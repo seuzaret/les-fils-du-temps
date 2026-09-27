@@ -6,8 +6,9 @@
    ============================================================ */
 
 const ETAPES = [
-  { tab: 0, nom: "Ta chambre",    sous: "smartphone dans la poche", emoji: "📱" },
-  { tab: 1, nom: "Le datacenter", sous: "serveurs à des km",         emoji: "🗄️" },
+  { tab: 0, nom: "Ta chambre",      sous: "tout dans la poche",       emoji: "📱" },
+  { tab: 1, nom: "Canapé du soir",  sous: "fil, JT, deepfakes",       emoji: "🛋️" },
+  { tab: 2, nom: "Le datacenter",   sous: "serveurs à des km",        emoji: "🗄️" },
 ];
 
 export default function CarteXXIe({ tab = 0 }) {
@@ -70,10 +71,10 @@ export default function CarteXXIe({ tab = 0 }) {
         <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.4s" repeatCount="indefinite" />
       </path>
 
-      {/* les 2 étapes de part et d'autre du nuage */}
+      {/* les 3 étapes réparties autour du nuage */}
       {ETAPES.map((e, i) => {
         const ici = e.tab === tab;
-        const x = i === 0 ? 160 : 540;
+        const x = i === 0 ? 130 : i === 1 ? 350 : 570;
         return (
           <g key={e.tab}>
             {/* halo si actif */}
