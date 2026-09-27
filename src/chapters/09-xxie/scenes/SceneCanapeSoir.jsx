@@ -70,17 +70,11 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       {/* léger voile bleuté (halo du téléphone qui éclaire toute la pièce) */}
       <ellipse cx="500" cy="300" rx="340" ry="240" fill="url(#es-glow)" />
 
-<<<<<<< HEAD
       {/* BOX WI-FI — bien identifiable, posée à gauche sur une petite table, avec afficheur 13:37.
           Placée à x=240 : plus proche du centre pour rester visible malgré preserveAspectRatio="slice"
           qui rogne les bords sur les écrans hors ratio 16:9. Reste à gauche du smartphone (x=500). */}
       <PLayer depth={2}>
         <g transform="translate(240,470)">
-=======
-      {/* BOX WI-FI — bien identifiable, posée à gauche sur une petite table, avec afficheur 13:37 */}
-      <PLayer depth={2}>
-        <g transform="translate(120,470)">
->>>>>>> origin/main
           {/* petite tablette où la box repose */}
           <rect x="-56" y="42" width="120" height="8" fill="#1a1a24" />
           <rect x="-48" y="50" width="6" height="30" fill="#1a1a24" />
@@ -250,11 +244,7 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       )}
       {/* BOX WI-FI (posée à gauche, avec afficheur 13:37) — support fixe */}
       {!reseauxFait && (
-<<<<<<< HEAD
         <Hotspot cx={240} cy={490} r={54} label="box Wi-Fi (13:37)" item="wifi" reveal={reveal} onClick={() => collect("wifi")} />
-=======
-        <Hotspot cx={120} cy={490} r={54} label="box Wi-Fi (13:37)" item="wifi" reveal={reveal} onClick={() => collect("wifi")} />
->>>>>>> origin/main
       )}
       <Hotspot cx={950} cy={530} r={20} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
     </svg>
