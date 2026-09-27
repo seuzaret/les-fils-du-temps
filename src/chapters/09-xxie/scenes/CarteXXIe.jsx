@@ -6,7 +6,7 @@
    ============================================================ */
 
 const ETAPES = [
-  { tab: 0, nom: "Ta chambre",      sous: "tout dans la poche",       emoji: "📱" },
+  { tab: 0, nom: "Ta chambre",      sous: "l'histoire du téléphone", emoji: "📞" },
   { tab: 1, nom: "Canapé du soir",  sous: "fil, JT, deepfakes",       emoji: "🛋️" },
   { tab: 2, nom: "Le datacenter",   sous: "serveurs à des km",        emoji: "🗄️" },
 ];

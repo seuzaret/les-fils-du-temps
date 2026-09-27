@@ -15,10 +15,14 @@ import { PLayer } from "../../../engine/Parallax.jsx";
    ============================================================ */
 
 export default function SceneChambre({ collect, action, reveal, made = [], inv = [], mode }) {
-  const usb   = made.includes("msg_usb");
-  const phone = made.includes("msg_smartphone");
-  const dead  = made.includes("msg_disquette");
+  const appelFait = made.includes("msg_appel");
+  const mobileFait = made.includes("msg_mobile");
+  const smartFait = made.includes("msg_smartphone");
+  const telPris   = made.includes("telephone");
+  const dead   = made.includes("msg_disquette");
   const compte = made.includes("msg_compte");
+  /* On masque le téléphone à cadran une fois qu'il a servi aux 3 recettes (appel, mobile, smartphone) */
+  const telUsed = appelFait && mobileFait && smartFait;
 
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
@@ -413,26 +417,44 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
 
         {/* --- PIECES A RAMASSER SUR LE BUREAU (bien devant l'ecran) --- */}
 
-        {/* MEMOIRE FLASH (puce nue) posee sur le bureau, cote gauche */}
-        {!usb && (
-          <g transform="translate(320,424)">
-            <rect x="-9" y="-6" width="18" height="12" rx="1.5" fill="#1c2028" />
-            <rect x="-6" y="-4" width="12" height="8"  rx="1" fill="#3a4050" />
-            {[-7,-4,-1,2,5].map((x,i) => <path key={i} d={`M${x} 6 v3`}  stroke="#c9a24a" strokeWidth="1.2" />)}
-            {[-7,-4,-1,2,5].map((x,i) => <path key={`t${i}`} d={`M${x} -6 v-3`} stroke="#c9a24a" strokeWidth="1.2" />)}
+        {/* TÉLÉPHONE À CADRAN posé sur le bureau, côté gauche — héritage 80s */}
+        {!inv.includes("telephone") && !telUsed && (
+          <g transform="translate(320,414)">
+            {/* base bakélite */}
+            <path d="M-24 6 Q-26 -4 -18 -12 L18 -12 Q26 -4 24 6 Z" fill="#1a1408" stroke="#3a2418" strokeWidth="1" />
+            {/* combiné posé dessus */}
+            <path d="M-18 -14 Q-22 -18 -18 -20 L-12 -20 Q-8 -18 -8 -14 L8 -14 Q8 -18 12 -20 L18 -20 Q22 -18 18 -14 Z" fill="#3a2818" stroke="#5a3818" strokeWidth="1" />
+            {/* cadran rotatif */}
+            <circle cx="0" cy="-4" r="8" fill="#c8b898" stroke="#3a2818" strokeWidth="0.8" />
+            {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => {
+              const a = (n * 36 - 90) * Math.PI / 180;
+              return <circle key={n} cx={Math.cos(a) * 5.6} cy={-4 + Math.sin(a) * 5.6} r="0.7" fill="#3a2818" />;
+            })}
+            <circle cx="0" cy="-4" r="1.8" fill="#3a2818" />
+            {/* fil qui s'échappe vers la prise */}
+            <path d="M-24 -2 Q-40 6 -60 20" stroke="#3a2818" strokeWidth="1.4" fill="none" opacity="0.75" />
+            <path d="M-30 -1 Q-46 8 -66 22" stroke="#5a3818" strokeWidth="0.5" fill="none" opacity="0.5" />
+            {/* halo doux */}
+            <ellipse cx="0" cy="0" rx="30" ry="8" fill="#c8a878" opacity="0.15" />
           </g>
         )}
 
-        {/* ECRAN TACTILE nu (vitre) : sur le bureau cote gauche */}
-        {!phone && (
-          <g transform="translate(410,410)">
-            <rect x="-18" y="-24" width="36" height="52" rx="4" fill="#cfe4ff" opacity="0.5" stroke="#8fb8e0" strokeWidth="1.4" />
-            <path d="M-12 -18 q14 -6 24 4" stroke="#eaf4ff" strokeWidth="2" fill="none" opacity="0.8" />
-            <circle cx="0" cy="4" r="7" fill="none" stroke="#7fd8ff" strokeWidth="1.6" style={{ animation: "pulse 1.6s infinite" }} />
-            <circle cx="0" cy="4" r="2.4" fill="#7fd8ff" />
+        {/* PRISE MURALE côté gauche du bureau — support (recette) */}
+        {!appelFait && (
+          <g transform="translate(240,436)">
+            {/* platine blanche */}
+            <rect x="-14" y="-12" width="28" height="24" rx="3" fill="#e8e4d8" stroke="#3a3a3a" strokeWidth="0.6" />
+            {/* petits trous style prise T */}
+            <circle cx="-4" cy="-2" r="1.6" fill="#1a1a1a" />
+            <circle cx="4" cy="-2" r="1.6" fill="#1a1a1a" />
+            <rect x="-1.2" y="4" width="2.4" height="4" fill="#1a1a1a" />
+            {/* signal RJ11 pour montrer que c'est la prise du tel */}
+            <text x="0" y="-18" textAnchor="middle" fontSize="6" fontFamily="ui-monospace,monospace" fill="#8a5828">RJ11</text>
           </g>
         )}
-        {phone && (
+
+        {/* Après le smartphone : révélation « tous les médias dans une main » sur l'écran gamer */}
+        {smartFait && (
           <g transform="translate(410,410)" style={{ animation: "pulse 0.7s ease-out 2" }}>
             <ellipse cx="0" cy="4" rx="80" ry="52" fill="url(#ch-glow)" />
             <rect x="-22" y="-30" width="44" height="60" rx="6" fill="#1c2028" />
@@ -486,25 +508,21 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       {/* ═══ zones cliquables ═══ */}
       <Hotspot cx={560} cy={430} r={54} label="toi (gaming)" reveal={reveal} onClick={() => action("ado")} />
 
-      {/* les OBJETS a assembler pour la cle USB — jean pose sur le lit */}
-      {!usb && (
-        <>
-          <Hotspot cx={150} cy={464} r={48} label="jean plié sur le lit (une poche)" item="poche" reveal={reveal} onClick={() => collect("poche")} />
-          <Hotspot cx={320} cy={424} r={22} label="mémoire flash" item="memoire_flash" reveal={reveal} onClick={() => collect("memoire_flash")} />
-        </>
+      {/* Le TÉLÉPHONE À CADRAN — objet ramassable qui sert dans 3 recettes */}
+      {!inv.includes("telephone") && !telUsed && (
+        <Hotspot cx={320} cy={414} r={28} label="vieux téléphone à cadran" item="telephone" reveal={reveal} onClick={() => collect("telephone")} />
       )}
-
-      {/* les OBJETS a assembler pour le smartphone */}
-      {!phone && (
-        <>
-          <Hotspot cx={410} cy={410} r={30} label="écran tactile" item="ecran_tactile" reveal={reveal} onClick={() => collect("ecran_tactile")} />
-          <Hotspot cx={850} cy={142} r={44} label="antenne 5G — réseau mobile" item="reseau_mobile" reveal={reveal} onClick={() => collect("reseau_mobile")} />
-        </>
+      {/* La PRISE MURALE — support fixe pour l'appel */}
+      {!appelFait && (
+        <Hotspot cx={240} cy={436} r={20} label="prise murale du téléphone" item="prise" reveal={reveal} onClick={() => collect("prise")} />
       )}
-
-      {/* le PC gamer : cible pour tenter de lire la disquette */}
-      {!dead && (
-        <Hotspot cx={560} cy={340} r={90} label="PC gamer — glisse la disquette dessus" item="pc_moderne" reveal={reveal} onClick={() => collect("pc_moderne")} />
+      {/* L'ANTENNE RELAIS — support fixe pour le mobile */}
+      {!mobileFait && (
+        <Hotspot cx={850} cy={142} r={44} label="antenne relais 4G/5G" item="antenne" reveal={reveal} onClick={() => collect("antenne")} />
+      )}
+      {/* L'ORDINATEUR (PC gamer) — support fixe pour le smartphone ET pour tenter la disquette */}
+      {(!smartFait || !dead) && (
+        <Hotspot cx={560} cy={340} r={90} label="ordinateur — colle un téléphone ou une disquette" item="ordinateur" reveal={reveal} onClick={() => collect("ordinateur")} />
       )}
 
       {/* la tablette avec les photos */}

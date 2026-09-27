@@ -13,9 +13,10 @@ import { PLayer } from "../../../engine/Parallax.jsx";
    - Carte du bas   : notif « Info reçue — vérif ? » → vrai/faux/IA
    ============================================================ */
 
-export default function SceneCanapeSoir({ action, reveal, made = [], mode }) {
+export default function SceneCanapeSoir({ collect, action, reveal, made = [], inv = [], mode }) {
   const bulleFaite = made.includes("msg_algorithme");
   const factFaite  = made.includes("msg_deepfake");
+  const reseauxFait = made.includes("msg_reseaux");
 
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
@@ -195,6 +196,14 @@ export default function SceneCanapeSoir({ action, reveal, made = [], mode }) {
       )}
       {!factFaite && (
         <Hotspot cx={500} cy={440} r={100} label="Image reçue — vérifier ?" reveal={reveal} onClick={() => action("verifier_images")} />
+      )}
+      {/* SMARTPHONE ramassable — la coque du téléphone que tient l'ado (côté téléphone, hors des cartes) */}
+      {!inv.includes("smartphone") && !reseauxFait && (
+        <Hotspot cx={370} cy={520} r={26} label="prendre le smartphone" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
+      )}
+      {/* WI-FI de la box (côté meuble bas, où la LED clignote) — support fixe */}
+      {!reseauxFait && (
+        <Hotspot cx={528} cy={352} r={22} label="Wi-Fi de la box internet" item="wifi" reveal={reveal} onClick={() => collect("wifi")} />
       )}
       <Hotspot cx={950} cy={530} r={20} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
     </svg>
