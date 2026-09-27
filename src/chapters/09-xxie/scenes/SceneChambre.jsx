@@ -508,10 +508,13 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       {!inv.includes("telephone") && !smartFait && (
         <Hotspot cx={320} cy={414} r={28} label="vieux téléphone à cadran" item="telephone" reveal={reveal} onClick={() => collect("telephone")} />
       )}
+<<<<<<< HEAD
       {/* Le SMARTPHONE — se combine avec la box Wi-Fi (autre tableau) */}
       {!inv.includes("smartphone") && !made.includes("msg_reseaux") && (
         <Hotspot cx={380} cy={424} r={20} label="smartphone" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
       )}
+=======
+>>>>>>> origin/main
       {/* La CLÉ USB — se combine avec l'ordinateur pour enregistrer */}
       {!inv.includes("cle_usb") && !usbFait && (
         <Hotspot cx={240} cy={432} r={20} label="clé USB" item="cle_usb" reveal={reveal} onClick={() => collect("cle_usb")} />
