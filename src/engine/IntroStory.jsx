@@ -339,10 +339,20 @@ function SlideNight({ onNext }) {
           </g>
         </g>
 
-        {/* TÉLÉPHONE sur la table de nuit — position centrée sur la table */}
-        <g transform="translate(696,470)" style={vibrating ? { animation: 'phoneShake 0.12s ease-in-out infinite' } : {}}>
+        {/* TÉLÉPHONE sur la table de nuit — position centrée sur la table.
+            NOTE : l'animation de vibration est appliquée sur un <g> ENFANT
+            sans transform initial, avec un shake local en unités SVG (via
+            animateTransform SMIL). Ne PAS mettre un keyframe CSS translate()
+            en px sur un g qui a déjà un translate() SVG : les unités px CSS
+            et SVG ne s'alignent pas si le SVG est redimensionné et l'élément
+            « saute » visuellement. */}
+        <g transform="translate(696,470)">
           {vibrating && <circle cx="0" cy="0" r="60" fill="url(#s1-phone-halo)" style={{ animation: 'phoneGlow 0.9s ease-in-out infinite' }} />}
           <g onClick={vibrating ? onNext : undefined} style={{ cursor: vibrating ? 'pointer' : 'default' }}>
+            {vibrating && (
+              <animateTransform attributeName="transform" type="translate"
+                values="0 0; -1 0.5; 0 0; 1 -0.5; 0 0" dur="0.12s" repeatCount="indefinite" />
+            )}
             <rect x="-20" y="-30" width="40" height="60" rx="6" fill="#1a1a1a" stroke="#5a5a5a" strokeWidth="1.4" />
             <rect x="-17" y="-27" width="34" height="52" rx="3" fill={vibrating ? '#3a80c8' : '#0a0a0a'} />
             {vibrating && (<>
@@ -441,7 +451,7 @@ function SlideNight({ onNext }) {
         </g>
 
         <style>{`
-          @keyframes phoneShake { 0%, 100% { transform: translate(696px, 470px); } 25% { transform: translate(695px, 470.5px); } 75% { transform: translate(697px, 469.5px); } }
+          /* phoneShake CSS retiré : le shake est maintenant fait par un animateTransform SMIL local sur le sous-groupe du téléphone (voir plus haut). */
           @keyframes phoneGlow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         `}</style>
       </svg>
