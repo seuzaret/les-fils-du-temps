@@ -1,15 +1,19 @@
 /* ============================================================
    CHAPITRE 9 — Le XXIe siècle : tout dans la poche (aujourd'hui)
    ============================================================
-   2 tableaux en ÉNIGMES : la chambre d'ado et le datacenter.
-   Idée forte : tout converge dans un seul objet… et le support
-   semble disparaître (streaming, cloud). En réalité il n'a pas
-   disparu : il est CHEZ QUELQU'UN D'AUTRE.
+   3 tableaux : chambre d'ado, canapé du soir, datacenter.
+   Idée forte : le téléphone se transforme, avale toute la
+   communication humaine, puis se prolonge dans le nuage.
 
-   DEUX messages perdus, les plus importants du jeu :
-   - la DISQUETTE héritée du chapitre 8 → illisible en 30 ans ;
-   - les photos d'enfance → le service ferme, tout disparaît.
-   Voir docs/AJOUTER-UN-CHAPITRE.md.
+   La progression des recettes suit l'histoire elle-même :
+     TÉLÉPHONE + PRISE          → l'APPEL (la voix, à distance)
+     TÉLÉPHONE + ANTENNE        → le MOBILE (la voix, partout)
+     TÉLÉPHONE + ORDINATEUR     → le SMARTPHONE (voix + tout)
+     SMARTPHONE + WI-FI         → les RÉSEAUX SOCIAUX
+     SERVEURS  + ABONNEMENT     → le STREAMING/CLOUD
+   Puis les DEUX messages PERDUS :
+     DISQUETTE + ORDINATEUR     → fichier ILLISIBLE en 30 ans
+     PHOTOS    + SERVICE FERMÉ  → compte SUPPRIMÉ
    ============================================================ */
 
 import SceneChambre from "./scenes/SceneChambre.jsx";
@@ -21,24 +25,27 @@ import CarteXXIe from "./scenes/CarteXXIe.jsx";
    LES ÉLÉMENTS
    ------------------------------------------------------------ */
 const ITEMS = {
-  /* ANACHRONISME — venu du FUTUR cette fois ! Un agent du temps de 2140
-     l'a fait tomber lors d'un saut. Objet inventé, années 2140. */
+  /* ANACHRONISME — venu du FUTUR cette fois ! */
   neurolien: { name: "Neuro-Lien™", emoji: "🧠", anachronic: true, desc: "Un petit disque translucide bio-imprimé qui se pose sur la tempe : le NEURO-LIEN™ (breveté en 2141). Il transmet directement les pensées sur le web. En 2025 il n'existe pas encore — et ça vaut mieux !" },
 
-  /* HÉRITAGE du chapitre 8 — elle voyage dans la besace */
+  /* HÉRITAGE du chapitre 8 */
   disquette: { name: "Disquette", emoji: "💾", heirloom: true, desc: "Ta disquette des années 80, rapportée du chapitre précédent. Il y a un fichier dessus. Elle a 30 ans à peine… ça devrait aller, non ?" },
 
-  /* T1 — la chambre d'ado */
-  memoire_flash:  { name: "Mémoire flash", emoji: "🔲", desc: "Une puce grosse comme un ongle. Elle retient des données toute seule : sans bande, sans disque qui tourne, sans électricité pour tenir." },
-  poche:          { name: "Poche", emoji: "👖", desc: "La poche de ton jean. Minuscule. Le défi : y faire tenir plus de livres que dans la bibliothèque d'Alexandrie." },
-  ecran_tactile:  { name: "Écran tactile", emoji: "📱", desc: "Une vitre qui sent ton doigt. Plus de boutons, plus de clavier : l'objet devient tout ce qu'on veut afficher dessus." },
-  /* support: true → fixe, ne va pas au sac : on lui apporte un objet
-     (le moteur l'affiche en cyan). */
-  reseau_mobile:  { name: "Réseau mobile", emoji: "📶", support: true, desc: "L'antenne-relais, là, derrière la fenêtre. Elle te relie au monde entier, partout, tout le temps." },
-  pc_moderne:     { name: "PC moderne", emoji: "💻", support: true, desc: "Ton ordinateur d'aujourd'hui. Fin, rapide, puissant. Et… tiens, il n'a aucun lecteur de disquette." },
+  /* ═════ Chambre : les briques du téléphone à travers le temps ═════ */
+  telephone:   { name: "Téléphone à cadran", emoji: "📞", desc: "Un vieux téléphone en bakélite, avec un cadran rotatif. Il traînait chez tes grands-parents. C'est l'ancêtre de tout : la voix, transportée sur un fil." },
+  /* support: true → fixe, ne va pas au sac : on lui apporte un objet */
+  prise:       { name: "Prise murale", emoji: "🔌", support: true, desc: "La ligne téléphonique : un fil qui va d'ici jusqu'au central, puis aux quatre coins du pays. Sans lui, ton téléphone n'est qu'un bibelot." },
+  antenne:     { name: "Antenne relais", emoji: "📡", support: true, desc: "L'antenne 4G/5G derrière la fenêtre. Elle capte ton téléphone et le relie au monde entier, partout, tout le temps." },
+  ordinateur:  { name: "Ordinateur", emoji: "💻", support: true, desc: "Ton ordinateur d'aujourd'hui. Un vrai cerveau miniature. Colle un téléphone dessus, tu obtiens un objet qui fait TOUT — le smartphone." },
+
+  /* ═════ Canapé du soir : le prolongement en réseau ═════ */
+  smartphone:  { name: "Smartphone", emoji: "📱", desc: "L'objet le plus utilisé du XXIe siècle. Il tient dans la main et remplace le téléphone, l'appareil photo, la télé, le baladeur, la carte, le courrier, la presse… TOUT ton voyage tient dedans." },
+  wifi:        { name: "Wi-Fi de la box", emoji: "📶", support: true, desc: "La box internet à la maison. Elle donne à ton smartphone l'accès aux réseaux sociaux et à toutes les messageries du monde. Sans elle, ton smartphone reste muet côté web." },
+
+  /* ═════ Chambre / Datacenter : les photos + le service ═════ */
   photos_enfance: { name: "Photos d'enfance", emoji: "🖼️", desc: "Toutes tes photos depuis que tu es petit. Elles ne sont pas ici : elles sont « dans le nuage ». C'est-à-dire… ailleurs." },
 
-  /* T2 — le datacenter */
+  /* ═════ Datacenter ═════ */
   serveurs:      { name: "Serveurs lointains", emoji: "🗄️", support: true, desc: "Des milliers de machines qui tournent jour et nuit, dans un hangar réfrigéré, à des centaines de kilomètres de chez toi." },
   abonnement:    { name: "Abonnement", emoji: "💳", desc: "Tu ne possèdes rien : tu paies pour ACCÉDER. Tant que tu paies, tout est là. Et si tu arrêtes ? Et si c'est EUX qui arrêtent ?" },
   service_ferme: { name: "Service fermé", emoji: "⛔", support: true, desc: "Un écriteau : « Ce service ferme le 31 décembre. Merci de votre fidélité. » Et tes photos, alors ?" },
@@ -54,40 +61,50 @@ const SCENES = [
 ];
 
 const WHERE = {
-  disquette: "dans ta besace — la disquette du chapitre 8 (si tu ne l'as plus, rejoue le chapitre 8 et ramasse-la au labo)",
-  memoire_flash: "dans ta chambre", poche: "dans ta chambre", ecran_tactile: "dans ta chambre",
-  photos_enfance: "dans ta chambre",
-  abonnement: "au datacenter",
+  disquette:      "dans ta besace — la disquette du chapitre 8 (si tu ne l'as plus, rejoue le chapitre 8 et ramasse-la au labo)",
+  telephone:      "dans ta chambre — un vieux téléphone à cadran, sur une commode",
+  photos_enfance: "dans ta chambre — la tablette photos",
+  smartphone:     "sur le canapé du soir — dans la main de l'ado",
+  abonnement:     "au datacenter",
 };
 
 const HIDDEN_BY_FLAG = {};
 
 /* ------------------------------------------------------------
-   LES RECETTES
+   LES RECETTES — la vie du téléphone en 4 étapes + streaming + perdus
    ------------------------------------------------------------ */
 const RECIPES = [
-  { a: "memoire_flash", b: "poche", out: "msg_usb", msg: true },
-  { a: "ecran_tactile", b: "reseau_mobile", out: "msg_smartphone", msg: true },
-  { a: "serveurs", b: "abonnement", out: "msg_streaming", msg: true },
-  /* MESSAGE PERDU 1 — LE clou du jeu : la disquette du chapitre 8, 30 ans après. */
-  { a: "disquette", b: "pc_moderne", out: "msg_disquette", msg: true, perdu: true },
+  { a: "telephone",     b: "prise",         out: "msg_appel",      msg: true },
+  { a: "telephone",     b: "antenne",       out: "msg_mobile",     msg: true },
+  { a: "telephone",     b: "ordinateur",    out: "msg_smartphone", msg: true },
+  { a: "smartphone",    b: "wifi",          out: "msg_reseaux",    msg: true },
+  { a: "serveurs",      b: "abonnement",    out: "msg_streaming",  msg: true },
+  /* MESSAGE PERDU 1 — la disquette du chapitre 8, 30 ans après. */
+  { a: "disquette",     b: "ordinateur",    out: "msg_disquette",  msg: true, perdu: true },
   /* MESSAGE PERDU 2 — la mémoire confiée à quelqu'un d'autre. */
-  { a: "photos_enfance", b: "service_ferme", out: "msg_compte", msg: true, perdu: true },
+  { a: "photos_enfance", b: "service_ferme", out: "msg_compte",    msg: true, perdu: true },
 ];
 
 /* ------------------------------------------------------------
    LES MESSAGES (fiches + jauges 1 à 5)
    ------------------------------------------------------------ */
 const MESSAGES = {
-  msg_usb: { title: "Enregistrer un message sur clé USB", emoji: "🔌",
-    jauges: { vitesse: 2, portee: 2, capacite: 5, durabilite: 2 },
-    fact: "Une puce grosse comme un ongle, et voilà plus de livres que n'en contenait toute la bibliothèque d'Alexandrie — dans ta poche. En un siècle, la quantité d'informations qu'on peut ranger dans un objet a été multipliée par des milliards. Mais attention à la blague : une clé USB tient environ 10 ans avant de devenir illisible. La bibliothèque d'Alexandrie, elle, a tenu des siècles. Le plus petit et le plus puissant n'est pas le plus solide." },
-  msg_smartphone: { title: "Enregistrer un vocal sur une messagerie en ligne", emoji: "📱",
+  msg_appel: { title: "Passer un appel téléphonique", emoji: "📞",
+    jauges: { vitesse: 4, portee: 3, capacite: 1, durabilite: 2 },
+    fact: "Fin XIXe : Alexander Graham Bell fait passer la voix humaine dans un fil de cuivre. Un siècle plus tard, la ligne fixe est partout : dans chaque maison, un poste noir avec un cadran rotatif relié à une prise murale. Tu décroches, tu tournes des chiffres — et tu parles instantanément avec quelqu'un à 500 km. C'est le média oublié de ta grand-mère : la voix, à distance. Toute la messagerie moderne descend de là." },
+  msg_mobile: { title: "Passer un appel mobile", emoji: "📱",
+    jauges: { vitesse: 5, portee: 4, capacite: 1, durabilite: 2 },
+    fact: "Années 1990-2000 : le téléphone abandonne le fil. Une antenne-relais tous les kilomètres, un petit boîtier dans la poche — et voilà la voix qui te suit PARTOUT. En vingt ans, l'usage explose : en 2025, il y a plus d'abonnements mobiles que d'êtres humains sur Terre. Le média n'a pas changé (c'est toujours la voix), mais le SUPPORT s'est affranchi du fil. C'est un tournant : pour la première fois, le message n'est plus lié à un lieu." },
+  msg_smartphone: { title: "Faire du téléphone un ordinateur", emoji: "📲",
     jauges: { vitesse: 5, portee: 5, capacite: 4, durabilite: 2 },
-    fact: "Un écran tactile, le réseau mobile, et TOUS les médias de ton voyage tiennent dans un seul objet : l'appareil photo, le téléphone, la télé, la radio, le journal, le courrier, la bibliothèque, le cinéma. Tout ce que tu as fabriqué depuis Lascaux est là, dans ta main. Mais pose-toi une question : cet objet est fabriqué pour capter ton attention le plus longtemps possible. Alors à qui profite ton temps d'écran ?" },
-  msg_streaming: { title: "Enregistrer un message en direct sur le web", emoji: "☁️",
+    fact: "2007 : Apple sort l'iPhone. C'est un téléphone qui contient aussi un vrai ordinateur : appareil photo, baladeur, carte, encyclopédie, réveil, télévision, journal, courrier… TOUS les médias de ton voyage — de Lascaux à aujourd'hui — tiennent maintenant dans un seul objet, au fond de ta poche. Mais rappelle-toi : cet objet est fabriqué pour capter ton attention le plus longtemps possible. Alors à qui profite ton temps d'écran ?" },
+  msg_reseaux: { title: "Publier sur un réseau social", emoji: "🌐",
+    jauges: { vitesse: 5, portee: 5, capacite: 5, durabilite: 2 },
+    fact: "Un smartphone branché sur le Wi-Fi = un poste d'émission mondial. Pour la première fois de l'histoire, chaque personne peut publier vers TOUT LE MONDE, gratuitement, immédiatement. C'est vertigineux — et c'est le vrai basculement du XXIe siècle : de « quelques diffuseurs pour des millions de spectateurs » (JT, presse) à « des millions d'émetteurs, chacun dans sa bulle ». Attention : sans ce Wi-Fi (ou la 4G/5G), un smartphone redevient un simple caillou lumineux." },
+  msg_streaming: { title: "Regarder un film en streaming", emoji: "☁️",
     jauges: { vitesse: 5, portee: 5, capacite: 5, durabilite: 1 },
-    fact: "Musique, films, photos, devoirs : plus besoin de support ! Enfin… c'est ce qu'on dit. En vrai le support existe toujours, mais il est CHEZ QUELQU'UN D'AUTRE, dans un hangar rempli de serveurs. Tu ne possèdes plus : tu accèdes, tant que tu paies et tant que le service existe. Et le jour où l'entreprise ferme, change ses règles ou supprime ton compte ? La vraie question de ton époque : à qui confies-tu tes messages ?" },
+    fact: "Musique, films, séries, photos, devoirs : plus besoin de support à la maison ! Enfin… c'est ce qu'on dit. En vrai, le support existe toujours, mais il est CHEZ QUELQU'UN D'AUTRE, dans un hangar rempli de serveurs. Tu ne possèdes plus : tu accèdes, tant que tu paies et tant que le service existe. Et le jour où l'entreprise ferme, change ses règles ou supprime ton compte ? La vraie question de ton époque : à qui confies-tu tes messages ?" },
+
   /* MESSAGES PERDUS */
   msg_disquette: { title: "Fichier illisible", emoji: "💾", perdu: true,
     jauges: { vitesse: 1, portee: 1, capacite: 2, durabilite: 1 },
@@ -96,10 +113,10 @@ const MESSAGES = {
     jauges: { vitesse: 4, portee: 3, capacite: 4, durabilite: 1 },
     fact: "Toutes tes photos d'enfance étaient « dans le nuage ». Et puis le service a fermé. Ou ton compte a été supprimé. Ou tu as oublié le mot de passe. En une seconde, des années de souvenirs disparaissent — et tu n'y peux rien, parce qu'ils n'étaient pas chez toi. Comment se protéger ? Faire plusieurs copies, à plusieurs endroits, dans des formats ouverts. C'est le métier des archivistes : la BnF, par exemple, archive le web français pour qu'il en reste quelque chose." },
 
-  /* ═════ NOUVEAUX MESSAGES — canapé du soir ═════ */
+  /* ═════ Canapé du soir — mini-jeux EMI ═════ */
   msg_algorithme: { title: "L'algorithme t'a choisi(e)", emoji: "🎯",
     jauges: { vitesse: 5, portee: 5, capacite: 5, durabilite: 3 },
-    fact: "Tu crois défiler ton fil librement. En réalité, une IA regarde CHAQUE seconde de ce que tu regardes, aimes ou ignores. En 10 vidéos, elle a construit un modèle de toi et va te servir surtout ce qui te retient. Deux élèves de la même classe voient DEUX MONDES DIFFÉRENTS sur la même appli — c'est ce qu'on appelle une bulle de filtre. Le média du XXIe siècle ne s'adresse plus à « tout le monde en même temps » comme le JT de 1989 : il s'adresse à toi, tout·e seul·e, en te suivant. Le vrai support, aujourd'hui, ce n'est plus l'antenne : c'est le modèle qui décide pour toi." },
+    fact: "Tu crois défiler ton fil librement. En réalité, une IA regarde CHAQUE seconde de ce que tu regardes, aimes ou ignores. En 10 vidéos, elle a construit un modèle de toi et va te servir surtout ce qui te retient. Deux élèves de la même classe voient DEUX MONDES DIFFÉRENTS sur la même appli — c'est ce qu'on appelle une bulle de filtre. Le média du XXIe siècle ne s'adresse plus à « tout le monde en même temps » comme le JT de 1989 : il s'adresse à toi, tout·e seul·e, en te suivant." },
   msg_deepfake: { title: "Vrai, faux ou fabriqué", emoji: "🔎",
     jauges: { vitesse: 5, portee: 5, capacite: 5, durabilite: 2 },
     fact: "Une image ne prouve plus rien à elle seule. Un logiciel peut créer un visage qui n'a jamais existé, ou coller le visage d'un politicien sur une autre vidéo. On appelle ça un DEEPFAKE. Trois réflexes pour tenir bon : 1) qui l'a prise ? (chercher la source, l'auteur, la date), 2) est-ce qu'on la retrouve ailleurs de sérieux ? (AFP, Reuters, un vrai journal), 3) qu'est-ce qui cloche visuellement ? (mains bizarres, oreilles asymétriques, lumière incohérente). Ne pas partager avant d'avoir vérifié : sinon, c'est TOI qui deviens le canal du mensonge." },
@@ -109,18 +126,22 @@ const MESSAGES = {
    LES INDICES (bouton 💡)
    ------------------------------------------------------------ */
 const HINTS = [
-  { needs: ["memoire_flash", "poche"], out: "msg_usb", text: "Une puce de mémoire flash, et hop, dans ta poche : la clé USB. Des bibliothèques entières dans ton jean." },
-  { needs: ["ecran_tactile", "reseau_mobile"], out: "msg_smartphone", text: "Un écran tactile + le réseau mobile de l'antenne, dehors : tu obtiens le smartphone, qui contient TOUS les médias du jeu." },
-  { needs: ["serveurs", "abonnement"], out: "msg_streaming", text: "Des serveurs très loin + un abonnement que tu paies : c'est le streaming. Tu n'as plus de support… enfin, tu crois." },
-  { needs: ["disquette", "pc_moderne"], out: "msg_disquette", text: "Tu meurs d'envie de savoir ce qu'il y a sur cette vieille disquette ? Essaie donc de la lire sur ton PC moderne…" },
+  { needs: ["telephone", "prise"],       out: "msg_appel",      text: "Le vieux téléphone à cadran + la prise murale = un appel filaire. C'est ainsi que ta grand-mère parlait à ses amis." },
+  { needs: ["telephone", "antenne"],     out: "msg_mobile",     text: "Le téléphone + l'antenne-relais à la fenêtre = la voix sans fil, dans ta poche." },
+  { needs: ["telephone", "ordinateur"],  out: "msg_smartphone", text: "Le téléphone + l'ordinateur = un smartphone, un objet qui fait TOUT à la fois." },
+  { needs: ["smartphone", "wifi"],       out: "msg_reseaux",    text: "Le smartphone du canapé + la Wi-Fi de la box : tu publies sur les réseaux sociaux — un émetteur mondial dans ta main." },
+  { needs: ["serveurs", "abonnement"],   out: "msg_streaming",  text: "Des serveurs très loin + un abonnement que tu paies : c'est le streaming. Tu n'as plus de support… enfin, tu crois." },
+  { needs: ["disquette", "ordinateur"],  out: "msg_disquette",  text: "Cette vieille disquette de 30 ans, essaie donc de la lire sur l'ordinateur d'aujourd'hui…" },
   { needs: ["photos_enfance", "service_ferme"], out: "msg_compte", text: "Tes photos d'enfance sont sur un service qui ferme le 31 décembre. Regarde ce qui se passe…" },
 ];
 
 const NEAR_MISS = [
-  { pair: ["disquette", "memoire_flash"], line: "Copier la disquette sur la puce flash ? Excellente idée ! Encore faudrait-il pouvoir la LIRE, ta disquette. Essaie sur le PC, tu verras." },
-  { pair: ["ecran_tactile", "serveurs"], line: "Un écran tactile branché sur un datacenter ? Il te manque le lien entre les deux : le réseau mobile." },
-  { pair: ["photos_enfance", "poche"], line: "Tu voudrais mettre tes photos dans ta poche ? Mauvaise nouvelle : elles ne sont pas chez toi. Elles sont au datacenter." },
-  { pair: ["abonnement", "poche"], line: "Un abonnement dans la poche… Tu paies, mais tu ne possèdes toujours rien. C'est bien ça, le problème." },
+  { pair: ["disquette", "telephone"], line: "Copier une disquette dans un téléphone ? Ils ne se parlent pas. Essaie plutôt l'ordinateur." },
+  { pair: ["telephone", "wifi"],      line: "Un téléphone à cadran sur la Wi-Fi ? Il n'a même pas d'écran. Le Wi-Fi, c'est pour le SMARTPHONE." },
+  { pair: ["smartphone", "prise"],    line: "Tu voudrais brancher ton smartphone sur la prise du téléphone ? Il faut du Wi-Fi ou une antenne, plus du cuivre." },
+  { pair: ["smartphone", "antenne"],  line: "Un smartphone se relie à l'antenne, oui — mais c'est le TÉLÉPHONE tout court qui a inventé le mobile. Ton smartphone, lui, veut le WI-FI pour les réseaux." },
+  { pair: ["photos_enfance", "smartphone"], line: "Tu voudrais mettre tes photos dans ton smartphone ? Mauvaise nouvelle : elles ne sont pas chez toi. Elles sont au datacenter, sur un service qui ferme…" },
+  { pair: ["abonnement", "smartphone"], line: "Un abonnement dans ton smartphone… Tu paies, mais tu ne possèdes toujours rien. C'est bien ça, le problème." },
 ];
 
 const FAIL_LINES = [
@@ -132,8 +153,8 @@ const FAIL_LINES = [
 ];
 
 const INTRO = [
-  "Nous y voilà : TON époque. Tout ce qu'on a fabriqué en 20 000 ans va tenir dans un seul objet, au fond d'une poche.",
-  "Deux personnes, deux vérités qui grincent. L'ado veut que TOUT — téléphone, photos, musique, jeux — tienne dans un seul truc. Le technicien, lui, sourit : « tes souvenirs ? Ils ne sont pas chez toi. Ils sont ICI, dans mes serveurs. Chez quelqu'un d'autre. »",
+  "Nous y voilà : TON époque. En un siècle, le téléphone est passé du cadran à la poche, puis a avalé tous les médias du monde.",
+  "Trois lieux : ta chambre (où traîne le vieux téléphone), le canapé du soir (ton smartphone à la main), et le hangar où dorment vraiment tes souvenirs.",
   "Aide-les, remplis ma jauge une dernière fois — et garde bien ta disquette du chapitre 8. J'ai une petite expérience à te proposer avant de te ramener chez toi.",
 ];
 
@@ -184,13 +205,13 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 10 — Ton époque.",
-  presentation: "Tout converge : l'appareil photo, le téléphone, la télé, la radio, le journal, la bibliothèque… tout tient désormais dans un seul objet, dans ta poche. Et le support semble avoir disparu — streaming, cloud, « le nuage ». Sauf qu'il n'a pas disparu du tout : il est chez quelqu'un d'autre. Deux lieux : ta chambre, et le hangar où dorment vraiment tes souvenirs.",
-  accroche: "La clé USB 🔌 · le smartphone 📱 · le cloud ☁️ · et deux messages qui se perdent…",
+  presentation: "Un vieux téléphone à cadran, une antenne, un ordinateur, une Wi-Fi… et voilà comment, en un siècle, la voix humaine est passée d'un fil de cuivre à un écran de poche relié au monde entier. Suis la ligne : appel, mobile, smartphone, réseaux sociaux. Puis va voir où vivent vraiment tes souvenirs — dans un hangar, chez quelqu'un d'autre.",
+  accroche: "L'appel 📞 · le mobile 📱 · le smartphone 📲 · les réseaux 🌐 · le cloud ☁️ · et deux messages qui se perdent…",
 
   finTitre: "VOYAGE TERMINÉ",
   finTexte: "« Circuits rechargés à {pct} %. Regarde ta frise, humain. Toute l'histoire est là, en un coup d'œil : la vitesse explose, la portée explose, la capacité explose… et la durabilité tombe au fond du trou. Ta disquette avait 30 ans et elle est déjà illisible. La paroi de Lascaux a 20 000 ans et on la lit encore. Alors avant que je te ramène : j'ai UNE dernière question pour toi. » — MARTINE",
 
-  required: 4,
+  required: 5,
   startScene: 0,
   destination: "ÉPILOGUE",
 
