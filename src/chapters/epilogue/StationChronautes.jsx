@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import CarnetElias from "./CarnetElias.jsx";
 
 /* Petit hook TYPEWRITER local — révèle un texte lettre par lettre.
    Repart de zéro dès que `text` change. `skip()` affiche tout d'un coup. */
@@ -551,6 +552,10 @@ function ChronauteDialogueBox({ step, persoName, prenom, idx, total, isLast, onN
 }
 
 export default function StationChronautes({ prenom, onContinue }) {
+  /* Avant la station on lit le CARNET D'ELIAS : 7 planches
+     illustrées qui racontent le monde d'avant, le grand silence,
+     la maladie de la mémoire et le voyage d'Al3x1A. */
+  const [carnetLu, setCarnetLu] = useState(false);
   /* perso courant dont on lit les dialogues (null = personne, on voit
      juste le décor et les ? cliquables). Idx = index dans la séquence
      du perso courant. */
@@ -563,6 +568,10 @@ export default function StationChronautes({ prenom, onContinue }) {
   /* Après avoir parlé aux 3, le clic sur Elias déclenche la question
      finale (séquence "finale"). Une fois celle-ci lue, bouton Continuer. */
   const [finalHeard, setFinalHeard] = useState(false);
+
+  /* Tant que le carnet n'est pas lu, on l'affiche à sa place — les
+     hooks au-dessus sont déjà déclarés donc la règle est respectée. */
+  if (!carnetLu) return <CarnetElias onDone={() => setCarnetLu(true)} />;
 
   const openPerso = (id) => {
     /* garde-fou : Mira n'est cliquable qu'après Elias, Al3x1A après Mira. */
