@@ -455,11 +455,12 @@ function SlideNight({ onNext }) {
           @keyframes phoneGlow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         `}</style>
       </svg>
-      {!vibrating && (
-        <p style={{ textAlign: 'center', margin: '10px auto 0', fontSize: 17, color: '#c8b090', fontStyle: 'italic', maxWidth: 600, lineHeight: 1.5 }}>
-          Une nuit paisible de ta vie…
-        </p>
-      )}
+      {/* On garde le paragraphe TOUJOURS monté (opacity change seulement) :
+          sinon le SVG au-dessus récupère la hauteur libérée et grossit d'un cran
+          quand le téléphone se met à vibrer. */}
+      <p style={{ textAlign: 'center', margin: '10px auto 0', fontSize: 17, color: '#c8b090', fontStyle: 'italic', maxWidth: 600, lineHeight: 1.5, opacity: vibrating ? 0 : 1, transition: 'opacity .3s' }}>
+        Une nuit paisible de ta vie…
+      </p>
     </div>
   );
 }
