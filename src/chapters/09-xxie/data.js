@@ -64,7 +64,7 @@ const WHERE = {
   telephone:      "dans ta chambre — un vieux téléphone à cadran, sur le bureau",
   cle_usb:        "dans ta chambre — une clé USB, sur le bureau",
   photos_enfance: "dans ta chambre — la tablette photos",
-  smartphone:     "sur le canapé du soir — dans la main de l'ado",
+  smartphone:     "dans ta chambre — le smartphone posé sur le bureau",
   abonnement:     "au datacenter",
 };
 
