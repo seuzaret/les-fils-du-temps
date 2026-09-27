@@ -17,10 +17,10 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
   const bulleFaite = made.includes("msg_algorithme");
   const factFaite  = made.includes("msg_deepfake");
   const reseauxFait = made.includes("msg_reseaux");
-  /* Trois états du grand téléphone :
-     - pas encore connecté au Wi-Fi (wifi absent de l'inventaire) → écran "PAS DE CONNEXION"
-     - connecté → cartes normales + barre "📶 Wi-Fi" */
-  const connecte = inv.includes("wifi");
+  /* Le grand téléphone n'est « connecté » que si l'élève a réellement le
+     smartphone dans le sac (obtenu via téléphone + ordinateur) ET a ramassé
+     la box Wi-Fi. Tant qu'il manque l'un ou l'autre → écran PAS DE CONNEXION. */
+  const connecte = inv.includes("wifi") && inv.includes("smartphone");
 
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">

@@ -953,12 +953,20 @@ export default function App() {
         setTimeout(() => setModal({ type: "lost", id: rec.out }), 850);
         return;
       }
-      /* Message pour le futur : gros feu d'artifice, PUIS la fiche documentaire */
+      /* Message pour le futur : gros feu d'artifice, PUIS la fiche documentaire.
+         Support optionnel `rec.give: "itemId"` : la recette FABRIQUE en plus
+         un objet, ajouté à l'inventaire — utile quand un message-recette
+         produit conceptuellement un objet utilisable ensuite (ex. le smartphone
+         obtenu par téléphone + ordinateur, réutilisé avec le Wi-Fi). */
       if (rec.msg) {
         const m = chapter.messages[rec.out];
         setMsgs((v) => [...v, rec.out]);
         setCollection((c) => c.some((x) => x.id === rec.out) ? c : [...c, { id: rec.out, titre: m.title, emoji: m.emoji, date: chapter.date, jauges: m.jauges, fact: m.fact, perdu: false }]);
-        setInv((v) => cleanup(v.filter((x) => !(rec.consume || []).includes(x)), newMade));
+        setInv((v) => {
+          const base = v.filter((x) => !(rec.consume || []).includes(x));
+          const withGive = rec.give && !base.includes(rec.give) ? [...base, rec.give] : base;
+          return cleanup(withGive, newMade);
+        });
         flash(); boom(point, true); playSfx("message");
         /* certains messages ont leur propre son (ex. la flûte joue sa
            mélodie) : il part juste après l'arpège de transmission */
