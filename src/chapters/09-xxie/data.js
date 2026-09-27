@@ -13,6 +13,7 @@
    ============================================================ */
 
 import SceneChambre from "./scenes/SceneChambre.jsx";
+import SceneCanapeSoir from "./scenes/SceneCanapeSoir.jsx";
 import SceneDatacenter from "./scenes/SceneDatacenter.jsx";
 import CarteXXIe from "./scenes/CarteXXIe.jsx";
 
@@ -47,8 +48,9 @@ const ITEMS = {
    LES TABLEAUX
    ------------------------------------------------------------ */
 const SCENES = [
-  { id: "chambre",    name: "Ta chambre",    Component: SceneChambre },
-  { id: "datacenter", name: "Le datacenter", Component: SceneDatacenter },
+  { id: "chambre",    name: "Ta chambre",     Component: SceneChambre },
+  { id: "canape",     name: "Canapé du soir", Component: SceneCanapeSoir },
+  { id: "datacenter", name: "Le datacenter",  Component: SceneDatacenter },
 ];
 
 const WHERE = {
@@ -93,6 +95,14 @@ const MESSAGES = {
   msg_compte: { title: "Compte supprimé", emoji: "⛔", perdu: true,
     jauges: { vitesse: 4, portee: 3, capacite: 4, durabilite: 1 },
     fact: "Toutes tes photos d'enfance étaient « dans le nuage ». Et puis le service a fermé. Ou ton compte a été supprimé. Ou tu as oublié le mot de passe. En une seconde, des années de souvenirs disparaissent — et tu n'y peux rien, parce qu'ils n'étaient pas chez toi. Comment se protéger ? Faire plusieurs copies, à plusieurs endroits, dans des formats ouverts. C'est le métier des archivistes : la BnF, par exemple, archive le web français pour qu'il en reste quelque chose." },
+
+  /* ═════ NOUVEAUX MESSAGES — canapé du soir ═════ */
+  msg_algorithme: { title: "L'algorithme t'a choisi(e)", emoji: "🎯",
+    jauges: { vitesse: 5, portee: 5, capacite: 5, durabilite: 3 },
+    fact: "Tu crois défiler ton fil librement. En réalité, une IA regarde CHAQUE seconde de ce que tu regardes, aimes ou ignores. En 10 vidéos, elle a construit un modèle de toi et va te servir surtout ce qui te retient. Deux élèves de la même classe voient DEUX MONDES DIFFÉRENTS sur la même appli — c'est ce qu'on appelle une bulle de filtre. Le média du XXIe siècle ne s'adresse plus à « tout le monde en même temps » comme le JT de 1989 : il s'adresse à toi, tout·e seul·e, en te suivant. Le vrai support, aujourd'hui, ce n'est plus l'antenne : c'est le modèle qui décide pour toi." },
+  msg_deepfake: { title: "Vrai, faux ou fabriqué", emoji: "🔎",
+    jauges: { vitesse: 5, portee: 5, capacite: 5, durabilite: 2 },
+    fact: "Une image ne prouve plus rien à elle seule. Un logiciel peut créer un visage qui n'a jamais existé, ou coller le visage d'un politicien sur une autre vidéo. On appelle ça un DEEPFAKE. Trois réflexes pour tenir bon : 1) qui l'a prise ? (chercher la source, l'auteur, la date), 2) est-ce qu'on la retrouve ailleurs de sérieux ? (AFP, Reuters, un vrai journal), 3) qu'est-ce qui cloche visuellement ? (mains bizarres, oreilles asymétriques, lumière incohérente). Ne pas partager avant d'avoir vérifié : sinon, c'est TOI qui deviens le canal du mensonge." },
 };
 
 /* ------------------------------------------------------------
@@ -142,6 +152,12 @@ const ACTIONS = {
         say: "L'ado renvoie AU DATACENTER, en haut à gauche sur les serveurs." },
     ] },
 
+  /* ═════ mini-jeux du canapé du soir ═════ */
+  fil_algo: { modal: "fil_algo", mood: "neutre",
+    say: "L'algo t'a fabriqué une bulle en 10 vidéos. Ton fil n'est pas celui de ton voisin." },
+  verifier_images: { modal: "verifier_images", mood: "neutre",
+    say: "Trois réflexes : source, recoupement, indices visuels. Sinon, tu deviens toi-même le relais du mensonge." },
+
   technicien: { mood: "neutre",
     bubble: "Tes photos, ta musique, tes devoirs… tu crois qu'ils sont dans ton téléphone ? Regarde autour de toi : ils sont ICI, dans ces serveurs. Chez quelqu'un d'autre. Et tant que tu paies, tout va bien.",
     say: "Le cloud : « plus de support » ? Faux — il est chez quelqu'un d'autre. Posséder ou accéder ? Et si le service ferme ?",
@@ -174,7 +190,7 @@ const chapter = {
   finTitre: "VOYAGE TERMINÉ",
   finTexte: "« Circuits rechargés à {pct} %. Regarde ta frise, humain. Toute l'histoire est là, en un coup d'œil : la vitesse explose, la portée explose, la capacité explose… et la durabilité tombe au fond du trou. Ta disquette avait 30 ans et elle est déjà illisible. La paroi de Lascaux a 20 000 ans et on la lit encore. Alors avant que je te ramène : j'ai UNE dernière question pour toi. » — MARTINE",
 
-  required: 3,
+  required: 4,
   startScene: 0,
   destination: "ÉPILOGUE",
 

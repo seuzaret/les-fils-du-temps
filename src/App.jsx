@@ -38,6 +38,8 @@ import { GraverCdGame } from "./chapters/xxe-graver-cd.jsx";
 import { FaireLaUneGame } from "./chapters/xxe-faire-la-une.jsx";
 import { CadrerEvenementGame } from "./chapters/xxe-cadrer-evenement.jsx";
 import { EniacDebugGame } from "./chapters/xxe-eniac-debug.jsx";
+import { FilAlgoGame } from "./chapters/xxie-fil-algo.jsx";
+import { VraiFauxIAGame } from "./chapters/xxie-vrai-faux-ia.jsx";
 import { TailleSilexGame } from "./chapters/paleo-taille-silex.jsx";
 import Mediadex from "./engine/Mediadex.jsx";
 import MediaCard from "./engine/MediaCard.jsx";
@@ -2256,6 +2258,14 @@ export default function App() {
 
       {modal?.type === "eniac_debug" && (
         <EniacDebugGame onClose={() => setModal(null)} onWin={() => grantMessage("msg_eniac")} />
+      )}
+
+      {modal?.type === "fil_algo" && (
+        <FilAlgoGame onClose={() => setModal(null)} onWin={() => grantMessage("msg_algorithme")} />
+      )}
+
+      {modal?.type === "verifier_images" && (
+        <VraiFauxIAGame onClose={() => setModal(null)} onWin={() => grantMessage("msg_deepfake")} />
       )}
 
       {/* Modales spécifiques au JEU 2 */}
