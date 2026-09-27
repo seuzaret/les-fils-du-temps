@@ -15,14 +15,10 @@ import { PLayer } from "../../../engine/Parallax.jsx";
    ============================================================ */
 
 export default function SceneChambre({ collect, action, reveal, made = [], inv = [], mode }) {
-  const appelFait = made.includes("msg_appel");
-  const mobileFait = made.includes("msg_mobile");
   const smartFait = made.includes("msg_smartphone");
-  const telPris   = made.includes("telephone");
-  const dead   = made.includes("msg_disquette");
-  const compte = made.includes("msg_compte");
-  /* On masque le téléphone à cadran une fois qu'il a servi aux 3 recettes (appel, mobile, smartphone) */
-  const telUsed = appelFait && mobileFait && smartFait;
+  const usbFait   = made.includes("msg_usb");
+  const dead      = made.includes("msg_disquette");
+  const compte    = made.includes("msg_compte");
 
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
@@ -136,7 +132,7 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           <text x="0" y="38" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#c8963e" letterSpacing="3">EN CE MOMENT</text>
         </g>
 
-        {/* FENETRE + antenne 5G (RESEAU MOBILE) */}
+        {/* FENETRE — vue nuit sur la ville (l'antenne 5G a été retirée : plus utile côté recette) */}
         <g transform="translate(830,158)">
           <rect x="-58" y="-58" width="116" height="116" fill="url(#ch-win)" />
           <g clipPath="url(#ch-winclip)">
@@ -147,20 +143,9 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
                 <animate attributeName="opacity" values="0.6;1;0.6" dur={`${2 + (i % 3)}s`} repeatCount="indefinite" />
               </rect>
             ))}
-            {/* antenne 5G */}
-            <g transform="translate(20,-16)">
-              <path d="M-3 26 L-7 -22 L7 -22 L3 26 Z" fill="#2a3040" />
-              {[-1, 1].map((s, i) => <rect key={i} x={s * 7 - 2} y="-24" width="4" height="11" rx="1" fill="#4a5060" />)}
-              <g fill="none" stroke="#7fd8ff">
-                {[10, 18, 26].map((r, i) => (
-                  <g key={i}>
-                    <animate attributeName="opacity" values="0.9;0.1;0.9" dur="1.8s" begin={`${i * 0.4}s`} repeatCount="indefinite" />
-                    <path d={`M${r * 0.6} -${r * 0.5 + 22} A${r} ${r} 0 0 1 ${r * 0.6} ${r * 0.5 - 22}`} strokeWidth="1.8" />
-                    <path d={`M-${r * 0.6} -${r * 0.5 + 22} A${r} ${r} 0 0 0 -${r * 0.6} ${r * 0.5 - 22}`} strokeWidth="1.8" />
-                  </g>
-                ))}
-              </g>
-            </g>
+            {/* lune / halo urbain */}
+            <circle cx="30" cy="-30" r="8" fill="#f4e0a8" opacity="0.55" />
+            <circle cx="30" cy="-30" r="16" fill="#f4e0a8" opacity="0.15" />
             {/* drone */}
             <g>
               <animateTransform attributeName="transform" type="translate"
@@ -407,7 +392,7 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
         {/* --- PIECES A RAMASSER SUR LE BUREAU (bien devant l'ecran) --- */}
 
         {/* TÉLÉPHONE À CADRAN posé sur le bureau, côté gauche — héritage 80s */}
-        {!inv.includes("telephone") && !telUsed && (
+        {!inv.includes("telephone") && !smartFait && (
           <g transform="translate(320,414)">
             {/* base bakélite */}
             <path d="M-24 6 Q-26 -4 -18 -12 L18 -12 Q26 -4 24 6 Z" fill="#1a1408" stroke="#3a2418" strokeWidth="1" />
@@ -420,25 +405,26 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
               return <circle key={n} cx={Math.cos(a) * 5.6} cy={-4 + Math.sin(a) * 5.6} r="0.7" fill="#3a2818" />;
             })}
             <circle cx="0" cy="-4" r="1.8" fill="#3a2818" />
-            {/* fil qui s'échappe vers la prise */}
-            <path d="M-24 -2 Q-40 6 -60 20" stroke="#3a2818" strokeWidth="1.4" fill="none" opacity="0.75" />
-            <path d="M-30 -1 Q-46 8 -66 22" stroke="#5a3818" strokeWidth="0.5" fill="none" opacity="0.5" />
             {/* halo doux */}
             <ellipse cx="0" cy="0" rx="30" ry="8" fill="#c8a878" opacity="0.15" />
           </g>
         )}
 
-        {/* PRISE MURALE côté gauche du bureau — support (recette) */}
-        {!appelFait && (
-          <g transform="translate(240,436)">
-            {/* platine blanche */}
-            <rect x="-14" y="-12" width="28" height="24" rx="3" fill="#e8e4d8" stroke="#3a3a3a" strokeWidth="0.6" />
-            {/* petits trous style prise T */}
-            <circle cx="-4" cy="-2" r="1.6" fill="#1a1a1a" />
-            <circle cx="4" cy="-2" r="1.6" fill="#1a1a1a" />
-            <rect x="-1.2" y="4" width="2.4" height="4" fill="#1a1a1a" />
-            {/* signal RJ11 pour montrer que c'est la prise du tel */}
-            <text x="0" y="-18" textAnchor="middle" fontSize="6" fontFamily="ui-monospace,monospace" fill="#8a5828">RJ11</text>
+        {/* CLÉ USB posée sur le bureau à côté du téléphone */}
+        {!inv.includes("cle_usb") && !usbFait && (
+          <g transform="translate(240,432)">
+            {/* corps plastique noir */}
+            <rect x="-14" y="-4" width="20" height="10" rx="1.5" fill="#1a1a24" stroke="#3a3a4a" strokeWidth="0.6" />
+            {/* embout métallique */}
+            <rect x="6" y="-3" width="10" height="8" fill="#c8ccd0" stroke="#8a8e94" strokeWidth="0.5" />
+            <rect x="8" y="-1" width="3" height="4" fill="#3a3a4a" />
+            {/* petit anneau du porte-clés */}
+            <circle cx="-12" cy="1" r="1.6" fill="none" stroke="#c9a54a" strokeWidth="0.8" />
+            {/* LED verte qui clignote pour attirer l'œil */}
+            <circle cx="-4" cy="1" r="1" fill="#5eff9e">
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="1.6s" repeatCount="indefinite" />
+            </circle>
+            <text x="0" y="-10" textAnchor="middle" fontSize="5" fontFamily="ui-monospace,monospace" fill="#8fa3bd">USB</text>
           </g>
         )}
 
@@ -497,21 +483,17 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       {/* ═══ zones cliquables ═══ */}
       <Hotspot cx={560} cy={430} r={54} label="toi (gaming)" reveal={reveal} onClick={() => action("ado")} />
 
-      {/* Le TÉLÉPHONE À CADRAN — objet ramassable qui sert dans 3 recettes */}
-      {!inv.includes("telephone") && !telUsed && (
+      {/* Le VIEUX TÉLÉPHONE — se combine avec l'ordinateur pour donner le smartphone */}
+      {!inv.includes("telephone") && !smartFait && (
         <Hotspot cx={320} cy={414} r={28} label="vieux téléphone à cadran" item="telephone" reveal={reveal} onClick={() => collect("telephone")} />
       )}
-      {/* La PRISE MURALE — support fixe pour l'appel */}
-      {!appelFait && (
-        <Hotspot cx={240} cy={436} r={20} label="prise murale du téléphone" item="prise" reveal={reveal} onClick={() => collect("prise")} />
+      {/* La CLÉ USB — se combine avec l'ordinateur pour enregistrer */}
+      {!inv.includes("cle_usb") && !usbFait && (
+        <Hotspot cx={240} cy={432} r={20} label="clé USB" item="cle_usb" reveal={reveal} onClick={() => collect("cle_usb")} />
       )}
-      {/* L'ANTENNE RELAIS — support fixe pour le mobile */}
-      {!mobileFait && (
-        <Hotspot cx={850} cy={142} r={44} label="antenne relais 4G/5G" item="antenne" reveal={reveal} onClick={() => collect("antenne")} />
-      )}
-      {/* L'ORDINATEUR (PC gamer) — support fixe pour le smartphone ET pour tenter la disquette */}
-      {(!smartFait || !dead) && (
-        <Hotspot cx={560} cy={340} r={90} label="ordinateur — colle un téléphone ou une disquette" item="ordinateur" reveal={reveal} onClick={() => collect("ordinateur")} />
+      {/* L'ORDINATEUR (PC gamer) — support fixe : clé USB, téléphone, disquette */}
+      {(!smartFait || !usbFait || !dead) && (
+        <Hotspot cx={560} cy={340} r={90} label="ordinateur — colle une clé USB, un téléphone ou une disquette" item="ordinateur" reveal={reveal} onClick={() => collect("ordinateur")} />
       )}
 
       {/* la tablette avec les photos */}
