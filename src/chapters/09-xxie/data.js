@@ -38,8 +38,11 @@ const ITEMS = {
   ordinateur:  { name: "Ordinateur", emoji: "💻", support: true, desc: "Ton ordinateur d'aujourd'hui. Un vrai cerveau miniature. Colle un téléphone dessus, tu obtiens un smartphone. Branche une clé USB dessus, tu enregistres. Glisse une disquette dessus… tu verras bien." },
 
   /* ═════ Canapé du soir : le prolongement en réseau ═════ */
-  smartphone:  { name: "Smartphone", emoji: "📱", desc: "L'objet le plus utilisé du XXIe siècle. Il tient dans la main et remplace le téléphone, l'appareil photo, la télé, le baladeur, la carte, le courrier, la presse… TOUT ton voyage tient dedans." },
-  wifi:        { name: "Box Wi-Fi", emoji: "📶", support: true, desc: "La box internet à la maison, avec son afficheur qui indique 13:37. Elle donne à ton smartphone l'accès aux réseaux sociaux et à toutes les messageries du monde. Sans elle, ton smartphone reste muet côté web." },
+  /* keep: true → l'objet reste dans le sac même après la recette, sinon
+     l'écran du gros téléphone retomberait sur PAS DE CONNEXION après avoir
+     fabriqué msg_reseaux (cleanup retire les items « plus utiles »). */
+  smartphone:  { name: "Smartphone", emoji: "📱", keep: true, desc: "L'objet le plus utilisé du XXIe siècle. Il tient dans la main et remplace le téléphone, l'appareil photo, la télé, le baladeur, la carte, le courrier, la presse… TOUT ton voyage tient dedans." },
+  wifi:        { name: "Box Wi-Fi", emoji: "📶", support: true, keep: true, desc: "La box internet à la maison, avec son afficheur qui indique 13:37. Elle donne à ton smartphone l'accès aux réseaux sociaux et à toutes les messageries du monde. Sans elle, ton smartphone reste muet côté web." },
 
   /* ═════ Chambre / Datacenter : les photos + le service ═════ */
   photos_enfance: { name: "Photos d'enfance", emoji: "🖼️", desc: "Toutes tes photos depuis que tu es petit. Elles ne sont pas ici : elles sont « dans le nuage ». C'est-à-dire… ailleurs." },
