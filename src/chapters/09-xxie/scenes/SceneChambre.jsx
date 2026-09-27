@@ -198,31 +198,20 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           {/* couverture froissee au pied */}
           <path d="M-32 -20 q22 -6 48 4 q28 8 46 -4 v34 h-94 Z" fill="#5a2a3e" />
 
-          {/* JEAN plie sur le lit — pantalon plie avec 2 jambes visibles */}
-          {!usb && (
-            <g transform="translate(10,-6)">
-              <path d="M-40 12 Q0 22 40 12 L40 16 Q0 26 -40 16 Z" fill="#050510" opacity="0.35" />
-              <rect x="-28" y="-10" width="56" height="6" rx="1.5" fill="#4a6ea0" />
-              <rect x="-24" y="-9" width="6" height="4" fill="#3a5a88" />
-              {[-16, -8, 0, 8, 16].map((x, i) => <rect key={i} x={x - 1} y="-9" width="2" height="4" fill="#8ac0e8" opacity="0.6" />)}
-              <path d="M-28 -4 L28 -4 L26 6 L16 6 L14 20 L4 20 L2 6 L-2 6 L-4 20 L-14 20 L-16 6 L-26 6 Z" fill="#3a5a8a" stroke="#1a3060" strokeWidth="1" />
-              <path d="M-28 -4 L28 -4 L26 6 L16 6 L14 20 L4 20 L2 6 L-2 6 L-4 20 L-14 20 L-16 6 L-26 6 Z" fill="#101828" opacity="0.2" filter="url(#ch-grain)" />
-              <path d="M0 -4 v10" stroke="#7fa8d8" strokeWidth="0.6" strokeDasharray="1.2 1.2" />
-              <path d="M-22 -2 q14 -2 16 6 l-2 3 q-8 -4 -14 -3 Z" fill="none" stroke="#7fa8d8" strokeWidth="1.6" />
-              <path d="M22 -2 q-14 -2 -16 6 l2 3 q8 -4 14 -3 Z" fill="none" stroke="#7fa8d8" strokeWidth="1.2" opacity="0.7" />
-              <path d="M-22 -2 q14 -2 16 6" stroke="#a8ccec" strokeWidth="0.6" strokeDasharray="1 1" fill="none" />
-              <rect x="14" y="-8" width="6" height="4" rx="0.4" fill="#8a5828" stroke="#3a1a08" strokeWidth="0.3" />
-            </g>
-          )}
-          {usb && (
-            <g transform="translate(10,-2)" style={{ animation: "pulse 0.7s ease-out 2" }}>
-              <ellipse cx="0" cy="4" rx="46" ry="16" fill="url(#ch-glow)" />
-              <rect x="-16" y="-5" width="26" height="11" rx="2" fill="#2a2e3a" />
-              <rect x="10" y="-3" width="11" height="7" rx="1" fill="#b8bcc4" />
-              <path d="M12 -1 h7 M12 2 h7" stroke="#6a6e76" strokeWidth="0.8" />
-              <circle cx="-11" cy="0" r="2" fill="#5eff9e" style={{ animation: "pulse 1.4s infinite" }} />
-            </g>
-          )}
+          {/* JEAN plie sur le lit — pantalon plie avec 2 jambes visibles (décoratif) */}
+          <g transform="translate(10,-6)">
+            <path d="M-40 12 Q0 22 40 12 L40 16 Q0 26 -40 16 Z" fill="#050510" opacity="0.35" />
+            <rect x="-28" y="-10" width="56" height="6" rx="1.5" fill="#4a6ea0" />
+            <rect x="-24" y="-9" width="6" height="4" fill="#3a5a88" />
+            {[-16, -8, 0, 8, 16].map((x, i) => <rect key={i} x={x - 1} y="-9" width="2" height="4" fill="#8ac0e8" opacity="0.6" />)}
+            <path d="M-28 -4 L28 -4 L26 6 L16 6 L14 20 L4 20 L2 6 L-2 6 L-4 20 L-14 20 L-16 6 L-26 6 Z" fill="#3a5a8a" stroke="#1a3060" strokeWidth="1" />
+            <path d="M-28 -4 L28 -4 L26 6 L16 6 L14 20 L4 20 L2 6 L-2 6 L-4 20 L-14 20 L-16 6 L-26 6 Z" fill="#101828" opacity="0.2" filter="url(#ch-grain)" />
+            <path d="M0 -4 v10" stroke="#7fa8d8" strokeWidth="0.6" strokeDasharray="1.2 1.2" />
+            <path d="M-22 -2 q14 -2 16 6 l-2 3 q-8 -4 -14 -3 Z" fill="none" stroke="#7fa8d8" strokeWidth="1.6" />
+            <path d="M22 -2 q-14 -2 -16 6 l2 3 q8 -4 14 -3 Z" fill="none" stroke="#7fa8d8" strokeWidth="1.2" opacity="0.7" />
+            <path d="M-22 -2 q14 -2 16 6" stroke="#a8ccec" strokeWidth="0.6" strokeDasharray="1 1" fill="none" />
+            <rect x="14" y="-8" width="6" height="4" rx="0.4" fill="#8a5828" stroke="#3a1a08" strokeWidth="0.3" />
+          </g>
 
           {/* pieds */}
           <rect x="-86" y="10" width="10" height="24" fill="#1a1a20" />
