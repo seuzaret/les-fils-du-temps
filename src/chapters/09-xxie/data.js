@@ -64,7 +64,7 @@ const WHERE = {
   telephone:      "dans ta chambre — un vieux téléphone à cadran, sur le bureau",
   cle_usb:        "dans ta chambre — une clé USB, sur le bureau",
   photos_enfance: "dans ta chambre — la tablette photos",
-  smartphone:     "dans ta chambre — le smartphone posé sur le bureau",
+  smartphone:     "à assembler : combine le vieux téléphone avec l'ordinateur",
   abonnement:     "au datacenter",
 };
 
@@ -75,7 +75,8 @@ const HIDDEN_BY_FLAG = {};
    ------------------------------------------------------------ */
 const RECIPES = [
   { a: "cle_usb",       b: "ordinateur",    out: "msg_usb",        msg: true },
-  { a: "telephone",     b: "ordinateur",    out: "msg_smartphone", msg: true },
+  /* tel + ordi = un smartphone : on fabrique aussi l'item, qui servira avec le Wi-Fi */
+  { a: "telephone",     b: "ordinateur",    out: "msg_smartphone", msg: true, give: "smartphone" },
   { a: "smartphone",    b: "wifi",          out: "msg_reseaux",    msg: true },
   { a: "serveurs",      b: "abonnement",    out: "msg_streaming",  msg: true },
   /* MESSAGE PERDU 1 — la disquette du chapitre 8, 30 ans après. */
