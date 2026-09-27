@@ -410,6 +410,26 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           </g>
         )}
 
+        {/* SMARTPHONE posé à plat sur le bureau, côté droit du téléphone à cadran */}
+        {!inv.includes("smartphone") && !made.includes("msg_reseaux") && (
+          <g transform="translate(380,424)">
+            {/* halo bleu pulsant pour attirer l'œil */}
+            <ellipse cx="0" cy="0" rx="26" ry="14" fill="#7fd8ff" opacity="0.25">
+              <animate attributeName="opacity" values="0.35;0.15;0.35" dur="2.4s" repeatCount="indefinite" />
+            </ellipse>
+            {/* coque */}
+            <rect x="-9" y="-16" width="18" height="32" rx="3" fill="#1a1a24" stroke="#3a3a4a" strokeWidth="0.8" />
+            {/* écran */}
+            <rect x="-7" y="-13" width="14" height="26" rx="1.5" fill="#0a1a2a" />
+            <text x="0" y="-3" textAnchor="middle" fontSize="7">📱</text>
+            <text x="0" y="6" textAnchor="middle" fontSize="2.6" fontFamily="ui-monospace,monospace" fill="#7fd8ff">SMART</text>
+            <rect x="-6" y="8" width="12" height="4" fill="#1a2438" rx="0.6" />
+            <circle cx="-3" cy="10" r="0.9" fill="#5eff9e">
+              <animate attributeName="opacity" values="1;0.4;1" dur="1.6s" repeatCount="indefinite" />
+            </circle>
+          </g>
+        )}
+
         {/* CLÉ USB posée sur le bureau à côté du téléphone */}
         {!inv.includes("cle_usb") && !usbFait && (
           <g transform="translate(240,432)">
@@ -487,6 +507,10 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       {/* Le VIEUX TÉLÉPHONE — se combine avec l'ordinateur pour donner le smartphone */}
       {!inv.includes("telephone") && !smartFait && (
         <Hotspot cx={320} cy={414} r={28} label="vieux téléphone à cadran" item="telephone" reveal={reveal} onClick={() => collect("telephone")} />
+      )}
+      {/* Le SMARTPHONE — se combine avec la box Wi-Fi (autre tableau) */}
+      {!inv.includes("smartphone") && !made.includes("msg_reseaux") && (
+        <Hotspot cx={380} cy={424} r={20} label="smartphone" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
       )}
       {/* La CLÉ USB — se combine avec l'ordinateur pour enregistrer */}
       {!inv.includes("cle_usb") && !usbFait && (
