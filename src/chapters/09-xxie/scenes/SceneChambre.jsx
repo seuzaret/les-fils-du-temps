@@ -468,7 +468,7 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
         </g>
 
         {/* ANACHRONISME DU FUTUR : le NEURO-LIEN sur le tapis */}
-        {!inv.includes("neurolien") && mode !== "jeu2" && (
+        {!made.includes("neurolien") && mode !== "jeu2" && (
           <g transform="translate(120,510)">
             <circle r={38} fill="#a840c0" opacity="0.25" style={{ animation: "pulse 2s infinite" }} />
             <circle r={24} fill="#7fe0ff" opacity="0.35" style={{ animation: "pulse 2s infinite" }} />
@@ -513,7 +513,7 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       )}
 
       <Hotspot cx={870} cy={512} r={32} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
-      {mode !== "jeu2" && !inv.includes("neurolien") && (
+      {mode !== "jeu2" && !made.includes("neurolien") && (
         <Hotspot cx={120} cy={506} r={44} label="… quelque chose de très bizarre" item="neurolien" reveal={reveal} onClick={() => collect("neurolien")} />
       )}
     </svg>

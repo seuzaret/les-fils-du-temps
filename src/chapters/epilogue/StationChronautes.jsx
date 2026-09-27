@@ -49,17 +49,17 @@ const DIALOGUES_PAR_PERSO = {
     { mood: "content",
       text: "Salut, moi c'est Mira, l'ingénieure de la station. Cette machine, à côté de la tienne… c'est sa sœur. Elle est là depuis dix ans." },
     { mood: "neutre",
-      text: "Elle attend son pilote. Al3x1A est parti dans le passé chercher un remède contre la maladie de la mémoire, il y a longtemps. On n'a jamais eu de nouvelles de cette personne. Regarde son portrait." },
+      text: "Elle attend sa pilote. Al3x1A est partie dans le passé chercher un remède contre la maladie de la mémoire, il y a longtemps. On n'a jamais eu de ses nouvelles. Regarde son portrait." },
   ],
   camille: [
     { mood: "neutre",
-      text: "Al3x1A a pris la route il y a longtemps, dans le passé, pour trouver un remède. Cette personne connaissait bien les époques. Aucune nouvelle depuis. On attend, tout simplement, depuis dix ans." },
+      text: "Al3x1A a pris la route il y a longtemps, dans le passé, pour trouver un remède. Elle connaissait bien les époques. Aucune nouvelle depuis. On attend, tout simplement, depuis dix ans." },
     { mood: "content",
-      text: "Tu es le seul chronaute, aujourd'hui, à avoir traversé les époques comme Al3x1A. Retourne voir Elias — il a quelque chose à te demander." },
+      text: "Tu es la seule chronaute, aujourd'hui, à avoir traversé les époques comme elle. Retourne voir Elias — il a quelque chose à te demander." },
   ],
   finale: [
     { mood: "content",
-      text: "Tu as tout entendu. Alors voilà : tu es le seul chronaute qui connaisse encore les époques. Al3x1A est là-bas, quelque part. Tu retrouverais cette personne ?" },
+      text: "Tu as tout entendu. Alors voilà : tu es la seule chronaute qui connaisse encore les époques. Al3x1A est là-bas, quelque part. Tu la retrouverais ?" },
   ],
 };
 
@@ -210,7 +210,7 @@ function PortraitAl3x1ACadre({ mood = "neutre" }) {
       {/* légère cicatrice fine sur la joue (souvenir de voyage) */}
       <path d="M124 92 l4 8" stroke="#8a5828" strokeWidth="0.6" opacity="0.6" />
       {/* légende sous le portrait */}
-      <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARU·E 2277</text>
+      <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2277</text>
     </svg>
   );
 }
