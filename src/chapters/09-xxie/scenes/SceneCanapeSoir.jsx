@@ -70,6 +70,45 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       {/* léger voile bleuté (halo du téléphone qui éclaire toute la pièce) */}
       <ellipse cx="500" cy="300" rx="340" ry="240" fill="url(#es-glow)" />
 
+      {/* BOX WI-FI — bien identifiable, posée à gauche sur une petite table, avec afficheur 13:37 */}
+      <PLayer depth={2}>
+        <g transform="translate(120,470)">
+          {/* petite tablette où la box repose */}
+          <rect x="-56" y="42" width="120" height="8" fill="#1a1a24" />
+          <rect x="-48" y="50" width="6" height="30" fill="#1a1a24" />
+          <rect x="42" y="50" width="6" height="30" fill="#1a1a24" />
+          {/* corps de la box, noir laqué */}
+          <rect x="-46" y="-4" width="94" height="48" fill="#0e0e14" stroke="#2a2a34" strokeWidth="1" rx="3" />
+          <rect x="-46" y="-4" width="94" height="6" fill="#1a1a24" />
+          {/* afficheur LED "13:37" en rouge */}
+          <rect x="-30" y="8" width="42" height="18" fill="#080404" stroke="#2a1010" strokeWidth="0.8" rx="1.5" />
+          <text x="-9" y="22" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="13" fontWeight="800" fill="#ff3020" letterSpacing="1.5">
+            13:37
+            <animate attributeName="opacity" values="1;0.85;1" dur="2.4s" repeatCount="indefinite" />
+          </text>
+          {/* LED Wi-Fi verte qui pulse */}
+          <circle cx="30" cy="16" r="2.4" fill="#5eff9e">
+            <animate attributeName="opacity" values="1;0.35;1" dur="1.4s" repeatCount="indefinite" />
+          </circle>
+          <text x="30" y="32" textAnchor="middle" fontSize="5" fontFamily="ui-monospace,monospace" fill="#5eff9e" opacity="0.9">Wi-Fi</text>
+          {/* antennes discrètes en haut */}
+          <path d="M-30 -4 L-32 -18" stroke="#3a3a44" strokeWidth="1.4" />
+          <path d="M-20 -4 L-16 -20" stroke="#3a3a44" strokeWidth="1.4" />
+          <path d="M32 -4 L36 -20" stroke="#3a3a44" strokeWidth="1.4" />
+          {/* ondes qui rayonnent */}
+          <g stroke="#7fd8ff" fill="none" strokeWidth="1" opacity="0.7">
+            {[14, 22, 30].map((r, i) => (
+              <path key={i} d={`M0 -12 m-${r} 0 a${r} ${r} 0 0 1 ${r * 2} 0`}>
+                <animate attributeName="opacity" values="0.8;0.1;0.8" dur="1.8s" begin={`${i * 0.4}s`} repeatCount="indefinite" />
+              </path>
+            ))}
+          </g>
+          {/* étiquette de face avec logo */}
+          <rect x="-42" y="-2" width="14" height="8" fill="#1a1a24" rx="1" />
+          <text x="-35" y="4" textAnchor="middle" fontSize="4" fontFamily="ui-monospace,monospace" fill="#7fd8ff">BOX</text>
+        </g>
+      </PLayer>
+
       {/* ═══ PREMIER PLAN : LES DEUX MAINS QUI TIENNENT LE TÉLÉPHONE ═══ */}
       <PLayer depth={1}>
         {/* main GAUCHE — tenue depuis le bas, seuls pouce + tranche visibles */}
@@ -201,9 +240,9 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       {!inv.includes("smartphone") && !reseauxFait && (
         <Hotspot cx={370} cy={520} r={26} label="prendre le smartphone" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
       )}
-      {/* WI-FI de la box (côté meuble bas, où la LED clignote) — support fixe */}
+      {/* BOX WI-FI (posée à gauche, avec afficheur 13:37) — support fixe */}
       {!reseauxFait && (
-        <Hotspot cx={528} cy={352} r={22} label="Wi-Fi de la box internet" item="wifi" reveal={reveal} onClick={() => collect("wifi")} />
+        <Hotspot cx={120} cy={490} r={54} label="box Wi-Fi (13:37)" item="wifi" reveal={reveal} onClick={() => collect("wifi")} />
       )}
       <Hotspot cx={950} cy={530} r={20} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
     </svg>

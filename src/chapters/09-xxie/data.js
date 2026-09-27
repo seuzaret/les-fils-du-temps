@@ -31,16 +31,15 @@ const ITEMS = {
   /* HÉRITAGE du chapitre 8 */
   disquette: { name: "Disquette", emoji: "💾", heirloom: true, desc: "Ta disquette des années 80, rapportée du chapitre précédent. Il y a un fichier dessus. Elle a 30 ans à peine… ça devrait aller, non ?" },
 
-  /* ═════ Chambre : les briques du téléphone à travers le temps ═════ */
-  telephone:   { name: "Téléphone à cadran", emoji: "📞", desc: "Un vieux téléphone en bakélite, avec un cadran rotatif. Il traînait chez tes grands-parents. C'est l'ancêtre de tout : la voix, transportée sur un fil." },
+  /* ═════ Chambre : brique 1 (l'héritage) + brique 2 (l'ordi) ═════ */
+  telephone:   { name: "Vieux téléphone", emoji: "📞", desc: "Un vieux téléphone en bakélite, avec un cadran rotatif. Il traînait chez tes grands-parents. Colle-le à un ordinateur, tu obtiens ce que tu as dans la poche : un smartphone." },
+  cle_usb:     { name: "Clé USB", emoji: "🔌", desc: "Une puce plate en plastique. Elle stocke des fichiers — bien plus qu'une disquette, sans pièce mobile, sans électricité pour tenir. Il faut la brancher sur un ordinateur pour lire ou écrire." },
   /* support: true → fixe, ne va pas au sac : on lui apporte un objet */
-  prise:       { name: "Prise murale", emoji: "🔌", support: true, desc: "La ligne téléphonique : un fil qui va d'ici jusqu'au central, puis aux quatre coins du pays. Sans lui, ton téléphone n'est qu'un bibelot." },
-  antenne:     { name: "Antenne relais", emoji: "📡", support: true, desc: "L'antenne 4G/5G derrière la fenêtre. Elle capte ton téléphone et le relie au monde entier, partout, tout le temps." },
-  ordinateur:  { name: "Ordinateur", emoji: "💻", support: true, desc: "Ton ordinateur d'aujourd'hui. Un vrai cerveau miniature. Colle un téléphone dessus, tu obtiens un objet qui fait TOUT — le smartphone." },
+  ordinateur:  { name: "Ordinateur", emoji: "💻", support: true, desc: "Ton ordinateur d'aujourd'hui. Un vrai cerveau miniature. Colle un téléphone dessus, tu obtiens un smartphone. Branche une clé USB dessus, tu enregistres. Glisse une disquette dessus… tu verras bien." },
 
   /* ═════ Canapé du soir : le prolongement en réseau ═════ */
   smartphone:  { name: "Smartphone", emoji: "📱", desc: "L'objet le plus utilisé du XXIe siècle. Il tient dans la main et remplace le téléphone, l'appareil photo, la télé, le baladeur, la carte, le courrier, la presse… TOUT ton voyage tient dedans." },
-  wifi:        { name: "Wi-Fi de la box", emoji: "📶", support: true, desc: "La box internet à la maison. Elle donne à ton smartphone l'accès aux réseaux sociaux et à toutes les messageries du monde. Sans elle, ton smartphone reste muet côté web." },
+  wifi:        { name: "Box Wi-Fi", emoji: "📶", support: true, desc: "La box internet à la maison, avec son afficheur qui indique 13:37. Elle donne à ton smartphone l'accès aux réseaux sociaux et à toutes les messageries du monde. Sans elle, ton smartphone reste muet côté web." },
 
   /* ═════ Chambre / Datacenter : les photos + le service ═════ */
   photos_enfance: { name: "Photos d'enfance", emoji: "🖼️", desc: "Toutes tes photos depuis que tu es petit. Elles ne sont pas ici : elles sont « dans le nuage ». C'est-à-dire… ailleurs." },
@@ -62,7 +61,8 @@ const SCENES = [
 
 const WHERE = {
   disquette:      "dans ta besace — la disquette du chapitre 8 (si tu ne l'as plus, rejoue le chapitre 8 et ramasse-la au labo)",
-  telephone:      "dans ta chambre — un vieux téléphone à cadran, sur une commode",
+  telephone:      "dans ta chambre — un vieux téléphone à cadran, sur le bureau",
+  cle_usb:        "dans ta chambre — une clé USB, sur le bureau",
   photos_enfance: "dans ta chambre — la tablette photos",
   smartphone:     "sur le canapé du soir — dans la main de l'ado",
   abonnement:     "au datacenter",
@@ -74,8 +74,7 @@ const HIDDEN_BY_FLAG = {};
    LES RECETTES — la vie du téléphone en 4 étapes + streaming + perdus
    ------------------------------------------------------------ */
 const RECIPES = [
-  { a: "telephone",     b: "prise",         out: "msg_appel",      msg: true },
-  { a: "telephone",     b: "antenne",       out: "msg_mobile",     msg: true },
+  { a: "cle_usb",       b: "ordinateur",    out: "msg_usb",        msg: true },
   { a: "telephone",     b: "ordinateur",    out: "msg_smartphone", msg: true },
   { a: "smartphone",    b: "wifi",          out: "msg_reseaux",    msg: true },
   { a: "serveurs",      b: "abonnement",    out: "msg_streaming",  msg: true },
@@ -89,12 +88,9 @@ const RECIPES = [
    LES MESSAGES (fiches + jauges 1 à 5)
    ------------------------------------------------------------ */
 const MESSAGES = {
-  msg_appel: { title: "Passer un appel téléphonique", emoji: "📞",
-    jauges: { vitesse: 4, portee: 3, capacite: 1, durabilite: 2 },
-    fact: "Fin XIXe : Alexander Graham Bell fait passer la voix humaine dans un fil de cuivre. Un siècle plus tard, la ligne fixe est partout : dans chaque maison, un poste noir avec un cadran rotatif relié à une prise murale. Tu décroches, tu tournes des chiffres — et tu parles instantanément avec quelqu'un à 500 km. C'est le média oublié de ta grand-mère : la voix, à distance. Toute la messagerie moderne descend de là." },
-  msg_mobile: { title: "Passer un appel mobile", emoji: "📱",
-    jauges: { vitesse: 5, portee: 4, capacite: 1, durabilite: 2 },
-    fact: "Années 1990-2000 : le téléphone abandonne le fil. Une antenne-relais tous les kilomètres, un petit boîtier dans la poche — et voilà la voix qui te suit PARTOUT. En vingt ans, l'usage explose : en 2025, il y a plus d'abonnements mobiles que d'êtres humains sur Terre. Le média n'a pas changé (c'est toujours la voix), mais le SUPPORT s'est affranchi du fil. C'est un tournant : pour la première fois, le message n'est plus lié à un lieu." },
+  msg_usb: { title: "Enregistrer un fichier sur clé USB", emoji: "🔌",
+    jauges: { vitesse: 2, portee: 2, capacite: 5, durabilite: 2 },
+    fact: "Une puce plate en plastique, une prise standard, et voilà plus de textes qu'il n'en existait dans toute la bibliothèque d'Alexandrie — dans ta poche. La clé USB (années 2000) remplace la disquette : plus rapide, plus grosse, sans pièce mobile. Attention à la blague : une clé tient environ 10 ans avant de devenir illisible. La bibliothèque d'Alexandrie, elle, a tenu des siècles. Le plus petit et le plus puissant n'est pas le plus solide." },
   msg_smartphone: { title: "Faire du téléphone un ordinateur", emoji: "📲",
     jauges: { vitesse: 5, portee: 5, capacite: 4, durabilite: 2 },
     fact: "2007 : Apple sort l'iPhone. C'est un téléphone qui contient aussi un vrai ordinateur : appareil photo, baladeur, carte, encyclopédie, réveil, télévision, journal, courrier… TOUS les médias de ton voyage — de Lascaux à aujourd'hui — tiennent maintenant dans un seul objet, au fond de ta poche. Mais rappelle-toi : cet objet est fabriqué pour capter ton attention le plus longtemps possible. Alors à qui profite ton temps d'écran ?" },
@@ -126,10 +122,9 @@ const MESSAGES = {
    LES INDICES (bouton 💡)
    ------------------------------------------------------------ */
 const HINTS = [
-  { needs: ["telephone", "prise"],       out: "msg_appel",      text: "Le vieux téléphone à cadran + la prise murale = un appel filaire. C'est ainsi que ta grand-mère parlait à ses amis." },
-  { needs: ["telephone", "antenne"],     out: "msg_mobile",     text: "Le téléphone + l'antenne-relais à la fenêtre = la voix sans fil, dans ta poche." },
-  { needs: ["telephone", "ordinateur"],  out: "msg_smartphone", text: "Le téléphone + l'ordinateur = un smartphone, un objet qui fait TOUT à la fois." },
-  { needs: ["smartphone", "wifi"],       out: "msg_reseaux",    text: "Le smartphone du canapé + la Wi-Fi de la box : tu publies sur les réseaux sociaux — un émetteur mondial dans ta main." },
+  { needs: ["cle_usb", "ordinateur"],    out: "msg_usb",        text: "Une clé USB + l'ordinateur : tu branches, tu enregistres. Une bibliothèque entière dans un objet grand comme un pouce." },
+  { needs: ["telephone", "ordinateur"],  out: "msg_smartphone", text: "Le vieux téléphone + l'ordinateur = un smartphone, un objet qui fait TOUT à la fois." },
+  { needs: ["smartphone", "wifi"],       out: "msg_reseaux",    text: "Le smartphone du canapé + la box Wi-Fi (13:37) : tu publies sur les réseaux sociaux — un émetteur mondial dans ta main." },
   { needs: ["serveurs", "abonnement"],   out: "msg_streaming",  text: "Des serveurs très loin + un abonnement que tu paies : c'est le streaming. Tu n'as plus de support… enfin, tu crois." },
   { needs: ["disquette", "ordinateur"],  out: "msg_disquette",  text: "Cette vieille disquette de 30 ans, essaie donc de la lire sur l'ordinateur d'aujourd'hui…" },
   { needs: ["photos_enfance", "service_ferme"], out: "msg_compte", text: "Tes photos d'enfance sont sur un service qui ferme le 31 décembre. Regarde ce qui se passe…" },
@@ -137,9 +132,8 @@ const HINTS = [
 
 const NEAR_MISS = [
   { pair: ["disquette", "telephone"], line: "Copier une disquette dans un téléphone ? Ils ne se parlent pas. Essaie plutôt l'ordinateur." },
+  { pair: ["cle_usb", "telephone"],   line: "Brancher une clé USB dans un vieux téléphone ? Il n'a pas de port. Il faut un ORDINATEUR." },
   { pair: ["telephone", "wifi"],      line: "Un téléphone à cadran sur la Wi-Fi ? Il n'a même pas d'écran. Le Wi-Fi, c'est pour le SMARTPHONE." },
-  { pair: ["smartphone", "prise"],    line: "Tu voudrais brancher ton smartphone sur la prise du téléphone ? Il faut du Wi-Fi ou une antenne, plus du cuivre." },
-  { pair: ["smartphone", "antenne"],  line: "Un smartphone se relie à l'antenne, oui — mais c'est le TÉLÉPHONE tout court qui a inventé le mobile. Ton smartphone, lui, veut le WI-FI pour les réseaux." },
   { pair: ["photos_enfance", "smartphone"], line: "Tu voudrais mettre tes photos dans ton smartphone ? Mauvaise nouvelle : elles ne sont pas chez toi. Elles sont au datacenter, sur un service qui ferme…" },
   { pair: ["abonnement", "smartphone"], line: "Un abonnement dans ton smartphone… Tu paies, mais tu ne possèdes toujours rien. C'est bien ça, le problème." },
 ];
@@ -153,8 +147,8 @@ const FAIL_LINES = [
 ];
 
 const INTRO = [
-  "Nous y voilà : TON époque. En un siècle, le téléphone est passé du cadran à la poche, puis a avalé tous les médias du monde.",
-  "Trois lieux : ta chambre (où traîne le vieux téléphone), le canapé du soir (ton smartphone à la main), et le hangar où dorment vraiment tes souvenirs.",
+  "Nous y voilà : TON époque. Tout ce qu'on a fabriqué en 20 000 ans va tenir dans un seul objet, au fond d'une poche.",
+  "Trois lieux : ta chambre (où traîne un vieux téléphone à côté de ta clé USB), le canapé du soir (smartphone à la main, box Wi-Fi à côté), et le hangar où dorment vraiment tes souvenirs.",
   "Aide-les, remplis ma jauge une dernière fois — et garde bien ta disquette du chapitre 8. J'ai une petite expérience à te proposer avant de te ramener chez toi.",
 ];
 
@@ -205,13 +199,13 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 10 — Ton époque.",
-  presentation: "Un vieux téléphone à cadran, une antenne, un ordinateur, une Wi-Fi… et voilà comment, en un siècle, la voix humaine est passée d'un fil de cuivre à un écran de poche relié au monde entier. Suis la ligne : appel, mobile, smartphone, réseaux sociaux. Puis va voir où vivent vraiment tes souvenirs — dans un hangar, chez quelqu'un d'autre.",
-  accroche: "L'appel 📞 · le mobile 📱 · le smartphone 📲 · les réseaux 🌐 · le cloud ☁️ · et deux messages qui se perdent…",
+  presentation: "Une clé USB, un vieux téléphone, un ordinateur, une box Wi-Fi… assemble et raconte : l'archive, le smartphone qui contient TOUT, les réseaux sociaux, le cloud d'un hangar lointain. Puis va voir où vivent vraiment tes souvenirs — chez quelqu'un d'autre.",
+  accroche: "La clé USB 🔌 · le smartphone 📲 · les réseaux 🌐 · le cloud ☁️ · et deux messages qui se perdent…",
 
   finTitre: "VOYAGE TERMINÉ",
   finTexte: "« Circuits rechargés à {pct} %. Regarde ta frise, humain. Toute l'histoire est là, en un coup d'œil : la vitesse explose, la portée explose, la capacité explose… et la durabilité tombe au fond du trou. Ta disquette avait 30 ans et elle est déjà illisible. La paroi de Lascaux a 20 000 ans et on la lit encore. Alors avant que je te ramène : j'ai UNE dernière question pour toi. » — MARTINE",
 
-  required: 5,
+  required: 4,
   startScene: 0,
   destination: "ÉPILOGUE",
 
