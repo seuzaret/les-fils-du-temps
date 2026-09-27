@@ -70,15 +70,14 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       {/* léger voile bleuté (halo du téléphone qui éclaire toute la pièce) */}
       <ellipse cx="500" cy="300" rx="340" ry="240" fill="url(#es-glow)" />
 
-      {/* BOX WI-FI — bien identifiable, posée à gauche sur une petite table, avec afficheur 13:37.
-          Placée à x=240 : plus proche du centre pour rester visible malgré preserveAspectRatio="slice"
-          qui rogne les bords sur les écrans hors ratio 16:9. Reste à gauche du smartphone (x=500). */}
+      {/* BOX WI-FI + SMARTPHONE POSÉ — posés côte à côte sur une petite table,
+          bien visibles pour que la recette (smartphone + Wi-Fi = réseaux) soit évidente. */}
       <PLayer depth={2}>
         <g transform="translate(240,470)">
-          {/* petite tablette où la box repose */}
-          <rect x="-56" y="42" width="120" height="8" fill="#1a1a24" />
+          {/* petite tablette qui accueille les deux objets */}
+          <rect x="-56" y="42" width="220" height="8" fill="#1a1a24" />
           <rect x="-48" y="50" width="6" height="30" fill="#1a1a24" />
-          <rect x="42" y="50" width="6" height="30" fill="#1a1a24" />
+          <rect x="146" y="50" width="6" height="30" fill="#1a1a24" />
           {/* corps de la box, noir laqué */}
           <rect x="-46" y="-4" width="94" height="48" fill="#0e0e14" stroke="#2a2a34" strokeWidth="1" rx="3" />
           <rect x="-46" y="-4" width="94" height="6" fill="#1a1a24" />
@@ -108,6 +107,30 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
           {/* étiquette de face avec logo */}
           <rect x="-42" y="-2" width="14" height="8" fill="#1a1a24" rx="1" />
           <text x="-35" y="4" textAnchor="middle" fontSize="4" fontFamily="ui-monospace,monospace" fill="#7fd8ff">BOX</text>
+
+          {/* SMARTPHONE posé à plat sur la même tablette, à droite de la box — cliquable */}
+          {!inv.includes("smartphone") && !reseauxFait && (
+            <g transform="translate(110,10)">
+              {/* halo doux pour attirer l'œil */}
+              <ellipse cx="0" cy="18" rx="34" ry="10" fill="#7fd8ff" opacity="0.2">
+                <animate attributeName="opacity" values="0.35;0.15;0.35" dur="2.4s" repeatCount="indefinite" />
+              </ellipse>
+              {/* coque : petit rect vertical, coins arrondis */}
+              <rect x="-16" y="-20" width="32" height="60" rx="5" fill="#1a1a24" stroke="#3a3a4a" strokeWidth="1" />
+              {/* écran */}
+              <rect x="-13" y="-16" width="26" height="52" rx="3" fill="#0a1a2a" />
+              {/* aperçu d'app comme si actif */}
+              <text x="0" y="0" textAnchor="middle" fontSize="10">📱</text>
+              <text x="0" y="14" textAnchor="middle" fontSize="4" fontFamily="ui-monospace,monospace" fill="#7fd8ff">SMARTPHONE</text>
+              <rect x="-11" y="20" width="22" height="8" fill="#1a2438" rx="1" />
+              <circle cx="-4" cy="24" r="1.4" fill="#5eff9e">
+                <animate attributeName="opacity" values="1;0.4;1" dur="1.6s" repeatCount="indefinite" />
+              </circle>
+              <rect x="0" y="22.5" width="10" height="3" fill="#3a4a68" rx="0.6" />
+              {/* bouton latéral */}
+              <rect x="16" y="-4" width="1.5" height="12" fill="#3a3a4a" />
+            </g>
+          )}
         </g>
       </PLayer>
 
@@ -238,9 +261,9 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       {!factFaite && (
         <Hotspot cx={500} cy={440} r={100} label="Image reçue — vérifier ?" reveal={reveal} onClick={() => action("verifier_images")} />
       )}
-      {/* SMARTPHONE ramassable — la coque du téléphone que tient l'ado (côté téléphone, hors des cartes) */}
+      {/* SMARTPHONE posé sur la même tablette que la box — bien visible pour la recette */}
       {!inv.includes("smartphone") && !reseauxFait && (
-        <Hotspot cx={370} cy={520} r={26} label="prendre le smartphone" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
+        <Hotspot cx={350} cy={480} r={28} label="smartphone posé sur la tablette" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
       )}
       {/* BOX WI-FI (posée à gauche, avec afficheur 13:37) — support fixe */}
       {!reseauxFait && (
