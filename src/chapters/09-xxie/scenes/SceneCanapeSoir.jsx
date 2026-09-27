@@ -70,12 +70,22 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       {/* léger voile bleuté (halo du téléphone qui éclaire toute la pièce) */}
       <ellipse cx="500" cy="300" rx="340" ry="240" fill="url(#es-glow)" />
 
+<<<<<<< HEAD
       {/* BOX WI-FI + SMARTPHONE POSÉ — posés côte à côte sur une petite table,
           bien visibles pour que la recette (smartphone + Wi-Fi = réseaux) soit évidente. */}
       <PLayer depth={2}>
         <g transform="translate(240,470)">
           {/* petite tablette qui accueille les deux objets */}
           <rect x="-56" y="42" width="220" height="8" fill="#1a1a24" />
+=======
+      {/* BOX WI-FI — bien identifiable, posée à gauche sur une petite table, avec afficheur 13:37.
+          Placée à x=240 : plus proche du centre pour rester visible malgré preserveAspectRatio="slice"
+          qui rogne les bords sur les écrans hors ratio 16:9. Reste à gauche du smartphone (x=500). */}
+      <PLayer depth={2}>
+        <g transform="translate(240,470)">
+          {/* petite tablette où la box repose */}
+          <rect x="-56" y="42" width="120" height="8" fill="#1a1a24" />
+>>>>>>> origin/main
           <rect x="-48" y="50" width="6" height="30" fill="#1a1a24" />
           <rect x="146" y="50" width="6" height="30" fill="#1a1a24" />
           {/* corps de la box, noir laqué */}
