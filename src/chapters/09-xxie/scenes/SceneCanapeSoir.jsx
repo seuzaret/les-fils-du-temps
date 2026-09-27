@@ -71,8 +71,6 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
         ))}
       </g>
 
-      {/* léger voile bleuté (halo du téléphone qui éclaire toute la pièce) */}
-      <ellipse cx="500" cy="300" rx="340" ry="240" fill="url(#es-glow)" />
 
       {/* BOX WI-FI — posée sur une petite tablette à gauche, avec afficheur 13:37 */}
       <PLayer depth={2}>
