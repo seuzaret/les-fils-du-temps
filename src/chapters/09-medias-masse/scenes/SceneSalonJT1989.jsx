@@ -262,17 +262,17 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       {/* ═════ CANAPÉ AU PREMIER PLAN, DE DOS, avec papa + un(e) autre ═════ */}
       <PLayer depth={1}>
         <g transform="translate(410,540)">
-          {/* dossier canapé, arrondi haut, plus généreux */}
-          <path d="M-260 -150 Q0 -172 260 -150 L272 -50 L-272 -50 Z" fill="url(#jt-couch)" />
+          {/* dossier canapé, arrondi haut, plus généreux (baissé pour laisser voir les têtes) */}
+          <path d="M-260 -128 Q0 -150 260 -128 L272 -50 L-272 -50 Z" fill="url(#jt-couch)" />
           {/* rainures velours cotelé */}
           {[-220, -180, -140, -100, -60, -20, 20, 60, 100, 140, 180, 220].map((x) => (
-            <line key={x} x1={x} y1="-150" x2={x} y2="-56" stroke="#2a0e04" strokeWidth="0.6" opacity="0.55" />
+            <line key={x} x1={x} y1="-128" x2={x} y2="-56" stroke="#2a0e04" strokeWidth="0.6" opacity="0.55" />
           ))}
           {/* liseré du dossier */}
-          <path d="M-260 -150 Q0 -172 260 -150" fill="none" stroke="#2a0e04" strokeWidth="2" />
+          <path d="M-260 -128 Q0 -150 260 -128" fill="none" stroke="#2a0e04" strokeWidth="2" />
           {/* accoudoirs */}
-          <path d="M-292 -130 Q-296 -142 -284 -144 L-268 -142 L-260 -50 L-292 -50 Z" fill="url(#jt-couch)" />
-          <path d="M292 -130 Q296 -142 284 -144 L268 -142 L260 -50 L292 -50 Z" fill="url(#jt-couch)" />
+          <path d="M-292 -108 Q-296 -120 -284 -122 L-268 -120 L-260 -50 L-292 -50 Z" fill="url(#jt-couch)" />
+          <path d="M292 -108 Q296 -120 284 -122 L268 -120 L260 -50 L292 -50 Z" fill="url(#jt-couch)" />
           {/* base */}
           <rect x="-292" y="-50" width="584" height="50" fill="#1a0a04" />
 
