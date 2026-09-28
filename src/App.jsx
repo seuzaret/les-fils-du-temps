@@ -2434,8 +2434,11 @@ export default function App() {
       {sosOpen && (
         <SosOverlay muted={muted} onDone={() => {
           setSosOpen(false);
-          if (isLastChapter) { setEpiChoice(null); setScreen("chronautes"); }
-          else { setVesselOpen(true); }
+          if (isLastChapter) setEpiChoice(null);
+          /* On ouvre le vaisseau temporel AUSSI pour le dernier saut
+             (XXIe → station des chronautes en 2287), pour que la
+             transition soit tangible et symétrique avec les autres. */
+          setVesselOpen(true);
         }} />
       )}
 
@@ -2452,14 +2455,21 @@ export default function App() {
           <FirstScene collect={() => {}} action={() => {}} reveal={null}
             made={[]} inv={[]} flags={{}} queteQui={null} mode="jeu1" bare />
         ) : null;
+        /* Label pour le dernier saut : on ne va pas à un chapitre, on va à
+           la station des chronautes en 2287. */
+        const finalLabel = isLastChapter ? "STATION DES CHRONAUTES · 2287" : label;
         return (
           <TimeVessel
-            nextLabel={label}
+            nextLabel={finalLabel}
             backdrop={cockpitBackdrop}
             onDone={() => {
               setVesselOpen(false);
-              setTransitionTo(chapterIndex + 1);
-              setScreen("transition");
+              if (isLastChapter) {
+                setScreen("chronautes");
+              } else {
+                setTransitionTo(chapterIndex + 1);
+                setScreen("transition");
+              }
             }}
             onCancel={() => setVesselOpen(false)}
           />

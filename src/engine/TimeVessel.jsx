@@ -453,6 +453,14 @@ export function TimeVessel({ nextLabel, onDone, onCancel, backdrop: backdropProp
     <div style={{ position: "fixed", inset: 0, zIndex: 90, background: "#080d16", overflow: "hidden", fontFamily: "Palatino, Georgia, serif" }}>
       {backdrop}
 
+      {/* Bouton PASSER discret, coin haut droit — saute directement le jeu
+          temporel et déclenche onDone (arrivée au chapitre suivant). */}
+      <button onClick={() => onDone?.()}
+        title="Sauter le jeu temporel"
+        style={{ position: "absolute", top: 12, right: 16, zIndex: 20, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+        passer ›
+      </button>
+
       {/* ---------- 1. MARTINE ANNONCE (gros plan) ---------- */}
       {phase === "martine" && (
         <>
