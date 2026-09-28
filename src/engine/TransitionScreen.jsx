@@ -10,11 +10,17 @@
 export default function TransitionScreen({ target, transitionTo, onLand }) {
   return (
     <div style={{
-      minHeight: "100vh",
+      minHeight: "100vh", position: "relative",
       background: "radial-gradient(ellipse at 50% 40%, #1a2f4a 0%, #060a12 75%)",
       display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
       fontFamily: "Palatino, Georgia, serif", color: "#e8eef5",
     }}>
+      {/* Bouton PASSER discret, coin haut droit */}
+      <button onClick={() => onLand(transitionTo)}
+        title="Atterrir sans regarder l'annonce"
+        style={{ position: "absolute", top: 12, right: 16, zIndex: 20, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+        passer ›
+      </button>
       <div style={{ maxWidth: 520, textAlign: "center" }}>
         <div style={{ fontSize: 96, animation: "spinGrow 1.2s ease-out" }}>🌀</div>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#5eff9e", marginTop: 10 }}>
