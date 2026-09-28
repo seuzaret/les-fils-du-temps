@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import CarnetElias from "./CarnetElias.jsx";
+import ArriveeElias from "./ArriveeElias.jsx";
 
 /* Petit hook TYPEWRITER local — révèle un texte lettre par lettre.
    Repart de zéro dès que `text` change. `skip()` affiche tout d'un coup. */
@@ -37,13 +38,9 @@ function useTypewriter(text, speed = 6) {
 const DIALOGUES_PAR_PERSO = {
   elias: [
     { mood: "content",
-      text: "Te voilà, {prenom}. Tu ne me connais pas encore. Moi, si — j'ai lu tes messages, ceux qui nous sont parvenus. Bienvenue à la station des chronautes. Je m'appelle Elias." },
-    { mood: "neutre",
-      text: "Nous sommes en 2287. Il y a longtemps, tout le numérique s'est éteint d'un coup. Un jour, deux jours, plus rien. Ni serveurs, ni disques, ni photos. Cinq siècles de mémoire humaine, envolés." },
-    { mood: "content",
-      text: "On a survécu grâce à ce qui restait sur les vieux murs, dans les vieux livres, gravé, imprimé, brodé. Grâce à toi, à ta traversée des époques, on connaît enfin CE QUI DURE. Tu viens de nous rendre notre mémoire, morceau par morceau." },
+      text: "Tu as lu mon carnet ? Bien. Ça va mieux, là — je te reconnais, {prenom}. Merci d'être venu·e." },
     { mood: "vexe",
-      text: "Mais il y a autre chose. Un mal étrange nous ronge : on perd nos souvenirs, un peu chaque jour. Ceux qui l'oublient tout, oublient qu'ils l'oublient. C'est cruel. Parle à Mira, elle t'expliquera. Et regarde le portrait sur la MARTINE-jumelle." },
+      text: "Grâce à toi, à ta traversée des époques, on connaît enfin CE QUI DURE. Tu viens de nous rendre notre mémoire, morceau par morceau. Ce que je n'ai pas écrit dans le carnet, Mira va te le dire. Puis reviens me voir : j'aurai une question." },
   ],
   mira: [
     { mood: "content",
@@ -552,10 +549,14 @@ function ChronauteDialogueBox({ step, persoName, prenom, idx, total, isLast, onN
 }
 
 export default function StationChronautes({ prenom, onContinue }) {
-  /* Avant la station on lit le CARNET D'ELIAS : 7 planches
-     illustrées qui racontent le monde d'avant, le grand silence,
-     la maladie de la mémoire et le voyage d'Al3x1A. */
-  const [carnetLu, setCarnetLu] = useState(false);
+  /* Séquence d'épilogue en 3 phases :
+       1. ARRIVÉE : Elias, confus à cause de la maladie de la mémoire,
+          accueille le/la chronaute puis tend son carnet pour mieux
+          expliquer que ses mots.
+       2. CARNET : les 6 planches illustrées se lisent.
+       3. STATION : décor, dialogues avec Mira et le portrait,
+          question finale d'Elias. */
+  const [phase, setPhase] = useState("arrivee"); // arrivee | carnet | station
   /* perso courant dont on lit les dialogues (null = personne, on voit
      juste le décor et les ? cliquables). Idx = index dans la séquence
      du perso courant. */
@@ -569,9 +570,10 @@ export default function StationChronautes({ prenom, onContinue }) {
      finale (séquence "finale"). Une fois celle-ci lue, bouton Continuer. */
   const [finalHeard, setFinalHeard] = useState(false);
 
-  /* Tant que le carnet n'est pas lu, on l'affiche à sa place — les
-     hooks au-dessus sont déjà déclarés donc la règle est respectée. */
-  if (!carnetLu) return <CarnetElias onDone={() => setCarnetLu(true)} />;
+  /* Phases 1 et 2 (arrivée + carnet) avant le décor complet.
+     Les hooks au-dessus sont déjà tous déclarés → règle React OK. */
+  if (phase === "arrivee") return <ArriveeElias prenom={prenom} onDone={() => setPhase("carnet")} />;
+  if (phase === "carnet") return <CarnetElias onDone={() => setPhase("station")} />;
 
   const openPerso = (id) => {
     /* garde-fou : Mira n'est cliquable qu'après Elias, Al3x1A après Mira. */
