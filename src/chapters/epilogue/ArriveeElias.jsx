@@ -51,8 +51,13 @@ export default function ArriveeElias({ prenom, onDone }) {
   const { shown, done, skip } = useTypewriter(raw);
   const dernier = idx === REPLIQUES.length - 1;
 
+  /* Clic n'importe où sur l'écran : d'abord révèle tout le texte,
+     puis passe à la réplique suivante (ou prend le carnet si dernière). */
+  const advance = () => { if (!done) skip(); else if (dernier) onDone(); else setIdx(idx + 1); };
+
   return (
-    <div style={{ height: "100dvh", overflow: "hidden", background: "#080d16", display: "flex", flexDirection: "column", position: "relative", fontFamily: "Georgia, serif" }}>
+    <div onClick={advance}
+      style={{ height: "100dvh", overflow: "hidden", background: "#080d16", display: "flex", flexDirection: "column", position: "relative", fontFamily: "Georgia, serif", cursor: "pointer" }}>
       {/* ═══ décor : silhouette de la station en fond, portail temporel qui s'estompe ═══ */}
       <svg viewBox="0 0 1000 560" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} preserveAspectRatio="xMidYMid slice">
         <defs>
@@ -167,8 +172,7 @@ export default function ArriveeElias({ prenom, onDone }) {
         <div style={{ width: 140, height: 170, flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: "2px solid #ffd166", boxShadow: "0 8px 32px rgba(0,0,0,0.65)" }}>
           <PortraitElias mood={step.mood} />
         </div>
-        <div onClick={() => !done && skip()}
-          title={done ? "" : "Cliquer pour tout afficher"}
+        <div title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}
           style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 130, display: "flex", flexDirection: "column", justifyContent: "space-between", cursor: done ? "default" : "pointer" }}>
           <div>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#ffd166", marginBottom: 6 }}>ELIAS</div>

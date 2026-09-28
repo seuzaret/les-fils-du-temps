@@ -511,14 +511,17 @@ function DecorStation({ onClickPerso, done }) {
 function ChronauteDialogueBox({ step, persoName, prenom, idx, total, isLast, onNext, onClose, Portrait }) {
   const rawText = step.text.replace("{prenom}", prenom || "chronaute");
   const { shown, done, skip } = useTypewriter(rawText);
+  /* Clic n'importe où sur la boîte de dialogue : d'abord révèle tout le
+     texte, puis passe au suivant (ou ferme si dernier). */
+  const advance = () => { if (!done) skip(); else if (isLast) onClose(); else onNext(); };
   return (
-    <div style={{ position: "relative", zIndex: 2, padding: "12px 20px 20px", background: "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end", animation: "fadein 0.3s ease-out" }}>
+    <div onClick={advance}
+      style={{ position: "relative", zIndex: 2, padding: "12px 20px 20px", background: "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end", animation: "fadein 0.3s ease-out", cursor: "pointer" }}>
       <div style={{ width: 160, height: 190, flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: "2px solid #ffd166", boxShadow: "0 8px 32px rgba(0,0,0,0.65)" }}>
         <Portrait mood={step.mood} />
       </div>
-      <div style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 140, display: "flex", flexDirection: "column", justifyContent: "space-between", cursor: done ? "default" : "pointer" }}
-        onClick={() => !done && skip()}
-        title={done ? "" : "Cliquer pour tout afficher"}>
+      <div style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 140, display: "flex", flexDirection: "column", justifyContent: "space-between" }}
+        title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}>
         <div>
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#ffd166", marginBottom: 6 }}>
             {persoName.toUpperCase()}
