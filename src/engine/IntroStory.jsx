@@ -470,7 +470,8 @@ function SlideNight({ onNext }) {
    ═══════════════════════════════════════════════════════════════ */
 function SlideMessage({ onNext }) {
   return (
-    <div style={{ animation: 'fadeIn 0.8s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div onClick={onNext} title="Cliquer n'importe où pour continuer"
+      style={{ animation: 'fadeIn 0.8s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
       <svg viewBox="0 0 800 500" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
         <defs><radialGradient id="s2-halo" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#3a80c8" stopOpacity="0.4" /><stop offset="100%" stopColor="#3a80c8" stopOpacity="0" /></radialGradient></defs>
         <rect width="800" height="500" fill="#050810" />
@@ -525,7 +526,8 @@ function SlideOutside({ onNext }) {
   }, []);
 
   return (
-    <div style={{ animation: 'fadeIn 0.8s ease-out', position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div onClick={ready ? onNext : undefined} title={ready ? "Cliquer n'importe où pour continuer" : ""}
+      style={{ animation: 'fadeIn 0.8s ease-out', position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', cursor: ready ? 'pointer' : 'default' }}>
       <svg viewBox="0 0 1200 680" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="s3-sky" x1="0" y1="0" x2="0" y2="1">
@@ -667,7 +669,7 @@ function SlideOutside({ onNext }) {
         </g>
       </svg>
       {ready && (
-        <button onClick={onNext}
+        <button onClick={(e) => { e.stopPropagation(); onNext(); }}
           autoFocus
           style={{ position: 'absolute', left: '50%', bottom: 8, transform: 'translateX(-50%)',
             background: '#5eff9e', color: '#06110b', border: 'none',
@@ -687,7 +689,8 @@ function SlideOutside({ onNext }) {
    ═══════════════════════════════════════════════════════════════ */
 function SlideCockpit({ onNext }) {
   return (
-    <div style={{ animation: 'fadeIn 0.8s ease-out', position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div onClick={onNext} title="Cliquer n'importe où pour continuer"
+      style={{ animation: 'fadeIn 0.8s ease-out', position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', cursor: 'pointer' }}>
       <svg viewBox="0 0 1200 680" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="s4-cabin" x1="0" y1="0" x2="0" y2="1">
@@ -844,7 +847,7 @@ function SlideCockpit({ onNext }) {
           Machine À Remonter le Temps Intelligente Néanmoins Excellente.
           Al3x1a m'envoie te chercher. Avant de partir, écoute bien : je vais te dire les <strong style={{ color: '#5eff9e' }}>4 règles</strong> que doit connaître un chronaute. »
         </p>
-        <button onClick={onNext} autoFocus
+        <button onClick={(e) => { e.stopPropagation(); onNext(); }} autoFocus
           style={{ marginTop: 12, background: 'linear-gradient(180deg,#ff8a3a,#c0501a)',
             color: '#fff', border: '3px solid #ffd166',
             borderRadius: 999, width: 88, height: 88,
@@ -962,7 +965,8 @@ function SlideRules({ onNext }) {
 
       {/* --- ÉTAPES 0..3 : LES RÈGLES --- */}
       {!isCheckin && (
-        <>
+        <div onClick={() => (isLast ? onNext() : setN(n + 1))} title="Cliquer n'importe où pour continuer"
+          style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, minHeight: 0, cursor: 'pointer' }}>
           <svg viewBox="0 0 800 520" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
             <defs>
               <linearGradient id="s4b-cabin3" x1="0" y1="0" x2="0" y2="1">
@@ -1013,7 +1017,7 @@ function SlideRules({ onNext }) {
                 ? "« Retiens bien ça. Chaque règle protège le fil du temps. »"
                 : "« Voilà. Quatre règles. Simples, mais très importantes. Encore une petite chose avant qu'on parte. »"}
             </p>
-            <button onClick={() => (isLast ? onNext() : setN(n + 1))} autoFocus
+            <button onClick={(e) => { e.stopPropagation(); if (isLast) onNext(); else setN(n + 1); }} autoFocus
               style={{ flexShrink: 0, background: isLast ? '#5eff9e' : '#141b26',
                 color: isLast ? '#06110b' : '#5eff9e',
                 border: '2px solid #5eff9e',
@@ -1023,7 +1027,7 @@ function SlideRules({ onNext }) {
               {isLast ? "Suite →" : `Suite (${n + 2}/${REGLES.length})`}
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
@@ -1043,9 +1047,11 @@ function SlideMartineReparee({ onNext }) {
   const [n, setN] = useState(0);
   const isLast = n === LINES.length - 1;
   const line = LINES[n];
+  const advance = () => (isLast ? onNext() : setN(n + 1));
 
   return (
-    <div style={{ animation: 'fadeIn 0.6s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, minHeight: 0 }}>
+    <div onClick={advance} title="Cliquer n'importe où pour continuer"
+      style={{ animation: 'fadeIn 0.6s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, minHeight: 0, cursor: 'pointer' }}>
       <svg viewBox="0 0 800 340" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="s4c-cabin" x1="0" y1="0" x2="0" y2="1">
@@ -1077,7 +1083,7 @@ function SlideMartineReparee({ onNext }) {
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginTop: 4 }}>
         <div><Avatar mood={line.mood} size={64} talking /></div>
-        <button onClick={() => (isLast ? onNext() : setN(n + 1))} autoFocus
+        <button onClick={(e) => { e.stopPropagation(); advance(); }} autoFocus
           style={{ background: isLast ? '#5eff9e' : '#141b26',
             color: isLast ? '#06110b' : '#5eff9e',
             border: '2px solid #5eff9e',
