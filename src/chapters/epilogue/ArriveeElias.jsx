@@ -58,6 +58,12 @@ export default function ArriveeElias({ prenom, onDone }) {
   return (
     <div onClick={advance}
       style={{ height: "100dvh", overflow: "hidden", background: "#080d16", display: "flex", flexDirection: "column", position: "relative", fontFamily: "Georgia, serif", cursor: "pointer" }}>
+      {/* bouton passer discret en haut à droite */}
+      <button onClick={(e) => { e.stopPropagation(); onDone(); }}
+        title="Sauter cette scène"
+        style={{ position: 'absolute', top: 10, right: 14, zIndex: 10, background: 'rgba(20,27,38,0.6)', border: '1px solid rgba(200,212,226,0.25)', color: '#8fa3bd', padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 1, backdropFilter: 'blur(4px)' }}>
+        passer ›
+      </button>
       {/* ═══ décor : silhouette de la station en fond, portail temporel qui s'estompe ═══ */}
       <svg viewBox="0 0 1000 560" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} preserveAspectRatio="xMidYMid slice">
         <defs>
