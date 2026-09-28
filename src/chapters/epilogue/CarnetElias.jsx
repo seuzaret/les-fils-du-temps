@@ -493,12 +493,17 @@ export default function CarnetElias({ onDone }) {
   const total = PLANCHES.length;
   const dernier = i === total - 1;
 
+  /* Clic n'importe où sur l'écran = tourner la page.
+     Sur la dernière planche : ferme le carnet. */
+  const advance = () => { if (dernier) onDone(); else setI(i + 1); };
+
   return (
-    <div style={{ position: "fixed", inset: 0, background: "#050810", color: "#e8eef5", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: 20, zIndex: 80, fontFamily: "Georgia, serif", overflowY: "auto" }}>
+    <div onClick={advance}
+      style={{ position: "fixed", inset: 0, background: "#050810", color: "#e8eef5", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: 20, zIndex: 80, fontFamily: "Georgia, serif", overflowY: "auto", cursor: "pointer" }}>
       {/* en-tête : indication + option skip */}
       <div style={{ width: "100%", maxWidth: 900, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#ffd166" }}>📖 LE CARNET D'ELIAS · {i + 1}/{total}</div>
-        <button onClick={onDone}
+        <button onClick={(e) => { e.stopPropagation(); onDone(); }}
           style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #26324a", borderRadius: 8, padding: "6px 12px", fontSize: 11, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
           Passer ▸
         </button>
@@ -524,20 +529,20 @@ export default function CarnetElias({ onDone }) {
       </div>
 
       {/* barre de navigation */}
-      <div style={{ display: "flex", gap: 12, marginTop: 16, alignItems: "center" }}>
-        <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0}
+      <div style={{ display: "flex", gap: 12, marginTop: 16, alignItems: "center" }} onClick={(e) => e.stopPropagation()}>
+        <button onClick={(e) => { e.stopPropagation(); setI(Math.max(0, i - 1)); }} disabled={i === 0}
           style={{ background: i === 0 ? "#26324a" : "#141b26", color: i === 0 ? "#5a7a90" : "#c8d4e2", border: "1px solid #3a4a68", borderRadius: 10, padding: "10px 18px", fontFamily: "ui-monospace,monospace", fontWeight: 700, cursor: i === 0 ? "default" : "pointer" }}>
           ‹ Précédent
         </button>
         {/* points de progression */}
         <div style={{ display: "flex", gap: 6 }}>
           {PLANCHES.map((_, k) => (
-            <div key={k} onClick={() => setI(k)}
+            <div key={k} onClick={(e) => { e.stopPropagation(); setI(k); }}
               style={{ width: 10, height: 10, borderRadius: "50%", background: k === i ? "#ffd166" : k < i ? "#8a6838" : "#26324a", cursor: "pointer", border: "1px solid #3a2818" }} />
           ))}
         </div>
         {!dernier ? (
-          <button onClick={() => setI(i + 1)}
+          <button onClick={(e) => { e.stopPropagation(); setI(i + 1); }}
             style={{ background: "#8a6838", color: "#f2e6cc", border: "none", borderRadius: 10, padding: "10px 18px", fontFamily: "ui-monospace,monospace", fontWeight: 700, cursor: "pointer" }}>
             Suivant ›
           </button>
