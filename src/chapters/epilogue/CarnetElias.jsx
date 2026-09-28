@@ -500,12 +500,13 @@ export default function CarnetElias({ onDone }) {
   return (
     <div onClick={advance}
       style={{ position: "fixed", inset: 0, background: "#050810", color: "#e8eef5", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: 20, zIndex: 80, fontFamily: "Georgia, serif", overflowY: "auto", cursor: "pointer" }}>
-      {/* en-tête : indication + option skip */}
+      {/* en-tête : indication + option skip discret */}
       <div style={{ width: "100%", maxWidth: 900, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#ffd166" }}>📖 LE CARNET D'ELIAS · {i + 1}/{total}</div>
         <button onClick={(e) => { e.stopPropagation(); onDone(); }}
-          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #26324a", borderRadius: 8, padding: "6px 12px", fontSize: 11, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
-          Passer ▸
+          title="Sauter le carnet"
+          style={{ background: "rgba(20,27,38,0.6)", color: "#8fa3bd", border: "1px solid rgba(200,212,226,0.25)", borderRadius: 6, padding: "5px 12px", fontSize: 11, fontWeight: 600, fontFamily: "ui-monospace,monospace", cursor: "pointer", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+          passer ›
         </button>
       </div>
 

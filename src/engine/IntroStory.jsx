@@ -92,8 +92,9 @@ export default function IntroStory({ onDone }) {
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#050810', zIndex: 100, display: 'flex', flexDirection: 'column', color: '#efe6d2', fontFamily: 'Palatino, Georgia, serif', overflow: 'hidden' }}>
       <button onClick={onDone}
-        style={{ position: 'absolute', top: 12, right: 16, zIndex: 10, background: '#ffd166', border: '2px solid #5a4028', color: '#3a2410', padding: '10px 18px', borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer', fontFamily: 'ui-monospace,monospace', boxShadow: '0 2px 8px rgba(0,0,0,0.4)' }}>
-        Passer l'intro ›
+        title="Sauter l'intro"
+        style={{ position: 'absolute', top: 10, right: 14, zIndex: 10, background: 'rgba(20,27,38,0.6)', border: '1px solid rgba(200,212,226,0.25)', color: '#8fa3bd', padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 1, backdropFilter: 'blur(4px)' }}>
+        passer ›
       </button>
       <SceneFrame style={{ padding: 12 }}>
         {SLIDES[i]}
