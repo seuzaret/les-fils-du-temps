@@ -1,0 +1,24 @@
+{
+  "_note": "Crédits Wikimedia des 4 images du mini-jeu Vrai/Faux/IA (chapitre XXIe). Toutes issues de Wikimedia Commons ; vérifie la page source pour la licence exacte de chacune avant redistribution en dehors du jeu.",
+  "manif.jpg": {
+    "title": "Manifestation du 8 mars 2025 à Paris",
+    "source": "https://commons.wikimedia.org/wiki/File:Manifestation_du_8_mars_2025_%C3%A0_Paris_(8).jpg",
+    "categorie_jeu": "vraie photo"
+  },
+  "ciel-retouche.jpg": {
+    "title": "Flying so low",
+    "source": "https://commons.wikimedia.org/wiki/File:Flying_so_low.jpg",
+    "categorie_jeu": "retouchée"
+  },
+  "portrait-ia.jpg": {
+    "title": "Boy 1 (portrait généré par IA)",
+    "source": "https://commons.wikimedia.org/wiki/File:Boy_1.jpg",
+    "categorie_jeu": "générée par IA"
+  },
+  "deepfake.jpg": {
+    "title": "Benjamin Franklin (The Trump White House) — frame extraite de la vidéo",
+    "source": "https://commons.wikimedia.org/wiki/File:Benjamin_Franklin_(The_Trump_White_House).webm",
+    "note": "Frame extraite à 3s de la vidéo webm avec ffmpeg, redimensionnée à 800px de large.",
+    "categorie_jeu": "deepfake"
+  }
+}
