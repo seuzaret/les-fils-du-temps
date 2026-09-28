@@ -410,15 +410,10 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           </g>
         )}
 
-<<<<<<< HEAD
         {/* SMARTPHONE posé sur le bureau — apparaît SEULEMENT après avoir
             découvert msg_smartphone (téléphone + ordinateur), pour que
             l'élève comprenne d'abord d'où vient l'objet avant de le voir. */}
         {smartFait && !inv.includes("smartphone") && !made.includes("msg_reseaux") && (
-=======
-        {/* SMARTPHONE posé à plat sur le bureau, côté droit du téléphone à cadran */}
-        {!inv.includes("smartphone") && !made.includes("msg_reseaux") && (
->>>>>>> origin/main
           <g transform="translate(380,424)">
             {/* halo bleu pulsant pour attirer l'œil */}
             <ellipse cx="0" cy="0" rx="26" ry="14" fill="#7fd8ff" opacity="0.25">
@@ -515,13 +510,8 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       {!inv.includes("telephone") && !smartFait && (
         <Hotspot cx={320} cy={414} r={28} label="vieux téléphone à cadran" item="telephone" reveal={reveal} onClick={() => collect("telephone")} />
       )}
-<<<<<<< HEAD
       {/* Le SMARTPHONE — apparaît après msg_smartphone découvert, se combine avec la Wi-Fi */}
       {smartFait && !inv.includes("smartphone") && !made.includes("msg_reseaux") && (
-=======
-      {/* Le SMARTPHONE — se combine avec la box Wi-Fi (autre tableau) */}
-      {!inv.includes("smartphone") && !made.includes("msg_reseaux") && (
->>>>>>> origin/main
         <Hotspot cx={380} cy={424} r={20} label="smartphone" item="smartphone" reveal={reveal} onClick={() => collect("smartphone")} />
       )}
       {/* La CLÉ USB — se combine avec l'ordinateur pour enregistrer */}
