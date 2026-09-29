@@ -349,11 +349,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 2 — Néolithique.",
-  presentation: "Les humains se sont posés : villages, champs, troupeaux… et même une cité fortifiée, avec son roi. Gagne ta place dans la cité de Göbekli Tepe en aidant ses habitants — la potière, le marchand, le prêtre, le tailleur et un mineur souffrant.",
+  presentation: "Les humains se sont posés : villages, champs, cité fortifiée. Aide les habitants de Göbekli Tepe — la potière, le marchand, le prêtre, le tailleur, un mineur malade — pour gagner ta place dans la cité.",
   accroche: "Deviens l'ami de la cité : poterie 🏺 · calculi 🔘 · mégalithe 🗿 · tatouages ✒️",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Tu as vu naître la CITÉ, la marque, le compte durable, le monument… et surtout, chez Ahmid, ces cailloux d'argile qui appellent déjà autre chose. La prochaine invention va tout changer : un système de petits signes pour NOTER. On appellera ça l'écriture. Prochain saut : la Mésopotamie… » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Tu as vu naître la cité, la marque, le compte, le monument. Et chez Ahmid, ces cailloux d'argile qui appellent déjà autre chose : bientôt, on va inventer des petits signes pour noter. L'écriture. Direction la Mésopotamie. » — MARTINE",
 
   required: 3,
   startScene: 0,

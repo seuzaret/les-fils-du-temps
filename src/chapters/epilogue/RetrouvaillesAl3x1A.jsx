@@ -184,15 +184,11 @@ function Decor({ amb, remede, mood }) {
 
 const DIALOGUES = [
   { mood: "neutre",
-    text: "Toi… ?" },
-  { mood: "neutre",
-    text: "Ton visage… je le connais. Mais tu es beaucoup trop jeune. Comment… non, laisse tomber. Je dois délirer. Dix ans toute seule ici, c'est long." },
+    text: "Toi… ? Ton visage me dit quelque chose. Mais tu es trop jeune. Non, laisse tomber. Dix ans seule ici, c'est long." },
   { mood: "content",
-    text: "Elias t'a envoyé·e ? Bien sûr, qui d'autre. Ma MARTINE est cassée depuis longtemps. Je pensais mourir sans que personne ne le sache. Tu m'as retrouvé·e, {prenom}. Je n'en reviens pas." },
+    text: "Elias t'a envoyé·e. Ma MARTINE est cassée, je pensais mourir sans que personne ne le sache. Tu m'as retrouvé·e, {prenom}." },
   { mood: "neutre",
-    text: "J'ai trouvé le remède, oui. Tiens — prends-le, il est à toi. Ramène-le à Elias, à Mira, à tous ceux qui commencent à oublier. Vite." },
-  { mood: "neutre",
-    text: "Attends. Regarde-moi encore une seconde. Non… rien. Il y a des règles, tu sais. Je te le dirai peut-être quand on sera rentré·e·s. Peut-être pas. Allez, viens." },
+    text: "J'ai le remède. Tiens — il est à toi. Ramène-le à Elias, à Mira, à tous ceux qui oublient. Vite." },
   { mood: "content",
     text: "On monte dans ta MARTINE. Repartons chez nous." },
 ];

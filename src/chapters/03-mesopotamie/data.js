@@ -339,11 +339,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 3 — Naissance de l'écriture.",
-  presentation: "Vers −3300, dans la cité d'Ur, les humains inventent un outil qui va tout changer : l'écriture. Elle naît de la comptabilité, dans l'argile. Aide le roi Mesannepada et son collecteur d'impôt, puis descends le fleuve vers l'Égypte et la côte phénicienne pour découvrir hiéroglyphes et alphabet.",
+  presentation: "Vers −3300 à Ur : l'écriture naît, dans l'argile. Aide le roi Mesannepada et son collecteur d'impôt. Puis descends le fleuve : l'Égypte a ses hiéroglyphes, la côte phénicienne a son alphabet.",
   accroche: "Grave le cunéiforme 🔠 · scelle le sceau du roi 🔏 · trace des hiéroglyphes 📜 · diffuse l'alphabet 🔤",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Tu viens d'assister au grand basculement : l'Histoire commence quand on écrit. Un message peut désormais survivre à son auteur, voyager loin, se copier. Mais tout est encore rare, réservé aux scribes… Prochain saut : l'Antiquité — Grèce, Rome, Pompéi. Là-bas, on va stocker le savoir par centaines de milliers de rouleaux. Que peut-il bien arriver à une bibliothèque ? » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Voilà : l'Histoire commence quand on écrit. Un message peut survivre à son auteur, voyager, être copié. Mais c'est encore réservé aux scribes. Direction l'Antiquité — Grèce, Rome, Pompéi. Que peut-il arriver à une bibliothèque de milliers de rouleaux ? » — MARTINE",
 
   required: 3,
   startScene: 0,

@@ -207,7 +207,7 @@ const chapter = {
   accroche: "La clé USB 🔌 · le smartphone 📲 · les réseaux 🌐 · le cloud ☁️ · et deux messages qui se perdent…",
 
   finTitre: "VOYAGE TERMINÉ",
-  finTexte: "« Circuits rechargés à {pct} %. Regarde ta frise, humain. Toute l'histoire est là, en un coup d'œil : la vitesse explose, la portée explose, la capacité explose… et la durabilité tombe au fond du trou. Ta disquette avait 30 ans et elle est déjà illisible. La paroi de Lascaux a 20 000 ans et on la lit encore. Alors avant que je te ramène : j'ai UNE dernière question pour toi. » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Regarde ta frise : ça va plus vite, plus loin, on stocke plus. Mais ça dure de moins en moins. La disquette de Julien a 30 ans : illisible. La paroi de Lascaux a 20 000 ans : on la lit encore. Avant que je te ramène — j'ai une dernière question pour toi. » — MARTINE",
 
   required: 4,
   startScene: 0,

@@ -411,11 +411,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 5 — Du manuscrit à l'imprimerie.",
-  presentation: "Vers 1450 : le seigneur Charles Bannister veut sa gloire brodée, et la peste réclame des remèdes enfermés dans de rares livres. Au monastère du frère Jorge, assemble un codex et paie la copie (hors de prix !) d'un traité de Galien. Puis découvre la machine qui change tout : l'imprimerie de Gutenberg.",
+  presentation: "Vers 1450 : la peste rôde, les remèdes dorment dans de rares livres. Au monastère de frère Jorge, assemble un codex et fais copier un traité — c'est hors de prix. Puis découvre la machine qui va tout changer : l'imprimerie de Gutenberg.",
   accroche: "Brode Bayeux 🧵 · relie un codex 📕 · paie une fortune 💰 · imprime avec Gutenberg 🖨️",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Tu viens de vivre LE grand basculement : avant l'imprimerie, un seul livre valait une petite maison et le savoir dormait dans les monastères ; après, il se copie par milliers et échappe au contrôle. Regarde ta frise : la portée et la capacité explosent… mais ce qui est rapide et puissant dure de moins en moins. Garde ça en tête. Prochain saut : les Temps modernes — la presse, la poste, le télégraphe. » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Avant Gutenberg, un livre valait une petite maison. Après, il se copie par milliers. Regarde ta frise : ça va plus loin, il y en a plus… mais ça dure de moins en moins. Retiens ça. Direction les Temps modernes — presse, poste, télégraphe. » — MARTINE",
 
   required: 3,
   startScene: 0,

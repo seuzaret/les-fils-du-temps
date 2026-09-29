@@ -316,11 +316,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 9 — Les médias entrent à la maison.",
-  presentation: "En vingt ans, la télévision, le magnétoscope, le CD et l'ordinateur envahissent chaque foyer. Chacun devient à la fois spectateur, enregistreur et graveur. Explore trois arrêts : la Lune en direct (1969), une chambre d'ado (1985), un bureau (1990). Et n'oublie pas la disquette que Julien te donne : on la retrouvera dans 30 ans…",
+  presentation: "En vingt ans, la télévision, le magnétoscope, le CD et l'ordi entrent dans chaque foyer. Trois arrêts : la Lune en direct (1969), une chambre d'ado (1985), un bureau (1990). Et n'oublie pas la disquette de Julien — on la retrouvera dans 30 ans.",
   accroche: "TV cathodique 📺 · cassettes 📼 · CD-Rom 💿 · disquette 3½ » 💾",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Vingt ans, trois révolutions : le direct mondial, l'enregistrement à domicile, la gravure numérique. Chaque support s'est vendu comme « inaltérable ». Regarde ta frise : la durabilité continue de plonger. Prochain saut : ton époque. Et j'ai gardé la disquette de Julien, on va voir ce qu'elle vaut aujourd'hui… » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Trois révolutions en vingt ans : la Lune en direct, l'enregistrement chez soi, la gravure sur CD. Chaque support s'est vendu comme « éternel ». Regarde ta frise : ça dure de moins en moins. J'ai gardé la disquette de Julien — on va voir ce qu'elle vaut aujourd'hui. » — MARTINE",
 
   required: 5,
   startScene: 0,

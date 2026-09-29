@@ -219,7 +219,7 @@ const chapter = {
   accroche: "Paris occupé 🇩🇪 · Studio BBC 📻 · Salon parisien 🧣 · Un poème → un débarquement 🌊",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Un vers de Verlaine, glissé dans les ondes ennemies, a lancé la libération de l'Europe. La radio franchit les murs et les frontières… mais elle n'existe que le temps qu'elle passe. Pas de trace, pas d'archive : l'appel du 18 juin, jamais enregistré, n'existe plus qu'en TEXTE. Prochain saut : ton époque. » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Un vers de Verlaine glissé dans les ondes ennemies a lancé la libération de l'Europe. La radio franchit les murs — mais elle n'existe que le temps qu'elle passe. L'appel du 18 juin, jamais enregistré, n'existe plus qu'en texte. Direction ton époque. » — MARTINE",
 
   required: 3,
   startScene: 0,
