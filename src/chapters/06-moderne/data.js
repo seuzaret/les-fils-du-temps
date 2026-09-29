@@ -241,11 +241,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 6 — Jules, journaliste des Temps modernes.",
-  presentation: "Suis Jules le journaliste : en province, il assiste au vol d'une montgolfière et l'envoie à Paris par la poste ; à l'imprimerie, le rédacteur en chef Sigismond en fait une gazette ; et après la Révolution, en 1794, la victoire de Condé file par le télégraphe de Chappe — où un certain Volta a besoin d'aide pour inventer la pile.",
+  presentation: "Suis Jules le journaliste : en province, il voit une montgolfière et raconte l'exploit par la poste. À l'imprimerie, Sigismond en fait une gazette. Puis, en 1794, une victoire file par le télégraphe de Chappe. Et Volta a besoin d'aide pour inventer la pile.",
   accroche: "Écris un scoop 📝 · lance-le par la poste 📯 · imprime la gazette 📰 · télégraphie Condé 🚦 · fabrique la pile de Volta ⚡",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. De la plume de Jules au télégraphe de Chappe, le message file de plus en plus vite — mais tout reste tenu par le pouvoir : gazette surveillée, télégraphe réservé à l'État. Ça va changer. Prochain saut : le XIXe siècle. Là, grâce à ta pile, l'électricité va lancer les messages autour du globe en un éclair — et, plus fou encore, on va apprendre à ENREGISTRER le son et l'image. As-tu bien la pile de Volta avec toi ? On en aura besoin dès l'arrivée. » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Le message file plus vite, mais tout reste tenu par le pouvoir : gazette surveillée, télégraphe réservé à l'État. Ça va changer. Direction le XIXe : grâce à ta pile, l'électricité va lancer les messages autour du globe — et on va apprendre à enregistrer le son et l'image. Prêt·e ? » — MARTINE",
 
   required: 3,
   startScene: 0,

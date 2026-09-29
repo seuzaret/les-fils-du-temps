@@ -302,11 +302,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 7 — Vaincre la distance, fixer l'instant. Avec les O'Sullivan.",
-  presentation: "Grâce à ta pile de Volta, l'électricité fait voyager les messages plus vite que l'homme — mais surtout, on apprend à FIXER l'instant (photo), la VOIX (phonographe) et le MOUVEMENT (cinéma). Suis la famille O'Sullivan sur 4 générations : James télégraphie son filon d'or, envoie son portrait à sa mère, dit « Venez ! » à l'Irlande par le câble, grave sa voix sur un cylindre de cire ; sa famille embarque sur le Titanic — la TSF les sauve ; Sean va au cinéma voir un film sur le naufrage, puis appelle San Francisco au téléphone.",
+  presentation: "Grâce à ta pile, l'électricité lance les messages autour du globe. Et on apprend à fixer l'instant (photo), la voix (phonographe), le mouvement (cinéma). Suis la famille O'Sullivan : James, chercheur d'or, appelle sa famille en Irlande. Ils embarquent sur le Titanic. Son petit-fils Sean va au cinéma, puis passe son premier coup de téléphone.",
   accroche: "Morse 📟 · photo 📷 · câble 🌊 · phono 🎙️ · TSF 🆘 · cinéma 🎞️ · téléphone 📞",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Quel siècle pressé ! Le message file désormais autour du globe en un éclair — par fil, par câble sous la mer, par ondes dans l'air, et pour finir en VOIX vivante d'un océan à l'autre. Mais regarde ta frise : plus c'est rapide et puissant, moins ça dure. Prochain saut : le XXe siècle. La radio et la télévision vont entrer dans chaque foyer… et l'ordinateur va naître. » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Quel siècle pressé ! Fil, câble sous la mer, ondes dans l'air, voix d'un océan à l'autre. Mais ta frise le montre : plus c'est rapide, moins ça dure. Direction le XXe : la radio et la télévision vont entrer dans chaque foyer. Et l'ordinateur va naître. » — MARTINE",
 
   required: 6,
   startScene: 0,

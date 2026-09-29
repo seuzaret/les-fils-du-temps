@@ -56,13 +56,11 @@ function FrisePreview() {
 }
 
 const DIALOGUES = [
-  { speaker: "elias", text: "MARTINE est réparée. Regarde-la — elle rayonne, comme jamais. Grâce à toi, {prenom}, elle est de nouveau entière." },
-  { speaker: "martine", mood: "content", text: "Mes circuits… ils vibrent, ils chantent. Merci, chronaute. Je ne suis plus une noix cassée : je suis MARTINE, entière, prête à tout." },
-  { speaker: "elias", text: "Écoute. Il nous reste UNE mission. Il y a bien des années, l'une des nôtres est partie chercher un remède contre l'oubli qui nous ronge. Elle n'est jamais rentrée." },
-  { speaker: "elias", text: "Son nom de code : Al3x1A. La pionnière. Elle a pris la MARTINE-jumelle et disparu quelque part dans les époques. Nous ignorons où. Elle attend, quelque part, quelqu'un pour la ramener." },
-  { speaker: "martine", mood: "content", text: "Je viens d'assembler un instrument à partir des époques que nous avons traversées. Voici ton nouvel outil : le TEMPOSCOPE. Il te permettra de voyager d'une époque à l'autre d'un simple regard.", showFrise: true },
-  { speaker: "martine", mood: "neutre", text: "Al3x1A a laissé des NOTES sur les supports caractéristiques de chaque époque — paroi, tablette, papyrus, télégramme… Trouve-les. Recoupe les indices. Retrouve-la." },
-  { speaker: "elias", text: "C'est une mission longue et difficile. Mais si quelqu'un peut le faire, c'est toi. Es-tu prêt·e à repartir dans les fils du temps, {prenom} ?" },
+  { speaker: "elias", text: "MARTINE est réparée. Regarde-la — elle rayonne. Grâce à toi, {prenom}." },
+  { speaker: "martine", mood: "content", text: "Mes circuits chantent. Merci, chronaute. Je suis prête à repartir." },
+  { speaker: "elias", text: "Écoute. Il y a des années, l'une des nôtres est partie chercher un remède contre l'oubli. Nom de code : Al3x1A. Elle n'est jamais rentrée. Quelqu'un doit aller la retrouver." },
+  { speaker: "martine", mood: "content", text: "J'ai bricolé un nouvel outil : le TEMPOSCOPE. Tu voyageras d'une époque à l'autre d'un simple regard. Al3x1A a laissé des notes dans chaque époque, sur son support typique — paroi, tablette, papyrus, télégramme…", showFrise: true },
+  { speaker: "elias", text: "Trouve ses notes, recoupe les indices, ramène-la. Prêt·e, {prenom} ?" },
 ];
 
 export default function BriefingMission({ prenom, onAccept }) {

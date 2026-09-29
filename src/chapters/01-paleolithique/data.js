@@ -468,13 +468,13 @@ const chapter = {
   /* Écran titre */
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
-  presentation: "Un accident temporel vous a projetés en −18 000. Explore quatre lieux — la grotte, le campement, la rivière — trouve des éléments cachés dans le décor et combine-les deux par deux pour fabriquer des outils… et laisser des messages pour le futur.",
+  presentation: "Un accident vous jette en −18 000. Fouille la grotte, le campement, la rivière. Trouve des objets cachés, combine-les deux par deux pour fabriquer des outils et laisser des messages pour le futur.",
   presentationTitre: "Chapitre 1 — Préhistoire.",
   accroche: "Fabrique un arc 🏹 · chasse 🦌 · invente la flûte, le tambour, la peinture…",
 
   /* Écran de fin — {pct} sera remplacé par le pourcentage de recharge */
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Tu viens de vivre la grande leçon de la Préhistoire : un média, c'est toujours une idée + un support + un outil — et souvent, il faut d'abord fabriquer le support. Prochaine escale : l'Antiquité, où les humains inventent un truc fou nommé écriture… » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. Retiens ça : un média, c'est une idée + un support + un outil. Et souvent, il faut d'abord fabriquer le support. Direction l'Antiquité : les humains vont y inventer un truc fou — l'écriture. » — MARTINE",
 
   /* Règles du chapitre */
   required: 3,          // nombre de messages pour débloquer le saut temporel

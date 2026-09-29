@@ -40,7 +40,7 @@ const DIALOGUES_PAR_PERSO = {
     { mood: "content",
       text: "Tu as lu mon carnet ? Bien. Ça va mieux, là — je te reconnais, {prenom}. Merci d'être venu·e." },
     { mood: "vexe",
-      text: "Grâce à toi, à ta traversée des époques, on connaît enfin CE QUI DURE. Tu viens de nous rendre notre mémoire, morceau par morceau. Ce que je n'ai pas écrit dans le carnet, Mira va te le dire. Puis reviens me voir : j'aurai une question." },
+      text: "Grâce à ta traversée des époques, on sait enfin ce qui dure. Tu nous as rendu notre mémoire. Le reste, Mira va te le dire. Puis reviens : j'ai une question pour toi." },
   ],
   mira: [
     { mood: "content",
@@ -50,9 +50,9 @@ const DIALOGUES_PAR_PERSO = {
   ],
   camille: [
     { mood: "neutre",
-      text: "Al3x1A a pris la route il y a longtemps, dans le passé, pour trouver un remède. Elle connaissait bien les époques. Aucune nouvelle depuis. On attend, tout simplement, depuis dix ans." },
+      text: "Al3x1A est partie chercher un remède, il y a dix ans. Aucune nouvelle. On attend." },
     { mood: "content",
-      text: "Tu es la seule chronaute, aujourd'hui, à avoir traversé les époques comme elle. Retourne voir Elias — il a quelque chose à te demander." },
+      text: "Aujourd'hui, tu es la seule à avoir traversé les époques comme elle. Retourne voir Elias — il a une question." },
   ],
   finale: [
     { mood: "content",

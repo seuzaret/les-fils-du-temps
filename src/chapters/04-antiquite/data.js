@@ -313,11 +313,11 @@ const chapter = {
   titre: "MARTINE",
   sousTitre: "Machine À Remonter le Temps Intelligente Néanmoins Excellente",
   presentationTitre: "Chapitre 4 — L'Antiquité, à Pompéi.",
-  presentation: "An 79, à Pompéi : le marchand Caius rénove sa villa pour une grande fête. Aide ses artisans à tout noter (la tablette de cire), inviter la ville, peindre une fresque, graver la pierre et copier un manuscrit à ranger dans sa bibliothèque. Le tout à l'ombre d'un Vésuve qui couve…",
+  presentation: "An 79, à Pompéi : Caius prépare une grande fête dans sa villa. Aide ses artisans : tablette de cire, invitations, fresque, gravure, manuscrit pour sa bibliothèque. Le tout à l'ombre du Vésuve.",
   accroche: "Note sur la cire 🪧 · peins une fresque 🖼️ · grave le marbre 🏛 · copie un manuscrit 📚",
 
   finTitre: "SAUT TEMPOREL RÉUSSI",
-  finTexte: "« Circuits rechargés à {pct} %. Tu as vu le meilleur et le pire : la bibliothèque qui rêve de tout garder… sur un support fragile, au même endroit. La grande leçon : un savoir sans COPIES ne tient qu'à un fil. Au prochain saut, les humains vont changer le FORMAT du livre (des pages !), puis inventer une machine qui copie tout par centaines : l'imprimerie. Direction le Moyen Âge et Gutenberg. » — MARTINE",
+  finTexte: "« Circuits rechargés à {pct} %. La leçon de Pompéi : un savoir sans copies ne tient qu'à un fil — un volcan et tout brûle. Au prochain saut, on change le livre (fini les rouleaux, place aux pages !) et une machine va bientôt tout copier par centaines. Direction Gutenberg. » — MARTINE",
 
   required: 3,
   /* on démarre à la villa (Caius t'accueille), pas au port : les 3

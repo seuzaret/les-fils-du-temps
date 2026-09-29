@@ -480,9 +480,9 @@ const PLANCHES = [
   { titre: "Le grand silence",          date: "un matin",    Vignette: P2,
     texte: "Un matin, tout s'est éteint. Serveurs, satellites, écrans, téléphones. Personne n'a jamais su rallumer. On a d'abord cru à une panne. Puis les jours ont passé." },
   { titre: "Cinq siècles envolés",      date: "les années suivantes", Vignette: P3,
-    texte: "Photos, films, livres, journaux, courrier : tout était sur des supports qu'on ne pouvait plus lire. Les enfants nous demandaient ce qu'était une clé USB — nous n'avions plus rien à leur montrer." },
+    texte: "Photos, films, livres, courrier : tout était sur des supports qu'on ne savait plus lire. Les enfants demandaient ce qu'était une clé USB. On n'avait rien à leur montrer." },
   { titre: "Ce qui a tenu",             date: "à travers les âges", Vignette: P4,
-    texte: "Il restait ce que le temps avait déjà éprouvé : les parois gravées, les livres imprimés, les stèles, les vitraux. Ce sont eux qui nous ont rendu, morceau par morceau, un peu de mémoire." },
+    texte: "Il restait ce que le temps avait déjà éprouvé : parois gravées, livres imprimés, stèles, vitraux. Ce sont eux qui nous ont rendu, morceau par morceau, un peu de mémoire." },
   { titre: "La maladie de la mémoire",  date: "aujourd'hui", Vignette: P5,
     texte: "Mais quelque chose nous ronge. On perd nos souvenirs, un peu chaque jour. Certains oublient jusqu'à leur propre nom. Ceux qui oublient tout oublient même qu'ils oublient. C'est le pire." },
 ];
