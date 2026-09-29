@@ -13,10 +13,10 @@ const CHEAT_BTN = {
 export default function CheatPanel({
   cheat, onClose,
   chapters, jeu2, mode, chapterIndex, jeu2Target, jeu2Notes,
-  onGiveAll, onUnlockAll, onFillFrise,
+  onFillFrise,
   onPlayChapter,
   onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab,
-  onNewGameJeu2,
+  onNewGameJeu2, onNewGameJeu3,
 }) {
   if (!cheat) return null;
   return (
@@ -30,8 +30,6 @@ export default function CheatPanel({
         <button onClick={onClose} style={{ background: "none", border: "none", color: "#8a7a9a", cursor: "pointer", fontSize: 14 }}>✕</button>
       </div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-        <button style={CHEAT_BTN} onClick={onGiveAll}>🎒 Tout ramasser (ce chapitre)</button>
-        <button style={CHEAT_BTN} onClick={onUnlockAll}>🔓 Débloquer tous les chapitres</button>
         <button style={CHEAT_BTN} onClick={onFillFrise}>◆ Remplir la frise (toutes époques)</button>
       </div>
 
@@ -62,6 +60,11 @@ export default function CheatPanel({
             Cible : ch.{jeu2Target + 1} · notes : {jeu2Notes.length}/9
           </div>
         )}
+      </div>
+
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 3 (Bunker 2087) :</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+        <button style={CHEAT_BTN} onClick={onNewGameJeu3}>🌑 Démarrer le Jeu 3</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>

@@ -1142,6 +1142,7 @@ export default function App() {
       onSetEpiChoice={setEpiChoice}
       onSetTab={setTab}
       onNewGameJeu2={newGameJeu2}
+      onNewGameJeu3={newGameJeu3}
     />
   );
 
