@@ -77,8 +77,14 @@ export default function BriefingMission({ prenom, onAccept }) {
     if (step.showFrise) setFriseVisible(true);
   }, [step]);
 
+  const advance = () => {
+    if (!done) skip();
+    else if (isLast) onAccept?.();
+    else setIdx(idx + 1);
+  };
+
   return (
-    <div style={{ minHeight: "100vh", position: "relative", overflow: "hidden", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5", padding: "20px 16px" }}>
+    <div onClick={advance} style={{ minHeight: "100vh", position: "relative", overflow: "hidden", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5", padding: "20px 16px", cursor: "pointer" }}>
       {/* Fond nébuleuse : dégradé profond + étoiles + traînées de temps */}
       <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 30% 20%, #1a2a5a 0%, #0a1030 40%, #04081a 80%)" }} />
       {/* Étoiles : petits points aléatoires (positions fixes pour ne pas re-rendre) */}
@@ -135,9 +141,8 @@ export default function BriefingMission({ prenom, onAccept }) {
         </div>
 
         {/* La bulle de dialogue avec effet TYPEWRITER */}
-        <div style={{ background: "rgba(20,30,50,0.85)", border: `2px solid ${step.speaker === "martine" ? "#5eff9e" : "#e0a848"}`, borderRadius: 14, padding: "16px 20px", marginTop: 18, minHeight: 96, boxShadow: `0 0 24px ${step.speaker === "martine" ? "rgba(94,255,158,0.22)" : "rgba(224,168,72,0.22)"}`, cursor: done ? "default" : "pointer" }}
-          onClick={() => !done && skip()}
-          title={done ? "" : "Cliquer pour tout afficher"}>
+        <div style={{ background: "rgba(20,30,50,0.85)", border: `2px solid ${step.speaker === "martine" ? "#5eff9e" : "#e0a848"}`, borderRadius: 14, padding: "16px 20px", marginTop: 18, minHeight: 96, boxShadow: `0 0 24px ${step.speaker === "martine" ? "rgba(94,255,158,0.22)" : "rgba(224,168,72,0.22)"}` }}
+          title={done ? "Cliquer pour continuer" : "Cliquer pour tout afficher"}>
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: step.speaker === "martine" ? "#5eff9e" : "#e0a848", marginBottom: 8 }}>
             {step.speaker === "martine" ? "MARTINE ▸" : "ELIAS ▸"}
           </div>
@@ -157,13 +162,13 @@ export default function BriefingMission({ prenom, onAccept }) {
         {/* Boutons : Suite / Accepter */}
         <div style={{ display: "flex", justifyContent: "center", marginTop: 20 }}>
           {!isLast ? (
-            <button onClick={() => done && setIdx(idx + 1)}
+            <button onClick={(e) => { e.stopPropagation(); if (done) setIdx(idx + 1); }}
               disabled={!done}
               style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#7fd8ff" : "#3a4058", border: `1px solid ${done ? "#3a80c8" : "#26324a"}`, borderRadius: 10, padding: "10px 26px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 2, transition: "all 0.2s" }}>
               Suite ▸
             </button>
           ) : (
-            <button onClick={() => done && onAccept?.()}
+            <button onClick={(e) => { e.stopPropagation(); if (done) onAccept?.(); }}
               disabled={!done}
               style={{ background: done ? "#5eff9e" : "#2a3020", color: done ? "#06110b" : "#3a4058", border: "none", borderRadius: 12, padding: "14px 32px", fontWeight: 900, cursor: done ? "pointer" : "default", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: done ? "0 0 22px rgba(94,255,158,0.5)" : "none", animation: done ? "pulseAccept 2s ease-in-out infinite" : "none" }}>
               ▶ ACCEPTER LA MISSION

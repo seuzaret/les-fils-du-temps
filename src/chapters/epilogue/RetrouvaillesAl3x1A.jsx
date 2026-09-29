@@ -75,9 +75,10 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
   const [idx, setIdx] = useState(0);
   const step = DIALOGUES[idx];
   const isLast = idx >= DIALOGUES.length - 1;
+  const advance = () => { if (isLast) onDone?.(); else setIdx(idx + 1); };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "rgba(4,8,16,0.95)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, zIndex: 95 }}>
+    <div onClick={advance} style={{ position: "fixed", inset: 0, background: "rgba(4,8,16,0.95)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, zIndex: 95, cursor: "pointer" }} title="Cliquer pour continuer">
       <div style={{ maxWidth: 640, width: "100%", background: "#0e1420", border: "3px solid #7fd8ff", borderRadius: 16, padding: 20, boxShadow: "0 12px 48px rgba(0,0,0,0.75), 0 0 40px rgba(127,216,255,0.35)", animation: "fadein 0.35s ease-out" }}>
         {/* Bandeau lieu */}
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", textAlign: "center", marginBottom: 10 }}>
@@ -96,12 +97,12 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14 }}>
               <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>{idx + 1} / {DIALOGUES.length}</div>
               {!isLast ? (
-                <button onClick={() => setIdx(idx + 1)}
+                <button onClick={(e) => { e.stopPropagation(); setIdx(idx + 1); }}
                   style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                   Suite ▸
                 </button>
               ) : (
-                <button onClick={onDone}
+                <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
                   style={{ background: "#e8934a", color: "#160c02", border: "none", borderRadius: 10, padding: "10px 22px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: "0 0 18px rgba(232,150,74,0.55)", animation: "glow 2.4s ease-in-out infinite" }}>
                   🌀 REPARTIR AU FUTUR
                 </button>
