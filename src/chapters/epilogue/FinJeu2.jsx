@@ -148,30 +148,42 @@ function Acte0() {
         </>
       )}
 
-      {/* MARTINE qui descend depuis le haut, grand format */}
+      {/* MARTINE qui descend depuis le haut, vraie noix spatiale (sprite standard 100×100 mis à l'échelle) */}
       <g style={{ transform: t >= 1 ? "translate(0px, 0px)" : "translate(0px, -260px)", transition: "transform 1100ms cubic-bezier(.34,1.56,.64,1)" }}>
-        <g transform="translate(500,390)">
-          {/* ombre au sol */}
-          <ellipse cx="0" cy="40" rx="90" ry="14" fill="#0a0603" opacity="0.7" />
-          {/* corps noix bombé */}
-          <path d="M-80 -30 Q0 -60 80 -30 Q86 12 40 22 L-40 22 Q-86 12 -80 -30 Z" fill="#a06838" stroke="#3a1810" strokeWidth="2.5" />
-          <path d="M-64 -30 Q0 -46 64 -30" stroke="#3a1810" strokeWidth="0.6" fill="none" opacity="0.5" />
-          <path d="M-72 -14 Q0 -30 72 -14" stroke="#3a1810" strokeWidth="0.6" fill="none" opacity="0.5" />
-          {/* œil bleu principal */}
-          <circle cx="-1" cy="-10" r="16" fill="#cfeaff" stroke="#5c3a22" strokeWidth="2" />
-          <circle cx="-3" cy="-12" r="7" fill="#7fd8ff" />
-          <circle cx="-5" cy="-14" r="2.5" fill="#fff" />
-          {/* plaque année */}
-          <rect x="-36" y="10" width="72" height="14" rx="3" fill="#0c1410" stroke="#5c3a22" strokeWidth="1" />
-          <text x="0" y="20" textAnchor="middle" fontSize="9" fill="#5eff9e" fontFamily="ui-monospace,monospace" letterSpacing="2">2287</text>
-          {/* antenne + LED */}
-          <path d="M20 -46 q10 -14 22 -12" stroke="#5a6878" strokeWidth="1.5" fill="none" />
-          <circle cx="42" cy="-58" r="4" fill="#5eff9e">
-            <animate attributeName="opacity" values="1;0.4;1" dur="1.4s" repeatCount="indefinite" />
+        {/* ombre au sol */}
+        <ellipse cx="500" cy="430" rx="90" ry="14" fill="#0a0603" opacity="0.7" />
+        <g transform="translate(400,290) scale(2)">
+          {/* antenne + LED verte au-dessus */}
+          <line x1="50" y1="26" x2="50" y2="12" stroke="#8a94a8" strokeWidth="3" strokeLinecap="round" />
+          <circle cx="50" cy="10" r="3.6" fill="#5eff9e">
+            <animate attributeName="opacity" values="1;0.5;1" dur="1.4s" repeatCount="indefinite" />
           </circle>
-          {/* petits pieds */}
-          <rect x="-30" y="20" width="6" height="12" fill="#3a1810" />
-          <rect x="24" y="20" width="6" height="12" fill="#3a1810" />
+          {/* propulseurs latéraux + flammes d'atterrissage */}
+          <rect x="4" y="52" width="14" height="11" rx="4" fill="#6a7488" />
+          <rect x="82" y="52" width="14" height="11" rx="4" fill="#6a7488" />
+          <g>
+            <path d="M5 63 l-10 8 l10 4 Z" fill="#7fd8ff">
+              <animate attributeName="opacity" values="0.6;1;0.6" dur="0.5s" repeatCount="indefinite" />
+            </path>
+            <path d="M95 63 l10 8 l-10 4 Z" fill="#7fd8ff">
+              <animate attributeName="opacity" values="0.6;1;0.6" dur="0.5s" repeatCount="indefinite" />
+            </path>
+            <path d="M5 65 l-5.5 4 l5.5 2 Z" fill="#ffb347" />
+            <path d="M95 65 l5.5 4 l-5.5 2 Z" fill="#ffb347" />
+          </g>
+          {/* coque de noix */}
+          <path d="M50 24 Q78 26 82 52 Q84 74 66 82 Q50 88 34 82 Q16 74 18 52 Q22 26 50 24 Z" fill="#8a6240" />
+          <path d="M50 24 Q78 26 82 52 Q83 66 74 76 Q64 60 66 42 Q60 30 50 24 Z" fill="#6e4a2c" opacity="0.7" />
+          {/* arête équatoriale + rides de la coque */}
+          <path d="M20 54 Q50 44 80 54" stroke="#5c3a22" strokeWidth="3" fill="none" opacity="0.8" />
+          <path d="M30 36 q10 6 6 16 M62 32 q-6 10 0 18 M40 68 q8 6 18 2 M26 62 q4 8 12 10" stroke="#5c3a22" strokeWidth="2" fill="none" opacity="0.55" />
+          {/* écran de bord : année de retour */}
+          <rect x="30" y="66" width="40" height="13" rx="3" fill="#0c1410" stroke="#5c3a22" strokeWidth="1.5" />
+          <text x="50" y="75.5" textAnchor="middle" fontSize="8.5" fill="#5eff9e" fontFamily="ui-monospace,monospace" letterSpacing="0.5">2287</text>
+          {/* hublot-œil */}
+          <circle cx="50" cy="52" r="11" fill="#cfeaff" stroke="#5c3a22" strokeWidth="2.5" />
+          <ellipse cx="46" cy="47" rx="4" ry="2.4" fill="#fff" opacity="0.85" />
+          <path d="M43 55 Q50 46 57 55" stroke="#0c2233" strokeWidth="3.6" fill="none" strokeLinecap="round" />
         </g>
       </g>
 
