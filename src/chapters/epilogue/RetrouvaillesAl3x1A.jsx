@@ -72,25 +72,35 @@ function Decor({ amb, remede, mood }) {
         </circle>
       ))}
 
-      {/* MARTINE d'Al3x1A cassée à gauche */}
-      <g transform="translate(150,260)">
-        {/* halo faible cassé */}
-        <circle cx="0" cy="-30" r="70" fill="url(#ret-halo)" opacity="0.35" />
-        {/* corps noix */}
-        <path d="M -55 30 Q -70 -20 -50 -70 Q -20 -100 20 -100 Q 55 -95 65 -55 Q 68 -10 55 30 Q 55 55 30 60 L -30 60 Q -55 55 -55 30 Z"
-          fill="#8a8a94" stroke="#3a3a44" strokeWidth="2" />
-        {/* fissure diagonale */}
-        <path d="M -30 -80 L 20 40" stroke="#1a1a22" strokeWidth="3" fill="none" strokeLinecap="round" />
-        <path d="M -30 -80 L 20 40" stroke="#ff5a3a" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.7" />
-        {/* œil éteint */}
-        <circle cx="0" cy="-45" r="16" fill="#20242c" stroke="#3a3a44" strokeWidth="1.5" />
-        <circle cx="0" cy="-45" r="3" fill="#5a5a68" />
-        {/* petite étiquette */}
-        <rect x="-22" y="10" width="44" height="14" rx="2" fill="#2a2a34" stroke="#5a5a64" strokeWidth="0.8" />
-        <text x="0" y="20" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#8a8a94" letterSpacing="1">HS · 2277</text>
-        {/* fumerolle */}
-        <path d="M -10 -100 q -6 -14 4 -22 q 10 -6 4 -18" stroke="#8a8a94" strokeWidth="1.5" fill="none" opacity="0.55">
-          <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3.5s" repeatCount="indefinite" />
+      {/* MARTINE d'Al3x1A cassée à gauche — vraie noix spatiale (viewBox 100×100 mise à l'échelle) */}
+      <g transform="translate(90,180) scale(1.6)">
+        {/* halo cassé, très pâle */}
+        <circle cx="50" cy="55" r="55" fill="url(#ret-halo)" opacity="0.25" />
+        {/* antenne retombée + boule éteinte */}
+        <line x1="50" y1="26" x2="60" y2="14" stroke="#5a5a64" strokeWidth="3" strokeLinecap="round" />
+        <circle cx="60" cy="12" r="3.6" fill="#5a5a64" />
+        {/* propulseurs latéraux, éteints */}
+        <rect x="4" y="52" width="14" height="11" rx="4" fill="#3a4048" />
+        <rect x="82" y="52" width="14" height="11" rx="4" fill="#3a4048" />
+        {/* coque de noix — teintée grisée pour dire l'usure/le HS */}
+        <path d="M50 24 Q78 26 82 52 Q84 74 66 82 Q50 88 34 82 Q16 74 18 52 Q22 26 50 24 Z" fill="#6a5040" />
+        <path d="M50 24 Q78 26 82 52 Q83 66 74 76 Q64 60 66 42 Q60 30 50 24 Z" fill="#4e3a24" opacity="0.7" />
+        {/* arête équatoriale + rides */}
+        <path d="M20 54 Q50 44 80 54" stroke="#3a2418" strokeWidth="3" fill="none" opacity="0.8" />
+        <path d="M30 36 q10 6 6 16 M62 32 q-6 10 0 18 M40 68 q8 6 18 2 M26 62 q4 8 12 10" stroke="#3a2418" strokeWidth="2" fill="none" opacity="0.55" />
+        {/* grosse fissure diagonale */}
+        <path d="M 30 28 L 70 82" stroke="#1a1008" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path d="M 30 28 L 70 82" stroke="#ff5a3a" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.6" />
+        <path d="M 42 40 L 38 46 M 56 60 L 62 58 M 48 50 L 44 56" stroke="#1a1008" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.7" />
+        {/* écran de bord éteint */}
+        <rect x="30" y="66" width="40" height="13" rx="3" fill="#0c1410" stroke="#3a2418" strokeWidth="1.5" />
+        <text x="50" y="75.5" textAnchor="middle" fontSize="8.5" fill="#3a4048" fontFamily="ui-monospace,monospace" letterSpacing="0.5">HS · 2277</text>
+        {/* hublot-œil éteint */}
+        <circle cx="50" cy="52" r="11" fill="#3a4048" stroke="#3a2418" strokeWidth="2.5" />
+        <path d="M43 50 L57 54 M43 54 L57 50" stroke="#5a5a64" strokeWidth="2" strokeLinecap="round" />
+        {/* fumerolle qui s'échappe par la fissure */}
+        <path d="M 42 30 q -6 -14 4 -22 q 10 -6 4 -18" stroke="#8a8a94" strokeWidth="1.5" fill="none" opacity="0.55">
+          <animate attributeName="opacity" values="0.15;0.55;0.15" dur="3.5s" repeatCount="indefinite" />
         </path>
       </g>
 
@@ -161,8 +171,6 @@ function Decor({ amb, remede, mood }) {
         )}
         {/* larme */}
         {mood === "content" && <circle cx="-18" cy="14" r="1.4" fill="#7fd8ff" opacity="0.9"><animate attributeName="cy" values="14;22;14" dur="4s" repeatCount="indefinite" /></circle>}
-        {/* bras tendu vers la fiole */}
-        <path d="M 40 90 Q 90 80 130 90" stroke="#d0a888" strokeWidth="10" fill="none" strokeLinecap="round" />
       </g>
 
       {/* Bandeau lieu, en haut */}
