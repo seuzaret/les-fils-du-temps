@@ -308,7 +308,7 @@ const chapter = {
   finTitre: "SAUT TEMPOREL RÉUSSI",
   finTexte: "« Circuits rechargés à {pct} %. Quel siècle pressé ! Le message file désormais autour du globe en un éclair — par fil, par câble sous la mer, par ondes dans l'air, et pour finir en VOIX vivante d'un océan à l'autre. Mais regarde ta frise : plus c'est rapide et puissant, moins ça dure. Prochain saut : le XXe siècle. La radio et la télévision vont entrer dans chaque foyer… et l'ordinateur va naître. » — MARTINE",
 
-  required: 7,
+  required: 6,
   startScene: 0,
   destination: "XXe SIÈCLE",
   linear: true,

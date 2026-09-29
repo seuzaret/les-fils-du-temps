@@ -3,55 +3,173 @@ import { useState } from "react";
    RETROUVAILLES AVEC AL3X1A
    ------------------------------------------------------------
    Modale plein écran qui joue la scène de retrouvailles quand
-   le joueur trouve Al3x1A dans son décor de cachette. Séquence
-   scriptée courte : Al3x1A reconnaissant·e, remise du remède,
-   bouton pour repartir au futur (déclenche l'écran de fin jeu 2).
+   le joueur trouve Al3x1A dans son décor de cachette. Un
+   bandeau SVG grand format (viewBox 1000×420) situe la scène
+   dans l'époque : MARTINE d'Al3x1A cassée derrière elle, le
+   remède qui brille sur une table, ambiance colorée selon le
+   chapitre. Séquence scriptée courte, click-anywhere pour
+   avancer, bouton final "REPARTIR AU FUTUR".
    ============================================================ */
 
-/* Portrait proche du cadre-photo, mais plus expressif (Al3x1A vit). */
-export function PortraitAl3x1AVivant({ mood = "content" }) {
-  const eyes = mood === "content" ? -1 : mood === "vexe" ? 1 : 0;
+/* Ambiance visuelle par époque. La clé est un mot-clé cherché
+   dans chapitreNom (case-insensitive) ; premier match gagne. */
+const AMBIANCES = [
+  { key: "préhist", cielHaut: "#f4a94b", cielBas: "#7d3a1f", sol: "#3b2312", rocaille: "#5a3a20", accent: "#f4c874", label: "GROTTE DU SUD" },
+  { key: "antiq",   cielHaut: "#f2c069", cielBas: "#c7702f", sol: "#c8a25a", rocaille: "#8a5a2a", accent: "#ffe6a6", label: "OASIS OUBLIÉE" },
+  { key: "médiév",  cielHaut: "#2c3450", cielBas: "#0e1428", sol: "#141a24", rocaille: "#3a2e1e", accent: "#e8c46c", label: "CELLIER DU DONJON" },
+  { key: "moyen",   cielHaut: "#2c3450", cielBas: "#0e1428", sol: "#141a24", rocaille: "#3a2e1e", accent: "#e8c46c", label: "CELLIER DU DONJON" },
+  { key: "renaiss", cielHaut: "#f3e1ba", cielBas: "#a97a45", sol: "#4b361f", rocaille: "#6c4a28", accent: "#f7d78a", label: "ATELIER D'IMPRIMEUR" },
+  { key: "xixe",    cielHaut: "#5a5a70", cielBas: "#20242e", sol: "#241d16", rocaille: "#3a2f22", accent: "#c8a848", label: "ARRIÈRE-BOUTIQUE" },
+  { key: "xxe",     cielHaut: "#4a5a6c", cielBas: "#1a1f28", sol: "#20242c", rocaille: "#2c3540", accent: "#7fd8ff", label: "SOUS-SOL DE STUDIO" },
+  { key: "xxie",    cielHaut: "#0a1428", cielBas: "#020614", sol: "#0a0f18", rocaille: "#1a2130", accent: "#5eff9e", label: "PARKING SOUTERRAIN" },
+];
+
+function findAmb(name = "") {
+  const n = name.toLowerCase();
+  return AMBIANCES.find(a => n.includes(a.key)) || AMBIANCES[3];
+}
+
+/* Décor SVG grand format 1000×420 :
+   ciel dégradé, silhouettes de rocaille/mobilier, MARTINE
+   cassée à gauche, Al3x1A au centre, table + remède à droite. */
+function Decor({ amb, remede, mood }) {
   return (
-    <svg viewBox="0 0 200 240" style={{ width: "100%", height: "100%", display: "block" }}>
+    <svg viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
-        <linearGradient id="alv-tunique" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#a0a0b0" /><stop offset="100%" stopColor="#606878" /></linearGradient>
+        <linearGradient id="ret-ciel" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={amb.cielHaut} />
+          <stop offset="100%" stopColor={amb.cielBas} />
+        </linearGradient>
+        <radialGradient id="ret-halo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={amb.accent} stopOpacity="0.85" />
+          <stop offset="100%" stopColor={amb.accent} stopOpacity="0" />
+        </radialGradient>
+        <linearGradient id="ret-sol" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={amb.sol} />
+          <stop offset="100%" stopColor="#000000" stopOpacity="0.9" />
+        </linearGradient>
       </defs>
-      <rect width="200" height="240" fill="#1a2030" />
-      <circle cx="100" cy="90" r="80" fill="#7fd8ff" opacity="0.18" />
-      {/* tunique de voyage grise, un peu usée */}
-      <path d="M20 240 L20 185 Q20 155 55 148 L145 148 Q180 155 180 185 L180 240 Z" fill="url(#alv-tunique)" stroke="#3a4048" strokeWidth="1.2" />
-      {/* insigne chronaute */}
-      <circle cx="55" cy="172" r="7" fill="#c8a848" stroke="#5a4020" strokeWidth="0.8" />
-      <path d="M55 167 L55 177 M50 172 L60 172" stroke="#5a4020" strokeWidth="0.8" />
-      {/* accrocs de voyage sur la tunique */}
-      <path d="M40 200 l6 10 M150 210 l-4 8" stroke="#3a3848" strokeWidth="1" />
-      {/* cou */}
-      <ellipse cx="100" cy="132" rx="15" ry="12" fill="#d0a888" />
-      {/* tête ovale */}
-      <ellipse cx="100" cy="80" rx="48" ry="56" fill="#d0a888" stroke="#5a3818" strokeWidth="1.2" />
-      {/* cheveux mi-longs androgynes */}
-      <path d="M55 62 Q60 25 100 22 Q140 25 145 62 L148 90 L140 88 Q142 60 132 45 Q100 30 68 45 Q58 60 60 88 L52 90 Z" fill="#4a3828" />
-      <path d="M65 55 Q75 40 100 42 Q125 40 135 55 Q125 62 100 60 Q75 62 65 55 Z" fill="#3a2818" />
-      <ellipse cx="145" cy="70" rx="8" ry="6" fill="#4a3828" />
-      {/* yeux vivants */}
-      <ellipse cx="82" cy="82" rx="6" ry="4" fill="#f8f4e8" />
-      <ellipse cx="118" cy="82" rx="6" ry="4" fill="#f8f4e8" />
-      <circle cx={82 + eyes} cy="82" r="2.6" fill="#3a2818" />
-      <circle cx={118 + eyes} cy="82" r="2.6" fill="#3a2818" />
-      {/* sourcils */}
-      <path d="M74 74 q8 -3 16 -1 M112 73 q8 -3 16 1" stroke="#3a2818" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-      {/* nez */}
-      <path d="M100 88 L98 105 L102 105" stroke="#8a5828" strokeWidth="0.8" fill="none" />
-      {/* sourire large */}
-      {mood === "content" ? (
-        <path d="M82 122 Q100 138 118 122" stroke="#5a2818" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-      ) : (
-        <path d="M86 128 Q100 122 114 128" stroke="#5a2818" strokeWidth="2" fill="none" strokeLinecap="round" />
-      )}
-      {/* petite cicatrice */}
-      <path d="M124 92 l4 8" stroke="#8a5828" strokeWidth="0.6" opacity="0.6" />
-      {/* Larme d'émotion */}
-      {mood === "content" && <circle cx="80" cy="94" r="1.5" fill="#7fd8ff" opacity="0.85" />}
+
+      {/* Fond ciel/paroi */}
+      <rect x="0" y="0" width="1000" height="420" fill="url(#ret-ciel)" />
+
+      {/* Rocailles au fond, silhouettes brumeuses */}
+      <path d="M -20 260 L 120 200 L 210 240 L 330 190 L 460 235 L 580 195 L 720 240 L 860 205 L 1020 245 L 1020 420 L -20 420 Z"
+        fill={amb.rocaille} opacity="0.55" />
+      <path d="M -20 300 L 90 260 L 240 285 L 390 255 L 560 290 L 700 260 L 880 295 L 1020 275 L 1020 420 L -20 420 Z"
+        fill={amb.rocaille} opacity="0.85" />
+
+      {/* Sol */}
+      <rect x="0" y="330" width="1000" height="90" fill="url(#ret-sol)" />
+
+      {/* Particules / lucioles selon époque */}
+      {[
+        [140, 90, 0.5], [260, 140, 0.9], [420, 70, 0.4], [560, 120, 0.6],
+        [680, 90, 0.8], [820, 150, 0.5], [900, 80, 0.7], [340, 160, 0.6],
+      ].map(([x, y, d], i) => (
+        <circle key={i} cx={x} cy={y} r="1.8" fill={amb.accent} opacity="0.75">
+          <animate attributeName="opacity" values="0.15;0.9;0.15" dur={`${2 + d * 3}s`} repeatCount="indefinite" begin={`${d}s`} />
+        </circle>
+      ))}
+
+      {/* MARTINE d'Al3x1A cassée à gauche */}
+      <g transform="translate(150,260)">
+        {/* halo faible cassé */}
+        <circle cx="0" cy="-30" r="70" fill="url(#ret-halo)" opacity="0.35" />
+        {/* corps noix */}
+        <path d="M -55 30 Q -70 -20 -50 -70 Q -20 -100 20 -100 Q 55 -95 65 -55 Q 68 -10 55 30 Q 55 55 30 60 L -30 60 Q -55 55 -55 30 Z"
+          fill="#8a8a94" stroke="#3a3a44" strokeWidth="2" />
+        {/* fissure diagonale */}
+        <path d="M -30 -80 L 20 40" stroke="#1a1a22" strokeWidth="3" fill="none" strokeLinecap="round" />
+        <path d="M -30 -80 L 20 40" stroke="#ff5a3a" strokeWidth="1" fill="none" strokeLinecap="round" opacity="0.7" />
+        {/* œil éteint */}
+        <circle cx="0" cy="-45" r="16" fill="#20242c" stroke="#3a3a44" strokeWidth="1.5" />
+        <circle cx="0" cy="-45" r="3" fill="#5a5a68" />
+        {/* petite étiquette */}
+        <rect x="-22" y="10" width="44" height="14" rx="2" fill="#2a2a34" stroke="#5a5a64" strokeWidth="0.8" />
+        <text x="0" y="20" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#8a8a94" letterSpacing="1">HS · 2277</text>
+        {/* fumerolle */}
+        <path d="M -10 -100 q -6 -14 4 -22 q 10 -6 4 -18" stroke="#8a8a94" strokeWidth="1.5" fill="none" opacity="0.55">
+          <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3.5s" repeatCount="indefinite" />
+        </path>
+      </g>
+
+      {/* Table + fiole du remède à droite */}
+      <g transform="translate(820,300)">
+        {/* pieds table */}
+        <rect x="-70" y="-6" width="140" height="8" fill={amb.rocaille} stroke="#1a1408" strokeWidth="1" />
+        <rect x="-64" y="2" width="6" height="42" fill={amb.rocaille} />
+        <rect x="58" y="2" width="6" height="42" fill={amb.rocaille} />
+        {/* halo remède */}
+        <circle cx="0" cy="-40" r="55" fill="url(#ret-halo)" opacity="0.9">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="2.6s" repeatCount="indefinite" />
+        </circle>
+        {/* fiole */}
+        <path d="M -12 -70 L -12 -50 L -22 -20 L -22 -8 Q -22 0 -14 0 L 14 0 Q 22 0 22 -8 L 22 -20 L 12 -50 L 12 -70 Z"
+          fill="rgba(200,240,255,0.35)" stroke="#e8f4ff" strokeWidth="1.5" />
+        <path d="M -18 -25 L 18 -25" stroke="#e8f4ff" strokeWidth="1" opacity="0.6" />
+        {/* liquide ambré */}
+        <path d="M -20 -18 L -20 -8 Q -20 -2 -14 -2 L 14 -2 Q 20 -2 20 -8 L 20 -18 Z"
+          fill={amb.accent} opacity="0.85" />
+        {/* bouchon */}
+        <rect x="-8" y="-76" width="16" height="8" fill="#5a3818" stroke="#2a1808" strokeWidth="0.8" rx="1" />
+        {/* étiquette */}
+        <rect x="-16" y="-46" width="32" height="12" rx="1.5" fill="#f4e8c8" stroke="#8a6a2a" strokeWidth="0.6" />
+        <text x="0" y="-38" textAnchor="middle" fontFamily="Georgia, serif" fontSize="7" fill="#5a2818">REMÈDE</text>
+        {/* emoji du remède flottant au-dessus */}
+        {remede?.emoji && (
+          <text x="0" y="-88" textAnchor="middle" fontSize="22">
+            {remede.emoji}
+            <animate attributeName="y" values="-88;-95;-88" dur="3s" repeatCount="indefinite" />
+          </text>
+        )}
+      </g>
+
+      {/* AL3X1A au centre, silhouette debout */}
+      <g transform="translate(500,175)">
+        {/* halo d'accueil doux */}
+        <ellipse cx="0" cy="60" rx="90" ry="130" fill={amb.accent} opacity="0.08" />
+        {/* tunique */}
+        <path d="M -50 200 L -50 90 Q -50 55 -20 48 L 20 48 Q 50 55 50 90 L 50 200 Z"
+          fill="#6a7280" stroke="#2a2e38" strokeWidth="1.5" />
+        {/* insigne */}
+        <circle cx="-30" cy="105" r="7" fill="#c8a848" stroke="#5a4020" strokeWidth="0.8" />
+        <path d="M -30 100 L -30 110 M -35 105 L -25 105" stroke="#5a4020" strokeWidth="0.8" />
+        {/* accroc */}
+        <path d="M -40 150 l 6 12" stroke="#2a2e38" strokeWidth="1.2" />
+        <path d="M 32 175 l -5 8" stroke="#2a2e38" strokeWidth="1.2" />
+        {/* cou */}
+        <ellipse cx="0" cy="42" rx="14" ry="10" fill="#d0a888" />
+        {/* tête */}
+        <ellipse cx="0" cy="0" rx="40" ry="48" fill="#d0a888" stroke="#5a3818" strokeWidth="1.3" />
+        {/* cheveux */}
+        <path d="M -42 -18 Q -38 -50 0 -52 Q 38 -50 42 -18 L 44 12 L 36 10 Q 38 -12 30 -25 Q 0 -38 -30 -25 Q -38 -12 -36 10 L -44 12 Z" fill="#4a3828" />
+        {/* yeux */}
+        <ellipse cx="-15" cy="4" rx="5" ry="3.5" fill="#f8f4e8" />
+        <ellipse cx="15" cy="4" rx="5" ry="3.5" fill="#f8f4e8" />
+        <circle cx={-15 + (mood === "content" ? -0.8 : 0)} cy="4" r="2.2" fill="#3a2818" />
+        <circle cx={15 + (mood === "content" ? -0.8 : 0)} cy="4" r="2.2" fill="#3a2818" />
+        {/* sourcils */}
+        <path d="M -22 -4 q 6 -3 12 -1 M 10 -5 q 6 -2 12 1" stroke="#3a2818" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+        {/* nez */}
+        <path d="M 0 10 L -2 22 L 2 22" stroke="#8a5828" strokeWidth="0.7" fill="none" />
+        {/* bouche */}
+        {mood === "content" ? (
+          <path d="M -14 34 Q 0 46 14 34" stroke="#5a2818" strokeWidth="2.2" fill="none" strokeLinecap="round" />
+        ) : (
+          <path d="M -12 38 Q 0 34 12 38" stroke="#5a2818" strokeWidth="1.8" fill="none" strokeLinecap="round" />
+        )}
+        {/* larme */}
+        {mood === "content" && <circle cx="-18" cy="14" r="1.4" fill="#7fd8ff" opacity="0.9"><animate attributeName="cy" values="14;22;14" dur="4s" repeatCount="indefinite" /></circle>}
+        {/* bras tendu vers la fiole */}
+        <path d="M 40 90 Q 90 80 130 90" stroke="#d0a888" strokeWidth="10" fill="none" strokeLinecap="round" />
+      </g>
+
+      {/* Bandeau lieu, en haut */}
+      <g>
+        <rect x="20" y="16" width="220" height="22" rx="4" fill="rgba(4,8,16,0.55)" stroke={amb.accent} strokeWidth="0.8" />
+        <text x="30" y="31" fontFamily="ui-monospace,monospace" fontSize="11" fill={amb.accent} letterSpacing="2">🌀 {amb.label}</text>
+      </g>
     </svg>
   );
 }
@@ -75,52 +193,55 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
   const [idx, setIdx] = useState(0);
   const step = DIALOGUES[idx];
   const isLast = idx >= DIALOGUES.length - 1;
+  const amb = findAmb(chapitreNom || "");
   const advance = () => { if (isLast) onDone?.(); else setIdx(idx + 1); };
 
   return (
-    <div onClick={advance} style={{ position: "fixed", inset: 0, background: "rgba(4,8,16,0.95)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, zIndex: 95, cursor: "pointer" }} title="Cliquer pour continuer">
-      <div style={{ maxWidth: 640, width: "100%", background: "#0e1420", border: "3px solid #7fd8ff", borderRadius: 16, padding: 20, boxShadow: "0 12px 48px rgba(0,0,0,0.75), 0 0 40px rgba(127,216,255,0.35)", animation: "fadein 0.35s ease-out" }}>
-        {/* Bandeau lieu */}
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", textAlign: "center", marginBottom: 10 }}>
-          🌀 RETROUVAILLES · {chapitreNom.toUpperCase()}
+    <div onClick={advance}
+      style={{ position: "fixed", inset: 0, background: "rgba(4,8,16,0.94)", display: "flex", alignItems: "center", justifyContent: "center", padding: 12, zIndex: 95, cursor: "pointer" }}
+      title="Cliquer pour continuer">
+      <div style={{ maxWidth: 900, width: "100%", background: "#0e1420", border: `3px solid ${amb.accent}`, borderRadius: 16, overflow: "hidden", boxShadow: `0 12px 48px rgba(0,0,0,0.75), 0 0 40px ${amb.accent}44`, animation: "fadein 0.35s ease-out" }}>
+        {/* Bandeau visuel grand format */}
+        <div style={{ position: "relative", width: "100%", aspectRatio: "1000 / 420", background: "#020614" }}>
+          <Decor amb={amb} remede={remede} mood={step.mood} />
         </div>
-        {/* Portrait + dialogue */}
-        <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
-          <div style={{ width: 150, height: 180, flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: "2px solid #7fd8ff", boxShadow: "0 6px 22px rgba(0,0,0,0.6)" }}>
-            <PortraitAl3x1AVivant mood={step.mood} />
+
+        {/* Dialogue en dessous */}
+        <div style={{ padding: "16px 20px 18px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: amb.accent }}>AL3X1A ▸</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>{idx + 1} / {DIALOGUES.length}</div>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff", marginBottom: 8 }}>AL3X1A</div>
-            <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
-              « {step.text.replace("{prenom}", prenom || "chronaute")} »
-            </p>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14 }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>{idx + 1} / {DIALOGUES.length}</div>
-              {!isLast ? (
-                <button onClick={(e) => { e.stopPropagation(); setIdx(idx + 1); }}
-                  style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-                  Suite ▸
-                </button>
-              ) : (
-                <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
-                  style={{ background: "#e8934a", color: "#160c02", border: "none", borderRadius: 10, padding: "10px 22px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: "0 0 18px rgba(232,150,74,0.55)", animation: "glow 2.4s ease-in-out infinite" }}>
-                  🌀 REPARTIR AU FUTUR
-                </button>
-              )}
+          <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#e8eef5", margin: 0, fontFamily: "Palatino, Georgia, serif" }}>
+            « {step.text.replace("{prenom}", prenom || "chronaute")} »
+          </p>
+
+          {/* Aperçu du remède récupéré, dernier écran */}
+          {isLast && remede && (
+            <div style={{ marginTop: 14, padding: "10px 14px", background: "#0a1820", border: `1px dashed ${amb.accent}`, borderRadius: 10, display: "flex", alignItems: "center", gap: 12 }}>
+              <div style={{ fontSize: 30 }}>{remede.emoji}</div>
+              <div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: amb.accent }}>REMÈDE RÉCUPÉRÉ</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#e8eef5" }}>{remede.name}</div>
+                <div style={{ fontSize: 12, color: "#c8d4e2", opacity: 0.85, marginTop: 2 }}>{remede.desc}</div>
+              </div>
             </div>
+          )}
+
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
+            {!isLast ? (
+              <button onClick={(e) => { e.stopPropagation(); setIdx(idx + 1); }}
+                style={{ background: "#141b26", color: amb.accent, border: `1px solid ${amb.accent}`, borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                Suite ▸
+              </button>
+            ) : (
+              <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
+                style={{ background: "#e8934a", color: "#160c02", border: "none", borderRadius: 10, padding: "11px 24px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: "0 0 18px rgba(232,150,74,0.55)", animation: "glow 2.4s ease-in-out infinite" }}>
+                🌀 REPARTIR AU FUTUR
+              </button>
+            )}
           </div>
         </div>
-        {/* Aperçu du remède récupéré */}
-        {isLast && remede && (
-          <div style={{ marginTop: 16, padding: "12px 16px", background: "#0a1820", border: "1px dashed #7fd8ff", borderRadius: 10, display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ fontSize: 34 }}>{remede.emoji}</div>
-            <div>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#7fd8ff" }}>REMÈDE RÉCUPÉRÉ</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: "#e8eef5" }}>{remede.name}</div>
-              <div style={{ fontSize: 12, color: "#c8d4e2", opacity: 0.85, marginTop: 2 }}>{remede.desc}</div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
