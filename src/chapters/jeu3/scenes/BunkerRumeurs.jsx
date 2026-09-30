@@ -100,9 +100,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     ? currentTemoin.questions[selected.questionIdx] : null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto" }}>
       {/* Bandeau titre + bouton carnet */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: 1200, padding: "0 4px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: 1200, padding: "0 4px", flexShrink: 0 }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
           🎯 MISSION 1 · {mission.titre.toUpperCase()}
         </div>
@@ -112,7 +112,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
         </button>
       </div>
 
-      <svg viewBox="0 0 1200 620" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
+      <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet" style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0 }}>
         <defs>
           <linearGradient id="br-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2a2418" /><stop offset="100%" stopColor="#141008" /></linearGradient>
           <linearGradient id="br-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3a2818" /><stop offset="100%" stopColor="#0e0a04" /></linearGradient>
