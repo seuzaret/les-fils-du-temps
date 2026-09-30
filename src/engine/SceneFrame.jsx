@@ -48,7 +48,7 @@ export default function SceneFrame({ ratio = 1000 / 560, style, children }) {
         alignItems: "center", justifyContent: "center", overflow: "hidden",
         ...(style || {}) }}>
       {box && (
-        <div style={{ width: box.w, height: box.h, position: "relative" }}>
+        <div style={{ width: box.w, height: box.h, position: "relative", overflowY: "auto", overflowX: "hidden" }}>
           {children}
         </div>
       )}
