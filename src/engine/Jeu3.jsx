@@ -113,7 +113,7 @@ export default function Jeu3({ prenom, onExit }) {
       {/* Barre du haut : lieu courant + bouton menu */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", background: "#0a1020", borderBottom: "1px solid #1a2536" }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#7fd8ff" }}>
-          🌑 BUNKER · 2087 · <span style={{ color: "#e8eef5" }}>{current.label}</span>
+          🌑 LE PUITS · 2087 · <span style={{ color: "#e8eef5" }}>{current.label}</span>
           {cheat && <span style={{ marginLeft: 12, color: "#ff5030", fontWeight: 800 }}>🐛 TRICHE</span>}
         </div>
         <button onClick={onExit}

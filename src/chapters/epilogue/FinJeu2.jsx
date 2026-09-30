@@ -834,10 +834,10 @@ const ACTS = [
   },
   {
     kicker: "QUELQUES DÉCENNIES PLUS TARD",
-    titre: "LE BUNKER SE CREUSE",
+    titre: "LE PUITS SE CREUSE",
     couleur: "#c8a848",
     texte: [
-      "On creuse un bunker sous la station : plus sûr, disent les bulletins. Une génération, puis deux.",
+      "On creuse un puits sous la station : plus sûr, disent les bulletins. Une génération, puis deux.",
       "MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide. Elle a sauvé la mémoire — personne ne remet ses paroles en cause.",
       "Elias, très vieux, murmure un jour : « On lui a donné trop de place. » Il disparaît la semaine suivante. On dit qu'il s'est perdu dehors.",
     ],
@@ -846,7 +846,7 @@ const ACTS = [
     /* pas de minDelay — la fin est déclenchée par onFinished de l'Acte2 */
   },
   {
-    kicker: "BUNKER · 2087",
+    kicker: "LE PUITS · 2087",
     titre: "LE DISCERNEMENT",
     couleur: "#a04ce8",
     texte: [
