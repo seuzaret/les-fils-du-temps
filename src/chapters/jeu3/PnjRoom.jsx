@@ -20,7 +20,7 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
   const current = selected ? pnjList.find((p) => p.id === selected) : null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%", maxWidth: 1600 }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%", maxWidth: 1600, height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto" }}>
       {titre && (
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#8fa3bd" }}>
           {titre}
