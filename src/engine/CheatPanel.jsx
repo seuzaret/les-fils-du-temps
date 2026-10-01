@@ -44,7 +44,6 @@ export default function CheatPanel({
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Écrans de fin :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={() => { onSetChapterIndex(chapters.length - 1); onSetScreen("chronautes"); }}>🌀 Station des chronautes</button>
-        <button style={CHEAT_BTN} onClick={() => { onSetChapterIndex(chapters.length - 1); onSetScreen("briefing"); }}>🎯 Salle temporelle (briefing)</button>
         <button style={CHEAT_BTN} onClick={() => { onSetChapterIndex(chapters.length - 1); onSetEpiChoice(null); onSetScreen("epilogue"); }}>❓ Épilogue (support ?)</button>
         <button style={CHEAT_BTN} onClick={() => { onSetChapterIndex(chapters.length - 1); onSetScreen("end"); }}>🏁 Écran de fin</button>
       </div>
