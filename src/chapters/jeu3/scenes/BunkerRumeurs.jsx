@@ -334,6 +334,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       {/* ÉCRANS PLEIN FORMAT (dialogues longs à la Préhistoire) */}
       {phase === "briefing" && selected?.temoinId === "vez_briefing" && (
         <BigDialogue
+          topic={`ENQUÊTE 1 · ${mission.titre.toUpperCase()}`}
           speakerNom="Juge Vez" speakerRole="Bureau des Rumeurs · R-01"
           speakerStyle={VEZ_STYLE}
           lignes={mission.briefing}
@@ -342,6 +343,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       )}
       {phase === "feedback" && feedback && feedback.verdict.ok && (
         <BigDialogue
+          topic={`ENQUÊTE 1 · ${mission.titre.toUpperCase()} · VERDICT`}
           speakerNom="Juge Vez" speakerRole="Verdict rendu"
           speakerStyle={VEZ_STYLE}
           accent="#5eff9e"
