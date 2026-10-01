@@ -114,19 +114,13 @@ export default function ChambreVoisinDecor({ num, accent = "#7fd8ff", extras = n
         ))}
       </g>
 
-      {/* Porte à droite (retour couloir) — agrandie, plaque visible */}
-      <g transform="translate(790,200)">
-        <rect x="-6" y="-6" width="200" height="220" fill="#3a2818" stroke="#0a0806" strokeWidth="3" />
-        <rect x="0" y="0" width="188" height="208" fill="#5a4028" stroke="#0a0806" strokeWidth="1.5" />
-        {/* Panneaux gravés */}
-        <rect x="18" y="100" width="152" height="90" fill="none" stroke="#3a2010" strokeWidth="1" />
-        {/* Poignée */}
-        <circle cx="170" cy="104" r="6" fill="#c8a848" stroke="#3a2010" strokeWidth="0.8" />
-        {/* Plaque COULOIR grand format */}
-        <rect x="24" y="24" width="140" height="54" fill="#e8dfc8" stroke="#3a2818" strokeWidth="1.5" />
-        <text x="94" y="56" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="22" fontWeight="800" fill="#0a0806" letterSpacing="4">COULOIR</text>
-        {/* Voyant */}
-        <circle cx="94" cy="92" r="4" fill={accent}>
+      {/* Porte à droite — pas cliquable, sortie se fait par le bouton bas */}
+      <g transform="translate(830,320)">
+        <rect x="-4" y="-4" width="140" height="88" fill="#3a2818" stroke="#0a0806" strokeWidth="2" />
+        <rect x="0" y="0" width="132" height="80" fill="#5a4028" stroke="#0a0806" strokeWidth="1" />
+        <circle cx="120" cy="40" r="4" fill="#c8a848" />
+        {/* Voyant discret */}
+        <circle cx="54" cy="40" r="3" fill={accent}>
           <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
         </circle>
       </g>

@@ -33,10 +33,10 @@ export default function BigDialogue({
     <div onClick={advance}
       style={{ position: "fixed", inset: 0, zIndex: 180, background: "rgba(4,8,14,0.92)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
       <div onClick={advance}
-        style={{ maxWidth: 1100, width: "100%", display: "flex", gap: 24, alignItems: "stretch" }}>
-        {/* Portrait grand format — viewBox zoomé sur la silhouette */}
-        <div style={{ flex: "0 0 320px", background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 8, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44`, overflow: "hidden" }}>
-          <svg viewBox="40 150 120 260" style={{ width: "100%", height: "auto" }}>
+        style={{ maxWidth: 960, width: "100%", display: "flex", gap: 20, alignItems: "stretch" }}>
+        {/* Portrait resserré — panneau plus petit, mais viewBox cadrée sur Vez pour qu'il remplisse */}
+        <div style={{ flex: "0 0 220px", background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 6, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44`, overflow: "hidden" }}>
+          <svg viewBox="58 180 84 230" style={{ width: "100%", height: "auto" }}>
             <PnjSprite x={100} y={400}
               color={speakerStyle.color || "#3a2818"}
               pants={speakerStyle.pants || "#1a1408"}
