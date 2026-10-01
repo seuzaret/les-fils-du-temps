@@ -33,11 +33,11 @@ export default function BigDialogue({
     <div onClick={advance}
       style={{ position: "fixed", inset: 0, zIndex: 180, background: "rgba(4,8,14,0.92)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
       <div onClick={advance}
-        style={{ maxWidth: 980, width: "100%", display: "flex", gap: 24, alignItems: "stretch" }}>
-        {/* Portrait grand format */}
-        <div style={{ flex: "0 0 220px", background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 10, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44` }}>
-          <svg viewBox="0 0 200 400" style={{ width: "100%", height: "auto" }}>
-            <PnjSprite x={100} y={380}
+        style={{ maxWidth: 1100, width: "100%", display: "flex", gap: 24, alignItems: "stretch" }}>
+        {/* Portrait grand format — viewBox zoomé sur la silhouette */}
+        <div style={{ flex: "0 0 320px", background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 8, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44`, overflow: "hidden" }}>
+          <svg viewBox="40 150 120 260" style={{ width: "100%", height: "auto" }}>
+            <PnjSprite x={100} y={400}
               color={speakerStyle.color || "#3a2818"}
               pants={speakerStyle.pants || "#1a1408"}
               hair={speakerStyle.hair || "#c8b090"}
@@ -50,20 +50,20 @@ export default function BigDialogue({
         </div>
 
         {/* Panneau texte */}
-        <div style={{ flex: 1, background: "#141020", border: `2px solid ${accent}`, borderRadius: 12, padding: "20px 26px", color: "#e8eef5", boxShadow: `0 0 24px ${accent}44`, display: "flex", flexDirection: "column", minHeight: 300 }}>
+        <div style={{ flex: 1, background: "#141020", border: `2px solid ${accent}`, borderRadius: 12, padding: "22px 28px", color: "#e8eef5", boxShadow: `0 0 24px ${accent}44`, display: "flex", flexDirection: "column", minHeight: 360 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14, paddingBottom: 10, borderBottom: `1px solid ${accent}44` }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: accent, fontWeight: 800 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, letterSpacing: 2, color: accent, fontWeight: 800 }}>
               {speakerNom.toUpperCase()}
             </div>
             {speakerRole && (
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd", fontStyle: "italic" }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8fa3bd", fontStyle: "italic" }}>
                 {speakerRole}
               </div>
             )}
           </div>
 
-          <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6, color: "#e8eef5" }}>
-            « {lignes[i]} »
+          <p style={{ margin: 0, fontSize: 20, lineHeight: 1.6, color: "#e8eef5" }}>
+            {lignes[i]}
           </p>
 
           <div style={{ flex: 1 }} />
