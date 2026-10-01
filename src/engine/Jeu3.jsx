@@ -62,10 +62,10 @@ const ROOMS = {
   serveurs:   { Comp: BunkerServeurs,   label: "⚠ Niveau -3 · Serveurs" },
 };
 
-export default function Jeu3({ prenom, onExit }) {
-  const [room, setRoom] = useState("awake");
-  const [flags, setFlags] = useState({});
-  const [heardPnj, setHeardPnj] = useState({});
+export default function Jeu3({ prenom, onExit, startAt }) {
+  const [room, setRoom] = useState(startAt?.room || "awake");
+  const [flags, setFlags] = useState(startAt?.flags || {});
+  const [heardPnj, setHeardPnj] = useState(startAt?.heardPnj || {});
   /* Mode triche : Ctrl+Shift+C toggle. Quand actif, la mini-carte redevient
      cliquable pour se téléporter d'un étage à l'autre sans passer par
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
