@@ -17,9 +17,10 @@ export const MISSIONS_RUMEURS = {
     affirmation: "Le Dr Kova aurait dit que l'air, dehors, est respirable — et que sa nièce serait sortie sans dommage.",
     /* Briefing du Juge Vez, lu au comptoir. Chaque ligne = une réplique. */
     briefing: [
-      "Vez pose une fiche sur le comptoir. « Nouvelle affaire pour toi, assistant. Un cas d'école : rumeur pure. »",
-      "« Marek, un habitant, dit avoir entendu, à la cantine, un certain Dr Kova affirmer que sa nièce est sortie du Puits et qu'elle allait bien. »",
-      "« Interroge Marek d'abord. Puis vérifie auprès de deux personnes qui pourraient savoir : l'archiviste Séra, et le garde Yol. Reviens me voir avec ton verdict. »",
+      "Vez te regarde entrer, pose son stylo. « Alors c'est toi qui a reçu le billet. Tu es le troisième cette année. Les deux autres ont abandonné. »",
+      "« Je ne te demande pas qui tu es. On est trop d'habitants au Puits pour que je retienne les noms. Je te demande juste si tu es prêt·e à faire ce boulot. »",
+      "« Pour commencer, un cas d'école. Un habitant, Marek, dit avoir entendu à la cantine un certain Dr Kova affirmer que sa nièce est sortie du Puits et qu'elle allait bien. Rumeur, vraie info ? »",
+      "« Interroge Marek. Puis vérifie auprès de deux personnes qui pourraient savoir : l'archiviste Séra, et le garde Yol de la C-3. Reviens me voir avec ton verdict. »",
     ],
     minWitnesses: 3,
     /* Les 3 témoins. Chacun expose une fiche + 3 questions type. Chaque
