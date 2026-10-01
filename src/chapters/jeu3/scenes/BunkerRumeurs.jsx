@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import EnqueteCarnet from "../EnqueteCarnet.jsx";
 import BigDialogue from "../BigDialogue.jsx";
@@ -8,6 +8,9 @@ const VEZ_STYLE = {
   color: "#3a2818", pants: "#1a1408", hair: "#c8b090",
   skin: "#c8a888", facing: "front", accessory: "robe", activity: "write",
 };
+
+/* Ordre canonique des missions. On joue toujours la 1re non résolue. */
+const MISSION_ORDER = ["kova", "vitamine"];
 
 /* ============================================================
    JEU 3 — SCÈNE : « Bureau des Rumeurs » (R-01)
@@ -24,12 +27,35 @@ const VEZ_STYLE = {
      l'écran VERDICT : 3 choix + cocher les témoins jugés fiables.
    ============================================================ */
 export default function BunkerRumeurs({ onGo, j3 }) {
-  const mission = j3.missions.kova;
-  const done = j3.flags[mission.flag];
   const billetRecu = j3.flags.puits_billet;
+  /* Mission active = première de la séquence qui n'est pas encore marquée faite. */
+  const mission = MISSION_ORDER.map((id) => j3.missions[id]).find((m) => m && !j3.flags[m.flag]);
+  const allDone = !mission;
+  const missionNum = mission ? MISSION_ORDER.indexOf(mission.id) + 1 : MISSION_ORDER.length;
 
-  /* Bureau verrouillé tant que le joueur n'a pas trouvé le billet qui
-     l'invite à devenir assistant du Juge. */
+  // Hooks TOUJOURS déclarés dans le même ordre (pas de hook conditionnel).
+  const [phase, setPhase] = useState(allDone ? "done" : "briefing");
+  const [selected, setSelected] = useState(null);
+  const [answered, setAnswered] = useState({});
+  const [carnet, setCarnet] = useState(false);
+  const [verdictChoice, setVerdictChoice] = useState(null);
+  const [reliablePicks, setReliablePicks] = useState(new Set());
+  const [feedback, setFeedback] = useState(null);
+  const [replay, setReplay] = useState(false);
+
+  /* Quand la mission courante change (une résolue → la suivante prend sa place),
+     on réinitialise l'UI : briefing de la nouvelle, états locaux à zéro. */
+  useEffect(() => {
+    if (!mission) { setPhase("done"); return; }
+    setPhase("briefing");
+    setSelected(null);
+    setAnswered({});
+    setVerdictChoice(null);
+    setReliablePicks(new Set());
+    setFeedback(null);
+  }, [mission?.id]);
+
+  /* Bureau verrouillé tant que le joueur n'a pas trouvé le billet. */
   if (!billetRecu) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
@@ -53,21 +79,25 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     );
   }
 
-  // phase: "briefing" (Vez actif) | "enquete" (témoins actifs) | "verdict" (choix + cochage) | "feedback" (retour Vez)
-  const [phase, setPhase] = useState(done ? "done" : "briefing");
-  // Interview courante : { temoinId, questionIdx | null }
-  const [selected, setSelected] = useState(null);
-  // Réponses déjà données : { [temoinId]: Set<number> }
-  const [answered, setAnswered] = useState({});
-  // Carnet ouvert
-  const [carnet, setCarnet] = useState(false);
-  // Verdict UI
-  const [verdictChoice, setVerdictChoice] = useState(null);
-  const [reliablePicks, setReliablePicks] = useState(new Set());
-  // Feedback à afficher après verdict
-  const [feedback, setFeedback] = useState(null);
-  // Relecture du briefing (modal dédiée, pas liée à la phase)
-  const [replay, setReplay] = useState(false);
+  /* Toutes enquêtes rendues : écran d'attente final. */
+  if (allDone) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e", textAlign: "center" }}>
+          ✓ TOUTES LES ENQUÊTES RENDUES
+        </div>
+        <div style={{ maxWidth: 520, textAlign: "center", background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 12, padding: "22px 24px", color: "#c8ffdd" }}>
+          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6 }}>
+            Vez note dans son registre, pose son stylo. « Pas mal, pour un assistant. Reviens me voir plus tard — il y aura d'autres affaires. »
+          </p>
+        </div>
+        <button onClick={() => onGo(j3.hubRoom || "hubBas")}
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          ← Retour au couloir
+        </button>
+      </div>
+    );
+  }
 
   const nbInterroges = mission.temoins.filter((t) => (answered[t.id] || new Set()).size > 0).length;
   const allAsked = nbInterroges >= mission.temoins.length;
@@ -139,7 +169,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       {/* Bandeau titre + bouton carnet */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: 1200, padding: "0 4px", flexShrink: 0 }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
-          🎯 MISSION 1 · {mission.titre.toUpperCase()}
+          🎯 ENQUÊTE {missionNum} · {mission.titre.toUpperCase()}
         </div>
         <div style={{ display: "flex", gap: 6 }}>
           {phase !== "briefing" && phase !== "done" && (
@@ -344,7 +374,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       {/* ÉCRANS PLEIN FORMAT (dialogues longs à la Préhistoire) */}
       {phase === "briefing" && selected?.temoinId === "vez_briefing" && (
         <BigDialogue
-          topic={`ENQUÊTE 1 · ${mission.titre.toUpperCase()}`}
+          topic={`ENQUÊTE ${missionNum} · ${mission.titre.toUpperCase()}`}
           speakerNom="Juge Vez" speakerRole="Bureau des Rumeurs · R-01"
           speakerStyle={VEZ_STYLE}
           lignes={mission.briefing}
@@ -353,13 +383,18 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       )}
       {phase === "feedback" && feedback && feedback.verdict.ok && (
         <BigDialogue
-          topic={`ENQUÊTE 1 · ${mission.titre.toUpperCase()} · VERDICT`}
+          topic={`ENQUÊTE ${missionNum} · ${mission.titre.toUpperCase()} · VERDICT`}
           speakerNom="Juge Vez" speakerRole="Verdict rendu"
           speakerStyle={VEZ_STYLE}
           accent="#5eff9e"
           lignes={[feedback.verdict.retour, feedback.fbFiables, mission.succes].filter(Boolean)}
           actionLabel="Continuer ▸"
-          onDone={() => { setPhase("done"); setSelected(null); }} />
+          onDone={() => {
+            /* j3.setFlag a déjà été appelé au submit : la mission suivante
+               prendra la place via l'effet sur mission.id. On ne touche pas
+               à phase ici — l'effet s'en charge. */
+            setSelected(null);
+          }} />
       )}
 
       <button onClick={() => onGo(j3.hubRoom || "hub")}
@@ -373,7 +408,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
 
       {replay && (
         <BigDialogue
-          topic={`ENQUÊTE 1 · ${mission.titre.toUpperCase()} · RAPPEL`}
+          topic={`ENQUÊTE ${missionNum} · ${mission.titre.toUpperCase()} · RAPPEL`}
           speakerNom="Juge Vez" speakerRole="Rappel du briefing"
           speakerStyle={VEZ_STYLE}
           lignes={[`Rappel : ${mission.affirmation}`, ...mission.briefing]}

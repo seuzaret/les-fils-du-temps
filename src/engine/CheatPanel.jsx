@@ -16,7 +16,7 @@ export default function CheatPanel({
   onFillFrise,
   onPlayChapter,
   onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab,
-  onNewGameJeu2, onNewGameJeu3, onCheatJeu3Kova,
+  onNewGameJeu2, onNewGameJeu3, onCheatJeu3Kova, onCheatJeu3Vitamine,
 }) {
   if (!cheat) return null;
   return (
@@ -64,7 +64,8 @@ export default function CheatPanel({
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 3 (Le Puits · 2087) :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={onNewGameJeu3}>🌑 Démarrer le Jeu 3</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Kova}>🎯 Direct enquête Kova (bureau ouvert)</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Kova}>🎯 Direct enquête 1 · Kova</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Vitamine}>🎯 Direct enquête 2 · Vitamine</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
