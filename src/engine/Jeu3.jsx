@@ -20,6 +20,7 @@ import BunkerVoyage from "../chapters/jeu3/scenes/BunkerVoyage.jsx";
 import BunkerServeurs from "../chapters/jeu3/scenes/BunkerServeurs.jsx";
 import BunkerSerres from "../chapters/jeu3/scenes/BunkerSerres.jsx";
 import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
+import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
 import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT } from "../chapters/jeu3/missions.js";
 import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
 
@@ -108,6 +109,13 @@ export default function Jeu3({ prenom, onExit }) {
      immersifs (réveil, voyage dans le temps, confrontation finale). */
   const showMinimap = !["awake", "voyage", "serveurs"].includes(room);
 
+  /* Billet glissé : apparaît automatiquement quand le joueur a entendu
+     les 3 PNJ d'accroche (voisin_lior en N-24, chapelle_anselme à la
+     chapelle, cantine_via à la cantine). Déverrouille le Bureau des
+     Rumeurs via le flag "puits_billet". */
+  const billetReady = heardPnj.voisin_lior && heardPnj.chapelle_anselme && heardPnj.cantine_via;
+  const showBillet = billetReady && !flags.puits_billet;
+
   return (
     <div style={{ position: "fixed", inset: 0, background: "#050810", zIndex: 60, fontFamily: "Palatino, Georgia, serif", color: "#e8eef5", display: "flex", flexDirection: "column" }}>
       {/* Barre du haut : lieu courant + bouton menu */}
@@ -129,6 +137,10 @@ export default function Jeu3({ prenom, onExit }) {
           <Comp prenom={prenom} onGo={goTo} j3={j3} />
         </SceneFrame>
       </div>
+
+      {showBillet && (
+        <BilletOverlay onKeep={() => setFlag("puits_billet")} />
+      )}
     </div>
   );
 }

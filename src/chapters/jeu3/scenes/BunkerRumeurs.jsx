@@ -19,6 +19,32 @@ import EnqueteCarnet from "../EnqueteCarnet.jsx";
 export default function BunkerRumeurs({ onGo, j3 }) {
   const mission = j3.missions.kova;
   const done = j3.flags[mission.flag];
+  const billetRecu = j3.flags.puits_billet;
+
+  /* Bureau verrouillé tant que le joueur n'a pas trouvé le billet qui
+     l'invite à devenir assistant du Juge. */
+  if (!billetRecu) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#8a5030", textAlign: "center" }}>
+          BUREAU DES RUMEURS · R-01
+        </div>
+        <div style={{ maxWidth: 480, textAlign: "center", background: "#141008", border: "1px solid #3a2010", borderRadius: 12, padding: "22px 24px", color: "#c8b090" }}>
+          <div style={{ fontSize: 48, marginBottom: 10 }}>🔒</div>
+          <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic" }}>
+            La porte est fermée. Un petit mot y est punaisé :
+          </p>
+          <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.5, fontFamily: "Georgia, serif", color: "#e8dfc8" }}>
+            « Je reçois les habitants qui savent déjà pourquoi ils viennent. Prends le temps d'écouter les autres. — V. »
+          </p>
+        </div>
+        <button onClick={() => onGo(j3.hubRoom || "hubBas")}
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          ← Retour au couloir
+        </button>
+      </div>
+    );
+  }
 
   // phase: "briefing" (Vez actif) | "enquete" (témoins actifs) | "verdict" (choix + cochage) | "feedback" (retour Vez)
   const [phase, setPhase] = useState(done ? "done" : "briefing");

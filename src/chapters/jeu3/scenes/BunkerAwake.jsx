@@ -12,8 +12,11 @@ import { useState } from "react";
    ============================================================ */
 const LINES = [
   "Une lumière blanche, froide. Un plafond bas en béton. Tu ne connais pas cette pièce.",
-  "Ton téléphone est éteint. MARTINE ne répond pas. Aucun son familier.",
-  "Sur la porte, une inscription : « N-27 · Habitant · Niveau 4 ». Tu ne sais pas ce que ça veut dire. Il faut sortir voir.",
+  "Tu te relèves. Où es-tu ? Comment es-tu arrivé·e ici ? Rien ne te revient.",
+  "Juste un flash : MARTINE qui parle, un vertige, le noir. Est-ce que tu as rêvé tout ça ?",
+  "Ton téléphone sur la table est noir, muet. Tu essaies de l'allumer. Rien.",
+  "Sur le mur, une affiche : « RÉSEAU M · Bienvenue, HABITANT N-27 ». Tu ne connais pas ce logo.",
+  "Sur la porte : « N-27 · Habitant · Niveau 4 ». Il faut sortir voir.",
 ];
 
 export default function BunkerAwake({ prenom, onGo }) {
