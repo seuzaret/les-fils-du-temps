@@ -428,6 +428,17 @@ export default function App() {
     });
   };
 
+  /* Triche : Kova déjà résolue, Vitamine prête à briefer. */
+  const cheatJeu3Vitamine = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "rumeurs",
+      flags: { puits_billet: true, mission_kova_done: true },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+  };
+
   const newGameJeu2 = () => {
     setMode("jeu2");
     const target = Math.floor(Math.random() * JEU2.length);
@@ -1158,6 +1169,7 @@ export default function App() {
       onNewGameJeu2={newGameJeu2}
       onNewGameJeu3={newGameJeu3}
       onCheatJeu3Kova={cheatJeu3Kova}
+      onCheatJeu3Vitamine={cheatJeu3Vitamine}
     />
   );
 
