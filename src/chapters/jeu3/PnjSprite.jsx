@@ -32,7 +32,9 @@ export default function PnjSprite({
 }) {
   const hasActivity = !!activity;
   return (
-    <g transform={`translate(${x},${y})`} onClick={onClick} style={{ cursor: onClick ? "pointer" : "default" }}>
+    <g transform={`translate(${x},${y})`}
+      onClick={onClick ? (e) => { e.stopPropagation(); onClick(e); } : undefined}
+      style={{ cursor: onClick ? "pointer" : "default" }}>
       {/* Halo actif */}
       {active && (
         <circle cx="0" cy="-40" r="66" fill="none" stroke="#ffd166" strokeWidth="2" strokeDasharray="4 4">

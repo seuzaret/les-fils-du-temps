@@ -1,6 +1,13 @@
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import EnqueteCarnet from "../EnqueteCarnet.jsx";
+import BigDialogue from "../BigDialogue.jsx";
+
+/* Portrait du Juge Vez utilisé en plein écran. */
+const VEZ_STYLE = {
+  color: "#3a2818", pants: "#1a1408", hair: "#c8b090",
+  skin: "#c8a888", facing: "front", accessory: "robe", activity: "write",
+};
 
 /* ============================================================
    JEU 3 — SCÈNE : « Bureau des Rumeurs » (R-01)
@@ -138,7 +145,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
         </button>
       </div>
 
-      <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet" style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0 }}>
+      <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet"
+        style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0, cursor: (currentTemoin || selected) ? "pointer" : "default" }}
+        onClick={() => { if (phase === "enquete") setSelected(null); }}>
         <defs>
           <linearGradient id="br-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2a2418" /><stop offset="100%" stopColor="#141008" /></linearGradient>
           <linearGradient id="br-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3a2818" /><stop offset="100%" stopColor="#0e0a04" /></linearGradient>
@@ -276,10 +285,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           </div>
         )}
 
-        {phase === "briefing" && selected?.temoinId === "vez_briefing" && (
-          <VezPanel titre="Briefing" lignes={mission.briefing}
-            action={{ label: "Prendre l'affaire ▸", on: () => { setPhase("enquete"); setSelected(null); } }} />
-        )}
         {phase === "briefing" && !selected && (
           <IntroPanel affirmation={mission.affirmation}
             onGoVez={() => setSelected({ temoinId: "vez_briefing", questionIdx: null })} />
@@ -320,11 +325,30 @@ export default function BunkerRumeurs({ onGo, j3 }) {
             onCancel={() => setPhase("enquete")} />
         )}
 
-        {phase === "feedback" && feedback && (
+        {phase === "feedback" && feedback && !feedback.verdict.ok && (
           <FeedbackPanel feedback={feedback} onRetry={retryFromFeedback}
             onNext={() => { setPhase("done"); setSelected(null); }} />
         )}
       </div>
+
+      {/* ÉCRANS PLEIN FORMAT (dialogues longs à la Préhistoire) */}
+      {phase === "briefing" && selected?.temoinId === "vez_briefing" && (
+        <BigDialogue
+          speakerNom="Juge Vez" speakerRole="Bureau des Rumeurs · R-01"
+          speakerStyle={VEZ_STYLE}
+          lignes={mission.briefing}
+          actionLabel="Prendre l'affaire ▸"
+          onDone={() => { setPhase("enquete"); setSelected(null); }} />
+      )}
+      {phase === "feedback" && feedback && feedback.verdict.ok && (
+        <BigDialogue
+          speakerNom="Juge Vez" speakerRole="Verdict rendu"
+          speakerStyle={VEZ_STYLE}
+          accent="#5eff9e"
+          lignes={[feedback.verdict.retour, feedback.fbFiables, mission.succes].filter(Boolean)}
+          actionLabel="Continuer ▸"
+          onDone={() => { setPhase("done"); setSelected(null); }} />
+      )}
 
       <button onClick={() => onGo(j3.hubRoom || "hub")}
         style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1, marginTop: 4 }}>
@@ -402,27 +426,28 @@ function EnquetePanel({ mission, nbInterroges, allAsked }) {
 
 function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
   return (
-    <div style={{ background: "#141020", border: "1px solid #3a80c8", borderRadius: 10, padding: "12px 16px" }}>
+    <div onClick={(e) => e.stopPropagation()}
+      style={{ background: "#141020", border: "1px solid #3a80c8", borderRadius: 10, padding: "14px 18px", cursor: "default" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#7fd8ff", fontWeight: 700 }}>
           {temoin.nom.toUpperCase()} · {temoin.role}
         </div>
         <button onClick={onClose}
-          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 6, padding: "2px 8px", fontFamily: "ui-monospace,monospace", fontSize: 10, cursor: "pointer" }}>
-          Terminer ✕
+          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 6, padding: "3px 10px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+          Fermer ✕
         </button>
       </div>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8fa3bd", marginBottom: 8 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd", marginBottom: 10 }}>
         Au Puits depuis {temoin.ancienneteAns} ans · {temoin.lieu}
       </div>
 
       {answer && (
-        <div style={{ background: "#0a0e14", borderLeft: "3px solid #7fd8ff", padding: "8px 12px", marginBottom: 10, borderRadius: 4 }}>
-          <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>« {answer.r} »</p>
+        <div style={{ background: "#0a0e14", borderLeft: "3px solid #7fd8ff", padding: "10px 14px", marginBottom: 12, borderRadius: 4 }}>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#e8eef5", fontStyle: "italic" }}>« {answer.r} »</p>
         </div>
       )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
         {temoin.questions.map((q, i) => {
           const doneQ = asked.has(i);
           return (
@@ -431,13 +456,16 @@ function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
                 background: doneQ ? "#0e1420" : "#1a2436",
                 color: doneQ ? "#7a879e" : "#e8eef5",
                 border: `1px solid ${doneQ ? "#2a3648" : "#3a80c8"}`,
-                borderRadius: 6, padding: "8px 12px", textAlign: "left",
-                fontFamily: "Georgia, serif", fontSize: 13, cursor: "pointer",
+                borderRadius: 6, padding: "10px 14px", textAlign: "left",
+                fontFamily: "Georgia, serif", fontSize: 15, cursor: "pointer",
               }}>
               {doneQ ? "✓ " : "▸ "}{q.q}
             </button>
           );
         })}
+      </div>
+      <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
+        Clique ailleurs pour fermer ▸
       </div>
     </div>
   );

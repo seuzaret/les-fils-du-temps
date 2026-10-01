@@ -26,7 +26,8 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
           {titre}
         </div>
       )}
-      <svg viewBox="0 0 1000 520" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
+      <svg viewBox="0 0 1000 520" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%", cursor: selected ? "pointer" : "default" }}
+        onClick={() => setSelected(null)}>
         {bg}
         {pnjList.map((p) => (
           <PnjSprite key={p.id}
@@ -41,19 +42,23 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
             onClick={() => { setSelected(p.id); j3.hear(p.id); }} />
         ))}
       </svg>
-      <div style={{ maxWidth: 800, width: "100%", minHeight: 78 }}>
+      <div style={{ maxWidth: 820, width: "100%", minHeight: 90 }} onClick={() => setSelected(null)}>
         {current ? (
-          <div style={{ background: "#141020", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 14px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff" }}>
+          <div onClick={(e) => e.stopPropagation()}
+            style={{ background: "#141020", border: "1px solid #3a80c8", borderRadius: 10, padding: "12px 16px", cursor: "default" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
               {current.nom.toUpperCase()} · {current.role}
             </div>
-            <p style={{ margin: "3px 0 0", fontSize: 13.5, lineHeight: 1.5, color: "#e8eef5" }}>
+            <p style={{ margin: "4px 0 0", fontSize: 15, lineHeight: 1.55, color: "#e8eef5" }}>
               « {current.replique} »
             </p>
+            <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
+              Clique ailleurs pour fermer ▸
+            </div>
           </div>
         ) : (
-          <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#7a879e", fontStyle: "italic" }}>
+          <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 14px", textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: 13, color: "#7a879e", fontStyle: "italic" }}>
               Clique un PNJ pour écouter ce qu'il ou elle a à dire.
             </p>
           </div>
