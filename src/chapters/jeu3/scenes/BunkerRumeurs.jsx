@@ -66,6 +66,8 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const [reliablePicks, setReliablePicks] = useState(new Set());
   // Feedback à afficher après verdict
   const [feedback, setFeedback] = useState(null);
+  // Relecture du briefing (modal dédiée, pas liée à la phase)
+  const [replay, setReplay] = useState(false);
 
   const nbInterroges = mission.temoins.filter((t) => (answered[t.id] || new Set()).size > 0).length;
   const allAsked = nbInterroges >= mission.temoins.length;
@@ -139,10 +141,18 @@ export default function BunkerRumeurs({ onGo, j3 }) {
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
           🎯 MISSION 1 · {mission.titre.toUpperCase()}
         </div>
-        <button onClick={() => setCarnet(true)}
-          style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-          📓 Carnet ({nbInterroges}/{mission.temoins.length})
-        </button>
+        <div style={{ display: "flex", gap: 6 }}>
+          {phase !== "briefing" && phase !== "done" && (
+            <button onClick={() => setReplay(true)}
+              style={{ background: "#141020", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+              ℹ️ Rappel
+            </button>
+          )}
+          <button onClick={() => setCarnet(true)}
+            style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+            📓 Carnet ({nbInterroges}/{mission.temoins.length})
+          </button>
+        </div>
       </div>
 
       <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet"
@@ -277,7 +287,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       </svg>
 
       {/* PANEL BAS : contextuel selon phase */}
-      <div style={{ maxWidth: 900, width: "100%", minHeight: 280 }}>
+      <div style={{ maxWidth: 900, width: "100%", minHeight: 140 }}>
         {phase === "done" && (
           <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>✓ MISSION ACCOMPLIE</div>
@@ -359,6 +369,16 @@ export default function BunkerRumeurs({ onGo, j3 }) {
 
       {carnet && (
         <EnqueteCarnet temoins={mission.temoins} answered={answered} onClose={() => setCarnet(false)} />
+      )}
+
+      {replay && (
+        <BigDialogue
+          topic={`ENQUÊTE 1 · ${mission.titre.toUpperCase()} · RAPPEL`}
+          speakerNom="Juge Vez" speakerRole="Rappel du briefing"
+          speakerStyle={VEZ_STYLE}
+          lignes={[`Rappel : ${mission.affirmation}`, ...mission.briefing]}
+          actionLabel="Refermer ▸"
+          onDone={() => setReplay(false)} />
       )}
     </div>
   );
