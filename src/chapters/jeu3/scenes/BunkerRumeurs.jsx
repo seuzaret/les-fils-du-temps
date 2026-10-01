@@ -133,7 +133,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     ? currentTemoin.questions[selected.questionIdx] : null;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto" }}>
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto", scrollbarGutter: "stable" }}>
       {/* Bandeau titre + bouton carnet */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: 1200, padding: "0 4px", flexShrink: 0 }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
@@ -277,7 +277,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       </svg>
 
       {/* PANEL BAS : contextuel selon phase */}
-      <div style={{ maxWidth: 900, width: "100%", minHeight: 120 }}>
+      <div style={{ maxWidth: 900, width: "100%", minHeight: 280 }}>
         {phase === "done" && (
           <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>✓ MISSION ACCOMPLIE</div>
@@ -442,12 +442,12 @@ function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
       </div>
 
       {answer && (
-        <div style={{ background: "#0a0e14", borderLeft: "3px solid #7fd8ff", padding: "10px 14px", marginBottom: 12, borderRadius: 4 }}>
-          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, color: "#e8eef5", fontStyle: "italic" }}>« {answer.r} »</p>
+        <div style={{ background: "#0a0e14", borderLeft: "3px solid #7fd8ff", padding: "12px 16px", marginBottom: 12, borderRadius: 4 }}>
+          <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6, color: "#e8eef5" }}>{answer.r}</p>
         </div>
       )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {temoin.questions.map((q, i) => {
           const doneQ = asked.has(i);
           return (
@@ -456,8 +456,8 @@ function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
                 background: doneQ ? "#0e1420" : "#1a2436",
                 color: doneQ ? "#7a879e" : "#e8eef5",
                 border: `1px solid ${doneQ ? "#2a3648" : "#3a80c8"}`,
-                borderRadius: 6, padding: "10px 14px", textAlign: "left",
-                fontFamily: "Georgia, serif", fontSize: 15, cursor: "pointer",
+                borderRadius: 6, padding: "11px 16px", textAlign: "left",
+                fontFamily: "Georgia, serif", fontSize: 17, cursor: "pointer",
               }}>
               {doneQ ? "✓ " : "▸ "}{q.q}
             </button>

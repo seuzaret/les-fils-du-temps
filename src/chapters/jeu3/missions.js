@@ -17,10 +17,10 @@ export const MISSIONS_RUMEURS = {
     affirmation: "Le Dr Kova aurait dit que l'air, dehors, est respirable — et que sa nièce serait sortie sans dommage.",
     /* Briefing du Juge Vez, lu au comptoir. Chaque ligne = une réplique. */
     briefing: [
-      "Vez te regarde entrer, pose son stylo. « Alors c'est toi qui a reçu le billet. Tu es le troisième cette année. Les deux autres ont abandonné. »",
-      "« Je ne te demande pas qui tu es. On est trop d'habitants au Puits pour que je retienne les noms. Je te demande juste si tu es prêt·e à faire ce boulot. »",
-      "« Pour commencer, un cas d'école. Un habitant, Marek, dit avoir entendu à la cantine un certain Dr Kova affirmer que sa nièce est sortie du Puits et qu'elle allait bien. Rumeur, vraie info ? »",
-      "« Interroge Marek. Puis vérifie auprès de deux personnes qui pourraient savoir : l'archiviste Séra, et le garde Yol de la C-3. Reviens me voir avec ton verdict. »",
+      "Alors c'est toi qui a reçu le billet. Tu es le troisième cette année. Les deux autres ont abandonné.",
+      "Je ne te demande pas qui tu es. On est trop d'habitants au Puits pour que je retienne les noms. Je te demande juste si tu es prêt·e à faire ce boulot.",
+      "Pour commencer, un cas d'école. Un habitant, Marek, dit avoir entendu à la cantine un certain Dr Kova affirmer que sa nièce est sortie du Puits et qu'elle allait bien. Rumeur ? Vraie info ?",
+      "Interroge Marek. Puis vérifie auprès de deux personnes qui pourraient savoir : l'archiviste Séra, et le garde Yol de la C-3. Reviens me voir avec ton verdict.",
     ],
     minWitnesses: 3,
     /* Les 3 témoins. Chacun expose une fiche + 3 questions type. Chaque
@@ -90,17 +90,17 @@ export const MISSIONS_RUMEURS = {
         label: "SOLIDE",
         desc: "L'air est respirable dehors, c'est vrai.",
         ok: false,
-        retour: "Vez : « Non. Un seul habitant rapporte les paroles de quelqu'un dont l'archiviste ne trouve pas la trace, et le garde dit que la porte n'a pas bougé depuis 40 ans. Solide, ce serait faire confiance au maillon le plus fragile. Recommence. »" },
+        retour: "Non. Un seul habitant rapporte les paroles de quelqu'un dont l'archiviste ne trouve pas la trace, et le garde dit que la porte n'a pas bougé depuis 40 ans. Solide, ce serait faire confiance au maillon le plus fragile. Recommence." },
       { id: "fragile",
         label: "FRAGILE",
         desc: "Peut-être vrai, mais on manque de preuves.",
         ok: false,
-        retour: "Vez : « Trop généreux. Marek n'a rien vu, il rapporte les paroles de quelqu'un qui n'existe pas dans les registres. Ce n'est pas du fragile, c'est du zéro. »" },
+        retour: "Trop généreux. Marek n'a rien vu, il rapporte les paroles de quelqu'un qui n'existe pas dans les registres. Ce n'est pas du fragile, c'est du zéro." },
       { id: "rumeur",
         label: "RUMEUR",
         desc: "L'histoire ne tient pas.",
         ok: true,
-        retour: "Vez : « Verdict correct. Marek RAPPORTE — il n'a rien vu. La personne qu'il cite n'existe pas dans les registres. Le garde confirme que la porte n'a pas bougé depuis quarante ans. C'est une rumeur. »" },
+        retour: "Verdict correct. Marek RAPPORTE — il n'a rien vu. La personne qu'il cite n'existe pas dans les registres. Le garde confirme que la porte n'a pas bougé depuis quarante ans. C'est une rumeur." },
     ],
     /* Feedback selon la précision de la sélection des témoins fiables. */
     fiablesFeedback: {

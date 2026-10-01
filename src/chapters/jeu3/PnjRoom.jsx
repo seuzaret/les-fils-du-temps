@@ -49,8 +49,8 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
               {current.nom.toUpperCase()} · {current.role}
             </div>
-            <p style={{ margin: "4px 0 0", fontSize: 15, lineHeight: 1.55, color: "#e8eef5" }}>
-              « {current.replique} »
+            <p style={{ margin: "4px 0 0", fontSize: 17, lineHeight: 1.55, color: "#e8eef5" }}>
+              {current.replique}
             </p>
             <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
               Clique ailleurs pour fermer ▸
