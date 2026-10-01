@@ -21,6 +21,7 @@ export default function BigDialogue({
   speakerNom = "?", speakerRole = "",
   speakerStyle = {}, lignes = [],
   onDone, actionLabel, accent = "#e0a848",
+  topic = null,
 }) {
   const [i, setI] = useState(0);
   const isLast = i === lignes.length - 1;
@@ -31,7 +32,14 @@ export default function BigDialogue({
   };
   return (
     <div onClick={advance}
-      style={{ position: "fixed", inset: 0, zIndex: 180, background: "rgba(4,8,14,0.92)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
+      style={{ position: "fixed", inset: 0, zIndex: 180, background: "rgba(4,8,14,0.92)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
+      {topic && (
+        <div style={{ maxWidth: 960, width: "100%", marginBottom: 12, textAlign: "center" }}>
+          <div style={{ display: "inline-block", background: "#141020", border: `1px solid ${accent}`, borderRadius: 6, padding: "6px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: accent, fontWeight: 700 }}>
+            {topic}
+          </div>
+        </div>
+      )}
       <div onClick={advance}
         style={{ maxWidth: 960, width: "100%", display: "flex", gap: 20, alignItems: "stretch" }}>
         {/* Portrait resserré — panneau plus petit, mais viewBox cadrée sur Vez pour qu'il remplisse */}
