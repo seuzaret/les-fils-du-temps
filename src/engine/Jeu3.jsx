@@ -206,11 +206,12 @@ export default function Jeu3({ prenom, onExit, startAt }) {
             style={{ position: "absolute",
               top: "50%", left: showMinimap ? 160 : 12,
               transform: "translateY(-50%)", zIndex: 50,
-              width: 40, height: 56, borderRadius: 12,
-              border: "1px solid rgba(255,255,255,0.25)",
-              background: "rgba(0,0,0,0.38)", color: "#fff",
-              fontSize: 26, cursor: "pointer", backdropFilter: "blur(2px)",
-              lineHeight: 1 }}>
+              width: 44, height: 60, borderRadius: 12,
+              border: "1.5px solid rgba(255,209,102,0.75)",
+              background: "rgba(255,209,102,0.35)", color: "#ffe8a8",
+              fontSize: 30, fontWeight: 800, cursor: "pointer",
+              backdropFilter: "blur(2px)", lineHeight: 1,
+              boxShadow: "0 0 14px rgba(255,209,102,0.35)" }}>
             ‹
           </button>
         )}
