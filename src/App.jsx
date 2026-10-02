@@ -148,6 +148,7 @@ export default function App() {
   const [maxReached, setMaxReached] = useState(0); // plus haut chapitre débloqué (menu titre)
   const [mode, setMode] = useState("jeu1");        // "jeu1" (voyage principal) | "jeu2" (enquête Al3x1A) | "jeu3" (bunker 2087)
   const [jeu3Start, setJeu3Start] = useState(null); // triche : pièce + flags + heardPnj initiaux pour Jeu3
+  const [jeu3Nonce, setJeu3Nonce] = useState(0);    // bump → remonte Jeu3 (triche appliquée dès useState)
   const [jeu2Target, setJeu2Target] = useState(-1); // index du chapitre où Al3x1A est bloqué·e
   const [jeu2Notes, setJeu2Notes] = useState([]);  // chapitres où la note a été lue (indices)
   const [jeu2Found, setJeu2Found] = useState(false); // Al3x1A a été trouvé·e ?
@@ -414,6 +415,7 @@ export default function App() {
     setMode("jeu3");
     setScreen("jeu3");
     setJeu3Start(null);
+    setJeu3Nonce((n) => n + 1);
   };
 
   /* Triche : plonge direct dans l'enquête Kova (bureau déverrouillé,
@@ -426,6 +428,7 @@ export default function App() {
       flags: { puits_billet: true },
       heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
     });
+    setJeu3Nonce((n) => n + 1);
   };
 
   /* Triche : Kova déjà résolue, Vitamine prête à briefer. */
@@ -437,6 +440,7 @@ export default function App() {
       flags: { puits_billet: true, mission_kova_done: true },
       heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
     });
+    setJeu3Nonce((n) => n + 1);
   };
 
   const newGameJeu2 = () => {
@@ -1659,7 +1663,7 @@ export default function App() {
     return (
       <>
         {cheatPanel}
-        <Jeu3 prenom={prenom} startAt={jeu3Start} onExit={() => { setMode("jeu1"); setScreen("title"); setJeu3Start(null); }} />
+        <Jeu3 key={jeu3Nonce} prenom={prenom} startAt={jeu3Start} onExit={() => { setMode("jeu1"); setScreen("title"); setJeu3Start(null); }} />
       </>
     );
   }
