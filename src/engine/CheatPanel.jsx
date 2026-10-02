@@ -18,6 +18,7 @@ export default function CheatPanel({
   onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab,
   onNewGameJeu2, onNewGameJeu3,
   onCheatJeu3Kova, onCheatJeu3Vitamine, onCheatJeu3Jour40, onCheatJeu3Enfant, onCheatJeu3Champble,
+  onCheatJeu3Fontaine, onCheatJeu3Viande,
 }) {
   if (!cheat) return null;
   return (
@@ -70,6 +71,8 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onCheatJeu3Jour40}>🎯 Direct enquête 3 · 40e jour</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Enfant}>🎯 Direct enquête 4 · Enfant du haut</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Champble}>🎯 Direct enquête 5 · Champ de blé</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Fontaine}>🎯 Direct enquête 6 · Fontaine (FRAGILE)</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Viande}>🎯 Direct enquête 7 · Viande (SOLIDE)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
