@@ -483,8 +483,10 @@ function EnquetePanel({ mission, nbInterroges, allAsked }) {
 
 function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
   return (
-    <div onClick={(e) => e.stopPropagation()}
-      style={{ background: "#141020", border: "1px solid #3a80c8", borderRadius: 10, padding: "14px 18px", cursor: "default" }}>
+    <div onClick={onClose}
+      style={{ position: "fixed", inset: 0, zIndex: 170, background: "rgba(4,8,14,0.75)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
+      <div onClick={(e) => e.stopPropagation()}
+      style={{ maxWidth: 720, width: "100%", maxHeight: "85vh", overflowY: "auto", background: "#141020", border: "2px solid #3a80c8", borderRadius: 10, padding: "18px 22px", cursor: "default", boxShadow: "0 20px 60px rgba(0,0,0,0.75)" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#7fd8ff", fontWeight: 700 }}>
           {temoin.nom.toUpperCase()} · {temoin.role}
@@ -522,7 +524,8 @@ function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
         })}
       </div>
       <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
-        Clique ailleurs pour fermer ▸
+        Clique en dehors de l'encadré pour fermer ▸
+      </div>
       </div>
     </div>
   );
