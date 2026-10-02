@@ -203,14 +203,15 @@ export default function Jeu3({ prenom, onExit, startAt }) {
         {showBack && (
           <button onClick={() => goTo(backTarget)}
             title={backTarget === "elevator" ? "Ascenseur" : "Couloir"}
-            style={{ position: "absolute", left: showMinimap ? 160 : 20, bottom: 16, zIndex: 50,
-              background: "rgba(20,27,38,0.9)", color: "#7fd8ff",
-              border: "1px solid #3a80c8", borderRadius: 999,
-              width: 46, height: 46, cursor: "pointer",
-              fontFamily: "ui-monospace,monospace", fontSize: 18, fontWeight: 800,
-              display: "flex", alignItems: "center", justifyContent: "center",
-              boxShadow: "0 4px 16px rgba(0,0,0,0.5)" }}>
-            ←
+            style={{ position: "absolute",
+              top: "50%", left: showMinimap ? 160 : 12,
+              transform: "translateY(-50%)", zIndex: 50,
+              width: 40, height: 56, borderRadius: 12,
+              border: "1px solid rgba(255,255,255,0.25)",
+              background: "rgba(0,0,0,0.38)", color: "#fff",
+              fontSize: 26, cursor: "pointer", backdropFilter: "blur(2px)",
+              lineHeight: 1 }}>
+            ‹
           </button>
         )}
       </div>
