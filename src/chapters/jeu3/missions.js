@@ -8,7 +8,28 @@
      - "rumeur"    : info fausse ou infondée
      - "fragile"   : info partiellement vérifiée
      - "solide"    : info vérifiée par plusieurs sources fiables
+
+   Métadonnées de maillage inter-pièces :
+     - temoin.roomId  : "rumeurs" = convoqué au Bureau (cas d'école),
+                        sinon id de la pièce où on va le voir
+     - temoin.pnjId   : si fourni, id du PNJ ambiant correspondant
+                        dans pnj.js (match par cet id dans PnjRoom)
    ============================================================ */
+
+/* Ordre canonique des enquêtes. Partagé entre Jeu3 et BunkerRumeurs. */
+export const MISSION_ORDER = ["kova", "vitamine", "jour40", "enfant", "champble", "fontaine", "viande"];
+
+/* Première enquête non résolue d'après MISSION_ORDER et flags courants. */
+export function getActiveMission(missions, flags) {
+  return MISSION_ORDER.map((id) => missions[id]).find((m) => m && !flags[m.flag]) || null;
+}
+
+/* Pour un PNJ ambiant d'une pièce, retourne le témoin de l'enquête active
+   si ce PNJ correspond à un témoin — ou null. */
+export function findMissionTemoinForPnj(activeMission, pnjId) {
+  if (!activeMission || !pnjId) return null;
+  return activeMission.temoins.find((t) => t.pnjId === pnjId) || null;
+}
 export const MISSIONS_RUMEURS = {
   kova: {
     id: "kova",
@@ -29,7 +50,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "marek", nom: "Marek", role: "Habitant (retraité)",
-        ancienneteAns: 12, lieu: "Cantine commune",
+        ancienneteAns: 12, lieu: "Cantine commune", roomId: "rumeurs",
         pose: { x: 200, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#3a1808",
         facing: "right", activity: "cup",
@@ -47,7 +68,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "sera", nom: "Séra", role: "Archiviste",
-        ancienneteAns: 8, lieu: "Salle des Archives",
+        ancienneteAns: 8, lieu: "Salle des Archives", roomId: "rumeurs",
         pose: { x: 500, y: 400 },
         color: "#7fd8ff", pants: "#3a4048", hair: "#5a4028",
         facing: "front", accessory: "coat", activity: "write",
@@ -65,7 +86,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yol", nom: "Yol", role: "Garde de la grande porte",
-        ancienneteAns: 22, lieu: "Près de la grande porte",
+        ancienneteAns: 22, lieu: "Près de la grande porte", roomId: "rumeurs",
         pose: { x: 800, y: 400 },
         color: "#28303a", pants: "#1a2028", hair: "#1a1408",
         facing: "front", accessory: "toolbelt", activity: "crossed",
@@ -127,7 +148,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "tor", nom: "Tor", role: "Technicien aux Serres",
-        ancienneteAns: 11, lieu: "Serres hydroponiques",
+        ancienneteAns: 11, lieu: "Serres hydroponiques", roomId: "serres", pnjId: "serres_tor",
         pose: { x: 150, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#3a1808",
         facing: "right", accessory: "toolbelt", activity: "wrench",
@@ -145,7 +166,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "lin", nom: "Lin", role: "Médecin",
-        ancienneteAns: 14, lieu: "Infirmerie",
+        ancienneteAns: 14, lieu: "Infirmerie", roomId: "infirmerie", pnjId: "infirmerie_lin",
         pose: { x: 420, y: 400 },
         color: "#7fd8ff", pants: "#3a4048", hair: "#5a4028",
         facing: "front", accessory: "coat", activity: "clipboard",
@@ -163,7 +184,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "bri", nom: "Bri", role: "Cuisinière en chef",
-        ancienneteAns: 18, lieu: "Cantine commune",
+        ancienneteAns: 18, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_bri",
         pose: { x: 720, y: 400 },
         color: "#e8dfc8", pants: "#3a2818", hair: "#8a3820",
         facing: "left", accessory: "apron", activity: "stir",
@@ -181,7 +202,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "mel", nom: "Mel", role: "Patiente au repos",
-        ancienneteAns: 7, lieu: "Infirmerie",
+        ancienneteAns: 7, lieu: "Infirmerie", roomId: "infirmerie", pnjId: "infirmerie_mel",
         pose: { x: 980, y: 400 },
         color: "#8a5030", pants: "#3a4048", hair: "#c8a848",
         facing: "front", activity: "cup",
@@ -240,7 +261,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "yon", nom: "Yon", role: "Électricien",
-        ancienneteAns: 16, lieu: "Atelier des Ingénieurs",
+        ancienneteAns: 16, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_yon",
         pose: { x: 180, y: 400 },
         color: "#c8a848", pants: "#3a2818", hair: "#3a1808",
         facing: "right", accessory: "toolbelt", activity: "torch",
@@ -258,7 +279,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "gus", nom: "Gus", role: "Contremaître",
-        ancienneteAns: 24, lieu: "Atelier des Ingénieurs",
+        ancienneteAns: 24, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_gus",
         pose: { x: 450, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#e8dfc8", skin: "#c8a888",
         facing: "left", accessory: "coat", activity: "write",
@@ -276,7 +297,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "kev", nom: "Kev", role: "Ingénieur systèmes",
-        ancienneteAns: 10, lieu: "Atelier des Ingénieurs",
+        ancienneteAns: 10, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_kev",
         pose: { x: 720, y: 400 },
         color: "#3a4048", pants: "#28303a", hair: "#2a2018",
         facing: "left", accessory: "toolbelt", activity: "wrench",
@@ -294,7 +315,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "flor", nom: "Flor", role: "Botaniste",
-        ancienneteAns: 19, lieu: "Serres hydroponiques",
+        ancienneteAns: 19, lieu: "Serres hydroponiques", roomId: "serres", pnjId: "serres_flor",
         pose: { x: 980, y: 400 },
         color: "#5eff9e", pants: "#3a4048", hair: "#c8a848",
         facing: "left", accessory: "coat", activity: "write",
@@ -353,7 +374,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "via", nom: "Via", role: "Habitante",
-        ancienneteAns: 9, lieu: "Cantine commune",
+        ancienneteAns: 9, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
         pose: { x: 180, y: 400 },
         color: "#8a3820", pants: "#28303a", hair: "#3a1808",
         facing: "right", activity: "cup",
@@ -371,7 +392,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "iris", nom: "Iris", role: "Fidèle",
-        ancienneteAns: 21, lieu: "Chapelle des Anciens",
+        ancienneteAns: 21, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_iris",
         pose: { x: 450, y: 400 },
         color: "#8a5030", pants: "#5a4028", hair: "#8a5030",
         facing: "left", accessory: "robe", activity: "pray",
@@ -389,7 +410,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yol", nom: "Yol", role: "Garde de la grande porte",
-        ancienneteAns: 22, lieu: "Près de la grande porte",
+        ancienneteAns: 22, lieu: "Près de la grande porte", roomId: "rumeurs",
         pose: { x: 720, y: 400 },
         color: "#28303a", pants: "#1a2028", hair: "#1a1408",
         facing: "front", accessory: "toolbelt", activity: "crossed",
@@ -407,7 +428,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "anselme", nom: "Anselme", role: "Ancien",
-        ancienneteAns: 56, lieu: "Chapelle des Anciens",
+        ancienneteAns: 56, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_anselme",
         pose: { x: 980, y: 388 },
         color: "#5a3818", pants: "#3a2010", hair: "#f0e4c8", skin: "#c8a888",
         facing: "front", poseKind: "sit", accessory: "robe", activity: "pray",
@@ -466,7 +487,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "ela", nom: "Ela", role: "Enfant curieuse",
-        ancienneteAns: 10, lieu: "Cantine commune",
+        ancienneteAns: 10, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_ela",
         pose: { x: 180, y: 400 },
         color: "#c88060", pants: "#3a4048", hair: "#e8dfc8",
         facing: "right", activity: "cup",
@@ -484,7 +505,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "anselme2", nom: "Anselme", role: "Ancien",
-        ancienneteAns: 56, lieu: "Chapelle des Anciens",
+        ancienneteAns: 56, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_anselme",
         pose: { x: 450, y: 388 },
         color: "#5a3818", pants: "#3a2010", hair: "#f0e4c8", skin: "#c8a888",
         facing: "front", poseKind: "sit", accessory: "robe", activity: "pray",
@@ -502,7 +523,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yona", nom: "Yona", role: "Couturière",
-        ancienneteAns: 13, lieu: "Chambre N-30",
+        ancienneteAns: 13, lieu: "Chambre N-30", roomId: "chambreN30", pnjId: "voisin_yona",
         pose: { x: 720, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#c8a848",
         facing: "left", accessory: "apron", activity: "write",
@@ -520,7 +541,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "estev", nom: "Estev", role: "Ancien enseignant",
-        ancienneteAns: 44, lieu: "Chambre N-32",
+        ancienneteAns: 44, lieu: "Chambre N-32", roomId: "chambreN32", pnjId: "voisin_estev",
         pose: { x: 980, y: 388 },
         color: "#5a4028", pants: "#3a2818", hair: "#e8dfc8", skin: "#c8a888",
         facing: "front", poseKind: "sit", activity: "write",
@@ -584,7 +605,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "tam", nom: "Tam", role: "Mécanicienne",
-        ancienneteAns: 9, lieu: "Atelier des Ingénieurs",
+        ancienneteAns: 9, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_tam",
         pose: { x: 180, y: 400 },
         color: "#5a4028", pants: "#3a2010", hair: "#8a3820",
         facing: "right", accessory: "hardhat", activity: "hammer",
@@ -602,7 +623,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yon_f", nom: "Yon", role: "Électricien",
-        ancienneteAns: 16, lieu: "Atelier des Ingénieurs",
+        ancienneteAns: 16, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_yon",
         pose: { x: 450, y: 400 },
         color: "#c8a848", pants: "#3a2818", hair: "#3a1808",
         facing: "left", accessory: "toolbelt", activity: "torch",
@@ -620,7 +641,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "nel_f", nom: "Nel", role: "Serveuse",
-        ancienneteAns: 7, lieu: "Cantine commune",
+        ancienneteAns: 7, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_nel",
         pose: { x: 720, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#5a3018",
         facing: "right", accessory: "apron", activity: "wipe",
@@ -638,7 +659,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "via_f", nom: "Via", role: "Habitante",
-        ancienneteAns: 9, lieu: "Cantine commune",
+        ancienneteAns: 9, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
         pose: { x: 980, y: 400 },
         color: "#8a3820", pants: "#28303a", hair: "#3a1808",
         facing: "left", activity: "cup",
@@ -697,7 +718,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "dor_v", nom: "Dor", role: "Cuisinier",
-        ancienneteAns: 11, lieu: "Cantine commune",
+        ancienneteAns: 11, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_dor",
         pose: { x: 180, y: 400 },
         color: "#c8d4e2", pants: "#3a2818", hair: "#1a1408",
         facing: "right", accessory: "apron", activity: "stir",
@@ -715,7 +736,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "bri_v", nom: "Bri", role: "Cuisinière en chef",
-        ancienneteAns: 18, lieu: "Cantine commune",
+        ancienneteAns: 18, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_bri",
         pose: { x: 450, y: 400 },
         color: "#e8dfc8", pants: "#3a2818", hair: "#8a3820",
         facing: "left", accessory: "apron", activity: "write",
@@ -733,7 +754,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "nel_v", nom: "Nel", role: "Serveuse",
-        ancienneteAns: 7, lieu: "Cantine commune",
+        ancienneteAns: 7, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_nel",
         pose: { x: 720, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#5a3018",
         facing: "right", accessory: "apron", activity: "wipe",
@@ -751,7 +772,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "mo_v", nom: "Mo", role: "Habitant hors-service",
-        ancienneteAns: 32, lieu: "Cantine commune",
+        ancienneteAns: 32, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_mo",
         pose: { x: 980, y: 400 },
         color: "#5a6270", pants: "#3a2818", hair: "#3a1808",
         facing: "left", activity: "crossed",

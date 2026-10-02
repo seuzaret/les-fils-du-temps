@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PnjSprite from "./PnjSprite.jsx";
+import { findMissionTemoinForPnj } from "./missions.js";
 
 /* ============================================================
    JEU 3 — Pièce peuplée de PNJ (helper Cluedo)
@@ -18,6 +19,7 @@ import PnjSprite from "./PnjSprite.jsx";
 export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
   const [selected, setSelected] = useState(null);
   const current = selected ? pnjList.find((p) => p.id === selected) : null;
+  const activeMission = j3?.activeMission;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%", maxWidth: 1600, height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto" }}>
@@ -29,18 +31,34 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
       <svg viewBox="0 0 1000 520" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%", cursor: selected ? "pointer" : "default" }}
         onClick={() => setSelected(null)}>
         {bg}
-        {pnjList.map((p) => (
-          <PnjSprite key={p.id}
-            x={p.pose.x} y={p.pose.y}
-            color={p.color} hair={p.hair} pants={p.pants} skin={p.skin}
-            facing={p.facing || "front"}
-            pose={p.poseKind || "stand"} accessory={p.accessory || null}
-            activity={p.activity || null}
-            nom={p.nom} role={p.role}
-            heard={!!j3.heardPnj[p.id]}
-            active={selected === p.id}
-            onClick={() => { setSelected(p.id); j3.hear(p.id); }} />
-        ))}
+        {pnjList.map((p) => {
+          /* Si ce PNJ est un témoin de l'enquête active, cliquer l'ouvre
+             en mode interrogatoire (modal top-level) au lieu de la
+             réplique d'ambiance. Un halo doré signale cette qualité. */
+          const temoin = findMissionTemoinForPnj(activeMission, p.id);
+          const heardAsPnj = !!j3.heardPnj[p.id];
+          const asked = temoin ? (j3.enqAnswered?.[temoin.id]?.size || 0) : 0;
+          return (
+            <PnjSprite key={p.id}
+              x={p.pose.x} y={p.pose.y}
+              color={p.color} hair={p.hair} pants={p.pants} skin={p.skin}
+              facing={p.facing || "front"}
+              pose={p.poseKind || "stand"} accessory={p.accessory || null}
+              activity={p.activity || null}
+              nom={p.nom} role={p.role}
+              heard={temoin ? asked > 0 : heardAsPnj}
+              active={!!temoin && asked === 0}
+              onClick={() => {
+                if (temoin) {
+                  j3.openInterview(temoin.id);
+                  j3.hear(p.id);
+                } else {
+                  setSelected(p.id);
+                  j3.hear(p.id);
+                }
+              }} />
+          );
+        })}
       </svg>
       <div style={{ maxWidth: 820, width: "100%", minHeight: 90 }} onClick={() => setSelected(null)}>
         {current ? (

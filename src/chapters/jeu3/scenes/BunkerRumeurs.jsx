@@ -2,15 +2,13 @@ import { useState, useEffect } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import EnqueteCarnet from "../EnqueteCarnet.jsx";
 import BigDialogue from "../BigDialogue.jsx";
+import { MISSION_ORDER } from "../missions.js";
 
 /* Portrait du Juge Vez utilisé en plein écran. */
 const VEZ_STYLE = {
   color: "#3a2818", pants: "#1a1408", hair: "#c8b090",
   skin: "#c8a888", facing: "front", accessory: "robe", activity: "write",
 };
-
-/* Ordre canonique des missions. On joue toujours la 1re non résolue. */
-const MISSION_ORDER = ["kova", "vitamine", "jour40", "enfant", "champble", "fontaine", "viande"];
 
 /* ============================================================
    JEU 3 — SCÈNE : « Bureau des Rumeurs » (R-01)
@@ -34,9 +32,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const missionNum = mission ? MISSION_ORDER.indexOf(mission.id) + 1 : MISSION_ORDER.length;
 
   // Hooks TOUJOURS déclarés dans le même ordre (pas de hook conditionnel).
+  // L'état d'interview (quel témoin, quelles réponses) vit dans j3.
   const [phase, setPhase] = useState(allDone ? "done" : "briefing");
-  const [selected, setSelected] = useState(null);
-  const [answered, setAnswered] = useState({});
+  const [selected, setSelected] = useState(null); // uniquement pour Vez (briefing/rappel)
   const [carnet, setCarnet] = useState(false);
   const [verdictChoice, setVerdictChoice] = useState(null);
   const [reliablePicks, setReliablePicks] = useState(new Set());
@@ -44,12 +42,12 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const [replay, setReplay] = useState(false);
 
   /* Quand la mission courante change (une résolue → la suivante prend sa place),
-     on réinitialise l'UI : briefing de la nouvelle, états locaux à zéro. */
+     on réinitialise l'UI locale : briefing de la nouvelle, états locaux à zéro.
+     (L'état d'interview est réinitialisé par Jeu3 lui-même.) */
   useEffect(() => {
     if (!mission) { setPhase("done"); return; }
     setPhase("briefing");
     setSelected(null);
-    setAnswered({});
     setVerdictChoice(null);
     setReliablePicks(new Set());
     setFeedback(null);
@@ -99,28 +97,18 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     );
   }
 
+  /* Témoins convoqués au Bureau (roomId === "rumeurs") — essentiellement Kova
+     et le garde Yol de l'enquête Enfant. Les autres témoins vivent dans leur
+     pièce, et seront interrogés sur place via PnjRoom. */
+  const temoinsIci = mission.temoins.filter((t) => t.roomId === "rumeurs");
+  const answered = j3.enqAnswered || {};
   const nbInterroges = mission.temoins.filter((t) => (answered[t.id] || new Set()).size > 0).length;
   const allAsked = nbInterroges >= mission.temoins.length;
 
   const openTemoin = (t) => {
     if (phase !== "enquete") return;
-    // Marque au moins la 1re question comme disponible (l'interview ne remplit le carnet qu'après clic)
-    if (!answered[t.id]) {
-      setAnswered((a) => ({ ...a, [t.id]: new Set() }));
-    }
-    setSelected({ temoinId: t.id, questionIdx: null });
+    j3.openInterview(t.id);
     j3.hear(t.id);
-  };
-
-  const askQuestion = (temoinId, idx) => {
-    setAnswered((a) => {
-      const next = { ...a };
-      const set = new Set(next[temoinId] || []);
-      set.add(idx);
-      next[temoinId] = set;
-      return next;
-    });
-    setSelected({ temoinId, questionIdx: idx });
   };
 
   const togglePick = (id) => {
@@ -158,9 +146,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     setPhase("enquete");
   };
 
-  const currentTemoin = selected ? mission.temoins.find((t) => t.id === selected.temoinId) : null;
-  const currentAnswer = currentTemoin && selected.questionIdx !== null
-    ? currentTemoin.questions[selected.questionIdx] : null;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto", scrollbarGutter: "stable" }}>
@@ -184,7 +169,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       </div>
 
       <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet"
-        style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0, cursor: (currentTemoin || selected) ? "pointer" : "default" }}
+        style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0, cursor: selected ? "pointer" : "default" }}
         onClick={() => { if (phase === "enquete") setSelected(null); }}>
         <defs>
           <linearGradient id="br-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2a2418" /><stop offset="100%" stopColor="#141008" /></linearGradient>
@@ -298,8 +283,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
             else if (phase === "enquete") setSelected({ temoinId: "vez_rappel", questionIdx: null });
           }} />
 
-        {/* Les 3 témoins */}
-        {mission.temoins.map((t) => (
+        {/* Témoins convoqués ici (roomId === "rumeurs"). Les autres sont
+            dans leur pièce habituelle du Puits. */}
+        {temoinsIci.map((t) => (
           <PnjSprite key={t.id}
             x={t.pose.x} y={t.pose.y}
             color={t.color} pants={t.pants} hair={t.hair}
@@ -307,7 +293,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
             activity={t.activity || null}
             nom={t.nom} role={t.role}
             heard={!!(answered[t.id] && answered[t.id].size > 0)}
-            active={selected?.temoinId === t.id}
             onClick={phase === "enquete" ? () => openTemoin(t) : undefined} />
         ))}
 
@@ -332,24 +317,17 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           <EnquetePanel
             mission={mission}
             nbInterroges={nbInterroges}
-            allAsked={allAsked} />
+            allAsked={allAsked}
+            temoinsAChercher={mission.temoins.filter((t) => t.roomId !== "rumeurs" && !(answered[t.id] && answered[t.id].size > 0))}
+          />
         )}
         {phase === "enquete" && selected?.temoinId === "vez_rappel" && (
           <VezPanel titre="Retour vers le Juge"
             lignes={[
               `Il te reste ${mission.temoins.length - nbInterroges} personne(s) à interroger avant de rendre ton verdict.`,
-              "Passe voir Marek, Séra et Yol dans la salle. Ouvre le carnet 📓 si tu veux relire leurs fiches.",
+              "Ouvre le carnet 📓 pour voir où les trouver.",
             ]}
             action={{ label: "OK, je continue", on: () => setSelected(null) }} />
-        )}
-        {phase === "enquete" && currentTemoin && (
-          <InterviewPanel
-            temoin={currentTemoin}
-            asked={answered[currentTemoin.id] || new Set()}
-            answer={currentAnswer}
-            onAsk={(idx) => askQuestion(currentTemoin.id, idx)}
-            onClose={() => setSelected(null)}
-          />
         )}
 
         {phase === "verdict" && !feedback && (
@@ -462,15 +440,23 @@ function VezPanel({ titre, lignes, action }) {
   );
 }
 
-function EnquetePanel({ mission, nbInterroges, allAsked }) {
+function EnquetePanel({ mission, nbInterroges, allAsked, temoinsAChercher = [] }) {
+  const nbExterieurs = temoinsAChercher.length;
   return (
     <div style={{ background: "#0a0e14", border: "1px dashed #3a80c8", borderRadius: 10, padding: "12px 16px" }}>
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff", marginBottom: 6 }}>
         ENQUÊTE EN COURS · {nbInterroges}/{mission.temoins.length} interrogé{nbInterroges > 1 ? "s" : ""}
       </div>
       <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.5 }}>
-        Clique sur chaque témoin dans la salle. Pose-lui les questions de ton choix. Ouvre le carnet 📓 en haut à droite pour relire les fiches quand tu veux.
+        Clique sur chaque témoin ici au Bureau. Pour les autres, va les voir dans leur pièce. Le carnet 📓 note où les trouver.
       </p>
+      {nbExterieurs > 0 && (
+        <ul style={{ margin: "8px 0 0", paddingLeft: 20, fontSize: 12.5, color: "#8fa3bd", lineHeight: 1.5 }}>
+          {temoinsAChercher.map((t) => (
+            <li key={t.id}>☐ Voir <strong>{t.nom}</strong> · {t.lieu}</li>
+          ))}
+        </ul>
+      )}
       {allAsked && (
         <p style={{ margin: "8px 0 0", fontSize: 13, color: "#e0a848", fontWeight: 700 }}>
           ▸ Tu as interrogé tout le monde. Retourne voir le Juge Vez pour rendre ton verdict.
@@ -480,55 +466,6 @@ function EnquetePanel({ mission, nbInterroges, allAsked }) {
   );
 }
 
-function InterviewPanel({ temoin, asked, answer, onAsk, onClose }) {
-  return (
-    <div onClick={onClose}
-      style={{ position: "fixed", inset: 0, zIndex: 170, background: "rgba(4,8,14,0.75)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
-      <div onClick={(e) => e.stopPropagation()}
-      style={{ maxWidth: 720, width: "100%", maxHeight: "85vh", overflowY: "auto", background: "#141020", border: "2px solid #3a80c8", borderRadius: 10, padding: "18px 22px", cursor: "default", boxShadow: "0 20px 60px rgba(0,0,0,0.75)" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#7fd8ff", fontWeight: 700 }}>
-          {temoin.nom.toUpperCase()} · {temoin.role}
-        </div>
-        <button onClick={onClose}
-          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 6, padding: "3px 10px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
-          Fermer ✕
-        </button>
-      </div>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd", marginBottom: 10 }}>
-        Au Puits depuis {temoin.ancienneteAns} ans · {temoin.lieu}
-      </div>
-
-      {answer && (
-        <div style={{ background: "#0a0e14", borderLeft: "3px solid #7fd8ff", padding: "12px 16px", marginBottom: 12, borderRadius: 4 }}>
-          <p style={{ margin: 0, fontSize: 18, lineHeight: 1.6, color: "#e8eef5" }}>{answer.r}</p>
-        </div>
-      )}
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {temoin.questions.map((q, i) => {
-          const doneQ = asked.has(i);
-          return (
-            <button key={i} onClick={() => onAsk(i)}
-              style={{
-                background: doneQ ? "#0e1420" : "#1a2436",
-                color: doneQ ? "#7a879e" : "#e8eef5",
-                border: `1px solid ${doneQ ? "#2a3648" : "#3a80c8"}`,
-                borderRadius: 6, padding: "11px 16px", textAlign: "left",
-                fontFamily: "Georgia, serif", fontSize: 17, cursor: "pointer",
-              }}>
-              {doneQ ? "✓ " : "▸ "}{q.q}
-            </button>
-          );
-        })}
-      </div>
-      <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
-        Clique en dehors de l'encadré pour fermer ▸
-      </div>
-      </div>
-    </div>
-  );
-}
 
 function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks, togglePick, onSubmit, onCancel }) {
   const canSubmit = verdictChoice && reliablePicks.size >= 1;
