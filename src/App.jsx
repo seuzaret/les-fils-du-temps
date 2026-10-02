@@ -443,6 +443,42 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Triche : les 2 premières enquêtes faites, 40e jour prête. */
+  const cheatJeu3Jour40 = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "rumeurs",
+      flags: { puits_billet: true, mission_kova_done: true, mission_vitamine_done: true },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
+  /* Triche : les 3 premières enquêtes faites, Enfant prête. */
+  const cheatJeu3Enfant = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "rumeurs",
+      flags: { puits_billet: true, mission_kova_done: true, mission_vitamine_done: true, mission_jour40_done: true },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
+  /* Triche : les 4 premières enquêtes faites, Champ de blé prête. */
+  const cheatJeu3Champble = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "rumeurs",
+      flags: { puits_billet: true, mission_kova_done: true, mission_vitamine_done: true, mission_jour40_done: true, mission_enfant_done: true },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
   const newGameJeu2 = () => {
     setMode("jeu2");
     const target = Math.floor(Math.random() * JEU2.length);
@@ -1174,6 +1210,9 @@ export default function App() {
       onNewGameJeu3={newGameJeu3}
       onCheatJeu3Kova={cheatJeu3Kova}
       onCheatJeu3Vitamine={cheatJeu3Vitamine}
+      onCheatJeu3Jour40={cheatJeu3Jour40}
+      onCheatJeu3Enfant={cheatJeu3Enfant}
+      onCheatJeu3Champble={cheatJeu3Champble}
     />
   );
 
