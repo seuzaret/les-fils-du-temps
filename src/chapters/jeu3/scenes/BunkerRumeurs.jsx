@@ -145,12 +145,10 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     else fbType = "mauvais";
     const fbFiables = v.ok ? mission.fiablesFeedback[fbType] : null;
     setFeedback({ verdict: v, fbType, fbFiables });
-    if (v.ok) {
-      j3.setFlag(mission.flag);
-      setPhase("feedback");
-    } else {
-      setPhase("feedback");
-    }
+    /* NB : on NE pose PAS encore le flag ici — sinon la mission suivante
+       prend la place et l'effet reset la phase avant que le joueur ait
+       lu le feedback. Le flag est posé par le onDone du BigDialogue. */
+    setPhase("feedback");
   };
 
   const retryFromFeedback = () => {
@@ -390,9 +388,10 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           lignes={[feedback.verdict.retour, feedback.fbFiables, mission.succes].filter(Boolean)}
           actionLabel="Continuer ▸"
           onDone={() => {
-            /* j3.setFlag a déjà été appelé au submit : la mission suivante
-               prendra la place via l'effet sur mission.id. On ne touche pas
-               à phase ici — l'effet s'en charge. */
+            /* C'est MAINTENANT qu'on pose le flag, après lecture du
+               feedback — la mission suivante prendra alors la place
+               (useEffect sur mission.id). */
+            j3.setFlag(mission.flag);
             setSelected(null);
           }} />
       )}
