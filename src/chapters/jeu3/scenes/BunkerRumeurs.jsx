@@ -37,7 +37,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const [verdictChoice, setVerdictChoice] = useState(null);
   const [reliablePicks, setReliablePicks] = useState(new Set());
   const [feedback, setFeedback] = useState(null);
-  const [replay, setReplay] = useState(false);
 
   /* Quand la mission courante change (une résolue → la suivante prend sa place),
      on réinitialise l'UI locale : briefing de la nouvelle, états locaux à zéro.
@@ -152,12 +151,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
           🎯 ENQUÊTE {missionNum} · {mission.titre.toUpperCase()}
         </div>
-        {phase !== "briefing" && phase !== "done" && (
-          <button onClick={() => setReplay(true)}
-            style={{ background: "#141020", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-            ℹ️ Rappel du briefing
-          </button>
-        )}
       </div>
 
       <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet"
@@ -366,15 +359,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           }} />
       )}
 
-      {replay && (
-        <BigDialogue
-          topic={`ENQUÊTE ${missionNum} · ${mission.titre.toUpperCase()} · RAPPEL`}
-          speakerNom="Juge Vez" speakerRole="Rappel du briefing"
-          speakerStyle={VEZ_STYLE}
-          lignes={[`Rappel : ${mission.affirmation}`, ...mission.briefing]}
-          actionLabel="Refermer ▸"
-          onDone={() => setReplay(false)} />
-      )}
     </div>
   );
 }
