@@ -21,7 +21,8 @@ import BunkerServeurs from "../chapters/jeu3/scenes/BunkerServeurs.jsx";
 import BunkerSerres from "../chapters/jeu3/scenes/BunkerSerres.jsx";
 import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
 import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
-import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT } from "../chapters/jeu3/missions.js";
+import InterviewPanel from "../chapters/jeu3/InterviewPanel.jsx";
+import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT, getActiveMission } from "../chapters/jeu3/missions.js";
 import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
 
 /* ============================================================
@@ -66,6 +67,12 @@ export default function Jeu3({ prenom, onExit, startAt }) {
   const [room, setRoom] = useState(startAt?.room || "awake");
   const [flags, setFlags] = useState(startAt?.flags || {});
   const [heardPnj, setHeardPnj] = useState(startAt?.heardPnj || {});
+  /* État partagé de l'enquête active, remonté au niveau Jeu3 pour que
+     les interviews puissent se faire dans n'importe quelle pièce et
+     que le carnet persiste entre les changements de pièce. */
+  const [enqAnswered, setEnqAnswered] = useState({}); // { temoinId: Set<qidx> }
+  const [interviewTemoinId, setInterviewTemoinId] = useState(null);
+  const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null);
   /* Mode triche : Ctrl+Shift+C toggle. Quand actif, la mini-carte redevient
      cliquable pour se téléporter d'un étage à l'autre sans passer par
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
@@ -97,10 +104,53 @@ export default function Jeu3({ prenom, onExit, startAt }) {
      vaut la salle elle-même — auquel cas "Retour au couloir" doit renvoyer à
      l'ascenseur plutôt que sur la salle courante. */
   const hubRoom = lvlHubRoom && lvlHubRoom !== room ? lvlHubRoom : "elevator";
+  const missions = { ...MISSIONS_RUMEURS, ...MISSIONS_TEMPS, ...MISSIONS_OSINT };
+  const activeMission = getActiveMission(missions, flags);
+
+  /* Reset de l'état d'enquête quand la mission active change
+     (mission résolue → suivante prend sa place). */
+  useEffect(() => {
+    setEnqAnswered({});
+    setInterviewTemoinId(null);
+    setCurrentQuestionIdx(null);
+  }, [activeMission?.id]);
+
+  const openInterview = (temoinId) => {
+    setInterviewTemoinId(temoinId);
+    setCurrentQuestionIdx(null);
+    /* Signal au carnet : au moins une interaction avec ce témoin. */
+    setEnqAnswered((a) => a[temoinId] ? a : { ...a, [temoinId]: new Set() });
+  };
+  const closeInterview = () => {
+    setInterviewTemoinId(null);
+    setCurrentQuestionIdx(null);
+  };
+  const askQuestion = (temoinId, idx) => {
+    setEnqAnswered((a) => {
+      const next = { ...a };
+      const set = new Set(next[temoinId] || []);
+      set.add(idx);
+      next[temoinId] = set;
+      return next;
+    });
+    setCurrentQuestionIdx(idx);
+  };
+
   const j3 = { flags, heardPnj, setFlag, hear,
     previousRoom: prevRef.current,
     hubRoom,
-    missions: { ...MISSIONS_RUMEURS, ...MISSIONS_TEMPS, ...MISSIONS_OSINT } };
+    missions,
+    activeMission,
+    enqAnswered,
+    openInterview, closeInterview, askQuestion };
+
+  /* Témoin actuellement en interview (modal top-level). */
+  const interviewTemoin = interviewTemoinId && activeMission
+    ? activeMission.temoins.find((t) => t.id === interviewTemoinId)
+    : null;
+  const currentAnswer = interviewTemoin && currentQuestionIdx !== null
+    ? interviewTemoin.questions[currentQuestionIdx]
+    : null;
 
   const current = ROOMS[room] || ROOMS.hub;
   const Comp = current.Comp;
@@ -140,6 +190,15 @@ export default function Jeu3({ prenom, onExit, startAt }) {
 
       {showBillet && (
         <BilletOverlay onKeep={() => setFlag("puits_billet")} />
+      )}
+
+      {interviewTemoin && (
+        <InterviewPanel
+          temoin={interviewTemoin}
+          asked={enqAnswered[interviewTemoin.id]}
+          answer={currentAnswer}
+          onAsk={(idx) => askQuestion(interviewTemoin.id, idx)}
+          onClose={closeInterview} />
       )}
     </div>
   );
