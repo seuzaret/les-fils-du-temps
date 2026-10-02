@@ -10,7 +10,7 @@ const VEZ_STYLE = {
 };
 
 /* Ordre canonique des missions. On joue toujours la 1re non résolue. */
-const MISSION_ORDER = ["kova", "vitamine", "jour40", "enfant", "champble"];
+const MISSION_ORDER = ["kova", "vitamine", "jour40", "enfant", "champble", "fontaine", "viande"];
 
 /* ============================================================
    JEU 3 — SCÈNE : « Bureau des Rumeurs » (R-01)
