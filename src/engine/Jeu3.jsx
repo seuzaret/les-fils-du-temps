@@ -160,10 +160,12 @@ export default function Jeu3({ prenom, onExit, startAt }) {
   /* La mini-carte latérale n'a pas de sens dans quelques écrans très
      immersifs (réveil, voyage dans le temps, confrontation finale). */
   const showMinimap = !["awake", "voyage", "serveurs"].includes(room);
-  /* Flèche de retour visible dans toutes les pièces sauf les écrans
-     immersifs et l'ascenseur (qui gère son propre choix d'étage). */
-  const showBack = !["awake", "voyage", "serveurs", "elevator"].includes(room);
-  const backTarget = room === hubRoom ? "elevator" : hubRoom;
+  /* Flèche de retour visible dans les pièces individuelles. Masquée
+     dans les couloirs (où l'on clique directement sur l'ascenseur
+     dessiné dans le décor) et dans les écrans immersifs. */
+  const showBack = !["awake", "voyage", "serveurs", "elevator",
+                     "hub", "hubHaut", "hubBas"].includes(room);
+  const backTarget = hubRoom;
 
   /* Billet glissé : apparaît automatiquement quand le joueur a entendu
      les 3 PNJ d'accroche (voisin_lior en N-24, chapelle_anselme à la
@@ -204,7 +206,7 @@ export default function Jeu3({ prenom, onExit, startAt }) {
           <button onClick={() => goTo(backTarget)}
             title={backTarget === "elevator" ? "Ascenseur" : "Couloir"}
             style={{ position: "absolute",
-              top: "50%", left: showMinimap ? 160 : 12,
+              top: "50%", left: showMinimap ? 180 : 32,
               transform: "translateY(-50%)", zIndex: 50,
               width: 44, height: 60, borderRadius: 12,
               border: "1.5px solid rgba(255,209,102,0.75)",
