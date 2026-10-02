@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import PnjSprite from "../PnjSprite.jsx";
-import EnqueteCarnet from "../EnqueteCarnet.jsx";
 import BigDialogue from "../BigDialogue.jsx";
 import { MISSION_ORDER } from "../missions.js";
 
@@ -35,7 +34,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   // L'état d'interview (quel témoin, quelles réponses) vit dans j3.
   const [phase, setPhase] = useState(allDone ? "done" : "briefing");
   const [selected, setSelected] = useState(null); // uniquement pour Vez (briefing/rappel)
-  const [carnet, setCarnet] = useState(false);
   const [verdictChoice, setVerdictChoice] = useState(null);
   const [reliablePicks, setReliablePicks] = useState(new Set());
   const [feedback, setFeedback] = useState(null);
@@ -154,18 +152,12 @@ export default function BunkerRumeurs({ onGo, j3 }) {
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
           🎯 ENQUÊTE {missionNum} · {mission.titre.toUpperCase()}
         </div>
-        <div style={{ display: "flex", gap: 6 }}>
-          {phase !== "briefing" && phase !== "done" && (
-            <button onClick={() => setReplay(true)}
-              style={{ background: "#141020", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-              ℹ️ Rappel
-            </button>
-          )}
-          <button onClick={() => setCarnet(true)}
-            style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-            📓 Carnet ({nbInterroges}/{mission.temoins.length})
+        {phase !== "briefing" && phase !== "done" && (
+          <button onClick={() => setReplay(true)}
+            style={{ background: "#141020", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+            ℹ️ Rappel du briefing
           </button>
-        </div>
+        )}
       </div>
 
       <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet"
@@ -372,15 +364,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
             j3.setFlag(mission.flag);
             setSelected(null);
           }} />
-      )}
-
-      <button onClick={() => onGo(j3.hubRoom || "hub")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1, marginTop: 4 }}>
-        ← Retour au couloir
-      </button>
-
-      {carnet && (
-        <EnqueteCarnet temoins={mission.temoins} answered={answered} onClose={() => setCarnet(false)} />
       )}
 
       {replay && (

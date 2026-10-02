@@ -22,6 +22,7 @@ import BunkerSerres from "../chapters/jeu3/scenes/BunkerSerres.jsx";
 import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
 import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
 import InterviewPanel from "../chapters/jeu3/InterviewPanel.jsx";
+import EnqueteCarnet from "../chapters/jeu3/EnqueteCarnet.jsx";
 import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT, getActiveMission } from "../chapters/jeu3/missions.js";
 import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
 
@@ -73,6 +74,7 @@ export default function Jeu3({ prenom, onExit, startAt }) {
   const [enqAnswered, setEnqAnswered] = useState({}); // { temoinId: Set<qidx> }
   const [interviewTemoinId, setInterviewTemoinId] = useState(null);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null);
+  const [carnetOpen, setCarnetOpen] = useState(false);
   /* Mode triche : Ctrl+Shift+C toggle. Quand actif, la mini-carte redevient
      cliquable pour se téléporter d'un étage à l'autre sans passer par
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
@@ -158,6 +160,10 @@ export default function Jeu3({ prenom, onExit, startAt }) {
   /* La mini-carte latérale n'a pas de sens dans quelques écrans très
      immersifs (réveil, voyage dans le temps, confrontation finale). */
   const showMinimap = !["awake", "voyage", "serveurs"].includes(room);
+  /* Flèche de retour visible dans toutes les pièces sauf les écrans
+     immersifs et l'ascenseur (qui gère son propre choix d'étage). */
+  const showBack = !["awake", "voyage", "serveurs", "elevator"].includes(room);
+  const backTarget = room === hubRoom ? "elevator" : hubRoom;
 
   /* Billet glissé : apparaît automatiquement quand le joueur a entendu
      les 3 PNJ d'accroche (voisin_lior en N-24, chapelle_anselme à la
@@ -174,18 +180,39 @@ export default function Jeu3({ prenom, onExit, startAt }) {
           🌑 LE PUITS · 2087 · <span style={{ color: "#e8eef5" }}>{current.label}</span>
           {cheat && <span style={{ marginLeft: 12, color: "#ff5030", fontWeight: 800 }}>🐛 TRICHE</span>}
         </div>
-        <button onClick={onExit}
-          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-          ← Menu
-        </button>
+        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {activeMission && flags.puits_billet && (
+            <button onClick={() => setCarnetOpen(true)}
+              style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+              📓 Carnet
+            </button>
+          )}
+          <button onClick={onExit}
+            style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            ← Menu
+          </button>
+        </div>
       </div>
 
       {/* Zone principale : mini-carte à gauche + scène à droite */}
-      <div style={{ flex: 1, display: "flex", minHeight: 0 }}>
+      <div style={{ flex: 1, display: "flex", minHeight: 0, position: "relative" }}>
         {showMinimap && <BunkerMinimap room={room} flags={flags} onGo={goTo} cheat={cheat} />}
         <SceneFrame style={{ padding: 6 }}>
           <Comp prenom={prenom} onGo={goTo} j3={j3} />
         </SceneFrame>
+        {showBack && (
+          <button onClick={() => goTo(backTarget)}
+            title={backTarget === "elevator" ? "Ascenseur" : "Couloir"}
+            style={{ position: "absolute", left: showMinimap ? 160 : 20, bottom: 16, zIndex: 50,
+              background: "rgba(20,27,38,0.9)", color: "#7fd8ff",
+              border: "1px solid #3a80c8", borderRadius: 999,
+              width: 46, height: 46, cursor: "pointer",
+              fontFamily: "ui-monospace,monospace", fontSize: 18, fontWeight: 800,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 4px 16px rgba(0,0,0,0.5)" }}>
+            ←
+          </button>
+        )}
       </div>
 
       {showBillet && (
@@ -199,6 +226,14 @@ export default function Jeu3({ prenom, onExit, startAt }) {
           answer={currentAnswer}
           onAsk={(idx) => askQuestion(interviewTemoin.id, idx)}
           onClose={closeInterview} />
+      )}
+
+      {carnetOpen && (
+        <EnqueteCarnet
+          mission={activeMission}
+          temoins={activeMission?.temoins || []}
+          answered={enqAnswered}
+          onClose={() => setCarnetOpen(false)} />
       )}
     </div>
   );

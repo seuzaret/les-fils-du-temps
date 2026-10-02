@@ -14,9 +14,9 @@
                   témoin = fiche apparaît dans le carnet)
      onClose    — ferme le modal
    ============================================================ */
-export default function EnqueteCarnet({ temoins, answered, onClose }) {
-  const visited = temoins.filter((t) => answered[t.id] && answered[t.id].size > 0);
-  const notVisited = temoins.filter((t) => !(answered[t.id] && answered[t.id].size > 0));
+export default function EnqueteCarnet({ mission, temoins, answered, onClose }) {
+  const visited = (temoins || []).filter((t) => answered[t.id] && answered[t.id].size > 0);
+  const notVisited = (temoins || []).filter((t) => !(answered[t.id] && answered[t.id].size > 0));
   return (
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, zIndex: 200, background: "rgba(4,8,14,0.85)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: "Palatino, Georgia, serif" }}>
@@ -33,6 +33,18 @@ export default function EnqueteCarnet({ temoins, answered, onClose }) {
             Refermer ✕
           </button>
         </div>
+
+        {/* Rappel coloré de l'enquête courante */}
+        {mission && (
+          <div style={{ padding: "12px 22px", background: "#faf0d8", borderBottom: "1px solid #c8a848" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#8a1010", fontWeight: 800, marginBottom: 4 }}>
+              ENQUÊTE EN COURS
+            </div>
+            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: "#3a2010", fontStyle: "italic" }}>
+              « {mission.affirmation} »
+            </p>
+          </div>
+        )}
 
         {/* Corps : liste des fiches */}
         <div style={{ padding: "16px 22px 22px" }}>
