@@ -82,10 +82,6 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
           </div>
         )}
       </div>
-      <button onClick={() => onGo(j3?.hubRoom || "hub")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-        ← Retour au couloir
-      </button>
     </div>
   );
 }

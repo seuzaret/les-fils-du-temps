@@ -242,7 +242,7 @@ export const MISSIONS_RUMEURS = {
       partiel: "Un sur deux. Les témoins forts sont ceux qui MESURENT : Tor avec ses tomates, Lin avec ses cas de fatigue. Les autres apportent du contexte utile mais sans mesure.",
       mauvais: "Attention : tu as coché quelqu'un qui apporte surtout du contexte ou une impression personnelle. Les témoins forts sont ceux qui ont des MESURES : Tor dose, Lin compte.",
     },
-    succes: "Deuxième geste : quand plusieurs indices concordent et vont tous CONTRE une affirmation, cette affirmation ne tient pas. Même sans preuve absolue. On n'attend pas d'avoir TOUT prouvé pour dire que ça pue.",
+    succes: "Deuxième geste : quand plusieurs indices vont tous CONTRE une affirmation, elle ne tient pas — même sans preuve absolue.",
   },
 
   jour40: {
