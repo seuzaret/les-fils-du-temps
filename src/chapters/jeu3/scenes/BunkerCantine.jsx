@@ -107,23 +107,97 @@ export default function BunkerCantine({ onGo, j3 }) {
         </g>
       ))}
 
-      {/* DISTRIBUTEUR AUTOMATIQUE au fond droite */}
+      {/* HOTTE de cuisine avec ventilation suspendue */}
+      <g transform="translate(90,164)">
+        <path d="M-80 0 L80 0 L60 24 L-60 24 Z" fill="#5a6270" stroke="#0a0e14" strokeWidth="1.5" />
+        <rect x="-50" y="24" width="100" height="4" fill="#28303a" />
+        {/* Vapeur qui monte */}
+        <path d="M-30 -2 q-4 -16 2 -24 q6 -8 2 -18" stroke="#c8d4e2" strokeWidth="1.2" fill="none" opacity="0.5">
+          <animate attributeName="opacity" values="0.2;0.6;0.2" dur="3s" repeatCount="indefinite" />
+        </path>
+        <path d="M20 -2 q-4 -14 2 -22 q6 -6 2 -16" stroke="#c8d4e2" strokeWidth="1.2" fill="none" opacity="0.5">
+          <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3.6s" repeatCount="indefinite" />
+        </path>
+      </g>
+
+      {/* TABLEAU-MENU ardoise à droite de la cuisine */}
+      <g transform="translate(220,110)">
+        <rect x="-6" y="-6" width="112" height="112" fill="#3a2010" stroke="#1a0e08" strokeWidth="2" />
+        <rect x="0" y="0" width="100" height="100" fill="#141008" />
+        <text x="50" y="16" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fontWeight="800" fill="#e8dfc8">MENU · J+15042</text>
+        <line x1="10" y1="22" x2="90" y2="22" stroke="#c8a848" strokeWidth="0.4" opacity="0.6" />
+        <text x="8" y="36" fontFamily="Georgia,serif" fontSize="7" fill="#c8a848" fontStyle="italic">· Soupe des champs</text>
+        <text x="8" y="50" fontFamily="Georgia,serif" fontSize="7" fill="#c8a848" fontStyle="italic">· Galette M-42</text>
+        <text x="8" y="64" fontFamily="Georgia,serif" fontSize="7" fill="#c8a848" fontStyle="italic">· Chou braisé</text>
+        <text x="8" y="78" fontFamily="Georgia,serif" fontSize="7" fill="#c8a848" fontStyle="italic">· Flan vitaminé</text>
+        <text x="50" y="94" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="5" fill="#8fa3bd">— ratio M-42 : +12%</text>
+      </g>
+
+      {/* HORLOGE murale */}
+      <g transform="translate(500,110)">
+        <circle r="22" fill="#e8dfc8" stroke="#3a2818" strokeWidth="2" />
+        <circle r="18" fill="#f4ecd0" />
+        {[0, 90, 180, 270].map((a) => (
+          <line key={a} x1={15 * Math.cos((a * Math.PI) / 180)} y1={15 * Math.sin((a * Math.PI) / 180)}
+            x2={19 * Math.cos((a * Math.PI) / 180)} y2={19 * Math.sin((a * Math.PI) / 180)}
+            stroke="#3a2010" strokeWidth="1.5" />
+        ))}
+        <line x1="0" y1="0" x2="0" y2="-14" stroke="#0a0806" strokeWidth="1.6" strokeLinecap="round" />
+        <line x1="0" y1="0" x2="10" y2="6" stroke="#0a0806" strokeWidth="1" strokeLinecap="round" />
+        <circle r="1.8" fill="#0a0806" />
+      </g>
+
+      {/* AVIS OFFICIEL punaisé */}
+      <g transform="translate(620,100)">
+        <rect x="0" y="0" width="94" height="60" fill="#f0e4c8" stroke="#3a2818" strokeWidth="1.4" transform="rotate(-2 47 30)" />
+        <text x="47" y="20" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="800" fill="#8a1010" transform="rotate(-2 47 30)">AVIS · MARTINE</text>
+        <line x1="10" y1="26" x2="84" y2="26" stroke="#3a2010" strokeWidth="0.4" transform="rotate(-2 47 30)" />
+        <text x="10" y="38" fontFamily="Georgia,serif" fontSize="6" fill="#3a2010" fontStyle="italic" transform="rotate(-2 47 30)">Nouvelle ration de vitamine M-42</text>
+        <text x="10" y="48" fontFamily="Georgia,serif" fontSize="6" fill="#3a2010" fontStyle="italic" transform="rotate(-2 47 30)">obligatoire à chaque repas.</text>
+        <circle cx="4" cy="2" r="2" fill="#e83820" transform="rotate(-2 47 30)" />
+      </g>
+
+      {/* DISTRIBUTEUR AUTOMATIQUE au fond droite — avec compteur de rations qui tictaque */}
       <g transform="translate(880,120)">
         <rect x="0" y="0" width="90" height="200" fill="#28303a" stroke="#0a0e14" strokeWidth="2" />
         <rect x="6" y="6" width="78" height="60" fill="#0e1a10" stroke="#5eff9e" strokeWidth="1" />
         <text x="45" y="24" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fontWeight="700" fill="#5eff9e">RATIONS</text>
         <text x="45" y="36" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5eff9e">JOUR 15 042</text>
         <text x="45" y="48" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#c8d4e2">— MARTINE —</text>
-        {/* Petites cases produits */}
-        {[0, 1, 2, 3].map((r) => (
-          [0, 1, 2].map((c) => (
-            <rect key={`${r}${c}`} x={10 + c * 24} y={80 + r * 22} width="20" height="18" fill="#141c26" stroke="#3a4048" strokeWidth="0.6" />
+        <circle cx="78" cy="60" r="2.5" fill="#5eff9e">
+          <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite" />
+        </circle>
+        {/* Petites cases produits avec emoji */}
+        {[["🍞","🥣","🥫"],["🫓","🫛","🫘"],["🍪","🧈","🧂"],["💊","💊","💊"]].map((row, r) => (
+          row.map((em, c) => (
+            <g key={`${r}${c}`}>
+              <rect x={10 + c * 24} y={80 + r * 22} width="20" height="18" fill="#141c26" stroke="#3a4048" strokeWidth="0.6" />
+              <text x={20 + c * 24} y={94 + r * 22} textAnchor="middle" fontSize="10">{em}</text>
+            </g>
           ))
         ))}
         {/* Trappe de distribution */}
         <rect x="12" y="170" width="66" height="20" fill="#0a0806" />
         <text x="45" y="184" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#c8d4e2">RETIRER →</text>
       </g>
+
+      {/* Chariot ménage dans un coin (seau + serpillière) */}
+      <g transform="translate(50,460)">
+        <rect x="0" y="0" width="34" height="28" fill="#c8a848" stroke="#5a4020" strokeWidth="0.8" />
+        <ellipse cx="17" cy="0" rx="18" ry="4" fill="#3a2818" opacity="0.6" />
+        <line x1="38" y1="-20" x2="38" y2="30" stroke="#5a4028" strokeWidth="1.5" />
+        <path d="M30 -20 L46 -20 L44 -10 L32 -10 Z" fill="#8a7050" stroke="#3a2818" strokeWidth="0.5" />
+      </g>
+
+      {/* Trois gros bidons alignés au mur droite (approvisionnement) */}
+      {[0, 1, 2].map((i) => (
+        <g key={i} transform={`translate(${780 + i * 32},368)`}>
+          <rect x="-12" y="0" width="24" height="34" fill="#e8dfc8" stroke="#3a2818" strokeWidth="1" />
+          <rect x="-10" y="4" width="20" height="8" fill="#8a1010" />
+          <text x="0" y="22" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="5" fill="#3a2010">M-42</text>
+          <text x="0" y="29" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4" fill="#5a4028">10 kg</text>
+        </g>
+      ))}
     </>
   );
   return <PnjRoom titre="🍲 CANTINE COMMUNE — NIVEAU +1" bg={bg} pnjList={PNJ_ROOMS.cantine} j3={j3} onGo={onGo} />;
