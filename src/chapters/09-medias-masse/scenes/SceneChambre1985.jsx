@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import PacManEgg from "./PacManEgg.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : Chambre de Julien, 15 ans, 1985.
@@ -14,8 +16,10 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
   const cassetteChargee = !!flags.cassette_chargee;
   const cassetteFaite = made.includes("msg_cassette");
   const disquettePrise = made.includes("disquette");
+  const [pacman, setPacman] = useState(false);
 
   return (
+    <>
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
         <linearGradient id="c85-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a7098" /><stop offset="100%" stopColor="#2a4058" /></linearGradient>
@@ -110,8 +114,14 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
         <path d="M0 460 h1000 M0 480 h1000 M0 500 h1000 M0 520 h1000" stroke="#5a3818" strokeWidth="0.6" opacity="0.5" />
 
         {/* BORNE d'ARCADE plantee au sol entre le lit et le bureau, avec
-            un ecran ou tourne un Pac-Man. */}
-        <g transform="translate(410,320)">
+            un ecran ou tourne un Pac-Man. Un clic ouvre le mini-jeu. */}
+        <g transform="translate(410,320)"
+           onClick={(e) => { e.stopPropagation(); setPacman(true); }}
+           style={{ cursor: "pointer" }}>
+          {/* Halo doré clignotant pour signaler le mini-jeu */}
+          <ellipse cx="0" cy="140" rx="56" ry="10" fill="none" stroke="#ffd700" strokeWidth="1" strokeDasharray="3 4" opacity="0.5">
+            <animate attributeName="opacity" values="0.25;0.75;0.25" dur="2s" repeatCount="indefinite" />
+          </ellipse>
           {/* silhouette cabinet (haute et etroite) */}
           <path d="M-40 140 L40 140 L44 0 L36 -30 L36 -70 L-36 -70 L-36 -30 L-44 0 Z" fill="#181818" stroke="#0a0a0a" strokeWidth="1.5" />
           {/* enseigne "ARCADE" en haut */}
@@ -340,6 +350,10 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       {mode !== "jeu2" && (
         <Hotspot cx={240} cy={520} r={22} label="… quelque chose ne va pas ici" item="airpods" reveal={reveal} onClick={() => collect("airpods")} />
       )}
+      {/* Hotspot sur la borne d'arcade : "jouer à Pac-Man" */}
+      <Hotspot cx={410} cy={290} r={46} label="borne d'arcade (jouer à Pac-Man)" reveal={reveal} onClick={() => setPacman(true)} />
     </svg>
+    {pacman && <PacManEgg onClose={() => setPacman(false)} />}
+    </>
   );
 }
