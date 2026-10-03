@@ -235,7 +235,12 @@ export function FaireLaUneGame({ onClose, onWin }) {
   const [ton, setTon] = useState(null);
   const [pressStep, setPressStep] = useState(0);
   const [done, setDone] = useState(false);
-  useWinOnce(done, onWin);
+  /* Verdict calculé une fois arrivé à l'étape impression. */
+  const V = (step === 5 && titre && ton) ? verdict(journal, titre.angle, ton.angle) : null;
+  /* Victoire = Parfait OU presque. Un verdict "✗ Décalé" permet
+     seulement de ré-essayer, sans accorder la récompense (+5 flux). */
+  const isWin = V && (V.color === "#5eff9e" || V.color === "#ffd166");
+  useWinOnce(done && isWin, onWin);
 
   useEffect(() => {
     if (step !== 5) return;
@@ -250,13 +255,19 @@ export function FaireLaUneGame({ onClose, onWin }) {
     return () => timers.forEach(clearTimeout);
   }, [step]);
 
+  /* Reset pour "Essayer encore" après un verdict raté. */
+  const retry = () => {
+    setStep(3); setTitre(null); setTon(null);
+    setPressStep(0); setDone(false);
+  };
+
   return (
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
-        style={{ background: "#f6efdf", color: "#1c1a10", border: "2px solid #8a6a3a", borderRadius: 14, padding: 20, maxWidth: 700, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", fontFamily: "Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8a5a2a" }}>🗞️ KIOSQUE DE ROBERT — 1980</div>
-        <h2 style={{ textAlign: "center", margin: "6px 0 12px", color: "#3a2214", fontSize: 22 }}>Fais la Une</h2>
+        style={{ background: "#f6efdf", color: "#1c1a10", border: "2px solid #8a6a3a", borderRadius: 14, padding: 22, maxWidth: 760, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", fontFamily: "Georgia, serif" }}>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#8a5a2a" }}>🗞️ KIOSQUE DE ROBERT — 1980</div>
+        <h2 style={{ textAlign: "center", margin: "6px 0 14px", color: "#3a2214", fontSize: 26 }}>Fais la Une</h2>
 
         {/* ═════ 0 : Robert affolé demande de l'aide ═════ */}
         {step === 0 && (
@@ -264,19 +275,19 @@ export function FaireLaUneGame({ onClose, onWin }) {
             <div style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#fff", border: "2px solid #8a5a2a", borderRadius: 12, padding: 14 }}>
               <PortraitRobert />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800, marginBottom: 6 }}>▸ ROBERT · LE KIOSQUIER</div>
-                <p style={{ fontSize: 14.5, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800, marginBottom: 6 }}>▸ ROBERT · LE KIOSQUIER</div>
+                <p style={{ fontSize: 16.5, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
                   « Ouf, tu tombes bien ! Ma fille Julie débute comme stagiaire dans un journal. Elle m'appelle en panique : elle doit boucler sa toute première Une avant midi. Tu veux bien lui donner un coup de main ? »
                 </p>
               </div>
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
               <button onClick={onClose}
-                style={{ flex: 1, background: "#c9b48c", color: "#3a2214", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ flex: 1, background: "#c9b48c", color: "#3a2214", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Non, désolé
               </button>
               <button onClick={() => setStep(1)}
-                style={{ flex: 2, background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ flex: 2, background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Oui, j'aide Julie →
               </button>
             </div>
@@ -289,16 +300,16 @@ export function FaireLaUneGame({ onClose, onWin }) {
             <div style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#fff", border: `2px solid ${journal.couleur}`, borderRadius: 12, padding: 14 }}>
               <PortraitJulie couleur={journal.couleur} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 6 }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 6 }}>
                   ▸ JULIE · STAGIAIRE À <span style={{ textTransform: "uppercase" }}>{journal.nom}</span>
                 </div>
-                <p style={{ fontSize: 14, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
+                <p style={{ fontSize: 16, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
                   « Merci ! Bon, on écrit pour <strong>{journal.cible}</strong>. {journal.juliePhrase} Je te lis la dépêche AFP, tu me choisis un titre et un ton, OK ? »
                 </p>
               </div>
             </div>
             <button onClick={() => setStep(2)}
-              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               1/3 · Voir la dépêche AFP →
             </button>
           </>
@@ -307,16 +318,16 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 2 : dépêche AFP ═════ */}
         {step === 2 && (
           <>
-            <div style={{ background: "#fffbe8", border: "1px dashed #a08040", borderRadius: 8, padding: "10px 12px", marginBottom: 12, fontSize: 12.5, lineHeight: 1.5, color: "#3a2e1e" }}>
+            <div style={{ background: "#fffbe8", border: "1px dashed #a08040", borderRadius: 8, padding: "12px 14px", marginBottom: 12, fontSize: 15, lineHeight: 1.5, color: "#3a2e1e" }}>
               <strong style={{ color: "#8a5a2a" }}>Une dépêche AFP, c'est quoi ?</strong><br />
               L'<strong>Agence France-Presse</strong> envoie la même info, courte et neutre, à tous les journaux. Ensuite, chaque journal en fait ce qu'il veut : titre, ton, place dans le journal.
             </div>
             <div style={{ background: "#fff", border: "1px dashed #8a6a3a", borderRadius: 8, padding: "14px 16px", fontFamily: "ui-monospace, monospace" }}>
-              <div style={{ fontSize: 10, letterSpacing: 2, color: "#8a5a2a", marginBottom: 8, borderBottom: "1px solid #c9b48c", paddingBottom: 6 }}>DÉPÊCHE AFP · {dep.date}</div>
-              <p style={{ fontSize: 13.5, lineHeight: 1.5, margin: 0, color: "#1c1a10" }}>{dep.fait}</p>
+              <div style={{ fontSize: 12, letterSpacing: 2, color: "#8a5a2a", marginBottom: 8, borderBottom: "1px solid #c9b48c", paddingBottom: 6 }}>DÉPÊCHE AFP · {dep.date}</div>
+              <p style={{ fontSize: 16, lineHeight: 1.5, margin: 0, color: "#1c1a10" }}>{dep.fait}</p>
             </div>
             <button onClick={() => setStep(3)}
-              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               2/3 · Choisir un titre →
             </button>
           </>
@@ -325,7 +336,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 3 : choix du titre ═════ */}
         {step === 3 && (
           <>
-            <p style={{ fontSize: 13, lineHeight: 1.5, textAlign: "center", margin: "0 0 12px", color: "#3a2e1e" }}>
+            <p style={{ fontSize: 15, lineHeight: 1.5, textAlign: "center", margin: "0 0 12px", color: "#3a2e1e" }}>
               Pour <strong style={{ color: journal.couleur }}>{journal.nom}</strong> — {journal.cible}.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -333,15 +344,15 @@ export function FaireLaUneGame({ onClose, onWin }) {
                 const sel = titre?.t === t.t;
                 return (
                   <button key={t.t} onClick={() => setTitre(t)}
-                    style={{ textAlign: "left", background: sel ? "#fffbe8" : "#fff", border: `2px solid ${sel ? ANGLE_COLOR[t.angle] : "#c9b48c"}`, borderRadius: 10, padding: "10px 14px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1, color: ANGLE_COLOR[t.angle], fontWeight: 800, marginBottom: 4 }}>TITRE {ANGLE_LABEL[t.angle].toUpperCase()}</div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: "#1c1a10", lineHeight: 1.3 }}>{t.t}</div>
+                    style={{ textAlign: "left", background: sel ? "#fffbe8" : "#fff", border: `2px solid ${sel ? ANGLE_COLOR[t.angle] : "#c9b48c"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: ANGLE_COLOR[t.angle], fontWeight: 800, marginBottom: 4 }}>TITRE {ANGLE_LABEL[t.angle].toUpperCase()}</div>
+                    <div style={{ fontSize: 17, fontWeight: 700, color: "#1c1a10", lineHeight: 1.3 }}>{t.t}</div>
                   </button>
                 );
               })}
             </div>
             <button onClick={() => setStep(4)} disabled={!titre}
-              style={{ marginTop: 14, width: "100%", background: titre ? "#8a5a2a" : "#c9b48c", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: titre ? "pointer" : "not-allowed", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 14, width: "100%", background: titre ? "#8a5a2a" : "#c9b48c", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: titre ? "pointer" : "not-allowed", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               3/3 · Choisir le ton →
             </button>
           </>
@@ -350,7 +361,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 4 : choix du ton ═════ */}
         {step === 4 && (
           <>
-            <p style={{ fontSize: 13, lineHeight: 1.5, textAlign: "center", margin: "0 0 12px", color: "#3a2e1e" }}>
+            <p style={{ fontSize: 15, lineHeight: 1.5, textAlign: "center", margin: "0 0 12px", color: "#3a2e1e" }}>
               Le texte sous le titre, tu l'écris comment ?
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -358,62 +369,73 @@ export function FaireLaUneGame({ onClose, onWin }) {
                 const sel = ton?.angle === T.angle;
                 return (
                   <button key={T.angle} onClick={() => setTon(T)}
-                    style={{ textAlign: "left", background: sel ? "#fffbe8" : "#fff", border: `2px solid ${sel ? "#8a5a2a" : "#c9b48c"}`, borderRadius: 10, padding: "10px 14px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1, color: "#8a5a2a", fontWeight: 800 }}>{T.label}</div>
+                    style={{ textAlign: "left", background: sel ? "#fffbe8" : "#fff", border: `2px solid ${sel ? "#8a5a2a" : "#c9b48c"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, letterSpacing: 1, color: "#8a5a2a", fontWeight: 800 }}>{T.label}</div>
                   </button>
                 );
               })}
             </div>
             <button onClick={() => setStep(5)} disabled={!ton}
-              style={{ marginTop: 14, width: "100%", background: ton ? "#8a5a2a" : "#c9b48c", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: ton ? "pointer" : "not-allowed", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 14, width: "100%", background: ton ? "#8a5a2a" : "#c9b48c", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: ton ? "pointer" : "not-allowed", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Imprimer la Une !
             </button>
           </>
         )}
 
         {/* ═════ 5 : impression animée + verdict ═════ */}
-        {step === 5 && (() => {
-          const V = verdict(journal, titre.angle, ton.angle);
-          return (
+        {step === 5 && V && (
             <>
               <div style={{ background: "#fff", border: `2px solid ${journal.couleur}`, borderRadius: 8, padding: 18, boxShadow: "0 4px 16px rgba(0,0,0,0.15)", position: "relative", overflow: "hidden", minHeight: 220 }}>
                 {pressStep < 4 && (
                   <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, transparent 0%, rgba(60,40,20,0.12) 50%, transparent 100%)", animation: "inkPass 1.6s ease-out 1", pointerEvents: "none" }} />
                 )}
-                <div style={{ opacity: pressStep >= 1 ? 1 : 0, transition: "opacity .4s", fontFamily: "Georgia, serif", fontSize: 22, fontWeight: 900, textAlign: "center", borderBottom: `3px double ${journal.couleur}`, paddingBottom: 6, marginBottom: 12, color: journal.couleur, letterSpacing: 2 }}>
+                <div style={{ opacity: pressStep >= 1 ? 1 : 0, transition: "opacity .4s", fontFamily: "Georgia, serif", fontSize: 26, fontWeight: 900, textAlign: "center", borderBottom: `3px double ${journal.couleur}`, paddingBottom: 6, marginBottom: 12, color: journal.couleur, letterSpacing: 2 }}>
                   {journal.nom.toUpperCase()}
                 </div>
-                <div style={{ opacity: pressStep >= 2 ? 1 : 0, transform: pressStep >= 2 ? "translateY(0)" : "translateY(6px)", transition: "opacity .4s, transform .4s", fontSize: 22, fontWeight: 900, lineHeight: 1.2, color: "#1c1a10", marginBottom: 10 }}>
+                <div style={{ opacity: pressStep >= 2 ? 1 : 0, transform: pressStep >= 2 ? "translateY(0)" : "translateY(6px)", transition: "opacity .4s, transform .4s", fontSize: 24, fontWeight: 900, lineHeight: 1.2, color: "#1c1a10", marginBottom: 10 }}>
                   {titre.t}
                 </div>
-                <div style={{ opacity: pressStep >= 3 ? 1 : 0, transition: "opacity .5s", fontSize: 14.5, lineHeight: 1.55, color: "#2a2418" }}>
+                <div style={{ opacity: pressStep >= 3 ? 1 : 0, transition: "opacity .5s", fontSize: 16, lineHeight: 1.55, color: "#2a2418" }}>
                   {dep.chapo[ton.angle]}
                 </div>
                 {pressStep >= 3 && (
-                  <div style={{ marginTop: 14, borderTop: "1px solid #c9b48c", paddingTop: 10, fontSize: 11.5, color: "#7a6248", fontStyle: "italic" }}>
+                  <div style={{ marginTop: 14, borderTop: "1px solid #c9b48c", paddingTop: 10, fontSize: 12.5, color: "#7a6248", fontStyle: "italic" }}>
                     Suite en pages intérieures — voir aussi : brèves, sports, télé.
                   </div>
                 )}
               </div>
 
               {pressStep >= 4 && (
-                <div style={{ marginTop: 14, background: "#101827", border: `1px solid ${V.color}44`, borderRadius: 10, padding: "12px 14px", color: "#e8eef5", animation: "fadein .4s" }}>
-                  <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1.5, color: V.color, fontWeight: 800, marginBottom: 6 }}>{V.note}</div>
-                  <p style={{ fontSize: 14, lineHeight: 1.6, margin: 0 }}>{V.text}</p>
-                  <p style={{ fontSize: 13, lineHeight: 1.55, margin: "8px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
-                    « Même dépêche, mais chaque journal fabrique SA Une pour SON public. Ça, c'est une ligne éditoriale. » — MARTINE
-                  </p>
+                <div style={{ marginTop: 14, background: "#101827", border: `1px solid ${V.color}44`, borderRadius: 10, padding: "14px 16px", color: "#e8eef5", animation: "fadein .4s" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 6 }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1.5, color: V.color, fontWeight: 800 }}>{V.note}</div>
+                    {isWin && (
+                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 900, color: "#ffd166", letterSpacing: 1 }}>+5 ⚡</div>
+                    )}
+                  </div>
+                  <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: 0 }}>{V.text}</p>
+                  {isWin && (
+                    <p style={{ fontSize: 14, lineHeight: 1.55, margin: "10px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
+                      « Même dépêche, mais chaque journal fabrique SA Une pour SON public. Ça, c'est une ligne éditoriale. » — MARTINE
+                    </p>
+                  )}
                 </div>
               )}
               {pressStep >= 4 && (
-                <button onClick={onClose}
-                  style={{ marginTop: 12, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-                  Continuer
-                </button>
+                isWin ? (
+                  <button onClick={onClose}
+                    style={{ marginTop: 12, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                    Continuer
+                  </button>
+                ) : (
+                  <button onClick={retry}
+                    style={{ marginTop: 12, width: "100%", background: "#c9b48c", color: "#3a2214", border: "2px solid #8a5a2a", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                    ↻ Essayer encore
+                  </button>
+                )
               )}
             </>
-          );
-        })()}
+        )}
 
         <style>{`
           @keyframes inkPass { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }

@@ -478,8 +478,10 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
         }
       }
 
-      /* --- Tachyons rouges : chacun avance sur la grille, laisse un trait --- */
-      if (isPlaying && !isCaught) {
+      /* --- Tachyons rouges : chacun avance sur la grille, laisse un trait.
+         Dès que le verrouillage commence (isDone), on les fige : la victoire
+         est acquise, pas question de se faire attraper au tout dernier moment. --- */
+      if (isPlaying && !isCaught && !isDone) {
         for (let ti = 0; ti < tachyons.length; ti++) {
           const T = tachyons[ti];
           if (T.prog < 1) {
