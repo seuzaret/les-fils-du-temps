@@ -1,7 +1,5 @@
-import { useState } from "react";
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
-import PacManEgg from "./PacManEgg.jsx";
 
 /* ============================================================
    CHAPITRE 9 (XXIe) — Tableau : Ta chambre, aujourd'hui.
@@ -21,10 +19,8 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
   const usbFait   = made.includes("msg_usb");
   const dead      = made.includes("msg_disquette");
   const compte    = made.includes("msg_compte");
-  const [pacman, setPacman] = useState(false);
 
   return (
-    <>
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
         <linearGradient id="ch-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a1830" /><stop offset="100%" stopColor="#0a0a1c" /></linearGradient>
@@ -491,42 +487,6 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           <path d="M8 -20 q6 -8 13 -6" stroke="#8a94a8" strokeWidth="2.3" fill="none" strokeLinecap="round" />
         </g>
 
-        {/* 🎮 EASTER EGG : Game Boy vintage posée au sol près du lit */}
-        <g transform="translate(260,512) rotate(-8)"
-           onClick={(e) => { e.stopPropagation(); setPacman(true); }}
-           style={{ cursor: "pointer" }}>
-          {/* Coque grise */}
-          <rect x="-18" y="-28" width="36" height="56" rx="3" fill="#c8c8bc" stroke="#5a5a52" strokeWidth="1" />
-          <rect x="-18" y="-28" width="36" height="56" rx="3" fill="#050510" opacity="0.18" filter="url(#ch-grain)" />
-          {/* Écran */}
-          <rect x="-13" y="-22" width="26" height="20" rx="1.5" fill="#2a3a28" stroke="#3a3a3a" strokeWidth="0.8" />
-          {/* Mini Pac-Man clignotant à l'écran */}
-          <circle cx="-5" cy="-12" r="2" fill="#2a1a08">
-            <animate attributeName="opacity" values="1;0.3;1" dur="0.6s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="1" cy="-12" r="0.9" fill="#2a1a08" />
-          <circle cx="5" cy="-12" r="0.9" fill="#2a1a08" />
-          <circle cx="9" cy="-12" r="0.9" fill="#2a1a08" />
-          {/* Croix D-Pad */}
-          <path d="M-13 4 h8 v-3 h-3 v-3 h-2 v3 h-3 Z M-13 4 h8 v3 h-3 v3 h-2 v-3 h-3 Z" fill="#2a2a2a" transform="translate(0,2)" />
-          {/* Boutons A/B */}
-          <circle cx="8" cy="6" r="2.4" fill="#8a2060" />
-          <circle cx="13" cy="2" r="2.4" fill="#8a2060" />
-          <text x="8" y="12" fontFamily="ui-monospace,monospace" fontSize="2.6" fill="#5a5a52" textAnchor="middle">B</text>
-          <text x="13" y="8" fontFamily="ui-monospace,monospace" fontSize="2.6" fill="#5a5a52" textAnchor="middle">A</text>
-          {/* Start/Select */}
-          <rect x="-5" y="14" width="4" height="1.6" rx="0.6" fill="#2a2a2a" transform="rotate(-20 -3 14.8)" />
-          <rect x="1" y="14" width="4" height="1.6" rx="0.6" fill="#2a2a2a" transform="rotate(-20 3 14.8)" />
-          {/* Haut-parleur */}
-          <path d="M9 20 l6 2 l-1 3 l-6 -2 Z" fill="#5a5a52" />
-          {/* Logo */}
-          <text x="0" y="22" fontFamily="ui-monospace,monospace" fontSize="3" fill="#2a2a2a" textAnchor="middle" fontWeight="800">PAC·BOY</text>
-          {/* Halo discret pour signaler qu'on peut cliquer */}
-          <circle r="28" fill="none" stroke="#ffd700" strokeWidth="0.6" strokeDasharray="2 3" opacity="0.3">
-            <animate attributeName="opacity" values="0.15;0.5;0.15" dur="2.4s" repeatCount="indefinite" />
-          </circle>
-        </g>
-
         {/* ANACHRONISME DU FUTUR : le NEURO-LIEN sur le tapis */}
         {!made.includes("neurolien") && mode !== "jeu2" && (
           <g transform="translate(120,510)">
@@ -573,7 +533,5 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
         <Hotspot cx={120} cy={506} r={44} label="… quelque chose de très bizarre" item="neurolien" reveal={reveal} onClick={() => collect("neurolien")} />
       )}
     </svg>
-    {pacman && <PacManEgg onClose={() => setPacman(false)} />}
-    </>
   );
 }
