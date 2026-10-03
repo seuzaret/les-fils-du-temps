@@ -105,13 +105,91 @@ export default function BunkerInfirmerie({ onGo, j3 }) {
         <rect x="30" y="52" width="30" height="4" fill="#3a4048" />
         <rect x="30" y="24" width="4" height="28" fill="#3a4048" />
         <rect x="56" y="24" width="4" height="28" fill="#3a4048" />
-        {/* Dossiers empilés */}
+        {/* Dossiers empilés + étiquettes */}
         <rect x="8" y="-14" width="14" height="14" fill="#8a3820" stroke="#0a0806" strokeWidth="0.5" />
+        <text x="15" y="-5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4" fontWeight="800" fill="#f8e8d0">N-30</text>
         <rect x="26" y="-14" width="14" height="14" fill="#3a4048" stroke="#0a0806" strokeWidth="0.5" />
+        <text x="33" y="-5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4" fontWeight="800" fill="#c8d4e2">N-24</text>
         <rect x="44" y="-14" width="14" height="14" fill="#5a4028" stroke="#0a0806" strokeWidth="0.5" />
-        {/* Lampe */}
+        <text x="51" y="-5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4" fontWeight="800" fill="#f8e8d0">N-27</text>
+        {/* Lampe articulée */}
         <line x1="70" y1="-16" x2="70" y2="0" stroke="#5a6270" strokeWidth="1" />
         <ellipse cx="70" cy="-20" rx="6" ry="3" fill="#c8a848" />
+      </g>
+
+      {/* RIDEAUX séparateurs entre les lits (ambiance hospitalière) */}
+      {[290, 690].map((x, i) => (
+        <g key={i}>
+          <line x1={x} y1="240" x2={x} y2="340" stroke="#5a6270" strokeWidth="2" />
+          <path d={`M${x - 2} 240 L${x - 2} 340 Q${x - 2} 346 ${x + 4} 346 L${x + 4} 240 Z`} fill="#c8d4e2" opacity="0.75" stroke="#8a9098" strokeWidth="0.6" />
+          {/* Plis */}
+          {[0, 1, 2].map((p) => (
+            <line key={p} x1={x + 1 + p * 1.5} y1="246" x2={x + 1 + p * 1.5} y2="340" stroke="#8a9098" strokeWidth="0.3" opacity="0.5" />
+          ))}
+          {/* Rail au plafond */}
+          <line x1={x - 10} y1="238" x2={x + 10} y2="238" stroke="#3a4048" strokeWidth="1" />
+          <circle cx={x} cy="238" r="2" fill="#5a6270" />
+        </g>
+      ))}
+
+      {/* NÉGATOSCOPE (visionneuse de radiographies) sur le mur à gauche */}
+      <g transform="translate(100,100)">
+        <rect x="0" y="0" width="110" height="90" fill="#141c26" stroke="#3a4048" strokeWidth="2" />
+        <rect x="4" y="4" width="102" height="82" fill="#e8eef5" opacity="0.95" />
+        {/* Radiographie thorax stylisée */}
+        <g transform="translate(55,45)" opacity="0.7">
+          {/* colonne vertébrale */}
+          <line x1="0" y1="-30" x2="0" y2="30" stroke="#5a6270" strokeWidth="1.5" />
+          {/* côtes */}
+          {[-18, -8, 2, 12].map((y, i) => (
+            <g key={i}>
+              <path d={`M0 ${y} q-20 ${8 + i * 2} -32 2`} stroke="#5a6270" strokeWidth="0.6" fill="none" />
+              <path d={`M0 ${y} q20 ${8 + i * 2} 32 2`} stroke="#5a6270" strokeWidth="0.6" fill="none" />
+            </g>
+          ))}
+          {/* clavicules */}
+          <path d="M-18 -22 q-6 -4 -14 -2" stroke="#5a6270" strokeWidth="0.6" fill="none" />
+          <path d="M18 -22 q6 -4 14 -2" stroke="#5a6270" strokeWidth="0.6" fill="none" />
+        </g>
+        <text x="55" y="100" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#3a4048">RX · N-27 · THORAX</text>
+      </g>
+
+      {/* GEL HYDROALCOOLIQUE mural près de la porte */}
+      <g transform="translate(820,100)">
+        <rect x="0" y="0" width="18" height="40" rx="2" fill="#5eff9e" opacity="0.6" stroke="#3a4048" strokeWidth="0.8" />
+        <rect x="2" y="6" width="14" height="22" fill="#5eff9e" opacity="0.4" />
+        <rect x="-2" y="40" width="22" height="6" fill="#28303a" />
+        <path d="M0 46 L0 54 L8 54" stroke="#28303a" strokeWidth="1" fill="none" />
+        <text x="9" y="60" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4" fill="#c8d4e2">GEL · 90°</text>
+      </g>
+
+      {/* CHARIOT à instruments près du lit central */}
+      <g transform="translate(560,330)">
+        <rect x="-18" y="0" width="36" height="4" fill="#c8d4e2" stroke="#3a4048" strokeWidth="0.8" />
+        <rect x="-16" y="4" width="32" height="18" fill="#e8eef5" stroke="#3a4048" strokeWidth="0.6" />
+        <rect x="-18" y="22" width="36" height="4" fill="#c8d4e2" stroke="#3a4048" strokeWidth="0.6" />
+        {/* Roulettes */}
+        <circle cx="-14" cy="30" r="2.5" fill="#3a4048" />
+        <circle cx="14" cy="30" r="2.5" fill="#3a4048" />
+        {/* Objets sur le plateau */}
+        <rect x="-14" y="-6" width="8" height="6" fill="#8a1010" stroke="#3a0000" strokeWidth="0.4" />
+        <circle cx="0" cy="-3" r="3" fill="#5a6270" stroke="#0a0806" strokeWidth="0.4" />
+        <rect x="6" y="-4" width="10" height="4" fill="#7fd8ff" opacity="0.8" stroke="#3a80c8" strokeWidth="0.3" />
+      </g>
+
+      {/* POUBELLE À DÉCHETS MÉDICAUX à droite du bureau */}
+      <g transform="translate(230,330)">
+        <path d="M-10 0 L10 0 L8 36 L-8 36 Z" fill="#f4b800" stroke="#5a4020" strokeWidth="1" />
+        <rect x="-12" y="-4" width="24" height="4" fill="#8a6020" stroke="#5a4020" strokeWidth="0.5" />
+        <text x="0" y="22" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="5" fontWeight="800" fill="#5a2810">DASRI</text>
+        {/* Symbole biohazard simplifié */}
+        <circle cx="0" cy="10" r="3" fill="none" stroke="#8a1010" strokeWidth="0.8" />
+      </g>
+
+      {/* PICTOGRAMMES de signalétique "SILENCE" + "ACCÈS RESTREINT" */}
+      <g transform="translate(500,80)">
+        <rect x="-30" y="0" width="60" height="18" fill="#141c26" stroke="#5eff9e" strokeWidth="0.6" />
+        <text x="0" y="12" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="800" fill="#5eff9e" letterSpacing="2">SILENCE</text>
       </g>
     </>
   );
