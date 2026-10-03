@@ -16,23 +16,34 @@ import { useState, useEffect, useRef } from "react";
      avance. Le joueur voit son enregistrement se faire.
    ============================================================ */
 
-const SEGMENTS = [
+/* Les 5 segments de la boucle radio. L'ordre réel est tiré au hasard
+   à chaque partie — on ne sait jamais à quel moment le tube passera. */
+const SEGMENTS_POOL = [
   { type: "dj",   dur: 1.6, label: "…et voilà pour la météo. Restez avec nous sur Skyrap, tout de suite…" },
   { type: "pub",  dur: 1.4, label: "🎵 (jingle) MEUBLES CONFORIMA — le confort à petit prix ! 🎵" },
   { type: "dj",   dur: 1.4, label: "…on enchaîne avec le nouveau tube qui cartonne partout en Europe…" },
   { type: "tube", dur: 2.2, label: "🎸 ♪♪ LE TUBE ! ♪♪ (intro guitare + batterie qui démarre) 🎸" },
   { type: "dj",   dur: 1.6, label: "…c'était le nouveau single, à retrouver en 45-tours chez votre disquaire…" },
 ];
-const TOTAL = SEGMENTS.reduce((s, x) => s + x.dur, 0);
+const TOTAL = SEGMENTS_POOL.reduce((s, x) => s + x.dur, 0);
 const REC_DURATION = 10; // secondes d'enregistrement de la face A
 
-function segmentAt(pos) {
+function shuffleSegments() {
+  const arr = [...SEGMENTS_POOL];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function segmentAt(pos, segments) {
   let acc = 0;
-  for (const s of SEGMENTS) {
+  for (const s of segments) {
     if (pos >= acc && pos < acc + s.dur) return { ...s, start: acc };
     acc += s.dur;
   }
-  return SEGMENTS[SEGMENTS.length - 1];
+  return segments[segments.length - 1];
 }
 
 let _ac = null;
@@ -154,6 +165,9 @@ function playRate() {
 }
 
 export function CassetteGame({ onClose, onWin }) {
+  /* L'ordre des segments change à chaque partie : le tube peut
+     apparaître n'importe quand dans la boucle. */
+  const [segments] = useState(() => shuffleSegments());
   const [pos, setPos] = useState(0);
   const [attempts, setAttempts] = useState(0);
   const [verdict, setVerdict] = useState(null);
@@ -180,7 +194,7 @@ export function CassetteGame({ onClose, onWin }) {
   }, [won, recording]);
 
   /* changement de segment → cue sonore */
-  const seg = segmentAt(pos);
+  const seg = segmentAt(pos, segments);
   useEffect(() => {
     if (recording || won) return;
     if (lastSegType.current !== seg.type) {
@@ -210,8 +224,8 @@ export function CassetteGame({ onClose, onWin }) {
 
   useEffect(() => { if (won) onWin?.(); }, [won]); // eslint-disable-line
 
-  const tubeSeg = SEGMENTS.find((s) => s.type === "tube");
-  let tubeStart = 0; for (const s of SEGMENTS) { if (s.type === "tube") break; tubeStart += s.dur; }
+  const tubeSeg = segments.find((s) => s.type === "tube");
+  let tubeStart = 0; for (const s of segments) { if (s.type === "tube") break; tubeStart += s.dur; }
   const tubeEnd = tubeStart + tubeSeg.dur;
 
   const presser = () => {
@@ -333,7 +347,7 @@ export function CassetteGame({ onClose, onWin }) {
                pendant la phase d'ENREGISTREMENT : barre de progression 10 s. */}
             {!recording ? (
               <div style={{ position: "relative", height: 16, background: "#1a140a", border: "1px solid #5a4028", borderRadius: 4, overflow: "hidden", marginBottom: 8 }}>
-                {(() => { let acc = 0; const seps = []; for (let i = 0; i < SEGMENTS.length - 1; i++) { acc += SEGMENTS[i].dur; seps.push(<div key={i} style={{ position: "absolute", left: `${(acc / TOTAL) * 100}%`, top: 0, bottom: 0, width: 1, background: "#3a2818" }} />); } return seps; })()}
+                {(() => { let acc = 0; const seps = []; for (let i = 0; i < segments.length - 1; i++) { acc += segments[i].dur; seps.push(<div key={i} style={{ position: "absolute", left: `${(acc / TOTAL) * 100}%`, top: 0, bottom: 0, width: 1, background: "#3a2818" }} />); } return seps; })()}
                 <div style={{ position: "absolute", left: `${cursorPct}%`, top: 0, bottom: 0, width: 2, background: "#ffd166", transform: "translateX(-1px)" }} />
               </div>
             ) : (

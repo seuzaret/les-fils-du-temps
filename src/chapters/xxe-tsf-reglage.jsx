@@ -31,13 +31,26 @@ const HOLD_MS = 3000; // temps à tenir dans la zone BBC
 
 /* Tire un centre BBC aléatoire entre 25 et 85, mais évite les zones
    déjà occupées par les stations parasites (grâce à un check simple). */
-function randomBbcCenter() {
+function randomBbcCenter(zones = STATIC_ZONES) {
   for (let tries = 0; tries < 30; tries++) {
     const c = 25 + Math.random() * 60; // 25..85
-    const clash = STATIC_ZONES.some((z) => c + BBC_HALF > z.start - 4 && c - BBC_HALF < z.end + 4);
+    const clash = zones.some((z) => c + BBC_HALF > z.start - 4 && c - BBC_HALF < z.end + 4);
     if (!clash) return c;
   }
   return 60; // fallback
+}
+
+/* Les stations parasites bougent aussi d'une partie à l'autre : chaque
+   zone est décalée aléatoirement de ±8, dans les limites de la bande. */
+function randomizeZones() {
+  return STATIC_ZONES.map((z) => {
+    const width = z.end - z.start;
+    const minStart = 6;
+    const maxStart = 94 - width;
+    const shift = (Math.random() - 0.5) * 16;
+    const newStart = Math.max(minStart, Math.min(maxStart, z.start + shift));
+    return { ...z, start: newStart, end: newStart + width };
+  });
 }
 
 function bbcAt(center, elapsedMs) {
@@ -82,7 +95,10 @@ export function TsfReglageGame({ onClose, onWin }) {
   const [inZone, setInZone] = useState(0);    // ms cumulés dans la zone BBC
   const [won, setWon] = useState(false);
   const [, force] = useState(0);              // re-render pour le label courant
-  const bbcCenter = useRef(randomBbcCenter()); // ★ centre BBC tiré au sort par partie
+  /* ★ Les stations parasites ET le centre BBC sont tirés au sort à
+     chaque partie — la fouille de la bande n'est jamais la même. */
+  const zones = useRef(randomizeZones());
+  const bbcCenter = useRef(randomBbcCenter(zones.current));
   const raf = useRef(null);
   const lastT = useRef(null);
   const t0 = useRef(performance.now());
@@ -103,7 +119,7 @@ export function TsfReglageGame({ onClose, onWin }) {
       lastT.current = t;
       const elapsed = t - t0.current;
       const bbc = bbcAt(bbcCenter.current, elapsed);
-      const statZ = STATIC_ZONES.find((z) => freq >= z.start && freq <= z.end);
+      const statZ = zones.current.find((z) => freq >= z.start && freq <= z.end);
       const dansBBC = freq >= bbc.start && freq <= bbc.end;
       setInZone((v) => {
         const nv = dansBBC ? Math.min(HOLD_MS, v + dt) : Math.max(0, v - dt * 0.7);
@@ -127,7 +143,7 @@ export function TsfReglageGame({ onClose, onWin }) {
   /* Zone BBC courante (recalculée à chaque render) */
   const bbcNow = bbcAt(bbcCenter.current, performance.now() - t0.current);
   const dansBBC = freq >= bbcNow.start && freq <= bbcNow.end;
-  const staticZone = STATIC_ZONES.find((z) => freq >= z.start && freq <= z.end);
+  const staticZone = zones.current.find((z) => freq >= z.start && freq <= z.end);
   const currentLabel = dansBBC ? "« Ici Londres. Les Français parlent aux Français. »" :
                        staticZone?.label || "…grrrzzzz… (brouillage)";
   const currentColor = dansBBC ? "#efe6d2" :
