@@ -2555,9 +2555,13 @@ export default function App() {
         /* Label pour le dernier saut : on ne va pas à un chapitre, on va à
            la station des chronautes en 2287. */
         const finalLabel = isLastChapter ? "STATION DES CHRONAUTES · 2287" : label;
+        /* Palier de difficulté de la boussole temporelle, mappé sur
+           l'avancée dans la frise. 1..4 — plus on avance, plus ça serre. */
+        const compassLevel = chapterIndex <= 1 ? 1 : chapterIndex <= 4 ? 2 : chapterIndex <= 6 ? 3 : 4;
         return (
           <TimeVessel
             nextLabel={finalLabel}
+            level={compassLevel}
             backdrop={cockpitBackdrop}
             onDone={() => {
               setVesselOpen(false);

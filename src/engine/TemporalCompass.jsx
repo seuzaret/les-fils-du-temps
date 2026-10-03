@@ -17,14 +17,35 @@ const VH = 900;
 const WORLD = 5760;
 const LOCK_RADIUS = 100;   // un peu plus large : on s'arrete sur une case
 const LOCK_MS = 900;
-const NUM_WHIRLS = 24;     // densite proportionnelle a la nouvelle surface
 const GRID_N = 48;         // 48 subdivisions
 const STEP = (WORLD * 2) / GRID_N;       // 240 unites monde par case
 const CELL_MS = 260;                     // temps pour traverser une case
 const ZOOM = 0.82;                       // camera legerement reculee
-const TACHYON_CELL_MS = 520;             // tachyons rouges (joueur = 260 ms/case)
 const TACHYON_RANDOM = 0.15;             // chance d'un mouvement aleatoire
-const TACHYON_COUNT = 4;                 // un a chaque angle
+
+/* Palier de difficulté — mappé sur la frise des chapitres.
+   1 : préhisto -> antiquité     (découverte, 2 tachyons lents, pas de decoys)
+   2 : moyen-âge -> moderne      (3 tachyons, decoys actifs)
+   3 : XIXᵉ -> XXᵉ guerres        (4 tachyons rapides, cible plus loin)
+   4 : médias masse -> XXIᵉ       (5 tachyons, le siège se resserre)         */
+const LEVELS = {
+  1: { whirls: 14, tachyons: 2, tachyonMs: 720, distMin: 0.40, distMax: 0.55, decoys: false, label: "FLUX LÉGER" },
+  2: { whirls: 22, tachyons: 3, tachyonMs: 520, distMin: 0.55, distMax: 0.75, decoys: true,  label: "FLUX AGITÉ" },
+  3: { whirls: 30, tachyons: 4, tachyonMs: 420, distMin: 0.70, distMax: 0.90, decoys: true,  label: "FLUX INSTABLE" },
+  4: { whirls: 36, tachyons: 5, tachyonMs: 360, distMin: 0.85, distMax: 1.00, decoys: true,  label: "TEMPÊTE TEMPORELLE" },
+};
+export function paliereFromChapter(chapterIndex) {
+  if (chapterIndex <= 1) return 1;
+  if (chapterIndex <= 4) return 2;
+  if (chapterIndex <= 6) return 3;
+  return 4;
+}
+
+/* Trace du dernier échec — survit entre deux montages de la boussole
+   (le composant est démonté/remonté à chaque voyage par TimeVessel).
+   On enregistre les positions ECRAN (dans le groupe camera), pour
+   pouvoir rejouer le fantôme sans refaire les projections. */
+let lastGhostPath = [];
 
 /* Angle iso plus doux : moins ecrase verticalement.
    sx = (x - y) * ISO_X ; sy = (x + y) * ISO_Y */
@@ -75,7 +96,11 @@ const DATE_MARKERS = [
   { x:  WORLD * 0.94, y:  WORLD * 0.50, text: "2024",    tick: true  },
 ];
 
-export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
+export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 1 }) {
+  const cfg = LEVELS[level] || LEVELS[1];
+  const NUM_WHIRLS = cfg.whirls;
+  const TACHYON_COUNT = cfg.tachyons;
+  const TACHYON_CELL_MS = cfg.tachyonMs;
   const posRef = useRef({ x: 0, y: 0 });
   const heldRef = useRef({ up: false, down: false, left: false, right: false });
   const cameraRef = useRef(null);
@@ -91,6 +116,11 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
   const trailGroupRef = useRef(null);       // <g> ou on append les segments rouges
   const playerTrailGroupRef = useRef(null); // <g> ou on append la trainee verte du joueur
   const tachyonMiniRefs = useRef([]);       // points rouges sur la mini-carte
+  const surfFlashRef = useRef(null);        // texte "SURF" qui s'affiche sur un vortex
+  /* Snapshot (figé au montage) de la trace du dernier échec. On la fige
+     à la frame initiale pour éviter que le ghost disparaisse à mi-partie
+     si on écrit lastGhostPath depuis le step en cours. */
+  const ghostSnapshotRef = useRef(lastGhostPath.slice());
   const [done, setDone] = useState(false);
   const [caught, setCaught] = useState(false);
   const [decoys, setDecoys] = useState([]); // faux noeuds temporels ephemeres
@@ -115,8 +145,8 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
   const { target, whirls } = useMemo(() => {
     const snap = (v) => Math.round(v / STEP) * STEP;
     const angle = Math.random() * Math.PI * 2;
-    /* Cible plus loin, proportionnelle a la nouvelle taille du plateau. */
-    const dist = rand(WORLD * 0.6, WORLD * 0.88);
+    /* Distance de la cible selon le palier — courbe de difficulté. */
+    const dist = rand(WORLD * cfg.distMin, WORLD * cfg.distMax);
     let tx = snap(Math.cos(angle) * dist), ty = snap(Math.sin(angle) * dist);
     if (tx === 0 && ty === 0) tx = STEP * 6;
     const era = ERAS[eraIndexForX(tx)];
@@ -129,11 +159,30 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
         dir: Math.random() < 0.5 ? 1 : -1,
       })),
     };
-  }, [nextLabel]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextLabel, level]);
+
+  /* GRILLE VIVANTE : certaines lignes sont "chargées" (bonus de vitesse)
+     et d'autres "mortes" (malus). Tiré au sort une fois par voyage.
+     Les indices suivent la convention de la grille (0..GRID_N). */
+  const liveGrid = useMemo(() => {
+    const pick = (n) => {
+      const s = new Set();
+      while (s.size < n) s.add(Math.floor(Math.random() * (GRID_N + 1)));
+      return s;
+    };
+    return {
+      hotV: pick(3), coldV: pick(3),
+      hotH: pick(3), coldH: pick(3),
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nextLabel, level]);
 
   /* Faux noeuds : apparaissent au hasard, vivent ~5s puis disparaissent.
-     Purement decoratifs (aucune interaction gameplay). */
+     Purement decoratifs (aucune interaction gameplay). Désactivés au
+     palier 1 pour laisser le joueur apprendre les contrôles. */
   useEffect(() => {
+    if (!cfg.decoys) return;
     let nextId = 0;
     const CELL_MAX = Math.floor(WORLD / STEP);
     const spawn = () => {
@@ -183,6 +232,14 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
     let lock = 0, isDone = false, isCaught = false;
     /* Etat de deplacement */
     let fromX = 0, fromY = 0, toX = 0, toY = 0, prog = 1;
+    /* Multiplicateur de vitesse de l'arête courante — rafraîchi à
+       chaque nouvelle case selon la grille vivante + le surf. */
+    let edgeMul = 1;
+    /* Flash visuel du surf — ms restants d'affichage de la mention "SURF". */
+    let surfFlash = 0;
+    /* Buffer du parcours du joueur en coords écran (iso+warp), pour
+       enregistrer le fantôme si on se fait attraper. */
+    const ghostBuf = [];
     /* Emission de la trainee : une goutte toutes les TRAIL_EMIT_MS
        depuis la position courante du joueur. */
     let lastEmitAt = 0;
@@ -308,13 +365,15 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
       const isPlaying = phaseRef.current === "play";
 
       /* Progression sur la case en cours.
-         Si le frein est tenu, la traversee se ralentit (BRAKE_FACTOR). */
+         Si le frein est tenu, la traversee se ralentit (BRAKE_FACTOR).
+         `edgeMul` applique le bonus/malus de l'arête (grille vivante + surf). */
       if (isPlaying && prog < 1) {
         const factor = held.brake ? BRAKE_FACTOR : 1;
-        prog = Math.min(1, prog + (dt * factor) / CELL_MS);
+        prog = Math.min(1, prog + (dt * factor * edgeMul) / CELL_MS);
         p.x = fromX + (toX - fromX) * prog;
         p.y = fromY + (toY - fromY) * prog;
       }
+      if (surfFlash > 0) surfFlash = Math.max(0, surfFlash - dt);
       /* Arrive : demarrer la case suivante.
          Les tourbillons peuvent detourner (voire imposer) la direction. */
       if (isPlaying && prog >= 1) {
@@ -377,6 +436,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
                car il n'y a pas d'arete continue "traversee"). */
             if (!wrapped && trail.has(edgeKey(cx, cy, ncx, ncy)) && !isCaught) {
               isCaught = true; setCaught(true);
+              lastGhostPath = ghostBuf.slice();
               setTimeout(() => (onCaught || onClose)?.(), 1500);
             }
             if (wrapped) {
@@ -385,11 +445,39 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
               toX = ncx * STEP;   toY = ncy * STEP;
               p.x = fromX; p.y = fromY;
               prog = 1;
+              edgeMul = 1;
             } else {
               fromX = cx * STEP; fromY = cy * STEP;
               toX = ncx * STEP; toY = ncy * STEP;
               p.x = fromX; p.y = fromY;
               prog = 0;
+              /* --- SURF : si on part dans le sens de la rotation du vortex
+                 le plus proche, bonus de vitesse proportionnel à la profondeur. --- */
+              let surfBoost = 1;
+              if (strongest) {
+                const rx = fromX - strongest.x, ry = fromY - strongest.y;
+                const tx = -ry * strongest.dir, ty = rx * strongest.dir;
+                const tDir = Math.abs(tx) > Math.abs(ty)
+                  ? { dx: Math.sign(tx) || 1, dy: 0 }
+                  : { dx: 0, dy: Math.sign(ty) || 1 };
+                if (d.dx === tDir.dx && d.dy === tDir.dy) {
+                  surfBoost = 1 + strongestDepth * 0.8;
+                  surfFlash = 450;
+                }
+              }
+              /* --- GRILLE VIVANTE : ligne traversée = bonus/malus. --- */
+              let liveMul = 1;
+              if (d.dy === 0) {
+                /* Déplacement horizontal → on roule SUR la ligne horizontale cy. */
+                const j = cy + CELL_MAX;
+                if (liveGrid.hotH.has(j)) liveMul = 1.5;
+                else if (liveGrid.coldH.has(j)) liveMul = 0.65;
+              } else {
+                const i = cx + CELL_MAX;
+                if (liveGrid.hotV.has(i)) liveMul = 1.5;
+                else if (liveGrid.coldV.has(i)) liveMul = 0.65;
+              }
+              edgeMul = surfBoost * liveMul;
             }
           }
         }
@@ -437,6 +525,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
           /* Collision directe joueur / tachyon */
           if (Math.hypot(p.x - T.curX, p.y - T.curY) < STEP * 0.5) {
             isCaught = true; setCaught(true);
+            lastGhostPath = ghostBuf.slice();
             setTimeout(() => (onCaught || onClose)?.(), 1500);
             break;
           }
@@ -450,12 +539,20 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
       const psy = (wx + wy) * ISO_Y;
       if (cameraRef.current) cameraRef.current.setAttribute("transform", `translate(${VW / 2} ${VH / 2}) scale(${ZOOM}) translate(${-psx} ${-psy})`);
       if (playerRef.current) playerRef.current.setAttribute("transform", `translate(${psx} ${psy})`);
+      if (surfFlashRef.current) {
+        const opa = surfFlash > 0 ? Math.min(1, surfFlash / 450) : 0;
+        surfFlashRef.current.setAttribute("opacity", String(opa));
+        surfFlashRef.current.setAttribute("transform", `translate(${psx} ${psy - 42})`);
+      }
 
       /* Trainee : emet une petite goutte a la position ecran (iso+warp)
          du joueur toutes les TRAIL_EMIT_MS pendant qu'il bouge, et
          fait fondre toutes les gouttes actives cette frame. */
       if (!isCaught && prog < 1 && t - lastEmitAt >= TRAIL_EMIT_MS) {
         emitPlayerTrail(psx, psy, t);
+        /* On consigne la position dans le buffer du fantôme. On plafonne
+           à 400 points pour éviter de garder un chemin démesuré. */
+        if (ghostBuf.length < 400) ghostBuf.push([psx, psy]);
         lastEmitAt = t;
       }
       updatePlayerTrail(t);
@@ -492,6 +589,8 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
         if (lock >= 1 && !isDone) {
           isDone = true;
           setDone(true);
+          /* Voyage réussi : on efface le fantôme de l'échec précédent. */
+          lastGhostPath = [];
           /* Laisse le temps a l'effet de flash lumineux (1.5s), puis on
              saute a l'epoque du noeud et on ferme la boussole. */
           setTimeout(() => { onLock?.(); onClose?.(); }, 1500);
@@ -686,6 +785,55 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
       }
     }
 
+    /* ---------- GRILLE VIVANTE : overlays sur quelques lignes du maillage ----------
+       Trace les 6 lignes "chaudes" (dorées, pulsantes) et 6 lignes "froides"
+       (bleu-gris, ternes), en suivant la même warp que le reste. */
+    const buildOverlayLine = (ax, ay, bx, by, keyBase) => {
+      const steps = N * SUB;
+      const pts = [];
+      for (let i = 0; i <= steps; i++) {
+        const u = i / steps;
+        const wx = ax + (bx - ax) * u;
+        const wy = ay + (by - ay) * u;
+        const p = projectSample(wx, wy);
+        pts.push(`${p.sx.toFixed(1)},${p.sy.toFixed(1)}`);
+      }
+      return pts.join(" ");
+    };
+    const liveLines = [];
+    liveGrid.hotV.forEach((i) => {
+      const t = -WORLD + (i * WORLD * 2) / N;
+      const pts = buildOverlayLine(t, -WORLD, t, WORLD, `hv${i}`);
+      liveLines.push(
+        <polyline key={`hv${i}`} points={pts} fill="none" stroke="#ffd166" strokeWidth="4" opacity="0.55" strokeLinecap="round">
+          <animate attributeName="opacity" values="0.35;0.75;0.35" dur="2.6s" repeatCount="indefinite" />
+        </polyline>
+      );
+    });
+    liveGrid.hotH.forEach((j) => {
+      const t = -WORLD + (j * WORLD * 2) / N;
+      const pts = buildOverlayLine(-WORLD, t, WORLD, t, `hh${j}`);
+      liveLines.push(
+        <polyline key={`hh${j}`} points={pts} fill="none" stroke="#ffd166" strokeWidth="4" opacity="0.55" strokeLinecap="round">
+          <animate attributeName="opacity" values="0.35;0.75;0.35" dur="2.6s" repeatCount="indefinite" />
+        </polyline>
+      );
+    });
+    liveGrid.coldV.forEach((i) => {
+      const t = -WORLD + (i * WORLD * 2) / N;
+      const pts = buildOverlayLine(t, -WORLD, t, WORLD, `cv${i}`);
+      liveLines.push(
+        <polyline key={`cv${i}`} points={pts} fill="none" stroke="#2a3a52" strokeWidth="3" opacity="0.5" strokeDasharray="4 8" />
+      );
+    });
+    liveGrid.coldH.forEach((j) => {
+      const t = -WORLD + (j * WORLD * 2) / N;
+      const pts = buildOverlayLine(-WORLD, t, WORLD, t, `ch${j}`);
+      liveLines.push(
+        <polyline key={`ch${j}`} points={pts} fill="none" stroke="#2a3a52" strokeWidth="3" opacity="0.5" strokeDasharray="4 8" />
+      );
+    });
+
     return (
       <>
         <path d={diamond} fill="#1a2a48" opacity="0.55" />
@@ -731,6 +879,8 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
 
         <g fill="none">{grid}</g>
         <g>{gridDots}</g>
+        {/* Grille vivante : lignes chaudes dorées + lignes mortes bleu-gris. */}
+        <g fill="none">{liveLines}</g>
         <path d={diamond} fill="none" stroke="#7fb0e0" strokeWidth="3" strokeDasharray="12 8" opacity="0.9" />
 
         {/* Reperes de dates : petits, flottants, coleur de l'epoque. */}
@@ -823,7 +973,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
       </>
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [whirls, target, warp]);
+  }, [whirls, target, warp, liveGrid]);
 
   return (
     <div onClick={onClose}
@@ -833,12 +983,41 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
         <svg viewBox={`0 0 ${VW} ${VH}`} preserveAspectRatio="xMidYMid meet" width="100%" height="100%">
           <g ref={cameraRef} transform={`translate(${VW / 2} ${VH / 2}) scale(${ZOOM})`}>
             {worldStatic}
+
+            {/* 👻 FANTÔME du voyage précédent (si on s'est fait attraper juste avant).
+                Pâle, en coords écran (iso+warp) déjà projetées. */}
+            {ghostSnapshotRef.current.length > 1 && (
+              <g opacity="0.55">
+                <polyline
+                  points={ghostSnapshotRef.current.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(" ")}
+                  fill="none" stroke="#7fffb0" strokeWidth="2" strokeLinecap="round" strokeDasharray="3 6" />
+                {/* Croix rouge à l'endroit où on s'est fait avoir */}
+                {(() => {
+                  const [gx, gy] = ghostSnapshotRef.current[ghostSnapshotRef.current.length - 1];
+                  return (
+                    <g transform={`translate(${gx} ${gy})`}>
+                      <line x1="-6" y1="-6" x2="6" y2="6" stroke="#ff5266" strokeWidth="2.4" />
+                      <line x1="-6" y1="6" x2="6" y2="-6" stroke="#ff5266" strokeWidth="2.4" />
+                    </g>
+                  );
+                })()}
+              </g>
+            )}
+
             {/* Trainee rouge du tachyon (les segments sont ajoutes en direct) */}
             <g ref={trailGroupRef} />
 
             {/* Trainee verte du joueur (segments fondants), rendue au-dessus
                 pour rester visible malgre la trainee rouge et la grille. */}
             <g ref={playerTrailGroupRef} />
+
+            {/* 🏄 Texte "SURF" qui apparaît quand le joueur chevauche un vortex. */}
+            <g ref={surfFlashRef} opacity="0" style={{ pointerEvents: "none" }}>
+              <text textAnchor="middle" fontSize="18" fontWeight="800" fill="#ffd700"
+                letterSpacing="3" style={{ paintOrder: "stroke", stroke: "#0a1224", strokeWidth: 3, strokeLinejoin: "round" }}>
+                ↻ SURF
+              </text>
+            </g>
 
             {/* Faux noeuds temporels : apparaissent et disparaissent */}
             {decoys.map((d) => {
@@ -990,25 +1169,34 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel }) {
                 color: "#5eff9e", marginBottom: 6,
               }}>▶ MARTINE — CANAL PRIORITAIRE</div>
               <h2 style={{
-                margin: "6px 0 14px", fontSize: 26, letterSpacing: 2, color: "#ffd166",
+                margin: "6px 0 6px", fontSize: 26, letterSpacing: 2, color: "#ffd166",
                 textTransform: "uppercase",
               }}>Mission prioritaire</h2>
+              <div style={{
+                margin: "0 0 14px", fontFamily: "ui-monospace,monospace", fontSize: 11,
+                letterSpacing: 3, color: "#ff8a94",
+              }}>⚠ {cfg.label}</div>
               <p style={{ fontSize: 16.5, lineHeight: 1.55, margin: "0 0 14px" }}>
                 Nous sommes dans le <strong>flux du temps</strong>. Grâce à la
                 boussole temporelle, trouve un <strong>nœud dans le temps</strong>
                 {" "}et voyage jusqu'à son époque.
               </p>
-              <p style={{ fontSize: 15, lineHeight: 1.5, margin: "0 0 12px", color: "#c8d4e2" }}>
-                Utilise les <strong style={{ color: "#7fffb0" }}>flèches</strong> pour
-                te déplacer le long des lignes ; la <strong style={{ color: "#7fffb0" }}>barre espace</strong>
-                {" "}freine.
+              <p style={{ fontSize: 15, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
+                <strong style={{ color: "#7fffb0" }}>Flèches</strong> pour avancer,
+                {" "}<strong style={{ color: "#7fffb0" }}>Espace</strong> pour freiner.
+              </p>
+              <p style={{ fontSize: 14, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
+                Les <strong style={{ color: "#ffd166" }}>lignes dorées</strong> accélèrent,
+                les <strong style={{ color: "#5a6a80" }}>lignes mortes</strong> freinent.
+                {" "}Chevaucher un <strong style={{ color: "#c8a8f0" }}>tourbillon</strong>
+                {" "}dans son sens → <strong style={{ color: "#ffd700" }}>SURF</strong>.
               </p>
               <p style={{
-                fontSize: 15, lineHeight: 1.5, margin: "0 0 20px",
+                fontSize: 14, lineHeight: 1.5, margin: "0 0 20px",
                 color: "#ff8a94", fontWeight: 700,
               }}>
-                ⚠ Attention aux <span style={{ color: "#ff2a4a" }}>protecteurs du temps</span>,
-                les <span style={{ color: "#ff2a4a" }}>tachyons rouges</span> qui veulent te stopper.
+                ⚠ Attention aux <span style={{ color: "#ff2a4a" }}>tachyons rouges</span>,
+                protecteurs du temps.
               </p>
               <button onClick={() => setPhase("countdown")}
                 autoFocus

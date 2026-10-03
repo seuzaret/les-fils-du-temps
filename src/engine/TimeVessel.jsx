@@ -406,7 +406,7 @@ function CockpitPhase({ onGo, onCancel, backdropScene }) {
 /* ============================================================
    COMPOSANT PRINCIPAL
    ============================================================ */
-export function TimeVessel({ nextLabel, onDone, onCancel, backdrop: backdropProp }) {
+export function TimeVessel({ nextLabel, onDone, onCancel, backdrop: backdropProp, level = 1 }) {
   /* Départ direct dans le COCKPIT : la scène MARTINE/matérialisation n'est
      jouée qu'au tout premier chapitre (elle est skippée par défaut ici). */
   const [phase, setPhase] = useState("cockpit");
@@ -434,6 +434,7 @@ export function TimeVessel({ nextLabel, onDone, onCancel, backdrop: backdropProp
     return (
       <TemporalCompass
         nextLabel={nextLabel}
+        level={level}
         onLock={() => onDone?.()}
         onCaught={() => setPhase("cockpit")}
         onClose={() => setPhase("cockpit")}
