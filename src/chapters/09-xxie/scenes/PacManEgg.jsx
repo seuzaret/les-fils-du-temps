@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
 /* ============================================================
-   JEU 3 — EASTER EGG : Pac-Man dans la chambre de Lior
+   EASTER EGG : Pac-Man dans la chambre de l'ado (jeu 2)
    ------------------------------------------------------------
-   Petite console vintage planquée sur le bureau de Lior. Un clic
+   Petite console vintage trouvée dans la chambre de l'ado. Un clic
    ouvre une modal plein format avec un labyrinthe Pac-Man miniature
    qui joue tout seul (boucle hypnotique). Rien à gagner — juste un
    clin d'œil nostalgique pour les joueurs qui fouillent.
@@ -127,7 +127,7 @@ export default function PacManEgg({ onClose }) {
         </div>
 
         <div style={{ marginTop: 10, textAlign: "center", fontSize: 10, color: "#8a7a4a", fontStyle: "italic", letterSpacing: 2 }}>
-          « Lior a trouvé cette cartouche dans les affaires de son grand-père. »
+          « Trouvée au fond d'un tiroir — ça marchait déjà avant tes parents. »
         </div>
       </div>
     </div>
