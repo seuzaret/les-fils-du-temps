@@ -162,8 +162,8 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextLabel, level]);
 
-  /* GRILLE VIVANTE : certaines lignes sont "chargées" (bonus de vitesse)
-     et d'autres "mortes" (malus). Tiré au sort une fois par voyage.
+  /* GRILLE VIVANTE : seulement des lignes "chargées" (bonus de vitesse).
+     Pas de malus — on cherche la fluidité, pas la frustration.
      Les indices suivent la convention de la grille (0..GRID_N). */
   const liveGrid = useMemo(() => {
     const pick = (n) => {
@@ -171,10 +171,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
       while (s.size < n) s.add(Math.floor(Math.random() * (GRID_N + 1)));
       return s;
     };
-    return {
-      hotV: pick(3), coldV: pick(3),
-      hotH: pick(3), coldH: pick(3),
-    };
+    return { hotV: pick(3), hotH: pick(3) };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nextLabel, level]);
 
@@ -465,17 +462,15 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
                   surfFlash = 450;
                 }
               }
-              /* --- GRILLE VIVANTE : ligne traversée = bonus/malus. --- */
+              /* --- GRILLE VIVANTE : ligne chargée = bonus (pas de malus). --- */
               let liveMul = 1;
               if (d.dy === 0) {
                 /* Déplacement horizontal → on roule SUR la ligne horizontale cy. */
                 const j = cy + CELL_MAX;
                 if (liveGrid.hotH.has(j)) liveMul = 1.5;
-                else if (liveGrid.coldH.has(j)) liveMul = 0.65;
               } else {
                 const i = cx + CELL_MAX;
                 if (liveGrid.hotV.has(i)) liveMul = 1.5;
-                else if (liveGrid.coldV.has(i)) liveMul = 0.65;
               }
               edgeMul = surfBoost * liveMul;
             }
@@ -770,16 +765,18 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
     ];
 
     /* Points d'intersection de la grille (deformes par la warp). Rendent
-       les noeuds visuellement solidaires des lignes apparentes. */
+       les noeuds visuellement solidaires des lignes apparentes.
+       On n'affiche qu'un noeud sur deux (step 2) — 4× moins de nodes
+       SVG qu'avant, pour une fluidité nettement meilleure. */
     const gridDots = [];
-    for (let i = 0; i <= N; i++) {
-      for (let j = 0; j <= N; j++) {
+    for (let i = 0; i <= N; i += 2) {
+      for (let j = 0; j <= N; j += 2) {
         const wx0 = -WORLD + (i * WORLD * 2) / N;
         const wy0 = -WORLD + (j * WORLD * 2) / N;
         const [wx, wy] = warp(wx0, wy0);
         const p = iso(wx, wy);
         gridDots.push(
-          <circle key={`dot${i}_${j}`} cx={p.sx.toFixed(1)} cy={p.sy.toFixed(1)} r="1.4"
+          <circle key={`dot${i}_${j}`} cx={p.sx.toFixed(1)} cy={p.sy.toFixed(1)} r="1.6"
             fill={ERAS[eraIndexForX(wx0)].color} opacity="0.55" />
         );
       }
@@ -805,32 +802,14 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
       const t = -WORLD + (i * WORLD * 2) / N;
       const pts = buildOverlayLine(t, -WORLD, t, WORLD, `hv${i}`);
       liveLines.push(
-        <polyline key={`hv${i}`} points={pts} fill="none" stroke="#ffd166" strokeWidth="4" opacity="0.55" strokeLinecap="round">
-          <animate attributeName="opacity" values="0.35;0.75;0.35" dur="2.6s" repeatCount="indefinite" />
-        </polyline>
+        <polyline key={`hv${i}`} points={pts} fill="none" stroke="#ffd166" strokeWidth="3" opacity="0.5" strokeLinecap="round" />
       );
     });
     liveGrid.hotH.forEach((j) => {
       const t = -WORLD + (j * WORLD * 2) / N;
       const pts = buildOverlayLine(-WORLD, t, WORLD, t, `hh${j}`);
       liveLines.push(
-        <polyline key={`hh${j}`} points={pts} fill="none" stroke="#ffd166" strokeWidth="4" opacity="0.55" strokeLinecap="round">
-          <animate attributeName="opacity" values="0.35;0.75;0.35" dur="2.6s" repeatCount="indefinite" />
-        </polyline>
-      );
-    });
-    liveGrid.coldV.forEach((i) => {
-      const t = -WORLD + (i * WORLD * 2) / N;
-      const pts = buildOverlayLine(t, -WORLD, t, WORLD, `cv${i}`);
-      liveLines.push(
-        <polyline key={`cv${i}`} points={pts} fill="none" stroke="#2a3a52" strokeWidth="3" opacity="0.5" strokeDasharray="4 8" />
-      );
-    });
-    liveGrid.coldH.forEach((j) => {
-      const t = -WORLD + (j * WORLD * 2) / N;
-      const pts = buildOverlayLine(-WORLD, t, WORLD, t, `ch${j}`);
-      liveLines.push(
-        <polyline key={`ch${j}`} points={pts} fill="none" stroke="#2a3a52" strokeWidth="3" opacity="0.5" strokeDasharray="4 8" />
+        <polyline key={`hh${j}`} points={pts} fill="none" stroke="#ffd166" strokeWidth="3" opacity="0.5" strokeLinecap="round" />
       );
     });
 
@@ -1186,8 +1165,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
                 {" "}<strong style={{ color: "#7fffb0" }}>Espace</strong> pour freiner.
               </p>
               <p style={{ fontSize: 14, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
-                Les <strong style={{ color: "#ffd166" }}>lignes dorées</strong> accélèrent,
-                les <strong style={{ color: "#5a6a80" }}>lignes mortes</strong> freinent.
+                Les <strong style={{ color: "#ffd166" }}>lignes dorées</strong> accélèrent.
                 {" "}Chevaucher un <strong style={{ color: "#c8a8f0" }}>tourbillon</strong>
                 {" "}dans son sens → <strong style={{ color: "#ffd700" }}>SURF</strong>.
               </p>
