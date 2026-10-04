@@ -863,24 +863,10 @@ const ACTS = [
 /* ============================================================
    COMPOSANT PRINCIPAL
    ============================================================ */
-/* Variantes d'ouverture selon le choix fait aux retrouvailles. On n'altère
-   PAS la grande cinématique en 4 actes — seulement un bandeau d'ouverture
-   qui reconnaît le choix du joueur avant que la séquence ne reprenne son
-   cours (MARTINE réparée, remède ramené, bascule bunker). */
-const CHOICE_INTROS = {
-  ramener: { emoji: "🚀", couleur: "#5eff9e", titre: "Retour à deux",
-    texte: "Al3x1A monte avec toi dans ta MARTINE. 2287 l'attend — Elias, Mira, et un monde qui va renaître de ce remède qu'elle a cherché toute une vie." },
-  laisser: { emoji: "📜", couleur: "#ffd166", titre: "Elle est restée",
-    texte: "Al3x1A a choisi son époque. Tu repars seul·e avec le remède — et sa dernière lettre, à remettre en main propre à Elias." },
-  rester:  { emoji: "🔥", couleur: "#ff8a6a", titre: "Tu es resté·e",
-    texte: "Tu confies le remède à MARTINE, qui repart sans toi. Deux chronautes dans une époque qui n'est pas la leur — vous ferez quoi, maintenant ?" },
-};
-
-export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJeu3 }) {
+export default function FinJeu2({ prenom, remede, onRetour, onLancerJeu3 }) {
   const [i, setI] = useState(0);
   const acte = ACTS[i];
   const isLast = i === ACTS.length - 1;
-  const choiceIntro = i === 0 ? CHOICE_INTROS[endChoice] : null;
 
   /* Le texte + les boutons s'affichent APRÈS un délai minimum (le temps
      que les animations se mettent en place). On tracke ça par acte via
@@ -916,26 +902,6 @@ export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJ
             }} />
           ))}
         </div>
-
-        {/* Bandeau du CHOIX de la rencontre — visible seulement acte 0 */}
-        {choiceIntro && (
-          <div style={{
-            marginTop: 14,
-            background: `linear-gradient(90deg, ${choiceIntro.couleur}22, #101827)`,
-            border: `2px solid ${choiceIntro.couleur}`,
-            borderRadius: 10,
-            padding: "10px 16px",
-            textAlign: "left",
-            boxShadow: `0 0 14px ${choiceIntro.couleur}33`,
-          }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: choiceIntro.couleur, fontWeight: 800, marginBottom: 2 }}>
-              {choiceIntro.emoji} TON CHOIX · {choiceIntro.titre.toUpperCase()}
-            </div>
-            <div style={{ fontSize: 14, lineHeight: 1.5, color: "#e8eef5", fontStyle: "italic" }}>
-              {choiceIntro.texte}
-            </div>
-          </div>
-        )}
 
         <div style={{ fontFamily: "ui-monospace,monospace", color: acte.couleur, letterSpacing: 3, fontSize: 11, marginTop: 14, opacity: textePret ? 1 : 0.55, transition: "opacity 700ms" }}>{acte.kicker}</div>
         <h1 style={{ fontFamily: "ui-monospace,monospace", color: acte.couleur, letterSpacing: 3, fontSize: 24, marginTop: 4, marginBottom: 10, opacity: textePret ? 1 : 0.7, transition: "opacity 900ms" }}>{acte.titre}</h1>
