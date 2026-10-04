@@ -167,9 +167,6 @@ export default function App() {
      la note a été lue (dans l'ordre). */
   const [jeu2Pages, setJeu2Pages] = useState([]);
   const [jeu2CarnetOpen, setJeu2CarnetOpen] = useState(false);
-  /* Fin du jeu 2 : choix du joueur à la rencontre ("ramener", "laisser",
-     "rester"). null tant qu'il n'a pas choisi. */
-  const [jeu2EndChoice, setJeu2EndChoice] = useState(null);
   const [openNote, setOpenNote] = useState(null);  // { chapitre } → affiche la modale de note
   const [openRetrouvailles, setOpenRetrouvailles] = useState(false);
   const [tab, setTab] = useState(CHAPTERS[0].startScene); // tableau courant
@@ -265,9 +262,9 @@ export default function App() {
      partie existante avec un état vide). */
   useEffect(() => {
     if (screen === "play" || screen === "end") {
-      writeSave({ chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick, jeu2ClueMap, jeu2Pages, jeu2EndChoice }, mode);
+      writeSave({ chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick, jeu2ClueMap, jeu2Pages }, mode);
     }
-  }, [chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick, jeu2ClueMap, jeu2Pages, jeu2EndChoice]);
+  }, [chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick, jeu2ClueMap, jeu2Pages]);
 
   /* CONFORT DE LECTURE : applique les classes sur <html> (le CSS fait le
      reste, moteur compris) et mémorise le choix sur l'appareil. */
@@ -543,7 +540,6 @@ export default function App() {
     setJeu2ClueMap(clueMap);
     setJeu2Pages([]);
     setJeu2CarnetOpen(false);
-    setJeu2EndChoice(null);
     setChapterIndex(0); setMaxReached(CHAPTERS.length - 1);
     setInv([]); setMsgs([]); setMade([]); setFlags({}); setCollection([]); setQuete(0);
     setFlux(0); setFluxTotal(0); setBonusChapters([]);
@@ -680,7 +676,6 @@ export default function App() {
     setJeu2Found(s.jeu2Found || false);
     setJeu2ClueMap(s.jeu2ClueMap || {});
     setJeu2Pages(Array.isArray(s.jeu2Pages) ? s.jeu2Pages : []);
-    setJeu2EndChoice(s.jeu2EndChoice || null);
     setTab(s.tab ?? CHAPTERS[i].startScene);
     const nom = s.prenom ? `, ${s.prenom}` : "";
     setDialog({ lines: [`Reprise du voyage${nom}. Je remets les circuits en route là où on s'était arrêtés.`], idx: 0, mood: "neutre" });
@@ -1756,7 +1751,6 @@ export default function App() {
         <FinJeu2
           prenom={prenom}
           remede={jeu2Target >= 0 ? JEU2[jeu2Target]?.remede : null}
-          endChoice={jeu2EndChoice}
           onRetour={() => { setMode("jeu1"); setScreen("title"); }}
           onLancerJeu3={() => { setMode("jeu3"); setScreen("jeu3"); }} />
       </>
@@ -2486,7 +2480,6 @@ export default function App() {
           prenom={prenom}
           remede={JEU2[jeu2Target]?.remede}
           chapitreNom={CHAPTERS[jeu2Target]?.epoque || ""}
-          onChoice={(choice) => setJeu2EndChoice(choice)}
           onDone={() => { setOpenRetrouvailles(false); setScreen("finJeu2"); }} />
       )}
 
