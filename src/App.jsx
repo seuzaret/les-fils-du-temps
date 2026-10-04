@@ -2112,7 +2112,13 @@ export default function App() {
               </button>
             );
           })()}
-          <Martine lines={dialog.lines} idx={dialog.idx} mood={dialog.mood} date={chapter.date} onNext={() => setDialog((d) => ({ ...d, idx: d.idx + 1 }))} />
+          {/* Pendant qu'une carte Pokédex est ouverte, on masque la bulle
+              de MARTINE : le joueur lit la carte sans texte parasite en
+              dessous. Elle réapparaîtra à la fermeture avec le commentaire
+              différé mis en place dans grantMessage/craft. */}
+          {!cardShowing && (
+            <Martine lines={dialog.lines} idx={dialog.idx} mood={dialog.mood} date={chapter.date} onNext={() => setDialog((d) => ({ ...d, idx: d.idx + 1 }))} />
+          )}
         </div>
       </div>
 
