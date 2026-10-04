@@ -265,29 +265,47 @@ export function FaireLaUneGame({ onClose, onWin }) {
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
-        style={{ background: "#f6efdf", color: "#1c1a10", border: "2px solid #8a6a3a", borderRadius: 14, padding: 22, maxWidth: 760, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", fontFamily: "Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#8a5a2a" }}>🗞️ KIOSQUE DE ROBERT — 1980</div>
-        <h2 style={{ textAlign: "center", margin: "6px 0 14px", color: "#3a2214", fontSize: 26 }}>Fais la Une</h2>
+        style={{
+          background: "linear-gradient(180deg,#faf3e2 0%,#eee1c0 100%)",
+          color: "#1c1a10",
+          border: "3px solid #8a6a3a",
+          borderRadius: 16,
+          padding: 26,
+          maxWidth: 820,
+          width: "100%",
+          maxHeight: "94vh",
+          overflowY: "auto",
+          boxShadow: "0 16px 60px rgba(0,0,0,0.65)",
+          fontFamily: "Georgia, serif",
+        }}>
+        {/* Bandeau style "ÉDITION SPÉCIALE" */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 10, alignItems: "center", marginBottom: 10 }}>
+          <span style={{ background: "#8a5a2a", color: "#fff", padding: "4px 14px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(138,90,42,0.4)" }}>
+            🗞️ KIOSQUE DE ROBERT
+          </span>
+          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5a2a" }}>MATIN · 1980</span>
+        </div>
+        <h2 style={{ textAlign: "center", margin: "0 0 16px", color: "#3a2214", fontSize: 32, fontWeight: 900, letterSpacing: 1 }}>Fais la Une</h2>
 
         {/* ═════ 0 : Robert affolé demande de l'aide ═════ */}
         {step === 0 && (
           <>
-            <div style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#fff", border: "2px solid #8a5a2a", borderRadius: 12, padding: 14 }}>
+            <div style={{ display: "flex", gap: 18, alignItems: "flex-start", background: "linear-gradient(135deg,#fff 0%,#f8e8c8 100%)", border: "3px solid #8a5a2a", borderRadius: 14, padding: 18, boxShadow: "0 4px 16px rgba(138,90,42,0.25)" }}>
               <PortraitRobert />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800, marginBottom: 6 }}>▸ ROBERT · LE KIOSQUIER</div>
-                <p style={{ fontSize: 16.5, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800, marginBottom: 8 }}>▸ ROBERT · LE KIOSQUIER</div>
+                <p style={{ fontSize: 17.5, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
                   « Ouf, tu tombes bien ! Ma fille Julie débute comme stagiaire dans un journal. Elle m'appelle en panique : elle doit boucler sa toute première Une avant midi. Tu veux bien lui donner un coup de main ? »
                 </p>
               </div>
             </div>
-            <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
+            <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
               <button onClick={onClose}
-                style={{ flex: 1, background: "#c9b48c", color: "#3a2214", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ flex: 1, background: "#c9b48c", color: "#3a2214", border: "2px solid #a89468", borderRadius: 12, padding: "16px", fontWeight: 800, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
                 Non, désolé
               </button>
               <button onClick={() => setStep(1)}
-                style={{ flex: 2, background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ flex: 2, background: "linear-gradient(90deg,#a06030,#8a5a2a)", color: "#fff", border: "none", borderRadius: 12, padding: "16px", fontWeight: 900, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 6px 20px rgba(138,90,42,0.45)" }}>
                 Oui, j'aide Julie →
               </button>
             </div>
@@ -297,19 +315,24 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 1 : Julie au téléphone ═════ */}
         {step === 1 && (
           <>
-            <div style={{ display: "flex", gap: 14, alignItems: "flex-start", background: "#fff", border: `2px solid ${journal.couleur}`, borderRadius: 12, padding: 14 }}>
+            <div style={{
+              display: "flex", gap: 18, alignItems: "flex-start",
+              background: `linear-gradient(135deg, ${journal.couleur}22 0%, #fff 70%)`,
+              border: `3px solid ${journal.couleur}`,
+              borderRadius: 14, padding: 18,
+              boxShadow: `0 4px 20px ${journal.couleur}33`,
+            }}>
               <PortraitJulie couleur={journal.couleur} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 6 }}>
-                  ▸ JULIE · STAGIAIRE À <span style={{ textTransform: "uppercase" }}>{journal.nom}</span>
-                </div>
-                <p style={{ fontSize: 16, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 4 }}>▸ JULIE · STAGIAIRE À</div>
+                <div style={{ fontSize: 22, fontWeight: 900, color: journal.couleur, marginBottom: 10, letterSpacing: 1 }}>{journal.nom.toUpperCase()}</div>
+                <p style={{ fontSize: 17, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
                   « Merci ! Bon, on écrit pour <strong>{journal.cible}</strong>. {journal.juliePhrase} Je te lis la dépêche AFP, tu me choisis un titre et un ton, OK ? »
                 </p>
               </div>
             </div>
             <button onClick={() => setStep(2)}
-              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 16, width: "100%", background: "linear-gradient(90deg,#a06030,#8a5a2a)", color: "#fff", border: "none", borderRadius: 12, padding: "16px", fontWeight: 900, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 6px 20px rgba(138,90,42,0.45)" }}>
               1/3 · Voir la dépêche AFP →
             </button>
           </>
@@ -336,23 +359,33 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 3 : choix du titre ═════ */}
         {step === 3 && (
           <>
-            <p style={{ fontSize: 15, lineHeight: 1.5, textAlign: "center", margin: "0 0 12px", color: "#3a2e1e" }}>
-              Pour <strong style={{ color: journal.couleur }}>{journal.nom}</strong> — {journal.cible}.
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ background: `${journal.couleur}11`, border: `2px solid ${journal.couleur}44`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 2 }}>▸ POUR</div>
+              <div style={{ fontSize: 17, fontWeight: 900, color: journal.couleur, letterSpacing: 1 }}>{journal.nom.toUpperCase()}</div>
+              <div style={{ fontSize: 14, color: "#3a2e1e", fontStyle: "italic", marginTop: 2 }}>{journal.cible}</div>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {dep.titres.map((t) => {
                 const sel = titre?.t === t.t;
                 return (
                   <button key={t.t} onClick={() => setTitre(t)}
-                    style={{ textAlign: "left", background: sel ? "#fffbe8" : "#fff", border: `2px solid ${sel ? ANGLE_COLOR[t.angle] : "#c9b48c"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: ANGLE_COLOR[t.angle], fontWeight: 800, marginBottom: 4 }}>TITRE {ANGLE_LABEL[t.angle].toUpperCase()}</div>
-                    <div style={{ fontSize: 17, fontWeight: 700, color: "#1c1a10", lineHeight: 1.3 }}>{t.t}</div>
+                    style={{
+                      textAlign: "left",
+                      background: sel ? `linear-gradient(90deg, ${ANGLE_COLOR[t.angle]}22, #fffbe8)` : "#fff",
+                      border: `2px solid ${sel ? ANGLE_COLOR[t.angle] : "#c9b48c"}`,
+                      borderRadius: 12, padding: "14px 18px", cursor: "pointer",
+                      fontFamily: "Georgia, serif",
+                      boxShadow: sel ? `0 4px 14px ${ANGLE_COLOR[t.angle]}33` : "0 1px 4px rgba(0,0,0,0.06)",
+                      transition: "all .2s",
+                    }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: ANGLE_COLOR[t.angle], fontWeight: 800, marginBottom: 6 }}>TITRE {ANGLE_LABEL[t.angle].toUpperCase()}</div>
+                    <div style={{ fontSize: 19, fontWeight: 800, color: "#1c1a10", lineHeight: 1.3, fontFamily: "Georgia, serif" }}>{t.t}</div>
                   </button>
                 );
               })}
             </div>
             <button onClick={() => setStep(4)} disabled={!titre}
-              style={{ marginTop: 14, width: "100%", background: titre ? "#8a5a2a" : "#c9b48c", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: titre ? "pointer" : "not-allowed", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 16, width: "100%", background: titre ? "linear-gradient(90deg,#a06030,#8a5a2a)" : "#c9b48c", color: "#fff", border: "none", borderRadius: 12, padding: "16px", fontWeight: 900, cursor: titre ? "pointer" : "not-allowed", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: titre ? "0 6px 20px rgba(138,90,42,0.45)" : "none" }}>
               3/3 · Choisir le ton →
             </button>
           </>
@@ -361,23 +394,31 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 4 : choix du ton ═════ */}
         {step === 4 && (
           <>
-            <p style={{ fontSize: 15, lineHeight: 1.5, textAlign: "center", margin: "0 0 12px", color: "#3a2e1e" }}>
-              Le texte sous le titre, tu l'écris comment ?
+            <p style={{ fontSize: 16, lineHeight: 1.5, textAlign: "center", margin: "0 0 14px", color: "#3a2e1e" }}>
+              Le texte sous le titre, tu l'écris <strong>comment</strong> ?
             </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {TONS.map((T) => {
                 const sel = ton?.angle === T.angle;
                 return (
                   <button key={T.angle} onClick={() => setTon(T)}
-                    style={{ textAlign: "left", background: sel ? "#fffbe8" : "#fff", border: `2px solid ${sel ? "#8a5a2a" : "#c9b48c"}`, borderRadius: 10, padding: "12px 16px", cursor: "pointer", fontFamily: "Georgia, serif" }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, letterSpacing: 1, color: "#8a5a2a", fontWeight: 800 }}>{T.label}</div>
+                    style={{
+                      textAlign: "left",
+                      background: sel ? "linear-gradient(90deg,#fff6d8,#fffbe8)" : "#fff",
+                      border: `2px solid ${sel ? "#8a5a2a" : "#c9b48c"}`,
+                      borderRadius: 12, padding: "14px 18px", cursor: "pointer",
+                      fontFamily: "Georgia, serif",
+                      boxShadow: sel ? "0 4px 14px rgba(138,90,42,0.25)" : "0 1px 4px rgba(0,0,0,0.06)",
+                      transition: "all .2s",
+                    }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, letterSpacing: 1, color: "#8a5a2a", fontWeight: 800 }}>{T.label}</div>
                   </button>
                 );
               })}
             </div>
             <button onClick={() => setStep(5)} disabled={!ton}
-              style={{ marginTop: 14, width: "100%", background: ton ? "#8a5a2a" : "#c9b48c", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: ton ? "pointer" : "not-allowed", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-              ✓ Imprimer la Une !
+              style={{ marginTop: 16, width: "100%", background: ton ? "linear-gradient(90deg,#a06030,#8a5a2a)" : "#c9b48c", color: "#fff", border: "none", borderRadius: 12, padding: "16px", fontWeight: 900, cursor: ton ? "pointer" : "not-allowed", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: ton ? "0 6px 20px rgba(138,90,42,0.45)" : "none" }}>
+              🔥 Imprimer la Une !
             </button>
           </>
         )}

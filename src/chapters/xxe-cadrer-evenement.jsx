@@ -284,44 +284,78 @@ export function CadrerEvenementGame({ onClose, onWin }) {
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.88)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
-        style={{ background: "#0e1420", color: "#e8eef5", border: "2px solid #a02020", borderRadius: 14, padding: 20, maxWidth: 820, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.7)", fontFamily: "Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#a02020" }}>◉ RÉDACTION DU JT — 9 NOV. 1989</div>
-        <h2 style={{ textAlign: "center", margin: "6px 0 6px", color: "#ffd166", fontSize: 22 }}>Cadre l'événement</h2>
+        style={{ background: "linear-gradient(180deg,#101c30 0%,#0a1324 100%)", color: "#e8eef5", border: "2px solid #a02020", borderRadius: 16, padding: 24, maxWidth: 920, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 16px 60px rgba(0,0,0,0.75)", fontFamily: "Georgia, serif" }}>
+        {/* Bandeau "EN DIRECT" rouge style JT */}
+        <div style={{ display: "flex", justifyContent: "center", gap: 10, alignItems: "center", marginBottom: 8 }}>
+          <span style={{ background: "#a02020", color: "#fff", padding: "4px 12px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(160,32,32,0.5)" }}>
+            ◉ EN DIRECT
+          </span>
+          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8fa3bd" }}>BERLIN · 9 NOV. 1989</span>
+        </div>
+        <h2 style={{ textAlign: "center", margin: "0 0 14px", color: "#ffd166", fontSize: 30, fontWeight: 900, letterSpacing: 1 }}>Cadre l'événement</h2>
 
         {step === 0 && (
           <>
-            <p style={{ fontSize: 15, lineHeight: 1.55, textAlign: "center", margin: "0 0 12px", color: "#c8d4e2" }}>
-              Le mur de Berlin est en train de tomber, en direct.
-              <br />Mais chaque rédaction va choisir une image différente — selon qui elle veut toucher.
+            <p style={{ fontSize: 17, lineHeight: 1.5, textAlign: "center", margin: "0 0 18px", color: "#c8d4e2" }}>
+              Le mur de Berlin est en train de tomber, <strong style={{ color: "#ffd166" }}>en direct</strong>.
+              <br />Chaque rédaction va choisir une image différente — selon qui elle veut toucher.
             </p>
-            <div style={{ background: "#101827", border: `2px solid ${chaine.couleur}`, borderRadius: 10, padding: "14px 16px", marginBottom: 10 }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: chaine.couleur, fontWeight: 800, marginBottom: 4 }}>▸ TA RÉDACTION</div>
-              <div style={{ fontSize: 18, fontWeight: 800, color: "#e8eef5", marginBottom: 8, letterSpacing: 1 }}>
-                {chaine.emoji} {chaine.nom}
+            {/* Carte "ta rédaction" avec dégradé coloré */}
+            <div style={{
+              background: `linear-gradient(135deg, ${chaine.couleur}33 0%, ${chaine.couleur}11 100%)`,
+              border: `3px solid ${chaine.couleur}`,
+              borderRadius: 14,
+              padding: "20px 22px",
+              marginBottom: 16,
+              boxShadow: `0 0 24px ${chaine.couleur}33, inset 0 1px 0 ${chaine.couleur}66`,
+            }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: chaine.couleur, fontWeight: 800, marginBottom: 8 }}>▸ TU TRAVAILLES POUR</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
+                <div style={{ fontSize: 56, lineHeight: 1 }}>{chaine.emoji}</div>
+                <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", letterSpacing: 1, textShadow: `0 0 12px ${chaine.couleur}66` }}>
+                  {chaine.nom}
+                </div>
               </div>
-              <div style={{ fontSize: 14, lineHeight: 1.55, color: "#c8d4e2" }}>
-                Public : <strong style={{ color: "#e8eef5" }}>{chaine.public}</strong>.<br />
-                Ligne éditoriale : <em style={{ color: "#ffd166" }}>{chaine.ligne}</em>
+              <div style={{ fontSize: 15.5, lineHeight: 1.6, color: "#d8e2ee" }}>
+                <div style={{ marginBottom: 6 }}>
+                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2 }}>PUBLIC</strong><br />
+                  <span style={{ fontSize: 16 }}>{chaine.public}</span>
+                </div>
+                <div style={{ paddingTop: 10, borderTop: `1px dashed ${chaine.couleur}66` }}>
+                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2 }}>LIGNE ÉDITORIALE</strong><br />
+                  <em style={{ fontSize: 17, color: "#ffd166" }}>« {chaine.ligne} »</em>
+                </div>
               </div>
             </div>
             <button onClick={() => setStep(1)}
-              style={{ marginTop: 8, width: "100%", background: chaine.couleur, color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-              Voir l'image du cameraman →
+              style={{ width: "100%", background: chaine.couleur, color: "#fff", border: "none", borderRadius: 12, padding: "18px", fontWeight: 900, cursor: "pointer", fontSize: 18, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: `0 6px 20px ${chaine.couleur}66` }}>
+              📹 Voir l'image du cameraman →
             </button>
           </>
         )}
 
         {step === 1 && (
           <>
-            {/* Rappel de la rédaction + de sa ligne, pour que l'élève garde l'intention en tête. */}
-            <div style={{ background: "#101827", border: `1px solid ${chaine.couleur}66`, borderRadius: 8, padding: "8px 12px", marginBottom: 10, display: "flex", gap: 10, alignItems: "center" }}>
-              <div style={{ fontSize: 20 }}>{chaine.emoji}</div>
-              <div style={{ fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.4 }}>
-                <strong style={{ color: chaine.couleur }}>{chaine.nom}</strong> — {chaine.ligne}
+            {/* Rappel permanent de la rédaction et de sa ligne — pour garder l'intention à l'esprit */}
+            <div style={{
+              background: `linear-gradient(90deg, ${chaine.couleur}22 0%, ${chaine.couleur}08 100%)`,
+              border: `2px solid ${chaine.couleur}`,
+              borderRadius: 12,
+              padding: "12px 16px",
+              marginBottom: 14,
+              display: "flex",
+              gap: 14,
+              alignItems: "center",
+              boxShadow: `0 0 12px ${chaine.couleur}22`,
+            }}>
+              <div style={{ fontSize: 32, lineHeight: 1 }}>{chaine.emoji}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: chaine.couleur, fontWeight: 800 }}>▸ POUR {chaine.nom.toUpperCase()}</div>
+                <div style={{ fontSize: 15.5, color: "#e8eef5", lineHeight: 1.4, fontStyle: "italic" }}>« {chaine.ligne} »</div>
               </div>
             </div>
-            <p style={{ fontSize: 13, color: "#8fa3bd", textAlign: "center", margin: "0 0 10px", fontStyle: "italic" }}>
-              Passe la souris sur chaque zone : le cadre TV bouge et zoome. Clique pour choisir.
+            <p style={{ fontSize: 14.5, color: "#8fa3bd", textAlign: "center", margin: "0 0 12px", fontStyle: "italic" }}>
+              Clique sur une zone de l'image pour prévisualiser le cadrage.
             </p>
             {/* GRANDE image avec cadre TV survolable */}
             <div style={{ position: "relative", borderRadius: 10, overflow: "hidden", border: "1px solid #2a3648" }}>
@@ -355,34 +389,52 @@ export function CadrerEvenementGame({ onClose, onWin }) {
               </svg>
             </div>
 
-            {/* boutons de choix rapide (accessibilité + mobile) */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 8, marginTop: 10 }}>
+            {/* Boutons de choix rapide — plus voyants, chacun à la couleur de son cadrage */}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 10, marginTop: 12 }}>
               {ZONES.map((z) => {
                 const sel = zone?.id === z.id;
                 return (
                   <button key={z.id} onClick={() => setZone(z)}
-                    style={{ textAlign: "left", background: sel ? "#1a2536" : "#141b26", border: `2px solid ${sel ? z.color : "#2a3648"}`, borderRadius: 8, padding: "8px 10px", cursor: "pointer", color: "#e8eef5", fontFamily: "Georgia, serif" }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, letterSpacing: 1, color: z.color, fontWeight: 800, marginBottom: 2 }}>▸ CADRAGE</div>
-                    <div style={{ fontSize: 12.5, fontWeight: 700, lineHeight: 1.25 }}>{z.label}</div>
+                    style={{
+                      textAlign: "left",
+                      background: sel ? `linear-gradient(135deg, ${z.color}44 0%, ${z.color}11 100%)` : "#141b26",
+                      border: `2px solid ${sel ? z.color : "#2a3648"}`,
+                      borderRadius: 10,
+                      padding: "12px 14px",
+                      cursor: "pointer",
+                      color: "#e8eef5",
+                      fontFamily: "Georgia, serif",
+                      boxShadow: sel ? `0 0 14px ${z.color}66` : "none",
+                      transition: "all .2s",
+                    }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: z.color, fontWeight: 800, marginBottom: 4 }}>▸ {z.tag}</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.3 }}>{z.label}</div>
                   </button>
                 );
               })}
             </div>
 
             <button onClick={() => setStep(2)} disabled={!zone}
-              style={{ marginTop: 12, width: "100%", background: zone ? "#a02020" : "#3a3648", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: zone ? "pointer" : "not-allowed", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-              {zone ? "✓ Ouvrir le JT avec ce cadrage" : "Choisis d'abord un cadrage…"}
+              style={{
+                marginTop: 16, width: "100%",
+                background: zone ? "linear-gradient(90deg,#c02020,#a02020)" : "#3a3648",
+                color: "#fff", border: "none", borderRadius: 12, padding: "18px",
+                fontWeight: 900, cursor: zone ? "pointer" : "not-allowed",
+                fontSize: 18, fontFamily: "ui-monospace,monospace", letterSpacing: 2,
+                boxShadow: zone ? "0 6px 20px rgba(160,32,32,0.5)" : "none",
+              }}>
+              {zone ? "📺 Ouvrir le JT avec ce cadrage →" : "Choisis d'abord un cadrage…"}
             </button>
           </>
         )}
 
         {step === 2 && (
           <>
-            {/* TV cathodique qui affiche la zone cadrée en gros */}
+            {/* TV cathodique qui affiche la zone cadrée en GROS */}
             <div style={{ display: "flex", justifyContent: "center", marginTop: 6 }}>
-              <div style={{ background: "#3a2418", border: "8px solid #5a3a20", borderRadius: 14, padding: 10, boxShadow: "0 6px 20px rgba(0,0,0,0.6)" }}>
+              <div style={{ background: "linear-gradient(180deg,#5a3a20,#3a2418)", border: "10px solid #5a3a20", borderRadius: 18, padding: 14, boxShadow: "0 10px 32px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,255,255,0.1)" }}>
                 <svg viewBox={`${zone.frame.x} ${zone.frame.y} ${zone.frame.w} ${zone.frame.h}`}
-                  style={{ display: "block", width: 380, maxWidth: "100%", height: "auto", background: "#000", borderRadius: 10 }}>
+                  style={{ display: "block", width: 500, maxWidth: "100%", height: "auto", background: "#000", borderRadius: 12 }}>
                   <g style={{ opacity: reveal >= 1 ? 1 : 0, transition: "opacity .5s" }}>
                     <SceneEntiere />
                   </g>
@@ -415,19 +467,31 @@ export function CadrerEvenementGame({ onClose, onWin }) {
               const titre = resultKey === "best" ? "✓ Parfait pour la rédaction"
                            : resultKey === "ok" ? "≈ Acceptable" : "✗ Hors ligne éditoriale";
               return (
-                <div style={{ marginTop: 14, background: "#101827", border: `1px solid ${col}44`, borderRadius: 10, padding: "14px 16px", color: "#e8eef5", animation: "fadein .4s" }}>
-                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 6 }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1.5, color: col, fontWeight: 800 }}>{titre}</div>
+                <div style={{
+                  marginTop: 18,
+                  background: `linear-gradient(135deg, ${col}22 0%, #101827 60%)`,
+                  border: `2px solid ${col}`,
+                  borderRadius: 14,
+                  padding: "18px 20px",
+                  color: "#e8eef5",
+                  animation: "fadein .4s",
+                  boxShadow: `0 0 20px ${col}33`,
+                }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, gap: 10 }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, letterSpacing: 2, color: col, fontWeight: 900 }}>{titre}</div>
                     {points > 0 && (
-                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 900, color: "#ffd166", letterSpacing: 1 }}>+{points} ⚡</div>
+                      <div style={{ background: "#ffd166", color: "#1a0e08", padding: "6px 14px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 17, fontWeight: 900, letterSpacing: 1, boxShadow: "0 0 14px rgba(255,209,102,0.5)" }}>+{points} ⚡</div>
                     )}
                   </div>
-                  <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>
-                    « {chaine.verdict[resultKey]} » — <em style={{ color: chaine.couleur }}>Rédaction {chaine.nom}</em>
+                  <p style={{ fontSize: 17, lineHeight: 1.6, margin: 0 }}>
+                    « {chaine.verdict[resultKey]} »
                   </p>
+                  <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: chaine.couleur, textAlign: "right" }}>
+                    — RÉDACTION {chaine.nom.toUpperCase()}
+                  </div>
                   {canWin && (
-                    <p style={{ fontSize: 13.5, lineHeight: 1.5, margin: "10px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
-                      Cadrer, c'est déjà interpréter. Deux rédactions regardent la même scène et racontent deux histoires différentes. — MARTINE
+                    <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: "14px 0 0", padding: "12px 14px", background: "rgba(94,255,158,0.08)", borderLeft: "3px solid #5eff9e", color: "#c8d4e2", fontStyle: "italic", borderRadius: "4px 8px 8px 4px" }}>
+                      Cadrer, c'est déjà interpréter. Deux rédactions regardent la même scène et racontent deux histoires différentes. <strong style={{ color: "#5eff9e" }}>— MARTINE</strong>
                     </p>
                   )}
                 </div>
@@ -436,12 +500,12 @@ export function CadrerEvenementGame({ onClose, onWin }) {
             {reveal >= 3 && (
               canWin ? (
                 <button onClick={onClose}
-                  style={{ marginTop: 12, width: "100%", background: "#a02020", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                  style={{ marginTop: 16, width: "100%", background: "linear-gradient(90deg,#c02020,#a02020)", color: "#fff", border: "none", borderRadius: 12, padding: "18px", fontWeight: 900, cursor: "pointer", fontSize: 18, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 6px 20px rgba(160,32,32,0.5)" }}>
                   Continuer
                 </button>
               ) : (
                 <button onClick={retry}
-                  style={{ marginTop: 12, width: "100%", background: "#3a3648", color: "#fff", border: `2px solid ${chaine.couleur}`, borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                  style={{ marginTop: 16, width: "100%", background: "#1a2536", color: "#fff", border: `2px solid ${chaine.couleur}`, borderRadius: 12, padding: "18px", fontWeight: 900, cursor: "pointer", fontSize: 18, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
                   ↻ Essayer un autre cadrage
                 </button>
               )
