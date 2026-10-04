@@ -987,7 +987,16 @@ export default function App() {
      glisser-déposer et par le tap sur une cible.
      `point` : position à l'écran, pour les particules. */
   const combinePair = (a, b, point) => {
-    const rec = findRecipe(chapter.recipes, a, b);
+    /* On préfère la 1ʳᵉ recette (a,b) dont les flags requis sont satisfaits —
+       utile quand une même paire a 2 recettes (ex. antenne râteau + TV :
+       complète la Lune si l'autre antenne a déjà été posée, sinon pose
+       la 1ʳᵉ étape). Fallback : la 1ʳᵉ matching. */
+    const flagsOk = (r) => {
+      if (!r.needsFlag) return true;
+      const list = Array.isArray(r.needsFlag) ? r.needsFlag : [r.needsFlag];
+      return !list.some((f) => !flags[f] && !made.includes(f));
+    };
+    const rec = findRecipe(chapter.recipes, a, b, flagsOk);
     if (rec) {
       /* `needsInv` : objets qu'il faut AUSSI avoir en main pour que la
          recette parte (ex. la forme encrée avant de presser une feuille).
