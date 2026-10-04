@@ -54,6 +54,7 @@ import StationChronautes, { PortraitElias } from "./chapters/epilogue/StationChr
 import BriefingMission from "./chapters/epilogue/BriefingMission.jsx";
 import { JEU2 } from "./chapters/epilogue/jeu2Data.js";
 import NoteAl3x1A from "./chapters/epilogue/NoteAl3x1A.jsx";
+import CarnetAlexia from "./chapters/epilogue/CarnetAlexia.jsx";
 import RetrouvaillesAl3x1A from "./chapters/epilogue/RetrouvaillesAl3x1A.jsx";
 import FinJeu2 from "./chapters/epilogue/FinJeu2.jsx";
 
@@ -158,6 +159,17 @@ export default function App() {
      = deux enquetes differentes, meme si le chapitre cible est le meme. */
   const [jeu2NotePicks, setJeu2NotePicks] = useState(() => Array(10).fill(0));
   const [jeu2AlxPick, setJeu2AlxPick] = useState(0);
+  /* Assignation des INDICES "recoupement" : map epochIdx -> clueIdx dans
+     JEU2[target].clues. 3 époques (≠ target) portent un indice chacune,
+     le reste reçoit le texte d'ambiance "wrong". */
+  const [jeu2ClueMap, setJeu2ClueMap] = useState({});
+  /* Pages du CARNET D'AL3X1A collectées : liste d'index d'époques dont
+     la note a été lue (dans l'ordre). */
+  const [jeu2Pages, setJeu2Pages] = useState([]);
+  const [jeu2CarnetOpen, setJeu2CarnetOpen] = useState(false);
+  /* Fin du jeu 2 : choix du joueur à la rencontre ("ramener", "laisser",
+     "rester"). null tant qu'il n'a pas choisi. */
+  const [jeu2EndChoice, setJeu2EndChoice] = useState(null);
   const [openNote, setOpenNote] = useState(null);  // { chapitre } → affiche la modale de note
   const [openRetrouvailles, setOpenRetrouvailles] = useState(false);
   const [tab, setTab] = useState(CHAPTERS[0].startScene); // tableau courant
@@ -253,9 +265,9 @@ export default function App() {
      partie existante avec un état vide). */
   useEffect(() => {
     if (screen === "play" || screen === "end") {
-      writeSave({ chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick }, mode);
+      writeSave({ chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick, jeu2ClueMap, jeu2Pages, jeu2EndChoice }, mode);
     }
-  }, [chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick]);
+  }, [chapterIndex, maxReached, screen, tab, inv, msgs, made, flags, collection, quete, mediadex, sosSent, flux, fluxTotal, bonusChapters, anachronismLearned, prenom, mode, jeu2Target, jeu2Notes, jeu2Found, jeu2NotePicks, jeu2AlxPick, jeu2ClueMap, jeu2Pages, jeu2EndChoice]);
 
   /* CONFORT DE LECTURE : applique les classes sur <html> (le CSS fait le
      reste, moteur compris) et mémorise le choix sur l'appareil. */
@@ -515,14 +527,31 @@ export default function App() {
        parties donnent des enquetes vraiment differentes. */
     setJeu2NotePicks(JEU2.map((c) => Math.floor(Math.random() * (c.noteSpots?.length || 1))));
     setJeu2AlxPick(Math.floor(Math.random() * (JEU2[target].al3x1aSpots?.length || 1)));
+    /* On choisit 3 époques (différentes de la cible) qui vont porter les
+       3 indices de recoupement : au lieu d'un "wrong text" plat, le joueur
+       y trouvera une info précise sur l'époque cible. Les autres époques
+       gardent leur texte d'ambiance. */
+    const nClues = (JEU2[target].clues?.length) || 0;
+    const candidats = [];
+    for (let i = 0; i < JEU2.length; i++) if (i !== target) candidats.push(i);
+    for (let i = candidats.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [candidats[i], candidats[j]] = [candidats[j], candidats[i]];
+    }
+    const clueMap = {};
+    for (let k = 0; k < Math.min(nClues, candidats.length); k++) clueMap[candidats[k]] = k;
+    setJeu2ClueMap(clueMap);
+    setJeu2Pages([]);
+    setJeu2CarnetOpen(false);
+    setJeu2EndChoice(null);
     setChapterIndex(0); setMaxReached(CHAPTERS.length - 1);
     setInv([]); setMsgs([]); setMade([]); setFlags({}); setCollection([]); setQuete(0);
     setFlux(0); setFluxTotal(0); setBonusChapters([]);
     setTab(CHAPTERS[0].startScene);
     setDialog({ lines: [
       `Nouvelle mission, ${prenom || "chronaute"} : retrouver Al3x1A.`,
-      "Cette personne a laissé des notes dans les époques qu'elle a traversées, chacune sur le support de son temps : peinture, argile, papyrus, manuscrit, gazette, télégramme…",
-      "Trouve-les, lis-les, et déduis dans quelle époque Al3x1A est bloqué·e. Fouille les scènes — cette personne est cachée quelque part. Ta MARTINE t'attend.",
+      "Elle a laissé des notes dans les époques qu'elle a traversées, chacune sur le support de son temps : peinture, argile, papyrus, manuscrit, gazette, télégramme…",
+      "Trois d'entre elles contiennent des INDICES sur l'époque où elle s'est arrêtée. Recoupe-les — comme une enquête. Tes trouvailles s'ajoutent au carnet d'Al3x1A (📓 en haut).",
     ], idx: 0, mood: "neutre" });
     setScreen("play");
   };
@@ -649,6 +678,9 @@ export default function App() {
     setJeu2AlxPick(typeof s.jeu2AlxPick === "number" ? s.jeu2AlxPick : 0);
     setJeu2Notes(s.jeu2Notes || []);
     setJeu2Found(s.jeu2Found || false);
+    setJeu2ClueMap(s.jeu2ClueMap || {});
+    setJeu2Pages(Array.isArray(s.jeu2Pages) ? s.jeu2Pages : []);
+    setJeu2EndChoice(s.jeu2EndChoice || null);
     setTab(s.tab ?? CHAPTERS[i].startScene);
     const nom = s.prenom ? `, ${s.prenom}` : "";
     setDialog({ lines: [`Reprise du voyage${nom}. Je remets les circuits en route là où on s'était arrêtés.`], idx: 0, mood: "neutre" });
@@ -1724,6 +1756,7 @@ export default function App() {
         <FinJeu2
           prenom={prenom}
           remede={jeu2Target >= 0 ? JEU2[jeu2Target]?.remede : null}
+          endChoice={jeu2EndChoice}
           onRetour={() => { setMode("jeu1"); setScreen("title"); }}
           onLancerJeu3={() => { setMode("jeu3"); setScreen("jeu3"); }} />
       </>
@@ -1933,6 +1966,22 @@ export default function App() {
           les notes trouvées ont un ✓. Compact (~66 px de hauteur). */}
       {mode === "jeu2" && (
         <div style={{ position: "relative", padding: "4px 12px 8px", background: "linear-gradient(180deg, rgba(14,28,42,0.55), transparent)", flex: "0 0 auto" }}>
+          {/* Bouton carnet d'Al3x1A — accès rapide, en haut à droite */}
+          <button onClick={() => setJeu2CarnetOpen(true)}
+            title="Ouvrir le carnet d'Al3x1A"
+            style={{
+              position: "absolute", top: 6, right: 10, zIndex: 5,
+              background: jeu2Pages.length > 0 ? "linear-gradient(90deg,#c08030,#8a5a2a)" : "rgba(20,27,38,0.6)",
+              color: jeu2Pages.length > 0 ? "#fff8e4" : "#8fa3bd",
+              border: `1px solid ${jeu2Pages.length > 0 ? "#ffd166" : "rgba(200,212,226,0.25)"}`,
+              borderRadius: 20, padding: "4px 12px",
+              fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 800, letterSpacing: 1,
+              cursor: "pointer",
+              boxShadow: jeu2Pages.length > 0 ? "0 0 10px rgba(255,209,102,0.4)" : "none",
+              backdropFilter: "blur(4px)",
+            }}>
+            📓 Carnet · {jeu2Pages.length}/10
+          </button>
           {/* Le "fil du temps" : dégradé horizontal derrière les pastilles */}
           <div style={{ position: "absolute", left: 30, right: 30, top: "50%", height: 2, marginTop: -1, background: "linear-gradient(90deg, #26324a 0%, #7fd8ff 50%, #26324a 100%)", opacity: 0.55, borderRadius: 2 }} />
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4, position: "relative", maxWidth: 1080, margin: "0 auto" }}>
@@ -2400,24 +2449,44 @@ export default function App() {
       {openNote && (() => {
         const cfg = JEU2[openNote.chapitre];
         const isRight = openNote.chapitre === jeu2Target;
-        const text = isRight ? cfg.noteRightText : cfg.noteWrongText;
+        /* Indice de recoupement : cette époque porte-t-elle un bout d'info
+           sur la cible ? Si oui, on affiche l'indice en avant, pas le texte
+           d'ambiance générique. */
+        const clueIdx = jeu2ClueMap?.[openNote.chapitre];
+        const hasClue = Number.isInteger(clueIdx) && jeu2Target >= 0;
+        const clue = hasClue ? JEU2[jeu2Target]?.clues?.[clueIdx] : null;
+        let text, variant;
+        if (isRight) { text = cfg.noteRightText; variant = "right"; }
+        else if (clue) { text = `Indice au dos — « ${clue} » Je laisse cette trace pour qui saura la rapprocher d'une autre.`; variant = "clue"; }
+        else { text = cfg.noteWrongText; variant = "wrong"; }
         return (
           <NoteAl3x1A
             support={cfg.support}
             text={text}
+            variant={variant}
             chapitreNom={CHAPTERS[openNote.chapitre]?.epoque || ""}
             onClose={() => {
               /* Marque la note comme lue (retire le hotspot) */
               setJeu2Notes((v) => v.includes(openNote.chapitre) ? v : [...v, openNote.chapitre]);
+              /* Ajoute la page au CARNET D'AL3X1A (bio + ressenti). */
+              setJeu2Pages((v) => v.includes(openNote.chapitre) ? v : [...v, openNote.chapitre]);
               setOpenNote(null);
             }} />
         );
       })()}
+      {jeu2CarnetOpen && (
+        <CarnetAlexia
+          pages={jeu2Pages}
+          clueMap={jeu2ClueMap}
+          target={jeu2Target}
+          onClose={() => setJeu2CarnetOpen(false)} />
+      )}
       {openRetrouvailles && jeu2Target >= 0 && (
         <RetrouvaillesAl3x1A
           prenom={prenom}
           remede={JEU2[jeu2Target]?.remede}
           chapitreNom={CHAPTERS[jeu2Target]?.epoque || ""}
+          onChoice={(choice) => setJeu2EndChoice(choice)}
           onDone={() => { setOpenRetrouvailles(false); setScreen("finJeu2"); }} />
       )}
 

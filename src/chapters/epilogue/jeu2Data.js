@@ -5,16 +5,20 @@
    - support         : le support caractéristique de l'époque (juste
                        pour l'affichage stylisé de la note)
    - noteWrongText   : texte quand la note est trouvée dans une
-                       MAUVAISE époque (ambiance, pas décisive)
+                       MAUVAISE époque sans indice attribué (ambiance)
    - noteRightText   : texte quand la note est dans la BONNE époque
                        (indice précis sur où Al3x1A est caché·e)
+   - clues           : TROIS indices qui décrivent cette époque. Au
+                       lancement d'une partie, si Al3x1A y est cachée,
+                       ces 3 indices sont dispatchés dans 3 autres
+                       époques — le joueur doit les RECOUPER pour
+                       deviner la cible.
+   - page            : page du CARNET D'AL3X1A ajoutée dès qu'on lit
+                       la note d'une époque (bio + ressenti d'Al3x1A).
    - noteSpots       : TROIS emplacements candidats du hotspot note
-                       (tirage au sort à chaque nouvelle partie de jeu
-                       2). Champs {tab, cx, cy, r, hint}. Le `hint` est
-                       le nom du lieu utilisé par les dialogues des PNJ.
+                       (tirage au sort à chaque nouvelle partie).
    - al3x1aSpots     : TROIS cachettes candidates d'Al3x1A dans cette
-                       époque si c'est la cible. Même format que
-                       noteSpots.
+                       époque si c'est la cible.
    - remede          : nom + emoji + description du remède issu de
                        cette époque
    ============================================================ */
@@ -23,6 +27,12 @@ export const JEU2 = [
   /* 0 — Paléolithique : peinture rupestre */
   {
     support: "peinture rupestre",
+    clues: [
+      "Là où je suis, les gens peignent sur les parois des grottes avec de l'ocre.",
+      "Pas une once de métal ici — tout est en pierre, en os, en bois.",
+      "Je dors près d'un feu, à l'entrée d'une grotte.",
+    ],
+    page: "Première étape du voyage. J'ai posé la main sur la paroi, les doigts écartés — comme les autres l'ont fait avant moi, il y a des milliers d'années. Pour qu'il reste quelque chose.",
     noteSpots: [
       { tab: 0, cx: 550, cy: 280, r: 34, hint: "au fond de la grotte, sur la Grande Paroi" },
       { tab: 3, cx: 460, cy: 470, r: 34, hint: "au campement, sur les pierres du foyer, près du feu" },
@@ -40,6 +50,12 @@ export const JEU2 = [
   /* 1 — Néolithique */
   {
     support: "gravure sur mégalithe",
+    clues: [
+      "Il y a de grands monuments en pierre dressée — des menhirs, des dolmens.",
+      "Les gens cultivent la terre et font cuire la poterie, mais on n'écrit pas encore.",
+      "On vient d'inventer le cuivre : les premières lames fondues dans le feu.",
+    ],
+    page: "J'ai goûté le pain que les premières cultivatrices sortaient d'un four en terre. Un goût que mon époque avait perdu. Je comprends mieux pourquoi j'avais oublié.",
     noteSpots: [
       { tab: 0, cx: 649, cy: 187, r: 30, hint: "à la porte de la cité, sur la fenêtre noire de la tour de guet" },
       { tab: 3, cx: 140, cy: 270, r: 34, hint: "dans la plaine, sur le menhir déjà dressé à gauche" },
@@ -57,6 +73,12 @@ export const JEU2 = [
   /* 2 — Mésopotamie / Égypte */
   {
     support: "tablette d'argile cunéiforme",
+    clues: [
+      "Les gens écrivent au roseau sur de l'argile mouillée — ce sont les premiers scribes.",
+      "Je vois des tours à étages (des ziggourats) ou des pyramides au loin.",
+      "On navigue sur un très grand fleuve, bordé de palmiers et de temples.",
+    ],
+    page: "Un scribe m'a laissée tracer trois signes sur sa tablette. Pluie. Fleuve. Mémoire. L'argile sèche, les signes restent — bien plus longtemps qu'une image sur un écran.",
     noteSpots: [
       { tab: 0, cx: 560, cy: 420, r: 34, hint: "à la cité d'Ur, sur la porte sombre du grenier" },
       { tab: 2, cx: 520, cy: 320, r: 34, hint: "sur le mât de la felouque, au bord du Nil" },
@@ -74,6 +96,12 @@ export const JEU2 = [
   /* 3 — Antiquité */
   {
     support: "rouleau de papyrus",
+    clues: [
+      "Les gens portent des toges et des sandales, les colonnes sont partout.",
+      "On y lit sur des rouleaux de papyrus, dans d'immenses bibliothèques.",
+      "Pas encore de livres à pages — mais déjà des cartes du monde entier.",
+    ],
+    page: "La bibliothèque. J'y ai cherché le remède pendant des jours. Les rouleaux sentent la poussière, le roseau, la cire. Le savoir prenait son temps avant d'être partout, tout de suite.",
     noteSpots: [
       { tab: 4, cx: 175, cy: 220, r: 40, hint: "à la bibliothèque, sur le mur enduit frais (à gauche)" },
       { tab: 2, cx: 440, cy: 410, r: 34, hint: "au forum, sur la stèle SPQR au centre" },
@@ -91,6 +119,12 @@ export const JEU2 = [
   /* 4 — Moyen Âge */
   {
     support: "enluminure marginale",
+    clues: [
+      "Des moines recopient des livres à la main, à la plume, dans de grands scriptoriums.",
+      "Il y a des châteaux à remparts, des épées, des chevaliers.",
+      "Pas d'imprimerie encore — chaque livre prend des mois à produire.",
+    ],
+    page: "Les moines ne savent pas qu'ils sauvent le monde. Ils copient, encore, encore. Un livre qui prend six mois peut tenir mille ans. Nos mails ne tiennent pas six mois.",
     noteSpots: [
       { tab: 0, cx: 500, cy: 300, r: 34, hint: "au château, derrière la tenture au-dessus du trône" },
       { tab: 1, cx: 120, cy: 240, r: 40, hint: "au monastère, sur les manuscrits des rayonnages à gauche" },
@@ -108,6 +142,12 @@ export const JEU2 = [
   /* 5 — Époque moderne */
   {
     support: "gazette imprimée",
+    clues: [
+      "Les premiers journaux imprimés circulent dans les rues et les tavernes.",
+      "Les gens portent des perruques poudrées et des habits brodés.",
+      "On voit passer des montgolfières dans le ciel, et des tours à signaux.",
+    ],
+    page: "L'imprimerie fait trembler les rois. Un livre, mille copies, et plus personne ne contrôle la pensée. J'ai senti ici l'ancêtre de ce qui nous arrivera plus tard : trop de voix, pas assez d'oreilles.",
     noteSpots: [
       { tab: 0, cx: 580, cy: 240, r: 40, hint: "en province, sur la nacelle de la montgolfière" },
       { tab: 1, cx: 300, cy: 320, r: 45, hint: "à l'imprimerie, sur la presse (à gauche)" },
@@ -125,6 +165,12 @@ export const JEU2 = [
   /* 6 — XIXe siècle */
   {
     support: "télégramme Morse",
+    clues: [
+      "Les premiers trains à vapeur traversent la campagne en crachant de la fumée.",
+      "On envoie des messages en points et en traits sur un fil : le télégraphe.",
+      "On commence à prendre des photographies, mais il faut poser immobile longtemps.",
+    ],
+    page: "Un télégramme en Morse. Pour la première fois, je parle à quelqu'un qui n'est pas devant moi. Le fil est fin, les mots sont courts — mais ils arrivent. Le monde vient de rapetisser.",
     noteSpots: [
       { tab: 0, cx: 250, cy: 150, r: 34, hint: "au bureau du télégraphe, sur l'affiche WANTED (mur de gauche)" },
       { tab: 1, cx: 80, cy: 140, r: 34, hint: "au studio du daguerréotype, sur l'horloge murale à gauche" },
@@ -139,9 +185,15 @@ export const JEU2 = [
     noteRightText: "Télégramme — STOP — Trouvé — STOP — Le sel argentique fixe la mémoire — STOP — Je suis non loin — STOP — Vite — STOP",
     remede: { id: "sel_argentique", name: "Sel argentique Daguerre", emoji: "📸", desc: "Le sel d'argent des premières plaques photographiques, capable de fixer non seulement la lumière mais aussi les souvenirs volatils." },
   },
-  /* 7 — XXe siècle */
+  /* 7 — XXe siècle (guerres) */
   {
     support: "cassette audio",
+    clues: [
+      "La radio est le média principal — des voix qui traversent la nuit.",
+      "Il y a des tranchées, des uniformes, des codes secrets glissés dans les émissions.",
+      "Pas d'ordinateur personnel, mais déjà des machines à calculer géantes à tubes.",
+    ],
+    page: "La radio de Londres a chuchoté en français pendant toute la soirée. J'ai écouté, immobile. J'avais oublié ce silence qui écoute — celui où un message peut sauver mille vies.",
     noteSpots: [
       { tab: 0, cx: 55, cy: 345, r: 34, hint: "à Paris occupé, sur l'affiche VERBOTEN (mur de gauche)" },
       { tab: 2, cx: 130, cy: 445, r: 40, hint: "au salon Dupont, sous les tiroirs du buffet à gauche" },
@@ -159,6 +211,12 @@ export const JEU2 = [
   /* 8 — Médias de masse */
   {
     support: "CD gravé",
+    clues: [
+      "On enregistre la radio sur une cassette, bouton PLAY+REC calé pile au bon moment.",
+      "Un salon avec une TV cathodique à grosses antennes en forme de V.",
+      "On va au kiosque chercher son journal du matin — les Unes crient toutes différent.",
+    ],
+    page: "Trop d'images, trop vite. On regarde la Lune en direct, on oublie la Lune dans la minute. C'est peut-être ici que ma propre mémoire a commencé à se décrocher.",
     noteSpots: [
       { tab: 0, cx: 500, cy: 390, r: 34, hint: "au salon 1969, sur le téléviseur" },
       { tab: 1, cx: 570, cy: 356, r: 34, hint: "dans la chambre 1985, sur la radio-cassette" },
@@ -176,6 +234,12 @@ export const JEU2 = [
   /* 9 — XXIe siècle */
   {
     support: "smartphone",
+    clues: [
+      "Les gens ont un petit écran qu'ils regardent tout le temps, même en marchant.",
+      "Les chambres d'ados brillent de rubans RGB roses, bleus et violets.",
+      "On ne grave plus de CD — tout est quelque part dans un nuage invisible.",
+    ],
+    page: "Un écran partout. J'ai cherché quelqu'un à qui demander mon chemin — personne ne lève les yeux. Peut-être que je m'arrête ici. Peut-être qu'il faudra qu'on vienne me chercher.",
     noteSpots: [
       { tab: 0, cx: 150, cy: 480, r: 40, hint: "dans ta chambre, tout à gauche sur le lit" },
       { tab: 0, cx: 200, cy: 150, r: 40, hint: "dans ta chambre, sur le poster MUSIQUE" },

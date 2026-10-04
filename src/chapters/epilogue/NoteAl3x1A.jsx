@@ -22,27 +22,35 @@ const STYLES = {
   "smartphone":                { bg: "#0a0a10", ink: "#a8f0a0", border: "#3a5a48", font: "ui-monospace, monospace", label: "Note mémo — smartphone" },
 };
 
-export default function NoteAl3x1A({ support, text, chapitreNom, onClose }) {
+export default function NoteAl3x1A({ support, text, chapitreNom, variant = "wrong", onClose }) {
   const st = STYLES[support] || STYLES["rouleau de papyrus"];
+  const badge = variant === "right" ? { label: "✦ ICI ✦", color: "#5eff9e" }
+             : variant === "clue"  ? { label: "✦ INDICE DE RECOUPEMENT ✦", color: "#ffd166" }
+             : null;
   return (
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 90, padding: 20, backdropFilter: "blur(4px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{
           width: "min(540px, 100%)", maxHeight: "92vh", overflowY: "auto",
-          background: st.bg, border: `4px solid ${st.border}`, borderRadius: 12,
+          background: st.bg, border: `4px solid ${variant === "right" ? "#5eff9e" : variant === "clue" ? "#ffd166" : st.border}`, borderRadius: 12,
           padding: "22px 26px", position: "relative",
           fontFamily: st.font, color: st.ink,
-          boxShadow: `0 12px 48px rgba(0,0,0,0.7)`,
+          boxShadow: `0 12px 48px rgba(0,0,0,0.7)${variant !== "wrong" ? `, 0 0 24px ${variant === "right" ? "rgba(94,255,158,0.4)" : "rgba(255,209,102,0.35)"}` : ""}`,
           animation: "fadein 0.4s ease-out",
         }}>
         {/* En-tête discret : où la note a été trouvée */}
         <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 10, letterSpacing: 2, opacity: 0.55, marginBottom: 4 }}>
           {chapitreNom.toUpperCase()}
         </div>
-        <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 1.5, opacity: 0.75, marginBottom: 16, fontStyle: "italic" }}>
+        <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 1.5, opacity: 0.75, marginBottom: 10, fontStyle: "italic" }}>
           {st.label}
         </div>
+        {badge && (
+          <div style={{ display: "inline-block", background: badge.color, color: st.bg, padding: "3px 10px", borderRadius: 20, fontFamily: "ui-monospace, monospace", fontSize: 10, fontWeight: 900, letterSpacing: 2, marginBottom: 10 }}>
+            {badge.label}
+          </div>
+        )}
         {/* Séparateur */}
         <div style={{ height: 1, background: st.ink, opacity: 0.4, marginBottom: 14 }} />
         {/* Le texte de la note */}
@@ -51,6 +59,11 @@ export default function NoteAl3x1A({ support, text, chapitreNom, onClose }) {
         <div style={{ marginTop: 20, textAlign: "right", fontSize: 13, fontStyle: "italic", opacity: 0.75 }}>
           — Al3x1A
         </div>
+        {variant === "clue" && (
+          <div style={{ marginTop: 14, padding: "8px 12px", background: `${st.ink}11`, border: `1px dashed ${st.ink}66`, borderRadius: 6, fontSize: 12, lineHeight: 1.5, fontStyle: "italic", opacity: 0.85 }}>
+            Cette note décrit l'époque où elle s'est arrêtée. Recoupe avec d'autres indices pour trouver où. (📓 carnet en haut)
+          </div>
+        )}
         {/* Bouton fermer */}
         <button onClick={onClose}
           style={{
