@@ -284,51 +284,50 @@ export function CadrerEvenementGame({ onClose, onWin }) {
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.88)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
-        style={{ background: "linear-gradient(180deg,#101c30 0%,#0a1324 100%)", color: "#e8eef5", border: "2px solid #a02020", borderRadius: 16, padding: 24, maxWidth: 920, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 16px 60px rgba(0,0,0,0.75)", fontFamily: "Georgia, serif" }}>
+        style={{ background: "linear-gradient(180deg,#101c30 0%,#0a1324 100%)", color: "#e8eef5", border: "2px solid #a02020", borderRadius: 16, padding: "16px 20px", maxWidth: 920, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 16px 60px rgba(0,0,0,0.75)", fontFamily: "Georgia, serif" }}>
         {/* Bandeau "EN DIRECT" rouge style JT */}
-        <div style={{ display: "flex", justifyContent: "center", gap: 10, alignItems: "center", marginBottom: 8 }}>
-          <span style={{ background: "#a02020", color: "#fff", padding: "4px 12px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(160,32,32,0.5)" }}>
+        <div style={{ display: "flex", justifyContent: "center", gap: 10, alignItems: "center", marginBottom: 6 }}>
+          <span style={{ background: "#a02020", color: "#fff", padding: "3px 10px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(160,32,32,0.5)" }}>
             ◉ EN DIRECT
           </span>
-          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8fa3bd" }}>BERLIN · 9 NOV. 1989</span>
+          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8fa3bd" }}>BERLIN · 9 NOV. 1989</span>
         </div>
-        <h2 style={{ textAlign: "center", margin: "0 0 14px", color: "#ffd166", fontSize: 30, fontWeight: 900, letterSpacing: 1 }}>Cadre l'événement</h2>
+        <h2 style={{ textAlign: "center", margin: "0 0 10px", color: "#ffd166", fontSize: 26, fontWeight: 900, letterSpacing: 1 }}>Cadre l'événement</h2>
 
         {step === 0 && (
           <>
-            <p style={{ fontSize: 17, lineHeight: 1.5, textAlign: "center", margin: "0 0 18px", color: "#c8d4e2" }}>
-              Le mur de Berlin est en train de tomber, <strong style={{ color: "#ffd166" }}>en direct</strong>.
-              <br />Chaque rédaction va choisir une image différente — selon qui elle veut toucher.
+            <p style={{ fontSize: 15, lineHeight: 1.45, textAlign: "center", margin: "0 0 12px", color: "#c8d4e2" }}>
+              <strong style={{ color: "#ffd166" }}>Imagine que tu travailles pour le JT.</strong> Le mur de Berlin tombe en direct — mais chaque rédaction va choisir une image différente.
             </p>
-            {/* Carte "ta rédaction" avec dégradé coloré */}
+            {/* Carte "ta rédaction" avec dégradé coloré — compacte pour tenir sans scroll */}
             <div style={{
               background: `linear-gradient(135deg, ${chaine.couleur}33 0%, ${chaine.couleur}11 100%)`,
               border: `3px solid ${chaine.couleur}`,
-              borderRadius: 14,
-              padding: "20px 22px",
-              marginBottom: 16,
-              boxShadow: `0 0 24px ${chaine.couleur}33, inset 0 1px 0 ${chaine.couleur}66`,
+              borderRadius: 12,
+              padding: "14px 18px",
+              marginBottom: 12,
+              boxShadow: `0 0 20px ${chaine.couleur}33, inset 0 1px 0 ${chaine.couleur}66`,
             }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: chaine.couleur, fontWeight: 800, marginBottom: 8 }}>▸ TU TRAVAILLES POUR</div>
-              <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 14 }}>
-                <div style={{ fontSize: 56, lineHeight: 1 }}>{chaine.emoji}</div>
-                <div style={{ fontSize: 28, fontWeight: 900, color: "#fff", letterSpacing: 1, textShadow: `0 0 12px ${chaine.couleur}66` }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: chaine.couleur, fontWeight: 800, marginBottom: 4 }}>▸ TU TRAVAILLES POUR</div>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
+                <div style={{ fontSize: 44, lineHeight: 1 }}>{chaine.emoji}</div>
+                <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", letterSpacing: 1, textShadow: `0 0 12px ${chaine.couleur}66` }}>
                   {chaine.nom}
                 </div>
               </div>
-              <div style={{ fontSize: 15.5, lineHeight: 1.6, color: "#d8e2ee" }}>
-                <div style={{ marginBottom: 6 }}>
-                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2 }}>PUBLIC</strong><br />
-                  <span style={{ fontSize: 16 }}>{chaine.public}</span>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: 14, lineHeight: 1.45, color: "#d8e2ee" }}>
+                <div>
+                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, display: "block", marginBottom: 2 }}>PUBLIC</strong>
+                  <span>{chaine.public}</span>
                 </div>
-                <div style={{ paddingTop: 10, borderTop: `1px dashed ${chaine.couleur}66` }}>
-                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2 }}>LIGNE ÉDITORIALE</strong><br />
-                  <em style={{ fontSize: 17, color: "#ffd166" }}>« {chaine.ligne} »</em>
+                <div style={{ paddingLeft: 12, borderLeft: `1px dashed ${chaine.couleur}66` }}>
+                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, display: "block", marginBottom: 2 }}>LIGNE ÉDITORIALE</strong>
+                  <em style={{ color: "#ffd166" }}>« {chaine.ligne} »</em>
                 </div>
               </div>
             </div>
             <button onClick={() => setStep(1)}
-              style={{ width: "100%", background: chaine.couleur, color: "#fff", border: "none", borderRadius: 12, padding: "18px", fontWeight: 900, cursor: "pointer", fontSize: 18, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: `0 6px 20px ${chaine.couleur}66` }}>
+              style={{ width: "100%", background: chaine.couleur, color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontWeight: 900, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: `0 6px 20px ${chaine.couleur}66` }}>
               📹 Voir l'image du cameraman →
             </button>
           </>
