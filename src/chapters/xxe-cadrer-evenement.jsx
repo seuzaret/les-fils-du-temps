@@ -16,37 +16,110 @@ import { useWinOnce } from "../engine/useWinOnce.js";
 
 /* Coordonnées des zones cliquables sur la GRANDE image (viewBox
    0 0 800 460). Chaque zone donne un cadre { x, y, w, h } pour
-   la TV finale et un verdict de MARTINE. */
+   la TV finale et une « lecture » de ce cadrage. */
 const ZONES = [
   {
     id: "foule",
     label: "La foule qui danse",
+    tag: "LA FÊTE",
     color: "#e0a848",
     frame: { x: 260, y: 60, w: 280, h: 160 },
-    verdict: "Tu ouvres sur la FÊTE. C'est l'image la plus joyeuse. On oublie presque pourquoi ces gens sont là — c'est un peu dommage : l'histoire, c'est aussi ce qui a rendu cette fête possible.",
+    description: "Image joyeuse, mouvement, musique — l'ambiance d'un soir qui bascule.",
   },
   {
     id: "beton",
     label: "Un morceau de béton",
+    tag: "LA RELIQUE",
     color: "#a8a49c",
     frame: { x: 40, y: 260, w: 240, h: 160 },
-    verdict: "Tu ouvres sur la RELIQUE. Une image qui parle plus fort que 100 mots : le mur est déjà passé au passé. Un peu triste, très fort.",
+    description: "Un bout du mur dans une main — un symbole très fort, le passé qui s'effrite.",
   },
   {
     id: "garde",
     label: "Le garde-frontière hébété",
+    tag: "LA BASCULE POLITIQUE",
     color: "#5a7aa0",
     frame: { x: 520, y: 180, w: 220, h: 200 },
-    verdict: "Tu ouvres sur la BASCULE POLITIQUE. Cette image dit tout ce qui compte : celui qui interdisait laisse faire. C'est un régime entier qui vient de céder. Le plan des rédactions sérieuses.",
+    description: "Celui qui interdisait laisse faire : un régime entier vient de céder.",
   },
   {
     id: "couple",
     label: "Le couple qui s'embrasse",
+    tag: "L'HUMAIN",
     color: "#c04a70",
     frame: { x: 300, y: 260, w: 240, h: 170 },
-    verdict: "Tu ouvres sur l'HUMAIN. Le mur, c'était aussi des familles séparées. L'image la plus émouvante — celle qu'on retient dix ans après. Choix de la presse magazine.",
+    description: "L'émotion : des familles séparées se retrouvent. L'image qui touche directement.",
   },
 ];
+
+/* 4 chaînes fictives. Chacune a un public, une ligne et un cadrage
+   « parfait » + un cadrage « acceptable ». Le reste est hors sujet
+   pour sa ligne — l'élève doit se mettre à la place du rédacteur en
+   chef et choisir ce que SA rédaction mettrait en Une. */
+const CHAINES = [
+  {
+    id: "tf-serieuse",
+    nom: "Télé Info 1",
+    couleur: "#5a7aa0",
+    emoji: "📺",
+    public: "les familles adultes qui veulent comprendre ce qui se passe",
+    ligne: "Ouvrir sur ce qui est POLITIQUEMENT le plus important.",
+    best: "garde",
+    ok: "beton",
+    verdict: {
+      best:   "Pile l'image que Télé Info 1 attendait : la bascule politique vue en un seul plan.",
+      ok:     "C'est acceptable — le morceau de béton dit aussi la fin d'un régime, mais c'est plus abstrait.",
+      wrong:  "Télé Info 1 n'ouvrirait pas là-dessus — c'est joli, mais pas assez politique pour un journal du soir.",
+    },
+  },
+  {
+    id: "mag-cœur",
+    nom: "Magazine Famille",
+    couleur: "#c04a70",
+    emoji: "💞",
+    public: "des lectrices et lecteurs qui veulent des histoires humaines",
+    ligne: "Montrer les PERSONNES, les émotions, les retrouvailles.",
+    best: "couple",
+    ok: "foule",
+    verdict: {
+      best:   "Pile le cadrage Magazine Famille : les visages, les larmes, le mur devient un détail.",
+      ok:     "Ça passe — la fête, c'est humain aussi. Mais le couple aurait fait une meilleure couv'.",
+      wrong:  "Magazine Famille n'ouvrirait pas sur ça — trop politique, pas assez de visages.",
+    },
+  },
+  {
+    id: "canal-jeune",
+    nom: "Canal Jeune",
+    couleur: "#e0a848",
+    emoji: "🎉",
+    public: "des ados qui veulent de l'énergie et de la musique",
+    ligne: "Ouvrir sur le MOUVEMENT, la joie, la jeunesse qui danse.",
+    best: "foule",
+    ok: "couple",
+    verdict: {
+      best:   "Pile ce que Canal Jeune cherchait : la foule, l'énergie, le moment où Berlin fait la fête.",
+      ok:     "C'est pas mal — un couple qui s'embrasse, c'est jeune aussi. Mais la foule, c'est plus Canal Jeune.",
+      wrong:  "Canal Jeune n'ouvrirait pas sur ça — trop sérieux pour nos ados devant le JT.",
+    },
+  },
+  {
+    id: "doc-memoire",
+    nom: "Mémoires d'Histoire",
+    couleur: "#a8a49c",
+    emoji: "📜",
+    public: "un public qui aime les documentaires et les archives",
+    ligne: "Choisir le SYMBOLE qui parlera encore dans 50 ans.",
+    best: "beton",
+    ok: "garde",
+    verdict: {
+      best:   "Pile le choix de Mémoires d'Histoire : un bout de mur dans une main — c'est l'image qui reste dans les livres.",
+      ok:     "C'est bien — le garde-frontière, ça marque aussi un tournant. Mais le béton, c'est l'image qui traverse les décennies.",
+      wrong:  "Mémoires d'Histoire n'ouvrirait pas là-dessus — trop fugitif, pas assez de recul.",
+    },
+  },
+];
+
+function pickChaine() { return CHAINES[Math.floor(Math.random() * CHAINES.length)]; }
 
 /* La GRANDE image de la scène : tous les éléments cohabitent
    dans une seule image, on va « cadrer » dedans. */
@@ -179,11 +252,19 @@ function SceneEntiere() {
 }
 
 export function CadrerEvenementGame({ onClose, onWin }) {
-  const [step, setStep] = useState(0); // 0 = intro, 1 = choix (cadrage), 2 = résultat
+  /* On tire la chaîne UNE FOIS au mount — l'élève découvre sa
+     mission éditoriale et doit cadrer en conséquence. */
+  const [chaine] = useState(() => pickChaine());
+  const [step, setStep] = useState(0); // 0 = intro + brief, 1 = choix, 2 = résultat
   const [zone, setZone] = useState(null);
   const [reveal, setReveal] = useState(0);
   const [done, setDone] = useState(false);
-  useWinOnce(done, onWin);
+
+  /* Verdict : "best" (parfait, +5), "ok" (acceptable, +2), "wrong" (0, retry). */
+  const resultKey = zone ? (zone.id === chaine.best ? "best" : zone.id === chaine.ok ? "ok" : "wrong") : null;
+  const points = resultKey === "best" ? 5 : resultKey === "ok" ? 2 : 0;
+  const canWin = resultKey === "best" || resultKey === "ok";
+  useWinOnce(done && canWin, onWin);
 
   useEffect(() => {
     if (step !== 2) return;
@@ -197,6 +278,8 @@ export function CadrerEvenementGame({ onClose, onWin }) {
     return () => timers.forEach(clearTimeout);
   }, [step]);
 
+  const retry = () => { setStep(1); setZone(null); setReveal(0); setDone(false); };
+
   return (
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.88)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
@@ -207,20 +290,37 @@ export function CadrerEvenementGame({ onClose, onWin }) {
 
         {step === 0 && (
           <>
-            <p style={{ fontSize: 14, lineHeight: 1.55, textAlign: "center", margin: "0 0 12px", color: "#c8d4e2" }}>
-              Le mur de Berlin est en train de tomber, en direct. Tu es dans la régie du JT de 20 h.
-              <br />Le cameraman t'envoie sa grande image de la scène. À toi de <strong>choisir ce que tu montres en gros</strong> — tout ne rentrera pas dans le cadre.
+            <p style={{ fontSize: 15, lineHeight: 1.55, textAlign: "center", margin: "0 0 12px", color: "#c8d4e2" }}>
+              Le mur de Berlin est en train de tomber, en direct.
+              <br />Mais chaque rédaction va choisir une image différente — selon qui elle veut toucher.
             </p>
+            <div style={{ background: "#101827", border: `2px solid ${chaine.couleur}`, borderRadius: 10, padding: "14px 16px", marginBottom: 10 }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: chaine.couleur, fontWeight: 800, marginBottom: 4 }}>▸ TA RÉDACTION</div>
+              <div style={{ fontSize: 18, fontWeight: 800, color: "#e8eef5", marginBottom: 8, letterSpacing: 1 }}>
+                {chaine.emoji} {chaine.nom}
+              </div>
+              <div style={{ fontSize: 14, lineHeight: 1.55, color: "#c8d4e2" }}>
+                Public : <strong style={{ color: "#e8eef5" }}>{chaine.public}</strong>.<br />
+                Ligne éditoriale : <em style={{ color: "#ffd166" }}>{chaine.ligne}</em>
+              </div>
+            </div>
             <button onClick={() => setStep(1)}
-              style={{ marginTop: 8, width: "100%", background: "#a02020", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-              Voir la scène →
+              style={{ marginTop: 8, width: "100%", background: chaine.couleur, color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              Voir l'image du cameraman →
             </button>
           </>
         )}
 
         {step === 1 && (
           <>
-            <p style={{ fontSize: 12.5, color: "#8fa3bd", textAlign: "center", margin: "0 0 10px", fontStyle: "italic" }}>
+            {/* Rappel de la rédaction + de sa ligne, pour que l'élève garde l'intention en tête. */}
+            <div style={{ background: "#101827", border: `1px solid ${chaine.couleur}66`, borderRadius: 8, padding: "8px 12px", marginBottom: 10, display: "flex", gap: 10, alignItems: "center" }}>
+              <div style={{ fontSize: 20 }}>{chaine.emoji}</div>
+              <div style={{ fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.4 }}>
+                <strong style={{ color: chaine.couleur }}>{chaine.nom}</strong> — {chaine.ligne}
+              </div>
+            </div>
+            <p style={{ fontSize: 13, color: "#8fa3bd", textAlign: "center", margin: "0 0 10px", fontStyle: "italic" }}>
               Passe la souris sur chaque zone : le cadre TV bouge et zoome. Clique pour choisir.
             </p>
             {/* GRANDE image avec cadre TV survolable */}
@@ -310,18 +410,41 @@ export function CadrerEvenementGame({ onClose, onWin }) {
               </div>
             </div>
 
+            {reveal >= 3 && (() => {
+              const col = resultKey === "best" ? "#5eff9e" : resultKey === "ok" ? "#ffd166" : "#ff8a6a";
+              const titre = resultKey === "best" ? "✓ Parfait pour la rédaction"
+                           : resultKey === "ok" ? "≈ Acceptable" : "✗ Hors ligne éditoriale";
+              return (
+                <div style={{ marginTop: 14, background: "#101827", border: `1px solid ${col}44`, borderRadius: 10, padding: "14px 16px", color: "#e8eef5", animation: "fadein .4s" }}>
+                  <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 6 }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1.5, color: col, fontWeight: 800 }}>{titre}</div>
+                    {points > 0 && (
+                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 900, color: "#ffd166", letterSpacing: 1 }}>+{points} ⚡</div>
+                    )}
+                  </div>
+                  <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0 }}>
+                    « {chaine.verdict[resultKey]} » — <em style={{ color: chaine.couleur }}>Rédaction {chaine.nom}</em>
+                  </p>
+                  {canWin && (
+                    <p style={{ fontSize: 13.5, lineHeight: 1.5, margin: "10px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
+                      Cadrer, c'est déjà interpréter. Deux rédactions regardent la même scène et racontent deux histoires différentes. — MARTINE
+                    </p>
+                  )}
+                </div>
+              );
+            })()}
             {reveal >= 3 && (
-              <div style={{ marginTop: 14, background: "#101827", border: "1px solid #2a3648", borderRadius: 10, padding: "12px 14px", color: "#e8eef5", animation: "fadein .4s" }}>
-                <p style={{ fontSize: 14.5, lineHeight: 1.6, margin: 0 }}>
-                  « {zone.verdict} Retiens : cadrer, c'est déjà interpréter. Deux JT peuvent ouvrir le même soir sur la même chute de mur, et raconter deux histoires différentes selon ce qu'ils choisissent de montrer. » — MARTINE
-                </p>
-              </div>
-            )}
-            {reveal >= 3 && (
-              <button onClick={onClose}
-                style={{ marginTop: 12, width: "100%", background: "#a02020", color: "#fff", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-                Continuer
-              </button>
+              canWin ? (
+                <button onClick={onClose}
+                  style={{ marginTop: 12, width: "100%", background: "#a02020", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                  Continuer
+                </button>
+              ) : (
+                <button onClick={retry}
+                  style={{ marginTop: 12, width: "100%", background: "#3a3648", color: "#fff", border: `2px solid ${chaine.couleur}`, borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                  ↻ Essayer un autre cadrage
+                </button>
+              )
             )}
           </>
         )}
