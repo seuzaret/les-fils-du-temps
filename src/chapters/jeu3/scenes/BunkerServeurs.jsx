@@ -13,7 +13,9 @@ export default function BunkerServeurs({ prenom, j3 }) {
   const [phase, setPhase] = useState("intro");
   const [step, setStep] = useState(0);
   const [chosen, setChosen] = useState(null);
-  const intro = CONFRONTATION.intro;
+  /* L'intro insère les lignes "mémoire réécrite" si le joueur a cru avoir
+     fait un autre choix que "ramener" à la fin du jeu 2. */
+  const intro = CONFRONTATION.getIntro ? CONFRONTATION.getIntro(j3?.endChoice) : CONFRONTATION.intro;
   const fill = (s) => (s || "").replace(/\{prenom\}/g, prenom || "chronaute");
 
   const nextIntro = () => {

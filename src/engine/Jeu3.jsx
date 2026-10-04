@@ -64,7 +64,7 @@ const ROOMS = {
   serveurs:   { Comp: BunkerServeurs,   label: "⚠ Niveau -3 · Serveurs" },
 };
 
-export default function Jeu3({ prenom, onExit, startAt }) {
+export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [room, setRoom] = useState(startAt?.room || "awake");
   const [flags, setFlags] = useState(startAt?.flags || {});
   const [heardPnj, setHeardPnj] = useState(startAt?.heardPnj || {});
@@ -144,7 +144,8 @@ export default function Jeu3({ prenom, onExit, startAt }) {
     missions,
     activeMission,
     enqAnswered,
-    openInterview, closeInterview, askQuestion };
+    openInterview, closeInterview, askQuestion,
+    endChoice };
 
   /* Témoin actuellement en interview (modal top-level). */
   const interviewTemoin = interviewTemoinId && activeMission

@@ -188,17 +188,55 @@ const DIALOGUES = [
   { mood: "content",
     text: "Elias t'a envoyé·e. Ma MARTINE est cassée, je pensais mourir sans que personne ne le sache. Tu m'as retrouvé·e, {prenom}." },
   { mood: "neutre",
-    text: "J'ai le remède. Tiens — il est à toi. Ramène-le à Elias, à Mira, à tous ceux qui oublient. Vite." },
-  { mood: "content",
-    text: "On monte dans ta MARTINE. Repartons chez nous." },
+    text: "J'ai le remède. Il est à toi — ramène-le à Elias, à Mira, à tous ceux qui oublient." },
+  { mood: "neutre",
+    text: "Mais écoute. J'hésite. Dix ans ici, c'est une vie. J'ai des gens que j'aime. Qu'est-ce qu'on fait, {prenom} ?" },
 ];
 
-export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDone }) {
+/* Les 3 fins possibles. Narrativement, seule "ramener" est le vrai canon :
+   les deux autres sont des choix qui seront RÉÉCRITS par MARTINE pendant
+   le voyage retour (révélé à la confrontation du jeu 3). Mais au moment du
+   choix, le joueur ignore le lien de parenté avec Al3x1A — l'ambiguïté est
+   psychologiquement légitime. */
+const CHOICES = [
+  {
+    id: "ramener",
+    label: "Rentrons ensemble — tu as ta place au futur.",
+    emoji: "🚀",
+    color: "#5eff9e",
+    reply: "Tu as raison. Ils ont besoin de la personne qui a trouvé le remède, pas juste du remède. On rentre.",
+    confirm: "Al3x1A monte avec toi dans ta MARTINE. Direction 2287.",
+  },
+  {
+    id: "laisser",
+    label: "Reste si c'est ta vie. Je ramène le remède seul·e.",
+    emoji: "📜",
+    color: "#ffd166",
+    reply: "Merci. Dis à Elias que la mémoire du monde ne tient pas qu'à moi. Prends soin du remède, et des gens.",
+    confirm: "Al3x1A reste. Tu repars avec le remède, et sa dernière lettre.",
+  },
+  {
+    id: "rester",
+    label: "Je reste avec toi. Que quelqu'un d'autre livre le remède.",
+    emoji: "🔥",
+    color: "#ff8a6a",
+    reply: "Tu es sûr·e ? Les tiens vont te chercher. Mais si c'est ton choix, je ne refuse pas la compagnie.",
+    confirm: "Tu confies le remède à MARTINE, qui repart seule. Toi, tu restes. Pour toujours ?",
+  },
+];
+
+export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDone, onChoice }) {
   const [idx, setIdx] = useState(0);
+  const [choice, setChoice] = useState(null);
   const step = DIALOGUES[idx];
-  const isLast = idx >= DIALOGUES.length - 1;
+  const atChoiceStep = idx >= DIALOGUES.length - 1;
   const amb = findAmb(chapitreNom || "");
-  const advance = () => { if (isLast) onDone?.(); else setIdx(idx + 1); };
+  const pickChoice = (c) => { setChoice(c); onChoice?.(c.id); };
+  const advance = () => {
+    if (choice) { onDone?.(); return; }
+    if (atChoiceStep) return;
+    setIdx(idx + 1);
+  };
 
   return (
     <div onClick={advance}
@@ -214,14 +252,15 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
         <div style={{ padding: "16px 20px 18px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: amb.accent }}>AL3X1A ▸</div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>{idx + 1} / {DIALOGUES.length}</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>
+              {choice ? "fin" : `${idx + 1} / ${DIALOGUES.length}`}
+            </div>
           </div>
           <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#e8eef5", margin: 0, fontFamily: "Palatino, Georgia, serif" }}>
-            « {step.text.replace("{prenom}", prenom || "chronaute")} »
+            « {(choice ? choice.reply : step.text).replace("{prenom}", prenom || "chronaute")} »
           </p>
 
-          {/* Aperçu du remède récupéré, dernier écran */}
-          {isLast && remede && (
+          {atChoiceStep && remede && (
             <div style={{ marginTop: 14, padding: "10px 14px", background: "#0a1820", border: `1px dashed ${amb.accent}`, borderRadius: 10, display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ fontSize: 30 }}>{remede.emoji}</div>
               <div>
@@ -232,19 +271,56 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
             </div>
           )}
 
-          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
-            {!isLast ? (
+          {choice && (
+            <div style={{ marginTop: 14, padding: "12px 14px", background: `${choice.color}11`, border: `2px solid ${choice.color}`, borderRadius: 10, color: "#e8eef5" }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: choice.color, fontWeight: 800, marginBottom: 4 }}>▸ FIN · {choice.id.toUpperCase()}</div>
+              <div style={{ fontSize: 14.5, lineHeight: 1.55, fontStyle: "italic" }}>{choice.confirm}</div>
+            </div>
+          )}
+
+          {!atChoiceStep && (
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
               <button onClick={(e) => { e.stopPropagation(); setIdx(idx + 1); }}
-                style={{ background: "#141b26", color: amb.accent, border: `1px solid ${amb.accent}`, borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ background: "#141b26", color: amb.accent, border: `1px solid ${amb.accent}`, borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Suite ▸
               </button>
-            ) : (
+            </div>
+          )}
+          {atChoiceStep && !choice && (
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8d4e2", marginBottom: 8, textAlign: "center", opacity: 0.75 }}>▸ TON CHOIX</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 10 }}>
+                {CHOICES.map((c) => (
+                  <button key={c.id} onClick={(e) => { e.stopPropagation(); pickChoice(c); }}
+                    style={{
+                      textAlign: "left",
+                      background: `linear-gradient(90deg, ${c.color}22, #141b26)`,
+                      border: `2px solid ${c.color}`,
+                      color: "#e8eef5",
+                      borderRadius: 12, padding: "12px 16px",
+                      fontFamily: "Palatino, Georgia, serif",
+                      fontSize: 15, lineHeight: 1.35,
+                      cursor: "pointer",
+                      transition: "all .18s",
+                      boxShadow: `0 0 10px ${c.color}22`,
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.boxShadow = `0 0 18px ${c.color}66`; e.currentTarget.style.transform = "translateY(-1px)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 0 10px ${c.color}22`; e.currentTarget.style.transform = "none"; }}>
+                    <span style={{ fontSize: 22, marginRight: 8 }}>{c.emoji}</span>
+                    <strong style={{ color: c.color }}>{c.label}</strong>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {choice && (
+            <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
               <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
-                style={{ background: "#e8934a", color: "#160c02", border: "none", borderRadius: 10, padding: "11px 24px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: "0 0 18px rgba(232,150,74,0.55)", animation: "glow 2.4s ease-in-out infinite" }}>
+                style={{ background: choice.color, color: "#160c02", border: "none", borderRadius: 10, padding: "12px 26px", fontWeight: 900, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: `0 0 18px ${choice.color}88`, animation: "glow 2.4s ease-in-out infinite" }}>
                 🌀 REPARTIR AU FUTUR
               </button>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
