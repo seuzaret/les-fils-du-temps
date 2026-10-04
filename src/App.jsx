@@ -919,16 +919,17 @@ export default function App() {
      pédagogique et se ferme au bout de quelques secondes. Idempotent.
      Déclenche aussi le bouton SOS flottant : le joueur peut émettre le
      signal de détresse ··· −−− ··· pour être retrouvé par l'équipe. */
-  const unlockCard = (msgId, msgData) => {
+  const unlockCard = (msgId, msgData, pendingSay = null) => {
     // Le SOS n'apparaît plus par transmission — il se choisit en fin de chapitre
     // Carte-invention (uniquement si mappée dans le Mediadex)
     const card = getCardMeta(msgId);
-    if (!card) return;
+    if (!card) return false;
     setMediadex((v) => v.includes(msgId) ? v : [...v, msgId]);
     setTimeout(() => {
-      setCardShowing({ card, message: msgData });
+      setCardShowing({ card, message: msgData, pendingSay });
       playCardSound(muted);
     }, 500);
+    return true;
   };
 
   /* Octroyer un message SANS combinaison d'objets — pour les mini-jeux
@@ -947,8 +948,12 @@ export default function App() {
        mini-jeu à +3) : +5 sur la jauge flux. Un chapitre required:3 se remplit
        donc pile avec 3 messages, et les bonus AJOUTENT au-delà. */
     bumpFlux(5);
-    say(`◆ « ${m.title} » transmis au futur ! Tu l'as gagné en l'écrivant toi-même. Mes circuits se rechargent (+5).`, "content");
-    unlockCard(id, m);
+    /* Si une carte Pokédex va s'afficher, on retient le texte de MARTINE
+       pour le relâcher UNIQUEMENT quand la carte sera fermée (sinon les
+       deux apparaissent en même temps et ça fait trop d'infos). */
+    const sayLine = `◆ « ${m.title} » transmis au futur ! Tu l'as gagné en l'écrivant toi-même. Mes circuits se rechargent (+5).`;
+    const carte = unlockCard(id, m, { line: sayLine, mood: "content" });
+    if (!carte) say(sayLine, "content");
   };
 
   /* Octroyer un OBJET (dans la besace) — pour les mini-jeux qui font GAGNER
@@ -1060,10 +1065,13 @@ export default function App() {
         /* certains messages ont leur propre son (ex. la flûte joue sa
            mélodie) : il part juste après l'arpège de transmission */
         if (m.sfx) setTimeout(() => playSfx(m.sfx), 950);
-        say(`◆ « ${chapter.messages[rec.out].title} » transmis au futur ! Mes circuits se rechargent, je sens l'excellence revenir (+5⚡).`, "content");
         bumpFlux(5);
         setTimeout(() => setModal({ type: "fact", id: rec.out }), 750);
-        unlockCard(rec.out, m);
+        /* Idem grantMessage : la parole de MARTINE attend la fermeture
+           de la carte Pokédex quand il y en a une. */
+        const sayLineRec = `◆ « ${chapter.messages[rec.out].title} » transmis au futur ! Mes circuits se rechargent, je sens l'excellence revenir (+5⚡).`;
+        const carteRec = unlockCard(rec.out, m, { line: sayLineRec, mood: "content" });
+        if (!carteRec) say(sayLineRec, "content");
         return;
       }
       /* Objet fabriqué classique */
@@ -2428,7 +2436,13 @@ export default function App() {
       {/* CARTE-INVENTION (façon Pokémon) qui apparaît quand un nouveau message est transmis */}
       {cardShowing && (
         <MediaCard card={cardShowing.card} message={cardShowing.message}
-          onClose={() => setCardShowing(null)} />
+          onClose={() => {
+            const ps = cardShowing.pendingSay;
+            setCardShowing(null);
+            /* Petit délai pour que la carte ait fini sa transition de
+               fermeture avant que la bulle MARTINE n'apparaisse. */
+            if (ps) setTimeout(() => say(ps.line, ps.mood || "neutre"), 220);
+          }} />
       )}
 
       {/* MEDIADEX plein écran (bouton 🃏) */}
