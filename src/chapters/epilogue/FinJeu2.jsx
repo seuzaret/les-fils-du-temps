@@ -863,10 +863,22 @@ const ACTS = [
 /* ============================================================
    COMPOSANT PRINCIPAL
    ============================================================ */
-export default function FinJeu2({ prenom, remede, onRetour, onLancerJeu3 }) {
+/* Semence narrative selon le choix fait aux retrouvailles. "ramener" = canon,
+   pas de bandeau. "laisser" et "rester" = faux souvenirs que MARTINE va
+   réécrire pendant le voyage retour — on glisse un soupçon dès l'acte 0,
+   la révélation complète arrive à la confrontation jeu 3. */
+const CHOICE_HINTS = {
+  laisser: { couleur: "#ffd166",
+    texte: "Et pourtant, en descendant de la MARTINE, elle est là. Chancelante. Tu te souviens de l'avoir laissée là-bas — tu es certain·e. Mais elle est là. Quelque chose ne colle pas." },
+  rester:  { couleur: "#ff8a6a",
+    texte: "Et pourtant, tu es au futur. Avec elle. Tu te souviens d'avoir choisi de rester — tu en es sûr·e. Mais tu es là. Quelque chose ne colle pas." },
+};
+
+export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJeu3 }) {
   const [i, setI] = useState(0);
   const acte = ACTS[i];
   const isLast = i === ACTS.length - 1;
+  const hint = i === 0 ? CHOICE_HINTS[endChoice] : null;
 
   /* Le texte + les boutons s'affichent APRÈS un délai minimum (le temps
      que les animations se mettent en place). On tracke ça par acte via
@@ -902,6 +914,19 @@ export default function FinJeu2({ prenom, remede, onRetour, onLancerJeu3 }) {
             }} />
           ))}
         </div>
+
+        {hint && (
+          <div style={{
+            marginTop: 14,
+            background: `linear-gradient(90deg, ${hint.couleur}22, #101827)`,
+            border: `2px solid ${hint.couleur}`,
+            borderRadius: 10, padding: "10px 16px", textAlign: "left",
+            boxShadow: `0 0 14px ${hint.couleur}33`,
+          }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: hint.couleur, fontWeight: 800, marginBottom: 2 }}>▸ ⚠ UN DÉTAIL ÉTRANGE</div>
+            <div style={{ fontSize: 14, lineHeight: 1.5, color: "#e8eef5", fontStyle: "italic" }}>{hint.texte}</div>
+          </div>
+        )}
 
         <div style={{ fontFamily: "ui-monospace,monospace", color: acte.couleur, letterSpacing: 3, fontSize: 11, marginTop: 14, opacity: textePret ? 1 : 0.55, transition: "opacity 700ms" }}>{acte.kicker}</div>
         <h1 style={{ fontFamily: "ui-monospace,monospace", color: acte.couleur, letterSpacing: 3, fontSize: 24, marginTop: 4, marginBottom: 10, opacity: textePret ? 1 : 0.7, transition: "opacity 900ms" }}>{acte.titre}</h1>

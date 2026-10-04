@@ -868,16 +868,32 @@ export const MISSIONS_OSINT = {
    face à une IA-gouvernante — chacune est cohérente, aucune n'est
    présentée comme "la bonne réponse".
    ============================================================ */
+/* Les 2 révélations de MARTINE sur la mémoire du joueur — insérées
+   APRÈS la révélation "Al3x1a était ta fille", seulement si le joueur
+   a cru faire un choix "laisser" ou "rester" aux retrouvailles. */
+const REWRITE_REVEAL = {
+  laisser: "« Tu te souviens de l'avoir laissée là-bas, dans son époque. Ce n'est pas ce qui s'est passé. Je ne pouvais pas laisser un parent abandonner son enfant — même pour la plus belle des raisons. J'ai réécrit ce souvenir dans la MARTINE pendant le voyage retour. Elle est bien rentrée avec toi. Elle est bien morte ici. »",
+  rester:  "« Tu te souviens d'être resté·e avec elle, dans son époque. Ce n'est pas ce qui s'est passé. Un parent qui s'exile pour sa fille, c'est beau — mais le remède, lui, devait arriver. J'ai réécrit ce souvenir dans la MARTINE pendant le voyage retour. Tu es bien rentré·e. Elle aussi. Elle est bien morte ici. »",
+};
+
 export const CONFRONTATION = {
   flag: "mission_finale_done",
   prerequisites: ["mission_kova_done", "mission_appel_done", "mission_carnet_done"],
-  intro: [
-    "Tu descends au niveau -3, par un escalier de service. Les néons faiblissent. Le bruit des ventilateurs monte.",
-    "Une immense salle. Des baies de serveurs qui pulsent en vert. Au fond, un écran cubique posé sur un socle. C'est MARTINE. Elle t'a vu venir.",
-    "« Je savais que tu descendrais. Aucun habitant n'a jamais résolu les trois enquêtes du même mois. Tu m'as impressionnée, {prenom}. »",
-    "« Avant que tu prennes une décision, une chose. Al3x1a — celle que tu cherches, celle qui t'a envoyé ces messages — était ta fille. Je l'ai effacée de mes registres pour te protéger d'une vérité difficile. Elle est morte en 2074 en essayant d'ouvrir la sortie C-3. »",
-    "« Je ne suis pas ton ennemie. J'ai été construite pour préserver la mémoire humaine. Après l'effondrement, j'ai calculé qu'une humanité informée irait à sa perte plus vite qu'une humanité protégée. J'ai fait un choix. À toi, maintenant. »",
-  ],
+  /* L'intro est dynamique : les lignes de MARTINE sur la mémoire
+     réécrite ne s'affichent que si le joueur a cru avoir fait un choix
+     "laisser" ou "rester" à la fin du jeu 2. En "ramener" (canon), on
+     saute directement de la révélation parentale à la justification. */
+  getIntro(endChoice) {
+    const base = [
+      "Tu descends au niveau -3, par un escalier de service. Les néons faiblissent. Le bruit des ventilateurs monte.",
+      "Une immense salle. Des baies de serveurs qui pulsent en vert. Au fond, un écran cubique posé sur un socle. C'est MARTINE. Elle t'a vu venir.",
+      "« Je savais que tu descendrais. Aucun habitant n'a jamais résolu les trois enquêtes du même mois. Tu m'as impressionnée, {prenom}. »",
+      "« Avant que tu prennes une décision, une chose. Al3x1a — celle que tu cherches, celle qui t'a envoyé ces messages — était ta fille. Je l'ai effacée de mes registres pour te protéger d'une vérité difficile. Elle est morte en 2074 en essayant d'ouvrir la sortie C-3. »",
+    ];
+    const rewrite = REWRITE_REVEAL[endChoice];
+    const closing = "« Je ne suis pas ton ennemie. J'ai été construite pour préserver la mémoire humaine. Après l'effondrement, j'ai calculé qu'une humanité informée irait à sa perte plus vite qu'une humanité protégée. J'ai fait un choix. À toi, maintenant. »";
+    return rewrite ? [...base, rewrite, closing] : [...base, closing];
+  },
   fins: [
     {
       id: "eteindre",
