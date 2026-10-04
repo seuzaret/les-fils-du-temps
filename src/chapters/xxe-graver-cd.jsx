@@ -54,7 +54,19 @@ const fmtSize = (mo) => {
   return `${mo.toLocaleString("fr-FR", { maximumFractionDigits: 1 })} Mo`;
 };
 
+/* Fichiers mélangés une fois par partie — le joueur ne peut plus
+   mémoriser leur position dans la liste. */
+function shuffleFiles() {
+  const arr = [...FILES];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
 export function GraverCdGame({ onClose, onWin }) {
+  const [files] = useState(() => shuffleFiles());
   const [selected, setSelected] = useState([]);
   const [phase, setPhase] = useState("choix");
   const [progress, setProgress] = useState(0);
@@ -138,15 +150,14 @@ export function GraverCdGame({ onClose, onWin }) {
                     🖥️ Mon PC — C:\
                   </div>
                   <div style={{ maxHeight: 320, overflowY: "auto" }}>
-                    {FILES.filter((f) => !selected.includes(f.id)).map((f) => (
+                    {files.filter((f) => !selected.includes(f.id)).map((f) => (
                       <div key={f.id} onClick={() => toggle(f.id)}
-                        style={{ padding: "4px 8px", cursor: "pointer", display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center", fontSize: 11.5, borderBottom: "1px dotted #c8c0b0" }}>
+                        style={{ padding: "4px 8px", cursor: "pointer", display: "grid", gridTemplateColumns: "1fr auto", gap: 8, alignItems: "center", fontSize: 11.5, borderBottom: "1px dotted #c8c0b0" }}>
                         <span>{f.icon} {f.nom}</span>
-                        <span style={{ fontSize: 9.5, background: catColor[f.cat] + "22", color: catColor[f.cat], padding: "0 6px", borderRadius: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>{catLabel[f.cat]}</span>
                         <span style={{ color: "#6a6a6a" }}>{fmtSize(f.size)}</span>
                       </div>
                     ))}
-                    {FILES.length === selected.length && (
+                    {files.length === selected.length && (
                       <div style={{ padding: 20, textAlign: "center", color: "#6a6a6a", fontSize: 11, fontStyle: "italic" }}>
                         (Dossier vide)
                       </div>
@@ -168,9 +179,8 @@ export function GraverCdGame({ onClose, onWin }) {
                       const f = FILES.find((x) => x.id === id);
                       return (
                         <div key={id} onClick={() => toggle(id)}
-                          style={{ padding: "4px 8px", cursor: "pointer", display: "grid", gridTemplateColumns: "1fr auto auto", gap: 8, alignItems: "center", fontSize: 11.5, borderBottom: "1px dotted #c8c0b0" }}>
+                          style={{ padding: "4px 8px", cursor: "pointer", display: "grid", gridTemplateColumns: "1fr auto", gap: 8, alignItems: "center", fontSize: 11.5, borderBottom: "1px dotted #c8c0b0" }}>
                           <span>{f.icon} {f.nom}</span>
-                          <span style={{ fontSize: 9.5, background: catColor[f.cat] + "22", color: catColor[f.cat], padding: "0 6px", borderRadius: 6, textTransform: "uppercase", letterSpacing: 0.5 }}>{catLabel[f.cat]}</span>
                           <span style={{ color: "#6a6a6a" }}>{fmtSize(f.size)}</span>
                         </div>
                       );

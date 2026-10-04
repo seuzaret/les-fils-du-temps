@@ -12,6 +12,7 @@ import { PLayer } from "../../../engine/Parallax.jsx";
 
 export default function SceneSalon1969({ collect, action, reveal, made = [], flags = [] }) {
   const rateauPose = !!flags.rateau_pose;
+  const lapinPose  = !!flags.lapin_pose;
   const capte      = made.includes("msg_tv_lune");
 
   return (
@@ -185,8 +186,9 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
             </g>
           )}
 
-          {/* ★ ORREILLES DE LAPIN ★ posées à droite parmi le bric-à-brac */}
-          {!capte && (
+          {/* ★ ORREILLES DE LAPIN ★ posées à droite parmi le bric-à-brac
+              — disparaissent dès qu'elles sont posées sur la TV. */}
+          {!lapinPose && !capte && (
             <g transform="translate(910,306)">
               <path d="M0 14 L-18 -18" stroke="#c8963e" strokeWidth="2.2" />
               <path d="M0 14 L18 -18" stroke="#c8963e" strokeWidth="2.2" />
@@ -280,8 +282,8 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
         <circle cx="605" cy="388" r="7" fill="#c8963e" stroke="#5a3818" strokeWidth="1.5" />
         <path d="M605 328 L605 336" stroke="#5a3818" strokeWidth="1.5" />
 
-        {/* Antenne râteau posée sur la TV (une fois le flag rateau_pose) */}
-        {rateauPose && (
+        {/* Antenne râteau posée sur la TV (dès son propre flag OU la Lune captée) */}
+        {(rateauPose || capte) && (
           <g transform="translate(500,280)">
             <path d="M-40 -30 h80" stroke="#8a8a8a" strokeWidth="3" />
             {[-32, -20, -8, 0, 8, 20, 32].map((x, i) => (
@@ -290,8 +292,8 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
             <path d="M0 -30 L0 0" stroke="#5a5a5a" strokeWidth="2" />
           </g>
         )}
-        {/* Oreilles de lapin posées sur la TV (une fois captée) */}
-        {capte && (
+        {/* Oreilles de lapin posées sur la TV (dès leur propre flag OU la Lune captée) */}
+        {(lapinPose || capte) && (
           <g transform="translate(500,290)">
             <path d="M0 -10 L-24 -60" stroke="#c8963e" strokeWidth="2.5" />
             <path d="M0 -10 L24 -60" stroke="#c8963e" strokeWidth="2.5" />
@@ -406,11 +408,11 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       {/* ═══ zones cliquables ═══ */}
       <Hotspot cx={340} cy={460} r={54} label="Nathalie" reveal={reveal} onClick={() => action("nathalie")} />
 
-      {/* Les VRAIS objets utiles */}
-      {!rateauPose && (
+      {/* Les VRAIS objets utiles — chacune disparaît une fois posée. */}
+      {!rateauPose && !capte && (
         <Hotspot cx={255} cy={178} r={22} label="antenne râteau (sur l'étagère à jouets)" item="antenne_rateau" reveal={reveal} onClick={() => collect("antenne_rateau")} />
       )}
-      {!capte && (
+      {!lapinPose && !capte && (
         <Hotspot cx={910} cy={300} r={22} label="oreilles de lapin (bric-à-brac)" item="antenne_lapin" reveal={reveal} onClick={() => collect("antenne_lapin")} />
       )}
 
@@ -445,8 +447,13 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       {!made.includes("vase_fleurs") && (
         <Hotspot cx={960} cy={310} r={14} label="petit vase" item="vase_fleurs" reveal={reveal} onClick={() => collect("vase_fleurs")} />
       )}
-      {/* la TV = support de dépôt */}
-      <Hotspot cx={500} cy={370} r={100} label={rateauPose ? "TV — pose les oreilles de lapin dessus" : "TV — pose l'antenne râteau dessus"} item="television" reveal={reveal} onClick={() => action("nathalie")} />
+      {/* la TV = support de dépôt — étiquette adaptative selon ce qui reste à poser */}
+      <Hotspot cx={500} cy={370} r={100} label={
+        capte ? "TV — Armstrong sur la Lune" :
+        (rateauPose && !lapinPose) ? "TV — pose les oreilles de lapin dessus" :
+        (lapinPose && !rateauPose) ? "TV — pose l'antenne râteau dessus" :
+        "TV — pose une antenne dessus"
+      } item="television" reveal={reveal} onClick={() => action("nathalie")} />
     </svg>
   );
 }

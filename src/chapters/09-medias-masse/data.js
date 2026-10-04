@@ -86,11 +86,19 @@ const HIDDEN_BY_FLAG = {};
    LES RECETTES
    ------------------------------------------------------------ */
 const RECIPES = [
-  /* T1 — assembler l'antenne pour capter la Lune */
-  { a: "antenne_rateau", b: "television", out: "rateau_pose", gives: [], consume: ["antenne_rateau"], flag: "rateau_pose",
-    line: "📡 Tu poses l'antenne râteau sur le toit — enfin, en bricolage, sur le meuble TV. L'image se dessine mais reste neigeuse : il manque les oreilles de lapin." },
+  /* T1 — assembler l'antenne pour capter la Lune. Les 2 antennes se posent
+     dans N'IMPORTE QUEL ORDRE. Les recettes avec needsFlag (complétion)
+     sont déclarées AVANT celles sans flag : findRecipe prend la 1ʳᵉ dont
+     le flag requis est satisfait, et retombe sur la version "première
+     étape" tant que l'autre antenne n'a pas encore été posée. */
+  { a: "antenne_rateau", b: "television", out: "msg_tv_lune", msg: true, consume: ["antenne_rateau"], needsFlag: "lapin_pose",
+    line: "📡 Tu accroches l'antenne râteau. Les oreilles de lapin étaient déjà en place — l'image se stabilise. Sur l'écran, Armstrong descend l'échelle du LM. « That's one small step for man, one giant leap for mankind. »" },
   { a: "antenne_lapin", b: "television", out: "msg_tv_lune", msg: true, consume: ["antenne_lapin"], needsFlag: "rateau_pose",
     line: "📶 Tu poses les oreilles de lapin, tu les ajustes en V. L'image se stabilise — noir et blanc mais net. Sur l'écran, Armstrong descend l'échelle du LM. « That's one small step for man, one giant leap for mankind. »" },
+  { a: "antenne_rateau", b: "television", out: "rateau_pose", gives: [], consume: ["antenne_rateau"], flag: "rateau_pose",
+    line: "📡 Tu accroches l'antenne râteau — l'image se dessine mais reste neigeuse. Il manque encore les oreilles de lapin." },
+  { a: "antenne_lapin", b: "television", out: "lapin_pose", gives: [], consume: ["antenne_lapin"], flag: "lapin_pose",
+    line: "📶 Tu poses les oreilles de lapin en V — ça aide, mais c'est encore flou. Il manque encore la grande antenne râteau." },
 
   /* T2 — insérer la cassette dans la platine (ouvre ensuite le mini-jeu PLAY+REC) */
   { a: "cassette_vierge", b: "radio_cassette", out: "cassette_chargee", gives: [], consume: ["cassette_vierge"], flag: "cassette_chargee",
@@ -107,21 +115,21 @@ const RECIPES = [
 const MESSAGES = {
   msg_tv_lune: { title: "Passer à la TV", emoji: "🌕",
     jauges: { vitesse: 5, portee: 5, capacite: 3, durabilite: 2 },
-    fact: "21 juillet 1969, 3h56 (heure de Paris). Neil Armstrong pose le pied sur la Lune. Grâce au satellite (Intelsat III), l'image et le son voyagent en direct jusqu'aux téléviseurs de la planète : environ 600 millions de spectateurs regardent en même temps — un humain sur quatre. C'est le PLUS GRAND rendez-vous médiatique de l'Histoire à ce moment. Fait moins connu : la phrase d'Armstrong était préparée depuis des semaines. Et un point d'EMI : la TV met le monde en direct dans le salon, mais un MONDE CHOISI — une rédaction décide quel plan on montre, combien de temps, avec quel commentaire. Regarder le journal télévisé, ce n'est pas voir le monde, c'est voir ce que quelqu'un a sélectionné pour toi." },
+    fact: "21 juillet 1969. Neil Armstrong pose le pied sur la Lune. Grâce au satellite Intelsat III, l'image voyage en direct jusqu'aux téléviseurs du monde : 600 millions de spectateurs regardent en même temps — un humain sur quatre. C'est le plus grand rendez-vous médiatique de l'Histoire." },
   msg_cassette: { title: "Enregistrer une cassette", emoji: "📼",
     jauges: { vitesse: 3, portee: 3, capacite: 3, durabilite: 2 },
-    fact: "Cassette audio (Philips, 1963) puis magnétoscope VHS (JVC, 1976) : pour la PREMIÈRE FOIS de l'Histoire, chaque foyer peut ENREGISTRER chez soi la radio, la télé, la musique des copains — puis la copier, la prêter, l'échanger. L'industrie du disque crie déjà au « piratage » (le débat Napster de la fin des années 90 commence là). Mais attention : la bande magnétique se démagnétise avec le temps, se casse, s'aimante par erreur (un simple aimant peut tout effacer). Des archives entières de radio et de télé ont été perdues : les bandes étaient trop chères, on effaçait pour ré-enregistrer par-dessus. Un support qui EXISTE ne garantit pas la SURVIE du message." },
+    fact: "Cassette audio (Philips, 1963) puis magnétoscope VHS (JVC, 1976) : pour la première fois, chaque foyer peut enregistrer la radio ou la télé chez soi — puis copier, prêter, échanger. Mais la bande magnétique se démagnétise, se casse, s'aimante. Un support qui existe ne garantit pas la survie du message." },
   msg_ligneEditoriale: { title: "La ligne éditoriale", emoji: "📰",
     jauges: { vitesse: 3, portee: 4, capacite: 3, durabilite: 2 },
-    fact: "Dans un kiosque des années 80, il y a des dizaines de journaux et magazines. Chacun fait des CHOIX : quelles infos il garde, quels titres il met en Une, comment il en parle. Deux journaux qui reçoivent la MÊME information peuvent sortir des Unes très différentes. C'est ça, une « ligne éditoriale » : le point de vue d'un journal sur ce qui compte. Aucun journal n'est complètement neutre. Bien lire un journal, c'est se demander : qui l'écrit ? pour qui ? avec quel angle ? Aujourd'hui, sur un fil d'actu ou un réseau social, c'est un ordinateur qui choisit à ta place ce que tu vois — mais quelqu'un (ou quelque chose) choisit toujours." },
+    fact: "Dans un kiosque, il y a des dizaines de journaux. Chacun fait des choix : quelles infos garder, quels titres mettre en Une, comment en parler. Deux journaux qui reçoivent la MÊME dépêche peuvent sortir des Unes très différentes. C'est ça, une « ligne éditoriale » — le point de vue d'un journal. Aucun journal n'est totalement neutre." },
 
   msg_evenement: { title: "L'événement mondial en direct", emoji: "📺",
     jauges: { vitesse: 5, portee: 5, capacite: 3, durabilite: 2 },
-    fact: "Le 9 novembre 1989, le mur de Berlin tombe. Pour la première fois, un événement historique majeur est vu EN DIRECT par des millions de gens sur toute la planète, en même temps. La TV devient un « village mondial » : chacun sait ce que sait le voisin. Mais attention : le journaliste choisit UNE image pour ouvrir son édition. La foule qui danse ? Un garde-frontière hébété ? Un couple qui s'embrasse ? Chaque choix raconte l'événement autrement. Cadrer, c'est déjà interpréter. C'est ça, la force et la limite du direct : on voit le monde entier — mais on voit ce qu'un rédacteur a décidé de nous montrer." },
+    fact: "9 novembre 1989 : le mur de Berlin tombe. Pour la première fois, un événement majeur est vu en direct par des millions de gens, partout, en même temps. La TV devient un « village mondial ». Mais le journaliste choisit UNE image pour ouvrir l'édition : la foule qui danse, un couple qui s'embrasse… Cadrer, c'est déjà interpréter." },
 
   msg_cd: { title: "CD-Rom & disque optique", emoji: "💿",
     jauges: { vitesse: 3, portee: 4, capacite: 4, durabilite: 2 },
-    fact: "CD audio (Philips + Sony, 1982) puis CD-Rom pour l'ordinateur (1985) : un laser lit des creux minuscules gravés sur une couche métallique sous du plastique. On vend le CD comme un support « inaltérable » qui durerait à jamais. La réalité, 30 ans plus tard : beaucoup de CD gravés dans les années 90 sont ILLISIBLES — la couche métallique s'oxyde et se décolle, on appelle ça la « maladie du disque ». Le support censé tout garder ne tient parfois même pas 20 ans. Prochaine étape (chapitre suivant) : on verra ce que devient une disquette héritée d'ici, 30 ans plus tard…" },
+    fact: "CD audio (Philips + Sony, 1982) puis CD-Rom (1985) : un laser lit des creux minuscules gravés sur une couche métallique. On le vend comme un support « inaltérable », qui durerait à jamais. Trente ans plus tard, beaucoup de CD gravés dans les années 90 sont illisibles : la couche métallique s'oxyde — on appelle ça la « maladie du disque »." },
 };
 
 /* ------------------------------------------------------------
