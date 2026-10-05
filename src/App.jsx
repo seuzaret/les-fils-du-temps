@@ -2546,13 +2546,13 @@ export default function App() {
           fluxTotal={fluxTotal} bonusChapters={bonusChapters} />
       )}
 
-      {/* POUBELLE TEMPORELLE — apparaît quand l'élève ramasse son
-          PREMIER déchet anachronique (via `anachronismLearned`). Elle
-          sort en même temps que le message de MARTINE qui explique la
-          mécanique → l'élève voit littéralement l'outil apparaître
-          quand il en a besoin. Cible de drop pour les items marqués
-          `anachronic: true`. Mode jeu 1 uniquement. */}
-      {screen === "play" && mode !== "jeu2" && anachronismLearned && (
+      {/* POUBELLE TEMPORELLE — toujours visible en jeu 1, dès l'arrivée
+          dans un chapitre. On ne la fait plus apparaître au ramassage
+          du premier déchet : trop d'indice (l'élève comprenait que
+          l'objet qu'il venait de ramasser était anachronique rien qu'en
+          voyant la poubelle sortir). Elle fait partie de l'équipement
+          du chronaute, visible dès le départ. */}
+      {screen === "play" && mode !== "jeu2" && (
         <div data-drop="hot:poubelle_temporelle"
           title="Poubelle temporelle — glisse-y les objets qui n'ont rien à faire à cette époque (+3 flux)"
           style={{
