@@ -16,12 +16,35 @@
                         dans pnj.js (match par cet id dans PnjRoom)
    ============================================================ */
 
-/* Ordre canonique des enquêtes. Partagé entre Jeu3 et BunkerRumeurs. */
-export const MISSION_ORDER = ["kova", "vitamine", "jour40", "enfant", "champble", "fontaine", "viande"];
+/* Enquêtes du bunker — Kova est fixée en premier (cas d'école/tutoriel),
+   puis deux enquêtes sont tirées au hasard dans le pool pour varier les
+   verdicts attendus (toutes ne sont pas des RUMEUR). */
+export const KOVA_FIRST = "kova";
+export const POOL_RUMEURS = ["vitamine", "jour40", "enfant", "champble", "fontaine", "viande", "pompe"];
+export const PLAYTHROUGH_SIZE = 3; // Kova + 2 au hasard
 
-/* Première enquête non résolue d'après MISSION_ORDER et flags courants. */
+/* Fisher-Yates : tire PLAYTHROUGH_SIZE-1 ids distincts du pool. */
+export function pickMissionOrder() {
+  const pool = [...POOL_RUMEURS];
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return [KOVA_FIRST, ...pool.slice(0, PLAYTHROUGH_SIZE - 1)];
+}
+
+/* Lit l'ordre persisté dans les flags, sinon Kova seul (fallback). */
+export function getMissionOrder(flags) {
+  return (flags && flags.mission_order) || [KOVA_FIRST];
+}
+
+/* MISSION_ORDER historique conservée pour compat descendante. */
+export const MISSION_ORDER = [KOVA_FIRST, ...POOL_RUMEURS];
+
+/* Première enquête non résolue d'après l'ordre tiré et flags courants. */
 export function getActiveMission(missions, flags) {
-  return MISSION_ORDER.map((id) => missions[id]).find((m) => m && !flags[m.flag]) || null;
+  const order = getMissionOrder(flags);
+  return order.map((id) => missions[id]).find((m) => m && !flags[m.flag]) || null;
 }
 
 /* Pour un PNJ ambiant d'une pièce, retourne le témoin de l'enquête active
@@ -813,6 +836,118 @@ export const MISSIONS_RUMEURS = {
       mauvais: "Les témoins forts sont ceux qui ont des DOCUMENTS : Dor avec le registre d'approvisionnement, Bri avec 36 bulletins cachetés. Un souvenir flou (Mo) ou même une observation isolée (Nel seule) pèsent moins qu'une trace écrite.",
     },
     succes: "Dernier geste à retenir : parfois une rumeur EST vraie. Quand plusieurs sources documentées convergent et que la contestation n'a que du souvenir imprécis en face, on dit SOLIDE. Attention : « vérifier » ne veut pas dire « démentir ». Parfois ça veut dire « confirmer ».",
+  },
+
+  pompe: {
+    id: "pompe",
+    flag: "mission_pompe_done",
+    titre: "La grande pompe à eau",
+    affirmation: "La panne de la grande pompe à eau du niveau -1 a bien été réparée le mois dernier, et le débit est revenu à la normale.",
+    briefing: [
+      "Affaire du jour. Un habitant m'a dit qu'au contraire, la pompe fuit toujours — qu'on nous raconte des histoires.",
+      "La maintenance affirme avoir réparé la grande pompe du niveau -1 il y a un mois. On aurait changé une pièce et le débit serait remonté à la normale.",
+      "Quatre personnes savent de quoi elles parlent : Tam qui a fait la réparation, Gus qui tient le registre des travaux, Bel l'apprentie qui l'a assistée, et Via qui rapporte une rumeur contraire.",
+      "Va les voir sur leur poste. Attention : la méfiance est bonne, mais tout démentir par réflexe, c'en est une autre forme.",
+    ],
+    minWitnesses: 4,
+    temoins: [
+      {
+        id: "tam_p", nom: "Tam", role: "Mécanicienne",
+        ancienneteAns: 9, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_tam",
+        pose: { x: 180, y: 400 },
+        color: "#5a4028", pants: "#3a2010", hair: "#8a3820",
+        facing: "right", accessory: "hardhat", activity: "wrench",
+        questions: [
+          { q: "Tu as réparé la pompe toi-même ?",
+            r: "Oui, le 14 du mois dernier. J'ai changé le rotor principal, pièce de référence R-204. L'intervention a duré six heures. J'ai mon bon d'intervention signé.",
+            type: "aVu", val: "A réparé la pompe le 14 : rotor R-204 changé, 6 h d'intervention, bon d'intervention signé." },
+          { q: "Comment sais-tu que le débit est revenu à la normale ?",
+            r: "Je l'ai chronométré. Avant : 7 litres par minute. Après : 42 litres par minute. C'est le débit normal qu'on avait il y a cinq ans. J'ai la fiche de mesure, avant et après.",
+            type: "aVu", val: "Débit mesuré avant/après : 7 L/min → 42 L/min. Fiche de mesure conservée." },
+          { q: "Quelqu'un a vérifié ton travail ?",
+            r: "Oui, Gus a contresigné le registre, et Bel m'a assistée pendant toute l'intervention. On a aussi un contrôle hebdomadaire depuis — le débit tient.",
+            type: "note", val: "Travail contresigné par Gus, assistée par Bel. Contrôle hebdomadaire depuis." },
+        ],
+      },
+      {
+        id: "gus_p", nom: "Gus", role: "Contremaître",
+        ancienneteAns: 24, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_gus",
+        pose: { x: 450, y: 400 },
+        color: "#8a5030", pants: "#3a2010", hair: "#e8dfc8", skin: "#c8a888",
+        facing: "left", accessory: "coat", activity: "write",
+        questions: [
+          { q: "Que dit ton registre sur la pompe ?",
+            r: "Intervention référencée IM-087, le 14 du mois dernier. Pièce R-204 changée. Signée par Tam, contresignée par moi. Débit vérifié à 42 L/min, conforme à la fiche-type.",
+            type: "aVu", val: "Registre IM-087 : intervention et débit conformes, double signature." },
+          { q: "Et depuis, tout va bien ?",
+            r: "Quatre contrôles hebdomadaires. Les quatre à 42 L/min, à 1 litre près. Zéro écart. C'est noté dans le journal, tu peux consulter.",
+            type: "aVu", val: "4 contrôles hebdomadaires post-réparation, tous à 42 L/min ±1." },
+          { q: "Tu as entendu une rumeur contraire ?",
+            r: "Oui, à la cantine. Quelqu'un dit que « ça fuit encore ». Je suis descendu voir : aucune fuite, le local est sec. La rumeur n'est pas sortie de la cantine.",
+            type: "note", val: "A vérifié la rumeur « ça fuit encore » : local sec, pas de fuite." },
+        ],
+      },
+      {
+        id: "bel_p", nom: "Bel", role: "Apprentie mécanicienne",
+        ancienneteAns: 2, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_bel",
+        pose: { x: 720, y: 400 },
+        color: "#c8a848", pants: "#3a4048", hair: "#5a3018",
+        facing: "right", accessory: "toolbelt", activity: "wrench",
+        questions: [
+          { q: "Tu as assisté Tam pendant la réparation ?",
+            r: "Oui, les six heures. J'ai passé les outils, tenu la lampe, noté les étapes. J'ai vu le rotor neuf être posé, et le flux reprendre quand on a rouvert la vanne.",
+            type: "aVu", val: "A assisté les 6 h, a vu le rotor posé et le flux reprendre à l'ouverture de la vanne." },
+          { q: "Vous avez testé tout de suite ?",
+            r: "Oui, dix minutes après la remise en route. Le compteur est passé de 7 à 42 litres par minute sous nos yeux. J'ai pris une photo du compteur avec la date affichée.",
+            type: "aVu", val: "Photo du compteur à 42 L/min avec date affichée." },
+          { q: "Qu'as-tu appris, toi, dans ce travail ?",
+            r: "Que ce n'est pas seulement remplacer une pièce — c'est mesurer avant, mesurer après, et signer ce qu'on a fait. Si Tam avait triché, le contrôle hebdomadaire l'aurait vu.",
+            type: "note", val: "Souligne la méthode : mesure avant/après et contrôle hebdomadaire." },
+        ],
+      },
+      {
+        id: "via_p", nom: "Via", role: "Habitante",
+        ancienneteAns: 9, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
+        pose: { x: 980, y: 400 },
+        color: "#8a3820", pants: "#28303a", hair: "#3a1808",
+        facing: "left", activity: "cup",
+        questions: [
+          { q: "On dit à la cantine que la pompe fuit toujours ?",
+            r: "Oui. Il paraît. Je ne l'ai pas vue moi-même. On en parle depuis deux semaines.",
+            type: "rapporte", val: "Rumeur de cantine : « ça fuit encore ». N'a rien vu personnellement." },
+          { q: "Qui a dit ça en premier ?",
+            r: "Je ne sais plus. Peut-être Mo. Mo dit souvent que rien ne marche. Il n'aime pas la maintenance.",
+            type: "note", val: "Source d'origine : probablement Mo, hostile à la maintenance par principe." },
+          { q: "Tu es descendue voir ?",
+            r: "Non. Je n'ai pas le droit, et je ne saurais pas quoi regarder. Mais on en parle.",
+            type: "note", val: "N'a pas vérifié sur place — se contente de rapporter." },
+        ],
+      },
+    ],
+    temoinsFiables: ["tam_p", "gus_p"],
+    verdicts: [
+      { id: "solide",
+        label: "SOLIDE",
+        desc: "Oui, la pompe est réparée, le débit est bon.",
+        ok: true,
+        retour: "Verdict juste. Trois sources documentées convergent : Tam a réparé avec un bon d'intervention signé et une fiche de mesure (7 → 42 L/min), Gus a contresigné le registre et tient 4 contrôles hebdomadaires à 42 L/min, Bel a assisté les 6 h et a une photo du compteur. Face à ça, Via n'apporte qu'un « il paraît » venu d'un habitant hostile par principe. C'est de l'info solide." },
+      { id: "fragile",
+        label: "FRAGILE",
+        desc: "Peut-être, mais Via dit que ça fuit encore.",
+        ok: false,
+        retour: "Trop prudent. Via ne RAPPORTE qu'un bruit de cantine, sans l'avoir vu, remontant à un habitant hostile à la maintenance. Face à trois témoins directs avec documents, mesures et photo, on ne dit pas « fragile » — on dit « solide »." },
+      { id: "rumeur",
+        label: "RUMEUR",
+        desc: "L'histoire ne tient pas.",
+        ok: false,
+        retour: "Trop sévère. L'affirmation est portée par trois témoins avec des preuves documentées : bon d'intervention, fiche de mesure, photo du compteur, 4 contrôles hebdomadaires. Démentir par réflexe, c'est aussi mal lire que croire par réflexe. Ici, l'info tient — c'est du solide." },
+    ],
+    fiablesFeedback: {
+      parfait: "Et tu as repéré les bons : Tam avec son bon d'intervention et sa fiche de mesure, Gus avec son registre et ses 4 contrôles hebdomadaires. Ce sont des documents qui engagent leurs auteurs. Bel confirme par observation directe mais c'est son premier chantier — son témoignage pèse moins que ceux qui signent.",
+      partiel: "Un sur deux. Les témoins forts sont ceux qui SIGNENT un document : Tam (bon d'intervention + fiche de mesure) et Gus (registre + contrôles hebdomadaires).",
+      mauvais: "Les témoins forts sont ceux qui SIGNENT un document : Tam avec son bon d'intervention, Gus avec son registre et ses contrôles. Un bruit de cantine (Via) ne pèse pas contre deux signatures officielles.",
+    },
+    succes: "Geste à retenir : quand plusieurs documents signés et des mesures concordantes vont dans le même sens, et que la seule contestation est un « il paraît » de cantine, on dit SOLIDE. Douter, c'est utile. Douter de tout, c'est l'inverse d'enquêter.",
   },
 };
 

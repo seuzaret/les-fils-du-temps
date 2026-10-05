@@ -23,7 +23,7 @@ import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
 import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
 import InterviewPanel from "../chapters/jeu3/InterviewPanel.jsx";
 import EnqueteCarnet from "../chapters/jeu3/EnqueteCarnet.jsx";
-import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT, getActiveMission } from "../chapters/jeu3/missions.js";
+import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT, getActiveMission, pickMissionOrder } from "../chapters/jeu3/missions.js";
 import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
 
 /* ============================================================
@@ -66,7 +66,11 @@ const ROOMS = {
 
 export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [room, setRoom] = useState(startAt?.room || "awake");
-  const [flags, setFlags] = useState(startAt?.flags || {});
+  const [flags, setFlags] = useState(() => {
+    const initial = { ...(startAt?.flags || {}) };
+    if (!initial.mission_order) initial.mission_order = pickMissionOrder();
+    return initial;
+  });
   const [heardPnj, setHeardPnj] = useState(startAt?.heardPnj || {});
   /* État partagé de l'enquête active, remonté au niveau Jeu3 pour que
      les interviews puissent se faire dans n'importe quelle pièce et
