@@ -141,8 +141,8 @@ export const MISSIONS_RUMEURS = {
     briefing: [
       "Deuxième affaire. Celle-ci te plaira moins — tu la bois tous les jours.",
       "Depuis un an, une poudre blanche est mélangée dans toutes nos rations. L'étiquette dit « Vitamine M-42 ». Les habitants s'inquiètent, mais personne ne sait rien de concret.",
-      "Quatre témoins ont du nouveau. Tor, aux Serres, dose cette poudre dans ses cuves. Lin, à l'infirmerie, voit arriver des patients fatigués. Bri, à la cantine, reçoit les sacs. Mel, au repos à l'infirmerie, est elle-même touchée.",
-      "Je les ai convoqués ici pour que tu les entendes au comptoir. Pour la prochaine enquête, tu iras les voir sur leurs postes. Reviens avec ton verdict.",
+      "Quatre témoins ont du nouveau. Tor, aux Serres. Lin, à l'infirmerie. Bri, à la cantine. Mel, en repos à l'infirmerie.",
+      "Va les voir sur leur poste et interroge-les. Reviens avec ton verdict quand tu les auras tous entendus.",
     ],
     minWitnesses: 4,
     temoins: [
@@ -254,8 +254,8 @@ export const MISSIONS_RUMEURS = {
     briefing: [
       "Troisième affaire. Celle-ci te chatouille parce qu'elle est régulière comme une horloge.",
       "Depuis des années, le Puits a une coupure de courant d'une minute pile toutes les 40 nuits. L'affichage officiel dit : « panne mineure, rien à signaler ». Les gens s'y sont habitués.",
-      "Quatre personnes à l'atelier et aux serres ont des choses à dire là-dessus. Yon l'électricien, Gus le contremaître, Kev l'ingénieur, Flor la botaniste. Je les ai convoqués ici.",
-      "Interroge-les. Vois si cette « panne mineure » tient face à leurs observations.",
+      "Quatre personnes à l'atelier et aux serres ont des choses à dire là-dessus. Yon l'électricien, Gus le contremaître, Kev l'ingénieur, Flor la botaniste.",
+      "Va les voir sur leurs postes. Interroge-les. Vois si cette « panne mineure » tient face à leurs observations.",
     ],
     minWitnesses: 4,
     temoins: [
@@ -481,7 +481,7 @@ export const MISSIONS_RUMEURS = {
       "Dernière affaire pour aujourd'hui. Celle-ci est la plus grosse. Prends ton temps.",
       "L'affichage officiel de MARTINE répète depuis quarante ans que la surface est morte, que l'air est mortel, que rien n'y pousse. Nos vies sont entièrement bâties sur cette certitude.",
       "Quatre personnes ont vu, lu, touché des choses qui pourraient faire bouger cette certitude. Ela, une enfant à la cantine. Anselme, un ancien à la chapelle, qui a VÉCU dehors enfant. Yona, couturière au niveau 4. Estev, ancien enseignant, qui tient trente carnets.",
-      "Je les ai convoqués. Si leur témoignage tient debout, c'est MARTINE elle-même qu'il faudra regarder en face.",
+      "Va les trouver chacun chez eux. Si leurs témoignages tiennent debout, c'est MARTINE elle-même qu'il faudra regarder en face.",
     ],
     minWitnesses: 4,
     temoins: [
@@ -711,7 +711,7 @@ export const MISSIONS_RUMEURS = {
     briefing: [
       "Une dernière pour aujourd'hui. Celle-ci va te surprendre.",
       "Un habitant est venu me voir, offensé : il dit avoir mangé de la viande à la cantine la semaine dernière. Pour lui, l'idée qu'« il n'y a plus de viande depuis trois ans » serait une invention des cuisiniers.",
-      "Quatre personnes savent de quoi elles parlent : Dor et Bri, qui gèrent les stocks ; Nel la serveuse ; et Mo, l'habitant qui conteste. Je les ai convoqués.",
+      "Quatre personnes savent de quoi elles parlent : Dor et Bri, qui gèrent les stocks ; Nel la serveuse ; et Mo, l'habitant qui conteste. Va les voir sur leur poste.",
       "Vérifie si l'affirmation « plus de viande depuis trois ans » tient — ou pas. Attention à ne pas te laisser emporter par l'habitude de crier à la rumeur.",
     ],
     minWitnesses: 4,
