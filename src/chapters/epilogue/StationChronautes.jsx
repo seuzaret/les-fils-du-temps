@@ -52,11 +52,11 @@ const DIALOGUES_PAR_PERSO = {
     { mood: "neutre",
       text: "Al3x1A est partie chercher un remède, il y a dix ans. Aucune nouvelle. On attend." },
     { mood: "content",
-      text: "Aujourd'hui, tu es la seule à avoir traversé les époques comme elle. Retourne voir Elias — il a une question." },
+      text: "Aujourd'hui, toi seul·e as traversé les époques comme elle. Retourne voir Elias — il a une question." },
   ],
   finale: [
     { mood: "content",
-      text: "Tu as tout entendu. Alors voilà : tu es la seule chronaute qui connaisse encore les époques. Al3x1A est là-bas, quelque part. Tu la retrouverais ?" },
+      text: "Tu as tout entendu. Alors voilà : parmi les chronautes, toi seul·e connaît encore les époques. Al3x1A est là-bas, quelque part. Tu la retrouverais ?" },
   ],
 };
 
