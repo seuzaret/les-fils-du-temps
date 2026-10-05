@@ -37,10 +37,11 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   // le Juge Vez redonne la mission chaque fois qu'on revient le voir).
   const [phase, setPhase] = useState(() => {
     if (!mission) return "done";
-    const ans = j3.enqAnswered || {};
-    const nb = mission.temoins.filter((t) => (ans[t.id] || new Set()).size > 0).length;
-    if (nb >= mission.temoins.length) return "enquete"; // tout fait → cliquer Vez va direct au verdict
-    if (nb > 0) return "enquete"; // enquête en cours
+    /* Flag "briefing déjà lu pour cette mission" posé par le onDone du
+       BigDialogue de briefing. S'il est là, on skippe le briefing au
+       remount — Vez proposera directement le rappel ou le verdict selon
+       l'avancée. */
+    if (j3.flags[`briefing_${mission.id}_done`]) return "enquete";
     return "briefing";
   });
   const [selected, setSelected] = useState(null); // uniquement pour Vez (briefing/rappel)
@@ -355,7 +356,13 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           speakerStyle={VEZ_STYLE}
           lignes={mission.briefing}
           actionLabel="Prendre l'affaire ▸"
-          onDone={() => { setPhase("enquete"); setSelected(null); }} />
+          onDone={() => {
+            /* On marque le briefing comme lu : si le joueur quitte la
+               pièce puis revient, on ne lui redonne pas le briefing. */
+            j3.setFlag(`briefing_${mission.id}_done`);
+            setPhase("enquete");
+            setSelected(null);
+          }} />
       )}
       {phase === "feedback" && feedback && feedback.verdict.ok && (
         <BigDialogue
