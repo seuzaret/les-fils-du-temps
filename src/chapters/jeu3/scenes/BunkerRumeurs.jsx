@@ -32,7 +32,17 @@ export default function BunkerRumeurs({ onGo, j3 }) {
 
   // Hooks TOUJOURS déclarés dans le même ordre (pas de hook conditionnel).
   // L'état d'interview (quel témoin, quelles réponses) vit dans j3.
-  const [phase, setPhase] = useState(allDone ? "done" : "briefing");
+  // Phase initiale calculée depuis l'état des interrogatoires : si le
+  // joueur a déjà interrogé des témoins, on skippe le briefing (sinon
+  // le Juge Vez redonne la mission chaque fois qu'on revient le voir).
+  const [phase, setPhase] = useState(() => {
+    if (!mission) return "done";
+    const ans = j3.enqAnswered || {};
+    const nb = mission.temoins.filter((t) => (ans[t.id] || new Set()).size > 0).length;
+    if (nb >= mission.temoins.length) return "enquete"; // tout fait → cliquer Vez va direct au verdict
+    if (nb > 0) return "enquete"; // enquête en cours
+    return "briefing";
+  });
   const [selected, setSelected] = useState(null); // uniquement pour Vez (briefing/rappel)
   const [verdictChoice, setVerdictChoice] = useState(null);
   const [reliablePicks, setReliablePicks] = useState(new Set());
@@ -40,7 +50,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
 
   /* Quand la mission courante change (une résolue → la suivante prend sa place),
      on réinitialise l'UI locale : briefing de la nouvelle, états locaux à zéro.
-     (L'état d'interview est réinitialisé par Jeu3 lui-même.) */
+     (L'état d'interview est réinitialisé par Jeu3 lui-même.) Le remount du
+     composant (changement de pièce) ne passe PAS par ce useEffect : la phase
+     initiale est alors calculée depuis l'état des témoins (cf. useState). */
   useEffect(() => {
     if (!mission) { setPhase("done"); return; }
     setPhase("briefing");
@@ -348,7 +360,11 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           speakerNom="Juge Vez" speakerRole="Verdict rendu"
           speakerStyle={VEZ_STYLE}
           accent="#5eff9e"
-          lignes={[feedback.verdict.retour, feedback.fbFiables, mission.succes].filter(Boolean)}
+          /* On ne garde que 2 répliques courtes : la validation du verdict
+             + la leçon à retenir. fbFiables (sur les témoins marqués
+             fiables) est volontairement laissé de côté — trop long pour
+             des 6ᵉ, et le joueur a déjà eu son retour sur les cases. */
+          lignes={[feedback.verdict.retour, mission.succes].filter(Boolean)}
           actionLabel="Continuer ▸"
           onDone={() => {
             /* C'est MAINTENANT qu'on pose le flag, après lecture du
@@ -437,18 +453,18 @@ function EnquetePanel({ mission, nbInterroges, allAsked, temoinsAChercher = [] }
 function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks, togglePick, onSubmit, onCancel }) {
   const canSubmit = verdictChoice && reliablePicks.size >= 1;
   return (
-    <div style={{ background: "#1a1408", border: "2px solid #e0a848", borderRadius: 10, padding: "14px 18px" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848", marginBottom: 8 }}>
-        🎯 RENDS TON VERDICT
+    <div style={{ background: "#1a1408", border: "2px solid #e0a848", borderRadius: 10, padding: "10px 14px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4, gap: 8 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>🎯 RENDS TON VERDICT</div>
+        <div style={{ fontSize: 11, color: "#c8d4e2", fontStyle: "italic", flex: 1, textAlign: "right" }}>
+          « {mission.affirmation} »
+        </div>
       </div>
-      <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", fontStyle: "italic" }}>
-        Affirmation : « {mission.affirmation} »
-      </p>
 
-      <div style={{ marginTop: 12, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
+      <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
         1. QUEL VERDICT ?
       </div>
-      <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
         {mission.verdicts.map((v) => (
           <button key={v.id} onClick={() => setVerdictChoice(v.id)}
             title={v.desc}
@@ -456,20 +472,21 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
               background: verdictChoice === v.id ? "#e0a848" : "#141b26",
               color: verdictChoice === v.id ? "#1a0e08" : "#e8eef5",
               border: `1px solid ${verdictChoice === v.id ? "#e0a848" : "#3a4048"}`,
-              borderRadius: 8, padding: "10px 16px",
+              borderRadius: 8, padding: "6px 12px",
               fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800,
-              cursor: "pointer", letterSpacing: 1, flex: "1 1 200px",
+              cursor: "pointer", letterSpacing: 1, flex: "1 1 150px",
+              textAlign: "left",
             }}>
             {v.label}
-            <div style={{ fontSize: 10, fontWeight: 500, marginTop: 4, opacity: 0.85 }}>{v.desc}</div>
+            <div style={{ fontSize: 10, fontWeight: 500, marginTop: 2, opacity: 0.85, lineHeight: 1.3 }}>{v.desc}</div>
           </button>
         ))}
       </div>
 
-      <div style={{ marginTop: 14, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
-        2. QUEL·S TÉMOIN·S JUGES-TU LE·S PLUS FIABLE·S SUR CE SUJET ?
+      <div style={{ marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
+        2. TÉMOIN·S FIABLE·S ?
       </div>
-      <div style={{ display: "flex", gap: 8, marginTop: 6, flexWrap: "wrap" }}>
+      <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
         {mission.temoins.map((t) => {
           const picked = reliablePicks.has(t.id);
           return (
@@ -478,8 +495,8 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
                 background: picked ? "#0e2818" : "#141b26",
                 color: picked ? "#5eff9e" : "#c8d4e2",
                 border: `1px solid ${picked ? "#5eff9e" : "#3a4048"}`,
-                borderRadius: 8, padding: "8px 14px",
-                fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer", letterSpacing: 1,
+                borderRadius: 8, padding: "5px 10px",
+                fontFamily: "ui-monospace,monospace", fontSize: 11.5, cursor: "pointer", letterSpacing: 1,
               }}>
               {picked ? "☑ " : "☐ "}{t.nom}
             </button>
@@ -487,16 +504,16 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
         })}
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, gap: 8 }}>
         <button onClick={onCancel}
-          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
           ← Continuer d'enquêter
         </button>
         <button onClick={onSubmit} disabled={!canSubmit}
           style={{
             background: canSubmit ? "#5eff9e" : "#2a3648",
             color: canSubmit ? "#06110b" : "#5a6678",
-            border: "none", borderRadius: 8, padding: "10px 22px",
+            border: "none", borderRadius: 8, padding: "7px 18px",
             fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800,
             cursor: canSubmit ? "pointer" : "default", letterSpacing: 1,
           }}>
