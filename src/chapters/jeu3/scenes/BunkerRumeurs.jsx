@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import BigDialogue from "../BigDialogue.jsx";
 import { MISSION_ORDER } from "../missions.js";
@@ -48,13 +48,16 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const [reliablePicks, setReliablePicks] = useState(new Set());
   const [feedback, setFeedback] = useState(null);
 
-  /* Quand la mission courante change (une résolue → la suivante prend sa place),
-     on réinitialise l'UI locale : briefing de la nouvelle, états locaux à zéro.
-     (L'état d'interview est réinitialisé par Jeu3 lui-même.) Le remount du
-     composant (changement de pièce) ne passe PAS par ce useEffect : la phase
-     initiale est alors calculée depuis l'état des témoins (cf. useState). */
+  /* Quand la mission courante CHANGE (une résolue → la suivante prend sa place),
+     on réinitialise l'UI locale. Attention : ce useEffect tourne AUSSI au
+     premier rendu, ce qui écraserait la phase intelligente du useState. On
+     garde donc une ref du dernier mission.id vu et on ne reset QUE si on
+     détecte un vrai changement (pas le mount initial). */
+  const prevMissionIdRef = useRef(mission?.id);
   useEffect(() => {
     if (!mission) { setPhase("done"); return; }
+    if (prevMissionIdRef.current === mission.id) return; // premier rendu : rien à reset
+    prevMissionIdRef.current = mission.id;
     setPhase("briefing");
     setSelected(null);
     setVerdictChoice(null);
