@@ -209,6 +209,7 @@ export default function App() {
   const [vesselOpen, setVesselOpen] = useState(false);          // Vaisseau temporel (fin de chapitre)
   const [anachronismLearned, setAnachronismLearned] = useState(false); // MARTINE a-t-elle déjà expliqué les déchets temporels ?
   const [anachronismesJetesCount, setAnachronismesJetesCount] = useState(0); // combien de déchets ont déjà été jetés (pour éviter que Martine ré-explique)
+  const [rule4Warned, setRule4Warned] = useState(false); // MARTINE a-t-elle déjà rappelé la RÈGLE 4 (temps limité) sur ce chapitre ?
   /* Confort de lecture (accessibilité) — mémorisé sur l'appareil, à part
      de la sauvegarde de partie (une même classe garde ses réglages). */
   const [a11y, setA11y] = useState(() => {
@@ -577,6 +578,7 @@ export default function App() {
     /* Le flux du CHAPITRE se remet à zéro (chaque chapitre a sa cible) ;
        le score CUMULÉ (fluxTotal) est preservé pour le badge final. */
     setFlux(0);
+    setRule4Warned(false); // rappel règle 4 à nouveau possible au prochain faux-pas
     setTab(CHAPTERS[i].startScene);
     setDialog({ lines: CHAPTERS[i].intro, idx: 0, mood: "neutre" });
     setScreen("play");
@@ -594,6 +596,7 @@ export default function App() {
     setMaxReached((m) => Math.max(m, i));
     setInv(seed); setMsgs([]); setMade([]); setFlags({}); setQuete(0);
     setFlux(0); /* rejouer un chapitre : jauge fraîche, mais fluxTotal/bonus conservés */
+    setRule4Warned(false);
     setTab(CHAPTERS[i].startScene);
     setDialog({ lines: CHAPTERS[i].intro, idx: 0, mood: "neutre" });
     setScreen("play");
@@ -713,15 +716,15 @@ export default function App() {
          Première fois : MARTINE explique la mécanique de nettoyage temporel.
          Fois suivantes : petite phrase courte, sans redite. */
       if (it.anachronic) {
-        /* Au ramassage, MARTINE ne donne QUE le nom + le signal
-           « déchet temporel » — pas la description (spoiler). C'est
-           quand l'élève JETTE l'objet dans la poubelle qu'il découvre
-           l'explication complète, en récompense. */
+        /* Au ramassage, MARTINE rappelle la RÈGLE 3 des chronautes
+           (ne rien laisser du futur dans le passé). Première fois :
+           explication + mention de la poubelle temporelle.
+           Fois suivantes : rappel court. */
         if (!anachronismLearned) {
           setAnachronismLearned(true);
-          say(`${it.emoji} ${it.name} — 🚨 DÉCHET TEMPOREL ! Cet objet n'a rien à faire ici : un agent du temps peu soigneux l'a laissé traîner et ça POLLUE la ligne temporelle. Vite, une POUBELLE TEMPORELLE 🗑️ vient d'apparaître en bas à gauche — glisse le déchet dedans pour nettoyer et gagner du flux. Il y en a un caché à chaque époque, ouvre l'œil.`, "vexe");
+          say(`${it.emoji} ${it.name} — 🚨 DÉCHET TEMPOREL ! Rappelle-toi la RÈGLE 3 des chronautes : rien du futur ne doit rester dans le passé. Un agent peu soigneux l'a oublié là. Glisse-le dans la POUBELLE TEMPORELLE 🗑️ (en bas à gauche) pour nettoyer et gagner du flux. Il y en a un à chaque époque — ouvre l'œil.`, "vexe");
         } else {
-          say(`${it.emoji} ${it.name} — dans la poubelle 🗑️.`, "vexe");
+          say(`${it.emoji} ${it.name} — règle 3, dans la poubelle 🗑️.`, "vexe");
         }
       } else {
         say(`${it.emoji} ${it.name} — ${it.desc}`);
@@ -945,6 +948,13 @@ export default function App() {
     if (delta > 0) setFluxTotal((t) => Math.round((t + delta) * 10) / 10);
     setFluxBubble({ delta, key: Date.now() });
     setTimeout(() => setFluxBubble((b) => (b && b.key ? null : b)), 1400);
+    /* RÈGLE 4 des chronautes : rentre à ton époque avant qu'il soit trop
+       tard. Première perte de flux dans ce chapitre → MARTINE rappelle
+       cette règle, pour relier la jauge à l'un des 4 commandements. */
+    if (delta < 0 && !rule4Warned && mode === "jeu1") {
+      setRule4Warned(true);
+      setTimeout(() => say("◆ RÈGLE 4 — rentre à ton époque avant qu'il soit trop tard. Mon flux temporel faiblit à chaque erreur. Si on reste trop ici, je ne pourrai pas te ramener.", "neutre"), 900);
+    }
   };
 
   /* Ouvre la CARTE-INVENTION (façon Pokémon) si le message a une image

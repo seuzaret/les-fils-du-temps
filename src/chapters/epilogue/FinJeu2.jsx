@@ -813,7 +813,7 @@ const ACTS = [
     titre: "LE REMÈDE MARCHE",
     couleur: "#7fd8ff",
     texte: [
-      "La MARTINE atterrit sur la plateforme. Al3x1A descend, chancelante. Elias arrive en courant, incrédule.",
+      "MARTINE se pose sur la plateforme. Al3x1A descend, chancelante. Elias arrive en courant, incrédule.",
       "Mira sort son écran, teste le remède, remonte les yeux vers toi et sourit. « Ça marche. Ça marche vraiment. »",
       "Al3x1A te fixe encore une seconde, comme si elle voulait dire quelque chose. Puis elle secoue la tête et sourit. « Merci d'être venu·e me chercher. »",
     ],
@@ -869,7 +869,7 @@ const ACTS = [
    la révélation complète arrive à la confrontation jeu 3. */
 const CHOICE_HINTS = {
   laisser: { couleur: "#ffd166",
-    texte: "Et pourtant, en descendant de la MARTINE, elle est là. Chancelante. Tu te souviens de l'avoir laissée là-bas — tu es certain·e. Mais elle est là. Quelque chose ne colle pas." },
+    texte: "Et pourtant, en descendant de MARTINE, elle est là. Chancelante. Tu te souviens de l'avoir laissée là-bas — tu es certain·e. Mais elle est là. Quelque chose ne colle pas." },
   rester:  { couleur: "#ff8a6a",
     texte: "Et pourtant, tu es au futur. Avec elle. Tu te souviens d'avoir choisi de rester — tu en es sûr·e. Mais tu es là. Quelque chose ne colle pas." },
 };
