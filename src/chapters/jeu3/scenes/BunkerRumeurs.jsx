@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import BigDialogue from "../BigDialogue.jsx";
-import { MISSION_ORDER } from "../missions.js";
+import { getMissionOrder } from "../missions.js";
 
 /* Portrait du Juge Vez utilisé en plein écran. */
 const VEZ_STYLE = {
@@ -26,9 +26,10 @@ const VEZ_STYLE = {
 export default function BunkerRumeurs({ onGo, j3 }) {
   const billetRecu = j3.flags.puits_billet;
   /* Mission active = première de la séquence qui n'est pas encore marquée faite. */
-  const mission = MISSION_ORDER.map((id) => j3.missions[id]).find((m) => m && !j3.flags[m.flag]);
+  const order = getMissionOrder(j3.flags);
+  const mission = order.map((id) => j3.missions[id]).find((m) => m && !j3.flags[m.flag]);
   const allDone = !mission;
-  const missionNum = mission ? MISSION_ORDER.indexOf(mission.id) + 1 : MISSION_ORDER.length;
+  const missionNum = mission ? order.indexOf(mission.id) + 1 : order.length;
 
   // Hooks TOUJOURS déclarés dans le même ordre (pas de hook conditionnel).
   // L'état d'interview (quel témoin, quelles réponses) vit dans j3.
