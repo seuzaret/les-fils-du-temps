@@ -171,7 +171,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       </div>
 
       <svg viewBox="0 0 1200 620" preserveAspectRatio="xMidYMid meet"
-        style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0, cursor: selected ? "pointer" : "default" }}
+        style={{ display: "block", width: "100%", flexShrink: 1, minHeight: 0,
+          maxHeight: phase === "verdict" || phase === "feedback" ? 200 : "none",
+          cursor: selected ? "pointer" : "default" }}
         onClick={() => { if (phase === "enquete") setSelected(null); }}>
         <defs>
           <linearGradient id="br-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2a2418" /><stop offset="100%" stopColor="#141008" /></linearGradient>
