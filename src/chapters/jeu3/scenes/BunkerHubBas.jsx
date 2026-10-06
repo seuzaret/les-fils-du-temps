@@ -16,14 +16,25 @@ const DOORS = [
 ];
 
 export default function BunkerHubBas({ onGo, j3 }) {
-  /* Badge "nouvelle enquête" sur la porte Rumeurs : Kova est faite,
-     il reste au moins une enquête active, et son briefing n'a pas
-     encore été lu. */
+  /* Badge "nouvelle enquête" sur la porte Rumeurs : apparaît quand la
+     prochaine enquête est RÉELLEMENT disponible (gate narratif rempli).
+     Enquête 2 : requiert mission_appel_done (Archives). Enquête 3 :
+     requiert aussi mission_carnet_done. */
   const flags = j3?.flags || {};
   const order = getMissionOrder(flags);
   const activeId = order.find((id) => j3?.missions?.[id] && !flags[j3.missions[id].flag]);
   const activeMission = activeId ? j3.missions[activeId] : null;
-  const newCase = !!flags.mission_kova_done && !!activeMission && !flags[`briefing_${activeMission.id}_done`];
+  const missionNum = activeId ? order.indexOf(activeId) + 1 : 0;
+  const gateOk = !activeMission ? false
+    : missionNum === 1 ? true
+    : missionNum === 2 ? !!flags.mission_appel_done
+    : missionNum === 3 ? !!flags.mission_appel_done && !!flags.mission_carnet_done
+    : true;
+  const newCase = !!activeMission && gateOk && !flags[`briefing_${activeMission.id}_done`] && !!flags.mission_kova_done;
+
+  /* Badge "nouveau lieu" sur la porte Archives tant que le joueur n'a
+     pas encore découvert le passage secret (seulement après Kova faite). */
+  const archivesNew = !!flags.mission_kova_done && !flags.archives_passage_opened;
   return (
     <svg viewBox="0 0 1000 460" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
       <defs>
@@ -151,6 +162,14 @@ export default function BunkerHubBas({ onGo, j3 }) {
                 <text x="0" y="4" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="14" fontWeight="900" fill="#1a0e08">!</text>
                 <text x="0" y="30" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="700" fill="#e0a848" letterSpacing="1">NOUVELLE</text>
                 <text x="0" y="40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="700" fill="#e0a848" letterSpacing="1">ENQUÊTE</text>
+              </g>
+            )}
+            {door.id === "archives" && archivesNew && (
+              <g transform="translate(118,10)">
+                <circle r="12" fill="#7fd8ff" stroke="#0a0806" strokeWidth="1.5">
+                  <animate attributeName="opacity" values="0.5;1;0.5" dur="1.6s" repeatCount="indefinite" />
+                </circle>
+                <text x="0" y="4" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fontWeight="900" fill="#0a0806">?</text>
               </g>
             )}
           </g>

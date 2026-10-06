@@ -14,8 +14,15 @@ export default function BunkerArchives({ onGo, j3 }) {
   const mission = j3.missions.appel;
   const unlocked = !!j3.flags[mission?.prerequisite];
   const done = !!j3.flags[mission?.flag];
+  const passageOpen = !!j3.flags.archives_passage_opened;
   const dossiers = j3.dossiers || {};
   const order = j3.dossiersOrder || [];
+  const openPassage = () => {
+    j3.setFlag("archives_passage_opened");
+    /* On n'envoie PAS automatiquement au sas : on laisse le joueur voir
+       l'escalier s'ouvrir, puis cliquer dessus. */
+  };
+  const descendToSas = () => onGo("sas");
   const dossierDone = (d) => !!j3.flags[d.flag];
   const nbDone = order.filter((id) => dossierDone(dossiers[id])).length;
   /* Si le joueur revient avec un bordereau rempli (= il a visité le passé),
@@ -163,6 +170,15 @@ export default function BunkerArchives({ onGo, j3 }) {
           ))}
         </g>
 
+        {/* PASSAGE SECRET au fond gauche. Étagère pivotante (fermée) ou
+            escalier descendant (ouvert). Interactif. */}
+        <HiddenPassage
+          unlocked={unlocked}
+          passageOpen={passageOpen}
+          onOpen={openPassage}
+          onDescend={descendToSas}
+        />
+
         {/* CHARIOT de dossiers oublié au sol, allée centrale */}
         <g transform="translate(560,370)">
           <rect x="-30" y="-14" width="60" height="16" fill="#3a4048" stroke="#0a0806" strokeWidth="1" />
@@ -201,7 +217,12 @@ export default function BunkerArchives({ onGo, j3 }) {
           <text x="0" y="-22" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5eff9e" letterSpacing="1">RÉSEAU M · ARCHIVES</text>
           <line x1="-52" y1="-16" x2="52" y2="-16" stroke="#144030" strokeWidth="0.5" />
           <text x="-52" y="-6" fontSize="6" fontFamily="ui-monospace,monospace" fill="#5eff9e">◆ 12 042 entrées</text>
-          {unlocked && !done && (
+          {unlocked && !done && !passageOpen && (
+            <text x="-52" y="6" fontSize="6" fontFamily="ui-monospace,monospace" fill="#5a6678">
+              ◇ VERROUILLÉ · MARTINE
+            </text>
+          )}
+          {unlocked && !done && passageOpen && (
             <>
               <text x="-52" y="6" fontSize="6" fontFamily="ui-monospace,monospace" fill="#e0a848">
                 ⚠ {order.length - nbDone} dossier{order.length - nbDone > 1 ? "s" : ""} réécrit{order.length - nbDone > 1 ? "s" : ""}
@@ -268,6 +289,15 @@ export default function BunkerArchives({ onGo, j3 }) {
               {mission.succes}
             </p>
           </div>
+        ) : unlocked && !passageOpen ? (
+          <div style={{ background: "#0a0e14", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.55 }}>
+              Le terminal des Archives affiche <strong style={{ color: "#5a6678" }}>VERROUILLÉ · MARTINE</strong>. Impossible de consulter les dossiers d'ici.
+            </p>
+            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8a848", fontStyle: "italic" }}>
+              Mais quelque chose scintille au fond de la salle, près de l'étagère du bas…
+            </p>
+          </div>
         ) : unlocked ? (
           <DossiersList dossiers={dossiers} order={order} flags={j3.flags}
             onPick={(id) => { j3.startDossier(id); onGo("sas"); }} />
@@ -290,6 +320,97 @@ export default function BunkerArchives({ onGo, j3 }) {
           onClose={() => { j3.finishDossier(); setCompareOpen(false); }} />
       )}
     </div>
+  );
+}
+
+/* --------- Passage secret (étagère pivotante + escalier) ---------
+   3 états :
+   - !unlocked : rien, l'étagère est normale (joueur n'a pas fait Kova)
+   - unlocked && !passageOpen : étagère avec lueur dorée pulsante, clic
+     la fait pivoter (anime via rotate CSS) et pose le flag
+   - passageOpen : étagère basculée, escalier descendant visible et
+     cliquable pour aller au sas. */
+function HiddenPassage({ unlocked, passageOpen, onOpen, onDescend }) {
+  if (!unlocked) return null;
+  return (
+    <g transform="translate(130,210)">
+      {passageOpen ? (
+        <g onClick={onDescend} style={{ cursor: "pointer" }}>
+          {/* Animation d'ouverture : fade de l'étagère + apparition de l'escalier.
+              Les deux groupes sont rendus en même temps, l'étagère disparaît
+              progressivement et laisse place à l'escalier au premier affichage. */}
+          <g opacity="1">
+            <animate attributeName="opacity" from="1" to="0" dur="0.9s" fill="freeze" begin="0s" />
+            <rect x="-10" y="-80" width="80" height="160" fill="url(#ar-shelf)" stroke="#0a0e14" strokeWidth="2" />
+            {[0, 1, 2, 3, 4].map((r) => (
+              <g key={r} transform={`translate(-6,${-70 + r * 32})`}>
+                <line x1="0" y1="0" x2="72" y2="0" stroke="#0a0e14" strokeWidth="0.6" />
+                {[0, 1, 2, 3, 4].map((k) => (
+                  <rect key={k} x={2 + k * 14} y="2" width="12" height="28"
+                    fill={["#8a3820", "#5a2818", "#8a5030", "#5a4028", "#c8a848"][(r + k) % 5]}
+                    stroke="#1a0e08" strokeWidth="0.4" />
+                ))}
+              </g>
+            ))}
+          </g>
+          {/* Cadre de passage (étagère pivotée) */}
+          <rect x="-10" y="-80" width="80" height="160" fill="#0a0806" stroke="#8a5030" strokeWidth="2" opacity="0">
+            <animate attributeName="opacity" from="0" to="1" dur="0.9s" fill="freeze" begin="0.5s" />
+          </rect>
+          {/* Marches descendantes (perspective fuyante) */}
+          {[0, 1, 2, 3, 4].map((i) => (
+            <path key={i}
+              d={`M${-5 + i * 4} ${-70 + i * 20} L${65 - i * 4} ${-70 + i * 20} L${60 - i * 4} ${-56 + i * 20} L${-i * 4} ${-56 + i * 20} Z`}
+              fill={`rgb(${50 + i * 10},${40 + i * 10},${30 + i * 10})`}
+              stroke="#1a0e08" strokeWidth="0.6" opacity="0">
+              <animate attributeName="opacity" from="0" to={1 - i * 0.1} dur="0.9s" fill="freeze" begin={`${0.6 + i * 0.1}s`} />
+            </path>
+          ))}
+          {/* Halo doré en bas de l'escalier */}
+          <circle cx="30" cy="60" r="30" fill="#c8a848" opacity="0.25">
+            <animate attributeName="opacity" values="0.15;0.4;0.15" dur="2.4s" repeatCount="indefinite" />
+          </circle>
+          {/* Pictogramme flèche vers le bas */}
+          <g transform="translate(30,0)">
+            <circle r="14" fill="#c8a848" stroke="#1a0e08" strokeWidth="1.5" opacity="0.9" />
+            <path d="M-7 -3 L0 6 L7 -3" stroke="#1a0e08" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
+          {/* Étiquette */}
+          <text x="30" y="100" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fontWeight="700" fill="#c8a848" letterSpacing="2">
+            → SAS DE LÉA
+          </text>
+        </g>
+      ) : (
+        <g onClick={onOpen} style={{ cursor: "pointer" }}>
+          {/* Étagère basse, pulsation dorée pour attirer le regard */}
+          <rect x="-10" y="-80" width="80" height="160" fill="url(#ar-shelf)" stroke="#0a0e14" strokeWidth="2" />
+          {/* Rangées de dossiers */}
+          {[0, 1, 2, 3, 4].map((r) => (
+            <g key={r} transform={`translate(-6,${-70 + r * 32})`}>
+              <line x1="0" y1="0" x2="72" y2="0" stroke="#0a0e14" strokeWidth="0.6" />
+              {[0, 1, 2, 3, 4].map((k) => (
+                <rect key={k} x={2 + k * 14} y="2" width="12" height="28"
+                  fill={["#8a3820", "#5a2818", "#8a5030", "#5a4028", "#c8a848"][(r + k) % 5]}
+                  stroke="#1a0e08" strokeWidth="0.4" />
+              ))}
+            </g>
+          ))}
+          {/* Dossier doré qui dépasse — l'indice visuel */}
+          <rect x="22" y="30" width="10" height="22" fill="#ffd870" stroke="#8a5030" strokeWidth="0.8">
+            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.6s" repeatCount="indefinite" />
+          </rect>
+          {/* Halo doré derrière l'étagère */}
+          <circle cx="30" cy="0" r="48" fill="#c8a848" opacity="0.12">
+            <animate attributeName="opacity" values="0.05;0.25;0.05" dur="2.8s" repeatCount="indefinite" />
+            <animate attributeName="r" values="40;52;40" dur="2.8s" repeatCount="indefinite" />
+          </circle>
+          {/* Picto main loupe */}
+          <text x="30" y="100" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fontWeight="700" fill="#c8a848" letterSpacing="2">
+            🔍 EXAMINER
+          </text>
+        </g>
+      )}
+    </g>
   );
 }
 

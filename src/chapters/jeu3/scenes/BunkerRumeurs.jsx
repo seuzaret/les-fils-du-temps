@@ -31,6 +31,19 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const allDone = !mission;
   const missionNum = mission ? order.indexOf(mission.id) + 1 : order.length;
 
+  /* Gate narratif : Vez ne propose une nouvelle enquête qu'après avoir
+     laissé le joueur avancer sur les missions annexes (Archives / Carnet).
+     Enquête 1 (Kova) : toujours prête. Enquête 2 : requiert les Archives
+     restaurées. Enquête 3 : requiert aussi le Carnet validé. */
+  const nextGate = !mission ? null
+    : missionNum === 1 ? null
+    : missionNum === 2 && !j3.flags.mission_appel_done ? "appel"
+    : missionNum === 3 && !j3.flags.mission_appel_done ? "appel"
+    : missionNum === 3 && !j3.flags.mission_carnet_done ? "carnet"
+    : null;
+  /* Vez bloqué : pas encore de nouvelle affaire tant que gate non remplie. */
+  const vezWaiting = !!nextGate && !j3.flags[`briefing_${mission.id}_done`];
+
   // Hooks TOUJOURS déclarés dans le même ordre (pas de hook conditionnel).
   // L'état d'interview (quel témoin, quelles réponses) vit dans j3.
   // Phase initiale calculée depuis l'état des interrogatoires : si le
@@ -81,6 +94,31 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           </p>
           <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.5, fontFamily: "Georgia, serif", color: "#e8dfc8" }}>
             « Je reçois les habitants qui savent déjà pourquoi ils viennent. Prends le temps d'écouter les autres. — V. »
+          </p>
+        </div>
+        <button onClick={() => onGo(j3.hubRoom || "hubBas")}
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          ← Retour au couloir
+        </button>
+      </div>
+    );
+  }
+
+  /* Vez attend : enquête suivante en pré-publication mais le joueur doit
+     d'abord passer par les Archives et/ou le Carnet. On garde la scène
+     visible (ambiance intacte) et on met Vez en « rien de neuf ». */
+  if (vezWaiting) {
+    const hint = nextGate === "appel"
+      ? "Je n'ai rien de neuf pour toi. Mais j'ai entendu des bruits bizarres venant des Archives, en bas. Va jeter un œil, tu peux peut-être m'aider sur autre chose en attendant."
+      : "J'étudie l'affaire suivante, elle n'est pas prête. Pour patienter, le carnet noir qui traîne dans ta chambre — tu l'as regardé ? Les trois affirmations qu'il contient ne sont pas toutes vraies.";
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#e0a848", textAlign: "center" }}>
+          BUREAU DES RUMEURS · JUGE VEZ
+        </div>
+        <div style={{ maxWidth: 540, textAlign: "center", background: "#141008", border: "1px solid #e0a848", borderRadius: 12, padding: "22px 24px", color: "#e8dfc8" }}>
+          <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic" }}>
+            « {hint} »
           </p>
         </div>
         <button onClick={() => onGo(j3.hubRoom || "hubBas")}
@@ -380,7 +418,14 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           lignes={[
             feedback.verdict.retour,
             mission.succes,
-            missionNum < order.length ? "Reviens me voir plus tard — s'il y a d'autres affaires sur mon bureau, je te les proposerai." : null,
+            /* Après Kova (mission 1) : on envoie explicitement le joueur
+               aux Archives, c'est le vrai pivot narratif. Après les
+               enquêtes suivantes : rappel plus générique. */
+            missionNum === 1
+              ? "Au fait — j'ai entendu des drôles de bruits en bas, dans les Archives. Va jeter un œil quand tu voudras, ça te changera les idées."
+              : missionNum < order.length
+                ? "Reviens me voir plus tard — s'il y a d'autres affaires, je te les proposerai."
+                : null,
           ].filter(Boolean)}
           actionLabel="Continuer ▸"
           onDone={() => {
