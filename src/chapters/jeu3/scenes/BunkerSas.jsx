@@ -16,26 +16,8 @@ export default function BunkerSas({ onGo, j3 }) {
   const [introIdx, setIntroIdx] = useState(0);
   const [levers, setLevers] = useState([false, false, false]);
 
-  /* Pas de dossier actif : le joueur est arrivé ici "en touriste",
-     on l'invite à passer par les Archives choisir un dossier. */
-  if (!dossier) {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, width: "100%", padding: 20, boxSizing: "border-box" }}>
-        <SasDecor idle />
-        <div style={{ background: "#0a0e14", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px", maxWidth: 620, textAlign: "center" }}>
-          <p style={{ margin: 0, fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.55 }}>
-            La machine est en veille. Pour l'activer, retourne aux Archives et choisis un dossier à vérifier.
-          </p>
-        </div>
-        <button onClick={() => onGo("archives")}
-          style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-          ← Retour aux Archives
-        </button>
-      </div>
-    );
-  }
-
-  /* Intro Léa : lu une seule fois, pose le flag puis bascule au cadran. */
+  /* Intro Léa : prioritaire sur tout le reste au premier passage.
+     Lu une seule fois, pose le flag puis bascule à la suite. */
   if (intro) {
     const lignes = j3.missions.appel.leaIntro;
     const last = introIdx >= lignes.length - 1;
@@ -63,10 +45,29 @@ export default function BunkerSas({ onGo, j3 }) {
             </div>
             <button onClick={nextLigne}
               style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-              {last ? "Lancer la machine ▸" : "Suite ▸"}
+              {last ? (dossier ? "Lancer la machine ▸" : "Remonter aux Archives ▸") : "Suite ▸"}
             </button>
           </div>
         </div>
+      </div>
+    );
+  }
+
+  /* Pas de dossier actif : le joueur a entendu l'intro de Léa mais n'a
+     pas encore choisi de dossier aux Archives. On lui dit de remonter. */
+  if (!dossier) {
+    return (
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, width: "100%", padding: 20, boxSizing: "border-box" }}>
+        <SasDecor idle />
+        <div style={{ background: "#0a0e14", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px", maxWidth: 620, textAlign: "center" }}>
+          <p style={{ margin: 0, fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.55 }}>
+            La machine est en veille. Pour l'activer, remonte aux Archives et choisis un dossier à vérifier.
+          </p>
+        </div>
+        <button onClick={() => onGo("archives")}
+          style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          ← Retour aux Archives
+        </button>
       </div>
     );
   }
@@ -141,7 +142,7 @@ export default function BunkerSas({ onGo, j3 }) {
 /* --------- Décor du sas (SVG) --------- */
 function SasDecor({ idle, annee, lieu, levers = [] }) {
   return (
-    <svg viewBox="0 0 1000 400" style={{ display: "block", width: "100%", maxHeight: 280 }}>
+    <svg viewBox="0 0 1000 400" style={{ display: "block", width: "100%", maxHeight: 480 }}>
       <defs>
         <linearGradient id="sas-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#2a2420" />
