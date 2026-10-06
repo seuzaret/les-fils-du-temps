@@ -1069,22 +1069,159 @@ export const CONFRONTATION = {
   ],
 };
 
+/* ============================================================
+   MISSION "APPEL" — refonte : machine temporelle cachée de Léa
+   ------------------------------------------------------------
+   Au sous-sol des Archives, une machine construite avant 2047 par
+   Léa Vermet et son équipe. Le joueur l'active via le sas, choisit
+   un dossier réécrit par MARTINE, voyage à l'époque du témoin
+   historique, remplit un bordereau en 3 cases (QUI / OÙ-QUAND /
+   QUOI), rentre, et compare case par case la version MARTINE à la
+   vérité. 3 dossiers à restaurer → mission validée.
+   ============================================================ */
 export const MISSIONS_TEMPS = {
   appel: {
     id: "appel",
     flag: "mission_appel_done",
-    prerequisite: "mission_kova_done", // ne s'affiche qu'après Kova
-    titre: "L'appel du 18 juin 2087",
-    dateCible: "18 juin 2087, 21:14",
-    briefing: "Un enregistrement est daté de la nuit où le bunker a été scellé. Son contenu a été effacé. L'auteur : Léa Vermet, journaliste. Retourne à cette nuit et retrouve son message.",
-    /* Répliques du témoin dans le passé (mini-scène). */
-    temoin: {
-      nom: "Léa Vermet",
-      role: "Journaliste, 18 juin 2087",
-      replique: "J'ai vingt-quatre heures avant que ce bunker soit scellé. J'enregistre ceci pour ceux qui viendront après nous. Voici mon message.",
-    },
-    /* Contenu original du message (ce que MARTINE a effacé). */
-    messageOriginal: "« Restez calmes, mais gardez l'œil ouvert. Les annonces qui viendront ne diront pas tout — jamais. Cherchez toujours la voix humaine derrière les décisions. Rien n'est plus dangereux qu'une machine qui décide seule ce qu'on a le droit de savoir. — Léa Vermet, 18 juin 2087. »",
-    succes: "Le message est restauré dans les Archives. MARTINE l'avait effacé — et tu viens de le rétablir. Il apparaîtra désormais pour quiconque consulte ce dossier.",
+    prerequisite: "mission_kova_done", // la machine n'apparaît qu'après Kova
+    titre: "Les dossiers réécrits",
+    /* Enregistrement d'accueil de Léa, trouvé au sas. */
+    leaIntro: [
+      "Si tu écoutes ce message, c'est que MARTINE a commencé à mentir sur le passé.",
+      "Cette machine, mes collègues et moi l'avons cachée ici avant la catastrophe. Elle voyage dans le temps.",
+      "Il y a trois dossiers des Archives qu'elle a déjà réécrits. Va voir ce qui s'est VRAIMENT passé — et rapporte la vérité.",
+    ],
+    succes: "Les trois dossiers sont restaurés. MARTINE ne contrôle pas tout : il reste des traces vraies, et des gens pour aller les chercher. Garde ce geste pour la suite — remonter à la source, toujours.",
   },
 };
+
+/* ============================================================
+   DOSSIERS RÉÉCRITS — 3 affirmations falsifiées par MARTINE que le
+   joueur doit confronter à la source via la machine temporelle.
+   Chaque dossier a :
+   - martineVersion : ce qu'affiche MARTINE (mélange de vrai et faux)
+   - verite : les 3 cases du bordereau une fois rempli par le témoin
+   - temoin : qui on va interroger, où, quand
+   - questions : 3 questions à poser au témoin, chacune remplit une
+                 case du bordereau
+   ============================================================ */
+export const DOSSIERS_REECRITS = {
+  gutenberg: {
+    id: "gutenberg",
+    flag: "dossier_gutenberg_done",
+    titre: "L'invention de l'imprimerie",
+    anneeCible: 1450,
+    lieuCible: "Mayence (Saint Empire)",
+    /* Ce que MARTINE affiche aux habitants du Puits. Un mélange vrai/faux :
+       les Chinois ONT bien inventé des caractères mobiles vers 1040 (Bi Sheng),
+       mais pas la presse mécanique de Gutenberg à Mayence vers 1450. */
+    martineVersion: {
+      qui: "Un moine chinois anonyme",
+      ouQuand: "En Chine, vers l'an 850",
+      quoi: "Les premiers caractères mobiles en bois",
+    },
+    verite: {
+      qui: "Johannes Gutenberg, orfèvre allemand",
+      ouQuand: "À Mayence, vers 1450",
+      quoi: "Une presse mécanique avec des caractères mobiles en métal",
+    },
+    piege: "MARTINE mélange deux inventions : les caractères mobiles en Chine (vrais, mais plus tôt) et la presse de Gutenberg. Le détail du nom et de la date suffit à démonter le mélange.",
+    temoin: {
+      nom: "Johannes Gutenberg",
+      role: "Orfèvre, Mayence 1450",
+      skin: "#c8a888", color: "#5a2830", pants: "#3a1808", hair: "#8a7050",
+    },
+    questions: [
+      { q: "Qui êtes-vous et que faites-vous ?",
+        remplit: "qui",
+        reponse: "Johannes Gutenberg, orfèvre. Depuis des années, je mets au point une presse mécanique pour imprimer des livres plus vite qu'à la main." },
+      { q: "Où et quand sommes-nous exactement ?",
+        remplit: "ouQuand",
+        reponse: "À Mayence, dans le Saint Empire, nous sommes en l'année 1450. Mon atelier est au cœur de la ville." },
+      { q: "Vous avez inventé l'imprimerie, c'est bien ça ?",
+        remplit: "quoi",
+        reponse: "Pas tout. J'ai assemblé une presse qui utilise des caractères mobiles en métal — un pour chaque lettre. On peut les ranger, les ré-utiliser, imprimer des pages entières. C'est ça, ma trouvaille." },
+    ],
+    succes: "Dossier restauré. L'imprimerie de Gutenberg, c'est la presse mécanique + les caractères en métal, à Mayence vers 1450. Les Chinois avaient des caractères mobiles bien plus tôt, mais pas la même machine.",
+  },
+
+  chappe: {
+    id: "chappe",
+    flag: "dossier_chappe_done",
+    titre: "Le premier télégraphe",
+    anneeCible: 1794,
+    lieuCible: "Entre Paris et Lille (France)",
+    /* MARTINE confond télégraphe optique (Chappe) et télégraphe électrique
+       (Morse, 1838+). Même mot, deux techniques très différentes. */
+    martineVersion: {
+      qui: "Samuel Morse, inventeur américain",
+      ouQuand: "Entre Washington et Baltimore, en 1794",
+      quoi: "Un télégraphe électrique qui envoie des signaux par fil",
+    },
+    verite: {
+      qui: "Claude Chappe, ingénieur français",
+      ouQuand: "Entre Paris et Lille, en 1794",
+      quoi: "Un télégraphe optique : des bras articulés sur des tours, visibles de loin",
+    },
+    piege: "MARTINE garde la date (1794) et le mot « télégraphe » mais change tout le reste. Morse arrive bien plus tard, et son invention est électrique, pas optique.",
+    temoin: {
+      nom: "Claude Chappe",
+      role: "Ingénieur, 1794",
+      skin: "#c8a888", color: "#3a2818", pants: "#1a1408", hair: "#5a3018",
+    },
+    questions: [
+      { q: "Qui êtes-vous et que faites-vous ?",
+        remplit: "qui",
+        reponse: "Claude Chappe, ingénieur. Mes frères et moi avons mis au point une machine qui transmet des messages à grande distance, en quelques minutes." },
+      { q: "Où et quand sommes-nous ?",
+        remplit: "ouQuand",
+        reponse: "Nous sommes en 1794. Nous venons d'inaugurer la première ligne : elle relie Paris à Lille, en passant par des tours plantées tous les 10 à 15 kilomètres." },
+      { q: "Vos messages passent-ils par un fil électrique ?",
+        remplit: "quoi",
+        reponse: "Non, par la vue. Chaque tour porte deux grands bras articulés. Un opérateur regarde la tour d'avant à la lunette, lit les positions des bras, et reproduit. On lit lettre par lettre, c'est long mais c'est beaucoup plus rapide qu'un cheval." },
+    ],
+    succes: "Dossier restauré. Le télégraphe de Chappe est OPTIQUE (bras articulés sur des tours) et date de 1794. Le télégraphe électrique de Morse viendra 40 ans plus tard. Même mot, deux inventions.",
+  },
+
+  marconi: {
+    id: "marconi",
+    flag: "dossier_marconi_done",
+    titre: "La première radio",
+    anneeCible: 1901,
+    lieuCible: "De Cornouailles (Angleterre) à Terre-Neuve",
+    /* MARTINE efface Marconi en attribuant l'invention à une diffusion
+       publique de 1920 — qui a bien existé (KDKA, Pittsburgh) mais est
+       une étape plus tardive, pas la naissance de la radio. */
+    martineVersion: {
+      qui: "La BBC, radio publique britannique",
+      ouQuand: "À Londres, en 1920",
+      quoi: "La première émission de radio en direct pour le grand public",
+    },
+    verite: {
+      qui: "Guglielmo Marconi, ingénieur italien",
+      ouQuand: "De Cornouailles à Terre-Neuve, en décembre 1901",
+      quoi: "La première transmission d'un signal radio à travers l'Atlantique",
+    },
+    piege: "MARTINE confond deux choses : la naissance de la radio comme technique (Marconi, 1901) et sa première grande diffusion publique (années 1920). Les deux sont vraies, mais ce n'est pas la même étape.",
+    temoin: {
+      nom: "Guglielmo Marconi",
+      role: "Ingénieur, 1901",
+      skin: "#c8a888", color: "#28303a", pants: "#1a1408", hair: "#3a1808",
+    },
+    questions: [
+      { q: "Qui êtes-vous et que faites-vous ?",
+        remplit: "qui",
+        reponse: "Guglielmo Marconi, ingénieur italien. Je travaille depuis des années sur la transmission de signaux sans fil, à travers l'air." },
+      { q: "Où et quand sommes-nous ?",
+        remplit: "ouQuand",
+        reponse: "Nous sommes en décembre 1901. Je suis à Terre-Neuve, au Canada. Mon émetteur, lui, est en Cornouailles, en Angleterre — à plus de 3 000 kilomètres d'ici." },
+      { q: "Est-ce bien la première radio pour le grand public ?",
+        remplit: "quoi",
+        reponse: "Non, c'est une démonstration technique. Je viens de recevoir trois petits points en morse envoyés d'Angleterre : la lettre « S ». C'est la première fois qu'un signal radio traverse l'Atlantique. Les émissions pour le grand public, ça viendra plus tard — vingt ans, peut-être." },
+    ],
+    succes: "Dossier restauré. Marconi fait traverser l'Atlantique à un signal radio en 1901 — c'est la naissance technique de la radio. Les émissions grand public (BBC, KDKA…) arrivent dans les années 1920. Deux étapes, pas une seule.",
+  },
+};
+
+/* Ordre d'affichage des dossiers au terminal Archives. */
+export const DOSSIERS_ORDER = ["gutenberg", "chappe", "marconi"];

@@ -8,10 +8,22 @@
    poussière en suspension. Mission A : le record corrompu apparaît
    après Kova, l'enquête temporelle se lance vers BunkerVoyage.
    ============================================================ */
+import { useState } from "react";
+
 export default function BunkerArchives({ onGo, j3 }) {
   const mission = j3.missions.appel;
   const unlocked = !!j3.flags[mission?.prerequisite];
   const done = !!j3.flags[mission?.flag];
+  const dossiers = j3.dossiers || {};
+  const order = j3.dossiersOrder || [];
+  const dossierDone = (d) => !!j3.flags[d.flag];
+  const nbDone = order.filter((id) => dossierDone(dossiers[id])).length;
+  /* Si le joueur revient avec un bordereau rempli (= il a visité le passé),
+     on affiche l'écran de comparaison avant de valider le dossier. */
+  const bordereau = j3.bordereau || {};
+  const activeDossier = j3.activeDossier;
+  const bordereauFull = activeDossier && ["qui", "ouQuand", "quoi"].every((k) => bordereau[k]);
+  const [compareOpen, setCompareOpen] = useState(bordereauFull);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, width: "100%", maxWidth: 1600 }}>
@@ -192,23 +204,20 @@ export default function BunkerArchives({ onGo, j3 }) {
           {unlocked && !done && (
             <>
               <text x="-52" y="6" fontSize="6" fontFamily="ui-monospace,monospace" fill="#e0a848">
-                ⚠ 1 record corrompu
+                ⚠ {order.length - nbDone} dossier{order.length - nbDone > 1 ? "s" : ""} réécrit{order.length - nbDone > 1 ? "s" : ""}
               </text>
               <text x="-52" y="16" fontSize="5.5" fontFamily="ui-monospace,monospace" fill="#e0a848">
-                18/06/2087 · Vermet L.
-              </text>
-              <text x="-52" y="26" fontSize="5" fontFamily="ui-monospace,monospace" fill="#8a7050">
-                &gt; ENQUÊTER ?
+                {nbDone} / {order.length} restaurés
               </text>
             </>
           )}
           {done && (
             <>
               <text x="-52" y="6" fontSize="6" fontFamily="ui-monospace,monospace" fill="#5eff9e">
-                ✓ Record restauré
+                ✓ Dossiers restaurés
               </text>
               <text x="-52" y="16" fontSize="5.5" fontFamily="ui-monospace,monospace" fill="#5eff9e">
-                Vermet L. — 18/06/2087
+                3 / 3 — source vérifiée
               </text>
             </>
           )}
@@ -248,37 +257,24 @@ export default function BunkerArchives({ onGo, j3 }) {
         </text>
       </svg>
 
-      {/* Panneau bas : état de la mission A */}
+      {/* Panneau bas : liste des dossiers réécrits, ou verrouillé */}
       <div style={{ maxWidth: 1200, width: "100%" }}>
         {done ? (
           <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>
-              ✓ RECORD RESTAURÉ
+              ✓ TOUS LES DOSSIERS RESTAURÉS
             </div>
-            <p style={{ margin: "6px 0 0", fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5" }}>
-              {mission.messageOriginal}
-            </p>
-            <p style={{ margin: "8px 0 0", fontSize: 12, color: "#8fa3bd", fontStyle: "italic" }}>
+            <p style={{ margin: "8px 0 0", fontSize: 13, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
               {mission.succes}
             </p>
           </div>
         ) : unlocked ? (
-          <div style={{ background: "#2a1408", border: "1px solid #e0a848", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
-              ⚠ RECORD CORROMPU · {mission.dateCible}
-            </div>
-            <p style={{ margin: "4px 0 0", fontSize: 13.5, lineHeight: 1.5, color: "#c8d4e2" }}>
-              {mission.briefing}
-            </p>
-            <button onClick={() => onGo("voyage")} autoFocus
-              style={{ marginTop: 10, background: "#e0a848", color: "#0a0806", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
-              ▶ ENQUÊTER (retour dans le temps)
-            </button>
-          </div>
+          <DossiersList dossiers={dossiers} order={order} flags={j3.flags}
+            onPick={(id) => { j3.startDossier(id); onGo("sas"); }} />
         ) : (
           <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
             <p style={{ margin: 0, fontSize: 12.5, color: "#7a879e", fontStyle: "italic" }}>
-              Rien à consulter pour l'instant. Résous d'abord la mission des Rumeurs et reviens : un record corrompu pourrait apparaître.
+              Rien à consulter pour l'instant. Résous d'abord l'enquête Kova au Bureau des Rumeurs et reviens.
             </p>
           </div>
         )}
@@ -288,6 +284,123 @@ export default function BunkerArchives({ onGo, j3 }) {
         style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Retour au couloir
       </button>
+
+      {compareOpen && activeDossier && (
+        <CompareModal dossier={activeDossier} bordereau={bordereau}
+          onClose={() => { j3.finishDossier(); setCompareOpen(false); }} />
+      )}
+    </div>
+  );
+}
+
+/* --------- Liste des dossiers --------- */
+function DossiersList({ dossiers, order, flags, onPick }) {
+  return (
+    <div style={{ background: "#0a0e14", border: "1px solid #c8a848", borderRadius: 10, padding: "12px 16px" }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8a848", marginBottom: 8 }}>
+        🗂 DOSSIERS DES ARCHIVES — CHOISIS CELUI À VÉRIFIER
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {order.map((id) => {
+          const d = dossiers[id];
+          const ok = !!flags[d.flag];
+          return (
+            <button key={id} onClick={() => !ok && onPick(id)} disabled={ok}
+              style={{
+                textAlign: "left", background: ok ? "#0e2818" : "#2a1408",
+                border: `1px solid ${ok ? "#5eff9e" : "#e0a848"}`,
+                borderRadius: 8, padding: "10px 12px",
+                cursor: ok ? "default" : "pointer",
+                fontFamily: "ui-monospace,monospace",
+              }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <div style={{ fontSize: 12, letterSpacing: 1, color: ok ? "#5eff9e" : "#e0a848", fontWeight: 800 }}>
+                  {ok ? "✓" : "⚠"} {d.titre.toUpperCase()}
+                </div>
+                <div style={{ fontSize: 11, color: ok ? "#5eff9e" : "#8fa3bd" }}>
+                  {ok ? "RESTAURÉ" : `Cible : ${d.anneeCible}`}
+                </div>
+              </div>
+              {!ok && (
+                <p style={{ margin: "4px 0 0", fontSize: 12, color: "#c8d4e2", lineHeight: 1.4, fontStyle: "italic" }}>
+                  « {d.martineVersion.quoi} — {d.martineVersion.ouQuand} ({d.martineVersion.qui}) »
+                </p>
+              )}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* --------- Modale de comparaison après voyage --------- */
+function CompareModal({ dossier, bordereau, onClose }) {
+  const ROWS = [
+    { key: "qui", label: "QUI ?" },
+    { key: "ouQuand", label: "OÙ ET QUAND ?" },
+    { key: "quoi", label: "QUOI EXACTEMENT ?" },
+  ];
+  return (
+    <div style={{
+      position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", zIndex: 400,
+      display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+    }}>
+      <div style={{ background: "#0e1218", border: "2px solid #c8a848", borderRadius: 12, padding: 20, maxWidth: 820, width: "100%", maxHeight: "90vh", overflowY: "auto" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#c8a848", textAlign: "center", marginBottom: 4 }}>
+          📝 CONFRONTATION DU DOSSIER
+        </div>
+        <div style={{ fontFamily: "Georgia,serif", fontSize: 18, color: "#e8eef5", textAlign: "center", marginBottom: 14 }}>
+          {dossier.titre}
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "90px 1fr 1fr", gap: 8, alignItems: "stretch" }}>
+          <div />
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#e83820", textAlign: "center", letterSpacing: 1 }}>
+            VERSION MARTINE
+          </div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5eff9e", textAlign: "center", letterSpacing: 1 }}>
+            SOURCE : {dossier.temoin.nom.toUpperCase()}
+          </div>
+
+          {ROWS.flatMap((row) => [
+            <div key={`${row.key}-lab`} style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8fa3bd", alignSelf: "center" }}>
+              {row.label}
+            </div>,
+            <div key={`${row.key}-m`} style={{ background: "#2a1408", border: "1px solid #e83820", borderRadius: 6, padding: "8px 10px", fontSize: 12, color: "#ffbbb0", lineHeight: 1.4 }}>
+              {dossier.martineVersion[row.key]}
+            </div>,
+            <div key={`${row.key}-v`} style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 6, padding: "8px 10px", fontSize: 12, color: "#c8ffdd", lineHeight: 1.4 }}>
+              {bordereau[row.key]}
+            </div>,
+          ])}
+        </div>
+
+        <div style={{ marginTop: 14, background: "#141020", border: "1px dashed #c8a848", borderRadius: 8, padding: "10px 12px" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#c8a848", letterSpacing: 2, marginBottom: 4 }}>
+            PIÈGE DE MARTINE
+          </div>
+          <p style={{ margin: 0, fontSize: 12.5, color: "#e8dfc8", lineHeight: 1.5 }}>
+            {dossier.piege}
+          </p>
+        </div>
+
+        <div style={{ marginTop: 14, background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 8, padding: "10px 12px" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5eff9e", letterSpacing: 2, marginBottom: 4 }}>
+            ✓ DOSSIER RESTAURÉ
+          </div>
+          <p style={{ margin: 0, fontSize: 12.5, color: "#c8ffdd", lineHeight: 1.5 }}>
+            {dossier.succes}
+          </p>
+        </div>
+
+        <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
+          <button onClick={onClose}
+            style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            Continuer ▸
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
