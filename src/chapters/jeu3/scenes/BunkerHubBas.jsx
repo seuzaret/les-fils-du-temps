@@ -1,3 +1,5 @@
+import { getMissionOrder } from "../missions.js";
+
 /* ============================================================
    JEU 3 — Couloir du niveau -1 (Services) — v2 cyberpunk
    ------------------------------------------------------------
@@ -13,7 +15,15 @@ const DOORS = [
   { id: "atelier",    code: "T-01", label: "Atelier des Ingénieurs", color: "#5a4028" },
 ];
 
-export default function BunkerHubBas({ onGo }) {
+export default function BunkerHubBas({ onGo, j3 }) {
+  /* Badge "nouvelle enquête" sur la porte Rumeurs : Kova est faite,
+     il reste au moins une enquête active, et son briefing n'a pas
+     encore été lu. */
+  const flags = j3?.flags || {};
+  const order = getMissionOrder(flags);
+  const activeId = order.find((id) => j3?.missions?.[id] && !flags[j3.missions[id].flag]);
+  const activeMission = activeId ? j3.missions[activeId] : null;
+  const newCase = !!flags.mission_kova_done && !!activeMission && !flags[`briefing_${activeMission.id}_done`];
   return (
     <svg viewBox="0 0 1000 460" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
       <defs>
@@ -133,6 +143,16 @@ export default function BunkerHubBas({ onGo }) {
             <circle cx="65" cy="76" r="3" fill="#5eff9e">
               <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
             </circle>
+            {door.id === "rumeurs" && newCase && (
+              <g transform="translate(118,10)">
+                <circle r="14" fill="#e0a848" stroke="#1a0e08" strokeWidth="1.5">
+                  <animate attributeName="r" values="12;15;12" dur="1.4s" repeatCount="indefinite" />
+                </circle>
+                <text x="0" y="4" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="14" fontWeight="900" fill="#1a0e08">!</text>
+                <text x="0" y="30" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="700" fill="#e0a848" letterSpacing="1">NOUVELLE</text>
+                <text x="0" y="40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="700" fill="#e0a848" letterSpacing="1">ENQUÊTE</text>
+              </g>
+            )}
           </g>
         );
       })}

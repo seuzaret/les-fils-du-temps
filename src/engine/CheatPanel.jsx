@@ -17,8 +17,7 @@ export default function CheatPanel({
   onPlayChapter,
   onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab,
   onNewGameJeu2, onNewGameJeu3,
-  onCheatJeu3Kova, onCheatJeu3Vitamine, onCheatJeu3Jour40, onCheatJeu3Enfant, onCheatJeu3Champble,
-  onCheatJeu3Fontaine, onCheatJeu3Viande,
+  onCheatJeu3Kova,
 }) {
   if (!cheat) return null;
   return (
@@ -66,13 +65,7 @@ export default function CheatPanel({
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 3 (Le Puits · 2087) :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={onNewGameJeu3}>🌑 Démarrer le Jeu 3</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Kova}>🎯 Direct enquête 1 · Kova</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Vitamine}>🎯 Direct enquête 2 · Vitamine</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Jour40}>🎯 Direct enquête 3 · 40e jour</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Enfant}>🎯 Direct enquête 4 · Enfant du haut</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Champble}>🎯 Direct enquête 5 · Champ de blé</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Fontaine}>🎯 Direct enquête 6 · Fontaine (FRAGILE)</button>
-        <button style={CHEAT_BTN} onClick={onCheatJeu3Viande}>🎯 Direct enquête 7 · Viande (SOLIDE)</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Kova}>🎯 Direct Bureau (billet reçu)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
