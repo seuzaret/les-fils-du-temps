@@ -377,7 +377,11 @@ export default function BunkerRumeurs({ onGo, j3 }) {
              + la leçon à retenir. fbFiables (sur les témoins marqués
              fiables) est volontairement laissé de côté — trop long pour
              des 6ᵉ, et le joueur a déjà eu son retour sur les cases. */
-          lignes={[feedback.verdict.retour, mission.succes].filter(Boolean)}
+          lignes={[
+            feedback.verdict.retour,
+            mission.succes,
+            missionNum < order.length ? "Reviens me voir plus tard — s'il y a d'autres affaires sur mon bureau, je te les proposerai." : null,
+          ].filter(Boolean)}
           actionLabel="Continuer ▸"
           onDone={() => {
             /* C'est MAINTENANT qu'on pose le flag, après lecture du
