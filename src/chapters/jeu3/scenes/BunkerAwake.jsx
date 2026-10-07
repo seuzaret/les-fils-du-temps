@@ -46,9 +46,6 @@ export default function BunkerAwake({ onGo }) {
         }}>
           {current.text}
         </p>
-        <div style={{ marginTop: 36, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a6678", letterSpacing: 2 }}>
-          CLIC POUR CONTINUER
-        </div>
       </div>
     );
   }
@@ -64,11 +61,7 @@ export default function BunkerAwake({ onGo }) {
           <p style={{ fontSize: 16, lineHeight: 1.6, color: "#c8d4e2", margin: 0, fontStyle: "italic" }}>
             « {current.text} »
           </p>
-        ) : (
-          <p style={{ fontSize: 13, color: "#5a6678", margin: 0, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
-            CLIC POUR CONTINUER
-          </p>
-        )}
+        ) : null}
         {isLast && (
           <div style={{ marginTop: 14 }} onClick={(e) => e.stopPropagation()}>
             <button onClick={() => onGo("hub")} autoFocus
