@@ -40,6 +40,10 @@ export default function PnjSprite({
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       style={{ cursor: onClick ? "pointer" : "default" }}>
+      {/* Zone de hit invisible : couvre tout le sprite pour que le hover
+          ne s'interrompe pas quand le curseur passe sur un pixel
+          transparent entre le corps, la tête et la loupe. */}
+      <rect x="-36" y="-110" width="72" height="140" fill="transparent" pointerEvents="all" />
       {/* Halo actif */}
       {active && (
         <circle cx="0" cy="-40" r="66" fill="none" stroke="#ffd166" strokeWidth="2" strokeDasharray="4 4">
