@@ -1,6 +1,7 @@
 import { useState } from "react";
 import PnjSprite from "./PnjSprite.jsx";
 import { findMissionTemoinForPnj } from "./missions.js";
+import { SMALLTALK_QUESTIONS } from "./pnj.js";
 
 /* ============================================================
    JEU 3 — Pièce peuplée de PNJ (helper Cluedo)
@@ -18,7 +19,9 @@ import { findMissionTemoinForPnj } from "./missions.js";
    ============================================================ */
 export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
   const [selected, setSelected] = useState(null);
+  const [smalltalk, setSmalltalk] = useState(null); // id du PNJ en mode orientation
   const current = selected ? pnjList.find((p) => p.id === selected) : null;
+  const chatPnj = smalltalk ? pnjList.find((p) => p.id === smalltalk) : null;
   const activeMission = j3?.activeMission;
 
   return (
@@ -48,6 +51,7 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
               nom={p.nom} role={p.role}
               heard={temoin ? asked > 0 : heardAsPnj}
               active={!!temoin && asked === 0}
+              onSmalltalk={() => setSmalltalk(p.id)}
               onClick={() => {
                 if (temoin) {
                   j3.openInterview(temoin.id);
@@ -81,6 +85,69 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
             </p>
           </div>
         )}
+      </div>
+
+      {chatPnj && (
+        <SmalltalkModal pnj={chatPnj} onClose={() => setSmalltalk(null)} />
+      )}
+    </div>
+  );
+}
+
+/* --------- Modale d'orientation (loupe / smalltalk) --------- */
+function SmalltalkModal({ pnj, onClose }) {
+  const [picked, setPicked] = useState(null);
+  const answerFor = (qid) => qid === "toi" ? pnj.replique : pnj[qid];
+  return (
+    <div onClick={onClose}
+      style={{
+        position: "fixed", inset: 0, background: "rgba(0,0,0,0.72)", zIndex: 400,
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+      }}>
+      <div onClick={(e) => e.stopPropagation()}
+        style={{ background: "#0e1218", border: "2px solid #7fd8ff", borderRadius: 12, padding: 18, maxWidth: 620, width: "100%" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
+            🔍 {pnj.nom.toUpperCase()} · {pnj.role}
+          </div>
+          <button onClick={onClose}
+            style={{ background: "transparent", border: "none", color: "#8fa3bd", cursor: "pointer", fontSize: 18 }}>✕</button>
+        </div>
+
+        <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+          {SMALLTALK_QUESTIONS.map((row) => {
+            const isPicked = picked === row.id;
+            const hasAnswer = !!answerFor(row.id);
+            return (
+              <div key={row.id}>
+                <button onClick={() => hasAnswer && setPicked(isPicked ? null : row.id)}
+                  disabled={!hasAnswer}
+                  style={{
+                    width: "100%", textAlign: "left",
+                    background: isPicked ? "#0e2a3a" : "#141b26",
+                    color: hasAnswer ? (isPicked ? "#7fd8ff" : "#e8eef5") : "#5a6678",
+                    border: `1px solid ${isPicked ? "#7fd8ff" : "#3a4048"}`,
+                    borderRadius: 8, padding: "8px 12px",
+                    fontFamily: "ui-monospace,monospace", fontSize: 12.5,
+                    cursor: hasAnswer ? "pointer" : "default",
+                  }}>
+                  {isPicked ? "▾" : "▸"} {row.q}
+                </button>
+                {isPicked && hasAnswer && (
+                  <div style={{ margin: "6px 4px 0 20px", padding: "8px 12px", background: "#0a0e14", borderLeft: "2px solid #7fd8ff", borderRadius: 4 }}>
+                    <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
+                      « {answerFor(row.id)} »
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", textAlign: "right", fontStyle: "italic" }}>
+          Clique une question pour entendre la réponse.
+        </div>
       </div>
     </div>
   );

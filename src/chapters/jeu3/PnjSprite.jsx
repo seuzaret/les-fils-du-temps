@@ -25,15 +25,20 @@
      active      — halo doré pulsant si vrai
      onClick     — callback clic
    ============================================================ */
+import { useState } from "react";
+
 export default function PnjSprite({
   x, y, color = "#5a5060", pants = "#3a2818", hair = "#2a1808", skin = "#e0a878",
   facing = "front", pose = "stand", accessory = null, activity = null,
-  nom = "?", role = "", heard = false, active = false, onClick,
+  nom = "?", role = "", heard = false, active = false, onClick, onSmalltalk,
 }) {
   const hasActivity = !!activity;
+  const [hover, setHover] = useState(false);
   return (
     <g transform={`translate(${x},${y})`}
       onClick={onClick ? (e) => { e.stopPropagation(); onClick(e); } : undefined}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
       style={{ cursor: onClick ? "pointer" : "default" }}>
       {/* Halo actif */}
       {active && (
@@ -69,6 +74,19 @@ export default function PnjSprite({
       {/* Étiquettes nom + rôle sous les pieds */}
       <text x="0" y="20" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fontWeight="700" fill="#e8dfc8">{nom}</text>
       <text x="0" y="31" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#8a7050">{role}</text>
+
+      {/* Loupe « questionner » : visible seulement au survol, et seulement
+          si un handler onSmalltalk est fourni. Clic → ouvre la modal
+          d'orientation (où / pourquoi moi / toi). */}
+      {hover && onSmalltalk && (
+        <g transform="translate(-24,-96)"
+          onClick={(e) => { e.stopPropagation(); onSmalltalk(); }}
+          style={{ cursor: "pointer" }}>
+          <circle r="11" fill="#141020" stroke="#7fd8ff" strokeWidth="1.5" />
+          <circle r="4.5" cx="-1" cy="-1" fill="none" stroke="#7fd8ff" strokeWidth="1.3" />
+          <line x1="2.5" y1="2.5" x2="6" y2="6" stroke="#7fd8ff" strokeWidth="1.8" strokeLinecap="round" />
+        </g>
+      )}
     </g>
   );
 }
