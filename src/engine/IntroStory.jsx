@@ -137,9 +137,9 @@ export default function IntroStory({ onDone }) {
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes martineHover {
           0%, 100% { transform: translate(0, 0) rotate(0deg); }
-          25%      { transform: translate(0, -6px) rotate(0.8deg); }
-          50%      { transform: translate(0, 2px) rotate(-0.4deg); }
-          75%      { transform: translate(0, -4px) rotate(0.3deg); }
+          25%      { transform: translate(0, -14px) rotate(1.5deg); }
+          50%      { transform: translate(0, 6px) rotate(-1deg); }
+          75%      { transform: translate(0, -10px) rotate(0.8deg); }
         }
       `}</style>
     </div>
@@ -179,7 +179,7 @@ function SlideNight({ onNext, silent = false }) {
   return (
     <div
       onClick={silent ? onNext : undefined}
-      style={{ animation: 'fadeIn 1s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', cursor: silent ? 'pointer' : 'default' }}>
+      style={{ animation: 'fadeIn 1s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', cursor: silent ? 'pointer' : 'default', filter: silent ? 'brightness(0.3)' : 'none', transition: 'filter 0.6s ease-out' }}>
       <svg viewBox="0 0 1200 680" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="s1-wall" x1="0" y1="0" x2="0" y2="1">
