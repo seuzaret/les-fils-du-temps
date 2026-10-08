@@ -107,18 +107,14 @@ export default function IntroStory({ onDone }) {
   const [i, setI] = useState(0);
   const next = () => setI((v) => v + 1);
   const SLIDES = [
+    <Blackout         key="b0" text="Une nuit paisible de ta vie." onNext={next} />,
     <SlideNight       key="s1" onNext={next} />,
-    <Blackout         key="b1" text="Ton téléphone s'allume. Tu te lèves." onNext={next} />,
+    <Blackout         key="b1" text="Tout à coup un bruit te réveille." onNext={next} />,
     <SlideMessage     key="s2" onNext={next} />,
-    <Blackout         key="b2" text="Tu enfiles des chaussures. Tu sors." onNext={next} />,
     <SlideOutside     key="s3" onNext={next} />,
-    <Blackout         key="b3" text="Tu montes à bord." onNext={next} />,
     <SlideCockpit     key="s4" onNext={next} />,
-    <Blackout         key="b4" text="Elle allume ses écrans." onNext={next} />,
     <SlideRules       key="s4b" onNext={next} />,
-    <Blackout         key="b5" text="Les règles comprises." onNext={next} />,
     <SlideMartineReparee key="s4c" onNext={next} />,
-    <Blackout         key="b6" text="L'horloge commence à battre." onNext={next} />,
     <SlideFlash       key="s5" onNext={next} />,
     <SlideArrival     key="s6" onDone={onDone} />,
   ];
@@ -489,12 +485,6 @@ function SlideNight({ onNext }) {
           @keyframes phoneGlow { 0%, 100% { opacity: 0.7; } 50% { opacity: 1; } }
         `}</style>
       </svg>
-      {/* On garde le paragraphe TOUJOURS monté (opacity change seulement) :
-          sinon le SVG au-dessus récupère la hauteur libérée et grossit d'un cran
-          quand le téléphone se met à vibrer. */}
-      <p style={{ textAlign: 'center', margin: '10px auto 0', fontSize: 17, color: '#c8b090', fontStyle: 'italic', maxWidth: 600, lineHeight: 1.5, opacity: vibrating ? 0 : 1, transition: 'opacity .3s' }}>
-        Une nuit paisible de ta vie…
-      </p>
     </div>
   );
 }
