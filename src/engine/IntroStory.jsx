@@ -879,11 +879,11 @@ function SlideCockpit({ onNext }) {
       </svg>
 
       {/* MARTINE avatar centré (au-dessus du SVG), avec un léger vol
-          stationnaire pendant son "bienvenue à bord". */}
-      <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, 0)', pointerEvents: 'none' }}>
-        <div style={{ animation: 'martineHover 4s ease-in-out infinite' }}>
-          <Avatar mood="content" size={130} talking />
-        </div>
+          stationnaire pendant son "bienvenue à bord". On utilise
+          `left: calc(50% - size/2)` pour éviter d'écraser l'animation
+          avec un transform: translate(-50%) sur le wrapper. */}
+      <div style={{ position: 'absolute', top: '30%', left: 'calc(50% - 65px)', pointerEvents: 'none', animation: 'martineHover 3.6s ease-in-out infinite' }}>
+        <Avatar mood="content" size={130} talking />
       </div>
       {/* Bulle texte + bouton GO */}
       <div style={{ position: 'absolute', left: '50%', bottom: 20, transform: 'translateX(-50%)', width: 'min(88%, 620px)',
