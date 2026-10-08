@@ -135,12 +135,6 @@ export default function IntroStory({ onDone }) {
         @keyframes drift { 0%, 100% { opacity: 0.85; transform: translate(0, 0); } 50% { opacity: 0.4; transform: translate(2px, -3px); } }
         @keyframes flick { 0%, 100% { opacity: 1; } 50% { opacity: 0.55; } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes martineHover {
-          0%, 100% { transform: translate(0, 0) rotate(0deg); }
-          25%      { transform: translate(0, -14px) rotate(1.5deg); }
-          50%      { transform: translate(0, 6px) rotate(-1deg); }
-          75%      { transform: translate(0, -10px) rotate(0.8deg); }
-        }
       `}</style>
     </div>
   );
@@ -878,11 +872,8 @@ function SlideCockpit({ onNext }) {
         <ellipse cx="600" cy="310" rx="220" ry="120" fill="url(#s4-glow)" />
       </svg>
 
-      {/* MARTINE avatar centré (au-dessus du SVG), avec un léger vol
-          stationnaire pendant son "bienvenue à bord". On utilise
-          `left: calc(50% - size/2)` pour éviter d'écraser l'animation
-          avec un transform: translate(-50%) sur le wrapper. */}
-      <div style={{ position: 'absolute', top: '30%', left: 'calc(50% - 65px)', pointerEvents: 'none', animation: 'martineHover 3.6s ease-in-out infinite' }}>
+      {/* MARTINE avatar centré (au-dessus du SVG) */}
+      <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translate(-50%, 0)', pointerEvents: 'none' }}>
         <Avatar mood="content" size={130} talking />
       </div>
       {/* Bulle texte + bouton GO */}
