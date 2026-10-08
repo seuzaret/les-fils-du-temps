@@ -44,10 +44,15 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
           const asked = temoin ? (j3.enqAnswered?.[temoin.id]?.size || 0) : 0;
           /* Loupe visible :
              - avant Kova faite → sur tous les PNJ (phase orientation)
-             - après Kova faite → uniquement sur les témoins de l'enquête
-               active (teaser avant interrogatoire officiel). */
+             - après Kova faite ET briefing de la mission active LU →
+               uniquement sur les témoins de l'enquête active (teaser
+               avant interrogatoire officiel)
+             - entre les deux (ex. Kova finie mais prochaine enquête
+               pas encore donnée par Vez) → aucune loupe, pour ne
+               rien spoiler. */
           const kovaDone = !!j3.flags?.mission_kova_done;
-          const showLoupe = !kovaDone || !!temoin;
+          const activeBriefed = !!activeMission && !!j3.flags?.[`briefing_${activeMission.id}_done`];
+          const showLoupe = !kovaDone || (activeBriefed && !!temoin);
           return (
             <PnjSprite key={p.id}
               x={p.pose.x} y={p.pose.y}
