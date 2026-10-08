@@ -1,14 +1,15 @@
 import { useState } from "react";
+import MediadexPanel from "../MediadexPanel.jsx";
 
 /* ============================================================
-   JEU 3 — SCÈNE : « Ma chambre » (N-27) — MISSION OSINT
+   JEU 3 — SCÈNE : « Ma chambre » (N-27)
    ------------------------------------------------------------
-   Après avoir résolu la mission Kova, un vieux carnet noir
-   apparaît sur l'étagère. Cliquer dessus ouvre la mission :
-   trois affirmations à vérifier VRAIMENT sur internet (moteur
-   de recherche ou encyclopédie), puis coche Vrai/Faux pour
-   chacune. Toutes bonnes → flag posé + explications. Mauvaises
-   → message d'échec, réessayer.
+   Deux objets interactifs :
+   - un carnet noir sur l'étagère (mission OSINT, après Kova),
+   - un vieux médiadex posé sur le bureau (aide-mémoire des
+     dates des époques du Jeu 1, utile pour la mission Archives
+     avec Jorge). Première ouverture → pose le flag
+     "mediadex_retrouve" + un petit mot de reconnaissance.
    ============================================================ */
 export default function BunkerChambre({ onGo, j3 }) {
   const mission = j3.missions.carnet;
@@ -17,6 +18,16 @@ export default function BunkerChambre({ onGo, j3 }) {
   const [open, setOpen] = useState(false);
   const [answers, setAnswers] = useState({}); // { q1: true, q2: false, ... }
   const [checked, setChecked] = useState(false);
+  const [mediadexOpen, setMediadexOpen] = useState(false);
+  const [mediadexJustFound, setMediadexJustFound] = useState(false);
+  const mediadexRetrouve = !!j3.flags.mediadex_retrouve;
+  const openMediadex = () => {
+    if (!mediadexRetrouve) {
+      j3.setFlag("mediadex_retrouve");
+      setMediadexJustFound(true);
+    }
+    setMediadexOpen(true);
+  };
   const allAnswered = mission ? mission.questions.every((q) => typeof answers[q.id] === "boolean") : false;
   const allCorrect = mission ? mission.questions.every((q) => answers[q.id] === q.vrai) : false;
 
@@ -149,8 +160,23 @@ export default function BunkerChambre({ onGo, j3 }) {
           <line x1="46" y1="-24" x2="58" y2="-14" stroke="#5a6270" strokeWidth="1.6" />
           <path d="M52 -20 L64 -8 L54 -4 Z" fill="#c8a848" stroke="#3a2010" strokeWidth="0.5" />
           <circle cx="58" cy="-8" r="4" fill="#ffd870" opacity="0.6" />
-          {/* Carnet + stylo */}
-          <rect x="90" y="-8" width="30" height="6" fill="#e8dfc8" stroke="#3a2818" strokeWidth="0.5" />
+          {/* Carnet + stylo → remplacés par le MÉDIADEX cliquable, posé
+              sur le bureau. Pulse doré léger tant qu'on ne l'a pas
+              encore retrouvé, puis statique. */}
+          <g transform="translate(90,-10)" onClick={openMediadex} style={{ cursor: "pointer" }}>
+            {!mediadexRetrouve && (
+              <circle cx="18" cy="4" r="22" fill="none" stroke="#c8a848" strokeWidth="1.5" strokeDasharray="3 3">
+                <animate attributeName="r" values="18;26;18" dur="2.2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.2s" repeatCount="indefinite" />
+              </circle>
+            )}
+            <rect x="0" y="0" width="36" height="8" fill="#5a2820" stroke="#1a0e08" strokeWidth="0.6" />
+            <rect x="0" y="0" width="36" height="2" fill="#c8a848" />
+            <text x="18" y="6.2" textAnchor="middle" fontFamily="Georgia, serif" fontSize="4" fontWeight="800" fill="#e8dfc8">MÉDIADEX</text>
+            {!mediadexRetrouve && (
+              <text x="18" y="-6" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="7" fill="#c8a848" fontStyle="italic">médiadex</text>
+            )}
+          </g>
           <line x1="112" y1="-6" x2="128" y2="-14" stroke="#3a2010" strokeWidth="1" strokeLinecap="round" />
         </g>
 
@@ -268,6 +294,22 @@ export default function BunkerChambre({ onGo, j3 }) {
         style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Retour au couloir
       </button>
+
+      {mediadexOpen && (
+        <MediadexPanel onClose={() => { setMediadexOpen(false); setMediadexJustFound(false); }} />
+      )}
+      {mediadexJustFound && !mediadexOpen && (
+        <div style={{
+          position: "fixed", left: "50%", bottom: 24, transform: "translateX(-50%)",
+          background: "#141008", border: "1px solid #c8a848", borderRadius: 10,
+          padding: "10px 16px", maxWidth: 480, zIndex: 300,
+          boxShadow: "0 0 24px rgba(200,168,72,0.3)",
+        }}>
+          <p style={{ margin: 0, fontSize: 14, color: "#e8dfc8", fontFamily: "Georgia, serif", fontStyle: "italic", textAlign: "center" }}>
+            « Mais oui — mon médiadex. Les dates que j'ai notées au Jeu 1 sont là-dedans. Je garde ça sous la main. »
+          </p>
+        </div>
+      )}
     </div>
   );
 }
