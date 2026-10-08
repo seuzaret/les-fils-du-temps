@@ -108,8 +108,9 @@ export default function IntroStory({ onDone }) {
   const next = () => setI((v) => v + 1);
   const SLIDES = [
     <Blackout         key="b0" text="Une nuit paisible de ta vie." onNext={next} />,
-    <SlideNight       key="s1" onNext={next} />,
+    <SlideNight       key="s1a" silent onNext={next} />,
     <Blackout         key="b1" text="Tout à coup un bruit te réveille." onNext={next} />,
+    <SlideNight       key="s1b" onNext={next} />,
     <SlideMessage     key="s2" onNext={next} />,
     <SlideOutside     key="s3" onNext={next} />,
     <SlideCockpit     key="s4" onNext={next} />,
@@ -140,10 +141,11 @@ export default function IntroStory({ onDone }) {
 /* ═══════════════════════════════════════════════════════════════
    S1 — NUIT PAISIBLE (chambre, tel qui vibre après 3s)
    ═══════════════════════════════════════════════════════════════ */
-function SlideNight({ onNext }) {
+function SlideNight({ onNext, silent = false }) {
   const [vibrating, setVibrating] = useState(false);
   const audioRef = useRef(null);
   useEffect(() => {
+    if (silent) return; // chambre d'ouverture : muette, cliquable n'importe où
     try {
       const a = new Audio('assets/sounds/phone-vibrate.wav');
       a.loop = true; a.volume = 0.35; a.preload = 'auto';
@@ -164,10 +166,12 @@ function SlideNight({ onNext }) {
       tryPlay();
     }, 3000);
     return () => { clearTimeout(t); try { audioRef.current?.pause(); } catch { /* déjà arrêté */ } };
-  }, []);
+  }, [silent]);
 
   return (
-    <div style={{ animation: 'fadeIn 1s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+    <div
+      onClick={silent ? onNext : undefined}
+      style={{ animation: 'fadeIn 1s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', cursor: silent ? 'pointer' : 'default' }}>
       <svg viewBox="0 0 1200 680" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
         <defs>
           <linearGradient id="s1-wall" x1="0" y1="0" x2="0" y2="1">
