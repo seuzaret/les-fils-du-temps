@@ -692,10 +692,19 @@ function SlideOutside({ onNext }) {
           <animate attributeName="r" values="20;340;280" keyTimes="0;0.65;1" dur="2s" fill="freeze" />
           <animate attributeName="opacity" values="0;1;0.75" keyTimes="0;0.55;1" dur="2s" fill="freeze" />
         </circle>
-        {/* MARTINE se matérialise progressivement */}
+        {/* MARTINE se matérialise progressivement, puis flotte légèrement
+            comme une soucoupe en vol stationnaire. */}
         <g transform="translate(600,560) scale(1.05)" opacity="0">
           <animate attributeName="opacity" values="0;1" dur="0.8s" begin="1.2s" fill="freeze" />
-          <TimeMachine landed={true} />
+          <g>
+            <animateTransform attributeName="transform" type="translate"
+              values="0 0; 0 -8; 0 2; 0 -6; 0 0" dur="4s" begin="1.2s"
+              repeatCount="indefinite" additive="sum" />
+            <animateTransform attributeName="transform" type="rotate"
+              values="0; 0.6; -0.4; 0.3; 0" dur="5s" begin="1.2s"
+              repeatCount="indefinite" additive="sum" />
+            <TimeMachine landed={true} />
+          </g>
         </g>
       </svg>
       {ready && (
