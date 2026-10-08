@@ -445,6 +445,21 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Triche : Kova faite, dépose directement dans la salle des Archives
+     pour travailler sur la mission "dossiers réécrits" sans refaire
+     tout le parcours. Le passage secret est fermé — c'est voulu, pour
+     tester la mécanique de découverte. */
+  const cheatJeu3Archives = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "archives",
+      flags: { puits_billet: true, mission_kova_done: true, briefing_kova_done: true },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
   const newGameJeu2 = () => {
     setMode("jeu2");
     const target = Math.floor(Math.random() * JEU2.length);
@@ -1221,6 +1236,7 @@ export default function App() {
       onNewGameJeu2={newGameJeu2}
       onNewGameJeu3={newGameJeu3}
       onCheatJeu3Kova={cheatJeu3Kova}
+      onCheatJeu3Archives={cheatJeu3Archives}
     />
   );
 

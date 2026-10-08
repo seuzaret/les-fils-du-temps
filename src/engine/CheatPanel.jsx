@@ -18,6 +18,7 @@ export default function CheatPanel({
   onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab,
   onNewGameJeu2, onNewGameJeu3,
   onCheatJeu3Kova,
+  onCheatJeu3Archives,
 }) {
   if (!cheat) return null;
   return (
@@ -66,6 +67,7 @@ export default function CheatPanel({
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={onNewGameJeu3}>🌑 Démarrer le Jeu 3</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Kova}>🎯 Direct Bureau (billet reçu)</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Archives}>🗂 Direct Archives (Kova faite)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
