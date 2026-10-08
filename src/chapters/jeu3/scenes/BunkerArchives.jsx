@@ -9,6 +9,8 @@
    après Kova, l'enquête temporelle se lance vers BunkerVoyage.
    ============================================================ */
 import { useState } from "react";
+import PnjSprite from "../PnjSprite.jsx";
+import RangementPanel from "../archives/RangementPanel.jsx";
 
 export default function BunkerArchives({ onGo, j3 }) {
   const mission = j3.missions.appel;
@@ -23,6 +25,10 @@ export default function BunkerArchives({ onGo, j3 }) {
        l'escalier s'ouvrir, puis cliquer dessus. */
   };
   const descendToSas = () => onGo("sas");
+  const [rangementOpen, setRangementOpen] = useState(false);
+  const jorgeDone = !!j3.flags.archives_rangement_done;
+  /* Jorge est accessible dès que Kova est faite. */
+  const jorgePresent = unlocked;
   const dossierDone = (d) => !!j3.flags[d.flag];
   const nbDone = order.filter((id) => dossierDone(dossiers[id])).length;
   /* Si le joueur revient avec un bordereau rempli (= il a visité le passé),
@@ -276,6 +282,19 @@ export default function BunkerArchives({ onGo, j3 }) {
         <text x="500" y="500" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#5eff9e" letterSpacing="3" opacity="0.7">
           SILENCE — SECTEUR MÉMOIRE
         </text>
+
+        {/* Jorge, l'archiviste, à droite du terminal.
+            Visible seulement si Kova est faite ET s'il n'a pas été
+            arrêté (étape 3+ : flag jorge_arrete). */}
+        {jorgePresent && !j3.flags.jorge_arrete && (
+          <PnjSprite x={700} y={400}
+            color="#3a2818" pants="#1a1408" hair="#8a7050" skin="#c8a888"
+            facing="front" accessory="coat" activity="write"
+            nom="Jorge" role="Archiviste"
+            heard={jorgeDone}
+            active={!jorgeDone}
+            onClick={() => setRangementOpen(true)} />
+        )}
       </svg>
 
       {/* Panneau bas : liste des dossiers réécrits, ou verrouillé */}
@@ -318,6 +337,14 @@ export default function BunkerArchives({ onGo, j3 }) {
       {compareOpen && activeDossier && (
         <CompareModal dossier={activeDossier} bordereau={bordereau}
           onClose={() => { j3.finishDossier(); setCompareOpen(false); }} />
+      )}
+
+      {rangementOpen && (
+        <RangementPanel j3={j3}
+          onDone={() => {
+            j3.setFlag("archives_rangement_done");
+            setRangementOpen(false);
+          }} />
       )}
     </div>
   );
