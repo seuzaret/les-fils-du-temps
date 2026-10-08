@@ -53,6 +53,11 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
           const kovaDone = !!j3.flags?.mission_kova_done;
           const activeBriefed = !!activeMission && !!j3.flags?.[`briefing_${activeMission.id}_done`];
           const showLoupe = !kovaDone || (activeBriefed && !!temoin);
+          /* L'interrogatoire officiel ne s'ouvre qu'après briefing — sinon
+             on retombe sur la réplique d'ambiance. Évite que la cantine
+             déballe l'enquête Viande (ou autre) avant que Vez ait donné
+             la mission. */
+          const canInterview = !!temoin && activeBriefed;
           return (
             <PnjSprite key={p.id}
               x={p.pose.x} y={p.pose.y}
@@ -61,11 +66,11 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
               pose={p.poseKind || "stand"} accessory={p.accessory || null}
               activity={p.activity || null}
               nom={p.nom} role={p.role}
-              heard={temoin ? asked > 0 : heardAsPnj}
-              active={!!temoin && asked === 0}
+              heard={canInterview ? asked > 0 : heardAsPnj}
+              active={canInterview && asked === 0}
               onSmalltalk={showLoupe ? () => setSmalltalk(p.id) : null}
               onClick={() => {
-                if (temoin) {
+                if (canInterview) {
                   j3.openInterview(temoin.id);
                   j3.hear(p.id);
                 } else {
