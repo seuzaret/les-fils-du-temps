@@ -105,6 +105,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
             }}>
               {byChapter[chap].map((c) => {
                 const found = unlockedSet.has(c.msgId);
+                const chapDate = CHAPTERS[c.chapter - 1]?.date;
                 return (
                   <button key={c.msgId}
                     disabled={!found}
@@ -138,6 +139,17 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
                           alignItems: 'center', justifyContent: 'center',
                           fontSize: 32, color: '#5a4028', fontWeight: 800,
                         }}>?</div>
+                      )}
+                      {found && chapDate && (
+                        <div style={{
+                          position: 'absolute', right: 4, bottom: 4,
+                          background: 'rgba(10,6,4,0.85)', border: '1px solid #c8963e',
+                          borderRadius: 4, padding: '2px 6px',
+                          fontFamily: 'ui-monospace, monospace', fontSize: 10, fontWeight: 700,
+                          color: '#ffd166', letterSpacing: 0.5,
+                        }}>
+                          {chapDate}
+                        </div>
                       )}
                     </div>
                     <div style={{
