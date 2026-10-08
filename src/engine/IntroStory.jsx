@@ -74,6 +74,33 @@ function Bubble({ x, y, w = 260, text, from = 'left', color = 'default' }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   TRANSITION — écran noir plein cadre, une ligne, clic pour avancer
+   ═══════════════════════════════════════════════════════════════ */
+function Blackout({ text, big = false, onNext }) {
+  return (
+    <div onClick={onNext}
+      style={{
+        animation: 'fadeIn 0.6s ease-out',
+        width: '100%', height: '100%', background: '#000',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: 24, boxSizing: 'border-box', cursor: 'pointer',
+      }}>
+      <p style={{
+        color: '#e8eef5', textAlign: 'center', margin: 0,
+        fontFamily: 'Georgia, serif',
+        fontSize: big ? 32 : 20,
+        lineHeight: 1.5,
+        letterSpacing: big ? 1 : 0,
+        maxWidth: 760,
+        opacity: 0.95,
+      }}>
+        {text}
+      </p>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
    COMPOSANT PRINCIPAL
    ═══════════════════════════════════════════════════════════════ */
 export default function IntroStory({ onDone }) {
@@ -81,11 +108,17 @@ export default function IntroStory({ onDone }) {
   const next = () => setI((v) => v + 1);
   const SLIDES = [
     <SlideNight       key="s1" onNext={next} />,
+    <Blackout         key="b1" text="Ton téléphone s'allume. Tu te lèves." onNext={next} />,
     <SlideMessage     key="s2" onNext={next} />,
+    <Blackout         key="b2" text="Tu enfiles des chaussures. Tu sors." onNext={next} />,
     <SlideOutside     key="s3" onNext={next} />,
+    <Blackout         key="b3" text="Tu montes à bord." onNext={next} />,
     <SlideCockpit     key="s4" onNext={next} />,
+    <Blackout         key="b4" text="Elle allume ses écrans." onNext={next} />,
     <SlideRules       key="s4b" onNext={next} />,
+    <Blackout         key="b5" text="Les règles comprises." onNext={next} />,
     <SlideMartineReparee key="s4c" onNext={next} />,
+    <Blackout         key="b6" text="L'horloge commence à battre." onNext={next} />,
     <SlideFlash       key="s5" onNext={next} />,
     <SlideArrival     key="s6" onDone={onDone} />,
   ];
