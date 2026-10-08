@@ -11,7 +11,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ALascaux%20painting.jpg",
     "licenseUrl": "",
-    "filename": "lascaux.jpg"
+    "filename": "lascaux.jpg",
+    "date": "~17 000 av. J.-C."
   },
   {
     "id": "mains-negatives",
@@ -25,7 +26,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AManos%20de%20Gargas%20(Francia).png",
     "licenseUrl": "",
-    "filename": "mains-negatives.png"
+    "filename": "mains-negatives.png",
+    "date": "~27 000 av. J.-C."
   },
   {
     "id": "flute-hohle-fels",
@@ -39,7 +41,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AFl%C3%B6te%20aus%20G%C3%A4nsegeierknochen%20vom%20Hohle%20Fels%20im%20urmu.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "filename": "flute-hohle-fels.jpg"
+    "filename": "flute-hohle-fels.jpg",
+    "date": "~40 000 av. J.-C."
   },
   {
     "id": "cairn-barnenez",
@@ -53,7 +56,8 @@
     "credit": "No machine-readable source provided. Own work assumed (based on copyright claims).",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ABarnenez%20front2.jpg",
     "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
-    "filename": "cairn-barnenez.jpg"
+    "filename": "cairn-barnenez.jpg",
+    "date": "~4500 av. J.-C."
   },
   {
     "id": "poterie-neolithique",
@@ -67,7 +71,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ATorso%20of%20richly%20decorated%20neolithic%20potttery%2C%20Museum%20of%20Western%20Bohemia%2C%20187710.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "filename": "poterie-neolithique.jpg"
+    "filename": "poterie-neolithique.jpg",
+    "date": "~6000 av. J.-C."
   },
   {
     "id": "tablette-cuneiforme",
@@ -81,7 +86,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACuneiform%20tablet%2C%20legal%20document%20concerning%20a%20trial%2C%20Sumer%2C%20modern%20Iraq%2C%20c.%202037-2029%20BC%20-%20Spurlock%20Museum%2C%20UIUC%20-%20DSC05943.jpg",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "tablette-cuneiforme.jpg"
+    "filename": "tablette-cuneiforme.jpg",
+    "date": "~3300 av. J.-C."
   },
   {
     "id": "sceau-cylindre",
@@ -95,7 +101,8 @@
     "credit": "Jastrow (2005)",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACylinder%20seal%20Shamash%20Louvre%20AO9132.jpg",
     "licenseUrl": "",
-    "filename": "sceau-cylindre.jpg"
+    "filename": "sceau-cylindre.jpg",
+    "date": "~3500 av. J.-C."
   },
   {
     "id": "hieroglyphes",
@@ -109,7 +116,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AFragment%20from%20the%20Egyptian%20Book%20of%20the%20Dead%20%E2%80%93%20Papyrus%20of%20Ani%2C%20Louvre%2C%20Paris%2C%20France.jpg",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "hieroglyphes.jpg"
+    "filename": "hieroglyphes.jpg",
+    "date": "~3200 av. J.-C."
   },
   {
     "id": "alphabet-phenicien",
@@ -123,7 +131,8 @@
     "credit": "https://ar.wikipedia.org/wiki/%D9%85%D9%84%D9%81:Phoenician_Alphabet.jpg",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3APhoenician%20Abjad%20in%203%20Stages%20With%20Arabic%20Transliteration.jpg",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "alphabet-phenicien.jpg"
+    "filename": "alphabet-phenicien.jpg",
+    "date": "~1050 av. J.-C."
   },
   {
     "id": "fresque-pompei",
@@ -137,7 +146,8 @@
     "credit": "Transferred from en.wikipedia to Commons.",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ARoman%20fresco%20Villa%20dei%20Misteri%20Pompeii%20011.jpg",
     "licenseUrl": "",
-    "filename": "fresque-pompei.jpg"
+    "filename": "fresque-pompei.jpg",
+    "date": "~70 ap. J.-C."
   },
   {
     "id": "tablette-cire",
@@ -151,7 +161,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ATable%20with%20was%20and%20stylus%20Roman%20times.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "filename": "tablette-cire.jpg"
+    "filename": "tablette-cire.jpg",
+    "date": "Ier siècle"
   },
   {
     "id": "bibliotheque-alexandrie",
@@ -165,7 +176,8 @@
     "credit": "https://wellcomeimages.org/indexplus/obf_images/d0/b2/f07eefa807ee6e3e3818935f9156.jpg Gallery: https://wellcomeimages.org/indexplus/image/V0033436.html Wellcome Collection gallery (2018-04-02): https://wellcomecollection.org/works/hxwd4dzk CC-BY-4.0",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ASaint%20Catherine%20of%20Alexandria.%20Engraving.%20Wellcome%20V0033436.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "filename": "bibliotheque-alexandrie.jpg"
+    "filename": "bibliotheque-alexandrie.jpg",
+    "date": "~288 av. J.-C."
   },
   {
     "id": "inscription-romaine",
@@ -179,7 +191,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AAntioch%20in%20Pisidia%20Augustus%20Temple%202937.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "filename": "inscription-romaine.jpg"
+    "filename": "inscription-romaine.jpg",
+    "date": "Ier-IIe siècle"
   },
   {
     "id": "tapisserie-bayeux",
@@ -193,7 +206,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ABayeux%20Tapestry%20scene57%20Harold%20death.jpg",
     "licenseUrl": "",
-    "filename": "tapisserie-bayeux.jpg"
+    "filename": "tapisserie-bayeux.jpg",
+    "date": "~1070"
   },
   {
     "id": "codex-medieval",
@@ -207,7 +221,8 @@
     "credit": "",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACodex%20Calixtinus%20(Liber%20Sancti%20Jacobi)%20F0173k.jpg",
     "licenseUrl": "",
-    "filename": "codex-medieval.jpg"
+    "filename": "codex-medieval.jpg",
+    "date": "~IVe siècle"
   },
   {
     "id": "manuscrit-enlumine",
@@ -221,7 +236,8 @@
     "credit": "Réunion des musées nationaux – Grand Palais",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AAnatomical%20Man.jpg",
     "licenseUrl": "",
-    "filename": "manuscrit-enlumine.jpg"
+    "filename": "manuscrit-enlumine.jpg",
+    "date": "~XIIIe siècle"
   },
   {
     "id": "vitrail-chartres",
@@ -235,7 +251,8 @@
     "credit": "Scan and postprocessing by Hubertl, Monographie de la Cathédrale de Chartres - Atlas",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AChartres%20stained%20window%20complete%20-%20The%20life%20of%20Jesus%20-%20retouched%20final%20version%20MK%2010.jpg",
     "licenseUrl": "",
-    "filename": "vitrail-chartres.jpg"
+    "filename": "vitrail-chartres.jpg",
+    "date": "~1200"
   },
   {
     "id": "presse-gutenberg",
@@ -249,7 +266,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AGutenberg%20press.png",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "presse-gutenberg.png"
+    "filename": "presse-gutenberg.png",
+    "date": "~1450"
   },
   {
     "id": "bible-gutenberg",
@@ -263,7 +281,8 @@
     "credit": "Facsimile of a page from 42-line Gutenberg Bible",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AGutenberg%20Bible%20B42%20Genesis.JPG",
     "licenseUrl": "",
-    "filename": "bible-gutenberg.jpg"
+    "filename": "bible-gutenberg.jpg",
+    "date": "1455"
   },
   {
     "id": "pile-volta",
@@ -277,7 +296,8 @@
     "credit": "Downloaded from Adolphe Ganot (1893) Elementary Treatise on Physics: Experimental and Applied, 14th Ed., William Wood &amp; Co., New York, p.795, fig.764 on Google Books. Translated from Ganot's Éléments de Physique by E. Atkinson.",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AVoltaic%20pile%20battery.png",
     "licenseUrl": "",
-    "filename": "pile-volta.png"
+    "filename": "pile-volta.png",
+    "date": "1800"
   },
   {
     "id": "morse-key",
@@ -291,7 +311,8 @@
     "credit": "NPGallery",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACan%20you%20hear%20us%20now%3F%20Dah%20dah%2C%20dit%20dit.%20Dah%20dah%2C%20dit%20dit.%20The%20sound%20of%20this%20J.H.%20Bunnell%20%26%20Co.%20telegraph%20key%20and%20sounder%20was%20the%20(6ed899b0-1dd8-b71b-0b94-6e32f79a79a1).jpg",
     "licenseUrl": "",
-    "filename": "morse-key.jpg"
+    "filename": "morse-key.jpg",
+    "date": "1844"
   },
   {
     "id": "cable-transatlantique",
@@ -305,7 +326,8 @@
     "credit": "This image was originally posted to Flickr as Cable Laying Machinery on the 'Great Eastern'see also: National Maritime Museum from Greenwich, United Kingdom by Flickr",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACable%20Laying%20Machinery%20on%20SS%20'Great%20Eastern'.jpg",
     "licenseUrl": "",
-    "filename": "cable-transatlantique.jpg"
+    "filename": "cable-transatlantique.jpg",
+    "date": "1858"
   },
   {
     "id": "daguerreotype",
@@ -319,7 +341,8 @@
     "credit": "Unknown sourceUnknown source",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AConstanze%20Mozart%20and%20Max%20Keller%20Daguerreotype%201840.png",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "daguerreotype.png"
+    "filename": "daguerreotype.png",
+    "date": "1839"
   },
   {
     "id": "phonographe-edison",
@@ -333,7 +356,8 @@
     "credit": "Brady-Handy Photograph Collection (Library of Congress) - http://hdl.loc.gov/loc.pnp/cwpbh.04044",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AEdison%20and%20phonograph%20edit2.jpg",
     "licenseUrl": "",
-    "filename": "phonographe-edison.jpg"
+    "filename": "phonographe-edison.jpg",
+    "date": "1877"
   },
   {
     "id": "cinematographe-lumiere",
@@ -347,7 +371,8 @@
     "credit": "Source: http://www.moah.org/exhibits/archives/movies/movie_theatres_p.html",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACinematographe%20Lumiere.jpg",
     "licenseUrl": "",
-    "filename": "cinematographe-lumiere.jpg"
+    "filename": "cinematographe-lumiere.jpg",
+    "date": "1895"
   },
   {
     "id": "telephone-bell",
@@ -361,7 +386,8 @@
     "credit": "Retrieved April 18, 2014 from Harry Randolph Van Deventer 1912 Telephonology, 3rd Ed., McGraw-Hill, New York, p. 54, fig. 68 on Google Books",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ACandlestick%20telephone%20receiver%20cutaway.jpg",
     "licenseUrl": "",
-    "filename": "telephone-bell.jpg"
+    "filename": "telephone-bell.jpg",
+    "date": "1876"
   },
   {
     "id": "tsf-marconi",
@@ -375,7 +401,8 @@
     "credit": "This image comes from the Google-hosted LIFE Photo Archive where it is available under the filename 4a204d82f07524bd. This tag does not indicate the copyright status of the attached work. A normal copyright tag is still required. See the copyright section in the template documentation for more information.",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AGuglielmo%20Marconi%201901%20wireless%20signal.jpg",
     "licenseUrl": "",
-    "filename": "tsf-marconi.jpg"
+    "filename": "tsf-marconi.jpg",
+    "date": "1901"
   },
   {
     "id": "radio-1920",
@@ -389,7 +416,8 @@
     "credit": "Uploaded 2017-05-28 from a scan of Elmer Eustice Bucher's (October, 1917, Second Revised edition) Practical Wireless Telegraphy, Revised Ed., Wireless Press Inc., New York, p.151, fig.170.",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AMarconi%20Type%20106%20crystal%20radio%20receiver.jpg",
     "licenseUrl": "",
-    "filename": "radio-1920.jpg"
+    "filename": "radio-1920.jpg",
+    "date": "1920"
   },
   {
     "id": "poste-tsf-1940",
@@ -403,7 +431,8 @@
     "credit": "API data Catalogue record Photo",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ARadio%2C%20valve%20(AM%201999.40.4-2).jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "filename": "poste-tsf-1940.jpg"
+    "filename": "poste-tsf-1940.jpg",
+    "date": "1940"
   },
   {
     "id": "eniac",
@@ -417,7 +446,8 @@
     "credit": "Image from [1]",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ATwo%20women%20operating%20ENIAC.gif",
     "licenseUrl": "",
-    "filename": "eniac.gif"
+    "filename": "eniac.gif",
+    "date": "1946"
   },
   {
     "id": "cassette-philips",
@@ -431,7 +461,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3APhotoelasticity%20-%20TDK%20Head%20Cleaner%20-%20White%20background.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "filename": "cassette-philips.jpg"
+    "filename": "cassette-philips.jpg",
+    "date": "1963"
   },
   {
     "id": "boombox-1985",
@@ -445,7 +476,8 @@
     "credit": "https://www.lookandlearn.com/history-images/YSH001711/Boombox-carried-by-Radio-Raheem-in-the-film-Do-the-Right-Thing?t=1&amp;q=hip-hop&amp;n=22",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ARadio%20Raheem's%20Boombox.jpg",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "boombox-1985.jpg"
+    "filename": "boombox-1985.jpg",
+    "date": "1985"
   },
   {
     "id": "cd-rom",
@@ -459,7 +491,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3ABlank%20Verbatim%20CD-R%20(Front).jpg",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "cd-rom.jpg"
+    "filename": "cd-rom.jpg",
+    "date": "1982"
   },
   {
     "id": "disquette",
@@ -473,7 +506,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AFloppy%20disk%20internal%20diagram.svg",
     "licenseUrl": "",
-    "filename": "disquette.svg"
+    "filename": "disquette.svg",
+    "date": "1971"
   },
   {
     "id": "otzi-tatouages",
@@ -487,7 +521,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AArcheoparc%20-%20Museum%20%C3%96tzi%20Kleidung.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
-    "filename": "otzi-tatouages.jpg"
+    "filename": "otzi-tatouages.jpg",
+    "date": "~3300 av. J.-C."
   },
   {
     "id": "tv-1969",
@@ -501,7 +536,8 @@
     "credit": "Vintage Wood Television Savings Bank, Likely Handcrafted, Measures 7-3/8 Inches Tall",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AVintage%20Wood%20Television%20Savings%20Bank%2C%20Likely%20Handcrafted%2C%20Measures%207-3-8%20Inches%20Tall%20(15388600058).jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
-    "filename": "tv-1969.jpg"
+    "filename": "tv-1969.jpg",
+    "date": "1969"
   },
   {
     "id": "venus-brassempouy",
@@ -515,7 +551,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AVenus%20de%20Brassempouy.jpg",
     "licenseUrl": "",
-    "filename": "venus-brassempouy.jpg"
+    "filename": "venus-brassempouy.jpg",
+    "date": "~25 000 av. J.-C."
   },
   {
     "id": "volumen",
@@ -529,7 +566,8 @@
     "credit": "This file was donated to Wikimedia Commons as part of a project by the Metropolitan Museum of Art. See the Image and Data Resources Open Access Policy",
     "sourcePage": "https://commons.wikimedia.org/wiki/File%3AAmduat%20Papyrus%20of%20Nesenaset%20MET%20LC-EG%2062977.jpg",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "filename": "volumen.jpg"
+    "filename": "volumen.jpg",
+    "date": "~Ier siècle"
   },
   {
     "id": "gazette-1631",
@@ -543,7 +581,8 @@
     "credit": "Own work",
     "sourcePage": "https://commons.wikimedia.org/wiki/File:Gazette_de_Renaudot_1632.jpg",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "filename": "gazette-1631.jpg"
+    "filename": "gazette-1631.jpg",
+    "date": "1631"
   },
   {
     "id": "telegraphe-chappe",
@@ -557,6 +596,7 @@
     "credit": "Sotheby's",
     "sourcePage": "https://commons.wikimedia.org/wiki/File:Jacques-Auguste_Regnier,_Vue_de_l%27%C3%A9glise_Saint_Pierre_de_Montmartre_%C3%A0_Paris,_circa_1820._Coll._part..jpg",
     "licenseUrl": "",
-    "filename": "telegraphe-chappe.jpg"
+    "filename": "telegraphe-chappe.jpg",
+    "date": "1794"
   }
 ]
