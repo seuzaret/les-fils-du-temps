@@ -201,22 +201,34 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
           : nbMisplaced === slots.length
             ? "« En revanche, pour le classement : rien n'est à sa place. Revois tes dates. »"
             : `« Pour le classement, par contre : ${nbMisplaced} fiche(s) sur ${slots.length} est mal placée. Fais attention aux dates. »`;
+    /* Tant que l'ordre n'est pas bon, Jorge ne clôt rien : il pointe
+       seulement l'erreur et renvoie au plateau. La phrase finale
+       (END_NEUTRE ou REACTION_SIGNALE) n'arrive qu'au classement
+       correct. */
+    if (!trie) {
+      return (
+        <BigDialogue
+          topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
+          speakerNom="Jorge" speakerRole="Archiviste du Puits"
+          speakerStyle={JORGE_STYLE}
+          accent="#c8a848"
+          lignes={[chronoLine, "« Reprends ton classement pour que je puisse clore ce lot. »"]}
+          actionLabel="↩ Reclasser"
+          onDone={() => setPhase("tri")} />
+      );
+    }
     const baseLines = trueSignale
       ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
-      : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor];
-    const closingLine = trie
-      ? null
-      : "« Reprends ton classement pour que je puisse clore ce lot. »";
-    const allLines = closingLine ? [...baseLines, chronoLine, closingLine] : [...baseLines, chronoLine];
+      : [END_NEUTRE_LINES[triIdx].trie];
     return (
       <BigDialogue
         topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
         speakerNom="Jorge" speakerRole="Archiviste du Puits"
         speakerStyle={JORGE_STYLE}
         accent="#c8a848"
-        lignes={allLines}
-        actionLabel={trie ? "Sortir ▸" : "↩ Reclasser"}
-        onDone={trie ? onDone : () => setPhase("tri")} />
+        lignes={[...baseLines, chronoLine]}
+        actionLabel="Sortir ▸"
+        onDone={onDone} />
     );
   }
 
