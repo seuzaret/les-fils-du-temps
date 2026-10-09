@@ -81,6 +81,10 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
   const [showSignalerOverlay, setShowSignalerOverlay] = useState(false);
   const [signaled, setSignaled] = useState({});
   const [lastReaction, setLastReaction] = useState(null);
+  /* Si le joueur valide un tri parfait sans jamais signaler, on lui
+     donne un indice. S'il revalide tel quel après coup, on clôt la
+     passe (son choix). */
+  const [indiceDonne, setIndiceDonne] = useState(false);
 
   const inStock = (idx) => !slots.includes(idx);
 
@@ -215,6 +219,25 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
           lignes={[chronoLine, "« Reprends ton classement pour que je puisse clore ce lot. »"]}
           actionLabel="↩ Reclasser"
           onDone={() => setPhase("tri")} />
+      );
+    }
+    /* Classement parfait mais aucune anomalie signalée : premier
+       passage → Jorge laisse un indice et renvoie au plateau. Si le
+       joueur insiste en revalidant tel quel, on clôt sans flag. */
+    if (!trueSignale && !indiceDonne) {
+      return (
+        <BigDialogue
+          topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
+          speakerNom="Jorge" speakerRole="Archiviste du Puits"
+          speakerStyle={JORGE_STYLE}
+          accent="#c8a848"
+          lignes={[
+            "Jorge regarde ton classement, lève un sourcil : « L'ordre est bon. Mais regarde encore… »",
+            "« Toutes ces dates te paraissent justes, à toi ? Toutes ? »",
+            "« Reprends-les une à une. Si une seule te chatouille, tu me la signales. »",
+          ]}
+          actionLabel="↩ Reprendre les fiches"
+          onDone={() => { setIndiceDonne(true); setPhase("tri"); }} />
       );
     }
     const baseLines = trueSignale
