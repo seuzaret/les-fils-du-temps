@@ -103,26 +103,8 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
     setSlots((prev) => prev.map((v) => (v === ficheIdx ? null : v)));
   };
 
-  const valider = () => {
-    const allPlaced = slots.every((s) => s !== null);
-    const nbCorrect = countCorrect(slots, fiches);
-    const trie = allPlaced && nbCorrect === slots.length;
-    if (!allPlaced) {
-      setLastReaction({
-        text: "Jorge lève à peine les yeux : « Il reste des fiches dans la pile. Range-les toutes avant de me déranger. »",
-      });
-      setPhase("reactionBack");
-      return;
-    }
-    if (!trie) {
-      setLastReaction({
-        text: "Jorge survole tes cases, pince les lèvres : « Ce n'est pas l'ordre chronologique. Du plus ancien au plus récent — recommence, et vérifie les dates. »",
-      });
-      setPhase("reactionBack");
-      return;
-    }
-    setPhase("fin");
-  };
+  const [confirmValider, setConfirmValider] = useState(false);
+  const valider = () => setConfirmValider(true);
 
   const signalerFiche = (idx) => {
     const f = fiches[idx];
@@ -177,7 +159,10 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
         signaled={signaled}
         stamping={phase === "stamping"}
         onContinueStamping={() => setPhase("fin")}
-        onAbandon={onDone} />
+        onAbandon={onDone}
+        confirmValider={confirmValider}
+        onConfirmAccept={() => { setConfirmValider(false); setPhase("fin"); }}
+        onConfirmRefuse={() => setConfirmValider(false)} />
     );
   }
 
@@ -197,6 +182,9 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
 
   if (phase === "fin") {
     const trueSignale = Object.entries(signaled).find(([, v]) => v === true);
+    const nbCorrect = countCorrect(slots, fiches);
+    const allPlaced = slots.every((s) => s !== null);
+    const trie = allPlaced && nbCorrect === slots.length;
     return (
       <BigDialogue
         topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
@@ -206,7 +194,7 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
         lignes={
           trueSignale
             ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
-            : [END_NEUTRE_LINES[triIdx].trie]
+            : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor]
         }
         actionLabel="Sortir ▸"
         onDone={onDone} />
@@ -223,6 +211,7 @@ function TriBoard({
   mediadexRetrouve, onValider, onSignaler,
   showSignalerOverlay, onCloseSignalerOverlay, onSignalerFiche,
   signaled, stamping, onContinueStamping, onAbandon,
+  confirmValider, onConfirmAccept, onConfirmRefuse,
 }) {
   const [mediadexOpen, setMediadexOpen] = useState(false);
   const [dragging, setDragging] = useState(null); // ficheIdx en cours de drag
@@ -352,6 +341,32 @@ function TriBoard({
       {showSignalerOverlay && (
         <SignalerOverlay fiches={fiches} signaled={signaled}
           onSignaler={onSignalerFiche} onClose={onCloseSignalerOverlay} />
+      )}
+
+      {/* Confirmation avant de remettre le tri à Jorge */}
+      {confirmValider && (
+        <div onClick={onConfirmRefuse}
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", zIndex: 420, display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+          <div onClick={(e) => e.stopPropagation()}
+            style={{ background: "#141008", border: "2px solid #c8a848", borderRadius: 12, padding: 20, maxWidth: 480, width: "100%", textAlign: "center" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848" }}>
+              REMETTRE LE TRI À JORGE ?
+            </div>
+            <p style={{ margin: "10px 0 18px", fontSize: 13, color: "#c8b090", lineHeight: 1.55 }}>
+              Jorge va regarder ton classement tel quel. Tu peux encore corriger si tu as un doute.
+            </p>
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, flexWrap: "wrap" }}>
+              <button onClick={onConfirmRefuse}
+                style={{ background: "#2a1408", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 8, padding: "10px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+                ← Refuser (corriger)
+              </button>
+              <button onClick={onConfirmAccept}
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+                ✓ Accepter (remettre)
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
