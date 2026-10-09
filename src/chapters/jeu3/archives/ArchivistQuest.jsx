@@ -103,7 +103,26 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
     setSlots((prev) => prev.map((v) => (v === ficheIdx ? null : v)));
   };
 
-  const valider = () => setPhase("fin");
+  const valider = () => {
+    const allPlaced = slots.every((s) => s !== null);
+    const nbCorrect = countCorrect(slots, fiches);
+    const trie = allPlaced && nbCorrect === slots.length;
+    if (!allPlaced) {
+      setLastReaction({
+        text: "Jorge lève à peine les yeux : « Il reste des fiches dans la pile. Range-les toutes avant de me déranger. »",
+      });
+      setPhase("reactionBack");
+      return;
+    }
+    if (!trie) {
+      setLastReaction({
+        text: "Jorge survole tes cases, pince les lèvres : « Ce n'est pas l'ordre chronologique. Du plus ancien au plus récent — recommence, et vérifie les dates. »",
+      });
+      setPhase("reactionBack");
+      return;
+    }
+    setPhase("fin");
+  };
 
   const signalerFiche = (idx) => {
     const f = fiches[idx];
@@ -178,9 +197,6 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
 
   if (phase === "fin") {
     const trueSignale = Object.entries(signaled).find(([, v]) => v === true);
-    const nbCorrect = countCorrect(slots, fiches);
-    const allPlaced = slots.every((s) => s !== null);
-    const trie = allPlaced && nbCorrect === slots.length;
     return (
       <BigDialogue
         topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
@@ -190,7 +206,7 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
         lignes={
           trueSignale
             ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
-            : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor]
+            : [END_NEUTRE_LINES[triIdx].trie]
         }
         actionLabel="Sortir ▸"
         onDone={onDone} />
