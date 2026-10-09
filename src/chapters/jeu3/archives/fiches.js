@@ -60,19 +60,35 @@ export const FICHE_HONNETES = [
   { id: "h_lune",        sujet: "Pas sur la Lune, direct TV",       dateFiche: "1969",              lieuFiche: "diffusion mondiale", qui: "Neil Armstrong" },
 ];
 
-/* Tire 6 fiches : les 3 falsifiées + 3 honnêtes au hasard.
-   Mélange final pour que la position ne trahisse pas le type. */
+/* Tire 4 fiches : 2 falsifiées (sur les 3 dossiers, au hasard) + 2
+   honnêtes au hasard. Mélange final. */
 export function tirerFiches() {
+  const fals = [...FICHE_FALSIFIEES];
+  for (let i = fals.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [fals[i], fals[j]] = [fals[j], fals[i]];
+  }
   const honnetes = [...FICHE_HONNETES];
   for (let i = honnetes.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [honnetes[i], honnetes[j]] = [honnetes[j], honnetes[i]];
   }
-  const choix = [...FICHE_FALSIFIEES.map((f) => ({ ...f, falsified: true })),
-                 ...honnetes.slice(0, 3).map((f) => ({ ...f, falsified: false }))];
+  const choix = [...fals.slice(0, 2).map((f) => ({ ...f, falsified: true })),
+                 ...honnetes.slice(0, 2).map((f) => ({ ...f, falsified: false }))];
   for (let i = choix.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [choix[i], choix[j]] = [choix[j], choix[i]];
   }
   return choix;
+}
+
+/* Compare une date de fiche (texte "~1450", "1794"…) à une année de
+   référence pour pouvoir trier. Retourne un entier (année). */
+export function anneeOf(dateFiche) {
+  const s = String(dateFiche);
+  const neg = /av\. J\.-C\./i.test(s);
+  const match = s.match(/(\d{1,5})/);
+  if (!match) return 0;
+  const n = parseInt(match[1], 10);
+  return neg ? -n : n;
 }

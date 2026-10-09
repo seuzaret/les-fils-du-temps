@@ -53,6 +53,8 @@ export default function BigDialogue({
               facing={speakerStyle.facing || "front"}
               accessory={speakerStyle.accessory || null}
               activity={speakerStyle.activity || null}
+              bald={!!speakerStyle.bald}
+              beard={speakerStyle.beard || null}
               nom="" role="" />
           </svg>
         </div>

@@ -30,6 +30,7 @@ import { useState } from "react";
 export default function PnjSprite({
   x, y, color = "#5a5060", pants = "#3a2818", hair = "#2a1808", skin = "#e0a878",
   facing = "front", pose = "stand", accessory = null, activity = null,
+  bald = false, beard = null,
   nom = "?", role = "", heard = false, active = false, onClick, onSmalltalk,
 }) {
   const hasActivity = !!activity;
@@ -65,7 +66,7 @@ export default function PnjSprite({
       {hasActivity && <Activity kind={activity} skin={skin} facing={facing} pose={pose} />}
 
       {/* Tête + cheveux + visage — orientation selon `facing` */}
-      <Head hair={hair} skin={skin} facing={facing} />
+      <Head hair={hair} skin={skin} facing={facing} bald={bald} beard={beard} />
 
       {/* Pastille "déjà entendu" */}
       {heard && (
@@ -168,21 +169,35 @@ function SitBody({ color, pants, skin, hideArms = false }) {
 }
 
 /* ═══ TÊTE (avec cheveux et visage — orientation) ═══ */
-function Head({ hair, skin, facing }) {
+function Head({ hair, skin, facing, bald = false, beard = null }) {
   return (
     <g transform="translate(0,-96)">
       {/* cou */}
       <rect x="-4" y="6" width="8" height="10" fill={skin} stroke="#5a3018" strokeWidth="0.5" />
       {/* tête ovale */}
       <ellipse rx="12" ry="14" fill={skin} stroke="#5a3018" strokeWidth="0.8" />
+      {/* Crâne chauve : liseré clair sur la tempe pour le volume */}
+      {bald && (
+        <path d="M-9 -10 Q0 -14 9 -10" stroke="#5a3018" strokeWidth="0.4" fill="none" opacity="0.6" />
+      )}
+      {/* Couronne de cheveux (demi-tour arrière, caractéristique des chauves) */}
+      {bald && facing === "front" && (
+        <path d="M-12 2 Q-13 -4 -11 -6 L-9 -6 L-9 2 Z M12 2 Q13 -4 11 -6 L9 -6 L9 2 Z" fill={hair} />
+      )}
+      {bald && facing === "left" && (
+        <path d="M-11 -2 Q-13 -4 -10 -6 L-6 -4 L-6 2 Z" fill={hair} />
+      )}
+      {bald && facing === "right" && (
+        <path d="M11 -2 Q13 -4 10 -6 L6 -4 L6 2 Z" fill={hair} />
+      )}
       {/* Cheveux : la coupe change avec l'orientation */}
-      {facing === "front" && (
+      {!bald && facing === "front" && (
         <path d="M-11 -6 q0 -14 6 -16 q4 2 5 -4 q3 4 5 -2 q4 3 6 8 q0 8 -1 14 Z" fill={hair} />
       )}
-      {facing === "left" && (
+      {!bald && facing === "left" && (
         <path d="M-11 -6 q0 -14 6 -16 q6 -2 8 4 q0 12 -2 16 L-4 -2 Z" fill={hair} />
       )}
-      {facing === "right" && (
+      {!bald && facing === "right" && (
         <path d="M11 -6 q0 -14 -6 -16 q-6 -2 -8 4 q0 12 2 16 L4 -2 Z" fill={hair} />
       )}
       {/* Visage : yeux + bouche différents selon l'orientation */}
@@ -207,6 +222,16 @@ function Head({ hair, skin, facing }) {
           <path d="M10 2 Q11 4 9 5" stroke="#5a3018" strokeWidth="0.5" fill="none" />
           <path d="M4 5 Q1 6 -1 5" stroke="#5a2818" strokeWidth="0.9" fill="none" strokeLinecap="round" />
         </>
+      )}
+      {/* Barbe (recouvre la bouche + le menton + les joues) */}
+      {beard && facing === "front" && (
+        <path d="M-10 4 Q-11 10 -6 13 Q0 15 6 13 Q11 10 10 4 Q7 7 4 7 Q0 9 -4 7 Q-7 7 -10 4 Z" fill={beard} stroke="#2a1808" strokeWidth="0.4" />
+      )}
+      {beard && facing === "left" && (
+        <path d="M-9 4 Q-11 10 -6 13 Q-2 14 1 11 Q3 8 2 4 Q-2 7 -5 6 Q-7 6 -9 4 Z" fill={beard} stroke="#2a1808" strokeWidth="0.4" />
+      )}
+      {beard && facing === "right" && (
+        <path d="M9 4 Q11 10 6 13 Q2 14 -1 11 Q-3 8 -2 4 Q2 7 5 6 Q7 6 9 4 Z" fill={beard} stroke="#2a1808" strokeWidth="0.4" />
       )}
     </g>
   );
