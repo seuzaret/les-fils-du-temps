@@ -284,7 +284,7 @@ export default function BunkerArchives({ onGo, j3 }) {
             heard={!triReady && (tri1 || tri2 || tri3)}
             active={triReady}
             onClick={openJorge}
-            onSmalltalk={(jorgeDone || tri1 || tri2 || tri3) ? null : () => setSmalltalkOpen(true)} />
+            onSmalltalk={(jorgeDone || triReady || tri1 || tri2 || tri3) ? null : () => setSmalltalkOpen(true)} />
         )}
       </svg>
 
