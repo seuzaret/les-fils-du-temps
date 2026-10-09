@@ -1,4 +1,4 @@
-import { LEVELS, ROOM_TO_LEVEL, isLevelUnlocked } from "./levels.js";
+import { LEVELS as ALL_LEVELS, ROOM_TO_LEVEL, isLevelUnlocked, isLevelVisible } from "./levels.js";
 
 /* ============================================================
    JEU 3 — Mini-carte latérale du bunker (coupe verticale)
@@ -13,20 +13,26 @@ import { LEVELS, ROOM_TO_LEVEL, isLevelUnlocked } from "./levels.js";
    ============================================================ */
 export default function BunkerMinimap({ room, flags, onGo, cheat = false }) {
   const currentLevel = ROOM_TO_LEVEL[room] ?? null;
+  /* On n'affiche que les niveaux visibles (K reste masqué tant que
+     non débloqué). L'ordre de la liste suit celui de levels.js. */
+  const LEVELS = ALL_LEVELS.filter((lvl) => isLevelVisible(lvl, flags));
   /* Hauteurs et positions : la surface est en haut ; les 4 étages
      souterrains descendent. Le -3 est bien plus bas que le -1
-     (schema : gap réaliste). */
+     (schema : gap réaliste). K vient en toute dernière position
+     avec un gap supplémentaire pour marquer sa singularité. */
   const LEVEL_HEIGHT = 54;
   const GAP = 6;
   const SURFACE_TOP = 34;
   const levelsPos = LEVELS.map((lvl, i) => {
     let y;
-    if (i === 0) y = SURFACE_TOP;                                           // +2 Surface
-    else if (i === 1) y = SURFACE_TOP + (LEVEL_HEIGHT + GAP);               // +1
-    else if (i === 2) y = SURFACE_TOP + 2 * (LEVEL_HEIGHT + GAP);           // 0
-    else if (i === 3) y = SURFACE_TOP + 3 * (LEVEL_HEIGHT + GAP);           // -1
-    else if (i === 4) y = SURFACE_TOP + 4 * (LEVEL_HEIGHT + GAP);           // -2 Hydroponie
-    else y = SURFACE_TOP + 4 * (LEVEL_HEIGHT + GAP) + 2 * (LEVEL_HEIGHT + GAP); // -3 (gap plus grand)
+    if (lvl.id === "+2") y = SURFACE_TOP;
+    else if (lvl.id === "+1") y = SURFACE_TOP + (LEVEL_HEIGHT + GAP);
+    else if (lvl.id === "0")  y = SURFACE_TOP + 2 * (LEVEL_HEIGHT + GAP);
+    else if (lvl.id === "-1") y = SURFACE_TOP + 3 * (LEVEL_HEIGHT + GAP);
+    else if (lvl.id === "-2") y = SURFACE_TOP + 4 * (LEVEL_HEIGHT + GAP);
+    else if (lvl.id === "-3") y = SURFACE_TOP + 4 * (LEVEL_HEIGHT + GAP) + 2 * (LEVEL_HEIGHT + GAP);
+    else if (lvl.id === "K")  y = SURFACE_TOP + 4 * (LEVEL_HEIGHT + GAP) + 4 * (LEVEL_HEIGHT + GAP);
+    else y = SURFACE_TOP + i * (LEVEL_HEIGHT + GAP);
     return { lvl, y };
   });
   const SVG_H = levelsPos[levelsPos.length - 1].y + LEVEL_HEIGHT + 30;

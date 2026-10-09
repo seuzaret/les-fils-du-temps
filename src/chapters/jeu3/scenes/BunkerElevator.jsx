@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { LEVELS, ROOM_TO_LEVEL, isLevelUnlocked } from "../levels.js";
+import { LEVELS, ROOM_TO_LEVEL, isLevelUnlocked, isLevelVisible } from "../levels.js";
 
 /* ============================================================
    JEU 3 — Ascenseur du bunker (v5 : cabine + panneau de bord)
@@ -224,7 +224,7 @@ export default function BunkerElevator({ onGo, j3 }) {
 
             {/* GRILLE 3 × 2 boutons d'étage */}
             <g transform="translate(28,50)">
-              {LEVELS.map((lvl, i) => {
+              {LEVELS.filter((lvl) => isLevelVisible(lvl, j3.flags)).map((lvl, i) => {
                 const unlocked = isLevelUnlocked(lvl.id, j3.flags);
                 const here = lvl.id === currentLvl;
                 const col = i % 2;

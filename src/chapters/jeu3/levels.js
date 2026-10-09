@@ -35,6 +35,12 @@ export const LEVELS = [
     rooms: [{ id: "serres", label: "Serres hydroponiques" }] },
   { id: "-3", name: "Serveurs", hubRoom: "serveurs", color: "#ff5030",
     rooms: [{ id: "serveurs", label: "Salle MARTINE" }] },
+  /* Étage K : niveau caché, inconnu de l'ascenseur tant que le joueur
+     n'a pas récupéré l'indice de Jorge. Salle temporelle abandonnée
+     construite avant Léa. */
+  { id: "K",  name: "— Niveau K", hubRoom: "salleK", color: "#c8a848",
+    rooms: [{ id: "salleK", label: "Salle temporelle abandonnée" }],
+    hidden: true },
 ];
 
 /* Map inverse : d'une roomId → l'id du niveau où elle est. */
@@ -56,5 +62,15 @@ export function isLevelUnlocked(levelId, flags) {
   if (levelId === "-3") {
     return !!(flags?.mission_kova_done && flags?.mission_appel_done && flags?.mission_carnet_done);
   }
+  if (levelId === "K") {
+    return !!flags?.elevator_k_unlocked;
+  }
   return true;
+}
+
+/* Un étage HIDDEN n'apparaît sur le tableau de l'ascenseur et dans la
+   mini-carte que s'il est aussi déverrouillé. */
+export function isLevelVisible(level, flags) {
+  if (!level?.hidden) return true;
+  return isLevelUnlocked(level.id, flags);
 }
