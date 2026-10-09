@@ -180,8 +180,10 @@ export default function BunkerChambre({ onGo, j3 }) {
           <line x1="112" y1="-6" x2="128" y2="-14" stroke="#3a2010" strokeWidth="1" strokeLinecap="round" />
         </g>
 
-        {/* GRANDE PORTE à droite extrême */}
-        <g transform="translate(840,180)">
+        {/* GRANDE PORTE à droite extrême — cliquable pour sortir au couloir */}
+        <g transform="translate(840,180)"
+          onClick={() => onGo(j3.hubRoom || "hub")}
+          style={{ cursor: "pointer" }}>
           <rect x="0" y="0" width="140" height="240" fill="#5a4028" stroke="#0a0806" strokeWidth="3" />
           <rect x="4" y="4" width="132" height="232" fill="#4a3020" />
           <rect x="14" y="14" width="112" height="80" fill="none" stroke="#3a2010" strokeWidth="1" />

@@ -81,7 +81,17 @@ export function allCards() {
     const meta = META_BY_ID[invId];
     if (meta) cards.push({ ...meta, msgId });
   }
-  cards.sort((a, b) => a.chapter - b.chapter || a.title.localeCompare(b.title, 'fr'));
+  /* Tri : chapitre puis année (de la plus ancienne à la plus récente)
+     puis titre en fallback. Les dates "av. J.-C." comptent en négatif. */
+  const yearOf = (c) => {
+    const s = String(c.date || "");
+    const neg = /av\. J\.-C\./i.test(s) || /av\.J\.-C\./i.test(s);
+    const m = s.match(/(\d{1,5})/);
+    if (!m) return 0;
+    const n = parseInt(m[1], 10);
+    return neg ? -n : n;
+  };
+  cards.sort((a, b) => (a.chapter - b.chapter) || (yearOf(a) - yearOf(b)) || a.title.localeCompare(b.title, 'fr'));
   return cards;
 }
 

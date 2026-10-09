@@ -58,20 +58,21 @@ export default function ArchivistQuest({ j3, onDone }) {
     if (already) return;
     setSignaled((s) => ({ ...s, [idx]: f.falsified }));
     if (f.falsified) {
+      /* Vrai signalement : flags posés, le plateau passe en mode
+         "tampons" (anomalie rouge sur la fiche signalée, VALIDÉ vert
+         sur les autres), puis dialogue encourageant → fin. */
       j3.setFlag(`archives_signalement_${f.dossierId}`);
       j3.setFlag("archives_signalement_fait");
-      setLastReaction({
-        text: "Jorge jette un œil sur la fiche que tu lui tends. Il se raidit, puis murmure, bougon : « Hmf. Tu as l'œil pour une fois. Mets-la de côté. Ne va pas crier ça partout. »",
-        falsified: true,
-      });
+      setShowSignalerOverlay(false);
+      setPhase("stamping");
     } else {
+      /* Faux signalement : Jorge recadre, retour au plateau. */
       setLastReaction({
-        text: "Jorge soupire sans lever la tête : « Tu me fais perdre mon temps. Celle-là est correcte. Range-la et retourne travailler. »",
-        falsified: false,
+        text: "Jorge jette un œil, soupire : « Tu me fais perdre mon temps. Celle-là est correcte. Range-la et retourne travailler. »",
       });
+      setShowSignalerOverlay(false);
+      setPhase("reactionBack");
     }
-    setShowSignalerOverlay(false);
-    setPhase("reaction");
   };
 
   /* ---------- RENDUS ---------- */
@@ -92,7 +93,7 @@ export default function ArchivistQuest({ j3, onDone }) {
     );
   }
 
-  if (phase === "tri") {
+  if (phase === "tri" || phase === "stamping") {
     return (
       <TriBoard
         fiches={fiches} slots={slots}
@@ -106,17 +107,20 @@ export default function ArchivistQuest({ j3, onDone }) {
         onCloseSignalerOverlay={() => setShowSignalerOverlay(false)}
         onSignalerFiche={signalerFiche}
         signaled={signaled}
+        stamping={phase === "stamping"}
+        onContinueStamping={() => setPhase("fin")}
         onAbandon={onDone} />
     );
   }
 
-  if (phase === "reaction") {
+  /* Après signalement FAUX, Jorge réagit puis on retourne au plateau. */
+  if (phase === "reactionBack") {
     return (
       <BigDialogue
         topic="ARCHIVES · JORGE"
         speakerNom="Jorge" speakerRole="Archiviste du Puits"
         speakerStyle={JORGE_STYLE}
-        accent={lastReaction?.falsified ? "#e0a848" : "#5a6678"}
+        accent="#5a6678"
         lignes={[lastReaction?.text || ""]}
         actionLabel="Retourner aux fiches ▸"
         onDone={() => setPhase("tri")} />
@@ -124,9 +128,10 @@ export default function ArchivistQuest({ j3, onDone }) {
   }
 
   if (phase === "fin") {
-    const nbSignale = Object.values(signaled).filter(Boolean).length;
+    const trueSignale = Object.entries(signaled).find(([, v]) => v === true);
     const nbCorrect = countCorrect(slots, fiches);
     const allPlaced = slots.every((s) => s !== null);
+    const trie = allPlaced && nbCorrect === slots.length;
     return (
       <BigDialogue
         topic="ARCHIVES · JORGE"
@@ -134,16 +139,16 @@ export default function ArchivistQuest({ j3, onDone }) {
         speakerStyle={JORGE_STYLE}
         accent="#c8a848"
         lignes={
-          nbSignale > 0
+          trueSignale
             ? [
-                allPlaced && nbCorrect === slots.length
-                  ? "Jorge regarde ton classement, grommelle : « Pas plus mal que les autres. »"
-                  : "Jorge regarde ton classement : « Y a du désordre, mais passons. »",
-                "Il baisse la voix, les yeux sur ses propres fiches : « Les anomalies que tu as repérées, je m'en occupe. Toi, dégage. Et ne reparle à personne de ces dates. »",
+                "Jorge regarde la fiche que tu lui tends. Il se fige. Reprend sa respiration lentement, comme s'il hésitait.",
+                "Enfin, très bas : « … Tu l'as vue, toi aussi. Je ne pensais pas qu'un·e nouvel·le y verrait quelque chose. »",
+                "Il s'approche, baisse encore la voix : « Range-la. Ne la montre à personne. Il ne faut pas qu'on sache. Pas maintenant. »",
+                "Puis, un peu plus fort, pour se reprendre : « Pas mal pour un·e débutant·e. Reviens me voir à l'occasion… tu apprendras peut-être quelque chose d'utile. »",
               ]
             : [
-                allPlaced && nbCorrect === slots.length
-                  ? "Jorge regarde ton classement, hausse les épaules : « Bon. Rangé. Dégage, j'ai à faire. »"
+                trie
+                  ? "Jorge regarde ton classement : « Bon. Rangé. Dégage, j'ai à faire. »"
                   : "Jorge pousse ta pile sans un merci : « Mouais. J'avais besoin de plus propre. Allez, dégage. »",
               ]
         }
@@ -161,21 +166,21 @@ function TriBoard({
   onPlaceInSlot, onSendToStock,
   mediadexRetrouve, onValider, onSignaler,
   showSignalerOverlay, onCloseSignalerOverlay, onSignalerFiche,
-  signaled, onAbandon,
+  signaled, stamping, onContinueStamping, onAbandon,
 }) {
   const [mediadexOpen, setMediadexOpen] = useState(false);
   const [dragging, setDragging] = useState(null); // ficheIdx en cours de drag
   const stockFiches = fiches.map((_, i) => i).filter(inStock);
 
-  const onDragStart = (idx) => setDragging(idx);
+  const onDragStart = (idx) => { if (!stamping) setDragging(idx); };
   const onDragEnd = () => setDragging(null);
   const onDropSlot = (slotIdx) => {
-    if (dragging === null) return;
+    if (stamping || dragging === null) return;
     onPlaceInSlot(dragging, slotIdx);
     setDragging(null);
   };
   const onDropStock = () => {
-    if (dragging === null) return;
+    if (stamping || dragging === null) return;
     onSendToStock(dragging);
     setDragging(null);
   };
@@ -218,7 +223,9 @@ function TriBoard({
             <SlotCase key={slotIdx} slotIdx={slotIdx} ficheIdx={ficheIdx} fiches={fiches}
               dragging={dragging}
               onDragStart={onDragStart} onDragEnd={onDragEnd}
-              onDrop={() => onDropSlot(slotIdx)} />
+              onDrop={() => onDropSlot(slotIdx)}
+              stamping={stamping}
+              signaled={signaled} />
           ))}
         </div>
 
@@ -247,29 +254,40 @@ function TriBoard({
               stockFiches.map((idx) => (
                 <FicheCard key={idx} fiche={fiches[idx]} idx={idx}
                   dragging={dragging}
-                  onDragStart={onDragStart} onDragEnd={onDragEnd} />
+                  onDragStart={onDragStart} onDragEnd={onDragEnd}
+                  stamping={stamping}
+                  signaled={signaled} />
               ))
             )}
           </div>
         </div>
 
         {/* Actions */}
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14, gap: 8, flexWrap: "wrap" }}>
-          <button onClick={onAbandon}
-            style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "9px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
-            ← Abandonner
-          </button>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-            <button onClick={onSignaler}
-              style={{ background: "#2a1408", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 8, padding: "10px 16px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-              ⚠ Signaler une anomalie
-            </button>
-            <button onClick={onValider}
-              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
-              ✓ Valider mon classement
+        {stamping ? (
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
+            <button onClick={onContinueStamping}
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+              Jorge te répond ▸
             </button>
           </div>
-        </div>
+        ) : (
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14, gap: 8, flexWrap: "wrap" }}>
+            <button onClick={onAbandon}
+              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "9px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+              ← Abandonner
+            </button>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <button onClick={onSignaler}
+                style={{ background: "#2a1408", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 8, padding: "10px 16px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+                ⚠ Signaler une anomalie
+              </button>
+              <button onClick={onValider}
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+                ✓ Valider mon classement
+              </button>
+            </div>
+          </div>
+        )}
 
         {mediadexOpen && <MediadexPanel onClose={() => setMediadexOpen(false)} />}
       </div>
@@ -285,14 +303,14 @@ function TriBoard({
 
 /* ------- Case numérotée ------- */
 function SlotCase({ slotIdx, ficheIdx, fiches,
-  dragging, onDragStart, onDragEnd, onDrop }) {
+  dragging, onDragStart, onDragEnd, onDrop, stamping, signaled }) {
   const [hover, setHover] = useState(false);
   const occupied = ficheIdx !== null;
   return (
     <div
-      onDragOver={(e) => { e.preventDefault(); setHover(true); }}
+      onDragOver={(e) => { if (!stamping) { e.preventDefault(); setHover(true); } }}
       onDragLeave={() => setHover(false)}
-      onDrop={() => { onDrop(); setHover(false); }}
+      onDrop={() => { if (!stamping) { onDrop(); setHover(false); } }}
       style={{
         minHeight: 160,
         background: hover ? "#2a2010" : "#1a1408",
@@ -308,7 +326,8 @@ function SlotCase({ slotIdx, ficheIdx, fiches,
         <div style={{ marginTop: 4, width: "100%" }}>
           <FicheCard fiche={fiches[ficheIdx]} idx={ficheIdx}
             dragging={dragging}
-            onDragStart={onDragStart} onDragEnd={onDragEnd} compact />
+            onDragStart={onDragStart} onDragEnd={onDragEnd}
+            stamping={stamping} signaled={signaled} compact />
         </div>
       ) : (
         <div style={{ margin: "auto", fontSize: 11, color: "#5a4028", fontStyle: "italic" }}>
@@ -320,19 +339,23 @@ function SlotCase({ slotIdx, ficheIdx, fiches,
 }
 
 /* ------- Petite fiche catalographique ------- */
-function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = false }) {
+function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = false, stamping = false, signaled = {} }) {
   const isDragging = dragging === idx;
+  const isAnomaly = stamping && signaled[idx] === true;
+  const isValid = stamping && signaled[idx] !== true;
   return (
     <div
-      draggable
-      onDragStart={(e) => { e.dataTransfer.effectAllowed = "move"; onDragStart(idx); }}
+      draggable={!stamping}
+      onDragStart={(e) => { if (!stamping) { e.dataTransfer.effectAllowed = "move"; onDragStart(idx); } }}
       onDragEnd={onDragEnd}
       style={{
-        cursor: "grab",
+        cursor: stamping ? "default" : "grab",
         opacity: isDragging ? 0.4 : 1,
         width: compact ? "100%" : 160,
-        background: "linear-gradient(180deg,#f0e4c8,#d8ccb0)",
-        border: "1px solid #5a4028",
+        background: isAnomaly
+          ? "linear-gradient(180deg,#f8d8c8,#e8b0a0)"
+          : "linear-gradient(180deg,#f0e4c8,#d8ccb0)",
+        border: `1px solid ${isAnomaly ? "#8a2010" : "#5a4028"}`,
         borderRadius: 4,
         padding: "8px 10px 10px",
         position: "relative",
@@ -358,6 +381,30 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
       <div style={{ marginTop: 2, fontSize: 9, color: "#5a4028", fontStyle: "italic", lineHeight: 1.3 }}>
         {fiche.lieuFiche} · {fiche.qui}
       </div>
+      {isAnomaly && (
+        <div style={{
+          position: "absolute", left: "50%", top: "50%",
+          transform: "translate(-50%,-50%) rotate(-10deg)",
+          padding: "4px 10px", border: "3px solid #c81010", borderRadius: 4,
+          color: "#c81010", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 15, letterSpacing: 2,
+          background: "rgba(200,16,16,0.08)", textShadow: "0 0 4px rgba(200,16,16,0.3)",
+          pointerEvents: "none",
+        }}>
+          ANOMALIE
+        </div>
+      )}
+      {isValid && (
+        <div style={{
+          position: "absolute", left: "50%", top: "50%",
+          transform: "translate(-50%,-50%) rotate(-12deg)",
+          padding: "3px 10px", border: "2px solid #2a8030", borderRadius: 4,
+          color: "#2a8030", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 14, letterSpacing: 2,
+          background: "rgba(42,128,48,0.08)",
+          pointerEvents: "none",
+        }}>
+          VALIDÉ
+        </div>
+      )}
     </div>
   );
 }

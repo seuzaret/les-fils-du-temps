@@ -263,7 +263,8 @@ export default function BunkerArchives({ onGo, j3 }) {
             présent dans les Archives (sauf après arrestation). Clic →
             smalltalk (si rien à faire) ou mission (si Kova faite et
             rangement pas encore donné). Loupe sur hover → 3 questions
-            d'orientation. */}
+            d'orientation, SEULEMENT avant que la mission soit finie.
+            Après, Jorge est redevenu bougon et il ne cause plus. */}
         {jorgePresent && (
           <PnjSprite x={700} y={400}
             color="#3a2818" pants="#1a1408" hair="#8a8070" skin="#c8a888"
@@ -273,7 +274,7 @@ export default function BunkerArchives({ onGo, j3 }) {
             heard={jorgeDone}
             active={unlocked && !jorgeDone}
             onClick={openJorge}
-            onSmalltalk={() => setSmalltalkOpen(true)} />
+            onSmalltalk={jorgeDone ? null : () => setSmalltalkOpen(true)} />
         )}
       </svg>
 
