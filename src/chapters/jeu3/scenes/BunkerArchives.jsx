@@ -11,14 +11,12 @@
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import ArchivistQuest from "../archives/ArchivistQuest.jsx";
-import JorgeSmalltalk from "../archives/JorgeSmalltalk.jsx";
 
 export default function BunkerArchives({ onGo, j3 }) {
   const mission = j3.missions.appel;
   const unlocked = !!j3.flags[mission?.prerequisite];
   const done = !!j3.flags[mission?.flag];
   const [questOpen, setQuestOpen] = useState(false);
-  const [smalltalkOpen, setSmalltalkOpen] = useState(false);
   /* Trois passes de tri successives chez Jorge, en alternance avec
      les enquêtes de Vez. */
   const tri1 = !!j3.flags.archives_tri_1_done;
@@ -37,7 +35,6 @@ export default function BunkerArchives({ onGo, j3 }) {
   const jorgePresent = !jorgeArrete;
   const openJorge = () => {
     if (triReady) setQuestOpen(true);
-    else setSmalltalkOpen(true);
   };
 
   return (
@@ -283,8 +280,7 @@ export default function BunkerArchives({ onGo, j3 }) {
             nom="Jorge" role="Archiviste"
             heard={!triReady && (tri1 || tri2 || tri3)}
             active={triReady}
-            onClick={openJorge}
-            onSmalltalk={(jorgeDone || triReady || tri1 || tri2 || tri3) ? null : () => setSmalltalkOpen(true)} />
+            onClick={triReady ? openJorge : undefined} />
         )}
       </svg>
 
@@ -311,7 +307,7 @@ export default function BunkerArchives({ onGo, j3 }) {
         ) : (
           <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
             <p style={{ margin: 0, fontSize: 12.5, color: "#7a879e", fontStyle: "italic" }}>
-              L'archiviste Jorge est là, bougon. Tu peux lui parler, mais il n'a pas l'air d'avoir du travail à te confier pour l'instant.
+              L'archiviste Jorge est là, bougon, le nez dans ses dossiers. Il ne semble pas avoir de travail à te confier pour l'instant.
             </p>
           </div>
         )}
@@ -327,10 +323,8 @@ export default function BunkerArchives({ onGo, j3 }) {
           onDone={() => {
             j3.setFlag(`archives_tri_${nextTri}_done`);
             setQuestOpen(false);
-          }} />
-      )}
-      {smalltalkOpen && (
-        <JorgeSmalltalk onClose={() => setSmalltalkOpen(false)} />
+          }}
+          onCancel={() => setQuestOpen(false)} />
       )}
     </div>
   );

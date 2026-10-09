@@ -22,6 +22,7 @@ export default function BigDialogue({
   speakerStyle = {}, lignes = [],
   onDone, actionLabel, accent = "#e0a848",
   topic = null,
+  secondaryActionLabel = null, onSecondary = null,
 }) {
   const [i, setI] = useState(0);
   const isLast = i === lignes.length - 1;
@@ -83,10 +84,18 @@ export default function BigDialogue({
               {i + 1} / {lignes.length}
             </div>
             {isLast && actionLabel ? (
-              <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
-                style={{ background: accent, color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
-                {actionLabel}
-              </button>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {secondaryActionLabel && (
+                  <button onClick={(e) => { e.stopPropagation(); onSecondary?.(); }}
+                    style={{ background: "transparent", color: accent, border: `1px solid ${accent}`, borderRadius: 8, padding: "10px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+                    {secondaryActionLabel}
+                  </button>
+                )}
+                <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
+                  style={{ background: accent, color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+                  {actionLabel}
+                </button>
+              </div>
             ) : (
               <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd", fontStyle: "italic" }}>
                 Clique pour continuer ▸
