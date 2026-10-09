@@ -36,10 +36,11 @@ export default function BunkerHubBas({ onGo, j3 }) {
   /* Badge "nouveau lieu" sur la porte Archives tant que le joueur n'a
      pas encore découvert le passage secret (seulement après Kova faite). */
   const archivesNew = !!flags.mission_kova_done && !flags.archives_passage_opened;
-  /* Porte Cellules : n'apparaît qu'après l'arrestation de Jorge. Pour
-     éviter de reformater le gabarit, la 5e porte occupe le même
-     espacement — on ne la rend que si la condition est posée. */
-  const visibleDoors = DOORS.filter((d) => !d.conditional || flags[d.conditional]);
+  /* Les 5 portes sont TOUJOURS visibles. La porte Cellules est
+     rendue scellée (grisée, non cliquable, mention SCELLÉ) tant que
+     la condition narrative n'est pas remplie — ainsi le joueur
+     devine qu'un lieu existe là sans pouvoir y accéder. */
+  const visibleDoors = DOORS;
   const nDoors = visibleDoors.length;
   const spacing = nDoors <= 4 ? 195 : 160;
   const doorWidth = nDoors <= 4 ? 130 : 108;
@@ -145,29 +146,51 @@ export default function BunkerHubBas({ onGo, j3 }) {
         <text x="50" y="240" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#c8d4e2" letterSpacing="2">ASCENSEUR</text>
       </g>
 
-      {/* 4 à 5 portes en rangée (la 5e Cellules n'apparaît qu'après l'arrestation) */}
+      {/* 5 portes en rangée. La porte Cellules est scellée tant que
+          jorge_arrete n'est pas posé : non cliquable, grisée, étiquette
+          « SCELLÉ ». */}
       {visibleDoors.map((door, i) => {
         const x = originX + i * spacing;
         const labelXPad = 8;
         const inner = doorWidth - 8;
+        const sealed = !!door.conditional && !flags[door.conditional];
+        const onClickDoor = sealed ? undefined : () => onGo(door.id);
         return (
           <g key={door.id} transform={`translate(${x},150)`}
-            onClick={() => onGo(door.id)} style={{ cursor: "pointer" }}
-            onMouseEnter={(e) => e.currentTarget.querySelector(".db-hov").setAttribute("opacity", "1")}
-            onMouseLeave={(e) => e.currentTarget.querySelector(".db-hov").setAttribute("opacity", "0")}>
+            onClick={onClickDoor} style={{ cursor: sealed ? "not-allowed" : "pointer", opacity: sealed ? 0.55 : 1 }}
+            onMouseEnter={(e) => { if (!sealed) e.currentTarget.querySelector(".db-hov").setAttribute("opacity", "1"); }}
+            onMouseLeave={(e) => { if (!sealed) e.currentTarget.querySelector(".db-hov").setAttribute("opacity", "0"); }}>
             <rect className="db-hov" x="-8" y="-8" width={doorWidth + 16} height="236" fill="none" stroke="#5eff9e" strokeWidth="2" opacity="0" />
             <rect x="-4" y="-4" width={doorWidth + 8} height="228" fill="#3a2818" stroke="#0a0806" strokeWidth="2" />
-            <rect x="0" y="0" width={doorWidth} height="220" fill={door.color} stroke="#0a0806" strokeWidth="3" />
-            <rect x="4" y="4" width={doorWidth - 8} height="212" fill={door.color} stroke="#0a0806" strokeWidth="1" opacity="0.6" />
+            <rect x="0" y="0" width={doorWidth} height="220" fill={sealed ? "#1a1e26" : door.color} stroke="#0a0806" strokeWidth="3" />
+            <rect x="4" y="4" width={doorWidth - 8} height="212" fill={sealed ? "#1a1e26" : door.color} stroke="#0a0806" strokeWidth="1" opacity="0.6" />
             {/* Seuil */}
             <rect x="0" y="214" width={doorWidth} height="6" fill="#5a6270" stroke="#0a0806" strokeWidth="0.6" />
-            <circle cx={doorWidth - 20} cy="105" r="4" fill="#c8a848" />
-            <rect x={labelXPad} y="30" width={inner} height="38" fill="#e8eef5" stroke="#3a2818" strokeWidth="1.5" />
+            <circle cx={doorWidth - 20} cy="105" r="4" fill={sealed ? "#5a5a5a" : "#c8a848"} />
+            <rect x={labelXPad} y="30" width={inner} height="38" fill={sealed ? "#5a5a5a" : "#e8eef5"} stroke="#3a2818" strokeWidth="1.5" />
             <text x={doorWidth / 2} y="46" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#0a0806" fontWeight="700">{door.code}</text>
             <text x={doorWidth / 2} y="58" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize={nDoors <= 4 ? 6.5 : 5.5} fill="#5a4028">{door.label.toUpperCase()}</text>
-            <circle cx={doorWidth / 2} cy="76" r="3" fill={door.id === "prison" ? "#e83820" : "#5eff9e"}>
-              <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
-            </circle>
+            {sealed ? (
+              <>
+                {/* Grosses croix de scellés en travers de la porte */}
+                <line x1="4" y1="4" x2={doorWidth - 4} y2="216" stroke="#c8a848" strokeWidth="4" opacity="0.8" />
+                <line x1={doorWidth - 4} y1="4" x2="4" y2="216" stroke="#c8a848" strokeWidth="4" opacity="0.8" />
+                {/* Mention SCELLÉ */}
+                <rect x={doorWidth / 2 - 28} y="92" width="56" height="16" fill="#1a0e08" stroke="#c8a848" strokeWidth="1" />
+                <text x={doorWidth / 2} y="104" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fontWeight="800" fill="#c8a848" letterSpacing="3">
+                  SCELLÉ
+                </text>
+                {/* Cadenas */}
+                <g transform={`translate(${doorWidth / 2},140)`}>
+                  <path d="M-6 -6 Q-6 -14 0 -14 Q6 -14 6 -6" stroke="#c8a848" strokeWidth="2" fill="none" />
+                  <rect x="-8" y="-6" width="16" height="12" fill="#c8a848" stroke="#1a0e08" strokeWidth="0.6" />
+                </g>
+              </>
+            ) : (
+              <circle cx={doorWidth / 2} cy="76" r="3" fill={door.id === "prison" ? "#e83820" : "#5eff9e"}>
+                <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
+              </circle>
+            )}
             {door.id === "rumeurs" && newCase && (
               <g transform={`translate(${doorWidth - 12},10)`}>
                 <circle r="14" fill="#e0a848" stroke="#1a0e08" strokeWidth="1.5">
