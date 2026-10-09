@@ -22,53 +22,53 @@ const JORGE_STYLE = {
 /* Textes variant selon le numéro de passe (triIdx = 1, 2 ou 3). */
 const INTRO_LINES = {
   1: [
-    "Toi, là. Tu traînes depuis une heure dans mes rayons. Tu n'as rien à faire, c'est ça ? Évidemment.",
-    "Puisque tu es là, aide-moi au lieu de me regarder : classe ces fiches dans l'ordre chronologique. J'ai mieux à faire que de m'occuper de ces vieilleries.",
-    "Et si une date te paraît bizarre — ça arrive — tu me la signales. Pas de bavardage. Au boulot.",
+    "Toi, là. Puisque tu traînes, aide-moi.",
+    "Classe ces fiches dans l'ordre chronologique. J'ai mieux à faire.",
+    "Si une date te paraît bizarre, tu me la signales. Au boulot.",
   ],
   2: [
-    "Tiens, encore toi. Je commençais à croire que tu ne reviendrais plus.",
-    "Il m'en reste un lot à classer. Pareil que la dernière fois — chronologique, et tu me préviens si une date te chatouille.",
-    "Discrètement, cette fois. Il y a du monde aux étages du haut.",
+    "Encore toi. Tant mieux, il m'en reste un lot.",
+    "Pareil que la dernière fois : chronologique, et tu signales ce qui cloche.",
+    "Discrètement, cette fois.",
   ],
   3: [
-    "Encore. Dernier lot. Ne discute pas, je n'ai pas le temps.",
-    "Classe. Vérifie. Signale. Tu sais faire, maintenant.",
-    "Et si celui-ci part aussi aux étages du haut… fais vite, s'il te plaît.",
+    "Dernier lot. Ne discute pas.",
+    "Classe. Vérifie. Signale. Tu sais faire.",
+    "Fais vite.",
   ],
 };
 
 const REACTION_SIGNALE_LINES = {
   1: [
-    "Jorge regarde la fiche que tu lui tends. Il se fige. Reprend sa respiration lentement, comme s'il hésitait.",
-    "Enfin, très bas : « … Tu l'as vue, toi aussi. Je ne pensais pas qu'un·e nouvel·le y verrait quelque chose. »",
-    "Il s'approche, baisse encore la voix : « Range-la. Ne la montre à personne. Il ne faut pas qu'on sache. Pas maintenant. »",
-    "Puis, un peu plus fort, pour se reprendre : « Pas mal pour un·e débutant·e. Reviens me voir à l'occasion… tu apprendras peut-être quelque chose d'utile. »",
+    "Jorge regarde la fiche. Il se fige un instant.",
+    "Il baisse la voix : « Tu l'as vue, toi aussi. »",
+    "« Range-la. Ne la montre à personne. Pas maintenant. »",
+    "Un peu plus fort, pour se reprendre : « Pas mal. File, maintenant. »",
   ],
   2: [
-    "Jorge prend la fiche sans un mot. Il la lit, la relit. Ses mains tremblent un peu.",
-    "« Deuxième fois que tu la vois. Ce n'est plus un hasard. »",
-    "Il range la fiche sous une autre pile, lève les yeux vers la porte, comme s'il écoutait quelque chose : « Reviens. Et apprends à te taire quand il le faut. »",
+    "Jorge prend la fiche sans un mot. Il la lit, la relit.",
+    "« Deuxième fois. Ce n'est plus un hasard. »",
+    "Il range la fiche sous une pile, regarde la porte : « Reviens. Et apprends à te taire. »",
   ],
   3: [
-    "Jorge saisit la fiche à deux mains. Pour la première fois, il ne cache pas son soulagement — et sa peur.",
-    "« Trois fois sur trois. Tu les as toutes vues. »",
-    "Il te regarde longuement : « Je t'en dois une. Et je crois que je vais en payer une, moi. Rentre chez toi. Vite. »",
+    "Jorge saisit la fiche. Il la fixe longuement.",
+    "« Incroyable… il ne peut pourtant pas y avoir d'erreurs. »",
+    "Il se lève, inquiet : « Je vais vérifier. File chez toi. Vite. »",
   ],
 };
 
 const END_NEUTRE_LINES = {
   1: {
-    trie:   "Jorge regarde ton classement : « Bon. Rangé. Dégage, j'ai à faire. »",
-    desor:  "Jorge pousse ta pile sans un merci : « Mouais. J'avais besoin de plus propre. Allez, dégage. »",
+    trie:   "Jorge regarde ton classement : « Bon. Rangé. File, j'ai à faire. »",
+    desor:  "Jorge pousse ta pile : « Mouais. J'aurais voulu plus propre. Allez, file. »",
   },
   2: {
-    trie:   "Jorge jette un œil : « Rangé. Rien d'autre à dire. »",
-    desor:  "Jorge grommelle : « Faut remettre un peu d'ordre là-dedans. Mais passons. »",
+    trie:   "Jorge jette un œil : « Rangé. File. »",
+    desor:  "Jorge grommelle : « Faut remettre de l'ordre là-dedans. Mais passons. File. »",
   },
   3: {
-    trie:   "Jorge te fixe sans parler. Il acquiesce lentement, et replonge dans ses papiers.",
-    desor:  "Jorge pose la pile sans la regarder. Il parle sans lever les yeux : « … soit. »",
+    trie:   "Jorge te fixe sans parler. Il acquiesce, replonge dans ses papiers.",
+    desor:  "Jorge pose la pile sans la regarder : « … soit. File. »",
   },
 };
 

@@ -460,6 +460,44 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Triche : Kova + enquête 2 faites, dépose aux Archives pour tri 2. */
+  const cheatJeu3Tri2 = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "archives",
+      flags: {
+        puits_billet: true,
+        mission_order: ["kova", "vitamine", "jour40"],
+        mission_kova_done: true, briefing_kova_done: true,
+        mission_vitamine_done: true, briefing_vitamine_done: true,
+        archives_tri_1_done: true,
+      },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
+  /* Triche : Kova + enquêtes 2 & 3 faites, tri 1 & 2 OK, dépose aux Archives pour tri 3. */
+  const cheatJeu3Tri3 = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "archives",
+      flags: {
+        puits_billet: true,
+        mission_order: ["kova", "vitamine", "jour40"],
+        mission_kova_done: true, briefing_kova_done: true,
+        mission_vitamine_done: true, briefing_vitamine_done: true,
+        mission_jour40_done: true, briefing_jour40_done: true,
+        archives_tri_1_done: true,
+        archives_tri_2_done: true,
+      },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
   const newGameJeu2 = () => {
     setMode("jeu2");
     const target = Math.floor(Math.random() * JEU2.length);
@@ -1237,6 +1275,8 @@ export default function App() {
       onNewGameJeu3={newGameJeu3}
       onCheatJeu3Kova={cheatJeu3Kova}
       onCheatJeu3Archives={cheatJeu3Archives}
+      onCheatJeu3Tri2={cheatJeu3Tri2}
+      onCheatJeu3Tri3={cheatJeu3Tri3}
     />
   );
 

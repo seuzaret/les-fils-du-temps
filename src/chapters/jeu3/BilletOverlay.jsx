@@ -16,7 +16,7 @@ export default function BilletOverlay({ onKeep }) {
           UN BILLET EST TOMBÉ DE TA VESTE
         </div>
         <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.7, color: "#3a2010", fontStyle: "italic" }}>
-          « Assistant du Juge — poste vacant depuis trois mois. Ceux qui posent les bonnes questions savent qu'ils sont attendus.
+          « Tu poses les bonnes questions. Viens me voir, j'ai du travail pour toi.
           <br /><br />
           Bureau des Rumeurs, R-01, niveau −1.
           <br /><br />

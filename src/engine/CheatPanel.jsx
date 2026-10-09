@@ -19,6 +19,8 @@ export default function CheatPanel({
   onNewGameJeu2, onNewGameJeu3,
   onCheatJeu3Kova,
   onCheatJeu3Archives,
+  onCheatJeu3Tri2,
+  onCheatJeu3Tri3,
 }) {
   if (!cheat) return null;
   return (
@@ -68,6 +70,8 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onNewGameJeu3}>🌑 Démarrer le Jeu 3</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Kova}>🎯 Direct Bureau (billet reçu)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Archives}>🗂 Direct Archives (Kova faite)</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Tri2}>🗂 Jorge · Tri 2 prêt</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Tri3}>🗂 Jorge · Tri 3 prêt</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
