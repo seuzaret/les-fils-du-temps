@@ -103,7 +103,14 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
     setSlots((prev) => prev.map((v) => (v === ficheIdx ? null : v)));
   };
 
-  const valider = () => setPhase("fin");
+  /* Valider → passe en « stamping » pour afficher VALIDÉ / MAL CLASSÉ
+     sur chaque fiche avant la réaction finale de Jorge. */
+  const valider = () => setPhase("stamping");
+
+  /* Analyse chronologique : pour chaque case occupée, dit si sa fiche
+     est à la bonne place dans l'ordre chronologique (parmi les fiches
+     actuellement posées). */
+  const slotCorrect = chronoCheck(slots, fiches);
 
   const signalerFiche = (idx) => {
     const f = fiches[idx];
@@ -159,6 +166,7 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
         onSignalerFiche={signalerFiche}
         signaled={signaled}
         stamping={phase === "stamping"}
+        slotCorrect={slotCorrect}
         onContinueStamping={() => setPhase("fin")}
         onAbandon={onDone} />
     );
@@ -181,19 +189,28 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
   if (phase === "fin") {
     const trueSignale = Object.entries(signaled).find(([, v]) => v === true);
     const nbCorrect = countCorrect(slots, fiches);
-    const allPlaced = slots.every((s) => s !== null);
+    const nbPlaced = slots.filter((s) => s !== null).length;
+    const nbMisplaced = nbPlaced - nbCorrect;
+    const allPlaced = nbPlaced === slots.length;
     const trie = allPlaced && nbCorrect === slots.length;
+    const chronoLine =
+      !allPlaced
+        ? `« Et il reste ${slots.length - nbPlaced} fiche(s) dans la pile. La prochaine fois, finis le tri. »`
+        : trie
+          ? "« Et pour le classement : rien à redire. Les dates sont dans l'ordre. »"
+          : nbMisplaced === slots.length
+            ? "« En revanche, pour le classement : rien n'est à sa place. Revois tes dates. »"
+            : `« Pour le classement, par contre : ${nbMisplaced} fiche(s) sur ${slots.length} est mal placée. Fais attention aux dates. »`;
+    const baseLines = trueSignale
+      ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
+      : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor];
     return (
       <BigDialogue
         topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
         speakerNom="Jorge" speakerRole="Archiviste du Puits"
         speakerStyle={JORGE_STYLE}
         accent="#c8a848"
-        lignes={
-          trueSignale
-            ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
-            : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor]
-        }
+        lignes={[...baseLines, chronoLine]}
         actionLabel="Sortir ▸"
         onDone={onDone} />
     );
@@ -208,7 +225,7 @@ function TriBoard({
   onPlaceInSlot, onSendToStock,
   mediadexRetrouve, onValider, onSignaler,
   showSignalerOverlay, onCloseSignalerOverlay, onSignalerFiche,
-  signaled, stamping, onContinueStamping, onAbandon,
+  signaled, stamping, slotCorrect, onContinueStamping, onAbandon,
 }) {
   const [mediadexOpen, setMediadexOpen] = useState(false);
   const [dragging, setDragging] = useState(null); // ficheIdx en cours de drag
@@ -267,7 +284,8 @@ function TriBoard({
               onDragStart={onDragStart} onDragEnd={onDragEnd}
               onDrop={() => onDropSlot(slotIdx)}
               stamping={stamping}
-              signaled={signaled} />
+              signaled={signaled}
+              slotCorrect={slotCorrect && slotCorrect[slotIdx] === true} />
           ))}
         </div>
 
@@ -345,7 +363,7 @@ function TriBoard({
 
 /* ------- Case numérotée ------- */
 function SlotCase({ slotIdx, ficheIdx, fiches,
-  dragging, onDragStart, onDragEnd, onDrop, stamping, signaled }) {
+  dragging, onDragStart, onDragEnd, onDrop, stamping, signaled, slotCorrect }) {
   const [hover, setHover] = useState(false);
   const occupied = ficheIdx !== null;
   return (
@@ -369,7 +387,8 @@ function SlotCase({ slotIdx, ficheIdx, fiches,
           <FicheCard fiche={fiches[ficheIdx]} idx={ficheIdx}
             dragging={dragging}
             onDragStart={onDragStart} onDragEnd={onDragEnd}
-            stamping={stamping} signaled={signaled} compact />
+            stamping={stamping} signaled={signaled}
+            slotCorrect={slotCorrect} compact />
         </div>
       ) : (
         <div style={{ margin: "auto", fontSize: 11, color: "#5a4028", fontStyle: "italic" }}>
@@ -381,10 +400,13 @@ function SlotCase({ slotIdx, ficheIdx, fiches,
 }
 
 /* ------- Petite fiche catalographique ------- */
-function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = false, stamping = false, signaled = {} }) {
+function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = false, stamping = false, signaled = {}, slotCorrect = null }) {
   const isDragging = dragging === idx;
   const isAnomaly = stamping && signaled[idx] === true;
-  const isValid = stamping && signaled[idx] !== true;
+  /* Fiche en stock (pas dans une case) : slotCorrect null → pas de tampon. */
+  const inSlot = slotCorrect !== null;
+  const isValid = stamping && !isAnomaly && inSlot && slotCorrect === true;
+  const isMisplaced = stamping && !isAnomaly && inSlot && slotCorrect === false;
   return (
     <div
       draggable={!stamping}
@@ -396,8 +418,10 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
         width: compact ? "100%" : 160,
         background: isAnomaly
           ? "linear-gradient(180deg,#f8d8c8,#e8b0a0)"
-          : "linear-gradient(180deg,#f0e4c8,#d8ccb0)",
-        border: `1px solid ${isAnomaly ? "#8a2010" : "#5a4028"}`,
+          : isMisplaced
+            ? "linear-gradient(180deg,#f0e0c0,#e0c89a)"
+            : "linear-gradient(180deg,#f0e4c8,#d8ccb0)",
+        border: `1px solid ${isAnomaly ? "#8a2010" : isMisplaced ? "#8a5a10" : "#5a4028"}`,
         borderRadius: 4,
         padding: "8px 10px 10px",
         position: "relative",
@@ -445,6 +469,19 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
           pointerEvents: "none",
         }}>
           VALIDÉ
+        </div>
+      )}
+      {isMisplaced && (
+        <div style={{
+          position: "absolute", left: "50%", top: "50%",
+          transform: "translate(-50%,-50%) rotate(-8deg)",
+          padding: "3px 8px", border: "2px solid #a06810", borderRadius: 4,
+          color: "#a06810", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 12, letterSpacing: 1.5,
+          background: "rgba(160,104,16,0.08)",
+          pointerEvents: "none",
+          textAlign: "center", lineHeight: 1,
+        }}>
+          MAL<br />CLASSÉ
         </div>
       )}
     </div>
@@ -511,4 +548,14 @@ function countCorrect(slots, fiches) {
   const placed = slots.map((s, i) => ({ s, i })).filter((x) => x.s !== null);
   const ideal = [...placed].sort((a, b) => anneeOf(fiches[a.s].dateFiche) - anneeOf(fiches[b.s].dateFiche));
   return placed.filter((x, k) => x.s === ideal[k].s).length;
+}
+
+/* Renvoie un objet { slotIdx: true/false } indiquant si la fiche posée
+   dans cette case est bien à sa place chronologique parmi les posées. */
+function chronoCheck(slots, fiches) {
+  const placed = slots.map((s, i) => ({ s, i })).filter((x) => x.s !== null);
+  const ideal = [...placed].sort((a, b) => anneeOf(fiches[a.s].dateFiche) - anneeOf(fiches[b.s].dateFiche));
+  const out = {};
+  placed.forEach((p, k) => { out[p.i] = p.s === ideal[k].s; });
+  return out;
 }
