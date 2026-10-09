@@ -12,6 +12,7 @@ import BunkerChambre30 from "../chapters/jeu3/scenes/BunkerChambre30.jsx";
 import BunkerChambre32 from "../chapters/jeu3/scenes/BunkerChambre32.jsx";
 import BunkerRumeurs from "../chapters/jeu3/scenes/BunkerRumeurs.jsx";
 import BunkerArchives from "../chapters/jeu3/scenes/BunkerArchives.jsx";
+import BunkerPrison from "../chapters/jeu3/scenes/BunkerPrison.jsx";
 import BunkerSas from "../chapters/jeu3/scenes/BunkerSas.jsx";
 import BunkerCantine from "../chapters/jeu3/scenes/BunkerCantine.jsx";
 import BunkerInfirmerie from "../chapters/jeu3/scenes/BunkerInfirmerie.jsx";
@@ -56,6 +57,7 @@ const ROOMS = {
   chambreN32: { Comp: BunkerChambre32,  label: "Chambre N-32 · Estev" },
   rumeurs:    { Comp: BunkerRumeurs,    label: "Bureau des Rumeurs" },
   archives:   { Comp: BunkerArchives,   label: "Salle des Archives" },
+  prison:     { Comp: BunkerPrison,     label: "Cellules disciplinaires" },
   sas:        { Comp: BunkerSas,        label: "Sas de voyage · machine de Léa" },
   cantine:    { Comp: BunkerCantine,    label: "Cantine commune" },
   infirmerie: { Comp: BunkerInfirmerie, label: "Infirmerie" },

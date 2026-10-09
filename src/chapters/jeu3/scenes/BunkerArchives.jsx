@@ -17,6 +17,7 @@ export default function BunkerArchives({ onGo, j3 }) {
   const unlocked = !!j3.flags[mission?.prerequisite];
   const done = !!j3.flags[mission?.flag];
   const [questOpen, setQuestOpen] = useState(false);
+  const [arrestOverlay, setArrestOverlay] = useState(false);
   /* Trois passes de tri successives chez Jorge, en alternance avec
      les enquêtes de Vez. */
   const tri1 = !!j3.flags.archives_tri_1_done;
@@ -321,11 +322,48 @@ export default function BunkerArchives({ onGo, j3 }) {
       {questOpen && (
         <ArchivistQuest j3={j3} triIdx={nextTri || 1}
           onDone={() => {
+            const wasLast = nextTri === 3;
             j3.setFlag(`archives_tri_${nextTri}_done`);
             setQuestOpen(false);
+            if (wasLast) setArrestOverlay(true);
           }}
           onCancel={() => setQuestOpen(false)} />
       )}
+
+      {arrestOverlay && (
+        <ArrestOverlay
+          onDone={() => {
+            j3.setFlag("jorge_arrete");
+            setArrestOverlay(false);
+          }} />
+      )}
+    </div>
+  );
+}
+
+/* Overlay d'arrestation — enchaînement court après le 3e tri. */
+function ArrestOverlay({ onDone }) {
+  const lignes = [
+    "Tu sors des Archives, le troisième lot classé sous le bras.",
+    "Dans le couloir, des bottes claquent sur le béton — deux gardes de la Milice du Puits remontent au pas.",
+    "Ils entrent sans frapper. Jorge se lève lentement, pose ses lunettes sur le registre, ne proteste pas.",
+    "On l'emmène. Il te lance un regard — pas de peur, juste un signe de tête.",
+    "La porte des Archives claque. Il y a maintenant une cellule, quelque part sous tes pieds.",
+  ];
+  const [i, setI] = useState(0);
+  const isLast = i === lignes.length - 1;
+  return (
+    <div onClick={() => (isLast ? onDone() : setI(i + 1))}
+      style={{ position: "fixed", inset: 0, background: "rgba(2,4,8,0.96)", zIndex: 320, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
+      <div style={{ maxWidth: 640, color: "#e8dfc8", textAlign: "center" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4, color: "#e83820", marginBottom: 18 }}>
+          ⚠ ARRESTATION
+        </div>
+        <p style={{ fontSize: 20, lineHeight: 1.6, margin: 0 }}>{lignes[i]}</p>
+        <div style={{ marginTop: 24, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050", fontStyle: "italic" }}>
+          {isLast ? "Clique pour continuer ▸" : `${i + 1} / ${lignes.length} · clique pour continuer ▸`}
+        </div>
+      </div>
     </div>
   );
 }

@@ -29,6 +29,7 @@ export const LEVELS = [
       { id: "archives",   label: "Salle des Archives" },
       { id: "infirmerie", label: "Infirmerie" },
       { id: "atelier",    label: "Atelier des Ingénieurs" },
+      { id: "prison",     label: "Cellules disciplinaires" },
     ] },
   { id: "-2", name: "Hydroponie", hubRoom: "serres", color: "#8aff70",
     rooms: [{ id: "serres", label: "Serres hydroponiques" }] },

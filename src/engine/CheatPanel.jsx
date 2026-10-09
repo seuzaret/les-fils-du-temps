@@ -21,6 +21,7 @@ export default function CheatPanel({
   onCheatJeu3Archives,
   onCheatJeu3Tri2,
   onCheatJeu3Tri3,
+  onCheatJeu3Phase3,
 }) {
   if (!cheat) return null;
   return (
@@ -72,6 +73,7 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onCheatJeu3Archives}>🗂 Direct Archives (Kova faite)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Tri2}>🗂 Jorge · Tri 2 prêt</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Tri3}>🗂 Jorge · Tri 3 prêt</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Phase3}>🔒 Phase 3 (Jorge arrêté)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>

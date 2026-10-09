@@ -13,6 +13,7 @@ const DOORS = [
   { id: "archives",   code: "A-01", label: "Salle des Archives",     color: "#28303a" },
   { id: "infirmerie", code: "I-01", label: "Infirmerie",             color: "#5a6270" },
   { id: "atelier",    code: "T-01", label: "Atelier des Ingénieurs", color: "#5a4028" },
+  { id: "prison",     code: "C-01", label: "Cellules disciplinaires", color: "#1a2028", conditional: "jorge_arrete" },
 ];
 
 export default function BunkerHubBas({ onGo, j3 }) {
@@ -35,6 +36,17 @@ export default function BunkerHubBas({ onGo, j3 }) {
   /* Badge "nouveau lieu" sur la porte Archives tant que le joueur n'a
      pas encore découvert le passage secret (seulement après Kova faite). */
   const archivesNew = !!flags.mission_kova_done && !flags.archives_passage_opened;
+  /* Porte Cellules : n'apparaît qu'après l'arrestation de Jorge. Pour
+     éviter de reformater le gabarit, la 5e porte occupe le même
+     espacement — on ne la rend que si la condition est posée. */
+  const visibleDoors = DOORS.filter((d) => !d.conditional || flags[d.conditional]);
+  const nDoors = visibleDoors.length;
+  const spacing = nDoors <= 4 ? 195 : 160;
+  const doorWidth = nDoors <= 4 ? 130 : 108;
+  const originX = nDoors <= 4 ? 200 : 180;
+  /* Badge « nouveau » sur la porte Cellules tant qu'on n'y est pas
+     allé. */
+  const prisonNew = !!flags.jorge_arrete && !flags.jorge_cellule_vue;
   return (
     <svg viewBox="0 0 1000 460" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
       <defs>
@@ -133,29 +145,31 @@ export default function BunkerHubBas({ onGo, j3 }) {
         <text x="50" y="240" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#c8d4e2" letterSpacing="2">ASCENSEUR</text>
       </g>
 
-      {/* 4 portes en une rangée à droite du couloir — étendues (y=150, h=220 → bottom 370 = sol) */}
-      {DOORS.map((door, i) => {
-        const x = 200 + i * 195;
+      {/* 4 à 5 portes en rangée (la 5e Cellules n'apparaît qu'après l'arrestation) */}
+      {visibleDoors.map((door, i) => {
+        const x = originX + i * spacing;
+        const labelXPad = 8;
+        const inner = doorWidth - 8;
         return (
           <g key={door.id} transform={`translate(${x},150)`}
             onClick={() => onGo(door.id)} style={{ cursor: "pointer" }}
             onMouseEnter={(e) => e.currentTarget.querySelector(".db-hov").setAttribute("opacity", "1")}
             onMouseLeave={(e) => e.currentTarget.querySelector(".db-hov").setAttribute("opacity", "0")}>
-            <rect className="db-hov" x="-8" y="-8" width="146" height="236" fill="none" stroke="#5eff9e" strokeWidth="2" opacity="0" />
-            <rect x="-4" y="-4" width="138" height="228" fill="#3a2818" stroke="#0a0806" strokeWidth="2" />
-            <rect x="0" y="0" width="130" height="220" fill={door.color} stroke="#0a0806" strokeWidth="3" />
-            <rect x="4" y="4" width="122" height="212" fill={door.color} stroke="#0a0806" strokeWidth="1" opacity="0.6" />
+            <rect className="db-hov" x="-8" y="-8" width={doorWidth + 16} height="236" fill="none" stroke="#5eff9e" strokeWidth="2" opacity="0" />
+            <rect x="-4" y="-4" width={doorWidth + 8} height="228" fill="#3a2818" stroke="#0a0806" strokeWidth="2" />
+            <rect x="0" y="0" width={doorWidth} height="220" fill={door.color} stroke="#0a0806" strokeWidth="3" />
+            <rect x="4" y="4" width={doorWidth - 8} height="212" fill={door.color} stroke="#0a0806" strokeWidth="1" opacity="0.6" />
             {/* Seuil */}
-            <rect x="0" y="214" width="130" height="6" fill="#5a6270" stroke="#0a0806" strokeWidth="0.6" />
-            <circle cx="110" cy="105" r="4" fill="#c8a848" />
-            <rect x="18" y="30" width="94" height="38" fill="#e8eef5" stroke="#3a2818" strokeWidth="1.5" />
-            <text x="65" y="46" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#0a0806" fontWeight="700">{door.code}</text>
-            <text x="65" y="58" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6.5" fill="#5a4028">{door.label.toUpperCase()}</text>
-            <circle cx="65" cy="76" r="3" fill="#5eff9e">
+            <rect x="0" y="214" width={doorWidth} height="6" fill="#5a6270" stroke="#0a0806" strokeWidth="0.6" />
+            <circle cx={doorWidth - 20} cy="105" r="4" fill="#c8a848" />
+            <rect x={labelXPad} y="30" width={inner} height="38" fill="#e8eef5" stroke="#3a2818" strokeWidth="1.5" />
+            <text x={doorWidth / 2} y="46" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#0a0806" fontWeight="700">{door.code}</text>
+            <text x={doorWidth / 2} y="58" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize={nDoors <= 4 ? 6.5 : 5.5} fill="#5a4028">{door.label.toUpperCase()}</text>
+            <circle cx={doorWidth / 2} cy="76" r="3" fill={door.id === "prison" ? "#e83820" : "#5eff9e"}>
               <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite" />
             </circle>
             {door.id === "rumeurs" && newCase && (
-              <g transform="translate(118,10)">
+              <g transform={`translate(${doorWidth - 12},10)`}>
                 <circle r="14" fill="#e0a848" stroke="#1a0e08" strokeWidth="1.5">
                   <animate attributeName="r" values="12;15;12" dur="1.4s" repeatCount="indefinite" />
                 </circle>
@@ -165,11 +179,19 @@ export default function BunkerHubBas({ onGo, j3 }) {
               </g>
             )}
             {door.id === "archives" && archivesNew && (
-              <g transform="translate(118,10)">
+              <g transform={`translate(${doorWidth - 12},10)`}>
                 <circle r="12" fill="#7fd8ff" stroke="#0a0806" strokeWidth="1.5">
                   <animate attributeName="opacity" values="0.5;1;0.5" dur="1.6s" repeatCount="indefinite" />
                 </circle>
                 <text x="0" y="4" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fontWeight="900" fill="#0a0806">?</text>
+              </g>
+            )}
+            {door.id === "prison" && prisonNew && (
+              <g transform={`translate(${doorWidth - 12},10)`}>
+                <circle r="12" fill="#e83820" stroke="#1a0e08" strokeWidth="1.5">
+                  <animate attributeName="opacity" values="0.5;1;0.5" dur="1.3s" repeatCount="indefinite" />
+                </circle>
+                <text x="0" y="4" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fontWeight="900" fill="#1a0e08">!</text>
               </g>
             )}
           </g>
