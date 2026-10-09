@@ -204,15 +204,19 @@ export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
     const baseLines = trueSignale
       ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
       : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor];
+    const closingLine = trie
+      ? null
+      : "« Reprends ton classement pour que je puisse clore ce lot. »";
+    const allLines = closingLine ? [...baseLines, chronoLine, closingLine] : [...baseLines, chronoLine];
     return (
       <BigDialogue
         topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
         speakerNom="Jorge" speakerRole="Archiviste du Puits"
         speakerStyle={JORGE_STYLE}
         accent="#c8a848"
-        lignes={[...baseLines, chronoLine]}
-        actionLabel="Sortir ▸"
-        onDone={onDone} />
+        lignes={allLines}
+        actionLabel={trie ? "Sortir ▸" : "↩ Reclasser"}
+        onDone={trie ? onDone : () => setPhase("tri")} />
     );
   }
 
