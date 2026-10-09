@@ -311,11 +311,6 @@ export default function BunkerArchives({ onGo, j3 }) {
         ← Retour au couloir
       </button>
 
-      {compareOpen && activeDossier && (
-        <CompareModal dossier={activeDossier} bordereau={bordereau}
-          onClose={() => { j3.finishDossier(); setCompareOpen(false); }} />
-      )}
-
       {questOpen && (
         <ArchivistQuest j3={j3}
           onDone={() => {
