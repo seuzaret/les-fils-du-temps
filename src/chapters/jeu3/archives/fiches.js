@@ -89,7 +89,11 @@ export function tirerFiches(triIdx = 1) {
 export function anneeOf(dateFiche) {
   const s = String(dateFiche);
   const neg = /av\. J\.-C\./i.test(s);
-  const match = s.match(/(\d{1,5})/);
+  /* On tolère les séparateurs typographiques dans les grands nombres
+     (espace fine, espace insécable, point) : "~17 000" doit valoir
+     17000, pas 17. */
+  const compact = s.replace(/[\s  .]/g, "");
+  const match = compact.match(/(\d{1,6})/);
   if (!match) return 0;
   const n = parseInt(match[1], 10);
   return neg ? -n : n;

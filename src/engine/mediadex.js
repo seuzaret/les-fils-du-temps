@@ -86,7 +86,8 @@ export function allCards() {
   const yearOf = (c) => {
     const s = String(c.date || "");
     const neg = /av\. J\.-C\./i.test(s) || /av\.J\.-C\./i.test(s);
-    const m = s.match(/(\d{1,5})/);
+    const compact = s.replace(/[\s  .]/g, "");
+    const m = compact.match(/(\d{1,6})/);
     if (!m) return 0;
     const n = parseInt(m[1], 10);
     return neg ? -n : n;
