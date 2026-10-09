@@ -19,9 +19,62 @@ const JORGE_STYLE = {
   bald: true, beard: "#8a8070",
 };
 
-export default function ArchivistQuest({ j3, onDone }) {
+/* Textes variant selon le numéro de passe (triIdx = 1, 2 ou 3). */
+const INTRO_LINES = {
+  1: [
+    "Toi, là. Tu traînes depuis une heure dans mes rayons. Tu n'as rien à faire, c'est ça ? Évidemment.",
+    "Puisque tu es là, aide-moi au lieu de me regarder : classe ces fiches dans l'ordre chronologique. J'ai mieux à faire que de m'occuper de ces vieilleries.",
+    "Et si une date te paraît bizarre — ça arrive — tu me la signales. Pas de bavardage. Au boulot.",
+  ],
+  2: [
+    "Tiens, encore toi. Je commençais à croire que tu ne reviendrais plus.",
+    "Il m'en reste un lot à classer. Pareil que la dernière fois — chronologique, et tu me préviens si une date te chatouille.",
+    "Discrètement, cette fois. Il y a du monde aux étages du haut.",
+  ],
+  3: [
+    "Encore. Dernier lot. Ne discute pas, je n'ai pas le temps.",
+    "Classe. Vérifie. Signale. Tu sais faire, maintenant.",
+    "Et si celui-ci part aussi aux étages du haut… fais vite, s'il te plaît.",
+  ],
+};
+
+const REACTION_SIGNALE_LINES = {
+  1: [
+    "Jorge regarde la fiche que tu lui tends. Il se fige. Reprend sa respiration lentement, comme s'il hésitait.",
+    "Enfin, très bas : « … Tu l'as vue, toi aussi. Je ne pensais pas qu'un·e nouvel·le y verrait quelque chose. »",
+    "Il s'approche, baisse encore la voix : « Range-la. Ne la montre à personne. Il ne faut pas qu'on sache. Pas maintenant. »",
+    "Puis, un peu plus fort, pour se reprendre : « Pas mal pour un·e débutant·e. Reviens me voir à l'occasion… tu apprendras peut-être quelque chose d'utile. »",
+  ],
+  2: [
+    "Jorge prend la fiche sans un mot. Il la lit, la relit. Ses mains tremblent un peu.",
+    "« Deuxième fois que tu la vois. Ce n'est plus un hasard. »",
+    "Il range la fiche sous une autre pile, lève les yeux vers la porte, comme s'il écoutait quelque chose : « Reviens. Et apprends à te taire quand il le faut. »",
+  ],
+  3: [
+    "Jorge saisit la fiche à deux mains. Pour la première fois, il ne cache pas son soulagement — et sa peur.",
+    "« Trois fois sur trois. Tu les as toutes vues. »",
+    "Il te regarde longuement : « Je t'en dois une. Et je crois que je vais en payer une, moi. Rentre chez toi. Vite. »",
+  ],
+};
+
+const END_NEUTRE_LINES = {
+  1: {
+    trie:   "Jorge regarde ton classement : « Bon. Rangé. Dégage, j'ai à faire. »",
+    desor:  "Jorge pousse ta pile sans un merci : « Mouais. J'avais besoin de plus propre. Allez, dégage. »",
+  },
+  2: {
+    trie:   "Jorge jette un œil : « Rangé. Rien d'autre à dire. »",
+    desor:  "Jorge grommelle : « Faut remettre un peu d'ordre là-dedans. Mais passons. »",
+  },
+  3: {
+    trie:   "Jorge te fixe sans parler. Il acquiesce lentement, et replonge dans ses papiers.",
+    desor:  "Jorge pose la pile sans la regarder. Il parle sans lever les yeux : « … soit. »",
+  },
+};
+
+export default function ArchivistQuest({ j3, triIdx = 1, onDone }) {
   const [phase, setPhase] = useState("intro");
-  const [fiches] = useState(() => tirerFiches());
+  const [fiches] = useState(() => tirerFiches(triIdx));
   /* slots : tableau de 4 cases (index 0..3) qui contiennent un
      ficheIdx ou null. Stock : fiches pas encore posées. */
   const [slots, setSlots] = useState([null, null, null, null]);
@@ -79,15 +132,11 @@ export default function ArchivistQuest({ j3, onDone }) {
   if (phase === "intro") {
     return (
       <BigDialogue
-        topic="ARCHIVES · JORGE"
+        topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
         speakerNom="Jorge" speakerRole="Archiviste du Puits"
         speakerStyle={JORGE_STYLE}
         accent="#c8a848"
-        lignes={[
-          "Toi, là. Tu traînes depuis une heure dans mes rayons. Tu n'as rien à faire, c'est ça ? Évidemment.",
-          "Puisque tu es là, aide-moi au lieu de me regarder : classe ces fiches dans l'ordre chronologique. J'ai mieux à faire que de m'occuper de ces vieilleries.",
-          "Et si une date te paraît bizarre — ça arrive — tu me la signales. Pas de bavardage. Au boulot.",
-        ]}
+        lignes={INTRO_LINES[triIdx] || INTRO_LINES[1]}
         actionLabel="D'accord, je range ▸"
         onDone={() => setPhase("tri")} />
     );
@@ -134,23 +183,14 @@ export default function ArchivistQuest({ j3, onDone }) {
     const trie = allPlaced && nbCorrect === slots.length;
     return (
       <BigDialogue
-        topic="ARCHIVES · JORGE"
+        topic={`ARCHIVES · JORGE · PASSE ${triIdx}`}
         speakerNom="Jorge" speakerRole="Archiviste du Puits"
         speakerStyle={JORGE_STYLE}
         accent="#c8a848"
         lignes={
           trueSignale
-            ? [
-                "Jorge regarde la fiche que tu lui tends. Il se fige. Reprend sa respiration lentement, comme s'il hésitait.",
-                "Enfin, très bas : « … Tu l'as vue, toi aussi. Je ne pensais pas qu'un·e nouvel·le y verrait quelque chose. »",
-                "Il s'approche, baisse encore la voix : « Range-la. Ne la montre à personne. Il ne faut pas qu'on sache. Pas maintenant. »",
-                "Puis, un peu plus fort, pour se reprendre : « Pas mal pour un·e débutant·e. Reviens me voir à l'occasion… tu apprendras peut-être quelque chose d'utile. »",
-              ]
-            : [
-                trie
-                  ? "Jorge regarde ton classement : « Bon. Rangé. Dégage, j'ai à faire. »"
-                  : "Jorge pousse ta pile sans un merci : « Mouais. J'avais besoin de plus propre. Allez, dégage. »",
-              ]
+            ? (REACTION_SIGNALE_LINES[triIdx] || REACTION_SIGNALE_LINES[1])
+            : [trie ? END_NEUTRE_LINES[triIdx].trie : END_NEUTRE_LINES[triIdx].desor]
         }
         actionLabel="Sortir ▸"
         onDone={onDone} />

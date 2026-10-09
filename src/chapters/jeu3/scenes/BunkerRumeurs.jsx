@@ -31,15 +31,14 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   const allDone = !mission;
   const missionNum = mission ? order.indexOf(mission.id) + 1 : order.length;
 
-  /* Gate narratif : Vez ne propose une nouvelle enquête qu'après avoir
-     laissé le joueur avancer sur les missions annexes (Archives / Carnet).
-     Enquête 1 (Kova) : toujours prête. Enquête 2 : requiert les Archives
-     restaurées. Enquête 3 : requiert aussi le Carnet validé. */
+  /* Gate narratif : Vez ne propose la n-ième enquête qu'une fois que
+     l'archiviste Jorge a fait la n-ième passe de tri. Alternance
+     Vez / Archives tout au long du jeu 3. Enquête 1 (Kova) toujours
+     prête ; enquête 2 attend tri 1 ; enquête 3 attend tri 2. */
   const nextGate = !mission ? null
     : missionNum === 1 ? null
-    : missionNum === 2 && !j3.flags.mission_appel_done ? "appel"
-    : missionNum === 3 && !j3.flags.mission_appel_done ? "appel"
-    : missionNum === 3 && !j3.flags.mission_carnet_done ? "carnet"
+    : missionNum === 2 && !j3.flags.archives_tri_1_done ? "jorge"
+    : missionNum === 3 && !j3.flags.archives_tri_2_done ? "jorge"
     : null;
   /* Vez bloqué : pas encore de nouvelle affaire tant que gate non remplie. */
   const vezWaiting = !!nextGate && !j3.flags[`briefing_${mission.id}_done`];
@@ -108,9 +107,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
      d'abord passer par les Archives et/ou le Carnet. On garde la scène
      visible (ambiance intacte) et on met Vez en « rien de neuf ». */
   if (vezWaiting) {
-    const hint = nextGate === "appel"
-      ? "Je n'ai rien de neuf pour toi. Mais j'ai entendu des bruits bizarres venant des Archives, en bas. Va jeter un œil, tu peux peut-être m'aider sur autre chose en attendant."
-      : "J'étudie l'affaire suivante, elle n'est pas prête. Pour patienter, le carnet noir qui traîne dans ta chambre — tu l'as regardé ? Les trois affirmations qu'il contient ne sont pas toutes vraies.";
+    const hint = "Je n'ai rien de neuf pour toi. L'archiviste du niveau -1, Jorge, cherchait quelqu'un pour l'aider à classer ses fiches, j'ai entendu. Va voir, tu lui es sûrement plus utile qu'à traîner ici.";
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#e0a848", textAlign: "center" }}>
@@ -422,7 +419,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
                aux Archives, c'est le vrai pivot narratif. Après les
                enquêtes suivantes : rappel plus générique. */
             missionNum === 1
-              ? "Au fait — j'ai entendu des drôles de bruits en bas, dans les Archives. Va jeter un œil quand tu voudras, ça te changera les idées."
+              ? "Au fait — l'archiviste du niveau -1, Jorge, cherchait quelqu'un pour ranger ses fiches. Il est pénible, mais va le voir : ça te changera les idées."
               : missionNum < order.length
                 ? "Reviens me voir plus tard — s'il y a d'autres affaires, je te les proposerai."
                 : null,

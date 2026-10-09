@@ -19,14 +19,24 @@ export default function BunkerArchives({ onGo, j3 }) {
   const done = !!j3.flags[mission?.flag];
   const [questOpen, setQuestOpen] = useState(false);
   const [smalltalkOpen, setSmalltalkOpen] = useState(false);
-  const jorgeDone = !!j3.flags.archives_rangement_done;
-  /* Jorge est TOUJOURS présent dans les Archives (dès le début du jeu 3).
-     Avant Kova : il ne propose rien, seulement le smalltalk (loupe).
-     Après Kova : il propose la mission de rangement via dialogue. */
+  /* Trois passes de tri successives chez Jorge, en alternance avec
+     les enquêtes de Vez. */
+  const tri1 = !!j3.flags.archives_tri_1_done;
+  const tri2 = !!j3.flags.archives_tri_2_done;
+  const tri3 = !!j3.flags.archives_tri_3_done;
+  const nextTri = !tri1 ? 1 : !tri2 ? 2 : !tri3 ? 3 : null;
+  /* Compte le nombre d'enquêtes Vez résolues (parmi mission_order). */
+  const missionOrder = j3.flags.mission_order || [];
+  const missions = j3.missions || {};
+  const nbEnqueteDone = missionOrder.filter((id) => missions[id] && j3.flags[missions[id].flag]).length;
+  /* Chaque tri Jorge requiert d'avoir fini le même numéro d'enquête Vez
+     (tri 1 après Kova, tri 2 après enquête 2, tri 3 après enquête 3). */
+  const triReady = nextTri !== null && nbEnqueteDone >= nextTri;
+  const jorgeDone = nextTri === null;
   const jorgeArrete = !!j3.flags.jorge_arrete;
   const jorgePresent = !jorgeArrete;
   const openJorge = () => {
-    if (unlocked && !jorgeDone) setQuestOpen(true);
+    if (triReady) setQuestOpen(true);
     else setSmalltalkOpen(true);
   };
 
@@ -271,8 +281,8 @@ export default function BunkerArchives({ onGo, j3 }) {
             bald beard="#8a8070"
             facing="front" accessory="coat" activity="write"
             nom="Jorge" role="Archiviste"
-            heard={jorgeDone}
-            active={unlocked && !jorgeDone}
+            heard={!triReady && (tri1 || tri2 || tri3)}
+            active={triReady}
             onClick={openJorge}
             onSmalltalk={jorgeDone ? null : () => setSmalltalkOpen(true)} />
         )}
@@ -313,9 +323,9 @@ export default function BunkerArchives({ onGo, j3 }) {
       </button>
 
       {questOpen && (
-        <ArchivistQuest j3={j3}
+        <ArchivistQuest j3={j3} triIdx={nextTri || 1}
           onDone={() => {
-            j3.setFlag("archives_rangement_done");
+            j3.setFlag(`archives_tri_${nextTri}_done`);
             setQuestOpen(false);
           }} />
       )}
