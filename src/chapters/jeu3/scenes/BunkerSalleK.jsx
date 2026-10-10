@@ -458,21 +458,22 @@ function TableauBlanc({ lit, resolu, target }) {
         <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
         {lit && target && (
           <>
-            <text x="-150" y="-50" fontFamily="Georgia, serif" fontSize="14" fill="#1a0e08" fontStyle="italic">
-              τ · ∂ψ/∂t = Σ(ρ, η) — année de référence :
+            {/* Équations griffonnées, petites, en haut à gauche */}
+            <text x="-156" y="-58" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
+              E = mc²         ·         Δt' = Δt / √(1 − v²/c²)
             </text>
-            {/* Encart central : nom de l'invention */}
-            <g transform="translate(0,0)">
-              <rect x="-150" y="-14" width="300" height="38" fill="none" stroke="#c81010" strokeWidth="1.5" />
-              <text x="0" y="2" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="13" fontWeight="700" fill="#1a0e08">
-                ⇒ {target.title.toUpperCase()}
-              </text>
-              <text x="0" y="18" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#8a2010" fontStyle="italic">
-                (voir médiadex pour la date exacte)
-              </text>
-            </g>
-            <text x="-150" y="40" fontFamily="Georgia, serif" fontSize="11" fill="#5a2010" fontStyle="italic">
-              — Léa Vermet, prototype K
+            <text x="-156" y="-46" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
+              Rμν − ½ R gμν + Λ gμν = (8πG/c⁴) Tμν
+            </text>
+            <text x="-156" y="-34" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
+              ∂ψ/∂t = (iℏ/2m) ∇²ψ − (i/ℏ) V ψ
+            </text>
+            <text x="-156" y="-22" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
+              dτ = dt √(1 − 2GM/rc²)      ·      ds² = c²dt² − dx²
+            </text>
+            {/* Nom de l'invention en petit, un peu plus bas, sans encadré */}
+            <text x="-156" y="12" fontFamily="Palatino, Georgia, serif" fontSize="11" fill="#1a0e08" fontStyle="italic">
+              {target.title}
             </text>
           </>
         )}
