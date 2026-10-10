@@ -222,9 +222,10 @@ export default function BunkerElevator({ onGo, j3 }) {
             {/* Label du panneau */}
             <text x="225" y="34" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="#c8d4e2" letterSpacing="6">SÉLECTION D'ÉTAGE</text>
 
-            {/* GRILLE 3 × 2 boutons d'étage */}
+            {/* GRILLE 3 × 2 boutons d'étage (K exclu : trop discret pour la
+                grille principale, voir petit bouton séparé plus bas). */}
             <g transform="translate(28,50)">
-              {LEVELS.filter((lvl) => isLevelVisible(lvl, j3.flags)).map((lvl, i) => {
+              {LEVELS.filter((lvl) => isLevelVisible(lvl, j3.flags) && lvl.id !== "K").map((lvl, i) => {
                 const unlocked = isLevelUnlocked(lvl.id, j3.flags);
                 const here = lvl.id === currentLvl;
                 const col = i % 2;
@@ -268,6 +269,33 @@ export default function BunkerElevator({ onGo, j3 }) {
               <rect x="-52" y="-8" width="104" height="22" fill="#e83820" stroke="#3a0000" strokeWidth="1.5" rx="3" />
               <text x="0" y="8" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="14" fontWeight="900" fill="#fff" letterSpacing="4">STOP</text>
             </g>
+
+            {/* Petit bouton K discret, calé entre la grille et le STOP sur
+                le côté droit. N'apparaît que si l'étage est déverrouillé. */}
+            {(() => {
+              const lvlK = LEVELS.find((l) => l.id === "K");
+              if (!lvlK || !isLevelUnlocked("K", j3.flags)) return null;
+              const here = currentLvl === "K";
+              return (
+                <g transform="translate(395,326)"
+                  onClick={() => go(lvlK)}
+                  style={{ cursor: "pointer" }}
+                  onMouseEnter={(e) => e.currentTarget.querySelector(".k-hov").setAttribute("opacity", "1")}
+                  onMouseLeave={(e) => e.currentTarget.querySelector(".k-hov").setAttribute("opacity", "0")}>
+                  <circle className="k-hov" r="22" fill="none" stroke={lvlK.color} strokeWidth="1.6" opacity="0" />
+                  <circle r="16" fill={here ? lvlK.color : "#0a0e14"} stroke={lvlK.color} strokeWidth="1.8" />
+                  <text x="0" y="5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="16"
+                    fontWeight="900" fill={here ? "#0a0806" : lvlK.color} letterSpacing="1">
+                    K
+                  </text>
+                  {!here && (
+                    <circle r="20" fill="none" stroke={lvlK.color} strokeWidth="0.6" opacity="0.4">
+                      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                  )}
+                </g>
+              );
+            })()}
           </g>
 
           {/* Numéro de cabine sur le seuil */}
