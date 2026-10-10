@@ -16,11 +16,15 @@ import SceneTSF from "../../07-xixe/scenes/SceneTSF.jsx";
 
 const noop = () => {};
 
+/* pnj = position approximative (en coord viewBox 1000×560) du personnage
+   à repérer dans le décor Jeu 1 pour déclencher le dialogue. */
 const DEST = {
   gutenberg: {
     annee: "~1450", lieu: "Mayence (Saint-Empire romain germanique)",
     titre: "L'atelier de Johannes Gutenberg",
+    nomPnj: "Johannes Gutenberg",
     Scene: SceneImprimerie,
+    pnj: { x: 500, y: 360 },
     verite: [
       "L'atelier sent l'huile de lin et le plomb chaud. Devant toi, Johannes Gutenberg abaisse le levier de sa presse — un geste qu'il répète depuis des mois.",
       "Il ne grave plus chaque lettre dans un bloc de bois : il COULE chaque caractère séparément dans un alliage de plomb, étain et antimoine. Il peut les RÉUTILISER mot après mot. C'est ça, l'invention.",
@@ -32,7 +36,9 @@ const DEST = {
   chappe: {
     annee: "1794", lieu: "Ligne Paris–Lille",
     titre: "La tour de Claude Chappe",
+    nomPnj: "Claude Chappe",
     Scene: SceneChappe,
+    pnj: { x: 420, y: 340 },
     verite: [
       "Sur une colline, une tour de pierre. Un grand bras articulé pivote en haut — Claude Chappe lit un code dans son cahier et répercute le signal vers la tour suivante, à l'horizon.",
       "15 août 1794, le gouvernement reçoit la nouvelle de la reprise de Condé-sur-l'Escaut aux Autrichiens en moins d'une heure. Avant la ligne, il fallait deux jours à cheval.",
@@ -44,7 +50,9 @@ const DEST = {
   marconi: {
     annee: "12 décembre 1901", lieu: "Poldhu (Cornouailles) → Signal Hill (Terre-Neuve)",
     titre: "La station de Guglielmo Marconi",
+    nomPnj: "Guglielmo Marconi",
     Scene: SceneTSF,
+    pnj: { x: 440, y: 370 },
     verite: [
       "Nuit froide sur la côte cornouaillaise. L'antenne de Poldhu crache un signal de forte puissance : trois points — un S Morse — répétés inlassablement.",
       "À 3 400 km de là, à Signal Hill, Terre-Neuve, Marconi tend l'oreille sur son récepteur à cohéreur. Vers midi, il l'entend : trois clics. Il essuie une larme, prend des notes, recommence.",
@@ -59,6 +67,7 @@ export default function BunkerVoyageK({ onGo, j3 }) {
   const targetId = j3?.flags?.voyageK_target;
   const info = targetId ? DEST[targetId] : null;
   const [phase, setPhase] = useState("flash"); // flash → past → return
+  const [dialogueOpen, setDialogueOpen] = useState(false);
   const [lineIdx, setLineIdx] = useState(0);
 
   useEffect(() => {
@@ -70,7 +79,6 @@ export default function BunkerVoyageK({ onGo, j3 }) {
   useEffect(() => {
     if (phase !== "return") return;
     const t = setTimeout(() => {
-      /* Pose le flag voyageK_<id>_done et nettoie la cible. */
       j3.setFlag(`voyageK_${targetId}_done`);
       j3.setFlag("voyageK_target", null);
       onGo("salleK");
@@ -104,44 +112,92 @@ export default function BunkerVoyageK({ onGo, j3 }) {
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", width: "100%", gap: 10 }}>
-      {/* Décor Jeu 1 en tableau, props stubbés (visite d'observation).
-          pointerEvents: none sur le wrapper neutralise les Hotspots :
-          c'est une visite d'observation, pas un terrain de jeu. */}
-      <div style={{ position: "relative", width: "100%", maxHeight: "62vh", overflow: "hidden", borderRadius: 10, border: "2px solid #c8a848", boxShadow: "0 0 24px rgba(200,168,72,0.3)" }}>
-        <div style={{ pointerEvents: "none" }}>
-          <Scene collect={noop} action={noop} reveal={noop} made={[]} queteQui={null} mode="jeu3" />
-        </div>
-        {/* Bandeau topic en haut */}
-        <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(10,8,6,0.8)", border: "1px solid #c8a848", borderRadius: 6, padding: "4px 10px", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8a848" }}>
-          ⟡ {info.annee.toUpperCase()} · {info.lieu.toUpperCase()}
-        </div>
+    <div style={{ position: "relative", width: "100%", height: "100%" }}>
+      {/* Décor Jeu 1 PLEIN CADRE — ratio 1000/560, exactement comme en Jeu 1.
+          pointerEvents:none pour que les hotspots du décor ne se déclenchent
+          pas ; seul le marqueur PNJ au-dessus est cliquable. */}
+      <div style={{ pointerEvents: "none", position: "absolute", inset: 0 }}>
+        <Scene collect={noop} action={noop} reveal={noop} made={[]} queteQui={null} mode="jeu3" />
       </div>
 
-      {/* Panneau narratif : réplique courante */}
-      <div style={{ background: "#141008", border: "1px solid #c8a848", borderRadius: 10, padding: "14px 18px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
-            📜 {info.titre.toUpperCase()}
-          </div>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7050" }}>
-            {lineIdx + 1} / {totalLines}
-          </div>
-        </div>
-        <p style={{ margin: "10px 0 0", fontSize: 15, color: "#e8dfc8", lineHeight: 1.6 }}>
-          {info.verite[lineIdx]}
-        </p>
-        <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 8, flexWrap: "wrap" }}>
-          <button onClick={() => onGo("salleK")}
-            style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
-            ← Interrompre
-          </button>
-          <button onClick={() => atLast ? setPhase("return") : setLineIdx((i) => i + 1)}
-            style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
-            {atLast ? "Rapporter ▸" : "Suite ▸"}
-          </button>
-        </div>
+      {/* Overlay SVG qui aligne le marqueur PNJ sur le viewBox du décor
+          (même préserve-aspect-ratio pour aligner avec slice). */}
+      {!dialogueOpen && (
+        <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
+          <g transform={`translate(${info.pnj.x},${info.pnj.y})`}
+            style={{ cursor: "pointer", pointerEvents: "auto" }}
+            onClick={() => setDialogueOpen(true)}>
+            {/* Zone de clic large */}
+            <circle r="34" fill="transparent" />
+            {/* Halo pulsant */}
+            <circle r="22" fill="none" stroke="#ffd870" strokeWidth="2" opacity="0.9">
+              <animate attributeName="r" values="18;28;18" dur="1.6s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0.4;1;0.4" dur="1.6s" repeatCount="indefinite" />
+            </circle>
+            {/* Loupe */}
+            <circle r="10" fill="#141008" stroke="#ffd870" strokeWidth="2" />
+            <circle r="5" cx="-1" cy="-1" fill="none" stroke="#ffd870" strokeWidth="1.6" />
+            <line x1="3" y1="3" x2="7" y2="7" stroke="#ffd870" strokeWidth="2" strokeLinecap="round" />
+            {/* Étiquette sous le marqueur */}
+            <g transform="translate(0,28)">
+              <rect x="-50" y="-4" width="100" height="14" fill="rgba(10,8,6,0.85)" stroke="#ffd870" strokeWidth="0.6" rx="2" />
+              <text x="0" y="6" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7"
+                fontWeight="700" fill="#ffd870" letterSpacing="2">
+                QUESTIONNER
+              </text>
+            </g>
+          </g>
+        </svg>
+      )}
+
+      {/* Bandeau topic en haut à gauche */}
+      <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(10,8,6,0.85)", border: "1px solid #c8a848", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8a848", pointerEvents: "none" }}>
+        ⟡ {info.annee.toUpperCase()} · {info.lieu.toUpperCase()}
       </div>
+
+      {/* Bouton Interrompre en haut à droite */}
+      <button onClick={() => onGo("salleK")}
+        style={{ position: "absolute", top: 10, right: 10, background: "rgba(10,8,6,0.85)", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer", letterSpacing: 1 }}>
+        ← Interrompre le voyage
+      </button>
+
+      {/* Consigne discrète en bas tant qu'on n'a pas cliqué le PNJ */}
+      {!dialogueOpen && (
+        <div style={{ position: "absolute", bottom: 14, left: "50%", transform: "translateX(-50%)",
+          background: "rgba(10,8,6,0.85)", border: "1px dashed #ffd870", borderRadius: 6,
+          padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11,
+          color: "#ffd870", letterSpacing: 2, fontStyle: "italic", pointerEvents: "none" }}>
+          Trouve {info.nomPnj} dans le tableau et clique dessus.
+        </div>
+      )}
+
+      {/* Panneau narratif en modale par-dessus */}
+      {dialogueOpen && (
+        <div onClick={(e) => e.stopPropagation()}
+          style={{ position: "absolute", left: "50%", bottom: 24, transform: "translateX(-50%)",
+            background: "#141008", border: "2px solid #c8a848", borderRadius: 12,
+            padding: "16px 22px", maxWidth: 760, width: "min(760px, calc(100% - 32px))",
+            boxShadow: "0 10px 40px rgba(0,0,0,0.6)" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
+              📜 {info.titre.toUpperCase()}
+            </div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7050" }}>
+              {lineIdx + 1} / {totalLines}
+            </div>
+          </div>
+          <p style={{ margin: "10px 0 0", fontSize: 15, color: "#e8dfc8", lineHeight: 1.6 }}>
+            {info.verite[lineIdx]}
+          </p>
+          <div style={{ marginTop: 14, display: "flex", justifyContent: "flex-end", gap: 8 }}>
+            <button onClick={() => atLast ? setPhase("return") : setLineIdx((i) => i + 1)}
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+              {atLast ? "Rapporter ▸" : "Suite ▸"}
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

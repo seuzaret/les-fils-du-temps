@@ -29,11 +29,16 @@ function loadPuzzleInvention(flags) {
 
 export default function BunkerSalleK({ onGo, j3 }) {
   const alreadyActive = !!j3?.flags?.salle_k_reactivee;
+  const alreadyOnline = !!j3?.flags?.salle_k_portal_online;
   const alreadyVue = !!j3?.flags?.salle_k_vue;
   const [intro, setIntro] = useState(!alreadyVue);
   const [introIdx, setIntroIdx] = useState(0);
   const [lit, setLit] = useState(alreadyActive);
-  const [resolu, setResolu] = useState(alreadyActive);
+  /* tableauOuvert : puzzle résolu, le tableau blanc a coulissé.
+     portalOnline : les 4 cadrans ont été chargés par le joueur. */
+  const [tableauOuvert, setTableauOuvert] = useState(alreadyActive);
+  const [cadrans, setCadrans] = useState(alreadyOnline ? [true, true, true, true] : [false, false, false, false]);
+  const portalOnline = cadrans.every(Boolean);
   const [cockpit, setCockpit] = useState(false);
 
   /* Invention indice (posée en début de Jeu 3, stable pour la partie). */
@@ -43,19 +48,32 @@ export default function BunkerSalleK({ onGo, j3 }) {
   const [digits, setDigits] = useState(alreadyActive ? [...target.digits] : [0, 0, 0, 0]);
 
   useEffect(() => {
-    if (resolu) return;
+    if (tableauOuvert) return;
     if (digits.every((d, i) => d === target.digits[i])) {
       const t = setTimeout(() => {
         j3.setFlag("salle_k_reactivee");
-        setResolu(true);
+        setTableauOuvert(true);
       }, 500);
       return () => clearTimeout(t);
     }
-  }, [digits, target, resolu, j3]);
+  }, [digits, target, tableauOuvert, j3]);
+
+  /* Quand les 4 cadrans sont chargés, pose le flag et accepte le
+     clic sur le portail. */
+  useEffect(() => {
+    if (portalOnline && !j3?.flags?.salle_k_portal_online) {
+      j3.setFlag("salle_k_portal_online");
+    }
+  }, [portalOnline, j3]);
 
   const bumpDigit = (idx) => {
-    if (resolu) return;
+    if (tableauOuvert) return;
     setDigits((d) => d.map((v, i) => (i === idx ? (v + 1) % 10 : v)));
+  };
+
+  const chargeCadran = (idx) => {
+    if (!tableauOuvert || portalOnline) return;
+    setCadrans((c) => c.map((v, i) => (i === idx ? true : v)));
   };
 
   /* --- Intro narrative --- */
@@ -90,12 +108,16 @@ export default function BunkerSalleK({ onGo, j3 }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, width: "100%", maxWidth: 1600 }}>
       <svg viewBox="0 0 1000 520"
         style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
-        <SalleKDecor lit={lit} resolu={resolu}
+        <SalleKDecor lit={lit}
+          tableauOuvert={tableauOuvert}
+          portalOnline={portalOnline}
           onSwitch={() => setLit(true)}
           digits={digits}
           onBump={bumpDigit}
           target={target}
-          onPortalClick={() => setCockpit(true)} />
+          cadrans={cadrans}
+          onChargeCadran={chargeCadran}
+          onPortalClick={() => portalOnline && setCockpit(true)} />
       </svg>
 
       {/* Panneau bas d'état */}
@@ -106,14 +128,26 @@ export default function BunkerSalleK({ onGo, j3 }) {
               Il fait nuit noire. Tu devines à peine les contours de la pièce. Quelque chose luit faiblement, près de la porte sur la droite.
             </p>
           </div>
-        ) : !resolu ? (
+        ) : !tableauOuvert ? (
           <div style={{ background: "#2a1808", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px" }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
               ⟡ SALLE K — HORS SERVICE
             </div>
             <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8b090", lineHeight: 1.55, fontStyle: "italic" }}>
-              Quatre leviers à chiffres sont dissimulés dans la pièce. Chaque clic sur un levier fait avancer son chiffre. Ensemble, ils forment une année — celle d'une invention nommée sur le tableau blanc. Fouille, cherche, essaie.
+              Quatre leviers à chiffres sont dissimulés dans la pièce. Chaque clic sur un levier fait avancer son chiffre. Ensemble, ils forment une année — celle d'une invention notée sur le tableau blanc. Fouille, cherche, essaie.
             </p>
+          </div>
+        ) : !portalOnline ? (
+          <div style={{ background: "#141c26", border: "1px dashed #7fd8ff", borderRadius: 10, padding: "12px 16px" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
+              ⚙ PUPITRE DÉVOILÉ — CHARGER LES CADRANS
+            </div>
+            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8e4ff", lineHeight: 1.55, fontStyle: "italic" }}>
+              Le tableau blanc a glissé et dévoilé un pupitre à quatre cadrans. Clique chaque cadran pour l'amorcer. Les quatre chargés, le portail prendra vie.
+            </p>
+            <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#7fd8ff", letterSpacing: 2 }}>
+              cadrans · {cadrans.filter(Boolean).length} / {cadrans.length} chargés
+            </div>
           </div>
         ) : (
           <div style={{ background: "#0e2818", border: "1px solid #7fd8ff", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
@@ -150,7 +184,7 @@ export default function BunkerSalleK({ onGo, j3 }) {
 /* ============================================================
    DÉCOR SVG
    ============================================================ */
-function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalClick }) {
+function SalleKDecor({ lit, tableauOuvert, portalOnline, onSwitch, digits, onBump, target, cadrans, onChargeCadran, onPortalClick }) {
   return (
     <>
       <defs>
@@ -180,14 +214,14 @@ function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalCl
           <stop offset="100%" stopColor="#c8b090" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="sk-portalGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#7fd8ff" stopOpacity={resolu ? 0.75 : 0.08} />
-          <stop offset="50%" stopColor="#a840f0" stopOpacity={resolu ? 0.3 : 0} />
+          <stop offset="0%" stopColor="#7fd8ff" stopOpacity={portalOnline ? 0.75 : 0.08} />
+          <stop offset="50%" stopColor="#a840f0" stopOpacity={portalOnline ? 0.3 : 0} />
           <stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" />
         </radialGradient>
         <radialGradient id="sk-portalCore" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#e8f8ff" stopOpacity={resolu ? 0.9 : 0.05} />
-          <stop offset="60%" stopColor="#7fd8ff" stopOpacity={resolu ? 0.6 : 0.02} />
-          <stop offset="100%" stopColor="#0a1428" stopOpacity={resolu ? 0.9 : 1} />
+          <stop offset="0%" stopColor="#e8f8ff" stopOpacity={portalOnline ? 0.9 : 0.05} />
+          <stop offset="60%" stopColor="#7fd8ff" stopOpacity={portalOnline ? 0.6 : 0.02} />
+          <stop offset="100%" stopColor="#0a1428" stopOpacity={portalOnline ? 0.9 : 1} />
         </radialGradient>
         <pattern id="sk-brick" x="0" y="0" width="80" height="36" patternUnits="userSpaceOnUse">
           <rect width="80" height="36" fill={lit ? "#2a1e14" : "#060404"} />
@@ -239,7 +273,7 @@ function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalCl
       <Cobweb cx="18" cy="520" r={48} lit={lit} />
 
       {/* ═══ PORTAIL TEMPOREL — gauche ═══ */}
-      <PortailArche lit={lit} resolu={resolu} onClick={onPortalClick} />
+      <PortailArche lit={lit} portalOnline={portalOnline} onClick={onPortalClick} />
 
       {/* Câbles qui serpentent du portail au bureau */}
       <path d="M220 360 Q320 380 420 370 Q500 365 540 358" stroke={lit ? "#2a1808" : "#030202"} strokeWidth="4" fill="none" />
@@ -249,7 +283,9 @@ function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalCl
       <BureauRecherche lit={lit} />
 
       {/* ═══ TABLEAU BLANC — mur du fond ═══ */}
-      <TableauBlanc lit={lit} resolu={resolu} target={target} />
+      <TableauBlanc lit={lit} tableauOuvert={tableauOuvert}
+        portalOnline={portalOnline} target={target}
+        cadrans={cadrans} onChargeCadran={onChargeCadran} />
 
       {/* ═══ MACHINES DÉCORATIVES ═══ */}
       {/* Oscilloscope */}
@@ -294,10 +330,10 @@ function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalCl
           Placement : alignés sur quatre lieux distincts et clairs.
           Chaque levier possède son propre « rang » (milliers →
           unités) et affiche un compteur 0-9 juste en dessous. */}
-      <ChiffreLever x={340} y={356} rank={0} digit={digits[0]} lit={lit} resolu={resolu} onClick={() => onBump(0)} hint="générateur" />
-      <ChiffreLever x={580} y={350} rank={1} digit={digits[1]} lit={lit} resolu={resolu} onClick={() => onBump(1)} hint="pupitre bureau" />
-      <ChiffreLever x={700} y={300} rank={2} digit={digits[2]} lit={lit} resolu={resolu} onClick={() => onBump(2)} hint="oscilloscope" />
-      <ChiffreLever x={880} y={310} rank={3} digit={digits[3]} lit={lit} resolu={resolu} onClick={() => onBump(3)} hint="bobine Tesla" />
+      <ChiffreLever x={340} y={356} rank={0} digit={digits[0]} lit={lit} resolu={tableauOuvert} onClick={() => onBump(0)} hint="générateur" />
+      <ChiffreLever x={580} y={350} rank={1} digit={digits[1]} lit={lit} resolu={tableauOuvert} onClick={() => onBump(1)} hint="pupitre bureau" />
+      <ChiffreLever x={700} y={300} rank={2} digit={digits[2]} lit={lit} resolu={tableauOuvert} onClick={() => onBump(2)} hint="oscilloscope" />
+      <ChiffreLever x={880} y={310} rank={3} digit={digits[3]} lit={lit} resolu={tableauOuvert} onClick={() => onBump(3)} hint="bobine Tesla" />
 
       {/* ═══ PORTE ANCIENNE — droite ═══ */}
       <g transform="translate(930,180)">
@@ -362,12 +398,12 @@ function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalCl
 /* ============================================================
    PORTAIL — arche de pierre, inactif ou allumé néon
    ============================================================ */
-function PortailArche({ lit, resolu, onClick }) {
+function PortailArche({ lit, portalOnline, onClick }) {
   return (
     <g transform="translate(140,260)">
       {/* Halo externe double */}
       <circle r="160" fill="url(#sk-portalGlow)" />
-      {resolu && (
+      {portalOnline && (
         <circle r="130" fill="none" stroke="#7fd8ff" strokeWidth="1.2" opacity="0.3">
           <animate attributeName="r" values="120;140;120" dur="3s" repeatCount="indefinite" />
           <animate attributeName="opacity" values="0.1;0.4;0.1" dur="3s" repeatCount="indefinite" />
@@ -383,11 +419,11 @@ function PortailArche({ lit, resolu, onClick }) {
         return <circle key={i} cx={x} cy={y} r="4" fill="none" stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />;
       })}
       {/* Zone cliquable + plasma */}
-      <g style={{ cursor: resolu ? "pointer" : "default" }}
-        onClick={resolu ? (e) => { e.stopPropagation(); onClick?.(); } : undefined}>
-        <ellipse rx="56" ry="76" fill={resolu ? "url(#sk-portalCore)" : (lit ? "#0a1420" : "#020408")}
-          stroke={resolu ? "#7fd8ff" : (lit ? "#1a2838" : "#000")} strokeWidth="1.5" />
-        {resolu && (
+      <g style={{ cursor: portalOnline ? "pointer" : "default" }}
+        onClick={portalOnline ? (e) => { e.stopPropagation(); onClick?.(); } : undefined}>
+        <ellipse rx="56" ry="76" fill={portalOnline ? "url(#sk-portalCore)" : (lit ? "#0a1420" : "#020408")}
+          stroke={portalOnline ? "#7fd8ff" : (lit ? "#1a2838" : "#000")} strokeWidth="1.5" />
+        {portalOnline && (
           <>
             {/* Spirales de plasma */}
             <g>
@@ -422,22 +458,22 @@ function PortailArche({ lit, resolu, onClick }) {
         )}
       </g>
       {/* Reflet oblique quand inactif */}
-      {!resolu && <path d="M-30 -60 L-10 -70 L30 50 L10 60 Z" fill="#e8eef5" opacity={lit ? 0.08 : 0} />}
+      {!portalOnline && <path d="M-30 -60 L-10 -70 L30 50 L10 60 Z" fill="#e8eef5" opacity={lit ? 0.08 : 0} />}
       {/* Runes autour */}
       {lit && [[-70, -40, "⚛"], [70, -40, "✦"], [-70, 70, "⟡"], [70, 70, "☌"]].map(([x, y, s], i) => (
         <text key={i} x={x} y={y} textAnchor="middle" fontSize="14"
-          fill={resolu ? "#7fd8ff" : "#5a4028"}
-          opacity={resolu ? 0.9 : 0.6}>
-          {resolu && <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2 + i * 0.4}s`} repeatCount="indefinite" />}
+          fill={portalOnline ? "#7fd8ff" : "#5a4028"}
+          opacity={portalOnline ? 0.9 : 0.6}>
+          {portalOnline && <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2 + i * 0.4}s`} repeatCount="indefinite" />}
           {s}
         </text>
       ))}
       {/* Plaque */}
       <rect x="-50" y="112" width="100" height="14" fill={lit ? "#1a0e08" : "#010101"}
-        stroke={resolu ? "#7fd8ff" : (lit ? "#c8a848" : "#1a1008")} strokeWidth="0.8" />
+        stroke={portalOnline ? "#7fd8ff" : (lit ? "#c8a848" : "#1a1008")} strokeWidth="0.8" />
       <text x="0" y="123" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
-        fill={resolu ? "#7fd8ff" : (lit ? "#c8a848" : "#2a2010")} letterSpacing="3">
-        {resolu ? "PORTAIL · EN LIGNE" : "PORTAIL · HORS SERVICE"}
+        fill={portalOnline ? "#7fd8ff" : (lit ? "#c8a848" : "#2a2010")} letterSpacing="3">
+        {portalOnline ? "PORTAIL · EN LIGNE" : "PORTAIL · HORS SERVICE"}
       </text>
     </g>
   );
@@ -447,18 +483,20 @@ function PortailArche({ lit, resolu, onClick }) {
    TABLEAU BLANC — formule + nom de l'invention à deviner
    Coulisse à gauche une fois résolu pour dévoiler le pupitre
    ============================================================ */
-function TableauBlanc({ lit, resolu, target }) {
+function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onChargeCadran }) {
   return (
     <g transform="translate(500,180)">
       <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
       <g style={{ transition: "transform 1.4s cubic-bezier(0.3,0,0.3,1)",
-        transform: resolu ? "translateX(-340px)" : "translateX(0)" }}>
+        transform: tableauOuvert ? "translateX(340px)" : "translateX(0)" }}>
         <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
         <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
         <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
         {lit && target && (
           <>
-            {/* Équations griffonnées, petites, en haut à gauche */}
+            {/* Équations griffonnées, le nom de l'invention glissé au
+                milieu sur la même ligne de style — comme une note qui
+                prolonge une formule. */}
             <text x="-156" y="-58" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
               E = mc²         ·         Δt' = Δt / √(1 − v²/c²)
             </text>
@@ -466,37 +504,65 @@ function TableauBlanc({ lit, resolu, target }) {
               Rμν − ½ R gμν + Λ gμν = (8πG/c⁴) Tμν
             </text>
             <text x="-156" y="-34" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
-              ∂ψ/∂t = (iℏ/2m) ∇²ψ − (i/ℏ) V ψ
+              {target.title}
             </text>
             <text x="-156" y="-22" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
-              dτ = dt √(1 − 2GM/rc²)      ·      ds² = c²dt² − dx²
+              ∂ψ/∂t = (iℏ/2m) ∇²ψ − (i/ℏ) V ψ
             </text>
-            {/* Nom de l'invention en petit, un peu plus bas, sans encadré */}
-            <text x="-156" y="12" fontFamily="Palatino, Georgia, serif" fontSize="11" fill="#1a0e08" fontStyle="italic">
-              {target.title}
+            <text x="-156" y="-10" fontFamily="Georgia, serif" fontSize="9" fill="#1a0e08" fontStyle="italic">
+              dτ = dt √(1 − 2GM/rc²)      ·      ds² = c²dt² − dx²
             </text>
           </>
         )}
       </g>
-      {/* Pupitre dévoilé */}
-      {resolu && (
+      {/* Pupitre dévoilé — 4 cadrans à cliquer pour charger */}
+      {tableauOuvert && (
         <g>
           <rect x="-160" y="-70" width="320" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
           <text x="0" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="#7fd8ff" letterSpacing="4">
             PUPITRE PORTAIL · K-01
           </text>
           <line x1="-150" y1="-46" x2="150" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
-          {[-100, -30, 40, 110].map((x, i) => (
-            <g key={i} transform={`translate(${x},0)`}>
-              <circle r="18" fill="#0a1a28" stroke="#7fd8ff" strokeWidth="1" />
-              <line x1="0" y1="0" x2={Math.cos(i) * 14} y2={Math.sin(i) * 14} stroke="#7fd8ff" strokeWidth="1.4" />
-              <circle r="2" fill="#7fd8ff">
-                <animate attributeName="opacity" values="0.5;1;0.5" dur={`${1.4 + i * 0.3}s`} repeatCount="indefinite" />
-              </circle>
-            </g>
-          ))}
-          <text x="0" y="38" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#7fd8ff">
-            ✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER
+          {[-100, -30, 40, 110].map((x, i) => {
+            const on = !!cadrans?.[i];
+            return (
+              <g key={i} transform={`translate(${x},0)`}
+                style={{ cursor: on || portalOnline ? "default" : "pointer" }}
+                onClick={(!on && !portalOnline) ? (e) => { e.stopPropagation(); onChargeCadran?.(i); } : undefined}>
+                {/* Anneau externe cliquable */}
+                <circle r="22" fill="transparent" />
+                <circle r="18" fill={on ? "#0e2838" : "#0a1a28"} stroke={on ? "#7fd8ff" : "#3a5a78"} strokeWidth={on ? 1.5 : 1} />
+                {/* Aiguille animée quand ON */}
+                <line x1="0" y1="0"
+                  x2={on ? Math.cos(i + Date.now() / 1000) * 14 : Math.cos(i) * 10}
+                  y2={on ? Math.sin(i + Date.now() / 1000) * 14 : Math.sin(i) * 10}
+                  stroke={on ? "#7fd8ff" : "#5a6678"} strokeWidth={on ? 1.6 : 1} />
+                {on && (
+                  <circle r="14" fill="none" stroke="#7fd8ff" strokeWidth="0.6" opacity="0.5">
+                    <animate attributeName="r" values="12;16;12" dur="1.8s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="1.8s" repeatCount="indefinite" />
+                  </circle>
+                )}
+                <circle r="2.5" fill={on ? "#7fd8ff" : "#3a5a78"}>
+                  {on && <animate attributeName="opacity" values="0.5;1;0.5" dur={`${1.4 + i * 0.3}s`} repeatCount="indefinite" />}
+                </circle>
+                {/* Indicateur ON/charger */}
+                {!on && !portalOnline && (
+                  <text y="32" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#7fd8ff" opacity="0.7" letterSpacing="1">
+                    CHARGER
+                  </text>
+                )}
+                {on && (
+                  <text y="32" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5eff9e" letterSpacing="1">
+                    ✓
+                  </text>
+                )}
+              </g>
+            );
+          })}
+          <text x="0" y="52" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
+            fill={portalOnline ? "#5eff9e" : "#7fd8ff"}>
+            {portalOnline ? "✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER" : "⚙ CLIQUE CHAQUE CADRAN POUR L'AMORCER"}
           </text>
         </g>
       )}
