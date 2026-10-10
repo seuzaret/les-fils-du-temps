@@ -1,58 +1,65 @@
 /* ============================================================
    JEU 3 — SCÈNE : « Salle temporelle abandonnée » (K-01) — Phase 4+5
    ------------------------------------------------------------
-   Grande salle oubliée au niveau K, enfouie sous la roche. Fermée
-   depuis 2047. Trois états :
-     1. intro      : courte narration au premier passage
-     2. noir       : la salle dans le noir, seul un vieil
-                     interrupteur près de la porte luit faiblement.
-     3. lit        : l'ampoule au-dessus du bureau se rallume ;
-                     la scène apparaît en détail. Puzzle à 4 leviers
-                     cachés dans le décor — à activer dans l'ordre
-                     correspondant à la date 2047 (indice sur un
-                     papier du bureau et dans les équations du
-                     tableau blanc). Combinaison bonne → le tableau
-                     blanc coulisse et dévoile le pupitre du portail.
-     4. resolu     : panneau de destinations (Phase 5).
-   ============================================================ */
-import { useState, useEffect } from "react";
+   Grande salle oubliée au niveau K. Trois états :
+     intro   — courte narration au premier passage
+     noir    — pièce dans le noir, interrupteur à cliquer
+     lit     — scène allumée, puzzle à 4 leviers
+     resolu  — tableau blanc coulissé, portail allumé
+     cockpit — modal de voyage (clavier d'années)
 
-const CODE = [2, 0, 4, 7];
+   Puzzle : 4 leviers à chiffres (0-9). Chaque clic incrémente le
+   chiffre. Les 4 doivent former l'année d'une invention tirée au
+   hasard du médiadex. Le tableau blanc en donne le nom. Auto-check
+   à chaque clic.
+   ============================================================ */
+import { useState, useEffect, useMemo } from "react";
+import INVENTIONS from "../../../engine/inventions-meta.json";
+
+/* Sous-ensemble du médiadex utilisable comme code (année propre
+   à 4 chiffres, pas d'« av. J.-C. »). */
+function pickRandomInvention() {
+  const candidats = INVENTIONS.filter((inv) => {
+    if (/av\. J\.-C\./i.test(inv.date)) return false;
+    const s = String(inv.date).replace(/[\s  .]/g, "");
+    const m = s.match(/(\d{4})/);
+    return !!m && parseInt(m[1], 10) >= 1000 && parseInt(m[1], 10) <= 2100;
+  });
+  const inv = candidats[Math.floor(Math.random() * candidats.length)];
+  const s = String(inv.date).replace(/[\s  .]/g, "");
+  const year = parseInt(s.match(/(\d{4})/)[1], 10);
+  return { ...inv, year, digits: String(year).split("").map((d) => parseInt(d, 10)) };
+}
 
 export default function BunkerSalleK({ onGo, j3 }) {
   const alreadyActive = !!j3?.flags?.salle_k_reactivee;
   const alreadyVue = !!j3?.flags?.salle_k_vue;
   const [intro, setIntro] = useState(!alreadyVue);
   const [introIdx, setIntroIdx] = useState(0);
-  const [lit, setLit] = useState(alreadyActive); // lumières ON si déjà réactivée
-  const [sequence, setSequence] = useState([]);  // digits cliqués dans l'ordre
-  const [pulled, setPulled] = useState({});      // leviers tirés visuellement
+  const [lit, setLit] = useState(alreadyActive);
   const [resolu, setResolu] = useState(alreadyActive);
-  const [shake, setShake] = useState(false);     // feedback faux code
+  const [cockpit, setCockpit] = useState(false);
 
-  /* Si séquence courante === CODE → résolu. Si prefix faux → reset. */
+  /* Invention tirée au hasard, stable pour toute la vie du composant. */
+  const target = useMemo(() => pickRandomInvention(), []);
+  /* État des 4 chiffres (gauche à droite). Chaque clic sur un levier
+     incrémente, 9 → 0 (wrap). Auto-check à chaque changement. */
+  const [digits, setDigits] = useState(alreadyActive ? [...target.digits] : [0, 0, 0, 0]);
+
   useEffect(() => {
-    if (sequence.length === 0) return;
-    const matchesPrefix = CODE.slice(0, sequence.length).every((d, i) => d === sequence[i]);
-    if (!matchesPrefix) {
-      setShake(true);
-      const t1 = setTimeout(() => { setShake(false); setSequence([]); setPulled({}); }, 600);
-      return () => clearTimeout(t1);
-    }
-    if (sequence.length === CODE.length) {
+    if (resolu) return;
+    if (digits.every((d, i) => d === target.digits[i])) {
       const t = setTimeout(() => {
         j3.setFlag("salle_k_reactivee");
         setResolu(true);
-      }, 600);
+      }, 500);
       return () => clearTimeout(t);
     }
-  }, [sequence, j3]);
+  }, [digits, target, resolu, j3]);
 
-  const pullLever = (digit, id) => {
+  const bumpDigit = (idx) => {
     if (resolu) return;
-    if (pulled[id]) return;
-    setPulled((p) => ({ ...p, [id]: true }));
-    setSequence((s) => [...s, digit]);
+    setDigits((d) => d.map((v, i) => (i === idx ? (v + 1) % 10 : v)));
   };
 
   /* --- Intro narrative --- */
@@ -80,17 +87,19 @@ export default function BunkerSalleK({ onGo, j3 }) {
     );
   }
 
+  const flags = j3?.flags || {};
+  const voyagesDone = ["gutenberg", "chappe", "marconi"].filter((id) => flags[`voyageK_${id}_done`]).length;
+
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, width: "100%", maxWidth: 1600 }}>
       <svg viewBox="0 0 1000 520"
-        style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%",
-          filter: shake ? "hue-rotate(-15deg)" : "none",
-          transition: "filter 0.2s" }}>
-        <SalleKDecor lit={lit} resolu={resolu} shake={shake}
+        style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
+        <SalleKDecor lit={lit} resolu={resolu}
           onSwitch={() => setLit(true)}
-          sequence={sequence}
-          pulled={pulled}
-          onLever={pullLever} />
+          digits={digits}
+          onBump={bumpDigit}
+          target={target}
+          onPortalClick={() => setCockpit(true)} />
       </svg>
 
       {/* Panneau bas d'état */}
@@ -107,21 +116,26 @@ export default function BunkerSalleK({ onGo, j3 }) {
               ⟡ SALLE K — HORS SERVICE
             </div>
             <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8b090", lineHeight: 1.55, fontStyle: "italic" }}>
-              Quatre leviers sont dissimulés dans la pièce. Ils portent chacun un chiffre. Il faut deviner la combinaison et les tirer dans le bon ordre. Un indice traîne sur le bureau — un autre, peut-être, dans les équations du tableau. Promène la souris sur la scène pour les débusquer.
+              Quatre leviers à chiffres sont dissimulés dans la pièce. Chaque clic sur un levier fait avancer son chiffre. Ensemble, ils forment une année — celle d'une invention nommée sur le tableau blanc. Fouille, cherche, essaie.
             </p>
-            {sequence.length > 0 && (
-              <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#ffd870", letterSpacing: 4 }}>
-                séquence · {sequence.join(" ")}{"_".repeat(Math.max(0, CODE.length - sequence.length)).replace(/_/g, " _")}
-              </div>
-            )}
-            {shake && (
-              <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#e83820", fontWeight: 700, letterSpacing: 2 }}>
-                ⚠ MAUVAISE COMBINAISON — réessaie
+          </div>
+        ) : (
+          <div style={{ background: "#0e2818", border: "1px solid #7fd8ff", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
+              ⟡ PORTAIL EN LIGNE — {voyagesDone} / 3 VOYAGES
+            </div>
+            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8e4ff", lineHeight: 1.55, fontStyle: "italic" }}>
+              Clique sur le portail pour entrer dans la cabine et choisir une année de destination.
+            </p>
+            {voyagesDone === 3 && (
+              <div style={{ marginTop: 10 }}>
+                <button onClick={() => onGo("epilogueJeu3")}
+                  style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+                  ⟡ Remonter rapporter ▸
+                </button>
               </div>
             )}
           </div>
-        ) : (
-          <DestinationsPanel j3={j3} onGo={onGo} />
         )}
       </div>
 
@@ -129,17 +143,18 @@ export default function BunkerSalleK({ onGo, j3 }) {
         style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Reprendre l'ascenseur
       </button>
+
+      {cockpit && (
+        <CockpitVoyage j3={j3} onGo={onGo} onClose={() => setCockpit(false)} />
+      )}
     </div>
   );
 }
 
 /* ============================================================
-   DÉCOR SVG — grand tableau de la salle K
-   La structure reste la même, lit/resolu modulent l'affichage.
-   Les leviers du puzzle sont posés à des endroits précis. Les
-   autres leviers/machines autour sont purement décoratifs.
+   DÉCOR SVG
    ============================================================ */
-function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }) {
+function SalleKDecor({ lit, resolu, onSwitch, digits, onBump, target, onPortalClick }) {
   return (
     <>
       <defs>
@@ -164,13 +179,19 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
           <stop offset="40%" stopColor="#ffd870" stopOpacity={lit ? 0.6 : 0} />
           <stop offset="100%" stopColor="#ffd870" stopOpacity="0" />
         </radialGradient>
-        <radialGradient id="sk-portal" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#7fd8ff" stopOpacity={resolu ? 0.7 : 0.08} />
-          <stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" />
-        </radialGradient>
         <radialGradient id="sk-dust" cx="50%" cy="50%" r="60%">
           <stop offset="0%" stopColor="#c8b090" stopOpacity={lit ? 0.35 : 0} />
           <stop offset="100%" stopColor="#c8b090" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="sk-portalGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#7fd8ff" stopOpacity={resolu ? 0.75 : 0.08} />
+          <stop offset="50%" stopColor="#a840f0" stopOpacity={resolu ? 0.3 : 0} />
+          <stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" />
+        </radialGradient>
+        <radialGradient id="sk-portalCore" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#e8f8ff" stopOpacity={resolu ? 0.9 : 0.05} />
+          <stop offset="60%" stopColor="#7fd8ff" stopOpacity={resolu ? 0.6 : 0.02} />
+          <stop offset="100%" stopColor="#0a1428" stopOpacity={resolu ? 0.9 : 1} />
         </radialGradient>
         <pattern id="sk-brick" x="0" y="0" width="80" height="36" patternUnits="userSpaceOnUse">
           <rect width="80" height="36" fill={lit ? "#2a1e14" : "#060404"} />
@@ -183,161 +204,59 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
       <rect width="1000" height="520" fill="url(#sk-wall)" />
       <rect width="1000" height="340" fill="url(#sk-brick)" opacity="0.5" />
       <rect y="380" width="1000" height="140" fill="url(#sk-floor)" />
-      {/* Plinthe */}
       <rect y="376" width="1000" height="8" fill={lit ? "#1a1008" : "#030202"} />
 
-      {/* Plafond + grosses poutres + tuyaux */}
+      {/* Plafond, poutres, tuyaux */}
       <rect y="0" width="1000" height="36" fill={lit ? "#1a0e08" : "#020202"} />
-      {/* Poutres */}
       {[180, 500, 820].map((x, i) => (
         <rect key={i} x={x - 50} y="18" width="100" height="6" fill={lit ? "#3a2010" : "#060402"} />
       ))}
-      {/* Gros tuyau cuivre horizontal haut */}
       <g>
         <rect x="0" y="42" width="1000" height="18" fill="url(#sk-copper)" />
         <rect x="0" y="42" width="1000" height="3" fill={lit ? "#e8a868" : "#0a0804"} opacity="0.5" />
         <rect x="0" y="57" width="1000" height="3" fill={lit ? "#2a1808" : "#010101"} opacity="0.9" />
-        {/* Colliers de serrage */}
         {[120, 320, 520, 720, 920].map((x, i) => (
           <g key={i} transform={`translate(${x},50)`}>
             <rect x="-6" y="-10" width="12" height="22" fill={lit ? "#3a2010" : "#030302"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
             <circle r="2" fill={lit ? "#c8a848" : "#1a1008"} />
           </g>
         ))}
-        {/* Dérivation à 90° qui plonge */}
         <rect x="920" y="60" width="18" height="200" fill="url(#sk-copper)" />
         <circle cx="929" cy="60" r="12" fill={lit ? "#8a5020" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1" />
         <circle cx="929" cy="60" r="4" fill={lit ? "#c8a848" : "#1a1008"} />
       </g>
-      {/* Gros tuyau brass au sol côté droit */}
       <rect x="620" y="356" width="340" height="12" fill="url(#sk-brass)" />
       <rect x="620" y="356" width="340" height="2" fill={lit ? "#f0d890" : "#0a0804"} opacity="0.5" />
 
-      {/* Ampoule au centre, pendue */}
+      {/* Ampoule */}
       <g>
         <line x1="500" y1="24" x2="500" y2="110" stroke={lit ? "#5a3818" : "#0a0804"} strokeWidth="1.2" />
         <circle cx="500" cy="110" r="36" fill="url(#sk-bulb)" />
         <circle cx="500" cy="110" r="12" fill={lit ? "#ffd870" : "#141008"} stroke={lit ? "#8a5020" : "#1a0e08"} strokeWidth="1.2">
           {lit && <animate attributeName="opacity" values="0.85;1;0.9" dur="4s" repeatCount="indefinite" />}
         </circle>
-        <path d="M498 100 Q500 94 502 100" stroke={lit ? "#8a5020" : "#0a0804"} strokeWidth="0.8" fill="none" />
       </g>
 
-      {/* Toiles d'araignée dans les coins */}
+      {/* Toiles d'araignée */}
       <Cobweb cx="18" cy="42" r={60} lit={lit} />
       <Cobweb cx="982" cy="42" r={70} lit={lit} />
       <Cobweb cx="18" cy="520" r={48} lit={lit} />
 
-      {/* ═══ GAUCHE : PORTAIL TEMPOREL ═══ */}
-      <g transform="translate(140,260)">
-        {/* Halo */}
-        <circle r="130" fill="url(#sk-portal)" />
-        {/* Arche en pierre massive */}
-        <path d="M-90 110 L-90 -20 Q-90 -100 0 -100 Q90 -100 90 -20 L90 110 L68 110 L68 -20 Q68 -78 0 -78 Q-68 -78 -68 -20 L-68 110 Z"
-          fill={lit ? "#3a2818" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="2" />
-        {/* Blocs de pierre taillés sur l'arche */}
-        {Array.from({ length: 12 }).map((_, i) => {
-          const a = -Math.PI / 2 + (i - 5.5) * (Math.PI / 12);
-          const x = Math.cos(a) * 78;
-          const y = Math.sin(a) * 78;
-          return (
-            <circle key={i} cx={x} cy={y} r="4" fill="none" stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
-          );
-        })}
-        {/* Verre terne au centre */}
-        <ellipse rx="56" ry="76" fill={lit ? "#0a1420" : "#020408"} stroke={lit ? "#1a2838" : "#000"} strokeWidth="1" />
-        {/* Reflet oblique */}
-        <path d="M-30 -60 L-10 -70 L30 50 L10 60 Z" fill="#e8eef5" opacity={lit ? 0.08 : 0} />
-        {/* Runes ternes autour */}
-        {lit && [[-70, -40, "⚛"], [70, -40, "✦"], [-70, 70, "⟡"], [70, 70, "☌"]].map(([x, y, s], i) => (
-          <text key={i} x={x} y={y} textAnchor="middle" fontSize="14" fill="#5a4028" opacity="0.6">{s}</text>
-        ))}
-        {/* Plaque */}
-        <rect x="-50" y="112" width="100" height="14" fill={lit ? "#1a0e08" : "#010101"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="0.8" />
-        <text x="0" y="123" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
-          fill={lit ? "#c8a848" : "#2a2010"} letterSpacing="3">
-          PORTAIL · HORS SERVICE
-        </text>
-      </g>
+      {/* ═══ PORTAIL TEMPOREL — gauche ═══ */}
+      <PortailArche lit={lit} resolu={resolu} onClick={onPortalClick} />
 
-      {/* Pile de câbles qui serpentent du portail vers le centre */}
+      {/* Câbles qui serpentent du portail au bureau */}
       <path d="M220 360 Q320 380 420 370 Q500 365 540 358" stroke={lit ? "#2a1808" : "#030202"} strokeWidth="4" fill="none" />
       <path d="M220 370 Q340 388 450 378 Q520 374 560 368" stroke={lit ? "#1a0e08" : "#020101"} strokeWidth="3" fill="none" />
 
-      {/* ═══ CENTRE-FOND : BUREAU DE RECHERCHE ABANDONNÉ ═══ */}
-      <g transform="translate(500,310)">
-        {/* Chaise à l'arrière */}
-        <g transform="translate(0,-60)">
-          <rect x="-18" y="0" width="36" height="48" fill={lit ? "#2a1808" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
-          <rect x="-20" y="-20" width="40" height="22" fill={lit ? "#3a2010" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
-        </g>
-        {/* Bureau */}
-        <rect x="-120" y="0" width="240" height="20" fill={lit ? "#5a3818" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1.2" />
-        <rect x="-120" y="0" width="240" height="4" fill={lit ? "#8a5820" : "#0a0804"} opacity="0.5" />
-        {/* Pieds */}
-        <rect x="-112" y="20" width="12" height="60" fill={lit ? "#3a2010" : "#060402"} />
-        <rect x="100" y="20" width="12" height="60" fill={lit ? "#3a2010" : "#060402"} />
-        {/* Tiroir latéral */}
-        <rect x="-112" y="22" width="60" height="36" fill={lit ? "#3a2010" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
-        <circle cx="-82" cy="40" r="2.5" fill={lit ? "#c8a848" : "#1a1008"} />
+      {/* ═══ BUREAU DE RECHERCHE — centre-fond ═══ */}
+      <BureauRecherche lit={lit} />
 
-        {/* Lampe de bureau cassée (abat-jour penché) */}
-        <g transform="translate(-80,-10)">
-          <circle r="3" fill={lit ? "#5a3818" : "#060402"} />
-          <line x1="0" y1="0" x2="-8" y2="-20" stroke={lit ? "#5a3818" : "#060402"} strokeWidth="1.5" />
-          <path d="M-16 -24 L0 -24 L-4 -34 L-12 -34 Z" fill={lit ? "#8a5020" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" transform="rotate(-20 -8 -29)" />
-        </g>
-        {/* Moniteur CRT massif */}
-        <g transform="translate(10,-70)">
-          <rect x="-56" y="0" width="112" height="68" fill={lit ? "#8a8070" : "#0a0a08"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1.4" rx="4" />
-          <rect x="-48" y="6" width="96" height="52" fill={lit ? "#0a1808" : "#010101"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.8" />
-          {lit && (
-            <>
-              <text x="0" y="24" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5eff9e" letterSpacing="1">BOOT 2047</text>
-              <text x="0" y="36" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#5a6678">[err 0x7F] no signal</text>
-              <text x="0" y="48" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#5a6678">memory dump : --:--</text>
-              <rect x="-44" y="52" width="2" height="4" fill="#5eff9e">
-                <animate attributeName="opacity" values="0;1;0" dur="1.1s" repeatCount="indefinite" />
-              </rect>
-            </>
-          )}
-          {/* Boutons du CRT */}
-          <circle cx="-42" cy="62" r="2" fill={lit ? "#c8a848" : "#1a1008"} />
-          <circle cx="-32" cy="62" r="2" fill={lit ? "#5a6270" : "#0a0804"} />
-        </g>
-        {/* Clavier massif */}
-        <rect x="-50" y="4" width="100" height="12" fill={lit ? "#5a5a5a" : "#060606"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.5" rx="2" />
-        {Array.from({ length: 14 }).map((_, i) => (
-          <rect key={i} x={-48 + i * 7} y={6} width="6" height="4" fill={lit ? "#3a3a3a" : "#030303"} />
-        ))}
+      {/* ═══ TABLEAU BLANC — mur du fond ═══ */}
+      <TableauBlanc lit={lit} resolu={resolu} target={target} />
 
-        {/* Papier froissé avec un indice visible sous lumière */}
-        <g transform="translate(60,8) rotate(14)">
-          <rect x="-18" y="-10" width="36" height="20" fill={lit ? "#e8dfc8" : "#1a1810"} stroke={lit ? "#8a7050" : "#1a1810"} strokeWidth="0.5" />
-          <line x1="-14" y1="-5" x2="14" y2="-5" stroke={lit ? "#5a4028" : "#0a0804"} strokeWidth="0.3" opacity="0.7" />
-          <text x="0" y="2" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="5"
-            fill={lit ? "#3a2010" : "#1a1810"} fontStyle="italic">
-            année de scellement :
-          </text>
-          <text x="0" y="8" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="7"
-            fontWeight="700" fill={lit ? "#8a2010" : "#1a1810"}>
-            2 0 4 7
-          </text>
-        </g>
-
-        {/* Tasse renversée + flaque */}
-        <ellipse cx="-50" cy="18" rx="12" ry="3" fill={lit ? "#3a2010" : "#060402"} opacity="0.65" />
-        <path d="M-56 10 L-44 10 L-48 20 L-52 20 Z" fill={lit ? "#8a7050" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.4" transform="rotate(60 -50 15)" />
-
-        {/* Toile d'araignée au-dessus du bureau */}
-        <Cobweb cx={-120} cy={-80} r={56} lit={lit} />
-      </g>
-
-      {/* ═══ MUR DU FOND : TABLEAU BLANC avec équations ═══ */}
-      <TableauBlanc lit={lit} resolu={resolu} />
-
-      {/* ═══ MACHINES & LEVIERS « EN BAZAR » ═══ */}
-      {/* Oscilloscope à côté du bureau */}
+      {/* ═══ MACHINES DÉCORATIVES ═══ */}
+      {/* Oscilloscope */}
       <g transform="translate(680,320)">
         <rect x="-30" y="0" width="60" height="42" fill={lit ? "#3a4048" : "#060606"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1" rx="2" />
         <circle r="16" cx="-6" cy="20" fill={lit ? "#0a1a0a" : "#020202"} stroke={lit ? "#5eff9e" : "#1a1008"} strokeWidth="1.2" />
@@ -347,12 +266,9 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
             <animate attributeName="opacity" values="0.4;0.9;0.4" dur="2.3s" repeatCount="indefinite" />
           </path>
         )}
-        <rect x="14" y="8" width="12" height="6" fill={lit ? "#c8a848" : "#1a1008"} />
-        <rect x="14" y="18" width="12" height="6" fill={lit ? "#5a6270" : "#0a0804"} />
       </g>
-
-      {/* Bobine Tesla décorative */}
-      <g transform="translate(830,330)">
+      {/* Bobine Tesla */}
+      <g transform="translate(880,330)">
         <rect x="-14" y="20" width="28" height="12" fill={lit ? "#3a2010" : "#060402"} />
         <rect x="-8" y="-10" width="16" height="34" fill={lit ? "#8a5020" : "#0a0804"} />
         <circle cy="-18" r="12" fill={lit ? "#5a6270" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
@@ -362,67 +278,42 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
           </path>
         )}
       </g>
-
-      {/* Groupe électrogène rouillé en bas gauche */}
+      {/* Générateur rouillé */}
       <g transform="translate(300,370)">
         <rect x="-40" y="0" width="80" height="24" fill={lit ? "#5a3818" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1" />
         <rect x="-30" y="-14" width="60" height="14" fill={lit ? "#3a2010" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
         <circle cx="-20" cy="7" r="4" fill={lit ? "#8a5020" : "#0a0804"} />
         <circle cx="20" cy="7" r="4" fill={lit ? "#8a5020" : "#0a0804"} />
-        {/* Rouille sur les coins */}
-        <path d="M-40 24 L-32 24 L-36 20 Z" fill={lit ? "#8a3820" : "#060402"} opacity="0.7" />
       </g>
-
-      {/* Caisses en bois empilées devant le portail */}
-      <g transform="translate(280,370)">
+      {/* Caisses */}
+      <g transform="translate(240,370)">
         <rect x="-20" y="0" width="40" height="20" fill={lit ? "#5a3818" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
         <rect x="-14" y="-18" width="36" height="18" fill={lit ? "#5a3818" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
-        <line x1="-20" y1="10" x2="20" y2="10" stroke={lit ? "#3a2010" : "#060402"} strokeWidth="0.5" />
         <text x="0" y="14" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="5" fill={lit ? "#8a5020" : "#1a1008"}>
           LAB-K
         </text>
       </g>
 
-      {/* ═══ 4 LEVIERS CACHÉS (interactifs) ═══ */}
-      {/* L1 : digit 2 — collier du tuyau haut (x=320) */}
-      <HiddenLever x={320} y={80} digit={2} id="L1"
-        hint="dans le collier du tuyau de cuivre"
-        lit={lit} active={pulled["L1"]} onClick={() => onLever(2, "L1")} />
-      {/* L2 : digit 0 — sous le bureau (tiroir) */}
-      <HiddenLever x={430} y={360} digit={0} id="L2"
-        hint="attaché au tiroir latéral du bureau"
-        lit={lit} active={pulled["L2"]} onClick={() => onLever(0, "L2")} />
-      {/* L3 : digit 4 — sur le groupe électrogène */}
-      <HiddenLever x={340} y={356} digit={4} id="L3"
-        hint="greffé au groupe électrogène rouillé"
-        lit={lit} active={pulled["L3"]} onClick={() => onLever(4, "L3")} />
-      {/* L4 : digit 7 — à côté de la bobine Tesla */}
-      <HiddenLever x={790} y={340} digit={7} id="L4"
-        hint="vissé contre la bobine, à droite"
-        lit={lit} active={pulled["L4"]} onClick={() => onLever(7, "L4")} />
+      {/* ═══ 4 LEVIERS DU PUZZLE ═══
+          Placement : alignés sur quatre lieux distincts et clairs.
+          Chaque levier possède son propre « rang » (milliers →
+          unités) et affiche un compteur 0-9 juste en dessous. */}
+      <ChiffreLever x={340} y={356} rank={0} digit={digits[0]} lit={lit} resolu={resolu} onClick={() => onBump(0)} hint="générateur" />
+      <ChiffreLever x={580} y={350} rank={1} digit={digits[1]} lit={lit} resolu={resolu} onClick={() => onBump(1)} hint="pupitre bureau" />
+      <ChiffreLever x={700} y={300} rank={2} digit={digits[2]} lit={lit} resolu={resolu} onClick={() => onBump(2)} hint="oscilloscope" />
+      <ChiffreLever x={880} y={310} rank={3} digit={digits[3]} lit={lit} resolu={resolu} onClick={() => onBump(3)} hint="bobine Tesla" />
 
-      {/* ═══ PORTE ANCIENNE À DROITE ═══ */}
+      {/* ═══ PORTE ANCIENNE — droite ═══ */}
       <g transform="translate(930,180)">
         <path d="M-40 180 L-40 -20 Q-40 -40 0 -40 Q40 -40 40 -20 L40 180 Z"
           fill={lit ? "#5a3818" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="2" />
-        {/* Lamelles bois */}
         {[-30, -14, 2, 18].map((x, i) => (
           <line key={i} x1={x} y1="-20" x2={x} y2="180" stroke={lit ? "#3a2010" : "#060402"} strokeWidth="1" />
         ))}
-        {/* Pentures en fer */}
         {[-10, 60, 150].map((y, i) => (
           <rect key={i} x="-40" y={y} width="80" height="12" fill={lit ? "#3a4048" : "#060606"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
         ))}
-        {/* Clous */}
-        {[-10, 60, 150].map((y) => (
-          <g key={y}>
-            <circle cx="-28" cy={y + 6} r="2" fill={lit ? "#8a9098" : "#1a1a1a"} />
-            <circle cx="28" cy={y + 6} r="2" fill={lit ? "#8a9098" : "#1a1a1a"} />
-          </g>
-        ))}
-        {/* Poignée en anneau */}
         <circle cx="-20" cy="90" r="8" fill="none" stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2.5" />
-        {/* Plaque gravée */}
         <rect x="-30" y="30" width="60" height="12" fill={lit ? "#141008" : "#010101"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="0.8" />
         <text x="0" y="40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7"
           fill={lit ? "#c8a848" : "#2a2010"} letterSpacing="3">
@@ -430,7 +321,7 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
         </text>
       </g>
 
-      {/* ═══ INTERRUPTEUR près de la porte (phase noir) ═══ */}
+      {/* ═══ INTERRUPTEUR — phase noir ═══ */}
       {!lit && (
         <g transform="translate(866,290)"
           onClick={(e) => { e.stopPropagation(); onSwitch(); }}
@@ -448,8 +339,8 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
         </g>
       )}
 
-      {/* Mouchetures de poussière en suspension (lumière seulement) */}
-      {lit && [[200, 180], [400, 220], [600, 200], [800, 160], [320, 300], [720, 280]].map(([x, y], i) => (
+      {/* Poussière en suspension */}
+      {lit && [[200, 180], [400, 220], [600, 200], [800, 160]].map(([x, y], i) => (
         <g key={i}>
           <ellipse cx={x} cy={y} rx="30" ry="8" fill="url(#sk-dust)" opacity="0.3" />
           <circle cx={x} cy={y} r="1" fill="#e8dfc8" opacity="0.5">
@@ -458,7 +349,7 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
         </g>
       ))}
 
-      {/* Plaque murale K-01 au centre haut */}
+      {/* Plaque K-01 */}
       {lit && (
         <g transform="translate(500,74)">
           <rect x="-60" y="0" width="120" height="16" fill="#141008" stroke="#c8a848" strokeWidth="1" />
@@ -473,66 +364,142 @@ function SalleKDecor({ lit, resolu, shake, onSwitch, sequence, pulled, onLever }
 }
 
 /* ============================================================
-   Tableau blanc : équations qui laissent deviner "2047", puis
-   coulisse une fois le code trouvé pour révéler le pupitre.
+   PORTAIL — arche de pierre, inactif ou allumé néon
    ============================================================ */
-function TableauBlanc({ lit, resolu }) {
+function PortailArche({ lit, resolu, onClick }) {
   return (
-    <g transform="translate(500,180)">
-      {/* Cadre */}
-      <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
-      {/* Panneau coulissant (le "tableau blanc" lui-même) */}
-      <g style={{ transition: "transform 1.4s cubic-bezier(0.3,0,0.3,1)",
-        transform: resolu ? "translateX(-320px)" : "translateX(0)" }}>
-        <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
-        {/* Rails */}
-        <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
-        <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
-        {/* Équations */}
-        {lit && (
+    <g transform="translate(140,260)">
+      {/* Halo externe double */}
+      <circle r="160" fill="url(#sk-portalGlow)" />
+      {resolu && (
+        <circle r="130" fill="none" stroke="#7fd8ff" strokeWidth="1.2" opacity="0.3">
+          <animate attributeName="r" values="120;140;120" dur="3s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.1;0.4;0.1" dur="3s" repeatCount="indefinite" />
+        </circle>
+      )}
+      {/* Arche pierre */}
+      <path d="M-90 110 L-90 -20 Q-90 -100 0 -100 Q90 -100 90 -20 L90 110 L68 110 L68 -20 Q68 -78 0 -78 Q-68 -78 -68 -20 L-68 110 Z"
+        fill={lit ? "#3a2818" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="2" />
+      {Array.from({ length: 12 }).map((_, i) => {
+        const a = -Math.PI / 2 + (i - 5.5) * (Math.PI / 12);
+        const x = Math.cos(a) * 78;
+        const y = Math.sin(a) * 78;
+        return <circle key={i} cx={x} cy={y} r="4" fill="none" stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />;
+      })}
+      {/* Zone cliquable + plasma */}
+      <g style={{ cursor: resolu ? "pointer" : "default" }}
+        onClick={resolu ? (e) => { e.stopPropagation(); onClick?.(); } : undefined}>
+        <ellipse rx="56" ry="76" fill={resolu ? "url(#sk-portalCore)" : (lit ? "#0a1420" : "#020408")}
+          stroke={resolu ? "#7fd8ff" : (lit ? "#1a2838" : "#000")} strokeWidth="1.5" />
+        {resolu && (
           <>
-            <text x="-156" y="-56" fontFamily="Georgia, serif" fontSize="12" fill="#1a0e08" fontStyle="italic">
-              ∂t/∂τ · η(ρ) = 2
-            </text>
-            <text x="-156" y="-32" fontFamily="Georgia, serif" fontSize="12" fill="#1a0e08" fontStyle="italic">
-              ψ(0) = ψ(T) ⇒ T ≡ 0 (mod 10)
-            </text>
-            <text x="-156" y="-6" fontFamily="Georgia, serif" fontSize="12" fill="#1a0e08" fontStyle="italic">
-              Δν · 10³ = 4,0 kHz
-            </text>
-            <text x="-156" y="20" fontFamily="Georgia, serif" fontSize="12" fill="#1a0e08" fontStyle="italic">
-              Σ(E) : 7 modes · scellé.
-            </text>
-            {/* Petite note en bas à droite entourée */}
-            <g transform="translate(100,30)">
-              <ellipse rx="30" ry="12" fill="none" stroke="#c81010" strokeWidth="1.2" />
-              <text x="0" y="4" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="12" fontWeight="700" fill="#c81010">
-                2047 →
-              </text>
+            {/* Spirales de plasma */}
+            <g>
+              <path d="M-40 -40 Q0 -10 40 -40 Q0 10 -40 -40 Z" fill="#7fd8ff" opacity="0.4">
+                <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="7s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.2;0.5;0.2" dur="3s" repeatCount="indefinite" />
+              </path>
+              <path d="M-30 30 Q0 0 30 30 Q0 60 -30 30 Z" fill="#a840f0" opacity="0.35">
+                <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="9s" repeatCount="indefinite" />
+              </path>
             </g>
+            {/* Scanlines */}
+            <g clipPath="url(#sk-portalClip)">
+              {[-70, -50, -30, -10, 10, 30, 50, 70].map((y, i) => (
+                <line key={i} x1="-56" y1={y} x2="56" y2={y} stroke="#e8f8ff" strokeWidth="0.4" opacity="0.3">
+                  <animate attributeName="opacity" values="0.1;0.5;0.1" dur={`${2 + (i % 3) * 0.5}s`} repeatCount="indefinite" />
+                </line>
+              ))}
+            </g>
+            <clipPath id="sk-portalClip"><ellipse rx="56" ry="76" /></clipPath>
+            {/* Point blanc central */}
+            <circle r="6" fill="#ffffff" opacity="0.9">
+              <animate attributeName="r" values="4;8;4" dur="1.4s" repeatCount="indefinite" />
+            </circle>
+            {/* Appel : « ENTRER » clignote */}
+            <text y="100" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fontWeight="800"
+              fill="#7fd8ff" letterSpacing="4">
+              ⟡ ENTRER ⟡
+              <animate attributeName="opacity" values="0.5;1;0.5" dur="1.6s" repeatCount="indefinite" />
+            </text>
           </>
         )}
       </g>
-      {/* Derrière : pupitre de contrôle du portail — visible après résolution */}
+      {/* Reflet oblique quand inactif */}
+      {!resolu && <path d="M-30 -60 L-10 -70 L30 50 L10 60 Z" fill="#e8eef5" opacity={lit ? 0.08 : 0} />}
+      {/* Runes autour */}
+      {lit && [[-70, -40, "⚛"], [70, -40, "✦"], [-70, 70, "⟡"], [70, 70, "☌"]].map(([x, y, s], i) => (
+        <text key={i} x={x} y={y} textAnchor="middle" fontSize="14"
+          fill={resolu ? "#7fd8ff" : "#5a4028"}
+          opacity={resolu ? 0.9 : 0.6}>
+          {resolu && <animate attributeName="opacity" values="0.5;1;0.5" dur={`${2 + i * 0.4}s`} repeatCount="indefinite" />}
+          {s}
+        </text>
+      ))}
+      {/* Plaque */}
+      <rect x="-50" y="112" width="100" height="14" fill={lit ? "#1a0e08" : "#010101"}
+        stroke={resolu ? "#7fd8ff" : (lit ? "#c8a848" : "#1a1008")} strokeWidth="0.8" />
+      <text x="0" y="123" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
+        fill={resolu ? "#7fd8ff" : (lit ? "#c8a848" : "#2a2010")} letterSpacing="3">
+        {resolu ? "PORTAIL · EN LIGNE" : "PORTAIL · HORS SERVICE"}
+      </text>
+    </g>
+  );
+}
+
+/* ============================================================
+   TABLEAU BLANC — formule + nom de l'invention à deviner
+   Coulisse à gauche une fois résolu pour dévoiler le pupitre
+   ============================================================ */
+function TableauBlanc({ lit, resolu, target }) {
+  return (
+    <g transform="translate(500,180)">
+      <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
+      <g style={{ transition: "transform 1.4s cubic-bezier(0.3,0,0.3,1)",
+        transform: resolu ? "translateX(-340px)" : "translateX(0)" }}>
+        <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
+        <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
+        <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
+        {lit && target && (
+          <>
+            <text x="-150" y="-50" fontFamily="Georgia, serif" fontSize="14" fill="#1a0e08" fontStyle="italic">
+              τ · ∂ψ/∂t = Σ(ρ, η) — année de référence :
+            </text>
+            {/* Encart central : nom de l'invention */}
+            <g transform="translate(0,0)">
+              <rect x="-150" y="-14" width="300" height="38" fill="none" stroke="#c81010" strokeWidth="1.5" />
+              <text x="0" y="2" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="13" fontWeight="700" fill="#1a0e08">
+                ⇒ {target.title.toUpperCase()}
+              </text>
+              <text x="0" y="18" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#8a2010" fontStyle="italic">
+                (voir médiadex pour la date exacte)
+              </text>
+            </g>
+            <text x="-150" y="40" fontFamily="Georgia, serif" fontSize="11" fill="#5a2010" fontStyle="italic">
+              — Léa Vermet, prototype K
+            </text>
+          </>
+        )}
+      </g>
+      {/* Pupitre dévoilé */}
       {resolu && (
         <g>
-          <rect x="-160" y="-70" width="320" height="110" fill="#141008" stroke="#5eff9e" strokeWidth="1.5" />
-          <text x="0" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="#5eff9e" letterSpacing="4">
+          <rect x="-160" y="-70" width="320" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
+          <text x="0" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="#7fd8ff" letterSpacing="4">
             PUPITRE PORTAIL · K-01
           </text>
-          <line x1="-150" y1="-46" x2="150" y2="-46" stroke="#5eff9e" strokeWidth="0.4" opacity="0.5" />
-          {/* Simule des cadrans */}
+          <line x1="-150" y1="-46" x2="150" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
           {[-100, -30, 40, 110].map((x, i) => (
             <g key={i} transform={`translate(${x},0)`}>
-              <circle r="18" fill="#0a1a10" stroke="#5eff9e" strokeWidth="1" />
-              <line x1="0" y1="0" x2={Math.cos(i) * 14} y2={Math.sin(i) * 14} stroke="#5eff9e" strokeWidth="1.4" />
-              <circle r="2" fill="#5eff9e">
+              <circle r="18" fill="#0a1a28" stroke="#7fd8ff" strokeWidth="1" />
+              <line x1="0" y1="0" x2={Math.cos(i) * 14} y2={Math.sin(i) * 14} stroke="#7fd8ff" strokeWidth="1.4" />
+              <circle r="2" fill="#7fd8ff">
                 <animate attributeName="opacity" values="0.5;1;0.5" dur={`${1.4 + i * 0.3}s`} repeatCount="indefinite" />
               </circle>
             </g>
           ))}
-          <text x="0" y="38" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#5eff9e">
-            ✓ EN LIGNE — DESTINATION À CHOISIR
+          <text x="0" y="38" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#7fd8ff">
+            ✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER
           </text>
         </g>
       )}
@@ -541,46 +508,116 @@ function TableauBlanc({ lit, resolu }) {
 }
 
 /* ============================================================
-   Lever caché : petit sprite discret quand lit=false, visible mais
-   fondu dans le décor quand lit=true. Tooltip au survol avec hint.
+   BUREAU abandonné
    ============================================================ */
-function HiddenLever({ x, y, digit, id, hint, lit, active, onClick }) {
+function BureauRecherche({ lit }) {
+  return (
+    <g transform="translate(500,310)">
+      <g transform="translate(0,-60)">
+        <rect x="-18" y="0" width="36" height="48" fill={lit ? "#2a1808" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
+        <rect x="-20" y="-20" width="40" height="22" fill={lit ? "#3a2010" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
+      </g>
+      <rect x="-120" y="0" width="240" height="20" fill={lit ? "#5a3818" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1.2" />
+      <rect x="-120" y="0" width="240" height="4" fill={lit ? "#8a5820" : "#0a0804"} opacity="0.5" />
+      <rect x="-112" y="20" width="12" height="60" fill={lit ? "#3a2010" : "#060402"} />
+      <rect x="100" y="20" width="12" height="60" fill={lit ? "#3a2010" : "#060402"} />
+      <rect x="-112" y="22" width="60" height="36" fill={lit ? "#3a2010" : "#060402"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" />
+      <circle cx="-82" cy="40" r="2.5" fill={lit ? "#c8a848" : "#1a1008"} />
+      {/* Lampe cassée */}
+      <g transform="translate(-80,-10)">
+        <circle r="3" fill={lit ? "#5a3818" : "#060402"} />
+        <line x1="0" y1="0" x2="-8" y2="-20" stroke={lit ? "#5a3818" : "#060402"} strokeWidth="1.5" />
+        <path d="M-16 -24 L0 -24 L-4 -34 L-12 -34 Z" fill={lit ? "#8a5020" : "#0a0804"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.6" transform="rotate(-20 -8 -29)" />
+      </g>
+      {/* CRT */}
+      <g transform="translate(10,-70)">
+        <rect x="-56" y="0" width="112" height="68" fill={lit ? "#8a8070" : "#0a0a08"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="1.4" rx="4" />
+        <rect x="-48" y="6" width="96" height="52" fill={lit ? "#0a1808" : "#010101"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.8" />
+        {lit && (
+          <>
+            <text x="0" y="24" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5eff9e" letterSpacing="1">BOOT K-01</text>
+            <text x="0" y="36" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#5a6678">[err 0x7F] no signal</text>
+            <text x="0" y="48" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#5a6678">year input : ----</text>
+            <rect x="-44" y="52" width="2" height="4" fill="#5eff9e">
+              <animate attributeName="opacity" values="0;1;0" dur="1.1s" repeatCount="indefinite" />
+            </rect>
+          </>
+        )}
+      </g>
+      <rect x="-50" y="4" width="100" height="12" fill={lit ? "#5a5a5a" : "#060606"} stroke={lit ? "#1a0e08" : "#000"} strokeWidth="0.5" rx="2" />
+      {Array.from({ length: 14 }).map((_, i) => (
+        <rect key={i} x={-48 + i * 7} y={6} width="6" height="4" fill={lit ? "#3a3a3a" : "#030303"} />
+      ))}
+      {/* Papier froissé */}
+      <g transform="translate(60,8) rotate(14)">
+        <rect x="-18" y="-10" width="36" height="20" fill={lit ? "#e8dfc8" : "#1a1810"} stroke={lit ? "#8a7050" : "#1a1810"} strokeWidth="0.5" />
+        <line x1="-14" y1="-5" x2="14" y2="-5" stroke={lit ? "#5a4028" : "#0a0804"} strokeWidth="0.3" opacity="0.7" />
+        <text x="0" y="4" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="5"
+          fill={lit ? "#3a2010" : "#1a1810"} fontStyle="italic">
+          médiadex,
+        </text>
+        <text x="0" y="9" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="4.5"
+          fill={lit ? "#8a2010" : "#1a1810"}>
+          chambre N-27 →
+        </text>
+      </g>
+      <Cobweb cx={-120} cy={-80} r={56} lit={lit} />
+    </g>
+  );
+}
+
+/* ============================================================
+   Levier à chiffre : un socle + une manette + un petit afficheur
+   LED 7-segments en dessous.
+   ============================================================ */
+function ChiffreLever({ x, y, rank, digit, lit, resolu, onClick, hint }) {
   const [hover, setHover] = useState(false);
   if (!lit) return null;
+  const rankLabel = ["M", "C", "D", "U"][rank] || "?";
   return (
     <g transform={`translate(${x},${y})`}
-      style={{ cursor: active ? "default" : "pointer" }}
+      style={{ cursor: resolu ? "default" : "pointer" }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      onClick={active ? undefined : (e) => { e.stopPropagation(); onClick?.(); }}>
-      {/* Hit area invisible plus grand pour la souris */}
-      <circle r="20" fill="transparent" />
-      {/* Petit socle */}
-      <rect x="-7" y="-4" width="14" height="12" fill="#28303a" stroke="#0a0e14" strokeWidth="0.6" />
+      onClick={resolu ? undefined : (e) => { e.stopPropagation(); onClick?.(); }}>
+      {/* Zone de hit */}
+      <circle r="26" fill="transparent" />
+      {/* Socle métallique */}
+      <rect x="-14" y="-4" width="28" height="16" fill="#28303a" stroke="#0a0e14" strokeWidth="0.8" rx="2" />
+      <rect x="-10" y="-2" width="20" height="4" fill="#5a6270" opacity="0.8" />
       {/* Manette */}
-      <g style={{ transition: "transform 0.3s", transform: `rotate(${active ? 25 : -25}deg)`, transformOrigin: "0 2px" }}>
-        <rect x="-1.5" y="-14" width="3" height="18" fill={active ? "#ffd870" : "#5a4028"} stroke="#0a0806" strokeWidth="0.5" rx="1" />
-        <circle cx="0" cy="-14" r="3" fill={active ? "#ffd870" : "#8a5a10"} stroke="#0a0806" strokeWidth="0.5" />
+      <g style={{ transition: "transform 0.25s", transform: `rotate(${-25 + digit * 5}deg)`, transformOrigin: "0 2px" }}>
+        <rect x="-1.6" y="-20" width="3.2" height="22" fill="#5a4028" stroke="#0a0806" strokeWidth="0.5" rx="1" />
+        <circle cx="0" cy="-22" r="4" fill="#c8a848" stroke="#0a0806" strokeWidth="0.5">
+          {hover && !resolu && <animate attributeName="opacity" values="0.7;1;0.7" dur="1s" repeatCount="indefinite" />}
+        </circle>
       </g>
-      {/* Petit halo discret quand pas encore activé — doit se repérer sans être criard */}
-      {!active && (
-        <circle r="10" fill="none" stroke="#ffd870" strokeWidth="0.6" opacity={hover ? 0.9 : 0.35}>
-          <animate attributeName="opacity" values={hover ? "0.6;1;0.6" : "0.15;0.4;0.15"} dur="2.2s" repeatCount="indefinite" />
+      {/* Afficheur LED 7-seg sous le socle */}
+      <g transform="translate(0,22)">
+        <rect x="-10" y="-8" width="20" height="16" fill="#141008" stroke="#c8a848" strokeWidth="0.6" rx="1" />
+        <text x="0" y="4" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fontWeight="900"
+          fill={resolu ? "#5eff9e" : "#ffd870"}
+          style={{ filter: `drop-shadow(0 0 2px ${resolu ? "#5eff9e" : "#ffd870"})` }}>
+          {digit}
+        </text>
+        {/* Pastille rang */}
+        <text x="12" y="4" textAnchor="start" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5a4028" letterSpacing="1">
+          {rankLabel}
+        </text>
+      </g>
+      {/* Halo discret au survol */}
+      {!resolu && hover && (
+        <circle r="18" fill="none" stroke="#ffd870" strokeWidth="0.8" opacity="0.5">
+          <animate attributeName="opacity" values="0.3;0.8;0.3" dur="1.2s" repeatCount="indefinite" />
         </circle>
       )}
-      {/* Pastille digit (visible seulement si actif ou survolé) */}
-      {(hover || active) && (
-        <g transform="translate(0,-28)">
-          <rect x="-14" y="-10" width="28" height="16" fill="#141008" stroke="#c8a848" strokeWidth="0.8" rx="2" />
-          <text x="0" y="2" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="11" fontWeight="900"
-            fill={active ? "#5eff9e" : "#ffd870"}>
-            {digit}
+      {/* Tooltip hint */}
+      {hover && !resolu && (
+        <g transform="translate(0,-38)">
+          <rect x="-40" y="-10" width="80" height="14" fill="#141008" stroke="#c8a848" strokeWidth="0.5" rx="2" />
+          <text x="0" y="0" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#c8b090">
+            levier · {hint}
           </text>
-          {hover && !active && (
-            <text x="0" y="20" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#c8b090">
-              « levier · {hint} »
-            </text>
-          )}
         </g>
       )}
     </g>
@@ -588,7 +625,7 @@ function HiddenLever({ x, y, digit, id, hint, lit, active, onClick }) {
 }
 
 /* ============================================================
-   Petite toile d'araignée dans un coin (quart de cercle)
+   Toile d'araignée (quart de cercle)
    ============================================================ */
 function Cobweb({ cx, cy, r = 50, lit }) {
   const col = lit ? "#8a8070" : "#1a1a1a";
@@ -612,93 +649,147 @@ function Cobweb({ cx, cy, r = 50, lit }) {
 }
 
 /* ============================================================
-   PHASE 5 — Panneau de destinations (identique à avant)
+   COCKPIT — modal avec clavier d'années
    ============================================================ */
-const DESTINATIONS = [
-  { id: "gutenberg", annee: "~1450", lieu: "Mayence",
-    titre: "L'imprimerie de Gutenberg",
-    pitch: "Vérifier si c'est bien Johannes Gutenberg qui a inventé la presse à caractères mobiles en métal, et non un moine chinois anonyme." },
-  { id: "chappe",    annee: "1794",  lieu: "Paris–Lille",
-    titre: "Le télégraphe de Chappe",
-    pitch: "Vérifier si c'est Claude Chappe qui a tendu le premier télégraphe (optique, à bras articulés), et non Samuel Morse à Washington." },
-  { id: "marconi",   annee: "1901",  lieu: "Cornouailles → Terre-Neuve",
-    titre: "Le signal transatlantique de Marconi",
-    pitch: "Vérifier si c'est bien Guglielmo Marconi qui a envoyé le premier signal radio à travers l'Atlantique, et non la BBC en 1920." },
-];
+const DESTINATIONS = {
+  1450: { id: "gutenberg", titre: "L'imprimerie de Gutenberg", lieu: "Mayence" },
+  1794: { id: "chappe",    titre: "Le télégraphe de Chappe",    lieu: "Paris–Lille" },
+  1901: { id: "marconi",   titre: "Le signal transatlantique de Marconi", lieu: "Cornouailles → Terre-Neuve" },
+};
 
-function DestinationsPanel({ j3, onGo }) {
+function CockpitVoyage({ j3, onGo, onClose }) {
+  const [year, setYear] = useState("");
+  const [err, setErr] = useState(null);
+  const [confirming, setConfirming] = useState(null); // { year, dest }
+
   const flags = j3?.flags || {};
-  const done = DESTINATIONS.map((d) => !!flags[`voyageK_${d.id}_done`]);
-  const nbDone = done.filter(Boolean).length;
-  const allDone = nbDone === DESTINATIONS.length;
-  useEffect(() => {
-    if (allDone && !flags.phase5_done) j3.setFlag("phase5_done");
-  }, [allDone, flags.phase5_done, j3]);
-  const launchVoyage = (id) => {
-    j3.setFlag("voyageK_target", id);
+
+  const press = (c) => {
+    if (confirming) return;
+    setErr(null);
+    if (c === "⌫") {
+      setYear((y) => y.slice(0, -1));
+    } else if (c === "C") {
+      setYear("");
+    } else if (year.length < 4) {
+      setYear((y) => y + c);
+    }
+  };
+
+  const voyager = () => {
+    if (year.length !== 4) {
+      setErr("Entre une année à 4 chiffres (ex. 1794).");
+      return;
+    }
+    const dest = DESTINATIONS[parseInt(year, 10)];
+    if (!dest) {
+      setErr("Aucune destination indexée pour cette année. Essaie une des trois dates que Jorge voulait restaurer.");
+      return;
+    }
+    if (flags[`voyageK_${dest.id}_done`]) {
+      setErr("Tu es déjà allé·e vérifier ce dossier. Choisis une autre année.");
+      return;
+    }
+    setConfirming({ year, dest });
+  };
+
+  const lancer = () => {
+    j3.setFlag("voyageK_target", confirming.dest.id);
     onGo("voyageK");
   };
+
+  const KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "C", "0", "⌫"];
+
   return (
-    <div style={{ background: "#2a1808", border: "1px solid #c8a848", borderRadius: 10, padding: "14px 16px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
-          ⟡ PUPITRE K-01 — DESTINATIONS DISPONIBLES
-        </div>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050" }}>
-          {nbDone} / {DESTINATIONS.length} vérifiée{nbDone > 1 ? "s" : ""}
-        </div>
-      </div>
-      <p style={{ margin: "8px 0 12px", fontSize: 12.5, color: "#c8b090", lineHeight: 1.5, fontStyle: "italic" }}>
-        Trois dossiers falsifiés dans les Archives. Trois destinations pour aller vérifier sur place ce qui a vraiment eu lieu.
-      </p>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 10 }}>
-        {DESTINATIONS.map((d, i) => {
-          const isDone = done[i];
-          return (
-            <button key={d.id} onClick={() => !isDone && launchVoyage(d.id)}
-              disabled={isDone}
-              style={{
-                textAlign: "left",
-                background: isDone ? "#0e2818" : "#141008",
-                color: isDone ? "#5eff9e" : "#e8dfc8",
-                border: `1px solid ${isDone ? "#5eff9e" : "#c8a848"}`,
-                borderRadius: 8, padding: "10px 12px",
-                cursor: isDone ? "default" : "pointer",
-                fontFamily: "inherit",
-                opacity: isDone ? 0.8 : 1,
-              }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: isDone ? "#5eff9e" : "#c8a848" }}>
-                {isDone ? "✓ VÉRIFIÉ" : `DESTINATION ${i + 1}`}
-              </div>
-              <div style={{ fontFamily: "Palatino, Georgia, serif", fontSize: 14.5, fontWeight: 700, marginTop: 4 }}>
-                {d.titre}
-              </div>
-              <div style={{ fontSize: 11, color: "#8a7050", marginTop: 2 }}>
-                {d.annee} · {d.lieu}
-              </div>
-              <div style={{ fontSize: 11.5, marginTop: 6, lineHeight: 1.45, color: isDone ? "#8affb0" : "#c8b090" }}>
-                {d.pitch}
-              </div>
-            </button>
-          );
-        })}
-      </div>
-      {allDone && (
-        <div style={{ marginTop: 12, background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 8, padding: "10px 12px" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e", fontWeight: 800 }}>
-            ✓ TROIS DOSSIERS RESTAURÉS
+    <div onClick={onClose}
+      style={{ position: "fixed", inset: 0, background: "rgba(2,4,10,0.9)", zIndex: 420, display: "flex", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: "Palatino, Georgia, serif" }}>
+      <div onClick={(e) => e.stopPropagation()}
+        style={{ background: "#0a1428", border: "2px solid #7fd8ff", borderRadius: 14, padding: 24, maxWidth: 540, width: "100%", boxShadow: "0 0 60px rgba(127,216,255,0.3)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#7fd8ff", fontWeight: 800 }}>
+            ⟡ CABINE K-01 · CLAVIER TEMPOREL
           </div>
-          <p style={{ margin: "6px 0 10px", fontSize: 12.5, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
-            Tu as vu de tes yeux ce que Jorge essayait de garder vrai. Les sources ne sont plus réécrites — elles sont, dans ta mémoire, à leur juste place.
-          </p>
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
-            <button onClick={() => onGo("epilogueJeu3")}
-              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
-              ⟡ Remonter rapporter ▸
-            </button>
+          <button onClick={onClose}
+            style={{ background: "transparent", color: "#5a6678", border: "1px solid #28303a", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontSize: 11, fontFamily: "ui-monospace,monospace" }}>
+            ✕ Sortir
+          </button>
+        </div>
+
+        {/* Afficheur année */}
+        <div style={{ background: "#050810", border: "1px solid #3a4858", borderRadius: 8, padding: "20px 24px", textAlign: "center", marginBottom: 16 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#5a6678", marginBottom: 8 }}>
+            ANNÉE DE DESTINATION
+          </div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 56, fontWeight: 900, letterSpacing: 10, color: "#7fd8ff",
+            textShadow: "0 0 12px rgba(127,216,255,0.6)", minHeight: 60 }}>
+            {year.padEnd(4, "·").split("").map((c, i) => (
+              <span key={i} style={{ opacity: c === "·" ? 0.25 : 1 }}>{c}</span>
+            ))}
           </div>
         </div>
-      )}
+
+        {/* Erreur ou confirmation */}
+        {err && !confirming && (
+          <div style={{ background: "#2a0808", border: "1px solid #e83820", borderRadius: 6, padding: "8px 12px", marginBottom: 12 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#e83820", fontWeight: 700 }}>
+              ⚠ {err}
+            </div>
+          </div>
+        )}
+        {confirming && (
+          <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 8, padding: "12px 14px", marginBottom: 12 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e", fontWeight: 700 }}>
+              ✓ DESTINATION TROUVÉE
+            </div>
+            <p style={{ margin: "6px 0 10px", fontSize: 13, color: "#c8ffdd", lineHeight: 1.5 }}>
+              <strong>{confirming.dest.titre}</strong>, {confirming.dest.lieu} ({confirming.year}).
+            </p>
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+              <button onClick={() => setConfirming(null)}
+                style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 6, padding: "6px 12px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 11 }}>
+                Annuler
+              </button>
+              <button onClick={lancer}
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 6, padding: "8px 18px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, letterSpacing: 1 }}>
+                ⟡ Voyager ▸
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Clavier numérique */}
+        {!confirming && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 8, marginBottom: 14 }}>
+              {KEYS.map((c) => (
+                <button key={c} onClick={() => press(c)}
+                  style={{ background: c === "C" ? "#2a1808" : c === "⌫" ? "#1a2838" : "#141c26",
+                    color: c === "C" ? "#e0a848" : "#c8d4e2",
+                    border: `1px solid ${c === "C" ? "#8a5820" : "#3a4858"}`,
+                    borderRadius: 8, padding: "14px 0", fontSize: 20, fontWeight: 800,
+                    fontFamily: "ui-monospace,monospace", cursor: "pointer",
+                    boxShadow: "inset 0 -2px 0 rgba(0,0,0,0.4)" }}>
+                  {c}
+                </button>
+              ))}
+            </div>
+
+            <button onClick={voyager}
+              style={{ width: "100%", background: year.length === 4 ? "#7fd8ff" : "#28303a",
+                color: year.length === 4 ? "#06110b" : "#5a6678",
+                border: "none", borderRadius: 8, padding: "14px 0",
+                fontSize: 15, fontWeight: 800, letterSpacing: 3,
+                fontFamily: "ui-monospace,monospace",
+                cursor: year.length === 4 ? "pointer" : "not-allowed" }}>
+              ⟡ VALIDER L'ANNÉE
+            </button>
+          </>
+        )}
+
+        <p style={{ margin: "12px 0 0", fontSize: 11, color: "#5a6678", fontStyle: "italic", textAlign: "center", lineHeight: 1.4 }}>
+          Trois dossiers ont été falsifiés dans les archives. Entre l'année originale de l'un d'entre eux.
+        </p>
+      </div>
     </div>
   );
 }
