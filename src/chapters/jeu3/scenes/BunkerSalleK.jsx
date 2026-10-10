@@ -315,9 +315,15 @@ function DestinationsPanel({ j3, onGo }) {
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e", fontWeight: 800 }}>
             ✓ TROIS DOSSIERS RESTAURÉS
           </div>
-          <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
+          <p style={{ margin: "6px 0 10px", fontSize: 12.5, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
             Tu as vu de tes yeux ce que Jorge essayait de garder vrai. Les sources ne sont plus réécrites — elles sont, dans ta mémoire, à leur juste place.
           </p>
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <button onClick={() => onGo("epilogueJeu3")}
+              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+              ⟡ Remonter rapporter ▸
+            </button>
+          </div>
         </div>
       )}
     </div>

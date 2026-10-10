@@ -15,6 +15,7 @@ import BunkerArchives from "../chapters/jeu3/scenes/BunkerArchives.jsx";
 import BunkerPrison from "../chapters/jeu3/scenes/BunkerPrison.jsx";
 import BunkerSalleK from "../chapters/jeu3/scenes/BunkerSalleK.jsx";
 import BunkerVoyageK from "../chapters/jeu3/scenes/BunkerVoyageK.jsx";
+import EpilogueJeu3 from "../chapters/jeu3/scenes/EpilogueJeu3.jsx";
 import BunkerSas from "../chapters/jeu3/scenes/BunkerSas.jsx";
 import BunkerCantine from "../chapters/jeu3/scenes/BunkerCantine.jsx";
 import BunkerInfirmerie from "../chapters/jeu3/scenes/BunkerInfirmerie.jsx";
@@ -62,6 +63,7 @@ const ROOMS = {
   prison:     { Comp: BunkerPrison,     label: "Cellules disciplinaires" },
   salleK:     { Comp: BunkerSalleK,     label: "Salle temporelle · K-01" },
   voyageK:    { Comp: BunkerVoyageK,    label: "⟡ Voyage via Chronographe K-01" },
+  epilogueJeu3: { Comp: null, label: "ÉPILOGUE · Le Discernement" },
   sas:        { Comp: BunkerSas,        label: "Sas de voyage · machine de Léa" },
   cantine:    { Comp: BunkerCantine,    label: "Cantine commune" },
   infirmerie: { Comp: BunkerInfirmerie, label: "Infirmerie" },
@@ -197,12 +199,12 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
 
   /* La mini-carte latérale n'a pas de sens dans quelques écrans très
      immersifs (réveil, voyage dans le temps, confrontation finale). */
-  const showMinimap = !["awake", "voyage", "voyageK", "serveurs"].includes(room);
+  const showMinimap = !["awake", "voyage", "voyageK", "serveurs", "epilogueJeu3"].includes(room);
   /* Flèche de retour visible dans les pièces individuelles. Masquée
      dans les couloirs (où l'on clique directement sur l'ascenseur
      dessiné dans le décor) et dans les écrans immersifs. */
   const showBack = !["awake", "voyage", "voyageK", "serveurs", "elevator",
-                     "hub", "hubHaut", "hubBas"].includes(room);
+                     "hub", "hubHaut", "hubBas", "epilogueJeu3"].includes(room);
   const backTarget = hubRoom;
 
   /* Billet glissé : apparaît automatiquement quand le joueur a entendu
@@ -238,7 +240,9 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
       <div style={{ flex: 1, display: "flex", minHeight: 0, position: "relative" }}>
         {showMinimap && <BunkerMinimap room={room} flags={flags} onGo={goTo} cheat={cheat} />}
         <SceneFrame style={{ padding: 6 }}>
-          <Comp prenom={prenom} onGo={goTo} j3={j3} />
+          {room === "epilogueJeu3"
+            ? <EpilogueJeu3 prenom={prenom} onDone={onExit} />
+            : <Comp prenom={prenom} onGo={goTo} j3={j3} />}
         </SceneFrame>
         {showBack && (
           <button onClick={() => goTo(backTarget)}

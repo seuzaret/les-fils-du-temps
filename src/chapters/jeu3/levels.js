@@ -53,6 +53,8 @@ export const ROOM_TO_LEVEL = (() => {
   m.awake = "0";       // le réveil se fait dans la chambre → niveau 0
   m.elevator = null;   // l'ascenseur n'a pas de niveau propre
   m.voyage = null;     // hors-bunker (voyage dans le temps)
+  m.voyageK = null;    // idem pour les voyages via chronographe K
+  m.epilogueJeu3 = null; // écran plein, pas rattaché à un niveau
   return m;
 })();
 
