@@ -478,6 +478,36 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Triche : phase 5 — chronographe K-01 réactivé, dépose dans la Salle K. */
+  const cheatJeu3Phase5 = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({
+      room: "salleK",
+      flags: {
+        puits_billet: true,
+        mission_order: ["kova", "vitamine", "jour40"],
+        mission_kova_done: true, briefing_kova_done: true,
+        mission_vitamine_done: true, briefing_vitamine_done: true,
+        mission_jour40_done: true, briefing_jour40_done: true,
+        archives_tri_1_done: true,
+        archives_tri_2_done: true,
+        archives_tri_3_done: true,
+        archives_signalement_gutenberg: true,
+        archives_signalement_chappe: true,
+        archives_signalement_marconi: true,
+        archives_signalement_fait: true,
+        jorge_arrete: true,
+        jorge_cellule_vue: true,
+        elevator_k_unlocked: true,
+        salle_k_vue: true,
+        salle_k_reactivee: true,
+      },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
   /* Triche : phase 4 — Jorge arrêté + indice K reçu, dépose à l'ascenseur. */
   const cheatJeu3Phase4 = () => {
     setMode("jeu3");
@@ -1333,6 +1363,7 @@ export default function App() {
       onCheatJeu3Tri3={cheatJeu3Tri3}
       onCheatJeu3Phase3={cheatJeu3Phase3}
       onCheatJeu3Phase4={cheatJeu3Phase4}
+      onCheatJeu3Phase5={cheatJeu3Phase5}
     />
   );
 

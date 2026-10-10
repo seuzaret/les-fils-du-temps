@@ -14,6 +14,7 @@ import BunkerRumeurs from "../chapters/jeu3/scenes/BunkerRumeurs.jsx";
 import BunkerArchives from "../chapters/jeu3/scenes/BunkerArchives.jsx";
 import BunkerPrison from "../chapters/jeu3/scenes/BunkerPrison.jsx";
 import BunkerSalleK from "../chapters/jeu3/scenes/BunkerSalleK.jsx";
+import BunkerVoyageK from "../chapters/jeu3/scenes/BunkerVoyageK.jsx";
 import BunkerSas from "../chapters/jeu3/scenes/BunkerSas.jsx";
 import BunkerCantine from "../chapters/jeu3/scenes/BunkerCantine.jsx";
 import BunkerInfirmerie from "../chapters/jeu3/scenes/BunkerInfirmerie.jsx";
@@ -60,6 +61,7 @@ const ROOMS = {
   archives:   { Comp: BunkerArchives,   label: "Salle des Archives" },
   prison:     { Comp: BunkerPrison,     label: "Cellules disciplinaires" },
   salleK:     { Comp: BunkerSalleK,     label: "Salle temporelle · K-01" },
+  voyageK:    { Comp: BunkerVoyageK,    label: "⟡ Voyage via Chronographe K-01" },
   sas:        { Comp: BunkerSas,        label: "Sas de voyage · machine de Léa" },
   cantine:    { Comp: BunkerCantine,    label: "Cantine commune" },
   infirmerie: { Comp: BunkerInfirmerie, label: "Infirmerie" },
@@ -195,11 +197,11 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
 
   /* La mini-carte latérale n'a pas de sens dans quelques écrans très
      immersifs (réveil, voyage dans le temps, confrontation finale). */
-  const showMinimap = !["awake", "voyage", "serveurs"].includes(room);
+  const showMinimap = !["awake", "voyage", "voyageK", "serveurs"].includes(room);
   /* Flèche de retour visible dans les pièces individuelles. Masquée
      dans les couloirs (où l'on clique directement sur l'ascenseur
      dessiné dans le décor) et dans les écrans immersifs. */
-  const showBack = !["awake", "voyage", "serveurs", "elevator",
+  const showBack = !["awake", "voyage", "voyageK", "serveurs", "elevator",
                      "hub", "hubHaut", "hubBas"].includes(room);
   const backTarget = hubRoom;
 

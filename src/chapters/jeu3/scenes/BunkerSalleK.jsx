@@ -216,15 +216,7 @@ export default function BunkerSalleK({ onGo, j3 }) {
       {/* Panneau bas d'état */}
       <div style={{ maxWidth: 1200, width: "100%" }}>
         {announced ? (
-          <div style={{ background: "#2a1808", border: "1px solid #c8a848", borderRadius: 10, padding: "14px 16px", textAlign: "center" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
-              ⟡ CHRONOGRAPHE K-01 EN LIGNE
-            </div>
-            <p style={{ margin: "8px 0 0", fontSize: 13, color: "#e8dfc8", lineHeight: 1.55, fontStyle: "italic" }}>
-              La machine ronronne pour la première fois depuis quarante ans. L'écran du pupitre attend une destination.
-              Il va falloir choisir vers quelle époque voyager — ce sera pour la suite.
-            </p>
-          </div>
+          <DestinationsPanel j3={j3} onGo={onGo} />
         ) : (
           <div style={{ background: "#0a0806", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
             <p style={{ margin: 0, fontSize: 12.5, color: "#c8b090", fontStyle: "italic", lineHeight: 1.55 }}>
@@ -238,6 +230,96 @@ export default function BunkerSalleK({ onGo, j3 }) {
         style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Reprendre l'ascenseur
       </button>
+    </div>
+  );
+}
+
+/* ============================================================
+   PHASE 5 — Choix de la destination temporelle
+   Trois dossiers à vérifier sur place (dans le décor Jeu 1 associé).
+   Chaque voyage pose un flag voyageK_<id>_done ; les 3 ensemble
+   posent phase5_done.
+   ============================================================ */
+const DESTINATIONS = [
+  { id: "gutenberg", annee: "~1450", lieu: "Mayence",
+    titre: "L'imprimerie de Gutenberg",
+    pitch: "Vérifier si c'est bien Johannes Gutenberg qui a inventé la presse à caractères mobiles en métal, et non un moine chinois anonyme." },
+  { id: "chappe",    annee: "1794",  lieu: "Paris–Lille",
+    titre: "Le télégraphe de Chappe",
+    pitch: "Vérifier si c'est Claude Chappe qui a tendu le premier télégraphe (optique, à bras articulés), et non Samuel Morse à Washington." },
+  { id: "marconi",   annee: "1901",  lieu: "Cornouailles → Terre-Neuve",
+    titre: "Le signal transatlantique de Marconi",
+    pitch: "Vérifier si c'est bien Guglielmo Marconi qui a envoyé le premier signal radio à travers l'Atlantique, et non la BBC en 1920." },
+];
+
+function DestinationsPanel({ j3, onGo }) {
+  const flags = j3?.flags || {};
+  const done = DESTINATIONS.map((d) => !!flags[`voyageK_${d.id}_done`]);
+  const nbDone = done.filter(Boolean).length;
+  const allDone = nbDone === DESTINATIONS.length;
+  /* Pose phase5_done la première fois que les 3 voyages sont bouclés. */
+  useEffect(() => {
+    if (allDone && !flags.phase5_done) j3.setFlag("phase5_done");
+  }, [allDone, flags.phase5_done, j3]);
+  const launchVoyage = (id) => {
+    j3.setFlag("voyageK_target", id);
+    onGo("voyageK");
+  };
+  return (
+    <div style={{ background: "#2a1808", border: "1px solid #c8a848", borderRadius: 10, padding: "14px 16px" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
+          ⟡ CHRONOGRAPHE K-01 — DESTINATIONS DISPONIBLES
+        </div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050" }}>
+          {nbDone} / {DESTINATIONS.length} vérifiée{nbDone > 1 ? "s" : ""}
+        </div>
+      </div>
+      <p style={{ margin: "8px 0 12px", fontSize: 12.5, color: "#c8b090", lineHeight: 1.5, fontStyle: "italic" }}>
+        Trois dossiers falsifiés dans les Archives. Trois destinations pour aller vérifier sur place ce qui a vraiment eu lieu.
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: 10 }}>
+        {DESTINATIONS.map((d, i) => {
+          const isDone = done[i];
+          return (
+            <button key={d.id} onClick={() => !isDone && launchVoyage(d.id)}
+              disabled={isDone}
+              style={{
+                textAlign: "left",
+                background: isDone ? "#0e2818" : "#141008",
+                color: isDone ? "#5eff9e" : "#e8dfc8",
+                border: `1px solid ${isDone ? "#5eff9e" : "#c8a848"}`,
+                borderRadius: 8, padding: "10px 12px",
+                cursor: isDone ? "default" : "pointer",
+                fontFamily: "inherit",
+                opacity: isDone ? 0.8 : 1,
+              }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: isDone ? "#5eff9e" : "#c8a848" }}>
+                {isDone ? "✓ VÉRIFIÉ" : `DESTINATION ${i + 1}`}
+              </div>
+              <div style={{ fontFamily: "Palatino, Georgia, serif", fontSize: 14.5, fontWeight: 700, marginTop: 4 }}>
+                {d.titre}
+              </div>
+              <div style={{ fontSize: 11, color: "#8a7050", marginTop: 2 }}>
+                {d.annee} · {d.lieu}
+              </div>
+              <div style={{ fontSize: 11.5, marginTop: 6, lineHeight: 1.45, color: isDone ? "#8affb0" : "#c8b090" }}>
+                {d.pitch}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+      {allDone && (
+        <div style={{ marginTop: 12, background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 8, padding: "10px 12px" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e", fontWeight: 800 }}>
+            ✓ TROIS DOSSIERS RESTAURÉS
+          </div>
+          <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
+            Tu as vu de tes yeux ce que Jorge essayait de garder vrai. Les sources ne sont plus réécrites — elles sont, dans ta mémoire, à leur juste place.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
