@@ -28,16 +28,18 @@ export default function BunkerPrison({ onGo, j3 }) {
   const nbSignale = signalements.filter(Boolean).length;
   const visited = !!flags.jorge_cellule_vue;
 
-  /* Trois niveaux de confidence selon le nombre de signalements. */
+  /* Dialogue selon le nombre de signalements. Dans tous les cas, Jorge
+     livre la plaque K à la fin du dialogue (voir onDone ci-dessous).
+     Le ton varie : résignation à 0/3, partage à 1-2/3, confiance à 3/3. */
   const lignes = (() => {
     if (nbSignale === 0) {
       return [
-        "Jorge te regarde à travers les barreaux, sans se lever.",
-        "« Toi. Je ne te félicite pas. Tu as rangé tes fiches, et tu n'as rien vu. »",
-        "« Trois dates fausses. Trois. Et pas un mot. »",
-        "Il baisse la voix : « Je ne t'en veux pas. Beaucoup font pareil. On apprend à ranger, on désapprend à regarder. »",
-        "« Mais maintenant que je suis ici, écoute-moi. Il faut descendre. Il y a un étage que tu ne connais pas — en dessous de l'ascenseur. »",
-        "« Cherche. Si tu trouves, tu comprendras ce que j'essayais de faire. Et peut-être, tu pourras le finir. »",
+        "Jorge te regarde à travers les barreaux. Il hoche la tête, lentement.",
+        "« Tu es venu·e me voir. C'est déjà quelque chose — beaucoup se seraient contentés de ranger. »",
+        "« Je t'avais glissé trois signaux dans les lots que tu as triés. Trois dates qui ne collaient pas. Tu ne les as pas vues. Tant pis — on apprend à ranger, on désapprend à regarder. »",
+        "« Il est trop tard pour reprendre ces fiches, elles sont déjà au bureau du Juge. Mais ce que je faisais, tu peux encore aller le voir toi-même. »",
+        "Il te glisse à travers les barreaux une petite plaque métallique gravée d'un K.",
+        "« L'ascenseur a une touche cachée. Elle s'appelle K. Vas-y. Ouvre l'œil, cette fois. »",
       ];
     }
     if (nbSignale < 3) {
@@ -46,19 +48,24 @@ export default function BunkerPrison({ onGo, j3 }) {
         signalements[1] ? "Chappe" : null,
         signalements[2] ? "Marconi" : null,
       ].filter(Boolean).join(", ");
+      const manquants = [
+        !signalements[0] ? "Gutenberg" : null,
+        !signalements[1] ? "Chappe" : null,
+        !signalements[2] ? "Marconi" : null,
+      ].filter(Boolean).join(", ");
       return [
         "Jorge se lève à ton approche, s'accroche aux barreaux.",
-        `« Tu en as vu ${nbSignale} sur 3. ${noms}. Déjà beaucoup. »`,
-        "« Les autres sont passées — tant pis. Ce qui compte, c'est que tu AIES VU. »",
-        "Il baisse la voix : « Ils ont réécrit nos sources. Dates, lieux, noms. Pas pour mentir au hasard : pour effacer qui a inventé quoi. Pourquoi, je l'ignore encore. »",
-        "« Il y a un étage en dessous de l'ascenseur. Un bouton que tu ne vois pas. Trouve-le. Tu y verras ce que j'ai tenté de restaurer. »",
-        "« Si tu ne le fais pas, personne ne le fera. »",
+        `« Tu en as vu ${nbSignale} sur 3 : ${noms}. Déjà beaucoup. »`,
+        `« Il te reste ${3 - nbSignale} fiche${3 - nbSignale > 1 ? "s" : ""} à repérer : ${manquants}. Tu peux encore y retourner. »`,
+        "« Ou tu continues maintenant. À toi de voir. Dans tous les cas, je te confie ceci. »",
+        "Il te glisse à travers les barreaux une petite plaque métallique gravée d'un K.",
+        "« L'ascenseur a une touche cachée. Elle s'appelle K. Vas-y quand tu seras prêt·e. »",
       ];
     }
     return [
       "Jorge te regarde — pour la première fois sans bougonnerie.",
       "« Trois sur trois. Gutenberg, Chappe, Marconi. Tu les as toutes vues. »",
-      "« Alors tu sais déjà la moitié de l'histoire. Je ne mélangeais pas les dates par distraction, tu l'as compris. J'essayais de garder la trace de ce qu'ils effaçaient — en les signalant pour qu'un œil comme le tien les voie. »",
+      "« Alors tu sais déjà la moitié de l'histoire. Je ne mélangeais pas les dates par distraction. J'essayais de garder la trace de ce qu'ils effaçaient — en signalant les fiches pour qu'un œil comme le tien les voie. »",
       "« Ils ont réécrit les sources. Qui a inventé l'imprimerie. Qui a tendu le premier télégraphe. Qui a parlé le premier à travers l'océan. Il reste assez d'original quelque part pour reconstituer. »",
       "Il te glisse à travers les barreaux une petite plaque métallique gravée d'un K.",
       "« L'ascenseur a une touche cachée. Elle s'appelle K. Elle ouvre une salle que personne n'a vue depuis quarante ans. »",
@@ -199,7 +206,10 @@ export default function BunkerPrison({ onGo, j3 }) {
           actionLabel="Sortir ▸"
           onDone={() => {
             j3.setFlag("jorge_cellule_vue");
-            if (nbSignale === 3) j3.setFlag("elevator_k_unlocked");
+            /* Jorge livre la plaque K dans tous les cas — la fin de
+               l'arc n'est jamais bloquée. Seul le ton de son discours
+               change selon ce qui a été repéré. */
+            j3.setFlag("elevator_k_unlocked");
             setDialogOpen(false);
           }} />
       )}

@@ -54,6 +54,8 @@ export default function BunkerMinimap({ room, flags, onGo, cheat = false }) {
       case "archives":   return "📚";
       case "infirmerie": return "⚕";
       case "atelier":    return "🔧";
+      case "prison":     return "⛓";
+      case "salleK":     return "⟡";
       case "serres":     return "🌱";
       case "serveurs":   return "◈";
       default:           return "•";

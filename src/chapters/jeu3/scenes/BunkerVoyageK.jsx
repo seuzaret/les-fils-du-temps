@@ -105,9 +105,13 @@ export default function BunkerVoyageK({ onGo, j3 }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", width: "100%", gap: 10 }}>
-      {/* Décor Jeu 1 en tableau, props stubbés (visite d'observation). */}
+      {/* Décor Jeu 1 en tableau, props stubbés (visite d'observation).
+          pointerEvents: none sur le wrapper neutralise les Hotspots :
+          c'est une visite d'observation, pas un terrain de jeu. */}
       <div style={{ position: "relative", width: "100%", maxHeight: "62vh", overflow: "hidden", borderRadius: 10, border: "2px solid #c8a848", boxShadow: "0 0 24px rgba(200,168,72,0.3)" }}>
-        <Scene collect={noop} action={noop} reveal={noop} made={[]} queteQui={null} mode="jeu3" />
+        <div style={{ pointerEvents: "none" }}>
+          <Scene collect={noop} action={noop} reveal={noop} made={[]} queteQui={null} mode="jeu3" />
+        </div>
         {/* Bandeau topic en haut */}
         <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(10,8,6,0.8)", border: "1px solid #c8a848", borderRadius: 6, padding: "4px 10px", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8a848" }}>
           ⟡ {info.annee.toUpperCase()} · {info.lieu.toUpperCase()}
