@@ -79,6 +79,13 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [flags, setFlags] = useState(() => {
     const initial = { ...(startAt?.flags || {}) };
     if (!initial.mission_order) initial.mission_order = pickMissionOrder();
+    /* L'indice du puzzle Salle K pointe sur l'une des 3 inventions
+       dont Jorge a glissé la fiche falsifiée. Tiré au hasard une
+       seule fois par partie, pour que la date à décoder change. */
+    if (!initial.k_puzzle_invention) {
+      const pool = ["presse-gutenberg", "telegraphe-chappe", "tsf-marconi"];
+      initial.k_puzzle_invention = pool[Math.floor(Math.random() * pool.length)];
+    }
     return initial;
   });
   const [heardPnj, setHeardPnj] = useState(startAt?.heardPnj || {});

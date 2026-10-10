@@ -16,16 +16,12 @@
 import { useState, useEffect, useMemo } from "react";
 import INVENTIONS from "../../../engine/inventions-meta.json";
 
-/* Sous-ensemble du médiadex utilisable comme code (année propre
-   à 4 chiffres, pas d'« av. J.-C. »). */
-function pickRandomInvention() {
-  const candidats = INVENTIONS.filter((inv) => {
-    if (/av\. J\.-C\./i.test(inv.date)) return false;
-    const s = String(inv.date).replace(/[\s  .]/g, "");
-    const m = s.match(/(\d{4})/);
-    return !!m && parseInt(m[1], 10) >= 1000 && parseInt(m[1], 10) <= 2100;
-  });
-  const inv = candidats[Math.floor(Math.random() * candidats.length)];
+/* Charge l'invention indice depuis flags.k_puzzle_invention
+   (tiré au hasard en début de Jeu 3 parmi les 3 dossiers falsifiés
+   gutenberg / chappe / marconi). Fallback : Gutenberg. */
+function loadPuzzleInvention(flags) {
+  const id = flags?.k_puzzle_invention || "presse-gutenberg";
+  const inv = INVENTIONS.find((x) => x.id === id) || INVENTIONS.find((x) => x.id === "presse-gutenberg");
   const s = String(inv.date).replace(/[\s  .]/g, "");
   const year = parseInt(s.match(/(\d{4})/)[1], 10);
   return { ...inv, year, digits: String(year).split("").map((d) => parseInt(d, 10)) };
@@ -40,8 +36,8 @@ export default function BunkerSalleK({ onGo, j3 }) {
   const [resolu, setResolu] = useState(alreadyActive);
   const [cockpit, setCockpit] = useState(false);
 
-  /* Invention tirée au hasard, stable pour toute la vie du composant. */
-  const target = useMemo(() => pickRandomInvention(), []);
+  /* Invention indice (posée en début de Jeu 3, stable pour la partie). */
+  const target = useMemo(() => loadPuzzleInvention(j3?.flags), [j3?.flags?.k_puzzle_invention]);
   /* État des 4 chiffres (gauche à droite). Chaque clic sur un levier
      incrémente, 9 → 0 (wrap). Auto-check à chaque changement. */
   const [digits, setDigits] = useState(alreadyActive ? [...target.digits] : [0, 0, 0, 0]);
