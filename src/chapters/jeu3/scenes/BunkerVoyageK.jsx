@@ -177,7 +177,7 @@ export default function BunkerVoyageK({ onGo, j3 }) {
       {/* Décor Jeu 1 (ou fallback) PLEIN CADRE, hotspots neutralisés. */}
       <div style={{ pointerEvents: "none", position: "absolute", inset: 0 }}>
         {Scene
-          ? <Scene collect={noop} action={noop} reveal={noop} made={[]} queteQui={null} mode="jeu3" />
+          ? <Scene collect={noop} action={noop} reveal={false} made={[]} queteQui={null} mode="jeu3" />
           : <FallbackDecor />}
       </div>
 

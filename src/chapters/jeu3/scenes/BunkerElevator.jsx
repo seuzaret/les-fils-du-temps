@@ -22,14 +22,24 @@ export default function BunkerElevator({ onGo, j3 }) {
     if (!isLevelUnlocked(lvl.id, j3.flags)) return;
     if (lvl.id === currentLvl) { onGo(lvl.hubRoom); return; }
     setTarget(lvl);
-    setPhase("moving");
+    /* K-01 : phase « glitch » (défaillance lumière) avant le mouvement. */
+    setPhase(lvl.id === "K" ? "glitch" : "moving");
   };
+
+  /* Phase glitch : courte défaillance lumière avant le trajet vers K. */
+  useEffect(() => {
+    if (phase !== "glitch") return;
+    const t = setTimeout(() => setPhase("moving"), 1600);
+    return () => clearTimeout(t);
+  }, [phase]);
 
   useEffect(() => {
     if (phase !== "moving") return;
-    const t = setTimeout(() => setPhase("arrived"), 1500);
+    /* Trajet plus long et chaotique quand on descend vers K. */
+    const dur = target?.id === "K" ? 2600 : 1500;
+    const t = setTimeout(() => setPhase("arrived"), dur);
     return () => clearTimeout(t);
-  }, [phase]);
+  }, [phase, target]);
 
   useEffect(() => {
     if (phase !== "arrived") return;
@@ -39,6 +49,8 @@ export default function BunkerElevator({ onGo, j3 }) {
 
   const displayLvl = phase === "arrived" ? target : LEVELS.find((l) => l.id === currentLvl);
   const isMoving = phase === "moving";
+  const isGlitch = phase === "glitch";
+  const isK = target?.id === "K";
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8, width: "100%" }}>
@@ -75,7 +87,11 @@ export default function BunkerElevator({ onGo, j3 }) {
           </radialGradient>
         </defs>
 
-        <g style={isMoving ? { animation: "evShake 0.14s ease-in-out infinite" } : {}}>
+        <g style={
+          isGlitch ? { animation: "evJolt 0.5s ease-in-out infinite" } :
+          isMoving && isK ? { animation: "evShakeHard 0.09s ease-in-out infinite" } :
+          isMoving ? { animation: "evShake 0.14s ease-in-out infinite" } : {}
+        }>
           {/* Mur du fond de la cabine */}
           <rect width="1200" height="620" fill="url(#ev-wall)" />
           {/* Lambris verticaux sur tout le mur */}
@@ -83,15 +99,36 @@ export default function BunkerElevator({ onGo, j3 }) {
             <line key={i} x1={x} y1="80" x2={x} y2="540" stroke="#0a0e14" strokeWidth="0.8" opacity="0.6" />
           ))}
 
+          {/* Rideau noir qui éclipse brièvement toute la cabine pendant
+              le glitch (pour simuler la panne de courant). */}
+          {isGlitch && (
+            <rect width="1200" height="620" fill="#000">
+              <animate attributeName="opacity" values="0;0.8;0;0.6;0;0.9;0.1" dur="1.6s" repeatCount="1" fill="freeze" />
+            </rect>
+          )}
+
           {/* PLAFOND avec caissons de néons encastrés */}
           <rect x="0" y="0" width="1200" height="80" fill="url(#ev-ceil)" />
           <path d="M0 80 L1200 80" stroke="#0a0e14" strokeWidth="2.5" />
-          {/* 3 caissons de néons rectangulaires */}
+          {/* 3 caissons de néons rectangulaires. En glitch, ils vacillent
+              brutalement et de manière désynchronisée. */}
           {[220, 600, 980].map((x, i) => (
             <g key={i} transform={`translate(${x},40)`}>
               <rect x="-100" y="-24" width="200" height="48" fill="#141c26" stroke="#0a0e14" strokeWidth="2" rx="4" />
-              <rect x="-88" y="-16" width="176" height="32" fill="#e8eef5" opacity={isMoving ? 0.55 : 0.92} rx="2">
-                {isMoving && <animate attributeName="opacity" values="0.35;0.8;0.35" dur="0.25s" repeatCount="indefinite" />}
+              <rect x="-88" y="-16" width="176" height="32" fill="#e8eef5"
+                opacity={isGlitch ? 0.1 : (isMoving ? 0.55 : 0.92)} rx="2">
+                {isGlitch && (
+                  <animate attributeName="opacity"
+                    values={i === 0 ? "0.9;0.1;0.8;0.05;0.7;0;0.4" :
+                            i === 1 ? "0.1;0.9;0.05;0.6;0.1;0.8;0" :
+                                      "0.6;0;0.9;0.1;0.3;0.9;0.05"}
+                    dur="1.6s" repeatCount="1" fill="freeze" />
+                )}
+                {isMoving && !isGlitch && (
+                  <animate attributeName="opacity"
+                    values={isK ? "0.1;0.6;0.2;0.5;0.1" : "0.35;0.8;0.35"}
+                    dur={isK ? "0.35s" : "0.25s"} repeatCount="indefinite" />
+                )}
               </rect>
             </g>
           ))}
@@ -145,9 +182,14 @@ export default function BunkerElevator({ onGo, j3 }) {
             <rect x="-140" y="-40" width="280" height="70" fill="#0a0806" stroke="#5eff9e" strokeWidth="3" rx="6" />
             <text x="-130" y="-22" fontFamily="ui-monospace,monospace" fontSize="11" fill="#5eff9e" letterSpacing="4">ÉTAGE</text>
             <text x="0" y="18" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="46" fontWeight="900"
-              fill={displayLvl?.color || "#5eff9e"} letterSpacing="6"
-              style={{ filter: `drop-shadow(0 0 8px ${displayLvl?.color || "#5eff9e"})` }}>
-              {displayLvl?.id || "?"}
+              fill={isGlitch ? "#e83820" : (displayLvl?.color || "#5eff9e")} letterSpacing="6"
+              style={{ filter: `drop-shadow(0 0 8px ${isGlitch ? "#e83820" : (displayLvl?.color || "#5eff9e")})` }}>
+              {isGlitch ? (
+                <>
+                  ?!?
+                  <animate attributeName="opacity" values="1;0;1;0.4;0.9;0" dur="1.6s" repeatCount="1" fill="freeze" />
+                </>
+              ) : (displayLvl?.id || "?")}
             </text>
             {/* Voyant STATION / MARCHE */}
             <g transform="translate(120,-24)">
@@ -307,6 +349,8 @@ export default function BunkerElevator({ onGo, j3 }) {
 
         <style>{`
           @keyframes evShake { 0%,100% { transform: translate(0,0); } 50% { transform: translate(0,1.2px); } }
+          @keyframes evShakeHard { 0% { transform: translate(-1.4px,-2px); } 25% { transform: translate(1.6px,1.5px); } 50% { transform: translate(-1px,2.2px); } 75% { transform: translate(2px,-1.5px); } 100% { transform: translate(0,0); } }
+          @keyframes evJolt { 0% { transform: translate(0,0); } 15% { transform: translate(0,-6px) rotate(-0.3deg); } 30% { transform: translate(0,4px) rotate(0.4deg); } 50% { transform: translate(2px,-2px); } 70% { transform: translate(-2px,3px) rotate(-0.2deg); } 100% { transform: translate(0,0); } }
           @keyframes evDoorL { from { transform: translate(0,0); } to { transform: translate(-116px,0); } }
           @keyframes evDoorR { from { transform: translate(0,0); } to { transform: translate(116px,0); } }
         `}</style>
