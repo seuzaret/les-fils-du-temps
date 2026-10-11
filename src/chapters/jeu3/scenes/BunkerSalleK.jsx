@@ -13,8 +13,72 @@
    hasard du médiadex. Le tableau blanc en donne le nom. Auto-check
    à chaque clic.
    ============================================================ */
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import INVENTIONS from "../../../engine/inventions-meta.json";
+
+/* ============================================================
+   Petits sons générés en Web Audio — pas de fichiers externes.
+   - pumpBeep : court bip ascendant « pfft » quand on amorce une jauge.
+   - startupSweep : balayage SF descendant quand le portail prend vie.
+   ============================================================ */
+function makeAudio() {
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    return new Ctx();
+  } catch { return null; }
+}
+function pumpBeep(ctx) {
+  if (!ctx) return;
+  try {
+    const t0 = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(220, t0);
+    osc.frequency.exponentialRampToValueAtTime(880, t0 + 0.18);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.14, t0 + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.22);
+    osc.connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + 0.24);
+  } catch {}
+}
+function startupSweep(ctx) {
+  if (!ctx) return;
+  try {
+    const t0 = ctx.currentTime;
+    /* Onde porteuse qui descend */
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sawtooth";
+    osc.frequency.setValueAtTime(1200, t0);
+    osc.frequency.exponentialRampToValueAtTime(90, t0 + 1.6);
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.12, t0 + 0.08);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + 1.6);
+    /* Filtre passe-bas qui glisse */
+    const filt = ctx.createBiquadFilter();
+    filt.type = "lowpass";
+    filt.frequency.setValueAtTime(2000, t0);
+    filt.frequency.exponentialRampToValueAtTime(120, t0 + 1.5);
+    osc.connect(filt).connect(gain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + 1.7);
+    /* Puff de bruit blanc par-dessus pour densifier */
+    const bufferSize = Math.floor(ctx.sampleRate * 0.4);
+    const noiseBuf = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuf;
+    const nGain = ctx.createGain();
+    nGain.gain.setValueAtTime(0.08, t0);
+    nGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.4);
+    noise.connect(nGain).connect(ctx.destination);
+    noise.start(t0);
+  } catch {}
+}
 
 /* Charge l'invention indice depuis flags.k_puzzle_invention
    (tiré au hasard en début de Jeu 3 parmi les 3 dossiers falsifiés
@@ -71,10 +135,33 @@ export default function BunkerSalleK({ onGo, j3 }) {
     setDigits((d) => d.map((v, i) => (i === idx ? (v + 1) % 10 : v)));
   };
 
+  /* Contexte audio paresseux : créé au 1er clic utilisateur (requis par
+     les navigateurs qui bloquent AudioContext tant qu'il n'y a pas eu
+     d'interaction). */
+  const audioRef = useRef(null);
+  const ensureAudio = () => {
+    if (!audioRef.current) audioRef.current = makeAudio();
+    if (audioRef.current && audioRef.current.state === "suspended") {
+      audioRef.current.resume().catch(() => {});
+    }
+    return audioRef.current;
+  };
+
   const chargeCadran = (idx) => {
     if (!tableauOuvert || portalOnline) return;
+    if (cadrans[idx]) return;
+    pumpBeep(ensureAudio());
     setCadrans((c) => c.map((v, i) => (i === idx ? true : v)));
   };
+
+  /* Déclenche le son de démarrage SF au moment où le portail s'allume. */
+  const prevPortalOnline = useRef(portalOnline);
+  useEffect(() => {
+    if (!prevPortalOnline.current && portalOnline) {
+      startupSweep(ensureAudio());
+    }
+    prevPortalOnline.current = portalOnline;
+  }, [portalOnline]);
 
   /* --- Intro narrative --- */
   if (intro) {
@@ -365,9 +452,6 @@ function SalleKDecor({ lit, tableauOuvert, portalOnline, onSwitch, digits, onBum
           <circle r="3" fill="#ffd870">
             <animate attributeName="opacity" values="0.6;1;0.6" dur="1.6s" repeatCount="indefinite" />
           </circle>
-          <text x="0" y="30" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#8a7050" letterSpacing="2">
-            INTERRUPTEUR
-          </text>
         </g>
       )}
 
@@ -515,7 +599,8 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
           </>
         )}
       </g>
-      {/* Pupitre dévoilé — 4 cadrans à cliquer pour charger */}
+      {/* Pupitre dévoilé — 4 jauges verticales à charger, avec un petit
+          cadran chacun sur le dessus. */}
       {tableauOuvert && (
         <g>
           <rect x="-160" y="-70" width="320" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
@@ -523,49 +608,71 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
             PUPITRE PORTAIL · K-01
           </text>
           <line x1="-150" y1="-46" x2="150" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
-          {[-100, -30, 40, 110].map((x, i) => {
-            const on = !!cadrans?.[i];
-            return (
-              <g key={i} transform={`translate(${x},0)`}
-                style={{ cursor: on || portalOnline ? "default" : "pointer" }}
-                onClick={(!on && !portalOnline) ? (e) => { e.stopPropagation(); onChargeCadran?.(i); } : undefined}>
-                {/* Anneau externe cliquable */}
-                <circle r="22" fill="transparent" />
-                <circle r="18" fill={on ? "#0e2838" : "#0a1a28"} stroke={on ? "#7fd8ff" : "#3a5a78"} strokeWidth={on ? 1.5 : 1} />
-                {/* Aiguille animée quand ON */}
-                <line x1="0" y1="0"
-                  x2={on ? Math.cos(i + Date.now() / 1000) * 14 : Math.cos(i) * 10}
-                  y2={on ? Math.sin(i + Date.now() / 1000) * 14 : Math.sin(i) * 10}
-                  stroke={on ? "#7fd8ff" : "#5a6678"} strokeWidth={on ? 1.6 : 1} />
-                {on && (
-                  <circle r="14" fill="none" stroke="#7fd8ff" strokeWidth="0.6" opacity="0.5">
-                    <animate attributeName="r" values="12;16;12" dur="1.8s" repeatCount="indefinite" />
-                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="1.8s" repeatCount="indefinite" />
-                  </circle>
-                )}
-                <circle r="2.5" fill={on ? "#7fd8ff" : "#3a5a78"}>
-                  {on && <animate attributeName="opacity" values="0.5;1;0.5" dur={`${1.4 + i * 0.3}s`} repeatCount="indefinite" />}
-                </circle>
-                {/* Indicateur ON/charger */}
-                {!on && !portalOnline && (
-                  <text y="32" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#7fd8ff" opacity="0.7" letterSpacing="1">
-                    CHARGER
-                  </text>
-                )}
-                {on && (
-                  <text y="32" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fill="#5eff9e" letterSpacing="1">
-                    ✓
-                  </text>
-                )}
-              </g>
-            );
-          })}
+          {JAUGES.map((j, i) => (
+            <Jauge key={j.id} x={-105 + i * 70} label={j.label}
+              on={!!cadrans?.[i]}
+              clickable={!cadrans?.[i] && !portalOnline}
+              onClick={() => onChargeCadran?.(i)} />
+          ))}
           <text x="0" y="52" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
             fill={portalOnline ? "#5eff9e" : "#7fd8ff"}>
-            {portalOnline ? "✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER" : "⚙ CLIQUE CHAQUE CADRAN POUR L'AMORCER"}
+            {portalOnline ? "✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER" : "⚙ CLIQUE CHAQUE JAUGE POUR L'AMORCER"}
           </text>
         </g>
       )}
+    </g>
+  );
+}
+
+/* Labels des 4 jauges (ordre lu de gauche à droite). */
+const JAUGES = [
+  { id: "energie", label: "ÉNERGIE" },
+  { id: "masse",   label: "MASSE Mᶜ" },
+  { id: "flux",    label: "FLUX τ" },
+  { id: "champ",   label: "CHAMP Ψ" },
+];
+
+/* Une jauge verticale avec son petit cadran au-dessus. Cliquable → se
+   remplit par animation d'opacité CSS et le cadran s'allume. */
+function Jauge({ x, label, on, clickable, onClick }) {
+  return (
+    <g transform={`translate(${x},0)`}
+      style={{ cursor: clickable ? "pointer" : "default" }}
+      onClick={clickable ? (e) => { e.stopPropagation(); onClick?.(); } : undefined}>
+      {/* Zone de clic plus large */}
+      <rect x="-22" y="-40" width="44" height="80" fill="transparent" />
+      {/* Petit cadran au sommet */}
+      <circle cx="0" cy="-30" r="7" fill="#0a1a28" stroke={on ? "#7fd8ff" : "#3a5a78"} strokeWidth="1" />
+      <line x1="0" y1="-30"
+        x2={on ? 4 : 2} y2={on ? -34 : -32}
+        stroke={on ? "#7fd8ff" : "#5a6678"} strokeWidth="1"
+        style={{ transition: "all 0.6s ease-out" }} />
+      {on && (
+        <circle cx="0" cy="-30" r="2" fill="#7fd8ff">
+          <animate attributeName="opacity" values="0.5;1;0.5" dur="1.4s" repeatCount="indefinite" />
+        </circle>
+      )}
+      {/* Corps de la jauge */}
+      <rect x="-12" y="-20" width="24" height="46" fill="#141c26" stroke={on ? "#7fd8ff" : "#3a5a78"} strokeWidth="1" />
+      {/* Remplissage animé : hauteur = 42 quand on */}
+      <rect x="-10" y={on ? -18 : 22} width="20" height={on ? 42 : 2}
+        fill="url(#sk-portalCore)" opacity="0.9"
+        style={{ transition: "y 0.6s cubic-bezier(.2,.6,.3,1), height 0.6s cubic-bezier(.2,.6,.3,1)" }} />
+      {/* Graduations */}
+      {[-10, 0, 10, 20].map((y) => (
+        <line key={y} x1="-14" y1={y} x2="-12" y2={y} stroke={on ? "#7fd8ff" : "#3a5a78"} strokeWidth="0.5" />
+      ))}
+      {/* État sous la jauge */}
+      {on && (
+        <text y="36" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#5eff9e" letterSpacing="1">
+          ✓
+        </text>
+      )}
+      {/* Label (très petit sous la jauge) */}
+      <text y="46" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6"
+        fill={on ? "#7fd8ff" : "#5a6678"} letterSpacing="1" fontWeight="700">
+        {label}
+      </text>
     </g>
   );
 }
@@ -744,20 +851,25 @@ function CockpitVoyage({ j3, onGo, onClose }) {
       setErr("Entre une année à 4 chiffres (ex. 1794).");
       return;
     }
-    const dest = DESTINATIONS[parseInt(year, 10)];
-    if (!dest) {
-      setErr("Aucune destination indexée pour cette année. Essaie une des trois dates que Jorge voulait restaurer.");
-      return;
-    }
-    if (flags[`voyageK_${dest.id}_done`]) {
+    const y = parseInt(year, 10);
+    const known = DESTINATIONS[y];
+    /* Dossier déjà vérifié ? on refuse pour les 3 cibles connues. Pour une
+       année hors-dossier, le voyage est toujours possible — mais rien n'est
+       posé au retour. */
+    if (known && flags[`voyageK_${known.id}_done`]) {
       setErr("Tu es déjà allé·e vérifier ce dossier. Choisis une autre année.");
       return;
     }
+    const dest = known
+      ? { ...known, target: known.id }
+      : { id: "fallback", titre: "Époque hors-dossier", lieu: "Lieu indéfini", target: y };
     setConfirming({ year, dest });
   };
 
   const lancer = () => {
-    j3.setFlag("voyageK_target", confirming.dest.id);
+    /* target peut être un id de destination connue (string) ou une année
+       brute (number) pour un voyage hors-dossier. */
+    j3.setFlag("voyageK_target", confirming.dest.target);
     onGo("voyageK");
   };
 
@@ -850,7 +962,8 @@ function CockpitVoyage({ j3, onGo, onClose }) {
         )}
 
         <p style={{ margin: "12px 0 0", fontSize: 11, color: "#5a6678", fontStyle: "italic", textAlign: "center", lineHeight: 1.4 }}>
-          Trois dossiers ont été falsifiés dans les archives. Entre l'année originale de l'un d'entre eux.
+          Trois dossiers de Jorge mènent à des témoins précis (1450, 1794, 1901).<br />
+          Toute autre année t'y conduit aussi — mais le témoin que tu cherches n'y sera pas forcément.
         </p>
       </div>
     </div>
