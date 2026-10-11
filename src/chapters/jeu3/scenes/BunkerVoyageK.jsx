@@ -183,13 +183,17 @@ export default function BunkerVoyageK({ onGo, j3 }) {
 
       {/* Zones cliquables des PNJs, alignées sur le viewBox 1000×560.
           Pas de marqueur visible — c'est au joueur de repérer les
-          personnages dans le tableau et de cliquer dessus. */}
+          personnages dans le tableau et de cliquer dessus. Le SVG ne
+          porte PAS pointer-events:none (sinon ni le root ni les
+          enfants ne reçoivent les clics quels que soient les
+          overrides) ; seules les rects transparents captent les
+          événements, le reste passe au décor en-dessous. */}
       {!activePnj && (
         <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
           {info.pnjs.map((p) => (
             <g key={p.id} transform={`translate(${p.x},${p.y})`}
-              style={{ cursor: "pointer", pointerEvents: "auto" }}
+              style={{ cursor: "pointer" }}
               onClick={() => setActivePnj(p.id)}>
               {/* Zone de clic large et invisible (72×140, calée sur un
                   sprite PNJ typique de Jeu 1). */}
