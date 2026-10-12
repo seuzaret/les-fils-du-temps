@@ -77,7 +77,8 @@ export default function BunkerPrison({ onGo, j3 }) {
           : "« Tu as le médiadex en main. On peut parler. »",
         "« Il faut descendre à l'étage K. L'ascenseur a un petit bouton caché, à droite du frein d'urgence — sans inscription, discret. »",
         "« Il faut l'enfoncer CINQ fois d'affilée pour qu'il s'active. Pas une de plus, pas une de moins. C'était ma sécurité. »",
-        "« Là-bas, tu trouveras ma machine. Elle emmène dans le passé — mais passivement : tu peux voir, écouter, questionner. Rien de plus. »",
+        "« Là-bas, tu trouveras la machine. Léa Vermet l'a construite avant 2047 — elle a été la première à comprendre ce que MARTINE commençait à réécrire. Je l'ai entretenue, en secret, depuis sa mort. »",
+        "« Elle emmène dans le passé — mais passivement : tu peux voir, écouter, questionner. Rien de plus. »",
         `« D'abord, va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. La date exacte, cherche-la dans ton médiadex. »`,
         "« Reviens me voir après. »",
       ];

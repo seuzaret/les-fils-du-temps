@@ -154,7 +154,7 @@ export default function BunkerHub({ onGo, j3 }) {
       })}
 
       {/* Trappe rouge « Niveau -3 » quand débloquée (raccourci d'urgence) */}
-      {j3?.flags?.mission_kova_done && j3?.flags?.mission_appel_done && j3?.flags?.mission_carnet_done && (
+      {j3?.flags?.mission_kova_done && j3?.flags?.phase5_done && j3?.flags?.mission_carnet_done && (
         <g transform="translate(1110,280)" onClick={() => onGo("serveurs")} style={{ cursor: "pointer" }}>
           <circle r="52" fill="none" stroke="#ff5030" strokeWidth="2" strokeDasharray="6 4">
             <animate attributeName="r" values="46;56;46" dur="1.6s" repeatCount="indefinite" />

@@ -52,8 +52,7 @@ export const ROOM_TO_LEVEL = (() => {
   }
   m.awake = "0";       // le réveil se fait dans la chambre → niveau 0
   m.elevator = null;   // l'ascenseur n'a pas de niveau propre
-  m.voyage = null;     // hors-bunker (voyage dans le temps)
-  m.voyageK = null;    // idem pour les voyages via chronographe K
+  m.voyageK = null;    // voyages via chronographe K (hors-bunker)
   m.epilogueJeu3 = null; // écran plein, pas rattaché à un niveau
   return m;
 })();
@@ -62,7 +61,7 @@ export const ROOM_TO_LEVEL = (() => {
    n'est débloqué qu'une fois les 3 missions résolues. */
 export function isLevelUnlocked(levelId, flags) {
   if (levelId === "-3") {
-    return !!(flags?.mission_kova_done && flags?.mission_appel_done && flags?.mission_carnet_done);
+    return !!(flags?.mission_kova_done && flags?.phase5_done && flags?.mission_carnet_done);
   }
   if (levelId === "K") {
     return !!flags?.elevator_k_unlocked;

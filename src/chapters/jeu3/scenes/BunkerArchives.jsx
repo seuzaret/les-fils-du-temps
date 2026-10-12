@@ -6,7 +6,7 @@
    phosphorescentes au sol, terminal cubique cerclé de LED avec
    affichage cathodique, chariot de dossiers oublié, mote de
    poussière en suspension. Mission A : le record corrompu apparaît
-   après Kova, l'enquête temporelle se lance vers BunkerVoyage.
+   après Kova, le joueur reçoit sa première mission auprès de Jorge.
    ============================================================ */
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";

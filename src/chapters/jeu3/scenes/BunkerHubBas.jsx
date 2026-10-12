@@ -19,8 +19,8 @@ const DOORS = [
 export default function BunkerHubBas({ onGo, j3 }) {
   /* Badge "nouvelle enquête" sur la porte Rumeurs : apparaît quand la
      prochaine enquête est RÉELLEMENT disponible (gate narratif rempli).
-     Enquête 2 : requiert mission_appel_done (Archives). Enquête 3 :
-     requiert aussi mission_carnet_done. */
+     Enquête 2 : requiert la 1re passe de tri de Jorge. Enquête 3 :
+     requiert aussi la 2e passe (déjà géré dans BunkerRumeurs). */
   const flags = j3?.flags || {};
   const order = getMissionOrder(flags);
   const activeId = order.find((id) => j3?.missions?.[id] && !flags[j3.missions[id].flag]);
@@ -28,8 +28,8 @@ export default function BunkerHubBas({ onGo, j3 }) {
   const missionNum = activeId ? order.indexOf(activeId) + 1 : 0;
   const gateOk = !activeMission ? false
     : missionNum === 1 ? true
-    : missionNum === 2 ? !!flags.mission_appel_done
-    : missionNum === 3 ? !!flags.mission_appel_done && !!flags.mission_carnet_done
+    : missionNum === 2 ? !!flags.archives_tri_1_done
+    : missionNum === 3 ? !!flags.archives_tri_2_done
     : true;
   const newCase = !!activeMission && gateOk && !flags[`briefing_${activeMission.id}_done`] && !!flags.mission_kova_done;
 

@@ -16,12 +16,10 @@ import BunkerPrison from "../chapters/jeu3/scenes/BunkerPrison.jsx";
 import BunkerSalleK from "../chapters/jeu3/scenes/BunkerSalleK.jsx";
 import BunkerVoyageK from "../chapters/jeu3/scenes/BunkerVoyageK.jsx";
 import EpilogueJeu3 from "../chapters/jeu3/scenes/EpilogueJeu3.jsx";
-import BunkerSas from "../chapters/jeu3/scenes/BunkerSas.jsx";
 import BunkerCantine from "../chapters/jeu3/scenes/BunkerCantine.jsx";
 import BunkerInfirmerie from "../chapters/jeu3/scenes/BunkerInfirmerie.jsx";
 import BunkerAtelier from "../chapters/jeu3/scenes/BunkerAtelier.jsx";
 import BunkerChapelle from "../chapters/jeu3/scenes/BunkerChapelle.jsx";
-import BunkerVoyage from "../chapters/jeu3/scenes/BunkerVoyage.jsx";
 import BunkerServeurs from "../chapters/jeu3/scenes/BunkerServeurs.jsx";
 import BunkerSerres from "../chapters/jeu3/scenes/BunkerSerres.jsx";
 import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
@@ -29,7 +27,7 @@ import MediadexPanel from "../chapters/jeu3/MediadexPanel.jsx";
 import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
 import InterviewPanel from "../chapters/jeu3/InterviewPanel.jsx";
 import EnqueteCarnet from "../chapters/jeu3/EnqueteCarnet.jsx";
-import { MISSIONS_RUMEURS, MISSIONS_TEMPS, MISSIONS_OSINT, DOSSIERS_REECRITS, DOSSIERS_ORDER, getActiveMission, pickMissionOrder } from "../chapters/jeu3/missions.js";
+import { MISSIONS_RUMEURS, MISSIONS_OSINT, getActiveMission, pickMissionOrder } from "../chapters/jeu3/missions.js";
 import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
 
 /* ============================================================
@@ -65,12 +63,10 @@ const ROOMS = {
   salleK:     { Comp: BunkerSalleK,     label: "Salle temporelle · K-01" },
   voyageK:    { Comp: BunkerVoyageK,    label: "⟡ Voyage via Chronographe K-01" },
   epilogueJeu3: { Comp: null, label: "ÉPILOGUE · Le Discernement" },
-  sas:        { Comp: BunkerSas,        label: "Sas de voyage · machine de Léa" },
   cantine:    { Comp: BunkerCantine,    label: "Cantine commune" },
   infirmerie: { Comp: BunkerInfirmerie, label: "Infirmerie" },
   atelier:    { Comp: BunkerAtelier,    label: "Atelier des Ingénieurs" },
   chapelle:   { Comp: BunkerChapelle,   label: "Chapelle des Anciens" },
-  voyage:     { Comp: BunkerVoyage,     label: "⏳ Retour dans le temps" },
   serres:     { Comp: BunkerSerres,     label: "Serres hydroponiques · Niveau -2" },
   serveurs:   { Comp: BunkerServeurs,   label: "⚠ Niveau -3 · Serveurs" },
 };
@@ -112,11 +108,6 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null);
   const [carnetOpen, setCarnetOpen] = useState(false);
   const [mediadexOpen, setMediadexOpen] = useState(false);
-  /* État des dossiers réécrits (mission appel) : quel dossier le joueur
-     est en train de restaurer, et son bordereau en 3 cases rempli lors
-     du voyage. Remis à zéro quand le dossier est validé (ou annulé). */
-  const [activeDossierId, setActiveDossierId] = useState(null);
-  const [bordereau, setBordereau] = useState({}); // { qui?, ouQuand?, quoi? }
   /* Mode triche : Ctrl+Shift+C toggle. Quand actif, la mini-carte redevient
      cliquable pour se téléporter d'un étage à l'autre sans passer par
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
@@ -148,7 +139,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
      vaut la salle elle-même — auquel cas "Retour au couloir" doit renvoyer à
      l'ascenseur plutôt que sur la salle courante. */
   const hubRoom = lvlHubRoom && lvlHubRoom !== room ? lvlHubRoom : "elevator";
-  const missions = { ...MISSIONS_RUMEURS, ...MISSIONS_TEMPS, ...MISSIONS_OSINT };
+  const missions = { ...MISSIONS_RUMEURS, ...MISSIONS_OSINT };
   const activeMission = getActiveMission(missions, flags);
 
   /* Reset de l'état d'enquête quand la mission active change
@@ -180,23 +171,6 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
     setCurrentQuestionIdx(idx);
   };
 
-  /* API dossiers réécrits (mission appel). */
-  const dossiers = DOSSIERS_REECRITS;
-  const activeDossier = activeDossierId ? dossiers[activeDossierId] : null;
-  const startDossier = (id) => { setActiveDossierId(id); setBordereau({}); };
-  const fillBordereau = (key, value) => setBordereau((b) => ({ ...b, [key]: value }));
-  const finishDossier = () => {
-    if (activeDossier) setFlag(activeDossier.flag);
-    setActiveDossierId(null);
-    setBordereau({});
-    /* Marque la mission appel comme finie quand les 3 dossiers sont restaurés. */
-    const nextFlags = { ...flags, [activeDossier?.flag]: true };
-    if (DOSSIERS_ORDER.every((id) => nextFlags[dossiers[id].flag])) {
-      setFlag("mission_appel_done");
-    }
-  };
-  const cancelDossier = () => { setActiveDossierId(null); setBordereau({}); };
-
   const j3 = { flags, heardPnj, setFlag, hear,
     previousRoom: prevRef.current,
     hubRoom,
@@ -204,9 +178,6 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
     activeMission,
     enqAnswered,
     openInterview, closeInterview, askQuestion,
-    dossiers, dossiersOrder: DOSSIERS_ORDER,
-    activeDossier, bordereau,
-    startDossier, fillBordereau, finishDossier, cancelDossier,
     endChoice };
 
   /* Témoin actuellement en interview (modal top-level). */
@@ -222,11 +193,11 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
 
   /* La mini-carte latérale n'a pas de sens dans quelques écrans très
      immersifs (réveil, voyage dans le temps, confrontation finale). */
-  const showMinimap = !["awake", "voyage", "voyageK", "serveurs", "epilogueJeu3"].includes(room);
+  const showMinimap = !["awake", "voyageK", "serveurs", "epilogueJeu3"].includes(room);
   /* Flèche de retour visible dans les pièces individuelles. Masquée
      dans les couloirs (où l'on clique directement sur l'ascenseur
      dessiné dans le décor) et dans les écrans immersifs. */
-  const showBack = !["awake", "voyage", "voyageK", "serveurs", "elevator",
+  const showBack = !["awake", "voyageK", "serveurs", "elevator",
                      "hub", "hubHaut", "hubBas", "epilogueJeu3"].includes(room);
   const backTarget = hubRoom;
 
