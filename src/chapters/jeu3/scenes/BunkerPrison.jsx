@@ -17,6 +17,16 @@ const JORGE_STYLE = {
   bald: true, beard: "#8a8070",
 };
 
+/* Infos par destination pour les révélations progressives de Jorge. */
+const DEST_INFO = {
+  gutenberg: { nom: "Johannes Gutenberg", lieu: "Mayence", annee: 1450,
+    question: "la presse à caractères mobiles en métal" },
+  chappe:    { nom: "Claude Chappe", lieu: "Paris–Lille", annee: 1794,
+    question: "le télégraphe optique à bras articulés" },
+  marconi:   { nom: "Guglielmo Marconi", lieu: "Cornouailles", annee: 1901,
+    question: "le premier signal radio transatlantique" },
+};
+
 export default function BunkerPrison({ onGo, j3 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const flags = j3?.flags || {};
@@ -27,49 +37,64 @@ export default function BunkerPrison({ onGo, j3 }) {
   ];
   const nbSignale = signalements.filter(Boolean).length;
   const visited = !!flags.jorge_cellule_vue;
+  /* Ordre des destinations tiré au Jeu3 init. On compte combien ont
+     été vérifiées pour savoir laquelle révéler maintenant. */
+  const order = flags.k_voyage_order || ["gutenberg", "chappe", "marconi"];
+  const doneCount = order.filter((id) => flags[`voyageK_${id}_done`]).length;
+  const nextId = doneCount < 3 ? order[doneCount] : null;
+  const nextDest = nextId ? DEST_INFO[nextId] : null;
+  const prevId = doneCount > 0 ? order[doneCount - 1] : null;
+  const prevDest = prevId ? DEST_INFO[prevId] : null;
 
-  /* Dialogue selon le nombre de signalements. Dans tous les cas, Jorge
-     livre la plaque K à la fin du dialogue (voir onDone ci-dessous).
-     Le ton varie : résignation à 0/3, partage à 1-2/3, confiance à 3/3. */
+  /* Dialogue progressif selon l'avancée des voyages (doneCount 0..3) :
+     - 0 : première rencontre, Jorge explique le bouton caché et donne
+           la PREMIÈRE destination.
+     - 1-2 : il confirme ce qu'on a entendu puis donne la suivante.
+     - 3 : tout est vérifié, il invite à rapporter à Vez. */
   const lignes = (() => {
-    if (nbSignale === 0) {
+    if (doneCount === 0) {
+      const intro = !visited ? [
+        "Jorge te regarde à travers les barreaux. Il hoche la tête lentement.",
+      ] : [
+        "Jorge se redresse en te voyant revenir.",
+      ];
       return [
-        "Jorge te regarde à travers les barreaux. Il hoche la tête, lentement.",
-        "« Tu es venu·e me voir. C'est déjà quelque chose — beaucoup se seraient contentés de ranger. »",
-        "« Je t'avais glissé trois signaux dans les lots que tu as triés. Trois dates qui ne collaient pas. Tu ne les as pas vues. Tant pis — on apprend à ranger, on désapprend à regarder. »",
-        "« Il est trop tard pour reprendre ces fiches, elles sont déjà au bureau du Juge. Mais ce que je faisais, tu peux encore aller le voir toi-même. »",
-        "Il te glisse à travers les barreaux une petite plaque métallique gravée d'un K.",
-        "« L'ascenseur a une touche cachée. Elle s'appelle K. Vas-y. Ouvre l'œil, cette fois. »",
+        ...intro,
+        nbSignale > 0
+          ? `« Tu es venu·e me voir, et tu as repéré ${nbSignale} de mes signalements dans les archives. Je t'en remercie. »`
+          : "« Tu es venu·e me voir. C'est déjà beaucoup — la plupart se contentent de ranger. »",
+        "« Il faut descendre à l'étage K. L'ascenseur a un petit bouton caché, à droite du frein d'urgence — sans inscription, discret. »",
+        "« Il faut l'enfoncer CINQ fois d'affilée pour qu'il s'active. Pas une de plus, pas une de moins. C'était ma sécurité. »",
+        "« Là-bas, tu trouveras ma machine. Elle emmène dans le passé — mais passivement : tu peux voir, écouter, questionner. Rien de plus. »",
+        `« D'abord, va voir ${nextDest.nom}, en ${nextDest.annee}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. »`,
+        "« Reviens me voir après. Je t'en dirai plus. »",
       ];
     }
-    if (nbSignale < 3) {
-      const noms = [
-        signalements[0] ? "Gutenberg" : null,
-        signalements[1] ? "Chappe" : null,
-        signalements[2] ? "Marconi" : null,
-      ].filter(Boolean).join(", ");
-      const manquants = [
-        !signalements[0] ? "Gutenberg" : null,
-        !signalements[1] ? "Chappe" : null,
-        !signalements[2] ? "Marconi" : null,
-      ].filter(Boolean).join(", ");
+    if (doneCount === 1) {
       return [
-        "Jorge se lève à ton approche, s'accroche aux barreaux.",
-        `« Tu en as vu ${nbSignale} sur 3 : ${noms}. Déjà beaucoup. »`,
-        `« Il te reste ${3 - nbSignale} fiche${3 - nbSignale > 1 ? "s" : ""} à repérer : ${manquants}. Tu peux encore y retourner. »`,
-        "« Ou tu continues maintenant. À toi de voir. Dans tous les cas, je te confie ceci. »",
-        "Il te glisse à travers les barreaux une petite plaque métallique gravée d'un K.",
-        "« L'ascenseur a une touche cachée. Elle s'appelle K. Vas-y quand tu seras prêt·e. »",
+        "Jorge se lève, les yeux brillants.",
+        `« Tu l'as vu·e. ${prevDest.nom}. ${prevDest.annee}, ${prevDest.lieu}. Confirmé par la personne elle-même. »`,
+        "« C'est ça qu'ils effacent, dans les Archives : les noms, les dates, les lieux. Ils réécrivent par petites touches, jusqu'à ce que personne ne se souvienne plus. »",
+        `« Maintenant, deuxième voyage. Va voir ${nextDest.nom}, en ${nextDest.annee}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. »`,
+        "« Reviens me voir ensuite. »",
       ];
     }
+    if (doneCount === 2) {
+      return [
+        "Jorge pose son front contre les barreaux, soulagé.",
+        `« Deux sur trois. ${prevDest.nom} aussi, tu l'as entendu·e. »`,
+        "« Il n'en reste qu'un. Celui-là, c'est le plus récent — et c'est le plus facile à faire disparaître parce qu'il est encore dans les mémoires vivantes. »",
+        `« Va voir ${nextDest.nom}, en ${nextDest.annee}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. »`,
+        "« Puis reviens. On aura fini. »",
+      ];
+    }
+    /* doneCount >= 3 */
     return [
-      "Jorge te regarde — pour la première fois sans bougonnerie.",
-      "« Trois sur trois. Gutenberg, Chappe, Marconi. Tu les as toutes vues. »",
-      "« Alors tu sais déjà la moitié de l'histoire. Je ne mélangeais pas les dates par distraction. J'essayais de garder la trace de ce qu'ils effaçaient — en signalant les fiches pour qu'un œil comme le tien les voie. »",
-      "« Ils ont réécrit les sources. Qui a inventé l'imprimerie. Qui a tendu le premier télégraphe. Qui a parlé le premier à travers l'océan. Il reste assez d'original quelque part pour reconstituer. »",
-      "Il te glisse à travers les barreaux une petite plaque métallique gravée d'un K.",
-      "« L'ascenseur a une touche cachée. Elle s'appelle K. Elle ouvre une salle que personne n'a vue depuis quarante ans. »",
-      "« Vas-y. Et finis ce que je n'ai pas pu finir. »",
+      "Jorge te regarde longuement, sans parler d'abord.",
+      "« Trois sur trois. Les trois noms, les trois dates, les trois lieux. Tu as entendu de leur bouche. »",
+      "« Alors tu sais ce que je faisais, maintenant. Je signalais, dans le silence des archives, ce qu'ils réécrivaient. Pour qu'un œil comme le tien le voie. »",
+      "« Remonte au bureau du Juge Vez. Dépose-lui le dossier. Qu'elle fasse rouvrir les sources. »",
+      "« Et merci. »",
     ];
   })();
 
@@ -160,7 +185,7 @@ export default function BunkerPrison({ onGo, j3 }) {
                   bald beard={JORGE_STYLE.beard}
                   facing="front" activity="crossed"
                   nom="Jorge" role="Détenu"
-                  active={!visited}
+                  active={doneCount < 3}
                   onClick={() => setDialogOpen(true)} />
               )}
             </g>
@@ -186,8 +211,14 @@ export default function BunkerPrison({ onGo, j3 }) {
         <div style={{ background: "#0a0e14", border: "1px dashed #5a6270", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
           <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.55, fontStyle: "italic" }}>
             Trois cellules. Celle du milieu est occupée par Jorge, les deux autres vides. L'air sent la poussière et le métal froid.
-            {!visited && " Approche-toi des barreaux pour lui parler."}
+            {doneCount < 3 && " Approche-toi des barreaux pour lui parler."}
+            {doneCount >= 3 && " Jorge te regarde comme on regarde quelqu'un qui a fini son travail."}
           </p>
+          {doneCount > 0 && doneCount < 3 && (
+            <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8aff9e", letterSpacing: 2 }}>
+              voyages confirmés · {doneCount} / 3
+            </div>
+          )}
         </div>
       </div>
 
@@ -198,7 +229,7 @@ export default function BunkerPrison({ onGo, j3 }) {
 
       {dialogOpen && (
         <BigDialogue
-          topic={`CELLULE C-02 · JORGE · ${nbSignale} / 3 SIGNALEMENT${nbSignale > 1 ? "S" : ""}`}
+          topic={`CELLULE C-02 · JORGE · ${doneCount < 3 ? `VOYAGE ${doneCount + 1} / 3` : "MISSION ACHEVÉE"}`}
           speakerNom="Jorge" speakerRole="Archiviste détenu"
           speakerStyle={JORGE_STYLE}
           accent="#8aff9e"

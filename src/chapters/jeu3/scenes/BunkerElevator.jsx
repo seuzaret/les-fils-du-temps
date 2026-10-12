@@ -16,7 +16,30 @@ export default function BunkerElevator({ onGo, j3 }) {
   const currentLvl = ROOM_TO_LEVEL[j3?.previousRoom] || "0";
   const [phase, setPhase] = useState("idle");
   const [target, setTarget] = useState(null);
+  const [kTaps, setKTaps] = useState(0);
   const rafRef = useRef(null);
+  const audioRef = useRef(null);
+  const K_TAPS_NEEDED = 5;
+
+  const beep = (freq = 440, dur = 0.08) => {
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!audioRef.current) audioRef.current = new Ctx();
+      const ctx = audioRef.current;
+      if (ctx.state === "suspended") ctx.resume().catch(() => {});
+      const t0 = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(0.08, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+      osc.connect(g).connect(ctx.destination);
+      osc.start(t0);
+      osc.stop(t0 + dur + 0.02);
+    } catch {}
+  };
 
   const go = (lvl) => {
     if (!isLevelUnlocked(lvl.id, j3.flags)) return;
@@ -312,27 +335,46 @@ export default function BunkerElevator({ onGo, j3 }) {
               <text x="0" y="8" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="14" fontWeight="900" fill="#fff" letterSpacing="4">STOP</text>
             </g>
 
-            {/* Petit bouton K discret, calé entre la grille et le STOP sur
-                le côté droit. N'apparaît que si l'étage est déverrouillé. */}
-            {(() => {
+            {/* Petit bouton rond CACHÉ à droite du STOP, sans inscription.
+                Jorge dit en cellule qu'il faut 5 appuis pour l'activer.
+                Les 4 premiers clics émettent un bip et allument un
+                voyant partiel ; au 5e, l'étage K devient accessible et
+                le voyage se lance au prochain clic. */}
+            {isLevelUnlocked("K", j3.flags) && (() => {
               const lvlK = LEVELS.find((l) => l.id === "K");
-              if (!lvlK || !isLevelUnlocked("K", j3.flags)) return null;
+              if (!lvlK) return null;
               const here = currentLvl === "K";
+              /* Une fois la Salle K visitée au moins une fois, le bouton
+                 devient classique : un seul clic suffit. Sinon il faut
+                 5 appuis d'affilée pour l'activer. */
+              const learned = !!j3?.flags?.salle_k_vue;
+              const activated = learned || kTaps >= K_TAPS_NEEDED;
+              const onTap = () => {
+                if (activated || here) { go(lvlK); return; }
+                const next = kTaps + 1;
+                beep(300 + next * 90, 0.09);
+                setKTaps(next);
+              };
               return (
-                <g transform="translate(395,326)"
-                  onClick={() => go(lvlK)}
-                  style={{ cursor: "pointer" }}
-                  onMouseEnter={(e) => e.currentTarget.querySelector(".k-hov").setAttribute("opacity", "1")}
-                  onMouseLeave={(e) => e.currentTarget.querySelector(".k-hov").setAttribute("opacity", "0")}>
-                  <circle className="k-hov" r="22" fill="none" stroke={lvlK.color} strokeWidth="1.6" opacity="0" />
-                  <circle r="16" fill={here ? lvlK.color : "#0a0e14"} stroke={lvlK.color} strokeWidth="1.8" />
-                  <text x="0" y="5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="16"
-                    fontWeight="900" fill={here ? "#0a0806" : lvlK.color} letterSpacing="1">
-                    K
-                  </text>
-                  {!here && (
-                    <circle r="20" fill="none" stroke={lvlK.color} strokeWidth="0.6" opacity="0.4">
-                      <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite" />
+                <g transform="translate(430,338)"
+                  onClick={onTap}
+                  style={{ cursor: "pointer" }}>
+                  <circle r="14" fill="transparent" />
+                  {/* Minuscule bouton discret, pas de texte */}
+                  <circle r="4.5"
+                    fill={activated ? lvlK.color : "#1a2028"}
+                    stroke={activated ? lvlK.color : "#3a4048"}
+                    strokeWidth="1" />
+                  {/* Arc partiel qui se remplit à chaque clic (0..5) */}
+                  {!activated && kTaps > 0 && (
+                    <circle r="7" fill="none" stroke={lvlK.color} strokeWidth="1.2"
+                      strokeDasharray={`${(kTaps / K_TAPS_NEEDED) * 44} 44`}
+                      transform="rotate(-90)"
+                      opacity="0.7" />
+                  )}
+                  {activated && (
+                    <circle r="7" fill="none" stroke={lvlK.color} strokeWidth="1.2">
+                      <animate attributeName="opacity" values="0.3;1;0.3" dur="1.4s" repeatCount="indefinite" />
                     </circle>
                   )}
                 </g>

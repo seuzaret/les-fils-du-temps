@@ -79,12 +79,26 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [flags, setFlags] = useState(() => {
     const initial = { ...(startAt?.flags || {}) };
     if (!initial.mission_order) initial.mission_order = pickMissionOrder();
-    /* L'indice du puzzle Salle K pointe sur l'une des 3 inventions
-       dont Jorge a glissé la fiche falsifiée. Tiré au hasard une
-       seule fois par partie, pour que la date à décoder change. */
+    /* Ordre des 3 destinations du Chronographe K-01 tiré au hasard
+       une fois par partie — Jorge les révèle une à une au joueur. */
+    if (!initial.k_voyage_order) {
+      const pool = ["gutenberg", "chappe", "marconi"];
+      /* Fisher-Yates */
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      initial.k_voyage_order = pool;
+    }
+    /* L'indice du puzzle de la Salle K pointe sur la PREMIÈRE
+       destination (celle que Jorge révélera en premier). */
     if (!initial.k_puzzle_invention) {
-      const pool = ["presse-gutenberg", "telegraphe-chappe", "tsf-marconi"];
-      initial.k_puzzle_invention = pool[Math.floor(Math.random() * pool.length)];
+      const metaId = {
+        gutenberg: "presse-gutenberg",
+        chappe:    "telegraphe-chappe",
+        marconi:   "tsf-marconi",
+      };
+      initial.k_puzzle_invention = metaId[initial.k_voyage_order[0]];
     }
     return initial;
   });
