@@ -574,7 +574,7 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
     <g transform="translate(500,180)">
       <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
       <g style={{ transition: "transform 1.4s cubic-bezier(0.3,0,0.3,1)",
-        transform: tableauOuvert ? "translateX(340px)" : "translateX(0)" }}>
+        transform: tableauOuvert ? "translateX(240px)" : "translateX(0)" }}>
         <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
         <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
         <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
@@ -602,24 +602,27 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
         )}
       </g>
       {/* Pupitre dévoilé — 4 jauges verticales à charger, avec un petit
-          cadran chacun sur le dessus. */}
+          cadran chacun sur le dessus. Compact : laisse place au tableau
+          qui a coulissé sur la droite. */}
       {tableauOuvert && (
         <g>
-          <rect x="-160" y="-70" width="320" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
-          <text x="0" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="#7fd8ff" letterSpacing="4">
-            PUPITRE PORTAIL · K-01
+          <rect x="-160" y="-70" width="240" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
+          <text x="-40" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#7fd8ff" letterSpacing="3">
+            PUPITRE K-01
           </text>
-          <line x1="-150" y1="-46" x2="150" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
+          <line x1="-150" y1="-46" x2="70" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
           {JAUGES.map((j, i) => (
-            <Jauge key={j.id} x={-105 + i * 70} label={j.label}
+            <Jauge key={j.id} x={-100 + i * 55} label={j.label}
               on={!!cadrans?.[i]}
               clickable={!cadrans?.[i] && !portalOnline}
               onClick={() => onChargeCadran?.(i)} />
           ))}
-          <text x="0" y="52" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
-            fill={portalOnline ? "#5eff9e" : "#7fd8ff"}>
-            {portalOnline ? "✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER" : "⚙ CLIQUE CHAQUE JAUGE POUR L'AMORCER"}
-          </text>
+          {portalOnline && (
+            <text x="-40" y="52" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
+              fill="#5eff9e">
+              ✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER
+            </text>
+          )}
         </g>
       )}
     </g>
