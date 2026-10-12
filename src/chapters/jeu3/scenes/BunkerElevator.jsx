@@ -354,6 +354,11 @@ export default function BunkerElevator({ onGo, j3 }) {
                 const next = kTaps + 1;
                 beep(300 + next * 90, 0.09);
                 setKTaps(next);
+                /* Code triche : au 5e tap, on débloque aussi le médiadex
+                   (sinon Jorge force à aller le chercher d'abord). */
+                if (next >= K_TAPS_NEEDED && !j3?.flags?.mediadex_retrouve) {
+                  j3?.setFlag?.("mediadex_retrouve", true);
+                }
               };
               return (
                 <g transform="translate(430,338)"

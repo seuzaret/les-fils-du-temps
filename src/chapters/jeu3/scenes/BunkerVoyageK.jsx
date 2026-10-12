@@ -57,7 +57,7 @@ const DEST = {
         id: "chappe", x: 360, y: 470, right: true,
         question: "Est-ce que vous confirmez que vous avez tendu le premier télégraphe entre Paris et Lille, en 1794, et que c'est un télégraphe OPTIQUE ?",
         lignes: [
-          "— Oui. Je suis Claude Chappe. Nous sommes le 15 août 1794. La ligne va de Paris à Lille.",
+          "— Oui. Je suis Claude Chappe. La ligne va de Paris à Lille, inaugurée l'été dernier.",
           "— Ce n'est pas un télégraphe électrique — l'électricité ne porte pas encore de messages. C'est de la télégraphie OPTIQUE : des bras articulés en haut de chaque tour, chaque posture est une lettre, lue à la longue-vue par la tour d'à côté.",
           "— Tout à l'heure, en moins d'une heure, le gouvernement a appris la reprise de Condé-sur-l'Escaut aux Autrichiens. Avant moi, il fallait deux jours à cheval.",
         ],
@@ -288,9 +288,11 @@ export default function BunkerVoyageK({ onGo, j3 }) {
         </svg>
       )}
 
-      {/* Bandeau topic en haut à gauche */}
+      {/* Bandeau topic en haut à gauche — on affiche uniquement le lieu :
+          c'est au joueur, en interrogeant les témoins, de confirmer la
+          date du dossier. */}
       <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(10,8,6,0.85)", border: "1px solid #c8a848", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8a848", pointerEvents: "none" }}>
-        ⟡ {(info.annee || "? ? ? ?").toString().toUpperCase()} · {info.lieu.toUpperCase()}
+        ⟡ {info.lieu.toUpperCase()}
       </div>
 
       {/* Bouton Interrompre en haut à droite */}
