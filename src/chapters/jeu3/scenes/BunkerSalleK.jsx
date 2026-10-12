@@ -655,6 +655,23 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
   return (
     <g transform="translate(500,180)">
       <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
+      {/* Pupitre dévoilé — rendu AVANT le tableau pour qu'au cours de
+          l'animation le tableau glisse PAR-DESSUS la console. */}
+      {tableauOuvert && (
+        <g>
+          <rect x="-160" y="-70" width="240" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
+          <text x="-40" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#7fd8ff" letterSpacing="3">
+            PUPITRE K-01
+          </text>
+          <line x1="-150" y1="-46" x2="70" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
+          {JAUGES.map((j, i) => (
+            <Jauge key={j.id} x={-100 + i * 55} label={j.label}
+              on={!!cadrans?.[i]}
+              clickable={!cadrans?.[i] && !portalOnline}
+              onClick={() => onChargeCadran?.(i)} />
+          ))}
+        </g>
+      )}
       <g transform={`translate(${slideX},0)`}>
         <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
         <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
@@ -682,24 +699,6 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
           </>
         )}
       </g>
-      {/* Pupitre dévoilé — 4 jauges verticales à charger, avec un petit
-          cadran chacun sur le dessus. Compact : laisse place au tableau
-          qui a coulissé sur la droite. */}
-      {tableauOuvert && (
-        <g>
-          <rect x="-160" y="-70" width="240" height="110" fill="#0a1428" stroke="#7fd8ff" strokeWidth="1.5" />
-          <text x="-40" y="-54" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#7fd8ff" letterSpacing="3">
-            PUPITRE K-01
-          </text>
-          <line x1="-150" y1="-46" x2="70" y2="-46" stroke="#7fd8ff" strokeWidth="0.4" opacity="0.5" />
-          {JAUGES.map((j, i) => (
-            <Jauge key={j.id} x={-100 + i * 55} label={j.label}
-              on={!!cadrans?.[i]}
-              clickable={!cadrans?.[i] && !portalOnline}
-              onClick={() => onChargeCadran?.(i)} />
-          ))}
-        </g>
-      )}
     </g>
   );
 }
