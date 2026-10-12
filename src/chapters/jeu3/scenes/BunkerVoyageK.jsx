@@ -25,16 +25,17 @@ const DEST = {
     annee: "~1450", lieu: "Mayence (Saint-Empire romain germanique)",
     titre: "L'atelier de Johannes Gutenberg",
     Scene: SceneImprimerie,
-    /* Dans ce décor Jeu 1, un seul personnage visible : « Sigismond »,
-       le rédacteur en chef à la presse — ici le voyageur K le lit
-       comme s'il parlait à Gutenberg lui-même. */
+    /* Un seul personnage visible dans ce décor Jeu 1 (le rédacteur-
+       imprimeur « Sigismond »). Pour le voyage K, c'est Gutenberg
+       lui-même. Hotspot original en (762, 438). */
     pnjs: [
       {
-        id: "gutenberg", x: 762, y: 400, right: true,
+        id: "gutenberg", x: 762, y: 438, right: true,
+        question: "Est-ce que vous confirmez que vous avez bien inventé la presse à caractères mobiles en métal, ici à Mayence, autour de 1450 ?",
         lignes: [
-          "— Approche, chronaute. Je m'appelle Johannes Gutenberg. L'année : 1450. Nous sommes à Mayence.",
-          "— Regarde : je ne grave plus chaque lettre dans un bloc de bois. Je COULE chaque caractère séparément dans un alliage de plomb, d'étain et d'antimoine. Je peux les RÉUTILISER, mot après mot.",
-          "— Avec cette presse à vis et cette encre grasse, j'imprime une Bible — 42 lignes par colonne. On la nommera plus tard la B42. Le début d'une révolution.",
+          "— Oui. Je suis Johannes Gutenberg. Mayence, 1450.",
+          "— Je ne grave plus chaque lettre dans un bloc de bois. Je COULE chaque caractère séparément dans un alliage de plomb, étain et antimoine. Je peux les RÉUTILISER, mot après mot.",
+          "— Avec cette presse à vis et une encre grasse, j'imprime une Bible — 42 lignes par colonne. On la nommera plus tard la B42.",
         ],
       },
     ],
@@ -43,23 +44,24 @@ const DEST = {
     annee: "1794", lieu: "Ligne Paris–Lille",
     titre: "La tour de Claude Chappe",
     Scene: SceneChappe,
-    /* Décor Jeu 1 : 3 personnages — opérateur, Volta (dans son atelier),
-       et un espion caché. */
+    /* Hotspots originaux :
+         opérateur (392, 366), Volta (598, 452), espion (880, 486). */
     pnjs: [
       {
-        id: "chappe", x: 392, y: 330, right: true,
+        id: "chappe", x: 392, y: 366, right: true,
+        question: "Est-ce que vous confirmez que vous avez tendu le premier télégraphe entre Paris et Lille, en 1794, et que c'est un télégraphe OPTIQUE ?",
         lignes: [
-          "— Chronaute. Je suis Claude Chappe. Nous sommes le 15 août 1794. Ma ligne va de Paris à Lille.",
-          "— Ce n'est pas un télégraphe électrique — l'électricité ne porte pas encore de messages. C'est de la télégraphie OPTIQUE : des bras articulés en haut de chaque tour, chaque posture est une lettre, lue à la longue-vue par la tour suivante.",
+          "— Oui. Je suis Claude Chappe. Nous sommes le 15 août 1794. La ligne va de Paris à Lille.",
+          "— Ce n'est pas un télégraphe électrique — l'électricité ne porte pas encore de messages. C'est de la télégraphie OPTIQUE : des bras articulés en haut de chaque tour, chaque posture est une lettre, lue à la longue-vue par la tour d'à côté.",
           "— Tout à l'heure, en moins d'une heure, le gouvernement a appris la reprise de Condé-sur-l'Escaut aux Autrichiens. Avant moi, il fallait deux jours à cheval.",
         ],
       },
       {
-        id: "volta", x: 598, y: 416,
+        id: "volta", x: 598, y: 452,
         lignes: ["— Je m'appelle Volta. Je bricole une pile dans mon coin — rien à voir avec les bras articulés d'en haut. Si tu veux comprendre la ligne, va parler à l'opérateur sur sa tour."],
       },
       {
-        id: "espion", x: 880, y: 450,
+        id: "espion", x: 880, y: 486,
         lignes: ["— Chut… ne me regarde pas. Je ne suis que de passage. On raconte que ces tours parlent sans ouvrir la bouche. J'aimerais savoir comment, mais personne ne me répondra."],
       },
     ],
@@ -68,13 +70,13 @@ const DEST = {
     annee: "12 décembre 1901", lieu: "Poldhu (Cornouailles) → Signal Hill (Terre-Neuve)",
     titre: "La station de Guglielmo Marconi",
     Scene: SceneTSF,
-    /* Décor Jeu 1 : Marconi est le seul personnage visible, à sa station
-       de TSF. */
+    /* Hotspot original : Marconi en (238, 468). */
     pnjs: [
       {
-        id: "marconi", x: 238, y: 430, right: true,
+        id: "marconi", x: 238, y: 468, right: true,
+        question: "Est-ce que vous confirmez que vous avez envoyé le premier signal radio à travers l'Atlantique, ici depuis Poldhu, en décembre 1901 ?",
         lignes: [
-          "— Chronaute, approche. Je suis Guglielmo Marconi. Nous sommes dans la nuit du 12 décembre 1901, à Poldhu, en Cornouailles.",
+          "— Oui. Je suis Guglielmo Marconi. Nuit du 12 décembre 1901, Poldhu, Cornouailles.",
           "— À 3 400 kilomètres de là, à Signal Hill, Terre-Neuve, un de mes récepteurs écoute. L'antenne crache un S en Morse — trois points — répété sans relâche.",
           "— Vers midi, je l'ai entendu : trois clics, à travers l'Atlantique, sans aucun fil. L'ionosphère sert de miroir — personne ne le sait encore. C'est la première preuve.",
         ],
@@ -211,58 +213,105 @@ export default function BunkerVoyageK({ onGo, j3 }) {
 
       {/* Modale de dialogue avec le PNJ cliqué */}
       {activeNode && (
-        <div onClick={(e) => e.stopPropagation()}
-          style={{ position: "absolute", left: "50%", bottom: 24, transform: "translateX(-50%)",
-            background: "#141008",
-            border: `2px solid ${activeNode.right ? "#5eff9e" : "#8a7050"}`,
-            borderRadius: 12, padding: "16px 22px",
-            maxWidth: 760, width: "min(760px, calc(100% - 32px))",
-            boxShadow: "0 10px 40px rgba(0,0,0,0.6)" }}>
+        <PnjDialogue node={activeNode}
+          lineIdx={lineIdx}
+          totalLines={totalLines}
+          atLast={atLast}
+          onNext={() => setLineIdx((i) => i + 1)}
+          onClose={closeDialogue}
+          onReport={() => { if (activeNode.right) info.rightSeen = true; setPhase("return"); }} />
+      )}
+    </div>
+  );
+}
+
+/* Modale de dialogue : d'abord la question du joueur (encart loupe),
+   puis les répliques du PNJ. Pour un PNJ sans question définie (les
+   « bateau »), on saute directement aux lignes. */
+function PnjDialogue({ node, lineIdx, totalLines, atLast, onNext, onClose, onReport }) {
+  const [askedPhase, setAskedPhase] = useState(!!node.question);
+  const color = node.right ? "#5eff9e" : "#8a7050";
+  return (
+    <div onClick={(e) => e.stopPropagation()}
+      style={{ position: "absolute", left: "50%", bottom: 24, transform: "translateX(-50%)",
+        background: "#141008",
+        border: `2px solid ${color}`,
+        borderRadius: 12, padding: "16px 22px",
+        maxWidth: 760, width: "min(760px, calc(100% - 32px))",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.6)" }}>
+      {askedPhase ? (
+        <>
+          {/* Question du joueur, type « loupe/interrogation » */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div style={{ width: 28, height: 28, borderRadius: "50%", background: "#1a2838",
+              border: "1.5px solid #c8a848", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              🔎
+            </div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
+              VOUS DEMANDEZ
+            </div>
+          </div>
+          <p style={{ margin: "10px 0 0", fontSize: 15, color: "#e8dfc8", lineHeight: 1.6, fontStyle: "italic" }}>
+            « {node.question} »
+          </p>
+          <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 8 }}>
+            <button onClick={onClose}
+              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+              ← Fermer
+            </button>
+            <button onClick={() => setAskedPhase(false)}
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+              Écouter la réponse ▸
+            </button>
+          </div>
+        </>
+      ) : (
+        <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3,
-              color: activeNode.right ? "#5eff9e" : "#8a7050", fontWeight: 800 }}>
-              {activeNode.right ? "📜 TÉMOIGNAGE DE PREMIÈRE MAIN" : "— habitant·e du passé"}
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color, fontWeight: 800 }}>
+              {node.right ? "📜 TÉMOIGNAGE DE PREMIÈRE MAIN" : "— habitant·e du passé"}
             </div>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7050" }}>
               {lineIdx + 1} / {totalLines}
             </div>
           </div>
           <p style={{ margin: "10px 0 0", fontSize: 15, color: "#e8dfc8", lineHeight: 1.6 }}>
-            {activeNode.lignes[lineIdx]}
+            {node.lignes[lineIdx]}
           </p>
           <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 8 }}>
-            <button onClick={closeDialogue}
+            <button onClick={onClose}
               style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
               ← Fermer
             </button>
             {atLast ? (
-              activeNode.right ? (
-                <button onClick={() => { if (activeNode.right) info.rightSeen = true; setPhase("return"); }}
+              node.right ? (
+                <button onClick={onReport}
                   style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                   Rapporter ▸
                 </button>
               ) : (
-                <button onClick={closeDialogue}
+                <button onClick={onClose}
                   style={{ background: "#8a7050", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                   Fermer ▸
                 </button>
               )
             ) : (
-              <button onClick={() => setLineIdx((i) => i + 1)}
+              <button onClick={onNext}
                 style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                 Suite ▸
               </button>
             )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );
 }
 
-/* Zone cliquable d'un PNJ : hit-test explicite via pointerEvents="all"
-   et petit halo doré au survol pour confirmer visuellement que la zone
-   répond, sans gâcher la mise en scène. */
+/* Zone cliquable d'un PNJ : hit-test explicite via pointerEvents="all".
+   Les Hotspots Jeu 1 (cx, cy) sont posés sur le CORPS du personnage, pas
+   sur ses pieds — la hitbox va donc de −40 au-dessus à +60 en-dessous
+   pour couvrir à la fois la tête et le torse autour du centre. */
 function PnjHit({ p, onClick }) {
   const [hover, setHover] = useState(false);
   return (
@@ -271,15 +320,15 @@ function PnjHit({ p, onClick }) {
       onClick={onClick}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}>
-      {/* Zone de clic large (72×140, calée sur un sprite PNJ typique).
-          pointerEvents="all" force le hit-test quel que soit le fill. */}
-      <rect x="-36" y="-110" width="72" height="140" fill="black" fillOpacity="0" pointerEvents="all" />
+      <rect x="-40" y="-40" width="80" height="100" fill="black" fillOpacity="0" pointerEvents="all" />
       {hover && (
         <>
-          <rect x="-36" y="-110" width="72" height="140" fill="none"
+          <rect x="-40" y="-40" width="80" height="100" fill="none"
             stroke="#ffd870" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.6" pointerEvents="none" />
-          <circle cx="0" cy="-96" r="12" fill="rgba(10,8,6,0.85)" stroke="#ffd870" strokeWidth="1.2" pointerEvents="none" />
-          <text x="0" y="-93" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="11" fontWeight="800" fill="#ffd870" pointerEvents="none">?</text>
+          <circle cx="0" cy="-54" r="12" fill="rgba(10,8,6,0.85)" stroke="#ffd870" strokeWidth="1.2" pointerEvents="none" />
+          {/* Mini loupe */}
+          <circle cx="-2" cy="-56" r="5" fill="none" stroke="#ffd870" strokeWidth="1.4" pointerEvents="none" />
+          <line x1="2" y1="-52" x2="5" y2="-49" stroke="#ffd870" strokeWidth="2" strokeLinecap="round" pointerEvents="none" />
         </>
       )}
     </g>
