@@ -17,7 +17,8 @@ const JORGE_STYLE = {
   bald: true, beard: "#8a8070",
 };
 
-/* Infos par destination pour les révélations progressives de Jorge. */
+/* Infos par destination pour les révélations progressives de Jorge.
+   Pool de 8 : 3 sont tirés au hasard par partie dans k_voyage_order. */
 const DEST_INFO = {
   gutenberg: { nom: "Johannes Gutenberg", lieu: "Mayence", annee: 1450,
     question: "la presse à caractères mobiles en métal" },
@@ -25,21 +26,28 @@ const DEST_INFO = {
     question: "le télégraphe optique à bras articulés" },
   marconi:   { nom: "Guglielmo Marconi", lieu: "Cornouailles", annee: 1901,
     question: "le premier signal radio transatlantique" },
+  daguerre:  { nom: "Louis Daguerre", lieu: "Paris", annee: 1839,
+    question: "le daguerréotype — premier procédé photographique" },
+  bell:      { nom: "Alexander Graham Bell", lieu: "Boston", annee: 1876,
+    question: "le premier téléphone" },
+  edison:    { nom: "Thomas Edison", lieu: "Menlo Park", annee: 1877,
+    question: "le phonographe — enregistrement du son" },
+  lumiere:   { nom: "Les frères Lumière", lieu: "Lyon", annee: 1895,
+    question: "le cinématographe — première projection publique" },
+  eniac:     { nom: "John Mauchly et Presper Eckert", lieu: "Philadelphie", annee: 1946,
+    question: "l'ENIAC — premier ordinateur électronique" },
 };
 
 export default function BunkerPrison({ onGo, j3 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
   const flags = j3?.flags || {};
-  const signalements = [
-    !!flags.archives_signalement_gutenberg,
-    !!flags.archives_signalement_chappe,
-    !!flags.archives_signalement_marconi,
-  ];
-  const nbSignale = signalements.filter(Boolean).length;
   const visited = !!flags.jorge_cellule_vue;
-  /* Ordre des destinations tiré au Jeu3 init. On compte combien ont
-     été vérifiées pour savoir laquelle révéler maintenant. */
+  /* Ordre des destinations tiré au Jeu3 init (3 dossiers dans un
+     pool de 8). On compte combien ont été vérifiées pour savoir
+     laquelle révéler maintenant. */
   const order = flags.k_voyage_order || ["gutenberg", "chappe", "marconi"];
+  const signalements = order.map((id) => !!flags[`archives_signalement_${id}`]);
+  const nbSignale = signalements.filter(Boolean).length;
   const doneCount = order.filter((id) => flags[`voyageK_${id}_done`]).length;
   const nextId = doneCount < 3 ? order[doneCount] : null;
   const nextDest = nextId ? DEST_INFO[nextId] : null;

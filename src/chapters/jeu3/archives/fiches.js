@@ -43,6 +43,51 @@ export const FICHE_FALSIFIEES = [
     verite: "1901, Cornouailles→Terre-Neuve, Guglielmo Marconi (signal transatlantique)",
     dossierId: "marconi",
   },
+  {
+    id: "f_daguerre",
+    sujet: "Première photographie",
+    dateFiche: "1900",
+    lieuFiche: "New York",
+    qui: "George Eastman (Kodak)",
+    verite: "1839, Paris, Louis Daguerre (daguerréotype)",
+    dossierId: "daguerre",
+  },
+  {
+    id: "f_bell",
+    sujet: "Premier téléphone",
+    dateFiche: "1920",
+    lieuFiche: "France",
+    qui: "Antonio Meucci (fils tendus Paris–Lyon)",
+    verite: "1876, Boston, Alexander Graham Bell (brevet du téléphone)",
+    dossierId: "bell",
+  },
+  {
+    id: "f_edison",
+    sujet: "Enregistrement du son",
+    dateFiche: "1930",
+    lieuFiche: "Hollywood",
+    qui: "La Warner Bros.",
+    verite: "1877, Menlo Park, Thomas Edison (phonographe)",
+    dossierId: "edison",
+  },
+  {
+    id: "f_lumiere",
+    sujet: "Première projection de cinéma",
+    dateFiche: "1920",
+    lieuFiche: "Hollywood",
+    qui: "Charlie Chaplin",
+    verite: "1895, Lyon→Paris, les frères Lumière (cinématographe)",
+    dossierId: "lumiere",
+  },
+  {
+    id: "f_eniac",
+    sujet: "Premier ordinateur",
+    dateFiche: "1976",
+    lieuFiche: "Cupertino",
+    qui: "Steve Jobs (Apple I)",
+    verite: "1946, Philadelphie, Eckert et Mauchly (ENIAC)",
+    dossierId: "eniac",
+  },
 ];
 
 export const FICHE_HONNETES = [
@@ -60,15 +105,25 @@ export const FICHE_HONNETES = [
   { id: "h_lune",        sujet: "Pas sur la Lune, direct TV",       dateFiche: "1969",              lieuFiche: "diffusion mondiale", qui: "Neil Armstrong" },
 ];
 
-/* Tire 4 fiches pour une PASSE donnée (triIdx = 1,2,3). La falsifiée
-   est celle du dossier correspondant (gutenberg/chappe/marconi en
-   ordre). Les 3 autres sont honnêtes au hasard. */
-const DOSSIER_FOR_TRI = { 1: "gutenberg", 2: "chappe", 3: "marconi" };
+/* Honnêtes qui doublonneraient une falsifiée en jeu : si Daguerre
+   est le dossier à démasquer ce coup-ci, on ne tire pas la fiche
+   honnête du daguerréotype — sinon le joueur voit deux versions de
+   la même histoire. */
+const HONNETE_CLASH = {
+  daguerre: "h_daguerreo",
+  bell:     "h_bell",
+  edison:   "h_edison",
+  lumiere:  "h_lumiere",
+  eniac:    "h_eniac",
+};
 
-export function tirerFiches(triIdx = 1) {
-  const dossierId = DOSSIER_FOR_TRI[triIdx] || "gutenberg";
-  const faux = FICHE_FALSIFIEES.find((f) => f.dossierId === dossierId);
-  const honnetes = [...FICHE_HONNETES];
+/* Tire 4 fiches pour une PASSE donnée. On passe le dossierId
+   explicitement (il vient de flags.k_voyage_order[triIdx-1]). */
+export function tirerFiches(dossierId = "gutenberg") {
+  const faux = FICHE_FALSIFIEES.find((f) => f.dossierId === dossierId)
+    || FICHE_FALSIFIEES[0];
+  const clash = HONNETE_CLASH[dossierId];
+  const honnetes = FICHE_HONNETES.filter((h) => h.id !== clash);
   for (let i = honnetes.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [honnetes[i], honnetes[j]] = [honnetes[j], honnetes[i]];

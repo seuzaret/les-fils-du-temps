@@ -74,7 +74,11 @@ const END_NEUTRE_LINES = {
 
 export default function ArchivistQuest({ j3, triIdx = 1, onDone, onCancel }) {
   const [phase, setPhase] = useState("intro");
-  const [fiches] = useState(() => tirerFiches(triIdx));
+  const [fiches] = useState(() => {
+    const order = j3?.flags?.k_voyage_order || ["gutenberg", "chappe", "marconi"];
+    const dossierId = order[triIdx - 1] || order[0];
+    return tirerFiches(dossierId);
+  });
   /* slots : tableau de 4 cases (index 0..3) qui contiennent un
      ficheIdx ou null. Stock : fiches pas encore posées. */
   const [slots, setSlots] = useState([null, null, null, null]);

@@ -259,7 +259,8 @@ export default function BunkerSalleK({ onGo, j3 }) {
   }
 
   const flags = j3?.flags || {};
-  const voyagesDone = ["gutenberg", "chappe", "marconi"].filter((id) => flags[`voyageK_${id}_done`]).length;
+  const order = flags.k_voyage_order || ["gutenberg", "chappe", "marconi"];
+  const voyagesDone = order.filter((id) => flags[`voyageK_${id}_done`]).length;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, width: "100%", maxWidth: 1600 }}>
@@ -898,7 +899,12 @@ function Cobweb({ cx, cy, r = 50, lit }) {
 const DESTINATIONS = {
   1450: { id: "gutenberg", titre: "L'imprimerie de Gutenberg", lieu: "Mayence" },
   1794: { id: "chappe",    titre: "Le télégraphe de Chappe",    lieu: "Paris–Lille" },
+  1839: { id: "daguerre",  titre: "Le daguerréotype",           lieu: "Paris" },
+  1876: { id: "bell",      titre: "Le téléphone de Bell",       lieu: "Boston" },
+  1877: { id: "edison",    titre: "Le phonographe d'Edison",    lieu: "Menlo Park" },
+  1895: { id: "lumiere",   titre: "Le cinématographe Lumière",  lieu: "Lyon → Paris" },
   1901: { id: "marconi",   titre: "Le signal transatlantique de Marconi", lieu: "Cornouailles → Terre-Neuve" },
+  1946: { id: "eniac",     titre: "L'ENIAC",                     lieu: "Philadelphie" },
 };
 
 function CockpitVoyage({ j3, onGo, onClose }) {
@@ -1036,7 +1042,7 @@ function CockpitVoyage({ j3, onGo, onClose }) {
         )}
 
         <p style={{ margin: "12px 0 0", fontSize: 11, color: "#5a6678", fontStyle: "italic", textAlign: "center", lineHeight: 1.4 }}>
-          Trois dossiers de Jorge mènent à des témoins précis (1450, 1794, 1901).<br />
+          Trois dossiers de Jorge mènent à des témoins précis. Ouvre le médiadex 📘 pour retrouver les dates.<br />
           Toute autre année t'y conduit aussi — mais le témoin que tu cherches n'y sera pas forcément.
         </p>
       </div>

@@ -76,16 +76,17 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [flags, setFlags] = useState(() => {
     const initial = { ...(startAt?.flags || {}) };
     if (!initial.mission_order) initial.mission_order = pickMissionOrder();
-    /* Ordre des 3 destinations du Chronographe K-01 tiré au hasard
-       une fois par partie — Jorge les révèle une à une au joueur. */
+    /* Les 3 destinations du Chronographe K-01 sont tirées au hasard
+       une fois par partie, dans un pool de 8 inventions. Jorge les
+       révèle une à une au joueur. */
     if (!initial.k_voyage_order) {
-      const pool = ["gutenberg", "chappe", "marconi"];
+      const pool = ["gutenberg", "chappe", "marconi", "daguerre", "bell", "edison", "lumiere", "eniac"];
       /* Fisher-Yates */
       for (let i = pool.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [pool[i], pool[j]] = [pool[j], pool[i]];
       }
-      initial.k_voyage_order = pool;
+      initial.k_voyage_order = pool.slice(0, 3);
     }
     /* L'indice du puzzle de la Salle K pointe sur la PREMIÈRE
        destination (celle que Jorge révélera en premier). */
@@ -94,6 +95,11 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
         gutenberg: "presse-gutenberg",
         chappe:    "telegraphe-chappe",
         marconi:   "tsf-marconi",
+        daguerre:  "daguerreotype",
+        bell:      "telephone-bell",
+        edison:    "phonographe-edison",
+        lumiere:   "cinematographe-lumiere",
+        eniac:     "eniac",
       };
       initial.k_puzzle_invention = metaId[initial.k_voyage_order[0]];
     }
