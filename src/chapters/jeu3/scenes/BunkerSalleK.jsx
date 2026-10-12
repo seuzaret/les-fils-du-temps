@@ -560,7 +560,7 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
   return (
     <g transform="translate(500,180)">
       <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
-      <g style={{ transition: "transform 1.4s cubic-bezier(0.3,0,0.3,1)",
+      <g style={{ transition: "transform 3.6s cubic-bezier(0.3,0,0.3,1)",
         transform: tableauOuvert ? "translateX(240px)" : "translateX(0)",
         transformBox: "view-box", transformOrigin: "0 0", willChange: "transform" }}>
         <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
