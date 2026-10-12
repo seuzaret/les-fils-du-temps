@@ -25,22 +25,17 @@ const DEST = {
     annee: "~1450", lieu: "Mayence (Saint-Empire romain germanique)",
     titre: "L'atelier de Johannes Gutenberg",
     Scene: SceneImprimerie,
+    /* Dans ce décor Jeu 1, un seul personnage visible : « Sigismond »,
+       le rédacteur en chef à la presse — ici le voyageur K le lit
+       comme s'il parlait à Gutenberg lui-même. */
     pnjs: [
       {
-        id: "apprenti", x: 230, y: 420,
-        lignes: ["— Je lave l'encre des presses, moi. Si tu cherches à comprendre ce que fabrique le maître, va le voir, il est près du levier."],
-      },
-      {
-        id: "gutenberg", x: 500, y: 370, right: true,
+        id: "gutenberg", x: 762, y: 400, right: true,
         lignes: [
           "— Approche, chronaute. Je m'appelle Johannes Gutenberg. L'année : 1450. Nous sommes à Mayence.",
           "— Regarde : je ne grave plus chaque lettre dans un bloc de bois. Je COULE chaque caractère séparément dans un alliage de plomb, d'étain et d'antimoine. Je peux les RÉUTILISER, mot après mot.",
           "— Avec cette presse à vis et cette encre grasse, j'imprime une Bible — 42 lignes par colonne. On la nommera plus tard la B42. Le début d'une révolution.",
         ],
-      },
-      {
-        id: "visiteur", x: 780, y: 360,
-        lignes: ["— Je passe pour commander une Bible. On dit qu'il peut en faire plusieurs à la fois ? J'avoue, j'ai du mal à y croire."],
       },
     ],
   },
@@ -48,13 +43,11 @@ const DEST = {
     annee: "1794", lieu: "Ligne Paris–Lille",
     titre: "La tour de Claude Chappe",
     Scene: SceneChappe,
+    /* Décor Jeu 1 : 3 personnages — opérateur, Volta (dans son atelier),
+       et un espion caché. */
     pnjs: [
       {
-        id: "soldat", x: 200, y: 410,
-        lignes: ["— Je garde la base, moi. Les hommes du Comité ont dit : rien ne doit entrer. Pour le reste, demande à l'ingénieur, là-haut."],
-      },
-      {
-        id: "chappe", x: 420, y: 340, right: true,
+        id: "chappe", x: 392, y: 330, right: true,
         lignes: [
           "— Chronaute. Je suis Claude Chappe. Nous sommes le 15 août 1794. Ma ligne va de Paris à Lille.",
           "— Ce n'est pas un télégraphe électrique — l'électricité ne porte pas encore de messages. C'est de la télégraphie OPTIQUE : des bras articulés en haut de chaque tour, chaque posture est une lettre, lue à la longue-vue par la tour suivante.",
@@ -62,8 +55,12 @@ const DEST = {
         ],
       },
       {
-        id: "espion", x: 760, y: 380,
-        lignes: ["— Je ne suis que de passage. On raconte que ces tours parlent sans ouvrir la bouche. J'aimerais comprendre comment — mais on ne me dira rien."],
+        id: "volta", x: 598, y: 416,
+        lignes: ["— Je m'appelle Volta. Je bricole une pile dans mon coin — rien à voir avec les bras articulés d'en haut. Si tu veux comprendre la ligne, va parler à l'opérateur sur sa tour."],
+      },
+      {
+        id: "espion", x: 880, y: 450,
+        lignes: ["— Chut… ne me regarde pas. Je ne suis que de passage. On raconte que ces tours parlent sans ouvrir la bouche. J'aimerais savoir comment, mais personne ne me répondra."],
       },
     ],
   },
@@ -71,22 +68,16 @@ const DEST = {
     annee: "12 décembre 1901", lieu: "Poldhu (Cornouailles) → Signal Hill (Terre-Neuve)",
     titre: "La station de Guglielmo Marconi",
     Scene: SceneTSF,
+    /* Décor Jeu 1 : Marconi est le seul personnage visible, à sa station
+       de TSF. */
     pnjs: [
       {
-        id: "journaliste", x: 180, y: 370,
-        lignes: ["— Je viens pour le Times. On m'a promis une preuve. Je ne sais rien de plus pour l'instant — tout est entre les mains de l'Italien."],
-      },
-      {
-        id: "marconi", x: 440, y: 370, right: true,
+        id: "marconi", x: 238, y: 430, right: true,
         lignes: [
           "— Chronaute, approche. Je suis Guglielmo Marconi. Nous sommes dans la nuit du 12 décembre 1901, à Poldhu, en Cornouailles.",
           "— À 3 400 kilomètres de là, à Signal Hill, Terre-Neuve, un de mes récepteurs écoute. L'antenne crache un S en Morse — trois points — répété sans relâche.",
           "— Vers midi, je l'ai entendu : trois clics, à travers l'Atlantique, sans aucun fil. L'ionosphère sert de miroir — personne ne le sait encore. C'est la première preuve.",
         ],
-      },
-      {
-        id: "assistant", x: 720, y: 400,
-        lignes: ["— Je surveille les piles. Si tu veux savoir ce que fait l'antenne, va voir Marconi — c'est son appareil, c'est son idée."],
       },
     ],
   },
@@ -192,13 +183,7 @@ export default function BunkerVoyageK({ onGo, j3 }) {
         <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
           {info.pnjs.map((p) => (
-            <g key={p.id} transform={`translate(${p.x},${p.y})`}
-              style={{ cursor: "pointer" }}
-              onClick={() => setActivePnj(p.id)}>
-              {/* Zone de clic large et invisible (72×140, calée sur un
-                  sprite PNJ typique de Jeu 1). */}
-              <rect x="-36" y="-110" width="72" height="140" fill="transparent" />
-            </g>
+            <PnjHit key={p.id} p={p} onClick={() => setActivePnj(p.id)} />
           ))}
         </svg>
       )}
@@ -272,6 +257,32 @@ export default function BunkerVoyageK({ onGo, j3 }) {
         </div>
       )}
     </div>
+  );
+}
+
+/* Zone cliquable d'un PNJ : hit-test explicite via pointerEvents="all"
+   et petit halo doré au survol pour confirmer visuellement que la zone
+   répond, sans gâcher la mise en scène. */
+function PnjHit({ p, onClick }) {
+  const [hover, setHover] = useState(false);
+  return (
+    <g transform={`translate(${p.x},${p.y})`}
+      style={{ cursor: "pointer" }}
+      onClick={onClick}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}>
+      {/* Zone de clic large (72×140, calée sur un sprite PNJ typique).
+          pointerEvents="all" force le hit-test quel que soit le fill. */}
+      <rect x="-36" y="-110" width="72" height="140" fill="black" fillOpacity="0" pointerEvents="all" />
+      {hover && (
+        <>
+          <rect x="-36" y="-110" width="72" height="140" fill="none"
+            stroke="#ffd870" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.6" pointerEvents="none" />
+          <circle cx="0" cy="-96" r="12" fill="rgba(10,8,6,0.85)" stroke="#ffd870" strokeWidth="1.2" pointerEvents="none" />
+          <text x="0" y="-93" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="11" fontWeight="800" fill="#ffd870" pointerEvents="none">?</text>
+        </>
+      )}
+    </g>
   );
 }
 
