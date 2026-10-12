@@ -44,27 +44,41 @@ function pumpBeep(ctx) {
     osc.stop(t0 + 0.24);
   } catch {}
 }
-/* Bruit sourd d'un mur de béton qui coulisse sur ses rails : rumble
-   grave + frottement + petit grincement de rail. ~8 s. */
+/* Bruit SOURD et GRAVE d'un mur de béton qui coulisse — rumble très
+   bas (~40 Hz) + frottement sourd. Pas d'aigus. ~8 s. */
 function wallSlide(ctx) {
   if (!ctx) return;
   try {
     const t0 = ctx.currentTime;
     const DUR = 8;
-    /* 1) Rumble très grave (sinus 55 Hz avec légère modulation) */
+    /* 1) Rumble très grave (sinus 42 → 32 Hz) */
     const rumble = ctx.createOscillator();
     const rGain = ctx.createGain();
     rumble.type = "sine";
-    rumble.frequency.setValueAtTime(55, t0);
-    rumble.frequency.linearRampToValueAtTime(42, t0 + DUR);
+    rumble.frequency.setValueAtTime(42, t0);
+    rumble.frequency.linearRampToValueAtTime(32, t0 + DUR);
     rGain.gain.setValueAtTime(0.0001, t0);
-    rGain.gain.linearRampToValueAtTime(0.22, t0 + 0.6);
-    rGain.gain.setValueAtTime(0.22, t0 + DUR - 0.8);
+    rGain.gain.linearRampToValueAtTime(0.3, t0 + 1);
+    rGain.gain.setValueAtTime(0.3, t0 + DUR - 1);
     rGain.gain.linearRampToValueAtTime(0.0001, t0 + DUR);
     rumble.connect(rGain).connect(ctx.destination);
     rumble.start(t0);
     rumble.stop(t0 + DUR + 0.1);
-    /* 2) Frottement : bruit filtré passe-bas qui glisse */
+    /* 2) Deuxième oscillateur grave légèrement désaccordé pour épaissir
+       (sinus 60 → 48 Hz) */
+    const sub = ctx.createOscillator();
+    const sGain = ctx.createGain();
+    sub.type = "sine";
+    sub.frequency.setValueAtTime(60, t0);
+    sub.frequency.linearRampToValueAtTime(48, t0 + DUR);
+    sGain.gain.setValueAtTime(0.0001, t0);
+    sGain.gain.linearRampToValueAtTime(0.18, t0 + 1);
+    sGain.gain.setValueAtTime(0.18, t0 + DUR - 1);
+    sGain.gain.linearRampToValueAtTime(0.0001, t0 + DUR);
+    sub.connect(sGain).connect(ctx.destination);
+    sub.start(t0);
+    sub.stop(t0 + DUR + 0.1);
+    /* 3) Frottement SOURD : bruit filtré passe-bas très bas (120 → 80 Hz) */
     const bufSize = Math.floor(ctx.sampleRate * DUR);
     const noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
     const d = noiseBuf.getChannelData(0);
@@ -73,38 +87,17 @@ function wallSlide(ctx) {
     noise.buffer = noiseBuf;
     const nFilt = ctx.createBiquadFilter();
     nFilt.type = "lowpass";
-    nFilt.frequency.setValueAtTime(220, t0);
-    nFilt.frequency.linearRampToValueAtTime(140, t0 + DUR);
-    nFilt.Q.setValueAtTime(2, t0);
+    nFilt.frequency.setValueAtTime(120, t0);
+    nFilt.frequency.linearRampToValueAtTime(80, t0 + DUR);
+    nFilt.Q.setValueAtTime(1.4, t0);
     const nGain = ctx.createGain();
     nGain.gain.setValueAtTime(0.0001, t0);
-    nGain.gain.linearRampToValueAtTime(0.09, t0 + 0.8);
-    nGain.gain.setValueAtTime(0.09, t0 + DUR - 1);
+    nGain.gain.linearRampToValueAtTime(0.14, t0 + 1);
+    nGain.gain.setValueAtTime(0.14, t0 + DUR - 1);
     nGain.gain.linearRampToValueAtTime(0.0001, t0 + DUR);
     noise.connect(nFilt).connect(nGain).connect(ctx.destination);
     noise.start(t0);
     noise.stop(t0 + DUR);
-    /* 3) Petit grincement de rail métallique (sinus aigu avec vibrato) */
-    const squeak = ctx.createOscillator();
-    const sGain = ctx.createGain();
-    squeak.type = "triangle";
-    squeak.frequency.setValueAtTime(620, t0 + 1.2);
-    squeak.frequency.linearRampToValueAtTime(540, t0 + DUR - 0.5);
-    const vib = ctx.createOscillator();
-    const vibG = ctx.createGain();
-    vib.frequency.setValueAtTime(6, t0);
-    vibG.gain.setValueAtTime(14, t0);
-    vib.connect(vibG).connect(squeak.frequency);
-    sGain.gain.setValueAtTime(0.0001, t0);
-    sGain.gain.linearRampToValueAtTime(0.0001, t0 + 1.2);
-    sGain.gain.linearRampToValueAtTime(0.025, t0 + 2);
-    sGain.gain.setValueAtTime(0.025, t0 + DUR - 1);
-    sGain.gain.linearRampToValueAtTime(0.0001, t0 + DUR);
-    squeak.connect(sGain).connect(ctx.destination);
-    squeak.start(t0);
-    vib.start(t0);
-    squeak.stop(t0 + DUR);
-    vib.stop(t0 + DUR);
   } catch {}
 }
 function startupSweep(ctx) {
@@ -514,17 +507,18 @@ function SalleKDecor({ lit, tableauOuvert, portalOnline, onSwitch, digits, onBum
         </text>
       </g>
 
-      {/* ═══ INTERRUPTEUR — phase noir ═══ */}
+      {/* ═══ INTERRUPTEUR — phase noir : juste une pulsation sourde,
+          pas une lampe éblouissante. ═══ */}
       {!lit && (
         <g transform="translate(866,290)"
           onClick={(e) => { e.stopPropagation(); onSwitch(); }}
           style={{ cursor: "pointer" }}>
-          <rect x="-14" y="-18" width="28" height="36" fill="#141008" stroke="#5a4028" strokeWidth="1" rx="2" />
-          <circle r="7" fill="#141008" stroke="#c8a848" strokeWidth="1.2">
-            <animate attributeName="opacity" values="0.4;1;0.4" dur="1.6s" repeatCount="indefinite" />
+          <rect x="-14" y="-18" width="28" height="36" fill="#0a0804" stroke="#3a2814" strokeWidth="1" rx="2" />
+          <circle r="7" fill="#0a0804" stroke="#5a4028" strokeWidth="1">
+            <animate attributeName="opacity" values="0.2;0.5;0.2" dur="2.2s" repeatCount="indefinite" />
           </circle>
-          <circle r="3" fill="#ffd870">
-            <animate attributeName="opacity" values="0.6;1;0.6" dur="1.6s" repeatCount="indefinite" />
+          <circle r="3" fill="#8a6830">
+            <animate attributeName="opacity" values="0.25;0.55;0.25" dur="2.2s" repeatCount="indefinite" />
           </circle>
         </g>
       )}
@@ -635,12 +629,33 @@ function PortailArche({ lit, portalOnline, onClick }) {
    Coulisse à gauche une fois résolu pour dévoiler le pupitre
    ============================================================ */
 function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onChargeCadran }) {
+  /* Animation JS pilotée par rAF : les CSS-transition sur un <g> SVG
+     ne sont pas fiables selon les navigateurs. On fait coulisser le
+     tableau en interpolant un vrai attribut transform. */
+  const TARGET_X = 240;
+  const DUR = 8000;
+  const [slideX, setSlideX] = useState(tableauOuvert ? TARGET_X : 0);
+  useEffect(() => {
+    const goal = tableauOuvert ? TARGET_X : 0;
+    let raf;
+    const start = performance.now();
+    const from = slideX;
+    const tick = (now) => {
+      const t = Math.min(1, (now - start) / DUR);
+      /* easeInOutCubic : lent au départ, lent à l'arrivée */
+      const e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      setSlideX(from + (goal - from) * e);
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    if (from !== goal) raf = requestAnimationFrame(tick);
+    return () => raf && cancelAnimationFrame(raf);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tableauOuvert]);
+
   return (
     <g transform="translate(500,180)">
       <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
-      <g style={{ transition: "transform 8s cubic-bezier(0.3,0,0.3,1)",
-        transform: tableauOuvert ? "translateX(240px)" : "translateX(0)",
-        transformBox: "view-box", transformOrigin: "0 0", willChange: "transform" }}>
+      <g transform={`translate(${slideX},0)`}>
         <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
         <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
         <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
@@ -683,12 +698,6 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
               clickable={!cadrans?.[i] && !portalOnline}
               onClick={() => onChargeCadran?.(i)} />
           ))}
-          {portalOnline && (
-            <text x="-40" y="52" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
-              fill="#5eff9e">
-              ✓ EN LIGNE — CLIQUE LE PORTAIL POUR ENTRER
-            </text>
-          )}
         </g>
       )}
     </g>
