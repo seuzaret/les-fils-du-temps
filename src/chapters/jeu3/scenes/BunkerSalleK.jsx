@@ -239,11 +239,8 @@ export default function BunkerSalleK({ onGo, j3 }) {
         ) : (
           <div style={{ background: "#0e2818", border: "1px solid #7fd8ff", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
-              ⟡ PORTAIL EN LIGNE — {voyagesDone} / 3 VOYAGES
+              {voyagesDone} / 3 VOYAGES
             </div>
-            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8e4ff", lineHeight: 1.55, fontStyle: "italic" }}>
-              Clique sur le portail pour entrer dans la cabine et choisir une année de destination.
-            </p>
             {voyagesDone === 3 && (
               <div style={{ marginTop: 10 }}>
                 <button onClick={() => onGo("epilogueJeu3")}
@@ -718,18 +715,13 @@ function BureauRecherche({ lit }) {
       {Array.from({ length: 14 }).map((_, i) => (
         <rect key={i} x={-48 + i * 7} y={6} width="6" height="4" fill={lit ? "#3a3a3a" : "#030303"} />
       ))}
-      {/* Papier froissé */}
+      {/* Papier froissé — un vieux post-it illisible pour habiller le
+          bureau sans guider le joueur. */}
       <g transform="translate(60,8) rotate(14)">
         <rect x="-18" y="-10" width="36" height="20" fill={lit ? "#e8dfc8" : "#1a1810"} stroke={lit ? "#8a7050" : "#1a1810"} strokeWidth="0.5" />
         <line x1="-14" y1="-5" x2="14" y2="-5" stroke={lit ? "#5a4028" : "#0a0804"} strokeWidth="0.3" opacity="0.7" />
-        <text x="0" y="4" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="5"
-          fill={lit ? "#3a2010" : "#1a1810"} fontStyle="italic">
-          médiadex,
-        </text>
-        <text x="0" y="9" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="4.5"
-          fill={lit ? "#8a2010" : "#1a1810"}>
-          chambre N-27 →
-        </text>
+        <line x1="-14" y1="0" x2="10" y2="0" stroke={lit ? "#5a4028" : "#0a0804"} strokeWidth="0.3" opacity="0.5" />
+        <line x1="-14" y1="5" x2="12" y2="5" stroke={lit ? "#5a4028" : "#0a0804"} strokeWidth="0.3" opacity="0.5" />
       </g>
       <Cobweb cx={-120} cy={-80} r={56} lit={lit} />
     </g>

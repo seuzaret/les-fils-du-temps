@@ -51,6 +51,7 @@ export default function BunkerPrison({ onGo, j3 }) {
            la PREMIÈRE destination.
      - 1-2 : il confirme ce qu'on a entendu puis donne la suivante.
      - 3 : tout est vérifié, il invite à rapporter à Vez. */
+  const aMediadex = !!flags.mediadex_retrouve;
   const lignes = (() => {
     if (doneCount === 0) {
       const intro = !visited ? [
@@ -58,25 +59,36 @@ export default function BunkerPrison({ onGo, j3 }) {
       ] : [
         "Jorge se redresse en te voyant revenir.",
       ];
+      /* Si le joueur n'a PAS encore le médiadex, Jorge l'envoie
+         d'abord dans sa chambre le chercher — il en aura besoin pour
+         retrouver les dates. */
+      if (!aMediadex) {
+        return [
+          ...intro,
+          "« Tu es venu·e me voir. Bien. »",
+          "« Avant d'aller plus loin, retourne dans ta chambre. Il y a sur ton bureau un petit livre à couverture d'or : le médiadex. Prends-le. Sans lui, tu ne retrouveras aucune date. »",
+          "« Reviens me voir une fois que tu l'as. »",
+        ];
+      }
       return [
         ...intro,
         nbSignale > 0
-          ? `« Tu es venu·e me voir, et tu as repéré ${nbSignale} de mes signalements dans les archives. Je t'en remercie. »`
-          : "« Tu es venu·e me voir. C'est déjà beaucoup — la plupart se contentent de ranger. »",
+          ? `« Tu as repéré ${nbSignale} de mes signalements dans les archives, et tu as le médiadex en main. On peut parler. »`
+          : "« Tu as le médiadex en main. On peut parler. »",
         "« Il faut descendre à l'étage K. L'ascenseur a un petit bouton caché, à droite du frein d'urgence — sans inscription, discret. »",
         "« Il faut l'enfoncer CINQ fois d'affilée pour qu'il s'active. Pas une de plus, pas une de moins. C'était ma sécurité. »",
         "« Là-bas, tu trouveras ma machine. Elle emmène dans le passé — mais passivement : tu peux voir, écouter, questionner. Rien de plus. »",
-        `« D'abord, va voir ${nextDest.nom}, en ${nextDest.annee}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. »`,
-        "« Reviens me voir après. Je t'en dirai plus. »",
+        `« D'abord, va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. La date exacte, cherche-la dans ton médiadex. »`,
+        "« Reviens me voir après. »",
       ];
     }
     if (doneCount === 1) {
       return [
         "Jorge se lève, les yeux brillants.",
-        `« Tu l'as vu·e. ${prevDest.nom}. ${prevDest.annee}, ${prevDest.lieu}. Confirmé par la personne elle-même. »`,
+        `« Tu l'as vu·e. ${prevDest.nom}. Confirmé par la personne elle-même. »`,
         "« C'est ça qu'ils effacent, dans les Archives : les noms, les dates, les lieux. Ils réécrivent par petites touches, jusqu'à ce que personne ne se souvienne plus. »",
-        `« Maintenant, deuxième voyage. Va voir ${nextDest.nom}, en ${nextDest.annee}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. »`,
-        "« Reviens me voir ensuite. »",
+        `« Maintenant, deuxième voyage. Va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. La date, encore une fois, dans ton médiadex. »`,
+        "« Reviens ensuite. »",
       ];
     }
     if (doneCount === 2) {
@@ -84,7 +96,7 @@ export default function BunkerPrison({ onGo, j3 }) {
         "Jorge pose son front contre les barreaux, soulagé.",
         `« Deux sur trois. ${prevDest.nom} aussi, tu l'as entendu·e. »`,
         "« Il n'en reste qu'un. Celui-là, c'est le plus récent — et c'est le plus facile à faire disparaître parce qu'il est encore dans les mémoires vivantes. »",
-        `« Va voir ${nextDest.nom}, en ${nextDest.annee}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. »`,
+        `« Va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. Médiadex pour la date. »`,
         "« Puis reviens. On aura fini. »",
       ];
     }

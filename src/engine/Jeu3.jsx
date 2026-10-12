@@ -25,6 +25,7 @@ import BunkerVoyage from "../chapters/jeu3/scenes/BunkerVoyage.jsx";
 import BunkerServeurs from "../chapters/jeu3/scenes/BunkerServeurs.jsx";
 import BunkerSerres from "../chapters/jeu3/scenes/BunkerSerres.jsx";
 import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
+import MediadexPanel from "../chapters/jeu3/MediadexPanel.jsx";
 import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
 import InterviewPanel from "../chapters/jeu3/InterviewPanel.jsx";
 import EnqueteCarnet from "../chapters/jeu3/EnqueteCarnet.jsx";
@@ -110,6 +111,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [interviewTemoinId, setInterviewTemoinId] = useState(null);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null);
   const [carnetOpen, setCarnetOpen] = useState(false);
+  const [mediadexOpen, setMediadexOpen] = useState(false);
   /* État des dossiers réécrits (mission appel) : quel dossier le joueur
      est en train de restaurer, et son bordereau en 3 cases rempli lors
      du voyage. Remis à zéro quand le dossier est validé (ou annulé). */
@@ -244,6 +246,12 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
           {cheat && <span style={{ marginLeft: 12, color: "#ff5030", fontWeight: 800 }}>🐛 TRICHE</span>}
         </div>
         <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+          {flags.mediadex_retrouve && (
+            <button onClick={() => setMediadexOpen(true)}
+              style={{ background: "#2a1808", color: "#ffd166", border: "2px solid #c8a848", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+              📘 Médiadex
+            </button>
+          )}
           {activeMission && flags.puits_billet && (
             <button onClick={() => setCarnetOpen(true)}
               style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
@@ -301,6 +309,10 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
           temoins={activeMission?.temoins || []}
           answered={enqAnswered}
           onClose={() => setCarnetOpen(false)} />
+      )}
+
+      {mediadexOpen && (
+        <MediadexPanel onClose={() => setMediadexOpen(false)} />
       )}
     </div>
   );
