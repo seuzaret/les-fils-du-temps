@@ -169,7 +169,6 @@ export default function BunkerSalleK({ onGo, j3 }) {
       "L'ascenseur s'ouvre sur un couloir qui n'a pas vu de pas depuis quarante ans.",
       "L'air est lourd, chargé de poussière. Au bout, une double porte entrouverte sur une pièce noire.",
       "Jorge avait raison. Il y a quelque chose ici — tu le sens avant de le voir.",
-      "Il faut rallumer.",
     ];
     const last = introIdx >= lignes.length - 1;
     return (
@@ -549,13 +548,19 @@ function PortailArche({ lit, portalOnline, onClick }) {
           {s}
         </text>
       ))}
-      {/* Plaque */}
-      <rect x="-50" y="112" width="100" height="14" fill={lit ? "#1a0e08" : "#010101"}
-        stroke={portalOnline ? "#7fd8ff" : (lit ? "#c8a848" : "#1a1008")} strokeWidth="0.8" />
-      <text x="0" y="123" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
-        fill={portalOnline ? "#7fd8ff" : (lit ? "#c8a848" : "#2a2010")} letterSpacing="3">
-        {portalOnline ? "PORTAIL · EN LIGNE" : "PORTAIL · HORS SERVICE"}
-      </text>
+      {/* Plaque visible seulement une fois le portail en ligne.
+          Quand il est éteint, on retire tout texte — l'absence d'effet
+          suffit à montrer qu'il ne marche pas. */}
+      {portalOnline && (
+        <>
+          <rect x="-50" y="112" width="100" height="14" fill="#1a0e08"
+            stroke="#7fd8ff" strokeWidth="0.8" />
+          <text x="0" y="123" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
+            fill="#7fd8ff" letterSpacing="3">
+            PORTAIL · EN LIGNE
+          </text>
+        </>
+      )}
     </g>
   );
 }
