@@ -548,19 +548,6 @@ function PortailArche({ lit, portalOnline, onClick }) {
           {s}
         </text>
       ))}
-      {/* Plaque visible seulement une fois le portail en ligne.
-          Quand il est éteint, on retire tout texte — l'absence d'effet
-          suffit à montrer qu'il ne marche pas. */}
-      {portalOnline && (
-        <>
-          <rect x="-50" y="112" width="100" height="14" fill="#1a0e08"
-            stroke="#7fd8ff" strokeWidth="0.8" />
-          <text x="0" y="123" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8"
-            fill="#7fd8ff" letterSpacing="3">
-            PORTAIL · EN LIGNE
-          </text>
-        </>
-      )}
     </g>
   );
 }
@@ -574,7 +561,8 @@ function TableauBlanc({ lit, tableauOuvert, portalOnline, target, cadrans, onCha
     <g transform="translate(500,180)">
       <rect x="-170" y="-80" width="340" height="130" fill={lit ? "#141008" : "#030202"} stroke={lit ? "#c8a848" : "#1a1008"} strokeWidth="2" />
       <g style={{ transition: "transform 1.4s cubic-bezier(0.3,0,0.3,1)",
-        transform: tableauOuvert ? "translateX(240px)" : "translateX(0)" }}>
+        transform: tableauOuvert ? "translateX(240px)" : "translateX(0)",
+        transformBox: "view-box", transformOrigin: "0 0", willChange: "transform" }}>
         <rect x="-166" y="-76" width="332" height="122" fill={lit ? "#e8dfc8" : "#0a0804"} stroke={lit ? "#5a4028" : "#1a1008"} strokeWidth="0.6" />
         <rect x="-170" y="-82" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
         <rect x="-170" y="48" width="340" height="4" fill={lit ? "#3a2010" : "#060402"} />
