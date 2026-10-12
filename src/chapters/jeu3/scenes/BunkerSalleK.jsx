@@ -151,7 +151,13 @@ function loadPuzzleInvention(flags) {
   const inv = INVENTIONS.find((x) => x.id === id) || INVENTIONS.find((x) => x.id === "presse-gutenberg");
   const s = String(inv.date).replace(/[\s  .]/g, "");
   const year = parseInt(s.match(/(\d{4})/)[1], 10);
-  return { ...inv, year, digits: String(year).split("").map((d) => parseInt(d, 10)) };
+  /* Certains titres portent une parenthèse qui mentionne une AUTRE
+     date (celle du tableau peint, de la vue d'époque…) qu'il ne faut
+     pas laisser apparaître sur le tableau du puzzle — sinon l'élève
+     compose cette année-là au lieu de l'année de l'invention. On
+     garde donc seulement la racine du titre. */
+  const title = String(inv.title).replace(/\s*\([^)]*\)\s*$/, "").trim();
+  return { ...inv, title, year, digits: String(year).split("").map((d) => parseInt(d, 10)) };
 }
 
 export default function BunkerSalleK({ onGo, j3 }) {
