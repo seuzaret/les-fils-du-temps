@@ -49,11 +49,12 @@ const DEST = {
     annee: "1794", lieu: "Ligne Paris–Lille",
     titre: "La tour de Claude Chappe",
     Scene: SceneChappe,
-    /* Hotspots originaux :
-         opérateur (392, 366), Volta (598, 452), espion (880, 486). */
+    /* Positions des sprites dessinés dans SceneChappe :
+         opérateur translate(360,470), Volta translate(600,476),
+         espion translate(880,486). */
     pnjs: [
       {
-        id: "chappe", x: 392, y: 366, right: true,
+        id: "chappe", x: 360, y: 470, right: true,
         question: "Est-ce que vous confirmez que vous avez tendu le premier télégraphe entre Paris et Lille, en 1794, et que c'est un télégraphe OPTIQUE ?",
         lignes: [
           "— Oui. Je suis Claude Chappe. Nous sommes le 15 août 1794. La ligne va de Paris à Lille.",
@@ -62,7 +63,7 @@ const DEST = {
         ],
       },
       {
-        id: "volta", x: 598, y: 452,
+        id: "volta", x: 600, y: 476,
         lignes: ["— Je m'appelle Volta. Je bricole une pile dans mon coin — rien à voir avec les bras articulés d'en haut. Si tu veux comprendre la ligne, va parler à l'opérateur sur sa tour."],
       },
       {
