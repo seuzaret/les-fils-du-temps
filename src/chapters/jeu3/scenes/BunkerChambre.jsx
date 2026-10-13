@@ -1,5 +1,6 @@
 import { useState } from "react";
 import MediadexPanel from "../MediadexPanel.jsx";
+import TchatinePanel from "../TchatinePanel.jsx";
 
 /* ============================================================
    JEU 3 — SCÈNE : « Ma chambre » (N-27)
@@ -21,6 +22,13 @@ export default function BunkerChambre({ onGo, j3 }) {
   const [mediadexOpen, setMediadexOpen] = useState(false);
   const [mediadexJustFound, setMediadexJustFound] = useState(false);
   const mediadexRetrouve = !!j3.flags.mediadex_retrouve;
+  /* Tchatine : accessible dès que le carnet est validé (prérequis
+     noté dans missions.js). La tablette est posée sur le lit, elle
+     pulse tant que la mission n'est pas finie. */
+  const tchatineMission = j3.missions.tchatine;
+  const tchatineUnlocked = !!j3.flags[tchatineMission?.prerequisite];
+  const tchatineDone = !!j3.flags[tchatineMission?.flag];
+  const [tchatineOpen, setTchatineOpen] = useState(false);
   const openMediadex = () => {
     if (!mediadexRetrouve) {
       j3.setFlag("mediadex_retrouve");
@@ -139,6 +147,41 @@ export default function BunkerChambre({ onGo, j3 }) {
           <rect x="8" y="6" width="80" height="26" rx="4" fill="#e8eef5" stroke="#8a9098" strokeWidth="0.6" />
           <rect x="4" y="80" width="10" height="34" fill="#1a1e26" />
           <rect x="346" y="80" width="10" height="34" fill="#1a1e26" />
+          {/* TABLETTE posée sur le lit — Tchatine. Pulse rose tant
+              que la mission n'est pas faite. */}
+          {tchatineUnlocked && (
+            <g transform="translate(220,10)"
+              onClick={() => setTchatineOpen(true)}
+              style={{ cursor: "pointer" }}>
+              {!tchatineDone && (
+                <circle cx="22" cy="30" r="34" fill="none" stroke="#f08ad0" strokeWidth="1.6" strokeDasharray="4 4">
+                  <animate attributeName="r" values="28;38;28" dur="2.2s" repeatCount="indefinite" />
+                  <animate attributeName="opacity" values="0.3;0.9;0.3" dur="2.2s" repeatCount="indefinite" />
+                </circle>
+              )}
+              {/* corps tablette */}
+              <rect x="0" y="0" width="44" height="60" rx="4" fill="#0a0e14"
+                stroke={tchatineDone ? "#5eff9e" : "#f08ad0"} strokeWidth="1.4" />
+              <rect x="3" y="4" width="38" height="52" rx="1" fill="#131922" />
+              {/* UI mini Tchatine à l'écran */}
+              <text x="22" y="12" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4"
+                fontWeight="800" fill="#f08ad0" letterSpacing="0.5">◉ Tchatine</text>
+              <rect x="6" y="16" width="32" height="6" fill="#1a1e26" rx="1" />
+              <rect x="6" y="24" width="32" height="6" fill="#1a1e26" rx="1" />
+              <rect x="6" y="32" width="32" height="6" fill="#1a1e26" rx="1" />
+              <rect x="6" y="40" width="32" height="6" fill="#1a1e26" rx="1" />
+              {/* petit point de notification */}
+              {!tchatineDone && (
+                <circle cx="38" cy="4" r="3" fill="#ff5a4a">
+                  <animate attributeName="opacity" values="0.5;1;0.5" dur="1.4s" repeatCount="indefinite" />
+                </circle>
+              )}
+              {!tchatineDone && (
+                <text x="22" y="-6" textAnchor="middle" fontFamily="Palatino, Georgia, serif"
+                  fontSize="9" fill="#f08ad0" fontStyle="italic">tablette</text>
+              )}
+            </g>
+          )}
         </g>
 
         {/* BUREAU + CHAISE + LAMPE à droite */}
@@ -299,6 +342,12 @@ export default function BunkerChambre({ onGo, j3 }) {
 
       {mediadexOpen && (
         <MediadexPanel onClose={() => { setMediadexOpen(false); setMediadexJustFound(false); }} />
+      )}
+      {tchatineOpen && tchatineMission && (
+        <TchatinePanel
+          mission={tchatineMission}
+          onDone={() => j3.setFlag(tchatineMission.flag)}
+          onClose={() => setTchatineOpen(false)} />
       )}
       {mediadexJustFound && !mediadexOpen && (
         <div style={{
