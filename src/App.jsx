@@ -432,6 +432,23 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Tire 3 dossiers au hasard parmi les 8 inventions avec témoin de
+     Jeu 1, pour les triches qui amorcent une partie en milieu de
+     parcours. Même logique que l'init normal de Jeu3. */
+  const randomDossiers = () => {
+    const pool = ["gutenberg", "chappe", "marconi", "daguerre", "bell", "edison", "lumiere", "eniac"];
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    return pool.slice(0, 3);
+  };
+  const META_ID = {
+    gutenberg: "presse-gutenberg", chappe: "telegraphe-chappe", marconi: "tsf-marconi",
+    daguerre: "daguerreotype", bell: "telephone-bell", edison: "phonographe-edison",
+    lumiere: "cinematographe-lumiere", eniac: "eniac",
+  };
+
   /* Triche : plonge direct dans l'enquête Kova (bureau déverrouillé,
      3 PNJ d'accroche déjà entendus). Évite l'intro. */
   const cheatJeu3Kova = () => {
@@ -478,6 +495,20 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Construit un bloc commun de flags pour les triches de phase
+     avancée : les 3 dossiers tirés au hasard dans le pool de 8, les
+     signalements correspondants posés, et l'indice puzzle K cohérent. */
+  const commonDossiersFlags = () => {
+    const order = randomDossiers();
+    const f = {
+      k_voyage_order: order,
+      k_puzzle_invention: META_ID[order[0]],
+    };
+    for (const id of order) f[`archives_signalement_${id}`] = true;
+    f.archives_signalement_fait = true;
+    return f;
+  };
+
   /* Triche : phase 5 — chronographe K-01 réactivé, dépose dans la Salle K. */
   const cheatJeu3Phase5 = () => {
     setMode("jeu3");
@@ -493,12 +524,7 @@ export default function App() {
         archives_tri_1_done: true,
         archives_tri_2_done: true,
         archives_tri_3_done: true,
-        k_voyage_order: ["gutenberg", "chappe", "marconi"],
-        k_puzzle_invention: "presse-gutenberg",
-        archives_signalement_gutenberg: true,
-        archives_signalement_chappe: true,
-        archives_signalement_marconi: true,
-        archives_signalement_fait: true,
+        ...commonDossiersFlags(),
         jorge_arrete: true,
         jorge_cellule_vue: true,
         elevator_k_unlocked: true,
@@ -525,12 +551,7 @@ export default function App() {
         archives_tri_1_done: true,
         archives_tri_2_done: true,
         archives_tri_3_done: true,
-        k_voyage_order: ["gutenberg", "chappe", "marconi"],
-        k_puzzle_invention: "presse-gutenberg",
-        archives_signalement_gutenberg: true,
-        archives_signalement_chappe: true,
-        archives_signalement_marconi: true,
-        archives_signalement_fait: true,
+        ...commonDossiersFlags(),
         jorge_arrete: true,
         jorge_cellule_vue: true,
         elevator_k_unlocked: true,
@@ -555,12 +576,7 @@ export default function App() {
         archives_tri_1_done: true,
         archives_tri_2_done: true,
         archives_tri_3_done: true,
-        k_voyage_order: ["gutenberg", "chappe", "marconi"],
-        k_puzzle_invention: "presse-gutenberg",
-        archives_signalement_gutenberg: true,
-        archives_signalement_chappe: true,
-        archives_signalement_marconi: true,
-        archives_signalement_fait: true,
+        ...commonDossiersFlags(),
         jorge_arrete: true,
       },
       heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
