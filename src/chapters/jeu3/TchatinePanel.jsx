@@ -34,6 +34,12 @@ export default function TchatinePanel({ mission, onDone, onClose }) {
 
   return (
     <div style={backdrop} onClick={onClose}>
+      <style>{`
+        @keyframes tchatine-pulse {
+          0%, 100% { box-shadow: 0 4px 20px rgba(240,138,208,0.5); }
+          50% { box-shadow: 0 4px 30px rgba(240,138,208,0.9); }
+        }
+      `}</style>
       <div style={shell} onClick={(e) => e.stopPropagation()}>
         {/* Téléphone central, grand */}
         <div style={phoneFrame}>
@@ -73,7 +79,21 @@ export default function TchatinePanel({ mission, onDone, onClose }) {
                     </div>
                     <div style={{ fontSize: 11, color: "#5a6678" }}>#{i + 1}</div>
                   </div>
-                  <p style={{ margin: "10px 0 8px", fontSize: 14, lineHeight: 1.5, color: "#dbe4ef" }}>{p.texte}</p>
+                  {/* Bulle de "message" façon chat : fond adouci,
+                      coin coupé pour le pointer vers l'avatar. */}
+                  <div style={{
+                    position: "relative", margin: "12px 0 10px",
+                    background: "#1e2838", borderRadius: 14, borderTopLeftRadius: 4,
+                    padding: "10px 14px",
+                  }}>
+                    <div style={{
+                      position: "absolute", left: -6, top: 0,
+                      width: 0, height: 0, borderStyle: "solid",
+                      borderWidth: "0 0 10px 10px",
+                      borderColor: "transparent transparent #1e2838 transparent",
+                    }} />
+                    <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: "#e8eef5" }}>{p.texte}</p>
+                  </div>
                   <PostMedia media={p.media} />
                   <div style={{ display: "flex", gap: 14, fontSize: 11.5, color: "#7a879e", marginTop: 8, fontFamily: "ui-monospace,monospace" }}>
                     <span>♥ {p.stats.likes}</span>
@@ -108,10 +128,38 @@ export default function TchatinePanel({ mission, onDone, onClose }) {
           <div style={phoneHome} />
         </div>
 
-        {/* Encart latéral : WebToile + 4 intentions + valider */}
+        {/* Encart latéral : progression + WebToile + 4 intentions + valider */}
         <aside style={side}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#8fa3bd", marginBottom: 10 }}>
-            POST SÉLECTIONNÉ {focused && <span style={{ color: "#f08ad0" }}>#{posts.findIndex((p) => p.id === focused) + 1}</span>}
+          {/* Compteur de progression très visible : combien de posts
+              classés, et quand tout est prêt le bloc passe en rose
+              pulsant pour amener le regard sur le bouton VALIDER. */}
+          <div style={{
+            background: allClassified && !checked ? "#2a1030" : "#0a0e14",
+            border: `1.5px solid ${allClassified && !checked ? "#f08ad0" : "#2a3240"}`,
+            borderRadius: 10, padding: "10px 12px", marginBottom: 14,
+            transition: "all 0.3s",
+          }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: allClassified && !checked ? "#f08ad0" : "#5a6678", marginBottom: 4 }}>
+              PROGRESSION
+            </div>
+            <div style={{ display: "flex", gap: 4 }}>
+              {posts.map((p, i) => {
+                const picked = choices[p.id];
+                const correct = checked && picked === p.intention;
+                const wrong = checked && picked !== p.intention;
+                return (
+                  <div key={p.id} style={{
+                    flex: 1, height: 10, borderRadius: 3,
+                    background: correct ? "#5eff9e" : wrong ? "#ff5a4a" : picked ? "#f08ad0" : "#1a1e26",
+                    border: focused === p.id ? "1px solid #f08ad0" : "1px solid transparent",
+                  }} />
+                );
+              })}
+            </div>
+            <div style={{ fontSize: 11, color: "#8fa3bd", marginTop: 6, fontFamily: "ui-monospace,monospace" }}>
+              {Object.keys(choices).length} / {posts.length} posts classés
+              {focused && <span style={{ color: "#f08ad0" }}> · lecture #{posts.findIndex((p) => p.id === focused) + 1}</span>}
+            </div>
           </div>
 
           <button onClick={() => focusedPost && setWebtoile(focusedPost)}
@@ -158,12 +206,16 @@ export default function TchatinePanel({ mission, onDone, onClose }) {
             {!checked ? (
               <button onClick={submit} disabled={!allClassified}
                 style={{
-                  width: "100%", background: allClassified ? "#f08ad0" : "#3a2a35",
-                  color: "#0a0806", border: "none", borderRadius: 10, padding: "11px 20px",
-                  fontSize: 13, fontWeight: 800, letterSpacing: 2, fontFamily: "ui-monospace,monospace",
+                  width: "100%",
+                  background: allClassified ? "#f08ad0" : "#3a2a35",
+                  color: allClassified ? "#0a0806" : "#7a6678",
+                  border: "none", borderRadius: 12, padding: "16px 20px",
+                  fontSize: 16, fontWeight: 900, letterSpacing: 2, fontFamily: "ui-monospace,monospace",
                   cursor: allClassified ? "pointer" : "default",
+                  boxShadow: allClassified ? "0 4px 20px rgba(240,138,208,0.5)" : "none",
+                  animation: allClassified ? "tchatine-pulse 1.6s ease-in-out infinite" : "none",
                 }}>
-                ✓ VALIDER {allClassified ? "" : `(${Object.keys(choices).length}/${posts.length})`}
+                ✓ VALIDER L'ANALYSE
               </button>
             ) : perfect ? (
               <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "10px 14px" }}>
@@ -215,7 +267,10 @@ export default function TchatinePanel({ mission, onDone, onClose }) {
    animation thématique. */
 function PostMedia({ media }) {
   if (!media) return null;
-  const common = { viewBox: "0 0 260 130", style: { width: "100%", height: 130, display: "block", borderRadius: 8, background: "#0a0e14", border: "1px solid #2a3240" } };
+  /* On garde le viewBox 260x130 des mini-scènes et on les affiche en
+     200 px de haut via preserveAspectRatio="none" — comme ça pas
+     besoin de retoucher chaque scène, elles respirent plus. */
+  const common = { viewBox: "0 0 260 130", preserveAspectRatio: "none", style: { width: "100%", height: 200, display: "block", borderRadius: 10, background: "#0a0e14", border: "1px solid #2a3240" } };
   if (media.kind === "graph") return <MediaGraph {...common} />;
   if (media.kind === "video_robinet") return <MediaRobinet {...common} label={media.label} />;
   if (media.kind === "video_robot") return <MediaRobot {...common} label={media.label} />;
