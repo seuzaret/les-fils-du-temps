@@ -13,18 +13,11 @@ import TchatinePanel from "../TchatinePanel.jsx";
      "mediadex_retrouve" + un petit mot de reconnaissance.
    ============================================================ */
 export default function BunkerChambre({ onGo, j3 }) {
-  const mission = j3.missions.carnet;
-  const unlocked = !!j3.flags[mission?.prerequisite];
-  const done = !!j3.flags[mission?.flag];
-  const [open, setOpen] = useState(false);
-  const [answers, setAnswers] = useState({}); // { q1: true, q2: false, ... }
-  const [checked, setChecked] = useState(false);
   const [mediadexOpen, setMediadexOpen] = useState(false);
   const [mediadexJustFound, setMediadexJustFound] = useState(false);
   const mediadexRetrouve = !!j3.flags.mediadex_retrouve;
-  /* Tchatine : accessible dès que le carnet est validé (prérequis
-     noté dans missions.js). La tablette est posée sur le lit, elle
-     pulse tant que la mission n'est pas finie. */
+  /* Tchatine : tablette sur le lit, pulse rose tant que la mission
+     n'est pas finie. Accessible dès que Kova est validée. */
   const tchatineMission = j3.missions.tchatine;
   const tchatineUnlocked = !!j3.flags[tchatineMission?.prerequisite];
   const tchatineDone = !!j3.flags[tchatineMission?.flag];
@@ -36,14 +29,6 @@ export default function BunkerChambre({ onGo, j3 }) {
     }
     setMediadexOpen(true);
   };
-  const allAnswered = mission ? mission.questions.every((q) => typeof answers[q.id] === "boolean") : false;
-  const allCorrect = mission ? mission.questions.every((q) => answers[q.id] === q.vrai) : false;
-
-  const submit = () => {
-    setChecked(true);
-    if (allCorrect) j3.setFlag(mission.flag);
-  };
-  const retry = () => { setChecked(false); setAnswers({}); };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12, width: "100%", maxWidth: 1600 }}>
@@ -85,7 +70,7 @@ export default function BunkerChambre({ onGo, j3 }) {
           <line x1="10" y1="14" x2="10" y2="206" stroke="#5a6270" strokeWidth="0.5" opacity="0.7" />
         </g>
 
-        {/* ÉTAGÈRE MURALE (2 planches) — porte le carnet noir de la mission */}
+        {/* ÉTAGÈRE MURALE (2 planches) — décor simple, plus de mission */}
         <g transform="translate(240,220)">
           <rect x="0" y="0" width="140" height="4" fill="#3a4048" />
           <rect x="0" y="60" width="140" height="4" fill="#3a4048" />
@@ -93,30 +78,12 @@ export default function BunkerChambre({ onGo, j3 }) {
           {[[6, "#5a3818", 30], [18, "#8a3820", 28], [30, "#5a2818", 32], [44, "#8a5030", 26], [58, "#3a2818", 30]].map(([x, c, h], i) => (
             <rect key={i} x={x} y={-h} width="10" height={h} fill={c} stroke="#0a0806" strokeWidth="0.3" />
           ))}
-          {/* Gobelet + petit cadre */}
           <rect x="80" y="-20" width="14" height="20" rx="1" fill="#c8b090" stroke="#3a2818" strokeWidth="0.5" />
           <rect x="102" y="-24" width="20" height="24" fill="#e8dfc8" stroke="#3a2818" strokeWidth="0.6" />
           <rect x="105" y="-21" width="14" height="18" fill="#5a6270" opacity="0.7" />
-          {/* Planche basse : quelques livres + le CARNET NOIR (cliquable si mission débloquée) */}
-          {[[10, "#5a4028", 26], [22, "#8a5030", 24], [34, "#3a2818", 28]].map(([x, c, h], i) => (
+          {[[10, "#5a4028", 26], [22, "#8a5030", 24], [34, "#3a2818", 28], [46, "#5a3818", 30], [58, "#8a5030", 28], [70, "#5a2818", 26]].map(([x, c, h], i) => (
             <rect key={`b${i}`} x={x} y={64 + 64 - h} width="10" height={h} fill={c} stroke="#0a0806" strokeWidth="0.3" />
           ))}
-          {unlocked && !done && !open && (
-            <g transform="translate(60,80)" onClick={() => setOpen(true)} style={{ cursor: "pointer" }}>
-              <circle cx="18" cy="24" r="32" fill="none" stroke="#e0a848" strokeWidth="2" strokeDasharray="4 4">
-                <animate attributeName="r" values="26;34;26" dur="1.8s" repeatCount="indefinite" />
-              </circle>
-              <rect x="0" y="0" width="36" height="48" fill="#0a0806" stroke="#8a5030" strokeWidth="1.4" />
-              <path d="M4 6 L32 6 M4 12 L26 12 M4 18 L28 18 M4 24 L30 24" stroke="#e8dfc8" strokeWidth="0.6" opacity="0.6" />
-              <text x="18" y="-6" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="10" fill="#e0a848" fontStyle="italic">carnet noir</text>
-            </g>
-          )}
-          {done && (
-            <g transform="translate(60,80)">
-              <rect x="0" y="0" width="36" height="48" fill="#0a0806" stroke="#5eff9e" strokeWidth="1.2" />
-              <path d="M4 6 L32 6 M4 12 L26 12 M4 18 L28 18 M4 24 L30 24" stroke="#e8dfc8" strokeWidth="0.6" opacity="0.6" />
-            </g>
-          )}
         </g>
 
         {/* POSTER MURAL (Réseau M) — à la place de l'ancien panneau */}
@@ -244,86 +211,18 @@ export default function BunkerChambre({ onGo, j3 }) {
         <ellipse cx="400" cy="440" rx="120" ry="14" fill="#5a3818" opacity="0.55" />
       </svg>
 
-      {/* Panneau bas selon l'état de la mission carnet */}
+      {/* Petit message d'ambiance selon l'état de la tablette */}
       <div style={{ maxWidth: 800, width: "100%" }}>
-        {done ? (
-          <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>
-              ✓ CARNET VÉRIFIÉ
-            </div>
-            <p style={{ margin: "6px 0 0", fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5" }}>{mission.succes}</p>
-            <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 4 }}>
-              {mission.questions.map((q) => (
-                <div key={q.id} style={{ fontSize: 12, color: "#c8d4e2", lineHeight: 1.5 }}>
-                  <strong style={{ color: q.vrai ? "#5eff9e" : "#e0a848" }}>{q.vrai ? "VRAI" : "FAUX"}</strong>
-                  {" — "}{q.explication}
-                </div>
-              ))}
-            </div>
+        {tchatineDone ? (
+          <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: 12.5, color: "#7a879e", fontStyle: "italic" }}>
+              Ta tablette est posée sur le lit, écran noir. Tu as déjà fait le tri dans le fil du soir.
+            </p>
           </div>
-        ) : open ? (
-          <div style={{ background: "#141020", border: "1px solid #e0a848", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
-              📓 {mission.titre.toUpperCase()}
-            </div>
-            <p style={{ margin: "4px 0 10px", fontSize: 13, lineHeight: 1.5, color: "#c8d4e2" }}>{mission.briefing}</p>
-            {/* Questions */}
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {mission.questions.map((q, i) => {
-                const val = answers[q.id];
-                const wrongAfterCheck = checked && val !== q.vrai;
-                return (
-                  <div key={q.id} style={{ background: "#0a0e14", border: `1px solid ${wrongAfterCheck ? "#e0a848" : "#2a3648"}`, borderRadius: 8, padding: "8px 12px" }}>
-                    <div style={{ fontSize: 13, color: "#e8eef5", lineHeight: 1.4 }}>
-                      <strong style={{ color: "#e0a848", fontFamily: "ui-monospace,monospace", fontSize: 11 }}>{i + 1}.</strong>{" "}{q.prompt}
-                    </div>
-                    <div style={{ fontSize: 11, color: "#7a879e", fontStyle: "italic", marginTop: 3 }}>💡 {q.indice}</div>
-                    <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
-                      {[true, false].map((b) => (
-                        <button key={String(b)} onClick={() => setAnswers((a) => ({ ...a, [q.id]: b }))}
-                          disabled={checked}
-                          style={{
-                            background: val === b ? (b ? "#0e3a1a" : "#3a1a0e") : "#141b26",
-                            color: val === b ? (b ? "#5eff9e" : "#e0a848") : "#8fa3bd",
-                            border: `1px solid ${val === b ? (b ? "#5eff9e" : "#e0a848") : "#3a4048"}`,
-                            borderRadius: 6, padding: "5px 14px", fontSize: 12, fontWeight: 700,
-                            cursor: checked ? "default" : "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1,
-                          }}>
-                          {b ? "VRAI" : "FAUX"}
-                        </button>
-                      ))}
-                      {checked && val !== q.vrai && (
-                        <span style={{ fontSize: 11, color: "#e0a848", alignSelf: "center", fontStyle: "italic" }}>
-                          → à revérifier
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            {/* Bouton valider ou réessayer */}
-            <div style={{ marginTop: 12, display: "flex", gap: 8, alignItems: "center" }}>
-              {!checked ? (
-                <button onClick={submit} disabled={!allAnswered}
-                  style={{ background: allAnswered ? "#e0a848" : "#3a3020", color: "#0a0806", border: "none", borderRadius: 8, padding: "8px 20px", fontSize: 13, fontWeight: 800, cursor: allAnswered ? "pointer" : "default", fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
-                  ✓ VALIDER MES RÉPONSES
-                </button>
-              ) : allCorrect ? null : (
-                <>
-                  <span style={{ fontSize: 12, color: "#e0a848", fontStyle: "italic" }}>{mission.echec}</span>
-                  <button onClick={retry}
-                    style={{ background: "#141b26", color: "#e0a848", border: "1px solid #5a4028", borderRadius: 8, padding: "6px 14px", fontSize: 12, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-                    ↺ Réessayer
-                  </button>
-                </>
-              )}
-            </div>
-          </div>
-        ) : unlocked ? (
-          <div style={{ background: "#141020", border: "1px dashed #e0a848", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#c8b090", fontStyle: "italic" }}>
-              Un vieux carnet noir a été laissé sur ton étagère. Clique dessus pour l'ouvrir.
+        ) : tchatineUnlocked ? (
+          <div style={{ background: "#1a1020", border: "1px dashed #f08ad0", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: 12.5, color: "#f0b0dc", fontStyle: "italic" }}>
+              Ta tablette clignote sur le lit — Tchatine a de nouveaux posts. Clique dessus.
             </p>
           </div>
         ) : (

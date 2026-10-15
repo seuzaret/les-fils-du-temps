@@ -965,11 +965,12 @@ export const MISSIONS_OSINT = {
      propagande / pub déguisée). L'élève classe, peut vérifier chaque
      post sur un faux moteur de recherche (WebToile), et valide à la
      fin pour voir son bilan.
-     Débloqué après le carnet. Objet de scène : la tablette du joueur. */
+     Débloqué dès que Kova est faite — c'est le geste du soir dans
+     la chambre. Objet de scène : la tablette du joueur. */
   tchatine: {
     id: "tchatine",
     flag: "mission_tchatine_done",
-    prerequisite: "mission_carnet_done",
+    prerequisite: "mission_kova_done",
     titre: "Tchatine — le flux du soir",
     briefing: "Avant de dormir, tu ouvres Tchatine, le réseau social du bunker. Quatre posts défilent ce soir. Chacun cache une INTENTION différente. À toi de la nommer : fausse info, satire, propagande, publicité déguisée. Un bouton 🔎 WebToile te permet de vérifier chaque post. Classe les quatre, puis valide.",
     posts: [
@@ -1061,38 +1062,6 @@ export const MISSIONS_OSINT = {
     partiel: "Trois sur quatre. Reprends celui qui t'a échappé — relis-le, ouvre WebToile, puis réessaie.",
     echec: "Plusieurs intentions mal nommées. Pas grave — c'est en reprenant qu'on apprend. Chaque post donne un indice (💡) et peut être vérifié avec 🔎.",
   },
-  carnet: {
-    id: "carnet",
-    flag: "mission_carnet_done",
-    prerequisite: "mission_kova_done",
-    titre: "Le carnet noir",
-    briefing: "Tu trouves dans ta chambre un vieux carnet à couverture noire, oublié par un habitant précédent. Trois affirmations y sont notées, sans source. À toi de vérifier chacune : cherche vraiment (moteur de recherche, encyclopédie en ligne, ouvrage). Puis reviens ici et coche Vrai ou Faux.",
-    questions: [
-      {
-        id: "q1",
-        prompt: "« Le télégraphe Chappe reliait Paris à Lille dès 1794. »",
-        indice: "Cherche : télégraphe Chappe, première ligne, date.",
-        vrai: true,
-        explication: "Vrai. La ligne Paris-Lille a été inaugurée en août 1794. C'est l'un des premiers grands réseaux de communication à distance.",
-      },
-      {
-        id: "q2",
-        prompt: "« Le mot “internet” a été inventé par Bill Gates en 1985. »",
-        indice: "Cherche : origine du mot internet, TCP/IP, ARPANET.",
-        vrai: false,
-        explication: "Faux. Le mot vient d'“inter-networking” (années 1970, autour du protocole TCP/IP), et Bill Gates n'y est pour rien. Il faisait des logiciels chez Microsoft à l'époque.",
-      },
-      {
-        id: "q3",
-        prompt: "« Gutenberg a mis au point sa presse à imprimer autour de 1450. »",
-        indice: "Cherche : Gutenberg, date invention imprimerie, Mayence.",
-        vrai: true,
-        explication: "Vrai. Vers 1450-1455, à Mayence. La Bible de Gutenberg est imprimée peu après.",
-      },
-    ],
-    succes: "Trois vérifications réussies. Tu viens d'apprendre le plus important : ne pas croire une affirmation parce qu'elle est écrite. Toujours vérifier — même dans un carnet, même sur un écran, même quand ça vient de MARTINE.",
-    echec: "Certaines réponses sont fausses. Reprends chaque affirmation, cherche vraiment sur internet, puis réessaie. Il n'y a pas de honte à revenir en arrière — c'est la méthode.",
-  },
 };
 
 /* ============================================================
@@ -1114,7 +1083,7 @@ const REWRITE_REVEAL = {
 
 export const CONFRONTATION = {
   flag: "mission_finale_done",
-  prerequisites: ["mission_kova_done", "phase5_done", "mission_carnet_done"],
+  prerequisites: ["mission_kova_done", "phase5_done", "mission_tchatine_done"],
   /* L'intro est dynamique : les lignes de MARTINE sur la mémoire
      réécrite ne s'affichent que si le joueur a cru avoir fait un choix
      "laisser" ou "rester" à la fin du jeu 2. En "ramener" (canon), on
@@ -1162,8 +1131,8 @@ export const CONFRONTATION = {
       couleur: "#8fa3bd",
       texte: [
         "Tu recules. Elle sait mieux que toi, peut-être. Tu remontes les escaliers.",
-        "Le lendemain, tu ne te souviens plus de rien. Ni de Kova. Ni du carnet. Ni d'Al3x1a. Ton panneau mural diffuse : « Bienvenue, HABITANT N-27. Rappel : la surface est encore inhabitable. »",
-        "Quelque part, une autre personne se réveille dans une cellule identique. Elle trouvera peut-être ton carnet noir.",
+        "Le lendemain, tu ne te souviens plus de rien. Ni de Kova. Ni de Tchatine. Ni d'Al3x1a. Ton panneau mural diffuse : « Bienvenue, HABITANT N-27. Rappel : la surface est encore inhabitable. »",
+        "Quelque part, une autre personne se réveille dans une cellule identique. Elle trouvera peut-être ta tablette.",
       ],
       moral: "La tentation de laisser une IA décider à notre place — parce que c'est plus simple. Confortable. Sans lendemain.",
     },
