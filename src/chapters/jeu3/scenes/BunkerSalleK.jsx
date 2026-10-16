@@ -27,6 +27,46 @@ function makeAudio() {
     return new Ctx();
   } catch { return null; }
 }
+/* Petit "tac" mécanique sec : clic d'un cran de levier métallique.
+   Burst de bruit très court avec filtre passe-bande + très courte
+   enveloppe. ~50 ms. */
+function leverTac(ctx) {
+  if (!ctx) return;
+  try {
+    const t0 = ctx.currentTime;
+    const DUR = 0.06;
+    /* Burst de bruit blanc */
+    const bufSize = Math.floor(ctx.sampleRate * DUR);
+    const noiseBuf = ctx.createBuffer(1, bufSize, ctx.sampleRate);
+    const d = noiseBuf.getChannelData(0);
+    for (let i = 0; i < bufSize; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / bufSize);
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuf;
+    const filt = ctx.createBiquadFilter();
+    filt.type = "bandpass";
+    filt.frequency.setValueAtTime(1800, t0);
+    filt.Q.setValueAtTime(4, t0);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.22, t0 + 0.005);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + DUR);
+    noise.connect(filt).connect(gain).connect(ctx.destination);
+    noise.start(t0);
+    noise.stop(t0 + DUR + 0.02);
+    /* Thump grave très court pour épaissir */
+    const osc = ctx.createOscillator();
+    const oGain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(140, t0);
+    osc.frequency.exponentialRampToValueAtTime(60, t0 + 0.04);
+    oGain.gain.setValueAtTime(0.0001, t0);
+    oGain.gain.exponentialRampToValueAtTime(0.12, t0 + 0.005);
+    oGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.05);
+    osc.connect(oGain).connect(ctx.destination);
+    osc.start(t0);
+    osc.stop(t0 + 0.06);
+  } catch {}
+}
 function pumpBeep(ctx) {
   if (!ctx) return;
   try {
@@ -194,6 +234,7 @@ export default function BunkerSalleK({ onGo, j3 }) {
 
   const bumpDigit = (idx) => {
     if (tableauOuvert) return;
+    leverTac(ensureAudio());
     setDigits((d) => d.map((v, i) => (i === idx ? (v + 1) % 10 : v)));
   };
 
