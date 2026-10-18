@@ -75,7 +75,7 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 9. Au retour, Al3x1a descend de MARTINE, fixe le joueur « comme si elle voulait dire quelque chose », puis se tait (`FinJeu2.jsx:816-818`). [CODE] Seule Martine sait ; Elias ne sait rien.
 
 **Pendant le Puits**
-10. Martine fixe les règles du Puits (places, pas de famille libre), endort le joueur et efface Al3x1a des registres (`missions.js:1096`). [ACQUIS]
+10. Martine fixe les règles du Puits (places, pas de famille libre), endort le joueur et efface Al3x1a des registres (`missions.js:1096`). [ACQUIS] Au Jeu 3, elle l'avoue à la confrontation : Al3x1a est « ton enfant », « pas encore née » et « au Puits elle ne le sera jamais ». [CODE, 2026-10-18]
 11. En 2087, une voix féminine murmure sur les vieilles fréquences (`FinJeu2.jsx:855`, `missions.js:1096`). Qui parle : un enregistrement qu'elle a laissé, ou elle-même ? [À TRANCHER] Où est-elle physiquement ? [À TRANCHER]
 
 **Après (selon la fin de Jeu 3)** [PROPOSÉ]
@@ -112,6 +112,5 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 8. Texte exact qui amène à taper l'adresse, et rôle du « monde /Martine/ ».
 
 ## 10. Dette de code connue
-- `missions.js:1096` : « morte en 2074 » contredit le canon (Al3x1a n'est pas encore née).
 - Acte 2 de `FinJeu2.jsx` : les niveaux affichés (+2 SERRE… −2 SERVEURS) ne correspondent pas à ceux de Jeu 3 (`levels.js` : Surface, Communal, Habitat, Services, Hydroponie, Serveurs −3).
 - Pas de fiche ni de PNJ pour la salle des dormants (à créer si elle est visitable).
