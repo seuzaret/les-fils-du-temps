@@ -527,10 +527,10 @@ function SlideMessage({ onNext }) {
             <text x="108" y="62" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ici, une maladie</text>
             <text x="108" y="78" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">efface la mémoire</text>
             <text x="108" y="94" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">de tout le monde.</text>
-            <text x="108" y="118" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Quelqu'un que j'aime</text>
-            <text x="108" y="134" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">est parti dans le temps</text>
-            <text x="108" y="150" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">chercher un remède.</text>
-            <text x="108" y="166" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Plus aucune nouvelle.</text>
+            <text x="108" y="118" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ma famille</text>
+            <text x="108" y="134" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">est en danger.</text>
+            <text x="108" y="150" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Le remède est caché</text>
+            <text x="108" y="166" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">dans le passé.</text>
             <text x="108" y="190" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">MARTINE va se poser</text>
             <text x="108" y="206" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">devant chez toi.</text>
             <text x="108" y="232" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#111b21">Sors. »</text>

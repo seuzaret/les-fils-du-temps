@@ -61,16 +61,16 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 
 **Avant le jeu (hors écran)**
 1. Bien après 2087, elle naît du joueur devenu adulte, à condition que le Puits laisse des familles se former. [ACQUIS]
-2. Ce parent part dans le temps chercher un remède contre l'oubli et ne donne plus de nouvelles : « Quelqu'un que j'aime est parti dans le temps chercher un remède. Plus aucune nouvelle. » (`IntroStory.jsx:530-533`) [CODE, neutralisé le 2026-10-18 : l'ancien « Mon père » excluait les joueuses] Ce parent, c'est le joueur adulte, et **Al3x1a ne peut pas le lui dire**. [PROPOSÉ, appliqué au code, réversible] Variante possible : retirer la phrase du SMS.
+2. Le parent d'Al3x1a, devenu adulte, est perdu dans le temps. Où exactement : [À TRANCHER] (piste : piégé dans le « monde /Martine/ »). Al3x1a le sait et **ne peut pas le dire au joueur**. Le SMS dit seulement : « Ma famille est en danger. Le remède est caché dans le passé. » (`IntroStory.jsx:530-533`) [CODE, modifié le 2026-10-18 : l'ancien « Mon père est parti… » excluait les joueuses et promettait un parent « perdu » que Jeu 3 ne pouvait pas résoudre, alors que « en danger » se résout en arrêtant Martine.]
 3. Al3x1a devient chronaute et part à sa recherche. Elle passe par la station, répare MARTINE « avant de t'appeler » (`IntroStory.jsx:1082`), puis part (~2035) en laissant sa MARTINE-jumelle et son portrait. [CODE] Comment elle arrive à la station et dans quel ordre : [À TRANCHER]
 
 **Jeu 1 (le joueur chez lui, puis les époques)**
-4. SMS de 03:14 : « Je viens du futur… Sors. » C'est **la demande de partir** : le joueur devient chronaute. (`IntroStory.jsx:501-545`) [CODE]
+4. SMS de 03:14 : « Je viens du futur… Sors. » C'est **la demande de partir** : le joueur devient chronaute. (`IntroStory.jsx:501-545`) [CODE] Al3x1a sait déjà qui est le joueur depuis ce SMS (c'est elle qui l'a choisi). [ACQUIS]
 5. À la fin de Jeu 1, il arrive à la station (2045). Elias, Mira, et le **portrait** d'Al3x1a, jamais elle en personne (`StationChronautes.jsx:49`, `53`). Elias demande de la retrouver (`BriefingMission.jsx:61`). [CODE]
 
 **Jeu 2**
 6. Elle a passé dix ans seule dans une époque, sa MARTINE cassée, et laissé des notes dans chaque époque (`BriefingMission.jsx:62`, `RetrouvaillesAl3x1A.jsx:187-189`). [CODE]
-7. Le joueur la retrouve. Elle reconnaît son visage mais le trouve « trop jeune » (`RetrouvaillesAl3x1A.jsx:187`). Trois choix : ramener, laisser, rester. [CODE]
+7. Le joueur la retrouve. Elle reconnaît son visage mais le trouve « trop jeune » (`RetrouvaillesAl3x1A.jsx:187`) : un lapsus, elle sait et se reprend. Trois choix : ramener, laisser, rester. [CODE]
 8. Martine comprend le lien parent-enfant (Al3x1a est plus âgée que son parent : voyage dans le temps) et **se tait**. Elle **réécrit le souvenir** du choix pendant le retour (`RetrouvaillesAl3x1A.jsx:197`, `missions.js:1080` : « je ne pouvais pas laisser un parent abandonner son enfant »). [ACQUIS : elle sait et se tait] Moment exact de la découverte : [À TRANCHER] aux retrouvailles (face à face, plus simple : l'ADN du joueur est sous la main) ou plus tôt.
 9. Au retour, Al3x1a descend de MARTINE, fixe le joueur « comme si elle voulait dire quelque chose », puis se tait (`FinJeu2.jsx:816-818`). [CODE] Seule Martine sait ; Elias ne sait rien.
 
@@ -94,6 +94,7 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 - [PROPOSÉ] Pont avant la descente : retour chez Jorge (cause et moyen d'accès aux serveurs).
 - **Le joueur tape lui-même l'adresse** `seuzaret.github.io/martine/`. Formulation volontairement floue, du genre « trouve un moyen de rejoindre le monde de /Martine/ ». Texte à écrire. [ACQUIS]
 - Le « monde /Martine/ » pourrait servir à des jeux de révision. [IDÉE du créateur, à préciser]
+- Le SMS promet que « la famille est en danger » : Jeu 3 doit payer cette promesse. Officiellement Al3x1a n'est pas encore née en 2087, donc l'enjeu porte sur un **futur possible**, pas sur une personne présente. [PROPOSÉ]
 - Trois fins existantes : T'ÉTEINDRE, TE MODIFIER, TE SOUMETTRE. [CODE] [PROPOSÉ] Une 4e fin « la boucle ».
 - [PROPOSÉ] Berceuse de Martine à l'extinction, clin d'œil à *Daisy Bell* (HAL, 1968), liée à Bell dans le pool de voyages.
 
