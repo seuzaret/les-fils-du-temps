@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Bust, Figure } from "../../engine/chars.jsx";
 
 /* ============================================================
    ÉPILOGUE — LE CARNET D'ELIAS
@@ -184,30 +185,30 @@ function P2() {
       <rect y="420" width="800" height="40" fill="#0a0a10" />
       {/* passants qui lèvent les yeux, incrédules */}
       <g transform="translate(200,420)">
-        <path d="M-6 0 L-8 -22 L-2 -30 L2 -30 L8 -22 L6 0 Z" fill="#141420" />
-        <circle cx="0" cy="-34" r="4" fill="#c88870" />
-        {/* main levée, tel dans l'autre */}
-        <path d="M6 -20 L14 -32" stroke="#c88870" strokeWidth="2" strokeLinecap="round" />
-        <rect x="-3" y="-24" width="6" height="10" fill="#141420" />
+        <Figure x={0} y={0} s={0.31} skin="#c88870" hair="#1a1a24" look="short" mood="surpris" garment="coat" coat="#141420" pants="#101018"
+          arms={[{ a1: 10, a2: 6 }, { a1: 150, a2: 170 }]}>
+          <rect x="22" y="-142" width="12" height="20" rx="2" fill="#2a2a34" />
+        </Figure>
         {/* ! au-dessus */}
         <text x="14" y="-40" fontSize="14" fontWeight="800" fill="#ffd166">?</text>
       </g>
       {/* enfant qui secoue son téléphone */}
       <g transform="translate(440,420)">
-        <path d="M-5 0 L-7 -18 L-1 -24 L1 -24 L7 -18 L5 0 Z" fill="#3a2818" />
-        <circle cx="0" cy="-28" r="3" fill="#e8c4a0" />
-        <path d="M0 -22 L8 -14" stroke="#e8c4a0" strokeWidth="1.6" strokeLinecap="round" />
-        <rect x="6" y="-16" width="4" height="7" fill="#141420">
-          <animateTransform attributeName="transform" type="rotate" values="-15 8 -12;15 8 -12;-15 8 -12" dur="0.4s" repeatCount="indefinite" />
-        </rect>
+        <Figure x={0} y={0} s={0.26} skin="#e8c4a0" hair="#3a2418" look="mid" mood="colere" garment="tee" coat="#3a2818" pants="#1a1a24"
+          arms={[{ a1: 10, a2: 6 }, { a1: 40, a2: 60 }]}>
+          <rect x="42" y="-70" width="12" height="22" rx="2" fill="#141420">
+            <animateTransform attributeName="transform" type="rotate" values="-15 48 -58;15 48 -58;-15 48 -58" dur="0.4s" repeatCount="indefinite" />
+          </rect>
+        </Figure>
       </g>
       {/* silhouette au loin avec une bougie */}
-      <g transform="translate(640,420)">
-        <path d="M-6 0 L-8 -20 L-2 -28 L2 -28 L8 -20 L6 0 Z" fill="#1a1408" />
-        <circle cx="0" cy="-32" r="4" fill="#c88870" opacity="0.6" />
+      <g transform="translate(640,420)" opacity="0.8">
         <ellipse cx="10" cy="-16" rx="10" ry="8" fill="#ff9040" opacity="0.35" />
-        <rect x="7" y="-16" width="6" height="10" fill="#c8a870" />
-        <ellipse cx="10" cy="-22" rx="2" ry="4" fill="#ffd88a" />
+        <Figure x={0} y={0} s={0.3} skin="#c88870" hair="#1a1408" look="long" garment="dress" coat="#1a1408" pants="#1a1408"
+          arms={[{ a1: 10, a2: 6 }, { a1: 20, a2: -40 }]}>
+          <rect x="10" y="-62" width="9" height="16" fill="#c8a870" />
+          <ellipse cx="14.5" cy="-70" rx="3.4" ry="6.4" fill="#ffd88a" />
+        </Figure>
       </g>
     </svg>
   );
@@ -254,21 +255,18 @@ function P3() {
       ))}
       {/* PERSO 1 : adulte tenant une clé USB, dépité */}
       <g transform="translate(220,340)">
-        <path d="M-12 0 L-16 -60 L-4 -70 L4 -70 L16 -60 L12 0 Z" fill="#5a3020" />
-        <circle cx="0" cy="-78" r="10" fill="#e0b898" />
-        <path d="M-8 -80 Q0 -90 8 -80 L8 -70 L-8 -70 Z" fill="#3a2418" />
-        {/* bras qui tient la clé */}
-        <path d="M-12 -40 L-24 -20" stroke="#e0b898" strokeWidth="4" strokeLinecap="round" />
-        <rect x="-32" y="-24" width="14" height="6" fill="#3a4058" />
-        <rect x="-20" y="-23" width="4" height="4" fill="#c8b8a0" />
+        <Figure x={0} y={0} s={0.74} skin="#e0b898" hair="#3a2418" look="short" beard="stubble" mood="vexe" garment="coat" coat="#5a3020" pants="#3a2418"
+          arms={[{ a1: 30, a2: 20 }, { a1: 10, a2: 6 }]}>
+          <rect x="-50" y="-54" width="18" height="8" fill="#3a4058" />
+          <rect x="-34" y="-53" width="6" height="6" fill="#c8b8a0" />
+        </Figure>
         {/* ? au-dessus */}
         <text x="-8" y="-96" fontSize="14" fontWeight="800" fill="#8a8878">?</text>
       </g>
       {/* PERSO 2 : enfant qui demande "c'est quoi ?" */}
       <g transform="translate(300,340)">
-        <path d="M-8 0 L-10 -40 L-2 -46 L2 -46 L10 -40 L8 0 Z" fill="#3a5878" />
-        <circle cx="0" cy="-52" r="8" fill="#f0d0a8" />
-        <path d="M-6 -54 Q0 -62 6 -54 L6 -46 L-6 -46 Z" fill="#5a3818" />
+        <Figure x={0} y={0} s={0.5} skin="#f0d0a8" hair="#5a3818" look="mid" mood="surpris" garment="tee" coat="#3a5878" pants="#2a3a4a" shortSleeves
+          arms={[{ a1: 30, a2: 50 }, { a1: 10, a2: 6 }]} />
         {/* bulle "c'est quoi ?" */}
         <g transform="translate(28,-60)">
           <rect x="-4" y="-12" width="70" height="20" fill="#fff" rx="4" />
@@ -403,23 +401,16 @@ function P5() {
 
       {/* la personne âgée, moitié gauche nette, moitié droite qui s'efface */}
       <g transform="translate(340,220)">
-        {/* épaules — moitié gauche solide, moitié droite pointillée */}
-        <path d="M-100 200 L-100 90 Q-100 50 -60 40 L0 40 L0 200 Z" fill="#5a4838" stroke="#2a1810" strokeWidth="1.5" />
-        <path d="M0 40 L60 40 Q100 50 100 90 L100 200 L0 200 Z" fill="#5a4838" stroke="#2a1810" strokeWidth="1.5" strokeDasharray="3 4" opacity="0.35" />
-
-        {/* tête */}
-        <ellipse cx="-30" cy="-10" rx="42" ry="50" fill="#e0b898" stroke="#5a3818" strokeWidth="1.5" />
-        <path d="M-72 -30 Q-70 -60 -30 -60 Q10 -60 30 -30" stroke="#e8e8e0" strokeWidth="10" fill="none" strokeLinecap="round" />
-        {/* traits nets côté gauche */}
-        <ellipse cx="-46" cy="-14" rx="4" ry="3" fill="#f8f4e8" />
-        <circle cx="-46" cy="-14" r="1.8" fill="#3a3050" />
-        <path d="M-52 -24 q4 -3 10 -1" stroke="#8a7048" strokeWidth="1.6" fill="none" />
-        <path d="M-60 -4 q4 4 8 4" stroke="#8a5828" strokeWidth="0.6" fill="none" opacity="0.6" />
-        <path d="M-56 -4 q4 4 8 4" stroke="#8a5828" strokeWidth="0.6" fill="none" opacity="0.5" />
-        {/* moitié droite du visage qui s'estompe (pointillés) */}
-        <path d="M12 -50 Q30 -30 30 -10 Q30 30 12 40" stroke="#5a3818" strokeWidth="1.5" strokeDasharray="3 4" fill="none" />
-        <circle cx="-12" cy="-14" r="1.8" fill="#3a3050" opacity="0.35" />
-        <path d="M-14 4 L-14 20 L-4 22" stroke="#8a5828" strokeWidth="0.8" fill="none" opacity="0.4" strokeDasharray="2 2" />
+        {/* buste et tête du kit, deux fois : à gauche net, à droite qui s'estompe */}
+        <clipPath id="p5-gauche"><rect x="-200" y="-120" width="200" height="340" /></clipPath>
+        <clipPath id="p5-droite"><rect x="0" y="-120" width="200" height="340" /></clipPath>
+        <g clipPath="url(#p5-gauche)">
+          <Bust x={-30} y={-10} s={3.23} skin="#e0b898" hair="#e8e8e0" look="bun" wrinkles mood="vexe" cloth="#5a4838" collar="round" />
+        </g>
+        <g clipPath="url(#p5-droite)" opacity="0.3">
+          <Bust x={-30} y={-10} s={3.23} skin="#e0b898" hair="#e8e8e0" look="bun" wrinkles mood="vexe" cloth="#5a4838" collar="round" />
+        </g>
+        <path d="M0 -70 V200" stroke="#c8d4e2" strokeWidth="1" strokeDasharray="3 5" opacity="0.4" />
         {/* particules qui s'échappent du côté effacé, comme mémoire qui part au vent */}
         {[[20, -40], [30, -20], [40, 0], [26, 20], [40, -50]].map(([x, y], i) => (
           <circle key={i} cx={x} cy={y} r="1.6" fill="#c8d4e2" opacity="0.5">
@@ -437,13 +428,8 @@ function P5() {
       {/* enfant qui tend une photo, halo doré autour de la photo */}
       <g transform="translate(560,320)">
         <ellipse cx="0" cy="-30" rx="60" ry="45" fill="url(#p5-glow)" />
-        <path d="M-14 60 L-16 -10 L-4 -18 L4 -18 L16 -10 L14 60 Z" fill="#e05028" />
-        <circle cx="0" cy="-24" r="14" fill="#f0d0a8" stroke="#5a3818" strokeWidth="0.8" />
-        <path d="M-12 -30 Q0 -40 12 -30 L12 -18 L-12 -18 Z" fill="#3a2818" />
-        {/* petit sourire */}
-        <path d="M-6 -20 Q0 -16 6 -20" stroke="#5a2810" strokeWidth="1" fill="none" />
-        {/* bras tendu avec photo */}
-        <path d="M-14 -6 L-40 -20" stroke="#f0d0a8" strokeWidth="6" strokeLinecap="round" />
+        <Figure x={0} y={90} s={1.08} skin="#f0d0a8" hair="#3a2818" look="short" mood="content" garment="tee" coat="#e05028" pants="#3a4a6a" shoes="#e8e8e0" belt={false}
+          arms={[{ a1: 110, a2: 100 }, { a1: 14, a2: 6 }]} />
         <g transform="translate(-50,-28) rotate(-8)">
           <rect x="-20" y="-16" width="40" height="32" fill="#fff" stroke="#8a6838" strokeWidth="1" />
           {/* photo : une jeune femme avec un enfant */}
