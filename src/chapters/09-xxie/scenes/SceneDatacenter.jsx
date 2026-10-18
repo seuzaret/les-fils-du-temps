@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau-ÉNIGME : « Où sont VRAIMENT tes souvenirs ? »
@@ -196,16 +197,12 @@ export default function SceneDatacenter({ collect, action, reveal, made = [], mo
         )}
 
         {/* LA TECHNICIENNE, minuscule au milieu de l'allée (l'échelle !) */}
-        <g transform="translate(500,432) scale(0.8)">
-          <path d="M-13 8 Q-17 -16 0 -21 Q17 -16 13 8 L11 42 L-11 42 Z" fill="#2a6a5a" />
-          <path d="M-13 8 Q-17 -16 0 -21 Q17 -16 13 8 L11 42 L-11 42 Z" fill="#081018" opacity="0.24" filter="url(#dc-grain)" />
-          <circle cx="0" cy="-31" r="10" fill="#d8a884" />
-          <path d="M-10 -35 q1 -12 10 -11 q11 1 10 11 q-4 -6 -10 -6 q-7 0 -10 6 Z" fill="#3a2c24" />
+        <g transform="translate(500,432)">
           {/* les deux bras écartés : « regarde autour de toi » */}
-          <path d="M-13 -6 q-22 -2 -30 -16" stroke="#d8a884" strokeWidth="5" fill="none" strokeLinecap="round" />
-          <path d="M13 -6 q22 -2 30 -16" stroke="#d8a884" strokeWidth="5" fill="none" strokeLinecap="round" />
-          {/* badge */}
-          <rect x="-6" y="-4" width="9" height="6" rx="1" fill="#c9e8ff" />
+          <Figure x={0} y={34} s={0.56} skin="#d8a884" hair="#3a2c24" look="ponytail" mood="content"
+            garment="jacket" coat="#2a6a5a" pants="#1a3a34" shoes="#141418" arms={[{ a1: 110, a2: 130 }, { a1: 110, a2: 130 }]}>
+            <rect x="-12" y="-80" width="12" height="9" rx="1.4" fill="#c9e8ff" />
+          </Figure>
         </g>
 
         {/* PIÈCE : le terminal d'ABONNEMENT, au mur à gauche */}

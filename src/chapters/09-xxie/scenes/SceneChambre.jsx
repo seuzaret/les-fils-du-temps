@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 (XXIe) — Tableau : Ta chambre, aujourd'hui.
@@ -364,29 +365,20 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           <path d="M-40 30 L40 30 L34 46 L-34 46 Z" fill="#1a1a22" />
 
           {/* L'ADO assis */}
-          <g transform="translate(0,-4)">
-            {/* torse — sweat colore avec LED reflet */}
-            <path d="M-20 24 Q-22 -20 0 -26 Q22 -20 20 24 Z" fill="#2a2038" />
-            <path d="M-20 24 Q-22 -20 0 -26 Q22 -20 20 24 Z" fill="#050510" opacity="0.24" filter="url(#ch-grain)" />
-            {/* capuche */}
-            <path d="M-18 -14 Q-14 -30 0 -30 Q14 -30 18 -14" stroke="#1a1420" strokeWidth="4" fill="none" />
-            {/* tête */}
-            <circle cx="0" cy="-38" r="11" fill="#e0b090" />
-            {/* casque gamer RGB */}
-            <path d="M-11 -40 a11 11 0 0 1 22 0" stroke="#3a3a52" strokeWidth="3" fill="none" />
-            <ellipse cx="-11" cy="-38" rx="3.4" ry="4.4" fill="#151520" stroke="#ff4aa0" strokeWidth="0.8">
+          {/* sweat à capuche, casque gamer RGB et son micro */}
+          <Figure x={0} y={37} s={0.85} pose="sit" skin="#e0b090" hair="#3a2418" look="short" mood="content"
+            garment="tee" coat="#2a2038" pants="#1a1a2a" shoes="#e8e8f0" belt={false} arms={[{ a1: 24, a2: -36 }, { a1: 24, a2: -36 }]}>
+            <path d="M-20 -76 Q-16 -86 0 -86 Q16 -86 20 -76" stroke="#1a1420" strokeWidth="5" fill="none" />
+            <path d="M-14 -90 A14 14 0 0 1 14 -90" stroke="#3a3a52" strokeWidth="3.4" fill="none" />
+            <ellipse cx="-13.6" cy="-86" rx="4" ry="5.4" fill="#151520" stroke="#ff4aa0" strokeWidth="1">
               <animate attributeName="stroke" dur="5s" repeatCount="indefinite" values="#ff4aa0;#4ae0ff;#7fe0a8;#ff4aa0" />
             </ellipse>
-            <ellipse cx="11" cy="-38"  rx="3.4" ry="4.4" fill="#151520" stroke="#4ae0ff" strokeWidth="0.8">
+            <ellipse cx="13.6" cy="-86" rx="4" ry="5.4" fill="#151520" stroke="#4ae0ff" strokeWidth="1">
               <animate attributeName="stroke" dur="5s" repeatCount="indefinite" values="#4ae0ff;#ff4aa0;#a840f0;#4ae0ff" />
             </ellipse>
-            {/* micro rabattable */}
-            <path d="M-11 -35 q-8 4 -8 12" stroke="#3a3a52" strokeWidth="1.4" fill="none" />
-            <circle cx="-19" cy="-23" r="1.6" fill="#0a0a12" />
-            {/* petits yeux visibles */}
-            <circle cx="-3" cy="-38" r="1.2" fill="#0a0a12" />
-            <circle cx="3"  cy="-38" r="1.2" fill="#0a0a12" />
-          </g>
+            <path d="M-13 -82 q-8 4 -8 12" stroke="#3a3a52" strokeWidth="1.6" fill="none" />
+            <circle cx="-21" cy="-70" r="2" fill="#0a0a12" />
+          </Figure>
         </g>
 
         {/* --- PIECES A RAMASSER SUR LE BUREAU (bien devant l'ecran) --- */}
