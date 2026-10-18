@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Haze, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : le village (tableau de départ)
@@ -57,18 +58,26 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
 
       {/* ═══ couche lointaine : collines + champ labouré ═══ */}
       <PLayer depth={1}>
+        {/* collines violettes au loin, à contre-jour */}
+        <Ridge id="vg-r0" seed={161} y={276} amp={56} rough={0.52} fill="#6a4a6a" lit="#9a6a72" light={-1} />
+        <Haze id="vg-h0" y0={230} y1={300} color="#f4b26a" opacity={0.35} />
         <path d="M0 300 Q180 252 360 288 Q540 324 720 282 Q860 250 1000 292 L1000 420 L0 420 Z" fill="url(#vg-hill)" />
         <rect y="300" width="1000" height="30" fill="#f4b26a" opacity="0.12" filter="url(#vg-blur)" />
-        {/* lisière d'arbres en silhouette */}
-        {[120, 175, 235, 300, 690, 760, 830].map((x, i) => (
-          <ellipse key={i} cx={x} cy={286 - (i % 2) * 8} rx={26 + (i % 3) * 6} ry={20} fill="#3e3324" opacity="0.7" />
-        ))}
+        {/* lisière d'arbres en silhouette, bord éclairé côté soleil */}
+        <TreeLine seed={163} x0={60} x1={340} y={296} n={14} h={[22, 40]} kinds={["leafy", "leafy", "conifer"]} colors={["#3e3324", "#46392a"]} light={-1} lit="#a87a4a" jitter={8} />
+        <TreeLine seed={167} x0={660} x1={880} y={292} n={11} h={[22, 40]} kinds={["leafy", "conifer"]} colors={["#3e3324", "#46392a"]} light={-1} jitter={8} />
         {/* champ labouré */}
         <path d="M0 336 Q250 320 500 338 T1000 334 L1000 400 L0 400 Z" fill="#7a5a30" />
         <path d="M0 336 Q250 320 500 338 T1000 334 L1000 400 L0 400 Z" fill="#3c2c18" opacity="0.35" filter="url(#vg-grain)" />
-        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-          <path key={i} d={`M${40 + i * 122} 350 Q${100 + i * 122} 346 ${162 + i * 122} 352`} stroke="#5c4222" strokeWidth="3" fill="none" opacity="0.55" />
-        ))}
+        {/* sillons du champ en perspective, qui convergent vers l'horizon */}
+        {Array.from({ length: 22 }).map((_, i) => {
+          const x0 = -80 + i * 54;
+          return <path key={i} d={`M${(500 + (x0 - 500) * 0.55).toFixed(0)} 338 L${x0} 400`} stroke={i % 2 ? "#5c4222" : "#9a7444"} strokeWidth="2.4" opacity="0.5" />;
+        })}
+        <path d="M0 336 Q250 320 500 338 T1000 334" stroke="#c8925a" strokeWidth="2" fill="none" opacity="0.5" />
+        {/* palissade du village, piquets de bois */}
+        {Array.from({ length: 30 }).map((_, i) => <path key={i} d={`M${560 + i * 15} 360 l0 -16 l2 -3 l2 3 l0 16 Z`} fill="#4a3420" opacity="0.85" />)}
+        <path d="M556 352 L1004 352" stroke="#3a2818" strokeWidth="2" opacity="0.8" />
         {/* OISEAUX qui traversent le ciel — vol en V, plus visibles */}
         <g opacity="0.9">
           <animateTransform attributeName="transform" type="translate"
@@ -112,6 +121,9 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
         <ellipse cx="500" cy="470" rx="440" ry="60" fill="#8a6636" opacity="0.4" />
         <rect y="402" width="1000" height="158" fill="#241608" opacity="0.34" filter="url(#vg-mottle)" />
         <rect y="402" width="1000" height="158" fill="#2c1c10" opacity="0.5" filter="url(#vg-grain)" />
+        <Speckle seed={93} x0={0} x1={1000} y0={404} y1={560} n={300} colors={["#3a2414", "#c8a070", "#5a3e26", "#8a6a40"]} opacity={0.45} />
+        {/* chemin de terre battue entre les huttes */}
+        <path d="M380 404 Q420 440 360 480 Q300 520 330 560 L470 560 Q440 520 500 480 Q560 440 520 404 Z" fill="#b8925a" opacity="0.32" />
         {/* nappe de lumière dorée côté soleil */}
         <ellipse cx="220" cy="452" rx="360" ry="50" fill="#ffce7a" opacity="0.14" filter="url(#vg-blur)" />
 
