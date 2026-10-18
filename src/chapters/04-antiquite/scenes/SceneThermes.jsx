@@ -19,6 +19,9 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         <linearGradient id="th-mur" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c89058" /><stop offset="100%" stopColor="#7a5028" /></linearGradient>
         <linearGradient id="th-marbre" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f0e8d8" /><stop offset="100%" stopColor="#a89880" /></linearGradient>
         <radialGradient id="th-eau" cx="50%" cy="30%" r="60%"><stop offset="0%" stopColor="#c8e8f0" /><stop offset="100%" stopColor="#5090a8" /></radialGradient>
+        <linearGradient id="th-vault" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3a2410" stopOpacity="0.55" /><stop offset="40%" stopColor="#3a2410" stopOpacity="0" /></linearGradient>
+        <linearGradient id="th-wain" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#e8dccc" /><stop offset="100%" stopColor="#b8a890" /></linearGradient>
+        <filter id="th-blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="8" /></filter>
         <radialGradient id="th-vapeur" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#f0f0e8" stopOpacity="0.7" /><stop offset="100%" stopColor="#f0f0e8" stopOpacity="0" /></radialGradient>
       </defs>
 
@@ -38,11 +41,27 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
             ))}
           </g>
         ))}
-        {/* halo doré de lampe à huile suspendue */}
-        <circle cx="500" cy="70" r="90" fill="#f8d878" opacity="0.15" />
+        {/* la courbure de la voûte : plus sombre en haut */}
+        <rect width="1000" height="380" fill="url(#th-vault)" />
+        {/* l'oculus du sommet, d'où tombe la lumière du jour */}
+        <ellipse cx="500" cy="-6" rx="70" ry="22" fill="#c8e0f0" />
+        <ellipse cx="500" cy="-6" rx="70" ry="22" fill="none" stroke="#5a3818" strokeWidth="5" />
+        <path d="M440 8 L560 8 L640 380 L360 380 Z" fill="#fff4d8" opacity="0.16" filter="url(#th-blur)" />
       </PLayer>
 
       <PLayer depth={4}>
+        {/* soubassement de marbre veiné au pied des murs, avec une frise */}
+        <rect x="-40" y="340" width="1080" height="102" fill="url(#th-wain)" />
+        <rect x="-40" y="340" width="1080" height="10" fill="#8a3a2a" />
+        {Array.from({ length: 54 }).map((_, i) => <path key={i} d={`M${i * 20 - 40} 342 l10 6 l10 -6`} stroke="#e8c070" strokeWidth="1.2" fill="none" />)}
+        {Array.from({ length: 9 }).map((_, i) => (
+          <g key={i}>
+            <rect x={i * 120 - 40} y="354" width="114" height="80" fill="none" stroke="#a89880" strokeWidth="1.4" />
+            <path d={`M${i * 120 - 30} ${370 + (i % 3) * 8} q30 ${10 + (i % 2) * 8} 50 0 q20 -10 50 12`} stroke="#9a8a9a" strokeWidth="1.2" fill="none" opacity="0.6" />
+            <path d={`M${i * 120 - 20} ${404 + (i % 2) * 8} q40 -10 80 6`} stroke="#b89a8a" strokeWidth="1" fill="none" opacity="0.5" />
+          </g>
+        ))}
+        <rect x="-40" y="434" width="1080" height="8" fill="#9a8a72" />
         {/* Grande niche voûtée du fond (labrum au centre) */}
         <g transform="translate(500,340)">
           <path d="M-120 0 L-120 -140 Q-120 -220 0 -220 Q120 -220 120 -140 L120 0 Z" fill="url(#th-mur)" stroke="#5a3818" strokeWidth="1" />
@@ -69,6 +88,32 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
             </g>
           </g>
         ))}
+      </PLayer>
+
+      <PLayer depth={2}>
+        {/* MOSAÏQUE au sol : damier en perspective, qui fuit vers le mur */}
+        <rect x="-40" y="442" width="1080" height="130" fill="#e0d0b8" />
+        {Array.from({ length: 6 }).map((_, r) => {
+          const ys = [442, 456, 472, 491, 514, 540, 572];
+          return Array.from({ length: 26 }).map((_, c) => {
+            if ((c + r) % 2) return null;
+            const X = (k, y) => 500 + (k * 48 - 624) * (1 + (y - 442) / 110);
+            const y0 = ys[r], y1 = ys[r + 1];
+            return <path key={`${r}-${c}`} d={`M${X(c, y0).toFixed(1)} ${y0} L${X(c + 1, y0).toFixed(1)} ${y0} L${X(c + 1, y1).toFixed(1)} ${y1} L${X(c, y1).toFixed(1)} ${y1} Z`} fill="#2a2018" />;
+          });
+        })}
+        {/* reflets humides sur le sol */}
+        <ellipse cx="500" cy="470" rx="220" ry="14" fill="#fff4d8" opacity="0.18" filter="url(#th-blur)" />
+        {/* motif central circulaire (dauphin/rosette stylisé) */}
+        <g transform="translate(500,500)">
+          <circle r="42" fill="#e0d0b8" stroke="#2a2018" strokeWidth="2" />
+          <circle r="30" fill="none" stroke="#2a2018" strokeWidth="1" />
+          {/* dauphin stylisé */}
+          <path d="M-24 4 Q-14 -12 0 -10 Q14 -12 24 4 Q14 8 8 -2 Q0 -14 -8 -2 Q-14 8 -24 4 Z" fill="#2a2018" />
+          <circle cx="-14" cy="0" r="1.5" fill="#e0d0b8" />
+        </g>
+        {/* eau ruisselante sur le sol devant le labrum */}
+        <path d="M470 448 q-4 20 -14 40 M530 448 q4 20 14 40" stroke="#78b0c8" strokeWidth="1.5" fill="none" opacity="0.7" />
       </PLayer>
 
       <PLayer depth={3}>
@@ -102,30 +147,6 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         <path d="M400 40 L200 200 L160 200 L360 40 Z" fill="#f8e8b8" opacity="0.15" />
       </PLayer>
 
-      <PLayer depth={2}>
-        {/* MOSAÏQUE au sol : damier noir et blanc avec motif géométrique */}
-        <rect y="440" width="1000" height="120" fill="#e0d0b8" />
-        {/* tesselles noires en damier */}
-        {Array.from({ length: 22 }).map((_, c) => (
-          <g key={c}>
-            {Array.from({ length: 6 }).map((_, r) => (
-              (c + r) % 2 === 0
-                ? <rect key={r} x={c * 46} y={440 + r * 20} width="46" height="20" fill="#2a2018" />
-                : null
-            ))}
-          </g>
-        ))}
-        {/* motif central circulaire (dauphin/rosette stylisé) */}
-        <g transform="translate(500,500)">
-          <circle r="42" fill="#e0d0b8" stroke="#2a2018" strokeWidth="2" />
-          <circle r="30" fill="none" stroke="#2a2018" strokeWidth="1" />
-          {/* dauphin stylisé */}
-          <path d="M-24 4 Q-14 -12 0 -10 Q14 -12 24 4 Q14 8 8 -2 Q0 -14 -8 -2 Q-14 8 -24 4 Z" fill="#2a2018" />
-          <circle cx="-14" cy="0" r="1.5" fill="#e0d0b8" />
-        </g>
-        {/* eau ruisselante sur le sol devant le labrum */}
-        <path d="M470 448 q-4 20 -14 40 M530 448 q4 20 14 40" stroke="#78b0c8" strokeWidth="1.5" fill="none" opacity="0.7" />
-      </PLayer>
 
       <PLayer depth={1}>
         {/* DEUX BAIGNEURS qui discutent, drapés dans une serviette (à droite) */}
