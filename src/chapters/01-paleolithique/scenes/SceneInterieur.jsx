@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : au fond de la grotte
@@ -228,18 +229,8 @@ export default function SceneInterieur({ collect, action, reveal, made = [], que
           famille… et qui raconte l'histoire du clan aux ancêtres. */}
       <g transform="translate(452,486)">
         <ellipse cx="0" cy="18" rx="32" ry="8" fill="#0e0804" opacity="0.75" />
-        {/* le corps, enveloppé d'une fourrure, courbé par l'âge */}
-        <path d="M-22 18 Q-30 -10 -8 -24 Q10 -33 24 -18 Q32 -4 28 18 Z" fill="#6a4a30" />
-        <path d="M-22 18 Q-30 -10 -8 -24 Q10 -33 24 -18 Q32 -4 28 18 Z" fill="#2c1a0c" opacity="0.4" filter="url(#g1grain)" />
-        {/* les mèches de la fourrure */}
-        <path d="M-19 6 q8 -4 15 0 M-15 -5 q8 -4 15 0 M1 -15 q9 -4 15 2" stroke="#8a6440" strokeWidth="1.8" fill="none" opacity="0.55" />
-        {/* la tête et les cheveux blancs */}
-        <circle cx="9" cy="-34" r="10" fill="#c89a72" />
-        <path d="M-1 -38 q1 -12 11 -11 q11 1 10 12 q-4 -6 -10 -6 q-8 0 -11 5 Z" fill="#d8d0c4" />
-        {/* le bras tendu, la main posée sur la roche */}
-        <path d="M22 -14 q18 -8 27 -22" stroke="#c89a72" strokeWidth="5" fill="none" strokeLinecap="round" />
-        <circle cx="51" cy="-38" r="4" fill="#c89a72" />
-        {/* la lumière du matin l'accroche par le dos */}
+        <Figure x={0} y={18} s={0.72} pose="ground" facing="right" skin="#c09064" hair="#e4dccc" look="long" mood="content" paint="dots" wrinkles
+          garment="fur" coat="#6a4a30" pants="#4a3420" bareArms arms={[{ a1: 14, a2: -14 }, { a1: 96, a2: 130 }]} />
         <path d="M-8 -24 Q10 -33 24 -18" stroke="#ffe0a8" strokeWidth="2" fill="none" opacity="0.4" />
       </g>
       {/* le « ? » doré : c'est au tour de Kyan dans la quête */}

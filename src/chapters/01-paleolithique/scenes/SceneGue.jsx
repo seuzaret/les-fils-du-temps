@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : LE GUÉ DE LA RIVIÈRE
@@ -202,38 +203,10 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
       <PLayer depth={1}>
         {/* Le PÊCHEUR ancestral sur la berge, canne en bois — mieux fini */}
         <g transform="translate(120,470)">
-          {/* ombre au sol */}
           <ellipse cx="0" cy="42" rx="30" ry="4" fill="#0a0604" opacity="0.55" />
-          {/* jambes croisées assises */}
-          <path d="M-24 30 Q-20 20 -6 22 L18 34 Q24 40 20 42 L-20 42 Q-28 40 -24 30 Z" fill="#6a4020" stroke="#2a1810" strokeWidth="0.6" />
-          {/* torse penché en avant */}
-          <path d="M-18 22 Q-16 -14 0 -20 Q16 -14 18 22 Z" fill="#9a6028" stroke="#3a2010" strokeWidth="0.6" />
-          {/* détail pelage/fourrure sur le torse */}
-          <path d="M-14 -8 q4 -3 6 0 M-6 -12 q4 -3 6 0 M6 -12 q4 -3 6 0 M-10 4 q4 -3 6 0 M4 4 q4 -3 6 0" stroke="#5a3818" strokeWidth="0.5" fill="none" opacity="0.7" />
-          {/* épaule */}
-          <ellipse cx="-16" cy="-6" rx="6" ry="4" fill="#8a5828" />
-          <ellipse cx="16" cy="-6" rx="6" ry="4" fill="#8a5828" />
-          {/* bras qui tient la canne */}
-          <path d="M14 -8 Q22 -14 26 -22" stroke="#c8946a" strokeWidth="5" strokeLinecap="round" fill="none" />
-          {/* tête plus expressive */}
-          <ellipse cx="0" cy="-30" rx="12" ry="14" fill="#c8946a" stroke="#5a3818" strokeWidth="0.6" />
-          {/* cheveux longs (chignon) */}
-          <path d="M-11 -36 q-4 -8 3 -14 q5 8 7 -2 q3 8 6 -2 q6 6 5 14 q-2 4 -6 2 q-2 3 -5 -1 q-3 3 -5 -1 q-4 2 -5 2 z" fill="#3a2418" />
-          <ellipse cx="0" cy="-42" rx="6" ry="3" fill="#3a2418" />
-          {/* barbe */}
-          <path d="M-8 -24 q4 6 8 6 q4 0 8 -6" stroke="#3a2418" strokeWidth="2.5" fill="none" strokeLinecap="round" />
-          {/* traits */}
-          <circle cx="-3.5" cy="-30" r="1.5" fill="#2a1a10" />
-          <circle cx="3.5" cy="-30" r="1.5" fill="#2a1a10" />
-          <path d="M-3 -26 q3 1.5 6 0" stroke="#5a2818" strokeWidth="0.8" fill="none" />
-          {/* nez */}
-          <path d="M0 -30 l-1.5 4 l1.5 1" stroke="#8a5828" strokeWidth="0.5" fill="none" />
-          {/* canne à pêche courbée = branche qui plie sous le poids */}
-          <path d="M26 -22 Q80 -60 130 -70 Q160 -60 155 -30" stroke="#5a3818" strokeWidth="3.5" strokeLinecap="round" fill="none" />
-          {/* fil */}
-          <path d="M155 -30 L158 20" stroke="#c8b8a0" strokeWidth="0.6" fill="none" />
-          {/* petit flotteur */}
-          <circle cx="158" cy="18" r="2" fill="#c85028" stroke="#3a1010" strokeWidth="0.4" />
+          <Figure x={0} y={42} s={0.98} pose="ground" facing="right" skin="#c8946a" hair="#3a2418" look="bun" beard="short"
+            garment="fur" coat="#9a6028" pants="#6a4020" bareArms arms={[{ a1: 14, a2: -16 }, { a1: 48, a2: 120 }]} />
+          <path d="M48 -3 Q90 -60 130 -70 Q160 -60 155 -30" stroke="#5a3818" strokeWidth="3.5" strokeLinecap="round" fill="none" />
         </g>
         {/* Objets ephemere : disparaissent une fois ramassés */}
         {!inv.includes("escargot") && (

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : L'ATELIER DE SILEX
@@ -369,45 +370,10 @@ export default function SceneAtelier({ collect, action, reveal, made = [], inv =
              Corps plus soigné : anatomie, drapé de la peau de bête, mèches
              de cheveux, ombres, doigts qui tiennent le percuteur. */}
         <g transform="translate(340,458)">
-          {/* ombre longue à gauche */}
           <ellipse cx="-10" cy="52" rx="42" ry="10" fill="#0a0604" opacity="0.55" />
-          {/* jambes repliées, plis */}
-          <ellipse cx="0" cy="50" rx="34" ry="12" fill="#5a3818" />
-          <path d="M-30 46 q30 -8 60 0" stroke="#3a2010" strokeWidth="1.2" fill="none" opacity="0.7" />
-          {/* torse anatomique */}
-          <path d="M-24 30 Q-22 -14 0 -20 Q22 -14 24 30 Z" fill="#8a5828" />
-          <path d="M-24 30 Q-22 -14 0 -20 Q22 -14 24 30 Z" fill="#3a2010" opacity="0.35" filter="url(#at-grain)" />
-          {/* peau de bête sur les épaules, drapé */}
-          <path d="M-26 -10 Q0 -22 26 -10 L28 22 Q0 14 -28 22 Z" fill="#5a3818" />
-          <path d="M-26 -10 Q0 -22 26 -10 L28 22 Q0 14 -28 22 Z" fill="#2c1c10" opacity="0.35" filter="url(#at-grain)" />
-          {/* frange de la peau */}
-          <path d="M-22 20 l-2 6 M-14 22 l-1 8 M-6 22 l-1 8 M2 22 l1 8 M10 22 l1 8 M18 20 l2 6" stroke="#2c1c10" strokeWidth="1.5" strokeLinecap="round" />
-          {/* lien de cuir en croix */}
-          <path d="M-20 -4 L20 14 M20 -4 L-20 14" stroke="#3a2010" strokeWidth="1.2" opacity="0.6" />
-          {/* tête */}
-          <ellipse cx="0" cy="-30" rx="14" ry="16" fill="#c8946a" />
-          <ellipse cx="0" cy="-30" rx="14" ry="16" fill="#8a4c28" opacity="0.2" filter="url(#at-grain)" />
-          {/* cheveux longs bruns */}
-          <path d="M-12 -34 q-4 -6 4 -12 q6 8 8 -2 q4 8 6 -2 q6 6 6 12 q-2 -6 -12 -8 q-10 4 -12 12 Z" fill="#3a2418" />
-          <path d="M-14 -30 q-3 12 0 22 M14 -30 q3 12 0 22" stroke="#3a2418" strokeWidth="4" strokeLinecap="round" />
-          {/* mèche qui tombe devant le front */}
-          <path d="M-4 -40 q-2 6 -6 8" stroke="#3a2418" strokeWidth="1.5" fill="none" />
-          {/* yeux, sourcils, moustache */}
-          <path d="M-9 -34 q4 -2 8 0 M1 -34 q4 -2 8 0" stroke="#2a1a10" strokeWidth="1.2" fill="none" />
-          <circle cx="-5" cy="-30" r="1.6" fill="#2a1a10" />
-          <circle cx="5"  cy="-30" r="1.6" fill="#2a1a10" />
-          <path d="M-4 -22 q4 -1 8 0" stroke="#3a2418" strokeWidth="1.4" fill="none" />
-          {/* nez léger */}
-          <path d="M0 -28 q-1 4 -1 6" stroke="#8a5030" strokeWidth="0.8" fill="none" opacity="0.6" />
-          {/* bras qui tient un percuteur, plus dessiné */}
-          <path d="M22 0 Q40 -4 48 12" stroke="#c8946a" strokeWidth="10" fill="none" strokeLinecap="round" />
-          {/* main avec doigts qui saisit le percuteur */}
-          <ellipse cx="52" cy="14" rx="6" ry="4" fill="#c8946a" stroke="#5a3818" strokeWidth="0.8" />
-          <path d="M56 12 l3 -2 M56 16 l3 2" stroke="#5a3818" strokeWidth="0.6" />
-          {/* petit percuteur dans la main */}
-          <rect x="48" y="8" width="3" height="12" rx="1" fill="#8a6a4a" stroke="#3a2818" strokeWidth="0.6" transform="rotate(20 50 14)" />
-          {/* autre bras posé sur le genou */}
-          <path d="M-22 4 Q-32 12 -30 26" stroke="#c8946a" strokeWidth="8" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={52} s={1.1} pose="ground" skin="#c8946a" hair="#3a2418" look="long" mustache mood="colere"
+            garment="fur" coat="#5a3818" pants="#5a3818" bareArms arms={[{ a1: 22, a2: -24 }, { a1: 55, a2: 64 }]} />
+          <rect x="54" y="8" width="3" height="12" rx="1" fill="#8a6a4a" stroke="#3a2818" strokeWidth="0.6" transform="rotate(20 56 14)" />
         </g>
 
         {/* Petits ephemères ramassables — feuille morte, coccinelle, brindille */}

@@ -2,6 +2,7 @@ import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { GrassTuft, Birds } from "./decor.jsx";
 import TimeMachine from "../../../engine/TimeMachine.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : devant la grotte (tableau de départ)
@@ -286,21 +287,10 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
       {!bare && (
       <g transform="translate(252,494)">
         <ellipse cx="0" cy="16" rx="20" ry="5" fill="#241a10" opacity="0.6" />
-        {/* le petit corps, une peau nouée sur l'épaule */}
-        <path d="M-10 16 Q-13 -6 0 -12 Q13 -6 10 16 Z" fill="#8a6a48" />
-        <path d="M-10 16 Q-13 -6 0 -12 Q13 -6 10 16 Z" fill="#2c1a0c" opacity="0.3" filter="url(#x2grain)" />
-        {/* la tête, cheveux en bataille */}
-        <circle cx="0" cy="-22" r="8.5" fill="#c89a72" />
-        <path d="M-8 -26 q1 -10 8 -9 q9 1 8 9 q-3 -5 -8 -5 q-6 0 -8 5 Z" fill="#3a2a1c" />
-        <path d="M-7 -30 l-3 -5 M0 -31 l0 -6 M7 -30 l3 -5" stroke="#3a2a1c" strokeWidth="1.6" />
-        {/* LES DEUX MAINS LEVÉES, rouges d'ocre : « regarde ! » */}
-        <path d="M-10 -2 q-10 -6 -12 -18" stroke="#c89a72" strokeWidth="4" fill="none" strokeLinecap="round" />
-        <path d="M10 -2 q10 -6 12 -18" stroke="#c89a72" strokeWidth="4" fill="none" strokeLinecap="round" />
-        <circle cx="-23" cy="-22" r="4.5" fill="#b5451f" />
-        <circle cx="23" cy="-22" r="4.5" fill="#b5451f" />
-        {/* les doigts écartés */}
-        <path d="M-26 -26 l-2 -4 M-23 -27 l0 -4 M-20 -26 l2 -4" stroke="#b5451f" strokeWidth="1.4" strokeLinecap="round" />
-        <path d="M20 -26 l-2 -4 M23 -27 l0 -4 M26 -26 l2 -4" stroke="#b5451f" strokeWidth="1.4" strokeLinecap="round" />
+        <Figure x={0} y={16} s={0.37} skin="#cf9f72" hair="#3a2818" look="long" mood="content" paint earrings="#e8dcc4"
+          garment="fur" coat="#8a6a48" pants="#5a3e26" bareArms arms={[{ a1: 150, a2: 166 }, { a1: 150, a2: 166 }]}>
+          <circle cx="-33.6" cy="-115.6" r="6" fill="#b5451f" /><circle cx="33.6" cy="-115.6" r="6" fill="#b5451f" />
+        </Figure>
       </g>
       )}
       {/* le « ? » doré : c'est au tour d'Ana dans la quête */}

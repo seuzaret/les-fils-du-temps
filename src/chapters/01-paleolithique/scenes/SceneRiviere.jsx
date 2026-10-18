@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Birds } from "./decor.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : la rivière
@@ -245,17 +246,8 @@ export default function SceneRiviere({ collect, action, reveal, flags, queteQui 
           Son épreuve pour le nouveau : ramener ce cerf… de LOIN. */}
       <g transform="translate(470,486)">
         <ellipse cx="0" cy="22" rx="28" ry="7" fill="#160f08" opacity="0.65" />
-        {/* accroupi, tourné vers le cerf (vers la droite) */}
-        <path d="M-20 22 Q-26 0 -6 -12 Q10 -20 22 -8 Q28 4 24 22 Z" fill="#5c3a22" />
-        <path d="M-20 22 Q-26 0 -6 -12 Q10 -20 22 -8 Q28 4 24 22 Z" fill="#241408" opacity="0.4" filter="url(#r1grain)" />
-        {/* la tête, concentrée sur la rivière */}
-        <circle cx="10" cy="-24" r="9" fill="#c89a72" />
-        <path d="M1 -28 q1 -10 9 -9 q10 1 9 10 q-4 -6 -9 -6 q-7 0 -9 5 Z" fill="#3a2a1c" />
-        {/* la main en visière au-dessus des yeux */}
-        <path d="M20 -14 q14 -6 16 -18" stroke="#c89a72" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-        <path d="M30 -34 l12 -2" stroke="#c89a72" strokeWidth="4" strokeLinecap="round" />
-        {/* le genou replié */}
-        <path d="M-14 22 q-2 -14 8 -18" stroke="#4a2e18" strokeWidth="4" fill="none" />
+        <Figure x={0} y={22} s={0.66} pose="kneel" facing="right" skin="#c8986c" hair="#2c2013" look="ponytail" mood="colere" hat="headband" hatColor="#8a5a30" paint
+          garment="fur" coat="#5c3a22" pants="#4a2e18" bareArms arms={[{ a1: 18, a2: -16 }, { a1: 155, a2: -105 }]} />
       </g>
       {/* le « ? » doré : c'est au tour de Doru dans la quête */}
       {queteQui === "doru" && (

@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { GrassTuft } from "./decor.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : le campement
@@ -208,17 +209,9 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
       {/* LE CONTEUR (toi), enveloppé dans sa fourrure */}
       <g transform="translate(408,442)">
         <ellipse cx="4" cy="34" rx="26" ry="7" fill="#1c1008" opacity="0.7" />
-        <path d="M-12 -14 Q-18 12 -10 28 L14 28 Q20 8 12 -16 Z" fill="#5c3a22" />
-        <path d="M-12 -14 Q-4 -22 12 -16 L10 -6 Q-2 -12 -10 -6 Z" fill="#6e4a2c" />
-        {/* mèches de fourrure */}
-        <path d="M-11 0 l-4 3 M-10 10 l-4 3 M13 -2 l4 3 M12 12 l4 2 M-8 20 l-3 4" stroke="#4a2e1a" strokeWidth="1.6" opacity="0.8" />
-        <circle cx="1" cy="-26" r="10" fill="#8a5c3c" />
-        <path d="M-3 -28 a1.3 1.3 0 1 0 0.1 0 M5 -27 a1.3 1.3 0 1 0 0.1 0" fill="#2c1a10" />
-        <path d="M-8 -32 q8 -8 18 -2 q-2 -6 -9 -7 q-8 0 -9 9" fill="#3a2415" />
-        {/* côté du visage éclairé par le feu */}
-        <path d="M8 -32 q6 4 5 12" stroke="#ffb868" strokeWidth="2" fill="none" opacity="0.6" />
-        <path d="M-10 24 q-11 6 -19 3 M13 24 q11 6 18 2" stroke="#5c3a22" strokeWidth="8" strokeLinecap="round" fill="none" />
-        <path d="M14 -4 q12 -2 16 6" stroke="#8a5c3c" strokeWidth="6" strokeLinecap="round" fill="none" />
+        <Figure x={0} y={34} s={0.8} pose="ground" skin="#b07a52" hair="#3a2415" look="short" mood="content" hood hoodColor="#6e4a2c"
+          garment="fur" coat="#5c3a22" pants="#4a2e1a" arms={[{ a1: 14, a2: -10 }, { a1: 40, a2: 70 }]} />
+        <path d="M8 -32 q6 4 5 12" stroke="#ffb868" strokeWidth="2" fill="none" opacity="0.5" />
       </g>
       {/* LE TAS DE BRANCHES, écorces détaillées */}
       <g transform="translate(660,492)">
@@ -251,19 +244,10 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
           qui accueille, éprouve, et fait entrer les nouveaux dans le clan. */}
       <g transform="translate(300,470)">
         <ellipse cx="0" cy="20" rx="30" ry="8" fill="#160f08" opacity="0.7" />
-        {/* le corps, drapé d'une peau, tourné vers le feu (vers la droite) */}
-        <path d="M-24 20 Q-30 -8 -8 -22 Q10 -30 24 -16 Q31 -2 27 20 Z" fill="#5c3a22" />
-        <path d="M-24 20 Q-30 -8 -8 -22 Q10 -30 24 -16 Q31 -2 27 20 Z" fill="#241408" opacity="0.4" filter="url(#c1grain)" />
-        {/* la tête, barbe grise, tournée vers les flammes */}
-        <circle cx="8" cy="-32" r="9.5" fill="#c89a72" />
-        <path d="M-2 -36 q1 -11 10 -10 q10 1 9 11 q-4 -6 -9 -6 q-7 0 -10 5 Z" fill="#6a5a4a" />
-        <path d="M2 -27 q7 8 13 -1" stroke="#b8ac9c" strokeWidth="3" fill="none" />
-        {/* le bras qui tend un bâton vers les braises */}
-        <path d="M22 -10 q16 2 24 12" stroke="#c89a72" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-        <path d="M46 2 l30 8" stroke="#4a3420" strokeWidth="3" strokeLinecap="round" />
-        {/* la lueur du feu sur son visage et son épaule */}
-        <path d="M-8 -22 Q10 -30 24 -16" stroke="#ffb347" strokeWidth="2" fill="none" opacity="0.45" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
-        <circle cx="14" cy="-30" r="7" fill="#ffb347" opacity="0.12" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
+        <Figure x={0} y={20} s={0.7} pose="ground" facing="right" skin="#c0926a" hair="#5e5646" look="slick" wrinkles
+          garment="fur" coat="#5c3a22" pants="#4a2e1a" bareArms arms={[{ a1: 16, a2: -14 }, { a1: 70, a2: 82 }]} />
+        <path d="M39 -8 L72 4" stroke="#4a3420" strokeWidth="3" strokeLinecap="round" />
+        <circle cx="14" cy="-32" r="7" fill="#ffb347" opacity="0.12" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
       </g>
       {/* le « ? » doré : c'est au tour de Raya dans la quête */}
       {queteQui === "raya" && (

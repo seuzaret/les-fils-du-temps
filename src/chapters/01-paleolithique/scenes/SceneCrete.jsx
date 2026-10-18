@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : LE POINT DE VUE (crête)
@@ -255,41 +256,11 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
 
         {/* Personnage debout au bord (l'aîné qui observe) — plus détaillé */}
         <g transform="translate(800,480)">
-          {/* ombre au sol */}
           <ellipse cx="0" cy="44" rx="22" ry="4" fill="#0a0604" opacity="0.55" />
-          {/* longue tunique en peau */}
-          <path d="M-16 40 L-14 -10 Q-14 -22 -6 -22 L6 -22 Q14 -22 14 -10 L16 40 Z" fill="#5a3818" stroke="#2a1810" strokeWidth="0.8" />
-          {/* franges et coutures de la tunique */}
-          <path d="M-14 -4 q14 6 28 0 M-14 8 q14 -3 28 3 M-14 20 q14 6 28 0" stroke="#3a2010" strokeWidth="0.6" fill="none" opacity="0.8" />
-          <path d="M-16 40 l0 4 M-10 40 l0 4 M-4 40 l0 4 M2 40 l0 4 M8 40 l0 4 M14 40 l0 4" stroke="#3a2010" strokeWidth="1.2" strokeLinecap="round" />
-          {/* ceinture */}
-          <rect x="-14" y="10" width="28" height="3" fill="#3a2010" />
-          {/* épaule/bras qui tient bâton */}
-          <ellipse cx="14" cy="-10" rx="5" ry="4" fill="#7a4820" />
-          <path d="M15 -8 L20 -22" stroke="#c8946a" strokeWidth="4" strokeLinecap="round" />
-          {/* tête */}
-          <ellipse cx="0" cy="-32" rx="12" ry="14" fill="#c8946a" stroke="#5a3818" strokeWidth="0.6" />
-          {/* cheveux gris/blancs longs (aîné) */}
-          <path d="M-12 -36 q0 -10 6 -12 q6 2 8 -4 q4 6 8 4 q6 4 8 10 q-2 4 -4 4 q-4 -2 -8 0 q-4 -2 -8 0 q-4 -2 -10 -2 z" fill="#c0b8a8" />
-          {/* barbe blanche */}
-          <path d="M-9 -26 q3 8 9 8 q6 0 9 -8 q0 8 -4 12 q-5 3 -10 0 q-4 -4 -4 -12 z" fill="#e0d8c8" />
-          {/* yeux + rides */}
-          <circle cx="-3.5" cy="-32" r="1.5" fill="#2a1a10" />
-          <circle cx="3.5" cy="-32" r="1.5" fill="#2a1a10" />
-          <path d="M-6 -34 q3 -1 5 0 M2 -34 q3 -1 5 0" stroke="#5a3818" strokeWidth="0.5" fill="none" />
-          <path d="M-6 -30 q3 1 5 0 M2 -30 q3 1 5 0" stroke="#8a5828" strokeWidth="0.4" fill="none" opacity="0.7" />
-          {/* nez */}
-          <path d="M0 -32 l-1 5 l1 1" stroke="#8a5828" strokeWidth="0.6" fill="none" />
-          {/* collier de dents/coquillages */}
-          <path d="M-8 -20 q8 3 16 0" stroke="#3a2010" strokeWidth="0.6" fill="none" />
-          {[-6, -3, 0, 3, 6].map((cx, i) => (
-            <path key={i} d={`M${cx} -18 l1 3 l-2 0 z`} fill="#f0e8d0" stroke="#5a3818" strokeWidth="0.3" />
-          ))}
-          {/* bâton de marche décoré */}
-          <path d="M20 -22 L28 44" stroke="#3a2418" strokeWidth="4" strokeLinecap="round" />
-          <path d="M22 -12 q4 0 4 4 M24 4 q4 0 4 4 M26 20 q4 0 4 4" stroke="#5a3818" strokeWidth="0.6" fill="none" />
-          {/* petit tissu au sommet du bâton */}
-          <path d="M20 -22 q-6 -2 -8 4 q-2 4 4 4 z" fill="#c85028" stroke="#5a1810" strokeWidth="0.4" />
+          <Figure x={0} y={44} s={0.66} skin="#c8946a" hair="#c0b8a8" look="long" beard="long" beardColor="#e0d8c8" wrinkles
+            garment="coat" coat="#5a3818" pants="#3a2010" trim="#3a2010" arms={[{ a1: 8, a2: 4 }, { a1: 24, a2: -30 }]} />
+          <path d="M22 -22 L28 44" stroke="#3a2418" strokeWidth="4" strokeLinecap="round" />
+          <path d="M22 -22 q-6 -2 -8 4 q-2 4 4 4 z" fill="#c85028" stroke="#5a1810" strokeWidth="0.4" />
         </g>
         {/* Objets ephemere : disparaissent une fois ramassés */}
         {!inv.includes("plume") && (
