@@ -51,7 +51,7 @@ export function HeadBack({ look = "short", hair = "#3a2818", hood = false, hoodC
   return (
     <g>
       {(hood || hat === "hood") && <path d="M-17 4 Q-21.5 -25 0 -26.5 Q21.5 -25 17 4 L23 28 Q0 33 -23 28 Z" fill={hoodColor} stroke={shade(hoodColor, -0.25)} strokeWidth="0.7" />}
-      {hat === "coif" && <path d="M-17 -6 Q-20 18 -17 36 L17 36 Q20 18 17 -6 Q0 -22 -17 -6 Z" fill={hc} stroke={shade(hc, -0.2)} strokeWidth="0.6" />}
+      {(hat === "coif" || hat === "keffieh") && <path d="M-17 -6 Q-20 18 -17 36 L17 36 Q20 18 17 -6 Q0 -22 -17 -6 Z" fill={hc} stroke={shade(hc, -0.2)} strokeWidth="0.6" />}
       {look === "long" && <path d="M-14.4 -7 Q-18.5 14 -14.5 40 Q0 44 14.5 40 Q18.5 14 14.4 -7 Z" fill={hair} />}
       {(look === "mid" || look === "sidebun") && <path d="M-14.4 -7 Q-17.5 8 -15 22 Q0 26 15 22 Q17.5 8 14.4 -7 Z" fill={hair} />}
       {look === "sidebun" && <circle cx={f > 0 ? -14.5 : 14.5} cy="-7" r="6.4" fill={hair} stroke={shade(hair, -0.15)} strokeWidth="0.5" />}
@@ -63,6 +63,8 @@ export function HeadBack({ look = "short", hair = "#3a2818", hood = false, hoodC
         </g>
       )}
       {look === "bun" && <circle cx="0" cy="-19" r="7.5" fill={hair} stroke={shade(hair, -0.15)} strokeWidth="0.5" />}
+      {look === "rolls" && <path d="M-14.4 -4 Q-17 8 -14 14 Q0 18 14 14 Q17 8 14.4 -4 Z" fill={hair} stroke={shade(hair, -0.15)} strokeWidth="0.5" />}
+      {look === "bob" && <path d="M-14.8 -6 Q-17.2 4 -15.6 11 Q-12 13.4 -10.4 11 L10.4 11 Q12 13.4 15.6 11 Q17.2 4 14.8 -6 Z" fill={hair} stroke={shade(hair, -0.15)} strokeWidth="0.5" />}
       {look === "afro" && <ellipse cx="0" cy="-4" rx="20" ry="20" fill={hair} stroke={shade(hair, -0.15)} strokeWidth="0.6" />}
       {look === "curls" && (
         <g fill={hair} stroke={shade(hair, -0.12)} strokeWidth="0.6">
@@ -93,6 +95,7 @@ function Beard({ kind, hair, dx }) {
   const st = shade(hair, -0.12);
   if (kind === "stubble") return <path d={`M-12.65 3 A${RX} ${RY} 0 0 0 12.65 3 Q10.6 5.6 6.4 6 Q0 3 -6.4 6 Q-10.6 5.6 -12.65 3 Z`} fill={hair} opacity="0.28" />;
   if (kind === "goatee") return <path d={`M${dx - 5} 8.6 Q${dx} 7 ${dx + 5} 8.6 Q${dx + 4.4} 15 ${dx} 16.6 Q${dx - 4.4} 15 ${dx - 5} 8.6 Z`} fill={hair} stroke={st} strokeWidth="0.35" />;
+  if (kind === "chops") return <g fill={hair} stroke={st} strokeWidth="0.35"><path d="M-12.95 -1.5 A13 15 0 0 0 -9.6 10.1 Q-7.4 6 -8 2 Q-10 0.2 -12.95 -1.5 Z" /><path d="M12.95 -1.5 A13 15 0 0 1 9.6 10.1 Q7.4 6 8 2 Q10 0.2 12.95 -1.5 Z" /></g>;
   if (kind === "postiche") return <g><rect x={dx - 2.6} y="12" width="5.2" height="13" rx="2" fill="#2a2418" /><path d={`M${dx - 2.6} 15 h5.2 M${dx - 2.6} 18 h5.2 M${dx - 2.6} 21 h5.2`} stroke="#c8a848" strokeWidth="0.6" /></g>;
   const short = kind === "short";
   const top = short ? 6.5 : 3;
@@ -126,6 +129,10 @@ function Hat({ hat, c, c2, f }) {
           <circle cx="0" cy="-8.8" r="1.4" fill="#c02020" /><circle cx="-6" cy="-8.4" r="1" fill="#2060c0" /><circle cx="6" cy="-8.4" r="1" fill="#2060c0" />
         </g>
       );
+    case "pillbox":
+      return <g><path d="M-9 -11.6 L-9.4 -19.4 Q0 -21.6 9.4 -19.4 L9 -11.6 Q0 -9.8 -9 -11.6 Z" fill={c} stroke={s} strokeWidth="0.5" /><path d="M-9.2 -14.4 Q0 -12.8 9.2 -14.4 L9.1 -12.4 Q0 -10.8 -9.1 -12.4 Z" fill={c2 || "#e8c040"} /></g>;
+    case "circlet":
+      return <g><path d="M-13.2 -8.4 Q0 -13.6 13.2 -8.4 L13.4 -6 Q0 -11.2 -13.4 -6 Z" fill={c || "#e8c050"} stroke="#7a5a10" strokeWidth="0.45" /><circle cx="0" cy="-10.6" r="1.4" fill={c2 || "#c02020"} stroke="#7a5a10" strokeWidth="0.3" /></g>;
     case "nemes": {
       const g = c || "#e8c040", b = c2 || "#2a50a0";
       return (
@@ -152,9 +159,9 @@ function Hat({ hat, c, c2, f }) {
         </g>
       );
     case "cap":
-      return <g><path d="M-14.4 -3 A14.4 17.6 0 0 1 14.4 -3 Q0 -7.6 -14.4 -3 Z" fill={c} stroke={s} strokeWidth="0.5" /><path d="M-14.4 -3 Q0 -7.6 14.4 -3 L14.2 0.2 Q0 -4.6 -14.2 0.2 Z" fill={shade(c, -0.15)} stroke={s} strokeWidth="0.4" /></g>;
+      return <g><path d="M-14.6 -5 A14.6 17.6 0 0 1 14.6 -5 Q0 -11.4 -14.6 -5 Z" fill={c} stroke={s} strokeWidth="0.5" /><path d="M-14.6 -5 Q0 -11.4 14.6 -5 L14.4 -2.6 Q0 -8.8 -14.4 -2.6 Z" fill={shade(c, -0.15)} stroke={s} strokeWidth="0.4" /></g>;
     case "toque":
-      return <g><path d="M-14 -6 Q-16 -21 -6 -23 Q0 -25 6 -23 Q16 -21 14 -6 Q0 -10.4 -14 -6 Z" fill={c} stroke={s} strokeWidth="0.5" /><path d="M-14 -6 Q0 -10.4 14 -6 L14 -3 Q0 -7.4 -14 -3 Z" fill={c2 || shade(c, -0.2)} stroke={s} strokeWidth="0.4" /></g>;
+      return <g><path d="M-14 -7.6 Q-16 -22.6 -6 -24.6 Q0 -26.6 6 -24.6 Q16 -22.6 14 -7.6 Q0 -12 -14 -7.6 Z" fill={c} stroke={s} strokeWidth="0.5" /><path d="M-14 -7.6 Q0 -12 14 -7.6 L14 -4.8 Q0 -9.2 -14 -4.8 Z" fill={c2 || shade(c, -0.2)} stroke={s} strokeWidth="0.4" /></g>;
     case "beret":
       return <g><ellipse cx={2 - f * 1} cy="-13.5" rx="15.5" ry="6.4" fill={c} stroke={s} strokeWidth="0.5" transform="rotate(-6 2 -13.5)" /><path d="M2 -20 l0.6 -2.6" stroke={s} strokeWidth="1.4" strokeLinecap="round" /></g>;
     case "brim":
@@ -182,6 +189,14 @@ function Hat({ hat, c, c2, f }) {
       );
     case "coif":
       return <path fillRule="evenodd" d="M-15.2 0 A15.2 18 0 0 1 15.2 0 L15 10 Q14 19 5 20 L-5 20 Q-14 19 -15 10 Z M-11 1.2 A11 13.4 0 0 0 11 1.2 A11 13.4 0 0 0 -11 1.2 Z" fill={c || "#f0ece0"} stroke={shade(c || "#f0ece0", -0.2)} strokeWidth="0.5" />;
+    case "keffieh":
+      return (
+        <g>
+          <path d="M-15.4 12 L-15.4 0 A15.4 17.6 0 0 1 15.4 0 L15.4 12 L12.4 12 L12.6 -1 Q0 -9.6 -12.6 -1 L-12.4 12 Z" fill={c || "#e2d6bc"} stroke={shade(c || "#e2d6bc", -0.2)} strokeWidth="0.5" />
+          <path d="M-14.4 -8.6 Q0 -14.4 14.4 -8.6 L14.6 -5.8 Q0 -11.6 -14.6 -5.8 Z" fill={c2 || "#2a2018"} />
+          <path d="M-14.4 -8.6 Q0 -14.4 14.4 -8.6" stroke={shade(c2 || "#2a2018", 0.25)} strokeWidth="0.4" fill="none" />
+        </g>
+      );
     case "turban":
       return <g><path d="M-15.4 -4 Q-17 -22 0 -23 Q17 -22 15.4 -4 Q0 -9.4 -15.4 -4 Z" fill={c} stroke={s} strokeWidth="0.5" /><path d="M-14.6 -9 Q0 -20 14.6 -12 M-15 -5.6 Q2 -16 15 -6.4" stroke={shade(c, -0.18)} strokeWidth="1" fill="none" /><circle cx="0" cy="-12" r="1.6" fill={c2 || "#c02020"} /></g>;
     case "flatcap":
@@ -195,7 +210,7 @@ export function HeadFront({
   skin = "#e0a878", hair = "#3a2818", look = "short", beard = false, mustache = false, mood = "neutre",
   hood = false, hoodColor = "#6a5a8a", back = false, facing = "front",
   hat = null, hatColor, hatColor2, glasses = false, earrings = null, paint = false, scar = false,
-  freckles = false, kohl = false, lips = null, blush = true, beardColor,
+  freckles = false, kohl = false, lips = null, blush = true, beardColor, wrinkles = false,
 }) {
   if (back) return hat && hat !== "hood" && hat !== "coif" ? <Hat hat={hat} c={hatColor || "#5a4030"} c2={hatColor2} f={0} /> : null;
   const f = F(facing);
@@ -217,8 +232,8 @@ export function HeadFront({
     : `M${-3.6 * mouthW} 8.4 Q0 9.4 ${3.6 * mouthW} 8.4`;
   const eyeR = (side) => (f && side === f * -1 ? 0.72 : 1); // l'œil côté bord du visage, plus étroit
   const eyes = [-1, 1].map((side) => ({ x: side * 5.2 + dx + (f && side === -f ? f * 0.6 : 0), k: eyeR(side) }));
-  const showCap = !["bald", "ring"].includes(look) && !hood && !["hood", "coif", "nemes"].includes(hat);
-  const capHairline = look === "slick" ? "Q8 -8.6 0 -10.6 Q-8 -8.6" : "Q8 -4.6 2.6 -9.6 Q-5.6 -6.6";
+  const showCap = !["bald", "ring"].includes(look) && !hood && !["hood", "coif", "nemes", "keffieh"].includes(hat);
+  const capHairline = look === "slick" ? "Q8 -8.6 0 -10.6 Q-8 -8.6" : look === "bob" ? "Q9 -6.2 0 -6.6 Q-9 -6.2" : "Q8 -4.6 2.6 -9.6 Q-5.6 -6.6";
   const beardKind = beard === true ? "full" : beard;
   return (
     <g>
@@ -228,11 +243,13 @@ export function HeadFront({
       <ellipse cx="0" cy="0" rx={RX} ry={RY} fill={skin} stroke={line} strokeWidth="0.7" />
       {blush && <><ellipse cx={-7.4 + dx} cy="4.6" rx="3" ry="1.8" fill="#e06a5a" opacity="0.16" /><ellipse cx={7.4 + dx} cy="4.6" rx="3" ry="1.8" fill="#e06a5a" opacity="0.16" /></>}
       {freckles && [[-8, 3], [-6.4, 4.6], [-9, 5.2], [6.4, 3.4], [8, 4.8], [9.2, 3]].map(([x, y], i) => <circle key={i} cx={x + dx} cy={y} r="0.45" fill={shade(skin, -0.3)} />)}
-      {paint && <path d={`M${-11 + dx} 3.2 l4.4 -0.8 M${-10.8 + dx} 5.6 l3.8 -0.6`} stroke="#b5451f" strokeWidth="1.1" strokeLinecap="round" opacity="0.7" />}
+      {paint === "dots" && [-6, -3, 0, 3, 6].map((x, i) => <circle key={i} cx={x + dx} cy={-10 + Math.abs(x) * 0.25} r="0.7" fill="#b5451f" opacity="0.75" />)}
+      {paint && paint !== "dots" && <path d={`M${-11 + dx} 3.2 l4.4 -0.8 M${-10.8 + dx} 5.6 l3.8 -0.6`} stroke="#b5451f" strokeWidth="1.1" strokeLinecap="round" opacity="0.7" />}
+      {wrinkles && <path d={`M${-5 + dx} -9.6 Q${dx} -10.6 ${5 + dx} -9.6 M${-4 + dx} -8 Q${dx} -8.8 ${4 + dx} -8 M${-9.4 + dx} -0.4 l-1.4 0.8 M${9.4 + dx} -0.4 l1.4 0.8 M${-4 + dx} 6.2 q-1 1.4 -0.6 2.8 M${4 + dx} 6.2 q1 1.4 0.6 2.8`} stroke={shade(skin, -0.28)} strokeWidth="0.45" fill="none" strokeLinecap="round" />}
       {scar && <path d={`M${7.6 + dx} 1.6 l1.6 3.4`} stroke={shade(skin, -0.32)} strokeWidth="0.45" strokeLinecap="round" />}
       {/* barbe : région basse de la MÊME ellipse */}
       {beardKind && <Beard kind={beardKind} hair={beardColor || hair} dx={dx} />}
-      {(mustache || (beardKind && !["goatee", "postiche", "stubble"].includes(beardKind))) && (
+      {(mustache || (beardKind && !["goatee", "postiche", "stubble", "chops"].includes(beardKind))) && (
         mustache === "handlebar"
           ? <path d={`M${dx} 5.4 Q${dx - 3} 4 ${dx - 6.4} 6.4 Q${dx - 8.4} 7 ${dx - 8} 4.8 M${dx} 5.4 Q${dx + 3} 4 ${dx + 6.4} 6.4 Q${dx + 8.4} 7 ${dx + 8} 4.8`} stroke={beardColor || hair} strokeWidth="1.6" fill="none" strokeLinecap="round" />
           : <path d={`M${dx - 5} 6.2 Q${dx - 2} 4.2 ${dx} 5.2 Q${dx + 2} 4.2 ${dx + 5} 6.2 Q${dx + 2} 6.8 ${dx} 6 Q${dx - 2} 6.8 ${dx - 5} 6.2 Z`} fill={beardColor || hair} stroke={shade(beardColor || hair, -0.2)} strokeWidth="0.4" />
@@ -256,6 +273,12 @@ export function HeadFront({
       {/* cheveux de devant : un arc de l'ellipse du crâne */}
       {showCap && (
         <path d={`M${-RX - 0.3} -1.8 A${RX + 0.3} ${RY + 0.7} 0 0 1 ${RX + 0.3} -1.8 ${capHairline} ${-RX - 0.3} -1.8 Z`} fill={hair} stroke={shade(hair, -0.1)} strokeWidth="0.35" />
+      )}
+      {look === "rolls" && showCap && (
+        <g fill={hair} stroke={shade(hair, -0.2)} strokeWidth="0.45">
+          <ellipse cx="-6.2" cy="-12.6" rx="6.2" ry="4.2" transform="rotate(-14 -6.2 -12.6)" /><ellipse cx="6.2" cy="-12.6" rx="6.2" ry="4.2" transform="rotate(14 6.2 -12.6)" />
+          <path d="M-9 -12.6 q3 -1.6 6 0 M3 -12.6 q3 -1.6 6 0" fill="none" stroke={shade(hair, -0.25)} />
+        </g>
       )}
       {/* trois-quarts : l'arrière du crâne garde ses cheveux */}
       {showCap && f !== 0 && (() => { const sd = -f; return <path d={`M${sd * 2} -14.9 A${RX} ${RY} 0 0 ${sd > 0 ? 1 : 0} ${sd * 12.7} 3.2 Q${sd * 8} 1 ${sd * 6.4} -5 Q${sd * 5} -11 ${sd * 2} -14.9 Z`} fill={hair} />; })()}

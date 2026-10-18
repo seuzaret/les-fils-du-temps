@@ -6,6 +6,11 @@
    Même construction pour les quatre : halo du matin, chevelure
    arrière, buste en peau de bête, visage ovale, détails.
    ============================================================ */
+import { HeadBack, HeadFront } from "../../../engine/chars.jsx";
+
+/* Tête commune du jeu (engine/chars.jsx), posée à la place de l'ancien visage. */
+const HB = (p) => <g transform="translate(150,128) scale(4.7)"><HeadBack {...p} /></g>;
+const HF = (p) => <g transform="translate(150,128) scale(4.7)"><HeadFront {...p} /></g>;
 
 /* ANA — l'accueillante du clan. Longs cheveux bruns qui couvrent
    tout le crâne, un collier de coquillages, les traits d'ocre du
@@ -36,10 +41,7 @@ export function PortraitAna() {
 
       <circle cx="150" cy="138" r="130" fill="url(#pAnaHalo)" />
 
-      {/* chevelure ARRIÈRE (derrière les épaules) */}
-      <path d="M98 110 Q74 178 84 248 Q88 274 104 284 L114 238 Q102 178 106 124 Z" fill="#2b1d10" />
-      <path d="M202 110 Q226 176 219 250 Q214 278 197 286 L189 236 Q202 178 195 122 Z" fill="#2b1d10" />
-
+      {HB({ skin: "#cf9f72", hair: "#3a2818", look: "long", mood: "content", paint: true, earrings: "#e8dcc4" })}
       {/* LE BUSTE : la peau de bête nouée, une épaule nue */}
       <path d="M44 340 Q46 260 94 238 Q122 226 150 228 Q180 226 208 238 Q254 260 256 340 Z" fill="url(#pAnaFur)" />
       <path d="M94 238 Q120 226 150 228 L150 272 Q112 268 94 250 Z" fill="url(#pAnaSkin)" />
@@ -53,49 +55,7 @@ export function PortraitAna() {
       <path d="M134 190 L166 190 L169 240 Q150 248 131 240 Z" fill="url(#pAnaSkin)" />
       <path d="M136 196 q14 8 28 0" stroke="#9a7050" strokeWidth="4" fill="none" opacity="0.4" />
 
-      {/* LE VISAGE : un ovale doux, menton fin */}
-      <path d="M150 58 C190 58 208 92 206 130 C204 168 186 198 150 204 C114 198 96 168 94 130 C92 92 110 58 150 58 Z" fill="url(#pAnaSkin)" />
-      <path d="M104 116 Q100 152 118 180" stroke="#ffe0a8" strokeWidth="5" fill="none" opacity="0.4" strokeLinecap="round" />
-      {/* l'oreille + petit coquillage */}
-      <ellipse cx="97" cy="142" rx="7" ry="11" fill="#c89a72" />
-      <path d="M95 138 q5 2 4 8" stroke="#a87b54" strokeWidth="2" fill="none" />
-      <ellipse cx="93" cy="166" rx="3.4" ry="4.6" fill="#e8dcc4" stroke="#b8a884" strokeWidth="1" />
-
-      {/* SOURCILS + YEUX en amande */}
-      <path d="M116 125 Q128 118 141 123" stroke="#2c1f14" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-      <path d="M159 123 Q172 118 184 125" stroke="#2c1f14" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-      <path d="M119 136 Q129 128 140 135 Q130 142 119 136 Z" fill="#fdf4e6" />
-      <path d="M160 135 Q171 128 181 136 Q170 142 160 135 Z" fill="#fdf4e6" />
-      <circle cx="130" cy="135" r="4.4" fill="#3a2416" />
-      <circle cx="170" cy="135" r="4.4" fill="#3a2416" />
-      <circle cx="131.6" cy="133.4" r="1.4" fill="#fff" />
-      <circle cx="171.6" cy="133.4" r="1.4" fill="#fff" />
-      <path d="M118 135 Q129 127 141 134" stroke="#4a3322" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <path d="M159 134 Q171 127 182 135" stroke="#4a3322" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <path d="M122 140 Q130 143 138 140 M162 140 Q170 143 178 140" stroke="#a87b54" strokeWidth="1.4" fill="none" opacity="0.6" />
-
-      {/* NEZ + SOURIRE doux */}
-      <path d="M150 136 Q147 150 144 157 Q142 163 149 164" stroke="#a87b54" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M153 162 q3 1 4 -1" stroke="#a87b54" strokeWidth="1.8" fill="none" opacity="0.6" />
-      <path d="M131 173 Q150 183 169 173" stroke="#8a4a34" strokeWidth="3.2" fill="none" strokeLinecap="round" />
-      <path d="M139 180 Q150 186 161 180" stroke="#b06a4e" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.75" />
-      <path d="M127 171 q-3 2 -3 5 M173 171 q3 2 3 5" stroke="#a87b54" strokeWidth="1.8" fill="none" opacity="0.55" />
-      <ellipse cx="119" cy="154" rx="9" ry="5.5" fill="#e8b98c" opacity="0.35" />
-      <ellipse cx="181" cy="154" rx="9" ry="5.5" fill="#b5451f" opacity="0.14" />
-      {/* les deux traits d'ocre — la marque du clan */}
-      <path d="M107 148 l14 -3 M108 156 l12 -2" stroke="#b5451f" strokeWidth="3.4" strokeLinecap="round" opacity="0.55" />
-      <path d="M140 196 q10 5 20 0" stroke="#9a7050" strokeWidth="2.2" fill="none" opacity="0.4" />
-
-      {/* CHEVELURE AVANT : une vraie calotte pleine, jusqu'en haut du
-          crâne (elle DÉPASSE le sommet de la tête : les cheveux ont du
-          volume), puis la ligne du front et les mèches sur les épaules */}
-      <path d="M92 138 Q78 52 150 44 Q222 52 208 138 Q202 116 184 108 Q166 100 150 101 Q134 100 116 108 Q98 116 92 138 Z" fill="url(#pAnaHair)" />
-      <path d="M96 118 Q86 168 92 212 Q96 236 108 246 Q114 222 107 178 Q103 146 105 122 Z" fill="url(#pAnaHair)" />
-      <path d="M204 118 Q216 170 210 216 Q205 242 193 252 Q188 226 195 182 Q199 148 197 122 Z" fill="url(#pAnaHair)" />
-      {/* la raie et les reflets */}
-      <path d="M150 48 Q116 60 104 100 M150 48 Q184 60 196 100 M150 50 L150 100" stroke="#5c4429" strokeWidth="2" fill="none" opacity="0.7" />
-      <path d="M124 60 Q112 84 108 116 M176 60 Q188 84 192 116" stroke="#5c4429" strokeWidth="1.6" fill="none" opacity="0.5" />
-
+      {HF({ skin: "#cf9f72", hair: "#3a2818", look: "long", mood: "content", paint: true, earrings: "#e8dcc4" })}
       {/* LE COLLIER de coquillages */}
       <path d="M116 252 Q150 272 184 252" stroke="#54381e" strokeWidth="2.6" fill="none" />
       {[[127, 260, -18], [139, 266, -8], [150, 268, 0], [161, 266, 8], [173, 260, 18]].map(([x, y, r], i) => (
@@ -136,10 +96,7 @@ export function PortraitRaya() {
 
       <circle cx="150" cy="138" r="130" fill="url(#pRayaHalo)" />
 
-      {/* cheveux longs ramenés en arrière, sur la nuque */}
-      <path d="M108 108 Q90 158 98 212 L116 204 Q106 156 116 116 Z" fill="#3a3428" />
-      <path d="M192 108 Q210 158 202 212 L184 204 Q194 156 184 116 Z" fill="#3a3428" />
-
+      {HB({ skin: "#c0926a", hair: "#5e5646", look: "slick", wrinkles: true })}
       {/* LE MANTEAU du chef : fourrure épaisse sur les DEUX épaules */}
       <path d="M40 340 Q42 256 92 234 Q122 222 150 224 Q178 222 208 234 Q258 256 260 340 Z" fill="url(#pRayaFur)" />
       <g stroke="#3e2c18" strokeWidth="2.6" fill="none" opacity="0.6">
@@ -151,47 +108,7 @@ export function PortraitRaya() {
       {/* LE COU */}
       <path d="M134 188 L166 188 L169 234 Q150 242 131 234 Z" fill="url(#pRayaSkin)" />
 
-      {/* LE VISAGE : ALLONGÉ, plus étroit, mâchoire carrée */}
-      <path d="M150 64 C179 64 193 88 194 118 C195 144 190 168 176 186 C167 197 159 202 150 202 C141 202 133 197 124 186 C110 168 105 144 106 118 C107 88 121 64 150 64 Z" fill="url(#pRayaSkin)" />
-      <path d="M112 112 Q108 146 124 174" stroke="#ffd9a0" strokeWidth="5" fill="none" opacity="0.35" strokeLinecap="round" />
-      <ellipse cx="107" cy="136" rx="7" ry="11" fill="#b78a5e" />
-      <path d="M105 132 q5 2 4 8" stroke="#96684a" strokeWidth="2" fill="none" />
-      <ellipse cx="193" cy="136" rx="7" ry="11" fill="#b78a5e" />
-
-      {/* rides du front — l'expérience */}
-      <path d="M124 100 Q150 94 176 100 M128 110 Q150 105 172 110" stroke="#96684a" strokeWidth="1.7" fill="none" opacity="0.5" />
-
-      {/* SOURCILS épais */}
-      <path d="M119 124 Q131 117 144 123" stroke="#3a3226" strokeWidth="4.4" fill="none" strokeLinecap="round" />
-      <path d="M156 123 Q169 117 181 124" stroke="#3a3226" strokeWidth="4.4" fill="none" strokeLinecap="round" />
-      {/* YEUX francs, un peu étroits */}
-      <path d="M121 137 Q131 131 141 136 Q131 142 121 137 Z" fill="#f8efdd" />
-      <path d="M159 136 Q169 131 179 137 Q169 142 159 136 Z" fill="#f8efdd" />
-      <circle cx="131" cy="137" r="4" fill="#2e1d10" />
-      <circle cx="169" cy="137" r="4" fill="#2e1d10" />
-      <circle cx="132.3" cy="135.6" r="1.2" fill="#fff" />
-      <circle cx="170.3" cy="135.6" r="1.2" fill="#fff" />
-      <path d="M120 136 Q131 130 142 135 M158 135 Q169 130 180 136" stroke="#4a3322" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-      <path d="M115 137 l-6 -2 M115 140 l-6 2 M185 137 l6 -2 M185 140 l6 2" stroke="#96684a" strokeWidth="1.5" opacity="0.55" />
-
-      {/* NEZ long et droit */}
-      <path d="M150 135 Q147 151 144 159 Q142 165 150 166" stroke="#96684a" strokeWidth="2.8" fill="none" strokeLinecap="round" />
-      <path d="M153 164 q4 1 6 -2 M147 164 q-4 1 -6 -2" stroke="#96684a" strokeWidth="1.8" fill="none" opacity="0.55" />
-
-      {/* RASÉ (pas de barbe) : une bouche digne, un peu de relief des
-          lèvres, sillons discrets et ombre légère sous le menton */}
-      <path d="M134 174 Q150 180 166 174" stroke="#7a4630" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M139 180 Q150 184 161 180" stroke="#a06a4e" strokeWidth="2.4" fill="none" strokeLinecap="round" opacity="0.7" />
-      <path d="M138 166 q-3 5 -2 9 M162 166 q3 5 2 9" stroke="#96684a" strokeWidth="1.5" fill="none" opacity="0.4" />
-      <path d="M141 190 q9 4 18 0" stroke="#96684a" strokeWidth="1.8" fill="none" opacity="0.3" />
-
-      {/* CHEVEUX du dessus : tirés en arrière, front dégagé de chef */}
-      <path d="M106 120 Q98 62 150 56 Q202 62 194 120 Q186 92 168 84 Q158 80 150 80 Q142 80 132 84 Q114 92 106 120 Z" fill="url(#pRayaHair)" />
-      {/* stries des cheveux tirés en arrière + mèches grises */}
-      <g stroke="#8a8272" strokeWidth="1.7" fill="none" opacity="0.6">
-        <path d="M120 60 Q106 84 100 116 M180 60 Q194 84 200 116 M136 56 Q124 78 116 106 M164 56 Q176 78 184 106 M150 58 L150 80" />
-      </g>
-
+      {HF({ skin: "#c0926a", hair: "#5e5646", look: "slick", wrinkles: true })}
       {/* LE COLLIER de crocs — trophées du chef */}
       <path d="M116 248 Q150 268 184 248" stroke="#3e2c18" strokeWidth="2.8" fill="none" />
       {[[129, 256, -22], [141, 262, -10], [150, 264, 0], [159, 262, 10], [171, 256, 22]].map(([x, y, r], i) => (
@@ -228,13 +145,7 @@ export function PortraitDoru() {
 
       <circle cx="150" cy="138" r="130" fill="url(#pDoruHalo)" />
 
-      {/* cheveux arrière courts + la petite queue nouée */}
-      <path d="M104 96 Q94 130 100 168 L114 160 Q106 128 114 102 Z" fill="#2c2013" />
-      <path d="M196 96 Q206 130 200 168 L186 160 Q194 128 186 102 Z" fill="#2c2013" />
-      <path d="M150 52 Q186 58 196 92 L204 120 Q212 148 204 170 Q214 130 200 96 Q188 62 150 52 Z" fill="#2c2013" />
-      <ellipse cx="207" cy="176" rx="7" ry="14" fill="#2c2013" transform="rotate(-14 207 176)" />
-      <path d="M203 166 q8 4 8 12" stroke="#54381e" strokeWidth="2" fill="none" />
-
+      {HB({ skin: "#c8986c", hair: "#2c2013", look: "ponytail", mood: "colere", hat: "headband", hatColor: "#8a5a30", paint: true })}
       {/* LE BUSTE : tenue légère de chasse, une épaule nue */}
       <path d="M46 340 Q48 262 96 240 Q124 228 150 230 Q178 228 206 240 Q252 262 254 340 Z" fill="url(#pDoruFur)" />
       <path d="M150 230 Q178 228 206 240 L206 262 Q176 250 150 252 Z" fill="url(#pDoruSkin)" />
@@ -249,41 +160,7 @@ export function PortraitDoru() {
       <path d="M134 188 L166 188 L169 238 Q150 246 131 238 Z" fill="url(#pDoruSkin)" />
       <path d="M136 194 q14 8 28 0" stroke="#96684a" strokeWidth="4" fill="none" opacity="0.4" />
 
-      {/* LE VISAGE : jeune, un peu anguleux */}
-      <path d="M150 60 C190 60 207 94 205 130 C203 166 184 196 150 202 C116 196 97 166 95 130 C93 94 110 60 150 60 Z" fill="url(#pDoruSkin)" />
-      <path d="M104 116 Q100 150 118 178" stroke="#e8e0b8" strokeWidth="5" fill="none" opacity="0.35" strokeLinecap="round" />
-      <ellipse cx="98" cy="142" rx="7" ry="11" fill="#bf9066" />
-      <path d="M96 138 q5 2 4 8" stroke="#a3764e" strokeWidth="2" fill="none" />
-
-      {/* SOURCILS abaissés vers le centre — la concentration du chasseur ;
-          celui de gauche coupé par une fine cicatrice */}
-      <path d="M116 121 Q128 118 142 126" stroke="#241a10" strokeWidth="3.6" fill="none" strokeLinecap="round" />
-      <path d="M158 126 Q172 118 184 121" stroke="#241a10" strokeWidth="3.6" fill="none" strokeLinecap="round" />
-      <path d="M132 112 L138 129" stroke="#d8ab80" strokeWidth="2.6" strokeLinecap="round" />
-      {/* YEUX fixes, un peu plissés (à l'affût) */}
-      <path d="M118 137 Q129 131 141 136 Q130 142 118 137 Z" fill="#fdf4e6" />
-      <path d="M159 136 Q171 131 182 137 Q170 142 159 136 Z" fill="#fdf4e6" />
-      <circle cx="130" cy="137" r="4.4" fill="#2c1c0e" />
-      <circle cx="170" cy="137" r="4.4" fill="#2c1c0e" />
-      <circle cx="131.6" cy="135.4" r="1.4" fill="#fff" />
-      <circle cx="171.6" cy="135.4" r="1.4" fill="#fff" />
-      {/* paupières supérieures marquées, regard intense */}
-      <path d="M117 136 Q129 130 142 135 M158 135 Q171 130 183 136" stroke="#3a2818" strokeWidth="2.6" fill="none" strokeLinecap="round" />
-
-      {/* NEZ + une bouche NEUTRE, serrée : il ne sourit pas, il guette */}
-      <path d="M150 136 Q147 150 145 156 Q143 162 150 163" stroke="#a3764e" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M136 177 Q150 179 164 177" stroke="#7a4630" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M138 183 q12 3 24 0" stroke="#a3764e" strokeWidth="1.6" fill="none" opacity="0.5" strokeLinecap="round" />
-      <ellipse cx="120" cy="154" rx="9" ry="5.5" fill="#e0aa7c" opacity="0.35" />
-      {/* trait d'ocre du chasseur, sous l'œil droit */}
-      <path d="M162 148 l16 -2" stroke="#b5451f" strokeWidth="3.2" strokeLinecap="round" opacity="0.55" />
-
-      {/* CHEVELURE pleine + LE BANDEAU de cuir et sa plume */}
-      <path d="M95 130 Q82 50 150 44 Q218 50 205 130 Q200 102 182 94 Q164 86 150 87 Q136 86 118 94 Q100 102 95 130 Z" fill="#2c2013" />
-      <path d="M124 56 Q112 74 106 96 M150 46 L150 86 M176 56 Q188 74 194 96" stroke="#4c3a22" strokeWidth="2" fill="none" opacity="0.7" />
-      {/* le bandeau */}
-      <path d="M95 116 Q150 96 205 116 L205 128 Q150 108 95 128 Z" fill="#8a5a30" />
-      <path d="M99 119 Q150 100 201 119" stroke="#5a3a20" strokeWidth="1.8" fill="none" opacity="0.7" strokeDasharray="5 5" />
+      {HF({ skin: "#c8986c", hair: "#2c2013", look: "ponytail", mood: "colere", hat: "headband", hatColor: "#8a5a30", paint: true })}
       {/* la plume, glissée dans le bandeau */}
       <g transform="translate(196,102) rotate(24)">
         <path d="M0 0 Q-7 -16 -2 -38 Q10 -20 6 -2 Q3 2 0 0 Z" fill="#9a8a72" />
@@ -329,10 +206,7 @@ export function PortraitKyan() {
 
       <circle cx="150" cy="138" r="130" fill="url(#pKyanHalo)" />
 
-      {/* la longue chevelure blanche, derrière */}
-      <path d="M96 104 Q72 180 82 258 Q86 284 102 294 L112 240 Q100 176 104 118 Z" fill="#c8bfae" />
-      <path d="M204 104 Q228 178 219 260 Q214 288 197 296 L189 238 Q202 176 196 116 Z" fill="#c8bfae" />
-
+      {HB({ skin: "#c09064", hair: "#e4dccc", look: "long", mood: "content", paint: "dots", wrinkles: true })}
       {/* LE CHÂLE de fourrure, serré sur les épaules */}
       <path d="M46 340 Q48 262 94 240 Q122 228 150 230 Q180 228 206 240 Q252 262 254 340 Z" fill="url(#pKyanFur)" />
       <g stroke="#332818" strokeWidth="2.4" fill="none" opacity="0.6">
@@ -345,52 +219,7 @@ export function PortraitKyan() {
       <path d="M135 188 L165 188 L168 238 Q150 246 132 238 Z" fill="url(#pKyanSkin)" />
       <path d="M138 196 q12 7 24 0 M136 206 q14 8 28 0" stroke="#8a6040" strokeWidth="2.6" fill="none" opacity="0.45" />
 
-      {/* LE VISAGE : plus étroit, pommettes hautes */}
-      <path d="M150 62 C188 62 204 94 202 130 C200 166 182 194 150 200 C118 194 100 166 98 130 C96 94 112 62 150 62 Z" fill="url(#pKyanSkin)" />
-      <path d="M106 116 Q102 150 120 176" stroke="#ffe8c0" strokeWidth="5" fill="none" opacity="0.4" strokeLinecap="round" />
-      <ellipse cx="101" cy="142" rx="6.5" ry="10" fill="#b3835a" />
-      <path d="M99 138 q5 2 4 8" stroke="#95693f" strokeWidth="2" fill="none" />
-
-      {/* les rides — chaque ligne est une histoire */}
-      <path d="M122 94 Q150 88 178 94 M126 103 Q150 98 174 103 M130 112 Q150 108 170 112" stroke="#8a6040" strokeWidth="1.7" fill="none" opacity="0.55" />
-      <path d="M118 134 l-8 -2 M118 138 l-8 1 M182 134 l8 -2 M182 138 l8 1" stroke="#8a6040" strokeWidth="1.6" opacity="0.6" />
-      <path d="M132 158 Q127 170 132 179 M168 158 Q173 170 168 179" stroke="#8a6040" strokeWidth="1.8" fill="none" opacity="0.5" />
-      {/* creux des joues */}
-      <path d="M112 158 Q116 170 124 176 M188 158 Q184 170 176 176" stroke="#95693f" strokeWidth="2" fill="none" opacity="0.35" />
-
-      {/* SOURCILS fins, gris */}
-      <path d="M118 124 Q129 119 141 123" stroke="#8a8272" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M159 123 Q171 119 182 124" stroke="#8a8272" strokeWidth="3" fill="none" strokeLinecap="round" />
-      {/* YEUX plus petits, sous des paupières lourdes — mais brillants */}
-      <path d="M121 136 Q130 130 139 135 Q130 140 121 136 Z" fill="#faf1de" />
-      <path d="M161 135 Q170 130 179 136 Q170 140 161 135 Z" fill="#faf1de" />
-      <circle cx="130" cy="135" r="3.7" fill="#33200f" />
-      <circle cx="170" cy="135" r="3.7" fill="#33200f" />
-      <circle cx="131.3" cy="133.7" r="1.2" fill="#fff" />
-      <circle cx="171.3" cy="133.7" r="1.2" fill="#fff" />
-      <path d="M119 135 Q130 128 140 134 M160 134 Q170 128 181 135" stroke="#5c4630" strokeWidth="2.6" fill="none" strokeLinecap="round" />
-      <path d="M123 141 q7 3 14 0 M163 141 q7 3 14 0" stroke="#8a6040" strokeWidth="1.4" fill="none" opacity="0.6" />
-
-      {/* NEZ + le sourire de celle qui sait */}
-      <path d="M150 136 Q147 152 144 158 Q142 164 149 165" stroke="#95693f" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      <path d="M133 176 Q150 184 167 176" stroke="#7a4630" strokeWidth="3" fill="none" strokeLinecap="round" />
-      <path d="M129 174 q-3 2 -4 5 M171 174 q3 2 4 5" stroke="#8a6040" strokeWidth="1.7" fill="none" opacity="0.6" />
-      {/* les POINTS D'OCRE rituels, en arc sur le front */}
-      {[[126, 88], [138, 84], [150, 82], [162, 84], [174, 88]].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="2.7" fill="#b5451f" opacity="0.6" />
-      ))}
-
-      {/* CHEVELURE blanche : raie au milieu, pleine jusqu'au sommet */}
-      <path d="M96 134 Q82 52 150 46 Q218 52 204 134 Q198 108 178 78 Q166 96 150 98 Q134 96 122 78 Q102 108 96 134 Z" fill="url(#pKyanHair)" />
-      <path d="M150 48 L150 96 M128 56 Q116 80 108 112 M172 56 Q184 80 192 112 M138 52 Q132 72 126 86 M162 52 Q168 72 174 86" stroke="#a89e8a" strokeWidth="1.8" fill="none" opacity="0.7" />
-      {/* deux fines tresses devant, avec perle d'os */}
-      <path d="M108 112 Q102 160 106 208" stroke="#d4cbb8" strokeWidth="7" fill="none" strokeLinecap="round" />
-      <path d="M108 118 l5 6 M106 132 l6 6 M105 146 l6 6 M105 160 l6 6 M105 174 l6 6 M105 188 l6 6" stroke="#a89e8a" strokeWidth="1.6" opacity="0.8" />
-      <ellipse cx="106" cy="212" rx="4" ry="5" fill="#e8dcc4" stroke="#b8a884" strokeWidth="1" />
-      <path d="M192 112 Q198 160 194 208" stroke="#d4cbb8" strokeWidth="7" fill="none" strokeLinecap="round" />
-      <path d="M192 118 l-5 6 M194 132 l-6 6 M195 146 l-6 6 M195 160 l-6 6 M195 174 l-6 6 M195 188 l-6 6" stroke="#a89e8a" strokeWidth="1.6" opacity="0.8" />
-      <ellipse cx="194" cy="212" rx="4" ry="5" fill="#e8dcc4" stroke="#b8a884" strokeWidth="1" />
-
+      {HF({ skin: "#c09064", hair: "#e4dccc", look: "long", mood: "content", paint: "dots", wrinkles: true })}
       {/* LE PENDENTIF d'ivoire gravé d'une spirale */}
       <path d="M122 252 Q150 268 178 252" stroke="#332818" strokeWidth="2.6" fill="none" />
       <circle cx="150" cy="266" r="12" fill="#eee2c8" stroke="#b0a080" strokeWidth="1.6" />
