@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Haze, Ridge, Rock, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : le col de la montagne (l'homme des glaces)
@@ -43,36 +44,41 @@ export default function SceneCol({ collect, action, reveal, made = [] }) {
       <rect width="1000" height="560" fill="url(#cl-sky)" />
       <circle cx="790" cy="120" r="40" fill="#fff2d2" opacity="0.9" />
       <circle cx="790" cy="120" r="72" fill="#fff2d2" opacity="0.22" filter="url(#cl-blur)" />
-      <ellipse cx="300" cy="130" rx="150" ry="14" fill="#e8dcc0" opacity="0.35" filter="url(#cl-blur)" />
+      <Clouds id="cl-cl" seed={5} items={[[260, 118, 220], [560, 74, 160], [120, 60, 120]]} color="#f4ece0" shadow="#b8c0c8" opacity="0.75" drift={18} />
 
-      {/* ═══ couche lointaine : sommets ROCHEUX à calottes de neige ═══ */}
+      {/* ═══ couche lointaine : les grands sommets alpins, neige et alpenglow ═══ */}
       <PLayer depth={1}>
-        <path d="M0 268 L140 150 L260 244 L380 120 L520 252 L660 148 L800 250 L920 172 L1000 244 L1000 430 L0 430 Z" fill="url(#cl-rockFar)" />
-        {/* neige seulement sur les cimes et dans les couloirs */}
-        <path d="M380 120 L410 168 L350 168 Z M660 148 L690 196 L630 196 Z M140 150 L170 196 L110 196 Z M920 172 L944 210 L896 210 Z" fill="#eef4f6" opacity="0.92" />
-        <path d="M380 132 L392 168 L368 168 Z M660 160 L672 196 L648 196 Z" fill="#c6d4dc" opacity="0.7" />
-        {/* alpenglow chaud sur les faces au soleil */}
-        <path d="M380 120 L410 168 L398 168 Z M660 148 L690 196 L678 196 Z M800 250 L860 200 L846 214 Z" fill="#f4c88a" opacity="0.35" />
-        {/* strates rocheuses */}
-        <path d="M300 220 q60 -10 130 6 M560 230 q70 -12 150 8" stroke="#4e463e" strokeWidth="2" fill="none" opacity="0.4" />
-        <rect y="250" width="1000" height="26" fill="#c8cfc8" opacity="0.28" filter="url(#cl-blur)" />
+        <Ridge id="cl-r0" seed={101} y={250} amp={150} rough={0.62} fill="#9aa6c0" lit="#d8d0d8" light={1} snow="#f2f4f6" snowLine={170} opacity={0.75} />
+        <Haze id="cl-h0" y0={150} y1={260} color="#d8e0e8" opacity={0.4} />
+        <Ridge id="cl-r1" seed={103} y={290} amp={170} rough={0.64} fill="#7e746c" lit="#b8a090" light={1} snow="#eef4f6" snowLine={196} />
+        <Haze id="cl-h1" y0={220} y1={300} color="#c8cfc8" opacity={0.45} />
       </PLayer>
 
-      {/* ═══ couche intermédiaire : langue de glacier + moraine rocheuse ═══ */}
+      {/* ═══ couche intermédiaire : la langue de glacier entre deux éperons ═══ */}
       <PLayer depth={2}>
-        {/* pente rocheuse */}
-        <path d="M0 300 Q250 274 500 302 Q750 330 1000 298 L1000 440 L0 440 Z" fill="url(#cl-rock)" />
-        <path d="M0 300 Q250 274 500 302 Q750 330 1000 298 L1000 440 L0 440 Z" fill="#2e2820" opacity="0.3" filter="url(#cl-grain)" />
-        {/* langue de glacier qui descend au centre */}
-        <path d="M410 300 Q470 360 452 440 L560 440 Q548 360 588 300 Z" fill="url(#cl-glacier)" />
-        <path d="M470 320 q6 40 -4 90 M530 320 q-4 44 6 96" stroke="#8aa6b4" strokeWidth="3" fill="none" opacity="0.5" />
+        {/* éperons rocheux de part et d'autre */}
+        <Ridge id="cl-r2" seed={107} y={352} amp={112} rough={0.58} fill="url(#cl-rock)" lit="#a89880" light={1} snow="#e4ecf0" snowLine={262} />
+        {/* le glacier descend du cirque vers nous : étroit au loin, large au pied */}
+        <path d="M486 196 Q510 190 536 196 Q548 236 566 270 Q586 300 584 336 Q590 390 604 440 L424 440 Q440 392 438 340 Q436 300 458 268 Q476 234 486 196 Z" fill="url(#cl-glacier)" />
+        <g stroke="#7e9cae" strokeWidth="2" fill="none" opacity="0.65" strokeLinecap="round">
+          <path d="M478 230 q30 6 58 0 M466 262 q40 8 86 -2 M452 296 q50 8 110 -2 M446 332 q60 8 126 -2 M444 372 q66 8 136 -2 M436 410 q74 8 150 -2" />
+        </g>
+        <g fill="#8eaec0" opacity="0.6">
+          <path d="M500 250 l4 8 l-8 0 Z M530 286 l6 10 l-12 0 Z M484 318 l6 10 l-12 0 Z M548 352 l7 12 l-14 0 Z M500 392 l7 12 l-14 0 Z" />
+        </g>
+        {/* moraines latérales : bandes de débris sombres le long des bords */}
+        <path d="M486 196 Q476 234 458 268 Q436 300 438 340 Q440 392 424 440" stroke="#6a6056" strokeWidth="10" fill="none" opacity="0.8" strokeLinecap="round" />
+        <path d="M536 196 Q548 236 566 270 Q586 300 584 336 Q590 390 604 440" stroke="#6a6056" strokeWidth="10" fill="none" opacity="0.8" strokeLinecap="round" />
+        <path d="M512 210 Q508 300 516 440" stroke="#7a7066" strokeWidth="4" fill="none" opacity="0.45" strokeDasharray="10 8" />
+        <ellipse cx="511" cy="198" rx="40" ry="12" fill="#c8cfd4" opacity="0.6" filter="url(#cl-blur)" />
         {/* plaques de névé accrochées à la roche */}
         <path d="M120 360 q30 -8 62 4 q-24 12 -62 6 Z" fill="#dde8ec" opacity="0.85" />
         <path d="M820 372 q34 -8 70 6 q-30 12 -70 4 Z" fill="#dde8ec" opacity="0.85" />
-        {/* blocs de roche (moraine) */}
-        <ellipse cx="250" cy="404" rx="34" ry="15" fill="#6e655a" />
-        <ellipse cx="700" cy="410" rx="40" ry="17" fill="#645b50" />
-        <ellipse cx="250" cy="398" rx="20" ry="8" fill="#847a6c" opacity="0.7" />
+        {/* moraine : gros blocs au pied des pentes */}
+        <Rock x={250} y={414} w={80} h={34} color="#6e655a" light={1} seed={3} />
+        <Rock x={712} y={420} w={96} h={40} color="#645b50" light={1} seed={8} />
+        <Rock x={128} y={430} w={60} h={24} color="#706658" light={1} seed={11} />
+        <Rock x={900} y={432} w={70} h={28} color="#6a6054" light={1} seed={14} />
       </PLayer>
 
       {/* ═══ premier plan : le col rocheux (moraine + plaques de neige) ═══ */}
@@ -80,6 +86,7 @@ export default function SceneCol({ collect, action, reveal, made = [] }) {
         <path d="M0 560 L0 420 Q250 398 520 424 Q760 444 1000 416 L1000 560 Z" fill="url(#cl-ground)" />
         <path d="M0 560 L0 420 Q250 398 520 424 Q760 444 1000 416 L1000 560 Z" fill="#2a2318" opacity="0.34" filter="url(#cl-mottle)" />
         <path d="M0 560 L0 420 Q250 398 520 424 Q760 444 1000 416 L1000 560 Z" fill="#2e2820" opacity="0.4" filter="url(#cl-grain)" />
+        <Speckle seed={61} x0={0} x1={1000} y0={426} y1={560} n={300} colors={["#3a3228", "#a89a88", "#5a5046", "#c8c0b4"]} opacity={0.5} />
         {/* plaques de neige résiduelle au sol (pas un manteau) */}
         <path d="M60 470 Q160 458 250 472 Q180 486 80 482 Q50 480 60 470 Z" fill="#e4eef0" opacity="0.85" />
         <path d="M560 486 Q680 476 800 490 Q690 500 580 496 Q540 494 560 486 Z" fill="#e4eef0" opacity="0.8" />
