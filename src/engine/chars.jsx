@@ -45,7 +45,7 @@ export const shade = (hex, k = -0.18) => {
 const F = (facing) => (facing === "left" ? -1 : facing === "right" ? 1 : 0);
 
 /* ═══════════════════════ COUCHE ARRIÈRE ═══════════════════════ */
-export function HeadBack({ look = "short", hair = "#3a2818", hood = false, hoodColor = "#6a5a8a", back = false, hat = null, hatColor, hatColor2, facing = "front" }) {
+export function HeadBack({ look = "short", hair = "#3a2818", skin = "#e0a878", hood = false, hoodColor = "#6a5a8a", back = false, hat = null, hatColor, hatColor2, facing = "front" }) {
   const f = F(facing);
   const hc = hatColor || "#e8e4d8";
   return (
@@ -77,8 +77,19 @@ export function HeadBack({ look = "short", hair = "#3a2818", hood = false, hoodC
       )}
       {back && (
         <g>
-          <ellipse cx="0" cy="0" rx={RX + 0.8} ry={RY + 0.8} fill={look === "bald" || look === "ring" ? hair : hair} stroke={shade(hair, -0.2)} strokeWidth="0.8" />
-          <path d="M-7 -10 Q-8.5 0 -6 10 M0 -12.5 L0 11 M7 -10 Q8.5 0 6 10" stroke={shade(hair, -0.2)} strokeWidth="0.8" fill="none" strokeLinecap="round" opacity="0.7" />
+          <ellipse cx={-RX - 1} cy="2" rx="2.6" ry="4" fill={skin} stroke={shade(skin, -0.25)} strokeWidth="0.5" />
+          <ellipse cx={RX + 1} cy="2" rx="2.6" ry="4" fill={skin} stroke={shade(skin, -0.25)} strokeWidth="0.5" />
+          {look === "bald" || look === "ring" ? (
+            <g>
+              <ellipse cx="0" cy="0" rx={RX + 0.4} ry={RY + 0.4} fill={skin} stroke={shade(skin, -0.25)} strokeWidth="0.7" />
+              {look === "ring" && <path d={`M${-RX - 0.6} -2 A${RX + 0.6} ${RY + 0.6} 0 0 0 ${RX + 0.6} -2 Q0 4 ${-RX - 0.6} -2 Z`} fill={hair} stroke={shade(hair, -0.15)} strokeWidth="0.5" />}
+            </g>
+          ) : (
+            <g>
+              <ellipse cx="0" cy="0" rx={RX + 0.8} ry={RY + 0.8} fill={hair} stroke={shade(hair, -0.2)} strokeWidth="0.8" />
+              <path d="M-7 -10 Q-8.5 0 -6 10 M0 -12.5 L0 11 M7 -10 Q8.5 0 6 10" stroke={shade(hair, -0.2)} strokeWidth="0.8" fill="none" strokeLinecap="round" opacity="0.7" />
+            </g>
+          )}
         </g>
       )}
       {hat === "nemes" && (
@@ -352,20 +363,25 @@ const GARMENT = {
   jacket: { hem: 1, w: 20.5 }, tunic: { hem: 15, w: 23.5 }, coat: { hem: 28, w: 25 },
   robe: { hem: 46, w: 27 }, dress: { hem: 34, w: 30 }, fur: { hem: 18, w: 25 }, toga: { hem: 32, w: 25 },
   kilt: { hem: 22, w: 23 },   // torse nu + pagne (coat = couleur du pagne)
+  tee: { hem: 2, w: 21 },     // t-shirt / pull : col rond, sans boutonnage
 };
 const HIP = { stand: -48, sit: -30, kneel: -26, ground: -16 };
 
-export function Arm({ side, a1, a2, coat, skin, sy = -84, bare = false }) {
+export function Arm({ side, a1, a2, coat, skin, sy = -84, bare = false, short = false }) {
   const sx = side * 19.5, L1 = 19, L2 = 18;
   const r1 = (a1 * Math.PI) / 180, r2 = (a2 * Math.PI) / 180;
   const ex = sx + side * Math.sin(r1) * L1, ey = sy + Math.cos(r1) * L1;
   const hx = ex + side * Math.sin(r2) * L2, hy = ey + Math.cos(r2) * L2;
   const d = `M${sx} ${sy} L${ex.toFixed(1)} ${ey.toFixed(1)} L${hx.toFixed(1)} ${hy.toFixed(1)}`;
-  const col = bare ? skin : coat;
+  const col = bare || short ? skin : coat;
+  // manche courte : bras nu, et seulement le haut du bras couvert
+  const sl = `M${sx} ${sy} L${(sx + side * Math.sin(r1) * L1 * 0.6).toFixed(1)} ${(sy + Math.cos(r1) * L1 * 0.6).toFixed(1)}`;
   return (
     <g>
-      <path d={d} stroke={shade(col, -0.28)} strokeWidth={bare ? 8 : 9.6} fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      <path d={d} stroke={col} strokeWidth={bare ? 6.6 : 8} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={d} stroke={shade(col, -0.28)} strokeWidth={bare || short ? 8 : 9.6} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={d} stroke={col} strokeWidth={bare || short ? 6.6 : 8} fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      {short && !bare && <path d={sl} stroke={shade(coat, -0.28)} strokeWidth="10.4" fill="none" strokeLinecap="round" />}
+      {short && !bare && <path d={sl} stroke={coat} strokeWidth="8.8" fill="none" strokeLinecap="round" />}
       <circle cx={hx.toFixed(1)} cy={(hy + 2.4).toFixed(1)} r="4.4" fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />
     </g>
   );
@@ -385,11 +401,12 @@ export function Figure(props) {
   const {
     x = 0, y = 0, s = 1, pose = "stand",
     skin = "#e0a878", coat = "#3a80c8", coat2, trim, pants = "#3a2818", shoes = "#1a1410", garment = "jacket",
-    back = false, cane = false, stride = 0, apron = null, cape = null, bareArms = false, belt = true,
+    back = false, cane = false, stride = 0, apron = null, cape = null, bareArms = false, shortSleeves = false, belt = true,
     arms = [{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }], children, behind,
   } = props;
   const g = GARMENT[garment] || GARMENT.jacket;
   const kilt = garment === "kilt";
+  const tee = garment === "tee";
   const hip = HIP[pose] ?? HIP.stand;
   const dy = hip - HIP.stand;            // tout le haut du corps descend de dy
   const coatDark = shade(coat, -0.22);
@@ -446,10 +463,11 @@ export function Figure(props) {
       {garment === "toga" && <path d={`M-21 ${sh(-86)} Q-6 ${sh(-80)} 20 ${hip - 4} L20 ${hip + 8} Q-4 ${sh(-62)} -21 ${sh(-74)} Z`} fill={coat2 || shade(coat, 0.1)} stroke={coatDark} strokeWidth="0.6" />}
       {coat2 && garment === "jacket" && <path d={`M-4.8 ${sh(-91.4)} L0 ${sh(-87.6)} L4.8 ${sh(-91.4)} L7 ${hip - 2} L-7 ${hip - 2} Z`} fill={coat2} stroke={coatDark} strokeWidth="0.6" />}
       {apron && <path d={`M-12 ${sh(-80)} L12 ${sh(-80)} L14 ${hemY - 1} Q0 ${hemY + 1} -14 ${hemY - 1} Z`} fill={apron} stroke={shade(apron, -0.25)} strokeWidth="0.7" />}
-      {!kilt && <path d={`M-4.8 ${sh(-91.4)} L0 ${sh(-87.6)} L4.8 ${sh(-91.4)}`} fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />}
+      {!kilt && !tee && <path d={`M-4.8 ${sh(-91.4)} L0 ${sh(-87.6)} L4.8 ${sh(-91.4)}`} fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />}
+      {tee && <path d={`M-5.6 ${sh(-91.6)} Q0 ${sh(-86.2)} 5.6 ${sh(-91.6)} Z`} fill={skin} stroke={coatDark} strokeWidth="1.1" />}
       {belt && <path d={`M-20 ${hip - 2} Q0 ${hip + 1} 20 ${hip - 2}`} stroke={trim || coatDark} strokeWidth={trim ? 2.4 : 1.8} fill="none" />}
-      {!apron && garment !== "toga" && !kilt && <path d={`M0 ${sh(-87.6)} L0 ${hip - 4}`} stroke={coatDark} strokeWidth="0.7" opacity="0.55" />}
-      {arms.map((a, i) => <Arm key={i} side={i ? 1 : -1} a1={a.a1} a2={a.a2} coat={coat} skin={skin} sy={sh(-84)} bare={bareArms || kilt} />)}
+      {!apron && garment !== "toga" && !kilt && !tee && <path d={`M0 ${sh(-87.6)} L0 ${hip - 4}`} stroke={coatDark} strokeWidth="0.7" opacity="0.55" />}
+      {arms.map((a, i) => <Arm key={i} side={i ? 1 : -1} a1={a.a1} a2={a.a2} coat={coat} skin={skin} sy={sh(-84)} bare={bareArms || kilt} short={shortSleeves} />)}
       {cane && <path d={`M30 ${sh(-48)} L35 -1`} stroke="#6a4a2a" strokeWidth="3.6" strokeLinecap="round" />}
       <g transform={`translate(0,${-106 + dy})`}><HeadFront {...props} /></g>
       {children}

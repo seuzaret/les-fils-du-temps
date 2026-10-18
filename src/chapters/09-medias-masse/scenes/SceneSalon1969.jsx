@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : Salon, 21 juillet 1969, 3h56 du matin.
@@ -382,24 +383,12 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       {/* ═══ AVANT-PLAN : NATHALIE en chemise de nuit assise en tailleur devant la TV ═══ */}
       <PLayer depth={1}>
         <g transform="translate(340,450)">
-          {/* corps assis en tailleur */}
-          <path d="M-20 60 Q-18 20 0 14 Q18 20 20 60 Z" fill="#d89aa8" />
-          {/* jambes croisées */}
-          <ellipse cx="0" cy="70" rx="30" ry="12" fill="#d89aa8" />
-          {/* col */}
-          <path d="M-8 22 L0 32 L8 22 Z" fill="#efc8d0" />
-          {/* tête */}
-          <ellipse cx="0" cy="0" rx="14" ry="16" fill="#f4d8b8" />
-          {/* cheveux carré + frange */}
-          <path d="M-12 -8 Q-6 -18 0 -18 Q12 -18 12 -8 Q10 -14 0 -14 Q-10 -14 -12 -8 Z" fill="#5a3018" />
-          <path d="M-10 -4 Q0 0 10 -4" stroke="#4a2612" strokeWidth="3" fill="none" />
-          {/* barrette */}
-          <path d="M8 -6 L14 -8 L14 -5 L8 -3 Z" fill="#e8506a" />
-          {/* yeux ronds ouverts */}
-          <circle cx="-4" cy="-1" r="1.6" fill="#5a3818" />
-          <circle cx="4" cy="-1" r="1.6" fill="#5a3818" />
-          {/* bouche béate */}
-          <path d="M-3 8 Q0 12 3 8" stroke="#c04858" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+          {/* chemise de nuit rose, assise en tailleur devant la télé, une barrette */}
+          <Figure x={0} y={80} s={1.08} pose="ground" skin="#f0d0b0" hair="#5a3820" look="bob" mood="content"
+            garment="dress" coat="#d89aa8" pants="#d89aa8" shoes="#f0d0b0" belt={false} arms={[{ a1: 24, a2: -40 }, { a1: 24, a2: -40 }]}>
+            <path d="M-6 -90 L0 -82 L6 -90 Z" fill="#efc8d0" />
+            <path d="M6 -84 L12 -86 L12 -82.4 L6 -80.6 Z" fill="#e8506a" />
+          </Figure>
         </g>
 
         {/* « ? » de quête au-dessus de Nathalie */}

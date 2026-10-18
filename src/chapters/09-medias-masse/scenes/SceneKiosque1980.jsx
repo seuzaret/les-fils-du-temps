@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Bust, Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : KIOSQUE À JOURNAUX (années 80)
@@ -137,23 +138,13 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
         <g transform="translate(276,306) scale(0.7)">
           {/* petite ouverture de service, côté gauche du kiosque */}
           <rect x="70" y="-20" width="16" height="60" fill="#1a2a1e" stroke="#0e1a10" strokeWidth="1" />
-          {/* tête et buste de Robert */}
-          <ellipse cx="40" cy="10" rx="26" ry="34" fill="#d8b090" />
-          {/* béret noir */}
-          <path d="M14 -14 Q40 -30 66 -14 Q66 -2 40 0 Q14 -2 14 -14 Z" fill="#1a1a20" />
-          <circle cx="40" cy="-16" r="3" fill="#3a3a40" />
-          {/* moustache blanche */}
-          <path d="M28 20 Q40 22 52 20 Q46 26 40 25 Q34 26 28 20 Z" fill="#f0eae0" />
-          {/* sourcils gris */}
-          <path d="M28 4 q6 -2 10 0 M42 4 q6 -2 10 0" stroke="#8a8a90" strokeWidth="2" fill="none" />
-          {/* yeux */}
-          <circle cx="32" cy="12" r="2" fill="#1a1a20" />
-          <circle cx="48" cy="12" r="2" fill="#1a1a20" />
-          {/* nez */}
-          <path d="M40 14 q-2 4 0 8" stroke="#a07050" strokeWidth="1.5" fill="none" />
-          {/* buste — pull en laine grise, foulard rouge */}
-          <path d="M8 40 Q40 32 72 40 L74 74 L6 74 Z" fill="#6a6a70" />
-          <path d="M20 42 Q40 40 60 42 Q56 52 40 52 Q24 52 20 42 Z" fill="#c04030" />
+          {/* tête et buste de Robert, béret noir, moustache blanche, foulard rouge */}
+          <clipPath id="k80-robert"><rect x="0" y="-60" width="90" height="134" /></clipPath>
+          <g clipPath="url(#k80-robert)">
+            <Bust x={40} y={10} s={2} skin="#d8b090" hair="#c8c4c0" look="short" mustache beardColor="#f0eae0" hat="beret" hatColor="#1a1a20" wrinkles mood="content" cloth="#6a6a70" collar="round">
+              <path d="M-12 18 Q0 16 12 18 Q10 26 0 26 Q-10 26 -12 18 Z" fill="#c04030" />
+            </Bust>
+          </g>
         </g>
       </PLayer>
 
@@ -161,48 +152,33 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       <PLayer depth={2}>
         {/* Cadre pressé, gauche */}
         <g transform="translate(160,360)">
-          {/* jambes en pantalon marron */}
-          <rect x="-14" y="30" width="12" height="52" fill="#4a3620" />
-          <rect x="4" y="30" width="12" height="52" fill="#4a3620" />
-          {/* chaussures */}
-          <rect x="-16" y="80" width="16" height="8" fill="#1a1410" rx="2" />
-          <rect x="2" y="80" width="16" height="8" fill="#1a1410" rx="2" />
-          {/* manteau beige */}
-          <path d="M-22 -18 Q0 -24 22 -18 L26 32 L-26 32 Z" fill="#c9a878" />
-          {/* col + revers */}
-          <path d="M-6 -18 L6 -18 L4 -6 L-4 -6 Z" fill="#7a5a3a" />
-          {/* tête */}
-          <circle cx="0" cy="-30" r="12" fill="#e8bfa0" />
-          <path d="M-10 -38 Q0 -46 10 -38 Q8 -34 0 -34 Q-8 -34 -10 -38 Z" fill="#3a2418" />
-          {/* mallette dans la main */}
-          <rect x="24" y="10" width="18" height="14" fill="#3a2418" stroke="#1a1410" strokeWidth="1" />
-          <line x1="28" y1="8" x2="38" y2="8" stroke="#1a1410" strokeWidth="1.5" />
-          {/* journal replié sous le bras */}
-          <rect x="-30" y="0" width="20" height="26" fill="#e8e0c8" stroke="#8a7458" strokeWidth="0.8" transform="rotate(-8 -20 13)" />
-          <line x1="-28" y1="6" x2="-14" y2="6" stroke="#3a2418" strokeWidth="0.5" transform="rotate(-8 -20 13)" />
-          <line x1="-28" y1="10" x2="-14" y2="10" stroke="#3a2418" strokeWidth="0.4" transform="rotate(-8 -20 13)" />
+          {/* pressé : manteau beige, mallette, le journal replié sous le bras */}
+          <Figure x={0} y={88} s={1.1} skin="#e8bfa0" hair="#3a2418" look="short" mood="vexe"
+            garment="coat" coat="#c9a878" coat2="#7a5a3a" pants="#4a3620" shoes="#1a1410" arms={[{ a1: 14, a2: -20 }, { a1: 12, a2: 6 }]}>
+            <rect x="16" y="-44" width="22" height="16" rx="2" fill="#3a2418" stroke="#1a1410" strokeWidth="1" />
+            <path d="M21 -44 v-3 h12 v3" stroke="#1a1410" strokeWidth="1.6" fill="none" />
+            <g transform="rotate(-8 -24 -70)">
+              <rect x="-34" y="-84" width="20" height="26" fill="#e8e0c8" stroke="#8a7458" strokeWidth="0.8" />
+              <path d="M-31 -78 h14 M-31 -74 h14 M-31 -70 h10" stroke="#3a2418" strokeWidth="0.6" />
+            </g>
+          </Figure>
         </g>
 
         {/* Lycéenne, droite, en train de feuilleter */}
         <g transform="translate(830,370)">
-          {/* jambes en jean bleu */}
-          <rect x="-12" y="34" width="10" height="46" fill="#3a5074" />
-          <rect x="2" y="34" width="10" height="46" fill="#3a5074" />
-          {/* baskets blanches */}
-          <rect x="-14" y="78" width="14" height="8" fill="#e8e8e0" stroke="#7a7a70" strokeWidth="0.6" rx="2" />
-          <rect x="0" y="78" width="14" height="8" fill="#e8e8e0" stroke="#7a7a70" strokeWidth="0.6" rx="2" />
-          {/* pull rose fluo bien 80s */}
-          <path d="M-20 -12 Q0 -18 20 -12 L22 36 L-22 36 Z" fill="#e878a0" />
-          {/* motif géométrique */}
-          <path d="M-14 -4 L0 6 L14 -4 L14 8 L0 18 L-14 8 Z" fill="#f8b0c8" opacity="0.7" />
-          {/* tête + queue-de-cheval haute */}
-          <circle cx="0" cy="-24" r="11" fill="#f0d0a8" />
-          <path d="M-4 -34 Q4 -40 6 -30 Q4 -20 0 -18 Q-4 -20 -6 -30 Q-4 -40 -4 -34 Z" fill="#3a2418" />
-          <ellipse cx="8" cy="-38" rx="4" ry="8" fill="#c04a70" opacity="0.8" />
-          {/* magazine tenu à deux mains */}
-          <rect x="-16" y="12" width="32" height="24" fill="#f0c8d0" stroke="#8a5a70" strokeWidth="0.8" />
-          <rect x="-16" y="12" width="32" height="5" fill="#c04a70" />
-          <text x="0" y="26" textAnchor="middle" fontFamily="Georgia, serif" fontSize="5" fontWeight="800" fill="#c04a70">STAR</text>
+          {/* pull rose fluo bien 80s, jean, baskets ; elle feuillette un magazine */}
+          <Figure x={0} y={86} s={1.04} skin="#f0d0a8" hair="#3a2418" look="ponytail" mood="content"
+            garment="tee" coat="#e878a0" pants="#3a5074" shoes="#e8e8e0" belt={false} arms={[{ a1: 20, a2: -40 }, { a1: 20, a2: -40 }]}>
+            <path d="M-14 -82 L0 -72 L14 -82 L14 -70 L0 -60 L-14 -70 Z" fill="#f8b0c8" opacity="0.7" />
+            <ellipse cx="-10" cy="-120" rx="3.4" ry="2.4" fill="#c04a70" />
+            <g transform="translate(0,-48)">
+              <rect x="-18" y="-14" width="36" height="27" fill="#f0c8d0" stroke="#8a5a70" strokeWidth="0.8" />
+              <rect x="-18" y="-14" width="36" height="6" fill="#c04a70" />
+              <text x="0" y="2" textAnchor="middle" fontFamily="Georgia, serif" fontSize="6" fontWeight="800" fill="#c04a70">STAR</text>
+            </g>
+            <circle cx="-14.4" cy="-50" r="4.4" fill="#f0d0a8" stroke="#a88060" strokeWidth="0.6" />
+            <circle cx="14.4" cy="-50" r="4.4" fill="#f0d0a8" stroke="#a88060" strokeWidth="0.6" />
+          </Figure>
         </g>
 
         {/* petit chien attaché à la grille du kiosque, à droite —
@@ -281,19 +257,8 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
             <rect x="12" y="17" width="6" height="3" fill="#c8c8c8" />
             {/* CONDUCTEUR — homme au blouson bleu, casque bol */}
             <g transform="translate(12,-14)">
-              {/* dos + torse */}
-              <path d="M-8 12 L-6 -2 Q0 -4 6 -2 L8 12 Z" fill="#3a5a90" />
-              {/* jambes en pantalon marron */}
-              <rect x="-6" y="12" width="5" height="14" fill="#4a3620" />
-              <rect x="1" y="12" width="5" height="14" fill="#4a3620" />
-              {/* bras tendus sur le guidon */}
-              <path d="M-6 0 L-16 -4" stroke="#3a5a90" strokeWidth="4" strokeLinecap="round" />
-              <path d="M6 0 L14 4" stroke="#3a5a90" strokeWidth="4" strokeLinecap="round" />
-              {/* tête */}
-              <circle cx="0" cy="-10" r="6" fill="#e8bfa0" />
-              {/* casque bol beige, très 70/80s */}
-              <path d="M-7 -13 Q0 -20 7 -13 Q7 -8 0 -8 Q-7 -8 -7 -13 Z" fill="#c9a878" stroke="#5a4028" strokeWidth="0.8" />
-              <path d="M-7 -12 L7 -12" stroke="#5a4028" strokeWidth="0.6" />
+              <Figure x={0} y={26} s={0.41} pose="sit" facing="right" skin="#e8bfa0" hair="#3a2418" look="short" hat="hardhat" hatColor="#c9a878"
+                garment="jacket" coat="#3a5a90" pants="#4a3620" shoes="#1a1410" arms={[{ a1: -60, a2: -80 }, { a1: 70, a2: 90 }]} />
             </g>
           </g>
         </g>

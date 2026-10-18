@@ -2,6 +2,7 @@ import { useState } from "react";
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import PacManEgg from "./PacManEgg.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : Chambre de Julien, 15 ans, 1985.
@@ -286,26 +287,13 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       {/* ═══ AVANT-PLAN : JULIEN sur sa chaise devant le bureau ═══ */}
       <PLayer depth={1}>
         <g transform="translate(620,410)">
-          {/* corps assis */}
-          <path d="M-24 60 Q-22 20 0 14 Q22 20 24 60 L24 90 L-24 90 Z" fill="#1a1a1a" />
-          <text x="0" y="46" textAnchor="middle" fontFamily="ui-monospace,monospace" fontWeight="800" fontSize="12" fill="#e83820">ROCK</text>
-          {/* veste en jean déboutonnée */}
-          <path d="M-24 20 L-14 40 L-16 60" stroke="#3a5680" strokeWidth="6" fill="none" />
-          <path d="M24 20 L14 40 L16 60" stroke="#3a5680" strokeWidth="6" fill="none" />
-          {/* tête */}
-          <ellipse cx="0" cy="0" rx="14" ry="16" fill="#f0c8a0" />
-          {/* cheveux mulet */}
-          <path d="M-12 -8 Q-6 -18 0 -18 Q10 -18 12 -8 Z" fill="#3a2010" />
-          <path d="M12 -4 Q16 6 12 14" stroke="#3a2010" strokeWidth="4" fill="none" />
-          {/* yeux */}
-          <circle cx="-4" cy="-2" r="1.4" fill="#4a7a48" />
-          <circle cx="4" cy="-2" r="1.4" fill="#4a7a48" />
-          {/* bouche */}
-          <path d="M-3 6 q3 2 6 0" stroke="#a05040" strokeWidth="1.2" fill="none" strokeLinecap="round" />
-          {/* casque walkman autour du cou */}
-          <path d="M-14 14 Q0 8 14 14" fill="none" stroke="#3a3a3a" strokeWidth="2.5" />
-          <ellipse cx="-14" cy="15" rx="4" ry="5" fill="#3a3a3a" />
-          <ellipse cx="14" cy="15" rx="4" ry="5" fill="#3a3a3a" />
+          {/* t-shirt ROCK, veste en jean ouverte, casque de walkman autour du cou */}
+          <Figure x={0} y={95} s={1.08} pose="sit" skin="#e8bc96" hair="#4a3020" look="mid" mood="content"
+            garment="jacket" coat="#3a5680" coat2="#1a1a1a" pants="#2a3a5a" shoes="#e8e8e0" belt={false} arms={[{ a1: 24, a2: -36 }, { a1: 24, a2: -36 }]}>
+            <text x="0" y="-48" textAnchor="middle" fontFamily="ui-monospace,monospace" fontWeight="800" fontSize="9" fill="#e83820">ROCK</text>
+            <path d="M-15 -70 Q0 -77 15 -70" fill="none" stroke="#3a3a3a" strokeWidth="2.4" />
+            <ellipse cx="-15" cy="-69" rx="3.8" ry="4.6" fill="#3a3a3a" /><ellipse cx="15" cy="-69" rx="3.8" ry="4.6" fill="#3a3a3a" />
+          </Figure>
         </g>
 
         {/* « ? » de quête au-dessus de Julien */}

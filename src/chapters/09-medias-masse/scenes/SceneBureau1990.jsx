@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : Bureau, 1990. Céline, 25 ans, cadre
@@ -312,33 +313,16 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
         <g transform="translate(560,470)">
           {/* fauteuil de bureau à roulettes */}
           <path d="M-40 -10 L40 -10 L34 40 L-34 40 Z" fill="#1a1a1a" />
-          {/* T-SHIRT JAUNE (fan de Nirvana) */}
-          <path d="M-26 0 Q-24 -40 0 -46 Q24 -40 26 0 Z" fill="#f8d838" stroke="#a88020" strokeWidth="1" />
-          {/* bord de manches un peu plus fonce */}
-          <path d="M-26 -8 Q-30 -20 -22 -32" stroke="#c8a828" strokeWidth="4" fill="none" />
-          <path d="M26 -8 Q30 -20 22 -32" stroke="#c8a828" strokeWidth="4" fill="none" />
-          {/* le SMILEY Nirvana */}
-          <g transform="translate(0,-18)">
-            <circle r="10" fill="#f8d838" stroke="#1a1408" strokeWidth="1.4" />
-            {/* yeux en X */}
-            <path d="M-4 -3 l3 3 l-3 3 M-1 -3 l-3 3 l3 3" stroke="#1a1408" strokeWidth="0.8" fill="none" />
-            <path d="M4 -3 l-3 3 l3 3 M1 -3 l3 3 l-3 3" stroke="#1a1408" strokeWidth="0.8" fill="none" />
-            {/* sourire de traviole avec la langue qui pend */}
-            <path d="M-5 3 Q-2 6 2 5 Q4 4 5 3 L4 6 L2 5 L1 7" stroke="#1a1408" strokeWidth="1" fill="none" strokeLinecap="round" />
-          </g>
-          {/* col de t-shirt en cotes */}
-          <path d="M-6 -40 Q0 -34 6 -40" stroke="#c8a828" strokeWidth="1.4" fill="none" />
-          {/* tête */}
-          <ellipse cx="0" cy="-60" rx="14" ry="16" fill="#f4d8b8" />
-          {/* cheveux carrés blonds vénitiens volumineux */}
-          <path d="M-14 -66 Q-10 -80 0 -80 Q12 -80 14 -66 Q10 -76 0 -76 Q-10 -76 -14 -66 Z" fill="#c89060" />
-          <path d="M-14 -66 Q-18 -50 -12 -40" stroke="#c89060" strokeWidth="6" fill="none" />
-          <path d="M14 -66 Q18 -50 12 -40" stroke="#c89060" strokeWidth="6" fill="none" />
-          {/* yeux */}
-          <circle cx="-4" cy="-62" r="1.4" fill="#3a6a80" />
-          <circle cx="4" cy="-62" r="1.4" fill="#3a6a80" />
-          {/* bouche */}
-          <path d="M-3 -54 q3 2 6 0" stroke="#7a1020" strokeWidth="1.4" fill="none" strokeLinecap="round" />
+          {/* t-shirt jaune au smiley (fan de Nirvana), carré blond vénitien */}
+          <Figure x={0} y={35} s={1.08} pose="sit" skin="#ecc8a8" hair="#c89060" look="bob" earrings="#f4f0e4" lips="#7a1a2a" mood="content"
+            garment="tee" coat="#f8d838" shortSleeves pants="#3a4a6a" shoes="#e8e8e0" belt={false} arms={[{ a1: 30, a2: -40 }, { a1: 30, a2: -40 }]}>
+            <g transform="translate(0,-52) scale(0.85)">
+              <circle r="10" fill="#f8d838" stroke="#1a1408" strokeWidth="1.4" />
+              <path d="M-4 -3 l3 3 l-3 3 M-1 -3 l-3 3 l3 3" stroke="#1a1408" strokeWidth="0.8" fill="none" />
+              <path d="M4 -3 l-3 3 l3 3 M1 -3 l3 3 l-3 3" stroke="#1a1408" strokeWidth="0.8" fill="none" />
+              <path d="M-5 3 Q-2 6 2 5 Q4 4 5 3 L4 6 L2 5 L1 7" stroke="#1a1408" strokeWidth="1" fill="none" strokeLinecap="round" />
+            </g>
+          </Figure>
         </g>
 
         {/* « ? » de quête au-dessus de Céline */}

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure, HeadBack, HeadFront } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : SALON DEVANT LE JT (9 nov. 1989)
@@ -230,13 +231,9 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
           <rect x="68" y="0" width="10" height="12" fill="#1a0a04" rx="1" />
 
           {/* GRAND-PÈRE : nuque + haut du crâne qui dépasse du dossier arrondi */}
-          <g transform="translate(0,-176)">
-            <ellipse cx="0" cy="0" rx="18" ry="16" fill="#e8c8a8" />
-            {/* frange de cheveux blancs, calvitie sur le dessus */}
-            <path d="M-16 -6 Q-14 -14 -6 -16 L6 -16 Q14 -14 16 -6 L16 -2 L-16 -2 Z" fill="#efe8de" />
-            <path d="M-15 0 Q-10 2 -6 0 M-3 0 Q1 2 5 0 M8 0 Q13 2 16 0" stroke="#c8bfae" strokeWidth="0.5" />
-            {/* branche de lunettes discrète côté gauche */}
-            <line x1="-14" y1="0" x2="-8" y2="2" stroke="#1a1a1a" strokeWidth="0.7" opacity="0.7" />
+          <g transform="translate(0,-176) scale(1.38)">
+            <HeadBack back skin="#e8c8a8" hair="#efe8de" look="ring" />
+            <HeadFront back />
           </g>
           {/* col d'un gilet gris-beige qui dépasse */}
           <path d="M-22 -170 Q0 -164 22 -170 L22 -158 L-22 -158 Z" fill="#7a6a5a" />
@@ -251,11 +248,11 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
           <circle key={i} cx={500 + i * 68} cy="480" r="6" fill="none" stroke="#c9a54a" strokeWidth="0.9" opacity="0.55" />
         ))}
         <g transform="translate(400,504)">
-          <path d="M-16 -18 Q0 -22 16 -18 L18 20 L-18 20 Z" fill="#e878a0" />
-          <path d="M-10 -22 Q-14 -8 -10 6 M10 -22 Q14 -8 10 6" stroke="#1a1a1a" strokeWidth="8" fill="none" />
-          <circle cx="0" cy="-28" r="9" fill="#f0d0a8" />
-          <ellipse cx="4" cy="-36" rx="4" ry="2.5" fill="#f8b0c8" />
-          <path d="M-14 20 L14 20 L12 34 L-12 34 Z" fill="#3a5074" />
+          {/* assise par terre, de dos, tournée vers la télé : longs cheveux noirs, chouchou rose */}
+          <Figure x={0} y={23} s={0.69} pose="ground" back skin="#f0d0a8" hair="#1a1a1a" look="long"
+            garment="tee" coat="#e878a0" pants="#3a5074" shoes="#e8e8e0" belt={false} arms={[{ a1: 18, a2: 6 }, { a1: 18, a2: 6 }]}>
+            <ellipse cx="0" cy="-90" rx="6" ry="3.4" fill="#f8b0c8" />
+          </Figure>
         </g>
       </PLayer>
 
@@ -278,13 +275,9 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
 
           {/* PAPA — nuque proprement calée juste au-dessus du dossier */}
           <g transform="translate(-100,-158)">
-            {/* haut du crâne + nuque, ovale plus long horizontalement */}
-            <ellipse cx="0" cy="4" rx="16" ry="14" fill="#e8bfa0" />
-            {/* cheveux courts brun, coupe classique années 80 */}
-            <path d="M-15 -2 Q-14 -12 -6 -14 L6 -14 Q14 -12 15 -2 L15 4 L-15 4 Z" fill="#3a2418" />
-            <path d="M-14 4 L14 4" stroke="#2a1408" strokeWidth="0.6" />
-            {/* petit trait fin qui suggère l'arrière d'oreille droite */}
-            <ellipse cx="15" cy="8" rx="2" ry="4" fill="#d8a888" />
+            <g transform="translate(0,2) scale(1.2)">
+              <HeadBack back skin="#e8bfa0" hair="#3a2418" look="short" />
+            </g>
             {/* col de chemise à carreaux */}
             <path d="M-20 14 L-14 20 L0 18 L14 20 L20 14 L20 22 L-20 22 Z" fill="#8a5a3a" />
             <path d="M-14 20 L-4 24 L4 24 L14 20" stroke="#5a3a20" strokeWidth="0.6" fill="none" />
@@ -308,10 +301,9 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
 
           {/* SŒUR/FRÈRE — nuque, cheveux mi-longs, T-shirt orange 80s */}
           <g transform="translate(80,-158)">
-            <ellipse cx="0" cy="4" rx="15" ry="14" fill="#f0d0a8" />
-            {/* cheveux châtains mi-longs avec petites vagues */}
-            <path d="M-15 -2 Q-14 -14 -4 -16 L4 -16 Q14 -14 15 -2 L16 14 L-16 14 Z" fill="#7a5030" />
-            <path d="M-14 4 Q-10 8 -6 4 M6 4 Q10 8 14 4" stroke="#5a3a1a" strokeWidth="0.6" fill="none" opacity="0.7" />
+            <g transform="translate(0,2) scale(1.12)">
+              <HeadBack back skin="#f0d0a8" hair="#7a5030" look="mid" />
+            </g>
             {/* col d'un T-shirt orange fluo */}
             <path d="M-18 14 L-8 20 L8 20 L18 14 L20 22 L-20 22 Z" fill="#e8542e" />
           </g>
