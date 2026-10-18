@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Glitter, Haze, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau : la côte phénicienne
@@ -35,26 +36,41 @@ export default function ScenePhenicie({ collect, action, reveal, made = [], mode
       <rect width="1000" height="560" fill="url(#ph-sky)" />
       <circle cx="800" cy="150" r="150" fill="url(#ph-sun)" />
       <circle cx="800" cy="150" r="42" fill="#fff4d0" opacity="0.95" />
+      <Clouds id="ph-cl" seed={41} items={[[180, 70, 200], [480, 110, 160], [620, 52, 140]]} color="#fbf6ec" shadow="#d0d8dc" opacity="0.75" drift={18} />
       {/* mouettes */}
       <path d="M180 120 q8 -8 16 0 q8 -8 16 0 M260 150 q6 -6 12 0 q6 -6 12 0" stroke="#3c4452" strokeWidth="2.2" fill="none" opacity="0.6" />
 
       {/* ═══ couche lointaine : cap rocheux + ville phénicienne ═══ */}
       <PLayer depth={1}>
-        <path d="M0 300 Q160 250 320 288 L320 340 L0 340 Z" fill="#8a7a5e" />
-        {/* maisons blanches à flanc de colline */}
-        {[[60, 268], [110, 256], [150, 280], [220, 262], [270, 284]].map(([x, y], i) => (
-          <g key={i}><rect x={x - 12} y={y} width="24" height="26" fill="#d8cdb4" /><path d={`M${x - 14} ${y} L${x} ${y - 12} L${x + 14} ${y} Z`} fill="#a86a4a" /></g>
+        {/* montagnes de l'arrière-pays, puis la côte qui fuit au loin à droite */}
+        <Ridge id="ph-r0" seed={221} x0={-40} x1={1040} y={274} amp={90} rough={0.58} fill="#8a9ab8" lit="#b8c4d4" light={1} />
+        <Haze id="ph-h0" y0={200} y1={300} color="#f0dcb0" opacity={0.5} />
+        <path d="M600 300 Q760 290 1040 292 L1040 302 L600 302 Z" fill="#a8a088" opacity="0.8" />
+        {/* le cap rocheux et la ville phénicienne en terrasses */}
+        <path d="M-40 304 L-40 262 Q60 236 160 248 Q250 258 300 276 Q330 290 340 304 Z" fill="#9a8662" />
+        <path d="M-40 262 Q60 236 160 248 Q250 258 300 276" stroke="#c8b488" strokeWidth="3" fill="none" opacity="0.6" />
+        <TreeLine seed={223} x0={0} x1={300} y={262} n={10} h={[10, 18]} kinds={["leafy", "conifer"]} colors={["#4a5a34", "#566a3a"]} light={1} jitter={8} />
+        {[[20, 266, 26, 22], [50, 258, 22, 28], [80, 262, 28, 20], [112, 256, 24, 26], [146, 262, 30, 22], [182, 270, 24, 18], [214, 274, 28, 18], [246, 282, 22, 14], [36, 284, 30, 18], [96, 282, 26, 18], [160, 286, 28, 16]].map(([x, y, w, h], i) => (
+          <g key={i}>
+            <rect x={x} y={y - h} width={w} height={h} fill={i % 3 ? "#e8dcc4" : "#d8cab0"} />
+            <rect x={x} y={y - h} width={w} height="3" fill="#b8a888" />
+            <rect x={x + w * 0.6} y={y - h} width={w * 0.4} height={h} fill="#000" opacity="0.08" />
+            <rect x={x + w / 2 - 3} y={y - h + 7} width="5" height="7" fill="#4a3a28" />
+          </g>
         ))}
+        {/* jetée de pierre qui ferme le port */}
+        <path d="M200 304 L440 300 L446 308 L200 312 Z" fill="#8a7a5e" />
+        <path d="M200 304 L440 300" stroke="#c2b48e" strokeWidth="2" />
         {/* phare / tour de guet */}
         <rect x="300" y="230" width="16" height="70" fill="#c2b48e" /><rect x="298" y="224" width="20" height="10" fill="#a86a4a" />
       </PLayer>
 
       {/* ═══ couche intermédiaire : la mer + les navires marchands ═══ */}
       <PLayer depth={2}>
-        <rect y="300" width="1000" height="130" fill="url(#ph-sea)" />
-        <path d="M700 306 L790 306 L820 420 L660 420 Z" fill="#ffe09a" opacity="0.2" />
+        <rect x="-40" y="300" width="1080" height="130" fill="url(#ph-sea)" />
+        <Glitter x={780} y0={304} y1={420} w0={16} w1={130} blurId="ph-blur" />
         {[316, 342, 368, 396].map((y, i) => (
-          <path key={i} d={`M0 ${y} q110 ${i % 2 ? 5 : -5} 220 0 t220 0 t220 0 t220 0`} stroke="#bfe0dc" strokeWidth="1.6" fill="none" opacity="0.4" style={{ animation: `ripple ${3 + (i % 3)}s ease-in-out infinite` }} />
+          <path key={i} d={`M-40 ${y} q110 ${i % 2 ? 5 : -5} 220 0 t220 0 t220 0 t220 0 t220 0`} stroke="#bfe0dc" strokeWidth="1.6" fill="none" opacity="0.4" style={{ animation: `ripple ${3 + (i % 3)}s ease-in-out infinite` }} />
         ))}
         {/* deux navires marchands (coque à rames + voile carrée) */}
         {[[420, 350, 1], [720, 372, 0.8]].map(([x, y, s], i) => (
@@ -74,8 +90,24 @@ export default function ScenePhenicie({ collect, action, reveal, made = [], mode
       <PLayer depth={3}>
         <path d="M0 560 L0 418 Q250 404 520 424 Q760 442 1000 416 L1000 560 Z" fill="url(#ph-quay)" />
         <path d="M0 560 L0 418 Q250 404 520 424 Q760 442 1000 416 L1000 560 Z" fill="#3c2c18" opacity="0.3" filter="url(#ph-grain)" />
-        {/* dalles du quai */}
-        <path d="M0 470 h1000 M0 512 h1000 M180 440 v120 M420 440 v120 M700 440 v120" stroke="#5c4830" strokeWidth="1.6" opacity="0.4" />
+        {/* dalles du quai, en perspective, et le bord du quai sur l'eau */}
+        <path d="M-40 418 Q250 404 520 424 Q760 442 1040 416 L1040 428 Q760 454 520 436 Q250 416 -40 430 Z" fill="#5c4830" opacity="0.6" />
+        {[[430, 452], [452, 484], [484, 526], [526, 590]].map(([y0, y1], r) => (
+          <g key={r}>
+            <path d={`M-40 ${y1} H1040`} stroke="#5c4830" strokeWidth={1.2 + r * 0.4} opacity="0.45" />
+            {Array.from({ length: 10 }).map((_, k) => {
+              const x = -80 + k * 130 + (r % 2) * 65;
+              const f0 = 1 + (y0 - 420) / 140, f1 = 1 + (y1 - 420) / 140;
+              return <path key={k} d={`M${(500 + (x - 500) * f0).toFixed(0)} ${y0} L${(500 + (x - 500) * f1).toFixed(0)} ${y1}`} stroke="#5c4830" strokeWidth="1.4" opacity="0.4" />;
+            })}
+          </g>
+        ))}
+        <Speckle seed={225} x0={0} x1={1000} y0={430} y1={560} n={240} colors={["#8a7048", "#e0cca0", "#5c4830"]} opacity={0.45} />
+        {/* bitte d'amarrage et cordage */}
+        <g transform="translate(330,438)">
+          <rect x="-7" y="-20" width="14" height="22" rx="3" fill="#6a5a44" /><ellipse cx="0" cy="-20" rx="9" ry="3" fill="#8a7a62" />
+          <path d="M6 -12 Q40 -6 70 -26" stroke="#a8875a" strokeWidth="2.4" fill="none" />
+        </g>
         <ellipse cx="500" cy="500" rx="440" ry="46" fill="#7a6240" opacity="0.35" />
 
         {/* BALLOTS de marchandises empilés */}
