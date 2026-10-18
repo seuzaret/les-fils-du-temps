@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau : Studio BBC, Bush House, Londres,
@@ -189,27 +190,13 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
             (bas du corps caché par le meuble) ; le micro sera dessiné APRÈS le pupitre
             pour rester devant lui, sinon on ne verrait plus le micro. */}
         <g transform="translate(720,300)">
-          {/* torse */}
-          <path d="M-46 60 Q-40 20 0 14 Q40 20 46 60 L46 100 L-46 100 Z" fill="#1a2438" />
-          {/* chemise blanche + cravate */}
-          <path d="M-16 22 L0 50 L16 22 L22 60 L-22 60 Z" fill="#efe6d2" />
-          <path d="M-4 30 L4 30 L2 60 L0 80 L-2 60 Z" fill="#8a1a1a" />
-          {/* col */}
-          <path d="M-6 22 L0 32 L6 22 Z" fill="#fff" />
-          {/* tête */}
-          <ellipse cx="0" cy="0" rx="18" ry="20" fill="#eec8a0" />
-          {/* cheveux */}
-          <path d="M-16 -8 Q-14 -22 0 -22 Q16 -22 18 -8 Q14 -20 0 -20 Q-14 -20 -16 -8 Z" fill="#3a2418" />
-          <path d="M-16 -8 Q-18 -4 -16 0" stroke="#3a2418" strokeWidth="4" fill="none" />
-          <path d="M16 -8 Q18 -4 16 0" stroke="#3a2418" strokeWidth="4" fill="none" />
-          {/* yeux + moustache */}
-          <circle cx="-6" cy="-2" r="1.6" fill="#2a1a10" />
-          <circle cx="6" cy="-2" r="1.6" fill="#2a1a10" />
-          <path d="M-6 8 q6 -2 12 0" fill="#3a2418" />
-          {/* casque autour du cou */}
-          <path d="M-18 14 Q0 6 18 14" fill="none" stroke="#2a2a2a" strokeWidth="3" />
-          <ellipse cx="-18" cy="15" rx="5" ry="6" fill="#3a3a3a" />
-          <ellipse cx="18" cy="15" rx="5" ry="6" fill="#3a3a3a" />
+          {/* assis derrière le pupitre, casque autour du cou */}
+          <Figure x={0} y={121} s={1.38} pose="sit" skin="#e0b48a" hair="#4a3020" look="slick" mustache mood="content"
+            garment="jacket" coat="#1a2438" coat2="#efe6d2" pants="#141c2c" shoes="#0a0a10" arms={[{ a1: 20, a2: -30 }, { a1: 20, a2: -30 }]}>
+            <path d="M-2.4 -70 L2.4 -70 L1.6 -48 L0 -40 L-1.6 -48 Z" fill="#8a1a1a" />
+            <path d="M-15 -70 Q0 -78 15 -70" fill="none" stroke="#2a2a2a" strokeWidth="2.4" />
+            <ellipse cx="-15" cy="-69" rx="4" ry="4.6" fill="#3a3a3a" /><ellipse cx="15" cy="-69" rx="4" ry="4.6" fill="#3a3a3a" />
+          </Figure>
         </g>
 
         {/* PUPITRE du speaker (support de dépôt) — dessiné APRÈS Arthur pour cacher

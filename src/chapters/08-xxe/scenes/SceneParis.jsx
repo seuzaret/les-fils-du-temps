@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau : Paris occupé, 5 juin 1944, fin d'après-midi.
@@ -302,32 +303,12 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
 
           {/* ─── MARCHAND ─── */}
           <g transform="translate(-18,60)">
-            {/* ombre sous les pieds */}
-            <ellipse cx="0" cy="62" rx="18" ry="3" fill="#0a0604" opacity="0.55" />
-            {/* casquette gavroche */}
-            <path d="M-14 -6 Q0 -14 14 -6 L12 -2 L-12 -2 Z" fill="#3a2818" stroke="#1a1408" strokeWidth="0.5" />
-            <rect x="-14" y="-2" width="28" height="3" fill="#3a2818" />
-            <path d="M-12 -3 h24" stroke="#5a4030" strokeWidth="0.4" opacity="0.6" />
-            {/* visage cerné, un peu creusé — 1944, ration */}
-            <ellipse cx="0" cy="6" rx="8" ry="10" fill="#dfa888" />
-            <ellipse cx="0" cy="6" rx="8" ry="10" fill="#8a5030" opacity="0.15" filter="url(#pa-grain)" />
-            {/* cerne */}
-            <path d="M-4 4 q4 -1 8 0" stroke="#8a4020" strokeWidth="0.4" fill="none" opacity="0.6" />
-            {/* moustache et menton */}
-            <path d="M-4 10 q4 -2 8 0" stroke="#3a2818" strokeWidth="1.4" fill="none" />
-            <path d="M-2 14 q2 1 4 0" stroke="#3a2818" strokeWidth="0.4" fill="none" />
-            {/* buste + manteau brun usé */}
-            <path d="M-14 22 Q-12 16 0 14 Q12 16 14 22 L14 60 L-14 60 Z" fill="#5a3820" stroke="#2a1608" strokeWidth="1" />
-            <path d="M-14 22 Q-12 16 0 14 Q12 16 14 22 L14 60 L-14 60 Z" fill="#2a1408" opacity="0.28" filter="url(#pa-grain)" />
-            {/* revers du col */}
-            <path d="M-6 16 L-4 26 L-8 30 M6 16 L4 26 L8 30" stroke="#3a2010" strokeWidth="0.8" fill="none" />
-            {/* boutonnière en ligne */}
-            <path d="M-4 20 v40" stroke="#3a2410" strokeWidth="1" />
-            <circle cx="-4" cy="28" r="0.9" fill="#241408" />
-            <circle cx="-4" cy="40" r="0.9" fill="#241408" />
-            <circle cx="-4" cy="52" r="0.9" fill="#241408" />
-            {/* main levée sur la couverture */}
-            <ellipse cx="16" cy="34" rx="3" ry="4" fill="#dfa888" stroke="#5a3818" strokeWidth="0.4" />
+            <clipPath id="pa-marchand"><rect x="-60" y="-60" width="120" height="120" /></clipPath>
+            <g clipPath="url(#pa-marchand)">
+              {/* visage creusé (1944, la ration), manteau brun usé, la main sur la couverture */}
+              <Figure x={0} y={72} s={0.62} skin="#d4a47c" hair="#3a2818" look="short" mustache mood="vexe" hat="flatcap" hatColor="#5a5048"
+                garment="coat" coat="#5a3820" pants="#3a2818" shoes="#1a1008" arms={[{ a1: 10, a2: 6 }, { a1: 40, a2: -20 }]} />
+            </g>
           </g>
         </g>
       </PLayer>
@@ -389,34 +370,11 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
         <g transform="translate(560,410)">
           {[[0, 0], [40, 4]].map(([dx, dy], si) => (
             <g key={si} transform={`translate(${dx},${dy})`}>
-              {/* ombre sous les pieds */}
-              <ellipse cx="0" cy="93" rx="14" ry="2.5" fill="#0a0604" opacity="0.55" />
-              {/* casque stahlhelm avec rebord */}
-              <path d="M-9 -4 Q0 -14 9 -4 L11 2 L-11 2 Z" fill="#4a5040" stroke="#2a3020" strokeWidth="1" />
-              <path d="M-11 2 h22 v3 h-22 z" fill="#3a4030" />
-              {/* petit reflet sur le casque */}
-              <path d="M-6 -8 q3 -3 8 -1" stroke="#7a8070" strokeWidth="0.8" fill="none" opacity="0.55" />
-              {/* visage */}
-              <ellipse cx="0" cy="10" rx="6" ry="7" fill="#dfa888" />
-              {/* menton et mâchoire */}
-              <path d="M-3 14 q3 2 6 0" stroke="#8a5030" strokeWidth="0.4" fill="none" opacity="0.7" />
-              {/* buste uniforme feldgrau */}
-              <path d="M-14 20 Q-12 16 0 14 Q12 16 14 20 L14 60 L-14 60 Z" fill="#5a6050" stroke="#2a3020" strokeWidth="1" />
-              <path d="M-14 20 Q-12 16 0 14 Q12 16 14 20 L14 60 L-14 60 Z" fill="#2a2818" opacity="0.25" filter="url(#pa-grain)" />
-              {/* col + insigne */}
-              <path d="M-4 16 L-4 22 M4 16 L4 22" stroke="#2a3020" strokeWidth="0.8" />
-              <rect x="-2" y="20" width="4" height="2" fill="#c8b060" />
-              {/* ceinturon + boucle */}
-              <rect x="-14" y="40" width="28" height="4" fill="#2a2018" />
-              <rect x="-3" y="40" width="6" height="4" fill="#8a7040" stroke="#2a2018" strokeWidth="0.4" />
-              {/* fusil (Kar98k) sur épaule */}
-              <path d="M8 8 L22 42" stroke="#3a2818" strokeWidth="2.4" strokeLinecap="round" />
-              <path d="M8 8 L11 6" stroke="#5a5040" strokeWidth="1.2" />
-              {/* jambes bottées */}
-              <rect x="-10" y="60" width="8" height="30" fill="#4a5040" stroke="#2a3020" strokeWidth="0.4" />
-              <rect x="2"   y="60" width="8" height="30" fill="#4a5040" stroke="#2a3020" strokeWidth="0.4" />
-              <rect x="-11" y="88" width="10" height="5" fill="#0a0806" />
-              <rect x="1"   y="88" width="10" height="5" fill="#0a0806" />
+              {/* casque d'acier, uniforme feldgrau, fusil à l'épaule */}
+              <Figure x={0} y={93} s={0.78} skin="#dfa888" hair="#8a7050" look="short" mood="vexe" hat="wwhelm" hatColor="#4a5040"
+                garment="jacket" coat="#5a6050" trim="#2a2018" pants="#4a5040" shoes="#0a0806"
+                arms={[{ a1: 10, a2: 6 }, { a1: 24, a2: -40 }]}
+                behind={<path d="M12 -110 L30 -40" stroke="#3a2818" strokeWidth="3.6" strokeLinecap="round" />} />
             </g>
           ))}
         </g>
@@ -425,27 +383,17 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
         <g transform="translate(400,430)">
           {/* ombre */}
           <ellipse cx="0" cy="102" rx="18" ry="3" fill="#0a0604" opacity="0.55" />
-          <ellipse cx="0" cy="0" rx="10" ry="12" fill="#dfa888" />
-          {/* chignon gris */}
-          <path d="M-8 -6 Q-6 -14 0 -14 Q6 -14 8 -6 Z" fill="#8a8a8a" />
-          <ellipse cx="8" cy="0" rx="4" ry="5" fill="#7a7a7a" />
-          {/* traits usés */}
-          <circle cx="-3" cy="0" r="1" fill="#2a1a10" />
-          <circle cx="3" cy="0" r="1" fill="#2a1a10" />
-          <path d="M-2 6 q2 1 4 0" stroke="#5a3020" strokeWidth="0.4" fill="none" />
-          {/* robe noire + châle */}
-          <path d="M-18 20 Q-14 12 0 10 Q14 12 18 20 L20 80 L-20 80 Z" fill="#1a1a1a" />
-          <path d="M-22 22 Q0 12 22 22 L20 40 Q0 32 -20 40 Z" fill="#0a0a0a" />
-          {/* liseré du châle */}
-          <path d="M-20 38 q20 -6 40 0" stroke="#3a3030" strokeWidth="0.5" fill="none" opacity="0.7" />
-          {/* panier au bras + oignon qui dépasse */}
-          <ellipse cx="18" cy="46" rx="8" ry="6" fill="#8a6540" stroke="#3a2418" strokeWidth="1" />
-          <path d="M12 44 q6 -6 12 0" stroke="#3a2418" strokeWidth="1.4" fill="none" />
-          <path d="M14 40 h8" stroke="#c8b090" strokeWidth="0.5" opacity="0.6" />
-          <ellipse cx="16" cy="41" rx="2.5" ry="2" fill="#e8d090" stroke="#5a4028" strokeWidth="0.3" />
-          {/* jambes bas noirs */}
-          <rect x="-8" y="80" width="6" height="22" fill="#3a3028" />
-          <rect x="2" y="80" width="6" height="22" fill="#3a3028" />
+          {/* robe noire, châle, panier au bras (un oignon qui dépasse) */}
+          <Figure x={0} y={102} s={0.96} skin="#e4c4a4" hair="#a8a49c" look="bun" wrinkles mood="vexe"
+            garment="dress" coat="#1a1a1a" pants="#3a3028" shoes="#0a0a0a" belt={false} arms={[{ a1: 10, a2: 6 }, { a1: 20, a2: -30 }]}>
+            <path d="M-25 -89 Q0 -95 25 -89 L23 -66 Q0 -74 -23 -66 Z" fill="#0a0a0a" />
+            <path d="M-23 -68 q23 -7 46 0" stroke="#3a3030" strokeWidth="0.6" fill="none" opacity="0.7" />
+            <g transform="translate(22,-42)">
+              <ellipse cx="0" cy="0" rx="10" ry="7" fill="#8a6540" stroke="#3a2418" strokeWidth="1" />
+              <path d="M-7 -2 q7 -8 14 0" stroke="#3a2418" strokeWidth="1.6" fill="none" />
+              <ellipse cx="-2" cy="-6" rx="3" ry="2.4" fill="#e8d090" stroke="#5a4028" strokeWidth="0.4" />
+            </g>
+          </Figure>
         </g>
 
         {/* ANACHRONISME : télécommande TV moderne dans le caniveau */}

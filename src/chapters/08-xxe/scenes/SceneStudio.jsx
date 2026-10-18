@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau-ÉNIGME : « Parler à un pays occupé ? »
@@ -141,27 +142,15 @@ export default function SceneStudio({ collect, action, reveal, made = [] }) {
             un costume bleu franc qui reste bien visible au-dessus (et
             derriere) le pupitre. */}
         <g transform="translate(340,372)">
-          {/* costume large, bleu marine */}
-          <path d="M-46 150 Q-50 26 -10 8 Q10 2 30 8 Q50 26 46 150 Z" fill="#2a4870" />
-          {/* revers de veste plus clair */}
-          <path d="M-14 12 L-4 30 L-2 50 L-22 50 L-30 30 Z" fill="#3a5a88" />
-          <path d="M14 12 L4 30 L2 50 L22 50 L30 30 Z" fill="#3a5a88" />
-          {/* rangee de boutons */}
-          {[40, 70, 100, 130].map((y, i) => <circle key={i} cx="0" cy={y} r="1.6" fill="#e8dfc8" />)}
-          {/* legere texture grain */}
-          <path d="M-46 150 Q-50 26 -10 8 Q10 2 30 8 Q50 26 46 150 Z" fill="#101418" opacity="0.18" filter="url(#st-grain)" />
-          <circle cx="2" cy="-10" r="15" fill="#d8a884" />
-          <path d="M-13 -14 q-2 -18 16 -17 q17 1 12 16 q-5 -7 -14 -7 q-11 0 -14 8 Z" fill="#3a3028" />
-          <path d="M-5 -4 q7 3 14 0" stroke="#3a3028" strokeWidth="2.5" fill="none" />
-          {/* col et cravate */}
-          <path d="M-8 10 L2 22 L12 10" stroke="#e8e4da" strokeWidth="3" fill="none" />
-          <path d="M2 22 l-3 22 l6 0 Z" fill="#7a2418" />
-          {/* la main qui tient les feuilles */}
-          <path d="M26 34 q22 4 32 20" stroke="#d8a884" strokeWidth="6" fill="none" strokeLinecap="round" />
-          <g transform="translate(62,56) rotate(-12)">
-            <rect x="-13" y="-16" width="26" height="32" fill="#e8e4da" />
-            <path d="M-8 -9 h16 M-8 -3 h16 M-8 3 h12" stroke="#9a96a0" strokeWidth="1.4" />
-          </g>
+          {/* assis, costume bleu marine, ses feuilles à la main */}
+          <Figure x={0} y={91} s={1.15} pose="sit" skin="#d8a884" hair="#3a3028" look="short" mustache mood="content"
+            garment="jacket" coat="#2a4870" coat2="#e8e4da" pants="#1a2a44" shoes="#0a0a10" arms={[{ a1: 20, a2: -30 }, { a1: 50, a2: 60 }]}>
+            <path d="M-2 -70 L2 -70 L3 -50 L0 -46 L-3 -50 Z" fill="#7a2418" />
+            <g transform="translate(56,-40) rotate(-12)">
+              <rect x="-11" y="-14" width="22" height="28" fill="#e8e4da" stroke="#9a96a0" strokeWidth="0.5" />
+              <path d="M-7 -8 h14 M-7 -3 h14 M-7 2 h10" stroke="#9a96a0" strokeWidth="1.2" />
+            </g>
+          </Figure>
         </g>
       </PLayer>
 

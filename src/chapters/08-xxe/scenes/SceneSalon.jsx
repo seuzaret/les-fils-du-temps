@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau : Salon Dupont, Paris occupé, nuit du
@@ -188,17 +189,12 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
       {/* ═══ AVANT-PLAN : MARTHE dans son fauteuil ═══ */}
       <PLayer depth={1}>
         <g transform="translate(870,340)">
-          <path d="M-32 96 Q-30 30 0 20 Q30 30 32 96 L32 130 L-32 130 Z" fill="#1a1a1a" />
-          <path d="M-38 40 Q0 24 38 40 L36 80 Q0 68 -36 80 Z" fill="#0a0a0a" stroke="#2a2a2a" strokeWidth="1" />
-          {[-30, -20, -10, 0, 10, 20, 30].map((x, i) => (
-            <path key={i} d={`M${x} 76 v${5 + (i % 3) * 3}`} stroke="#2a2a2a" strokeWidth="1" />
-          ))}
-          <ellipse cx="0" cy="0" rx="16" ry="18" fill="#efd0b0" />
-          <path d="M-14 -8 Q-12 -20 0 -20 Q14 -20 16 -8 Q10 -16 0 -16 Q-10 -16 -14 -8 Z" fill="#8a8a8a" />
-          <ellipse cx="14" cy="4" rx="7" ry="9" fill="#7a7a7a" />
-          <circle cx="-5" cy="-2" r="1.4" fill="#5a7a90" />
-          <circle cx="5" cy="-2" r="1.4" fill="#5a7a90" />
-          <path d="M-4 8 q4 2 8 0" stroke="#8a5040" strokeWidth="1.2" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={108} s={1.23} pose="sit" skin="#e4c4a4" hair="#a8a49c" look="bun" wrinkles mood="content"
+            garment="dress" coat="#1a1a1a" pants="#2a2420" shoes="#0a0a0a" belt={false} arms={[{ a1: 14, a2: -30 }, { a1: 14, a2: -30 }]}>
+            {/* châle noir à franges */}
+            <path d="M-26 -71 Q0 -78 26 -71 L25 -47 Q0 -55 -25 -47 Z" fill="#0a0a0a" stroke="#2a2a2a" strokeWidth="0.8" />
+            {[-24, -16, -8, 0, 8, 16, 24].map((x, i) => <path key={x} d={`M${x} ${-50 + (Math.abs(x) > 12 ? 2 : 0)} v${3 + (i % 3) * 2}`} stroke="#2a2a2a" strokeWidth="0.8" />)}
+          </Figure>
         </g>
 
       </PLayer>

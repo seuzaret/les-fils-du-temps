@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau : ENIAC, Moore School of Electrical
@@ -200,26 +201,15 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
       {/* ═══ AVANT-PLAN : KAY McNULTY debout devant l'ENIAC ═══ */}
       <PLayer depth={1}>
         <g transform="translate(830,340)">
-          {/* corps debout en tailleur */}
-          <path d="M-24 96 Q-22 30 0 20 Q22 30 24 96 L24 130 L-24 130 Z" fill="#3a5060" />
-          {/* jupe */}
-          <path d="M-26 80 L26 80 L28 130 L-28 130 Z" fill="#243848" />
-          {/* col chemise blanc */}
-          <path d="M-6 22 L0 40 L6 22 L10 46 L-10 46 Z" fill="#efe6d2" />
-          {/* tête */}
-          <ellipse cx="0" cy="0" rx="16" ry="18" fill="#f0d0b0" />
-          {/* cheveux victory rolls */}
-          <path d="M-14 -8 Q-12 -20 0 -20 Q14 -20 14 -8 Z" fill="#5a3020" />
-          <ellipse cx="-11" cy="-4" rx="6" ry="8" fill="#6a3820" />
-          <ellipse cx="11" cy="-4" rx="6" ry="8" fill="#6a3820" />
-          {/* yeux */}
-          <circle cx="-5" cy="-2" r="1.4" fill="#5a3818" />
-          <circle cx="5" cy="-2" r="1.4" fill="#5a3818" />
-          {/* bouche rouge à lèvres */}
-          <path d="M-4 8 q4 2 8 0" stroke="#a83020" strokeWidth="1.4" fill="none" strokeLinecap="round" />
-          {/* main tenant un cahier de notes */}
-          <rect x="-32" y="60" width="12" height="16" fill="#efe6d2" stroke="#5a4028" strokeWidth="1" />
-          <path d="M-30 64 h8 M-30 68 h6 M-30 72 h8" stroke="#3a2818" strokeWidth="0.5" />
+          {/* debout en tailleur, un cahier de notes à la main */}
+          <Figure x={0} y={130} s={1.23} skin="#ecc8a4" hair="#5a3820" look="rolls" lips="#c02030" mood="content"
+            garment="dress" coat="#3a5060" pants="#c8a888" shoes="#2a1a10" belt={false} arms={[{ a1: 20, a2: -20 }, { a1: 10, a2: 6 }]}>
+            <path d="M-21 -46 L21 -46 L26 -14 Q0 -11 -26 -14 Z" fill="#243848" />
+            <path d="M-5 -91 L0 -78 L5 -91 L8 -72 L-8 -72 Z" fill="#efe6d2" />
+            <rect x="-30" y="-56" width="12" height="16" fill="#efe6d2" stroke="#5a4028" strokeWidth="0.8" />
+            <path d="M-28 -52 h8 M-28 -48 h6 M-28 -44 h8" stroke="#3a2818" strokeWidth="0.5" />
+            <circle cx="-19.8" cy="-46.9" r="4.4" fill="#ecc8a4" stroke="#a88060" strokeWidth="0.6" />
+          </Figure>
         </g>
 
         {/* « ? » de quête au-dessus de Kay (tant que l'ENIAC n'est pas allumé) */}

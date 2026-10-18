@@ -23,7 +23,7 @@
                curls | afro | slick | ring (couronne de chauve) | bald
      beard     true/"full" | "short" | "goatee" | "long" | "royal" |
                "postiche" | "stubble"        mustache : true | "handlebar"
-     hat       headband | crown | nemes | leather | helm | tricorne | visor | cap | toque | beret |
+     hat       headband | crown | nemes | leather | helm | tricorne | visor | wwhelm | cap | toque | beret |
                brim | tophat | kepi | hardhat | laurel | coif | turban |
                flatcap | hood
      facing    front | left | right (trois-quarts : les traits tournent)
@@ -149,6 +149,14 @@ function Hat({ hat, c, c2, f }) {
         </g>
       );
     }
+    case "wwhelm":   // casque d'acier à bord évasé (1939-1945)
+      return (
+        <g>
+          <path d="M-15 -1.6 Q-15.6 -20.6 0 -21.4 Q15.6 -20.6 15 -1.6 L18.4 3.4 L11.4 1 Q0 -1.6 -11.4 1 L-18.4 3.4 Z" fill={c || "#4a5040"} stroke={s} strokeWidth="0.7" />
+          <path d="M-14.6 -2 Q0 -5.4 14.6 -2" stroke={shade(c || "#4a5040", -0.3)} strokeWidth="1.2" fill="none" />
+          <path d="M-8 -16 Q-12 -12 -12 -7" stroke="#fff" strokeWidth="1.2" opacity="0.25" fill="none" />
+        </g>
+      );
     case "visor":   // visière de celluloïd verte (télégraphiste, typographe)
       return (
         <g>

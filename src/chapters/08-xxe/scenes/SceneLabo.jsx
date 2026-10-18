@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau-ÉNIGME : « Relier toutes les machines ? »
@@ -71,16 +72,8 @@ export default function SceneLabo({ collect, action, reveal, made = [] }) {
         )}
         {/* le chercheur, debout près des machines */}
         <g transform="translate(852,380)">
-          <path d="M-14 8 Q-18 -16 0 -21 Q18 -16 14 8 L12 44 L-12 44 Z" fill="#5a6a7a" />
-          <path d="M-14 8 Q-18 -16 0 -21 Q18 -16 14 8 L12 44 L-12 44 Z" fill="#101418" opacity="0.22" filter="url(#lb-grain)" />
-          <circle cx="0" cy="-31" r="10" fill="#e0b090" />
-          <path d="M-10 -35 q1 -12 10 -11 q11 1 10 11 q-4 -6 -10 -6 q-7 0 -10 6 Z" fill="#8a7a68" />
-          {/* lunettes */}
-          <circle cx="-4" cy="-30" r="3.4" fill="none" stroke="#3a3e46" strokeWidth="1.4" />
-          <circle cx="5" cy="-30" r="3.4" fill="none" stroke="#3a3e46" strokeWidth="1.4" />
-          <path d="M-1 -30 h3" stroke="#3a3e46" strokeWidth="1.2" />
-          {/* bras vers les machines */}
-          <path d="M-13 -4 q-20 0 -28 14" stroke="#e0b090" strokeWidth="5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={50} s={0.77} facing="left" skin="#e0b090" hair="#8a7a68" look="short" glasses mood="content"
+            garment="coat" coat="#5a6a7a" pants="#2a3038" shoes="#141418" arms={[{ a1: 60, a2: 30 }, { a1: 10, a2: 6 }]} />
         </g>
       </PLayer>
 
