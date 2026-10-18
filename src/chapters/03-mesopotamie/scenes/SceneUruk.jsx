@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Haze, Palm, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau 1 : la cité d'Ur (tableau de départ)
@@ -35,6 +36,9 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
           <feComposite in="a" in2="SourceGraphic" operator="in" />
         </filter>
+        <pattern id="uk-bricks" width="24" height="10" patternUnits="userSpaceOnUse">
+          <path d="M0 9.5 H24 M12 0 V5 M0 5 H24 M0 5 V10 M24 5 V10" stroke="#6e4c28" strokeWidth="0.8" opacity="0.45" />
+        </pattern>
         <filter id="uk-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="7" /></filter>
       </defs>
 
@@ -46,21 +50,46 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
 
       {/* ═══ couche lointaine : la ziggourat + palmiers ═══ */}
       <PLayer depth={1}>
-        <path d="M0 300 Q250 288 500 298 Q750 308 1000 296 L1000 445 L0 445 Z" fill="#b89660" />
-        <g transform="translate(250,300)">
-          <path d="M-130 0 L130 0 L96 -40 L-96 -40 Z" fill="url(#uk-brick2)" />
-          <path d="M-96 -40 L96 -40 L66 -78 L-66 -78 Z" fill="url(#uk-brick)" />
-          <path d="M-66 -78 L66 -78 L40 -112 L-40 -112 Z" fill="url(#uk-brick2)" />
-          <rect x="-14" y="-112" width="28" height="16" fill="#7a5230" />
-          <path d="M-8 0 L8 0 L6 -112 L-6 -112 Z" fill="#8a6238" opacity="0.7" />
-          {[0, -40, -78].map((y, i) => <path key={i} d={`M-120 ${y} h240`} stroke="#6e4c28" strokeWidth="1.5" opacity="0.3" />)}
-        </g>
-        {[[560, 300, 1], [900, 296, 0.85], [640, 302, 0.7]].map(([x, y, s], i) => (
-          <g key={i} transform={`translate(${x},${y}) scale(${s})`}>
-            <path d="M0 0 L-3 -60 L3 -60 Z" fill="#6e4c2e" />
-            <path d="M0 -60 q-30 -6 -46 12 M0 -60 q30 -6 46 12 M0 -60 q-20 -22 -34 -30 M0 -60 q20 -22 34 -30 M0 -60 q0 -26 0 -40" stroke="#4a6a30" strokeWidth="4" fill="none" />
-          </g>
+        {/* la plaine d'Uruk : rempart de la ville au loin, champs irrigués */}
+        <Haze id="uk-h0" y0={230} y1={300} color="#f0d090" opacity={0.5} />
+        <path d="M-40 300 Q250 288 500 298 Q750 308 1040 296 L1040 445 L-40 445 Z" fill="#b89660" />
+        {/* champs d'orge irrigués en bandes, canaux qui brillent */}
+        {[[312, 326, "#a8a050"], [326, 344, "#c8b060"], [344, 366, "#8a9a48"], [366, 392, "#c0a85a"], [392, 424, "#98a04e"]].map(([y0, y1, c], i) => (
+          <path key={i} d={`M-40 ${y0} Q500 ${y0 - 4} 1040 ${y0} L1040 ${y1} Q500 ${y1 - 4} -40 ${y1} Z`} fill={c} opacity="0.55" />
         ))}
+        {[330, 368].map((y, i) => <path key={i} d={`M-40 ${y} Q500 ${y - 4} 1040 ${y}`} stroke="#9ab8c0" strokeWidth={2 + i * 1.5} fill="none" opacity="0.7" />)}
+        {Array.from({ length: 14 }).map((_, i) => <path key={i} d={`M${(500 + (i * 80 - 520) * 0.5).toFixed(0)} 312 L${i * 80 - 520 + 500} 432`} stroke="#7a6a38" strokeWidth="1.4" opacity="0.4" />)}
+        <path d="M-40 296 L1040 292 L1040 300 L-40 304 Z" fill="#a88454" />
+        {Array.from({ length: 40 }).map((_, i) => <rect key={i} x={i * 27 - 20} y={286 + (i % 2) * 2} width="12" height="8" fill="#a88454" />)}
+        {[[400, 270, 22], [760, 274, 18]].map(([x, y, w], i) => <rect key={i} x={x} y={y} width={w} height={300 - y} fill="#9a7a4a" />)}
+        {/* LA ZIGGOURAT : trois terrasses de briques, escalier monumental, temple au sommet */}
+        <g transform="translate(250,300)">
+          <ellipse cx="0" cy="4" rx="150" ry="8" fill="#5a4024" opacity="0.4" />
+          <path d="M-130 0 L130 0 L112 -40 L-112 -40 Z" fill="url(#uk-brick2)" />
+          <path d="M-130 0 L130 0 L112 -40 L-112 -40 Z" fill="url(#uk-bricks)" />
+          <path d="M70 0 L130 0 L112 -40 L60 -40 Z" fill="#5a3818" opacity="0.28" />
+          <path d="M-92 -40 L92 -40 L78 -78 L-78 -78 Z" fill="url(#uk-brick)" />
+          <path d="M-92 -40 L92 -40 L78 -78 L-78 -78 Z" fill="url(#uk-bricks)" />
+          <path d="M48 -40 L92 -40 L78 -78 L40 -78 Z" fill="#5a3818" opacity="0.28" />
+          <path d="M-56 -78 L56 -78 L46 -110 L-46 -110 Z" fill="url(#uk-brick2)" />
+          <path d="M-56 -78 L56 -78 L46 -110 L-46 -110 Z" fill="url(#uk-bricks)" />
+          {/* contreforts verticaux (rythme des murs mésopotamiens) */}
+          {[-100, -70, -40, 40, 70, 100].map((x) => <rect key={x} x={x - 3} y="-38" width="6" height="38" fill="#8a5e34" opacity="0.5" />)}
+          {/* le temple blanc au sommet */}
+          <rect x="-26" y="-132" width="52" height="22" fill="#e8dcc0" />
+          <rect x="-26" y="-132" width="52" height="4" fill="#c8b890" />
+          <rect x="-6" y="-124" width="12" height="14" fill="#5a3818" />
+          {/* l'escalier monumental */}
+          <path d="M-12 0 L12 0 L8 -110 L-8 -110 Z" fill="#c8a066" />
+          {Array.from({ length: 22 }).map((_, i) => <path key={i} d={`M${-12 + i * 0.18} ${-i * 5} h${24 - i * 0.36}`} stroke="#8a6238" strokeWidth="0.8" />)}
+          {/* jardins plantés sur les terrasses */}
+          {[-100, -60, 60, 100].map((x) => <circle key={x} cx={x} cy="-42" r="4" fill="#5a7a3a" />)}
+          {[-60, -30, 30, 60].map((x) => <circle key={x} cx={x} cy="-80" r="3.5" fill="#5a7a3a" />)}
+        </g>
+        <Palm x={560} y={300} h={70} lean={6} seed={11} />
+        <Palm x={640} y={302} h={52} lean={-6} seed={12} dates={false} />
+        <Palm x={900} y={296} h={64} lean={-4} seed={13} />
+        <Palm x={940} y={300} h={48} lean={6} seed={14} dates={false} />
         {/* MILAN NOIR qui plane au-dessus de la cité — cercles lents, très
             oriental. Rotation autour d'un point du ciel, silhouette simple. */}
         <g opacity="0.7">
@@ -79,7 +108,8 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
         <g transform="translate(560,362)">
           <ellipse cx="0" cy="70" rx="64" ry="12" fill="#3c2c18" opacity="0.4" />
           <path d="M-50 72 L-50 -6 Q0 -38 50 -6 L50 72 Z" fill="url(#uk-brick)" />
-          <path d="M-50 72 L-50 -6 Q0 -38 50 -6 L50 72 Z" fill="#5c3f22" opacity="0.35" filter="url(#uk-grain)" />
+          <path d="M-50 72 L-50 -6 Q0 -38 50 -6 L50 72 Z" fill="url(#uk-bricks)" />
+          <path d="M20 72 L20 -16 Q40 -12 50 -6 L50 72 Z" fill="#5a3818" opacity="0.25" />
           <path d="M-50 6 h100 M-50 30 h100 M-50 54 h100" stroke="#6e4c28" strokeWidth="1.5" opacity="0.4" />
           <path d="M-14 72 L-14 42 Q0 34 14 42 L14 72 Z" fill="#2c1c10" />
           <text x="0" y="-14" textAnchor="middle" fontSize="12" fill="#5c3f22" opacity="0.6" fontFamily="ui-monospace,monospace">𒀭</text>
@@ -114,7 +144,9 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
         {/* maison de briques (gauche, derrière le roi) */}
         <g transform="translate(120,364)">
           <rect x="-56" y="-10" width="112" height="80" rx="4" fill="url(#uk-brick2)" />
-          <rect x="-56" y="-10" width="112" height="80" rx="4" fill="#5c3f22" opacity="0.3" filter="url(#uk-grain)" />
+          <rect x="-56" y="-10" width="112" height="80" rx="4" fill="url(#uk-bricks)" />
+          <rect x="30" y="-10" width="26" height="80" fill="#5a3818" opacity="0.25" />
+          <rect x="-60" y="-16" width="120" height="8" fill="#a87a48" />
           <path d="M-56 12 h112 M-56 36 h112" stroke="#6e4c28" strokeWidth="1.5" opacity="0.35" />
           <path d="M-14 70 L-14 30 Q0 24 14 30 L14 70 Z" fill="#241608" />
         </g>
@@ -123,6 +155,7 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
       {/* ═══ premier plan : la cour, le canal, les gens ═══ */}
       <PLayer depth={3}>
         <rect y="435" width="1000" height="125" fill="url(#uk-ground)" />
+        <Speckle seed={241} x0={0} x1={1000} y0={438} y1={560} n={260} colors={["#7a5a30", "#e0c890", "#5a4024", "#b08a58"]} opacity={0.45} />
         <ellipse cx="500" cy="500" rx="440" ry="50" fill="#8a6c40" opacity="0.35" />
         <rect y="437" width="1000" height="123" fill="#3c2c18" opacity="0.3" filter="url(#uk-mottle)" />
         <rect y="437" width="1000" height="123" fill="#2c1c10" opacity="0.4" filter="url(#uk-grain)" />
