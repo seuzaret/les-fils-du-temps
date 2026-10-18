@@ -2,6 +2,7 @@ import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { GrassTuft } from "./decor.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Canopy, Grass, Haze, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : le campement
@@ -67,21 +68,12 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
 
       {/* ═══ couche lointaine : forêt embrumée ═══ */}
       <PLayer depth={1}>
-      <rect y="320" width="1000" height="120" fill="#3e4a6a" opacity="0.85" />
-      {/* troncs lointains, bleutés par la brume — frondaisons irrégulières
-          qui se touchent (une lisière, pas des arbres isolés) */}
-      {[60, 150, 235, 330, 425, 505, 590, 680, 775, 860, 945].map((x, i) => (
-        <g key={i} opacity={0.72 - (i % 3) * 0.12}>
-          <rect x={x - 5 - (i % 3)} y={198 + (i % 4) * 12} width={9 + (i % 3) * 2} height={160} fill="#333f5c" rx="4" />
-          <path d={`M${x - 6 - (i % 2) * 4} ${226 + (i % 4) * 12} l${-14 - (i % 3) * 5} ${-16 - (i % 2) * 8}`} stroke="#333f5c" strokeWidth="4" />
-          <path d={`M${x + 5} ${210 + (i % 4) * 12} l${12 + (i % 2) * 6} ${-14 - (i % 3) * 5}`} stroke="#333f5c" strokeWidth="3.5" />
-          <ellipse cx={x - 18 - (i % 3) * 6} cy={186 + (i % 4) * 12} rx={30 + (i % 2) * 10} ry={24 + (i % 3) * 5} fill="#38466a" />
-          <ellipse cx={x + 16 + (i % 2) * 8} cy={176 + (i % 3) * 16} rx={34 + (i % 3) * 9} ry={27 + (i % 2) * 6} fill="#3a4864" />
-          <ellipse cx={x - 2} cy={158 + (i % 4) * 14} rx={26 + (i % 3) * 7} ry={21 + (i % 2) * 5} fill="#404e70" />
-        </g>
-      ))}
-      {/* cime continue au-dessus de la lisière */}
-      <path d="M0 176 Q90 138 190 164 Q290 190 390 150 Q490 116 590 156 Q690 192 790 148 Q890 112 1000 158 L1000 210 Q500 240 0 216 Z" fill="#36436a" opacity="0.5" />
+      <rect y="300" width="1000" height="140" fill="#3a4668" />
+      {/* forêt profonde en trois rangs, de plus en plus bleutée au loin */}
+      <TreeLine seed={51} y={330} n={40} h={[90, 150]} kinds={["conifer", "leafy"]} colors={["#3a4870", "#3e4c74"]} light={1} jitter={10} />
+      <Haze id="c1-h1" y0={190} y1={340} color="#a8a4c0" opacity={0.45} />
+      <TreeLine seed={53} y={350} n={26} h={[110, 170]} kinds={["leafy", "conifer", "leafy"]} colors={["#323e60", "#34405e", "#2e3a58"]} light={1} jitter={12} />
+      <Haze id="c1-h2" y0={260} y1={360} color="#c8b8c0" opacity={0.3} />
       {/* nappes de brume entre les troncs */}
       <ellipse cx="300" cy="352" rx="320" ry="22" fill="#e8dcc4" opacity="0.2" filter="url(#c1blur)" />
       <ellipse cx="740" cy="368" rx="300" ry="18" fill="#f4e4c0" opacity="0.24" filter="url(#c1blur)" />
@@ -115,9 +107,7 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
         <path d="M90 130 q2 100 0 200" stroke="#a8865c" strokeWidth="2" fill="none" opacity="0.4" />
         <ellipse cx="70" cy="448" rx="16" ry="6" fill="#3c4a28" opacity="0.8" />
         {/* frondaison en bouquets */}
-        <ellipse cx="82" cy="104" rx="108" ry="74" fill="url(#c1canopy)" />
-        <ellipse cx="146" cy="80" rx="66" ry="46" fill="url(#c1canopy)" />
-        <ellipse cx="30" cy="86" rx="52" ry="38" fill="#243626" />
+        <Canopy cx={86} cy={92} rx={130} ry={84} color="#2c4030" light={1} seed={3} n={20} />
         {[[40, 66], [96, 52], [148, 60], [66, 96], [120, 100]].map(([x, y], i) => (
           <path key={i} d={`M${x} ${y} q6 -8 14 -8 q-3 8 -14 8 Z`} fill="#54724a" opacity="0.85" />
         ))}
@@ -131,9 +121,7 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
         <path d="M874 180 q14 7 24 0 M872 290 q16 9 28 0 M878 380 q12 6 22 0" stroke="#33231a" strokeWidth="3" fill="none" />
         <ellipse cx="898" cy="320" rx="5" ry="10" fill="#2c1c10" />
         <path d="M902 100 q3 140 0 260" stroke="#a8865c" strokeWidth="2" fill="none" opacity="0.4" />
-        <ellipse cx="886" cy="76" rx="128" ry="84" fill="url(#c1canopy)" />
-        <ellipse cx="806" cy="114" rx="72" ry="50" fill="url(#c1canopy)" />
-        <ellipse cx="954" cy="106" rx="56" ry="42" fill="#243626" />
+        <Canopy cx={884} cy={84} rx={150} ry={90} color="#2c4030" light={1} seed={7} n={22} />
         {[[830, 84], [890, 48], [940, 76], [864, 110]].map(([x, y], i) => (
           <path key={i} d={`M${x} ${y} q6 -8 14 -8 q-3 8 -14 8 Z`} fill="#54724a" opacity="0.85" />
         ))}
@@ -158,8 +146,16 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
       {/* rayons du matin qui percent entre les arbres */}
       <path d="M830 60 L960 40 L760 460 L680 440 Z" fill="#ffe8b8" opacity="0.08" filter="url(#c1blur)" />
       <path d="M700 90 L780 76 L620 430 L570 416 Z" fill="#fff2cc" opacity="0.06" filter="url(#c1blur)" />
+      {/* bord de la clairière : herbes hautes et fougères qui fondent sol et forêt */}
+      <path d="M-20 404 Q120 396 260 406 Q420 398 560 404 Q720 396 860 406 Q940 400 1020 404 L1020 420 L-20 420 Z" fill="#3a4430" opacity="0.8" />
+      {Array.from({ length: 34 }).map((_, i) => <Grass key={i} x={i * 30 + (i % 3) * 7} y={410 + (i % 4) * 3} seed={i + 2} color={i % 2 ? "#4a5a34" : "#3c4c2c"} s={0.9 + (i % 3) * 0.2} n={7} />)}
       {/* clairière tassée autour du feu */}
-      <ellipse cx="500" cy="470" rx="360" ry="60" fill="#8a6c46" opacity="0.45" />
+      <ellipse cx="500" cy="472" rx="380" ry="66" fill="#8a6c46" opacity="0.4" />
+      <Speckle seed={44} x0={140} x1={860} y0={420} y1={540} n={220} colors={["#3a2414", "#a08060", "#5a3e26"]} opacity={0.45} />
+      {/* brindilles, aiguilles et feuilles mortes */}
+      {[[220, 506, 20], [330, 530, -15], [640, 520, 40], [760, 500, -30], [430, 540, 10]].map(([x, y, r], i) => (
+        <path key={i} d="M-10 0 L10 0 M2 0 l5 -4" stroke="#4a3220" strokeWidth="1.6" strokeLinecap="round" transform={`translate(${x},${y}) rotate(${r})`} />
+      ))}
       <ellipse cx="500" cy="470" rx="230" ry="110" fill="url(#c1fire)" style={{ animation: "glow 2.4s ease-in-out infinite" }} />
       {/* reflets du feu sur les troncs proches */}
       <path d="M60 210 l0 220" stroke="#ff9540" strokeWidth="8" opacity="0.12" />

@@ -179,7 +179,7 @@ export function TreeLine({ seed = 1, x0 = -20, x1 = 1020, y, jitter = 6, n = 30,
         ? <Conifer key={i} x={t.x} y={t.y} h={t.hh} color={t.c} light={light} snow={snow} />
         : t.k === "birch"
           ? <Birch key={i} x={t.x} y={t.y} h={t.hh} color={t.c} light={light} seed={t.sd} />
-          : <Leafy key={i} x={t.x} y={t.y} s={t.hh / 100} color={t.c} light={light} seed={t.sd} />)}
+          : <Leafy key={i} x={t.x} y={t.y} s={t.hh / 100} color={t.c} light={light} seed={t.sd} trunk={shade(t.c, -0.18)} />)}
     </g>
   );
 }
@@ -245,6 +245,27 @@ export function Reflect({ id, axisY, children, opacity = 0.45, blur = 2.5, tint 
         {children}
       </g>
       <rect x="-40" y={axisY} width="1080" height="200" fill={tint} opacity="0.25" />
+    </g>
+  );
+}
+
+/* grande frondaison (arbre qui cadre la scène) : masse de bouquets ombrés */
+export function Canopy({ cx, cy, rx, ry, color = "#2c4030", light = -1, seed = 1, n = 16, hi }) {
+  const r = rng(seed);
+  const H = hi || shade(color, 0.14);
+  const blobs = Array.from({ length: n }, () => {
+    const t = r() * Math.PI * 2, d = Math.sqrt(r());
+    return { x: cx + Math.cos(t) * rx * d * 0.8, y: cy + Math.sin(t) * ry * d * 0.75, rr: (rx + ry) * (0.16 + r() * 0.12) };
+  }).sort((a, b) => a.y - b.y);
+  return (
+    <g>
+      <ellipse cx={cx} cy={cy + ry * 0.1} rx={rx * 0.92} ry={ry * 0.8} fill={shade(color, -0.12)} />
+      {blobs.map((b, i) => <circle key={i} cx={b.x.toFixed(1)} cy={b.y.toFixed(1)} r={b.rr.toFixed(1)} fill={color} />)}
+      {blobs.map((b, i) => <circle key={`h${i}`} cx={(b.x + light * b.rr * 0.26).toFixed(1)} cy={(b.y - b.rr * 0.28).toFixed(1)} r={(b.rr * 0.66).toFixed(1)} fill={H} opacity="0.32" />)}
+      {blobs.filter((_, i) => i % 3 === 0).map((b, i) => <circle key={`s${i}`} cx={(b.x - light * b.rr * 0.35).toFixed(1)} cy={(b.y + b.rr * 0.4).toFixed(1)} r={(b.rr * 0.5).toFixed(1)} fill={shade(color, -0.16)} opacity="0.55" />)}
+      {blobs.filter((_, i) => i % 4 === 1).map((b, i) => (
+        <path key={`f${i}`} d={`M${(b.x + light * b.rr * 0.4).toFixed(1)} ${(b.y - b.rr * 0.5).toFixed(1)} q5 -7 12 -7 q-3 7 -12 7 Z`} fill={shade(H, 0.12)} opacity="0.8" />
+      ))}
     </g>
   );
 }
