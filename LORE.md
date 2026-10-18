@@ -61,7 +61,7 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 
 **Avant le jeu (hors écran)**
 1. Bien après 2087, elle naît du joueur devenu adulte, à condition que le Puits laisse des familles se former. [ACQUIS]
-2. Le parent d'Al3x1a, devenu adulte, est perdu dans le temps. Où exactement : [À TRANCHER] (piste : piégé dans le « monde /Martine/ »). Al3x1a le sait et **ne peut pas le dire au joueur**. Le SMS dit seulement : « Ma famille est en danger. Le remède est caché dans le passé. » (`IntroStory.jsx:530-533`) [CODE, modifié le 2026-10-18 : l'ancien « Mon père est parti… » excluait les joueuses et promettait un parent « perdu » que Jeu 3 ne pouvait pas résoudre, alors que « en danger » se résout en arrêtant Martine.]
+2. Le parent d'Al3x1a, c'est **le joueur lui-même, devenu adulte** (pas un autre personnage). [PROPOSÉ] Hypothèse A : il est perdu dans le temps, où exactement : [À TRANCHER] (piste : piégé dans le « monde /Martine/ »). Hypothèse B : personne n'est perdu, « en danger » veut seulement dire qu'Al3x1a s'efface (plus simple). Al3x1a le sait et **ne peut pas le dire au joueur**. Le SMS dit seulement : « Ma famille est en danger. Le remède est caché dans le passé. » (`IntroStory.jsx:530-533`) [CODE, modifié le 2026-10-18 : l'ancien « Mon père est parti… » excluait les joueuses et promettait un parent « perdu » que Jeu 3 ne pouvait pas résoudre, alors que « en danger » se résout en arrêtant Martine.]
 3. Al3x1a devient chronaute et part à sa recherche. Elle passe par la station, répare MARTINE « avant de t'appeler » (`IntroStory.jsx:1082`), puis part (~2035) en laissant sa MARTINE-jumelle et son portrait. [CODE] Comment elle arrive à la station et dans quel ordre : [À TRANCHER]
 
 **Jeu 1 (le joueur chez lui, puis les époques)**
@@ -105,7 +105,7 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 1. Dormants : qui exactement, salle visitable ou animation ?
 2. Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?
 3. Les Fils du Temps : résistance de 2087 ou peuple du futur ?
-4. Que devient le joueur adulte « parti sans nouvelles » du SMS ? (piste : piégé dans le « monde /Martine/ » ?)
+4. Faut-il un joueur adulte perdu dans le temps (hypothèse A, piste : piégé dans le « monde /Martine/ ») ou non (hypothèse B) ?
 5. Origine de la maladie de l'oubli à l'époque d'Al3x1a : la même qu'en 2045, ou la conséquence du Puits (l'eau) ? [PROPOSÉ] Le remède rapporté en 2045 permet à Martine de l'inverser, ce qui bouclerait la boucle.
 6. Quand Martine découvre-t-elle le lien (retrouvailles ou plus tôt) ?
 7. Format et activité EMI du Jeu 2B, et pourquoi le joueur est encore là en 2047.
