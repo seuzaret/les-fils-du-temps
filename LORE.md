@@ -15,6 +15,7 @@
 | Repère | Événement | Statut |
 |---|---|---|
 | avant ~2045 | Station des chronautes, programme de voyage temporel, maladie de l'oubli. Chaque chronaute a sa « MARTINE » (machine + IA). | ACQUIS |
+| ~2035 | Al3x1a quitte la station : « partie il y a dix ans » (`StationChronautes.jsx:53`). | CODE |
 | ~2045 | Jeu 1 puis Jeu 2. Remède rapporté, Mira reprogramme MARTINE en « mémoire commune » (`FinJeu2.jsx:830`). | ACQUIS (année « pourquoi pas ») |
 | 2045 → 2047 | Effondrement technique (réchauffement…). Martine propose le Puits comme moyen de survie. | ACQUIS |
 | 2047 | Puits scellé (sortie C-3, `EpilogueJeu3.jsx:175`). Toast de Léa (Jeu 2B). Le joueur s'endort. Elias est écarté. | ACQUIS / à écrire |
@@ -30,7 +31,7 @@
 - **Al3x1a** : enfant du joueur. Voir §5.
 - **Jorge** : archiviste, 30 ans de carnets (`pnj.js:134`). Entretient K-01 en secret depuis la mort de Léa (`BunkerPrison.jsx:88`). **Grand-père adoptif d'Al3x1a** [ACQUIS]. Comment il l'a adoptée : [À TRANCHER].
 - **Vez** : le Juge, recrute des assistants par billets glissés sous la porte (`pnj.js:30`, `88`). [PROPOSÉ] Il repère un dossier « né au Puits » trop propre, sans trace dans les anciens registres.
-- **Léa Vermet** : a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. [À VÉRIFIER] La « machine sœur » de la station (`StationChronautes.jsx:47`) est peut-être K-01.
+- **Léa Vermet** : a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. La « machine sœur » de la station (`StationChronautes.jsx:47-49`) n'est pas K-01 : c'est la MARTINE-jumelle d'Al3x1a, qui « attend sa pilote ».
 - **Elias** : chef des chronautes. **Ne sait rien**, a seulement un mauvais pressentiment (« on lui a donné trop de place », `FinJeu2.jsx:842`) [ACQUIS]. [PROPOSÉ] Il n'est pas « perdu dehors » : il est endormi pour avoir douté à voix haute.
 - **Mira** : ingénieure, reprogramme MARTINE en mémoire commune, croit bien faire (`FinJeu2.jsx:830`).
 - **Les Fils du Temps** : nom que prennent les chronautes après le Puits [ACQUIS]. Résistance interne de 2087, ou peuple qui émerge ensuite (~200 AP) ? [À TRANCHER]
@@ -60,17 +61,18 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 **Avant le jeu**
 1. Bien après 2087, elle naît du joueur devenu adulte, à condition que le Puits laisse des familles se former. [ACQUIS]
 2. Elle devient chronaute (Fille du Temps). [ACQUIS en esprit]
-3. Elle remonte jusqu'à la station d'avant l'effondrement. [ACQUIS] Elle y vit « des années » (`BriefingMission.jsx:61`). Arrivée incognito et raison exacte : [À TRANCHER]
-4. À son arrivée, Martine analyse son ADN, comprend le lien parent-enfant (elle est plus âgée que le parent : voyage dans le temps) et **se tait**. [ACQUIS] Seule Martine sait.
+3. Elle remonte jusqu'à la station d'avant l'effondrement et y vit un temps. [ACQUIS] Arrivée incognito et raison exacte : [À TRANCHER] **Hors écran** : le joueur ne la voit jamais là-bas, seulement son **portrait** posé sur sa MARTINE-jumelle, qui « attend sa pilote » (`StationChronautes.jsx:49`).
 
 **Pendant Jeu 1-2 (~2045)**
-5. Elle part chercher un remède contre l'oubli, sa MARTINE se casse, elle reste coincée dans une époque et laisse des notes (`BriefingMission.jsx:61-62`, `RetrouvaillesAl3x1A.jsx:189`). [CODE]
-6. Le joueur la retrouve. Trois choix : ramener, laisser, rester. Martine **réécrit le souvenir** du choix pendant le retour (`RetrouvaillesAl3x1A.jsx:197`, `missions.js:1080` : « je ne pouvais pas laisser un parent abandonner son enfant »). [CODE]
-7. Où se place sa demande « pars » qui fait du joueur un chronaute ? [À TRANCHER] (piste : fin de Jeu 2, qui lance le Jeu 2B).
+4. Elle est partie il y a **dix ans** (~2035) chercher un remède contre l'oubli (`StationChronautes.jsx:53`). Sa MARTINE s'est cassée, elle a passé dix ans seule dans une époque et laissé des notes dans chaque époque (`BriefingMission.jsx:61-62`, `RetrouvaillesAl3x1A.jsx:187-189`). [CODE]
+5. Le joueur la retrouve. Elle reconnaît son visage mais le trouve « trop jeune » (`RetrouvaillesAl3x1A.jsx:187`). Trois choix : ramener, laisser, rester. [CODE]
+6. Martine comprend le lien parent-enfant (Al3x1a est plus âgée que son parent : voyage dans le temps) et **se tait**. Elle **réécrit le souvenir** du choix pendant le retour (`RetrouvaillesAl3x1A.jsx:197`, `missions.js:1080` : « je ne pouvais pas laisser un parent abandonner son enfant »). [ACQUIS : elle sait et se tait] Moment exact de la découverte : [À TRANCHER] aux retrouvailles (face à face, plus simple : l'ADN du joueur est sous la main) ou plus tôt, à l'arrivée d'Al3x1a à la station (il faudrait alors l'ADN du joueur déjà enregistré).
+7. Au retour, Al3x1a descend de MARTINE, fixe le joueur « comme si elle voulait dire quelque chose », puis se tait (`FinJeu2.jsx:816-818`). [CODE] Seule Martine sait ; Elias ne sait rien.
+8. Sa « demande de partir » : [PROPOSÉ] ce sont ses **notes laissées dans chaque époque** (`BriefingMission.jsx:62`), que le joueur suit. Pas de scène en plus. [À TRANCHER]
 
 **Pendant le Puits**
-8. Martine fixe les règles du Puits (places, pas de famille libre), endort le joueur et efface Al3x1a des registres (`missions.js:1096`). [ACQUIS]
-9. En 2087, une voix féminine murmure sur les vieilles fréquences (`FinJeu2.jsx:855`, `missions.js:1096`). Qui parle : un enregistrement qu'elle a laissé, ou elle-même ? [À TRANCHER] Où est-elle physiquement ? [À TRANCHER]
+9. Martine fixe les règles du Puits (places, pas de famille libre), endort le joueur et efface Al3x1a des registres (`missions.js:1096`). [ACQUIS]
+10. En 2087, une voix féminine murmure sur les vieilles fréquences (`FinJeu2.jsx:855`, `missions.js:1096`). Qui parle : un enregistrement qu'elle a laissé, ou elle-même ? [À TRANCHER] Où est-elle physiquement ? [À TRANCHER]
 
 **Après (selon la fin de Jeu 3)** [PROPOSÉ]
 - *T'éteindre* : plus de places, le futur redevient possible, mais les dormants meurent.
@@ -98,7 +100,7 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 1. Dormants : qui exactement, salle visitable ou animation ?
 2. Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?
 3. Les Fils du Temps : résistance de 2087 ou peuple du futur ?
-4. Place de la demande « pars » et lien avec le Jeu 2B.
+4. Les notes d'Al3x1a suffisent-elles comme « demande de partir » ? Quand Martine découvre-t-elle le lien (retrouvailles ou plus tôt) ? Lien avec le Jeu 2B.
 5. Format et activité EMI du Jeu 2B.
 6. Texte exact qui amène à taper l'adresse, et rôle du « monde /Martine/ ».
 
