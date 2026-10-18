@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Dunes, Haze, Palm, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau adjacent : LE CHANTIER DE LA PYRAMIDE
@@ -36,8 +37,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         <circle cx="200" cy="120" r="34" fill="#fff8d8" />
         <circle cx="200" cy="120" r="22" fill="#fff4b0" />
         {/* traînées de nuages hauts */}
-        <ellipse cx="600" cy="70" rx="130" ry="4" fill="#f8f0d8" opacity="0.55" />
-        <ellipse cx="820" cy="90" rx="100" ry="4" fill="#f8f0d8" opacity="0.5" />
+        <Clouds id="py-cl" seed={51} items={[[600, 66, 220], [840, 92, 160]]} color="#fbf4e4" opacity="0.6" drift={14} />
         {/* vol de vautours au loin */}
         <g opacity="0.5" transform="translate(500,200)">
           <path d="M0 0 q-4 -4 -8 0 M0 0 q4 -4 8 0" stroke="#3a2818" strokeWidth="1.4" fill="none" strokeLinecap="round" />
@@ -46,9 +46,14 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
       </PLayer>
 
       <PLayer depth={4}>
-        {/* dunes lointaines */}
-        <path d="M0 380 L0 320 Q200 290 400 310 Q600 330 800 305 Q900 295 1000 320 L1000 380 Z" fill="#d8a868" opacity="0.7" />
-        <path d="M0 380 L0 340 Q200 320 400 335 Q600 350 800 328 Q900 320 1000 340 L1000 380 Z" fill="#c89858" opacity="0.8" />
+        {/* au loin : deux pyramides plus anciennes, puis les dunes */}
+        <g opacity="0.55">
+          <path d="M80 318 L150 250 L220 318 Z" fill="#d8b888" /><path d="M150 250 L220 318 L180 318 Z" fill="#b8946a" />
+          <path d="M230 320 L280 272 L330 320 Z" fill="#d8b888" /><path d="M280 272 L330 320 L300 320 Z" fill="#b8946a" />
+        </g>
+        <Haze id="py-h0" y0={250} y1={330} color="#f4dcb0" opacity={0.5} />
+        <Dunes id="py-d0" seed={231} y={322} amp={26} n={5} fill="#e0b070" shadow="#c08a50" light={-1} />
+        <Dunes id="py-d1" seed={233} y={350} amp={22} n={4} fill="#d8a460" shadow="#b8824a" light={-1} />
       </PLayer>
 
       <PLayer depth={3}>
@@ -96,7 +101,12 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
 
       <PLayer depth={2}>
         {/* sol : sable clair du premier plan */}
-        <rect y="380" width="1000" height="180" fill="url(#py-sand)" />
+        <path d="M-40 384 Q200 374 460 382 Q720 390 1040 378 L1040 560 L-40 560 Z" fill="url(#py-sand)" />
+        <Speckle seed={235} x0={0} x1={1000} y0={384} y1={560} n={360} colors={["#a07038", "#fff0c8", "#c89858", "#8a6838"]} opacity={0.45} />
+        {/* ombre portée de la pyramide sur le sable */}
+        <path d="M920 384 L1040 384 L1040 420 L980 420 Z" fill="#8a6838" opacity="0.3" />
+        {/* vent : rides de sable fines */}
+        {Array.from({ length: 10 }).map((_, i) => <path key={i} d={`M${(i * 113) % 1000 - 20} ${400 + (i * 37) % 140} q14 -4 28 0 q14 4 28 0`} stroke="#fff0c8" strokeWidth="1.2" fill="none" opacity="0.4" />)}
         {/* ondulations du sable */}
         <path d="M0 440 q100 -8 200 0 q100 8 200 0 q100 -8 200 0 q100 8 200 0 q100 -8 200 0" stroke="#a07038" strokeWidth="0.8" fill="none" opacity="0.5" />
         <path d="M0 480 q100 -6 200 0 q100 6 200 0 q100 -6 200 0 q100 6 200 0 q100 -6 200 0" stroke="#a07038" strokeWidth="0.6" fill="none" opacity="0.4" />
@@ -109,30 +119,10 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         ))}
         {/* haze de chaleur qui vibre au-dessus du sable */}
         <path d="M0 456 q80 -1 160 0 q80 1 160 0 q80 -1 160 0 q80 1 160 0" stroke="#f8e8b8" strokeWidth="0.4" fill="none" opacity="0.5" style={{ animation: "float 3s ease-in-out infinite" }} />
-        {/* PALMIER à gauche */}
-        <g transform="translate(120,400)">
-          {/* tronc */}
-          <path d="M-3 0 Q-2 -60 4 -120" stroke="#6a4020" strokeWidth="7" fill="none" strokeLinecap="round" />
-          <path d="M-2 -20 Q0 -18 2 -20 M-1 -50 Q1 -48 3 -50 M0 -80 Q2 -78 4 -80" stroke="#3a2010" strokeWidth="0.8" fill="none" />
-          {/* palmes */}
-          {[-140, -100, -60, -20, 20, 60].map((a, i) => (
-            <g key={i} transform={`translate(4,-120) rotate(${a})`}>
-              <path d="M0 0 Q20 -6 40 -2 Q20 2 0 0 Z" fill="#4a6820" stroke="#2a3810" strokeWidth="0.5" />
-              <path d="M0 0 L40 -2" stroke="#2a3810" strokeWidth="0.3" />
-            </g>
-          ))}
-          {/* dattes */}
-          <ellipse cx="4" cy="-118" rx="10" ry="4" fill="#8a4020" opacity="0.8" />
-        </g>
-        {/* second palmier plus petit à droite */}
-        <g transform="translate(950,410)">
-          <path d="M-2 0 Q-1 -50 3 -100" stroke="#6a4020" strokeWidth="5" fill="none" strokeLinecap="round" />
-          {[-140, -100, -60, -20, 20, 60].map((a, i) => (
-            <g key={i} transform={`translate(3,-100) rotate(${a})`}>
-              <path d="M0 0 Q16 -5 32 -2 Q16 2 0 0 Z" fill="#4a6820" stroke="#2a3810" strokeWidth="0.4" />
-            </g>
-          ))}
-        </g>
+        {/* palmiers (une petite oasis au bord du chantier) */}
+        <Palm x={120} y={402} h={130} lean={10} seed={7} />
+        <Palm x={160} y={410} h={84} lean={-12} seed={8} dates={false} />
+        <Palm x={950} y={412} h={110} lean={-8} seed={9} />
         {/* petit tas de blocs de calcaire prêts */}
         <g transform="translate(240,480)">
           <ellipse cx="0" cy="24" rx="48" ry="6" fill="#0a0604" opacity="0.55" />
