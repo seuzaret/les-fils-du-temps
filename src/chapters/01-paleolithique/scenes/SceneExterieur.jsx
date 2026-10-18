@@ -3,6 +3,7 @@ import { PLayer } from "../../../engine/Parallax.jsx";
 import { GrassTuft, Birds } from "./decor.jsx";
 import TimeMachine from "../../../engine/TimeMachine.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Ridge, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : devant la grotte (tableau de départ)
@@ -97,18 +98,18 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
 
       {/* ═══ couche lointaine (bouge peu) ═══ */}
       <PLayer depth={1}>
-      {/* crête lointaine, dentelée */}
-      <path d="M0 306 L58 268 L104 226 L128 246 L152 262 L208 238 L252 270 L300 240 L342 208 L378 228 L420 252 L452 234 L500 262 L540 280 L586 246 L622 260 L658 300 L700 268 L742 292 L788 256 L836 276 L876 254 L918 272 L962 252 L1000 288 L1000 420 L0 420 Z" fill="url(#x2mFar)" opacity="0.95" />
+      {/* crête lointaine, enneigée, éclairée par le soleil levant (à droite) */}
+      <Ridge id="x2-r1" seed={61} y={300} amp={110} rough={0.6} fill="#5c6aa6" lit="#8a8cc0" light={1} snow="#e8dce8" snowLine={222} />
       {/* brume matinale au pied de la crête */}
-      <rect y="290" width="1000" height="30" fill="#ffe6b0" opacity="0.2" filter="url(#x2blur)" />
+      <rect y="280" width="1000" height="40" fill="#ffe6b0" opacity="0.2" filter="url(#x2blur)" />
       {/* crête intermédiaire */}
-      <path d="M0 342 L66 300 L118 266 L148 288 L196 272 L246 310 L296 342 L348 300 L398 276 L440 296 L486 320 L540 288 L590 306 L648 348 L700 316 L756 288 L804 314 L860 296 L912 322 L1000 336 L1000 430 L0 430 Z" fill="url(#x2mMid)" />
+      <Ridge id="x2-r2" seed={67} y={340} amp={76} rough={0.58} fill="#5e5486" lit="#8a7aa8" light={1} />
       <rect y="332" width="1000" height="24" fill="#ffe6b0" opacity="0.16" filter="url(#x2blur)" />
       {/* collines proches, adoucies, avec forêt en silhouette */}
       <path d="M0 384 Q90 344 180 366 Q270 388 360 360 Q450 334 540 366 Q630 396 720 372 Q810 348 900 376 Q950 390 1000 372 L1000 440 L0 440 Z" fill="url(#x2mNear)" />
-      {[150, 190, 228, 262, 566, 600, 636, 850, 884].map((x, i) => (
-        <path key={i} d={`M${x} ${i < 4 ? 372 - (i % 2) * 6 : i < 7 ? 366 + (i % 2) * 4 : 374} l7 -${13 + (i % 3) * 3} l7 ${13 + (i % 3) * 3} Z`} fill="#2a1830" opacity="0.75" />
-      ))}
+      <TreeLine seed={29} x0={120} x1={300} y={384} n={9} h={[12, 24]} kinds={["conifer"]} colors={["#2a1830", "#33203a"]} light={1} jitter={5} />
+      <TreeLine seed={31} x0={540} x1={680} y={386} n={7} h={[12, 22]} kinds={["conifer"]} colors={["#2a1830", "#33203a"]} light={1} jitter={5} />
+      <TreeLine seed={37} x0={830} x1={960} y={388} n={6} h={[12, 22]} kinds={["conifer"]} colors={["#2a1830", "#33203a"]} light={1} jitter={5} />
       {/* deux MAMMOUTHS en silhouette sur la crête (défenses claires
           pour qu'on les reconnaisse au premier coup d'œil) */}
       <g>
@@ -178,10 +179,10 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
       ))}
 
       {/* LA FALAISE — silhouette irrégulière, strates, lumière rasante */}
-      <path d="M0 430 L0 96 Q28 76 58 84 Q78 62 104 92 Q134 74 152 96 Q178 84 208 118 Q238 108 258 138 Q290 132 308 176 Q330 214 318 258 Q338 292 312 330 Q336 374 300 398 Q318 416 292 430 Z" fill="url(#x2rock)" />
+      <path d="M-40 430 L-40 84 L40 80 L62 70 L104 74 L132 64 L170 72 L206 86 L230 84 L254 108 L276 112 L292 140 L312 150 L306 190 L322 206 L316 244 L332 264 L322 300 L336 320 L318 352 L326 380 L304 404 L310 430 Z" fill="url(#x2rock)" />
       {/* textures de la roche : taches larges + grain fin renforcé */}
-      <path d="M0 430 L0 96 Q28 76 58 84 Q78 62 104 92 Q134 74 152 96 Q178 84 208 118 Q238 108 258 138 Q290 132 308 176 Q330 214 318 258 Q338 292 312 330 Q336 374 300 398 Q318 416 292 430 Z" fill="#1c1006" opacity="0.3" filter="url(#x2mottle)" />
-      <path d="M0 430 L0 96 Q28 76 58 84 Q78 62 104 92 Q134 74 152 96 Q178 84 208 118 Q238 108 258 138 Q290 132 308 176 Q330 214 318 258 Q338 292 312 330 Q336 374 300 398 Q318 416 292 430 Z" fill="#221408" opacity="0.6" filter="url(#x2grain)" />
+      <path d="M-40 430 L-40 84 L40 80 L62 70 L104 74 L132 64 L170 72 L206 86 L230 84 L254 108 L276 112 L292 140 L312 150 L306 190 L322 206 L316 244 L332 264 L322 300 L336 320 L318 352 L326 380 L304 404 L310 430 Z" fill="#1c1006" opacity="0.3" filter="url(#x2mottle)" />
+      <path d="M-40 430 L-40 84 L40 80 L62 70 L104 74 L132 64 L170 72 L206 86 L230 84 L254 108 L276 112 L292 140 L312 150 L306 190 L322 206 L316 244 L332 264 L322 300 L336 320 L318 352 L326 380 L304 404 L310 430 Z" fill="#221408" opacity="0.6" filter="url(#x2grain)" />
       {/* piquetage de la roche (petits creux d'érosion) */}
       {[[64, 140], [118, 188], [86, 246], [156, 210], [190, 168], [132, 302], [98, 344], [204, 268], [246, 196], [174, 386], [228, 342], [268, 240]].map(([x, y], i) => (
         <ellipse key={i} cx={x} cy={y} rx={2.2 + (i % 3)} ry={1.4 + (i % 2)} fill="#241608" opacity="0.45" />
@@ -192,9 +193,19 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
       {/* fissures verticales */}
       <path d="M120 106 q12 56 -6 118 q-8 34 4 66 M212 132 q16 62 4 124 q-6 34 6 62 M282 168 q10 44 -2 92" stroke="#2a1a0e" strokeWidth="2.5" fill="none" opacity="0.55" />
       {/* lumière rasante du matin sur les arêtes */}
-      <path d="M258 138 Q290 132 308 176 Q330 214 318 258 Q338 292 312 330" stroke="#ffe0a0" strokeWidth="4" fill="none" opacity="0.45" />
-      <path d="M208 118 Q238 108 258 138 M104 92 Q134 74 152 96" stroke="#ffe0a0" strokeWidth="3" fill="none" opacity="0.32" />
-      <path d="M312 330 Q336 374 300 398" stroke="#f0c890" strokeWidth="3" fill="none" opacity="0.32" />
+      <path d="M254 108 L276 112 L292 140 L312 150 L306 190 L322 206 L316 244 L332 264 L322 300" stroke="#ffe0a0" strokeWidth="4" fill="none" opacity="0.45" strokeLinejoin="round" />
+      <path d="M170 72 L206 86 L230 84 L254 108 M62 70 L104 74 L132 64" stroke="#ffe0a0" strokeWidth="3" fill="none" opacity="0.32" strokeLinejoin="round" />
+      <path d="M322 300 L336 320 L318 352 L326 380 L304 404" stroke="#f0c890" strokeWidth="3" fill="none" opacity="0.32" strokeLinejoin="round" />
+      {/* surplombs : chaque strate dure fait une petite corniche qui projette une ombre */}
+      {[[20, 150, 230], [10, 222, 260], [16, 292, 270], [30, 360, 250]].map(([x, y, w], i) => (
+        <g key={i}>
+          <path d={`M${x} ${y} l${w * 0.22} -3 l${w * 0.18} 5 l${w * 0.25} -2 l${w * 0.2} 6 l${w * 0.15} 2`} stroke="#9a7458" strokeWidth="3" opacity="0.45" fill="none" strokeLinejoin="round" />
+          <path d={`M${x} ${y + 4} l${w * 0.22} -3 l${w * 0.18} 5 l${w * 0.25} -2 l${w * 0.2} 6 l${w * 0.15} 2`} stroke="#1a0e08" strokeWidth="5" opacity="0.38" fill="none" strokeLinejoin="round" />
+        </g>
+      ))}
+      {/* arbres et buissons accrochés au sommet de la falaise */}
+      <TreeLine seed={41} x0={-20} x1={240} y={80} n={10} h={[34, 58]} kinds={["conifer", "leafy", "conifer"]} colors={["#2c2a3a", "#383246", "#30303c"]} light={1} jitter={6} />
+      <path d="M-40 82 L40 80 L62 70 L104 74 L132 64 L170 72 L206 86 L230 84 L254 108" stroke="#4a5a30" strokeWidth="4" fill="none" opacity="0.7" strokeLinejoin="round" />
       {/* mousse et végétation accrochée */}
       {[[236, 150], [274, 210], [252, 300], [296, 258]].map(([x, y], i) => (
         <g key={i} opacity="0.8">

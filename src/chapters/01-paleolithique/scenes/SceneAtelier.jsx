@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Ridge, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : L'ATELIER DE SILEX
@@ -115,17 +116,17 @@ export default function SceneAtelier({ collect, action, reveal, made = [], inv =
 
       {/* ═══ couche lointaine (bouge peu) ═══ */}
       <PLayer depth={1}>
-        {/* crête lointaine dentelée */}
-        <path d="M0 302 L60 262 L108 224 L134 246 L160 262 L214 240 L258 268 L306 240 L346 210 L384 226 L426 252 L460 234 L502 260 L544 278 L590 246 L628 260 L664 296 L706 268 L748 292 L790 258 L840 278 L878 254 L920 272 L964 252 L1000 288 L1000 420 L0 420 Z" fill="url(#at-mFar)" opacity="0.95" />
+        {/* crête lointaine enneigée, éclairée par le soleil levant */}
+        <Ridge id="at-r1" seed={71} y={300} amp={112} rough={0.6} fill="#5c6aa6" lit="#8a8cc0" light={1} snow="#e8dce8" snowLine={222} />
         <rect y="286" width="1000" height="30" fill="#ffe6b0" opacity="0.2" filter="url(#at-blur)" />
         {/* crête intermédiaire */}
-        <path d="M0 340 L66 300 L118 266 L148 288 L196 272 L246 310 L296 340 L348 300 L398 276 L440 296 L486 320 L540 288 L590 306 L648 344 L700 316 L756 288 L804 314 L860 296 L912 322 L1000 334 L1000 430 L0 430 Z" fill="url(#at-mMid)" />
+        <Ridge id="at-r2" seed={73} y={340} amp={76} rough={0.58} fill="#5e5486" lit="#8a7aa8" light={1} />
         <rect y="330" width="1000" height="24" fill="#ffe6b0" opacity="0.16" filter="url(#at-blur)" />
         {/* collines proches — forêt en silhouette avec sapins piqués */}
         <path d="M0 384 Q90 344 180 366 Q270 388 360 360 Q450 334 540 366 Q630 396 720 372 Q810 348 900 376 Q950 390 1000 372 L1000 440 L0 440 Z" fill="url(#at-mNear)" />
-        {[150, 190, 228, 262, 566, 600, 636, 850, 884].map((x, i) => (
-          <path key={i} d={`M${x} ${i < 4 ? 372 - (i % 2) * 6 : i < 7 ? 366 + (i % 2) * 4 : 374} l7 -${13 + (i % 3) * 3} l7 ${13 + (i % 3) * 3} Z`} fill="#2a1830" opacity="0.75" />
-        ))}
+        <TreeLine seed={29} x0={120} x1={300} y={384} n={9} h={[12, 24]} kinds={["conifer"]} colors={["#2a1830", "#33203a"]} light={1} jitter={5} />
+      <TreeLine seed={31} x0={540} x1={680} y={386} n={7} h={[12, 22]} kinds={["conifer"]} colors={["#2a1830", "#33203a"]} light={1} jitter={5} />
+      <TreeLine seed={37} x0={830} x1={960} y={388} n={6} h={[12, 22]} kinds={["conifer"]} colors={["#2a1830", "#33203a"]} light={1} jitter={5} />
         {/* HIRONDELLES qui traversent le ciel du matin */}
         <g opacity="0.85">
           <animateTransform attributeName="transform" type="translate"
@@ -151,9 +152,9 @@ export default function SceneAtelier({ collect, action, reveal, made = [], inv =
         <path d="M120 452 Q300 444 470 452 M560 470 Q740 462 920 472" stroke="#3c2a1a" strokeWidth="2" fill="none" opacity="0.35" />
 
         {/* LA FALAISE (côté gauche) — silhouette irrégulière, strates, lumière rasante */}
-        <path d="M0 430 L0 90 Q30 70 62 82 Q82 60 108 90 Q138 70 158 96 Q186 84 214 118 Q244 108 264 138 Q294 132 312 176 Q332 214 322 258 Q340 292 316 328 Q338 372 306 396 Q322 414 296 430 Z" fill="url(#at-cliff)" />
-        <path d="M0 430 L0 90 Q30 70 62 82 Q82 60 108 90 Q138 70 158 96 Q186 84 214 118 Q244 108 264 138 Q294 132 312 176 Q332 214 322 258 Q340 292 316 328 Q338 372 306 396 Q322 414 296 430 Z" fill="#1c1006" opacity="0.3" filter="url(#at-mottle)" />
-        <path d="M0 430 L0 90 Q30 70 62 82 Q82 60 108 90 Q138 70 158 96 Q186 84 214 118 Q244 108 264 138 Q294 132 312 176 Q332 214 322 258 Q340 292 316 328 Q338 372 306 396 Q322 414 296 430 Z" fill="#221408" opacity="0.6" filter="url(#at-grain)" />
+        <path d="M-40 430 L-40 88 L44 82 L66 72 L108 78 L136 66 L176 76 L212 90 L236 88 L260 112 L282 116 L298 144 L318 154 L312 194 L328 210 L322 248 L338 268 L328 304 L342 324 L324 356 L332 384 L310 408 L316 430 Z" fill="url(#at-cliff)" />
+        <path d="M-40 430 L-40 88 L44 82 L66 72 L108 78 L136 66 L176 76 L212 90 L236 88 L260 112 L282 116 L298 144 L318 154 L312 194 L328 210 L322 248 L338 268 L328 304 L342 324 L324 356 L332 384 L310 408 L316 430 Z" fill="#1c1006" opacity="0.3" filter="url(#at-mottle)" />
+        <path d="M-40 430 L-40 88 L44 82 L66 72 L108 78 L136 66 L176 76 L212 90 L236 88 L260 112 L282 116 L298 144 L318 154 L312 194 L328 210 L322 248 L338 268 L328 304 L342 324 L324 356 L332 384 L310 408 L316 430 Z" fill="#221408" opacity="0.6" filter="url(#at-grain)" />
         {/* piquetage de la roche */}
         {[[66, 140], [122, 190], [86, 246], [156, 210], [190, 168], [132, 302], [98, 344], [206, 268], [246, 196], [174, 386], [228, 342], [270, 240]].map(([x, y], i) => (
           <ellipse key={i} cx={x} cy={y} rx={2.2 + (i % 3)} ry={1.4 + (i % 2)} fill="#241608" opacity="0.45" />
@@ -164,9 +165,11 @@ export default function SceneAtelier({ collect, action, reveal, made = [], inv =
         {/* fissures */}
         <path d="M120 100 q12 56 -6 118 q-8 34 4 66 M212 130 q16 62 4 124 q-6 34 6 62 M282 168 q10 44 -2 92" stroke="#2a1a0e" strokeWidth="2.5" fill="none" opacity="0.55" />
         {/* lumière rasante sur les arêtes */}
-        <path d="M264 138 Q294 132 312 176 Q332 214 322 258 Q340 292 316 328" stroke="#ffe0a0" strokeWidth="4" fill="none" opacity="0.45" />
-        <path d="M214 118 Q244 108 264 138 M108 90 Q138 70 158 96" stroke="#ffe0a0" strokeWidth="3" fill="none" opacity="0.32" />
-        <path d="M316 328 Q338 372 306 396" stroke="#f0c890" strokeWidth="3" fill="none" opacity="0.32" />
+        <path d="M260 112 L282 116 L298 144 L318 154 L312 194 L328 210 L322 248 L338 268 L328 304" stroke="#ffe0a0" strokeWidth="4" fill="none" opacity="0.45" strokeLinejoin="round" />
+        <path d="M176 76 L212 90 L236 88 L260 112 M66 72 L108 78 L136 66" stroke="#ffe0a0" strokeWidth="3" fill="none" opacity="0.32" strokeLinejoin="round" />
+        <path d="M328 304 L342 324 L324 356 L332 384 L310 408" stroke="#f0c890" strokeWidth="3" fill="none" opacity="0.32" strokeLinejoin="round" />
+        <TreeLine seed={43} x0={-20} x1={250} y={84} n={10} h={[34, 58]} kinds={["conifer", "leafy", "conifer"]} colors={["#2c2a3a", "#383246", "#30303c"]} light={1} jitter={6} />
+        <path d="M-40 86 L44 82 L66 72 L108 78 L136 66 L176 76 L212 90 L236 88 L260 112" stroke="#4a5a30" strokeWidth="4" fill="none" opacity="0.7" strokeLinejoin="round" />
         {/* mousses accrochées */}
         {[[236, 150], [274, 210], [252, 300], [296, 258]].map(([x, y], i) => (
           <g key={i} opacity="0.8">
