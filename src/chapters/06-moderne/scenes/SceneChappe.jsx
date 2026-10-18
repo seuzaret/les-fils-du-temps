@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 6 — Tableau : la tour de Chappe
@@ -100,30 +101,26 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
         {[[452, 430, "#5a3a4a", 0.85], [492, 436, "#3a4a6a", 0.95], [536, 432, "#5a4a2a", 0.9], [578, 438, "#4a3a5a", 1], [620, 434, "#6a3a3a", 0.9], [662, 440, "#3a4a3a", 0.82]].map(([x, y, c, s], i) => (
           <g key={i} transform={`translate(${x},${y}) scale(${s})`}>
             <ellipse cx="0" cy="34" rx="14" ry="4" fill="#241608" opacity="0.4" />
-            <path d="M-11 32 Q-14 -2 0 -8 Q14 -2 11 32 Z" fill={c} />
-            {/* tête levée */}
-            <circle cx="1" cy="-14" r="7" fill="#cc9c6c" />
-            <path d="M-6 -17 q7 -5 14 -1" stroke="#3a2c1c" strokeWidth="2.6" fill="none" />
-            {/* chapeau tricorne pour certains */}
-            {i % 2 === 0 && <path d="M-9 -18 q10 -6 20 0 l-3 -3 h-14 Z" fill="#2c2620" />}
-            {/* un bras qui pointe la tour */}
-            {i % 3 === 0 && <path d="M7 0 q14 -8 14 -24" stroke={c} strokeWidth="4" fill="none" strokeLinecap="round" />}
+            {/* le nez en l'air ; tricorne pour certains, un bras qui pointe la tour */}
+            <Figure x={0} y={32} s={0.44} skin="#cc9c6c" hair={["#3a2c1c", "#5a3a20", "#1e140c"][i % 3]} look={["ponytail", "bun", "short", "long", "ponytail", "curls"][i]}
+              hat={i % 2 === 0 ? "tricorne" : null} mood="surpris" garment={i % 2 ? "dress" : "coat"} coat={c} pants="#3a2c1c"
+              arms={i % 3 === 0 ? [{ a1: 10, a2: 6 }, { a1: 160, a2: 170 }] : [{ a1: 10, a2: 6 }, { a1: 10, a2: 6 }]} />
           </g>
         ))}
 
         {/* L'OPÉRATEUR à la longue-vue, tourné vers l'horizon */}
         <g transform="translate(360,470)">
           <ellipse cx="0" cy="30" rx="22" ry="6" fill="#241608" opacity="0.5" />
-          <path d="M-12 6 Q-16 -14 0 -18 Q16 -14 12 6 L10 28 L-10 28 Z" fill="#3a4a6a" />
-          <circle cx="2" cy="-24" r="8" fill="#c8a882" />
-          <path d="M-8 -28 q10 -6 20 -2" stroke="#4a3a2a" strokeWidth="4" fill="#4a3a2a" />
-          {/* bras qui tient la longue-vue vers la droite */}
-          <path d="M10 -12 l24 -8" stroke="#3a4a6a" strokeWidth="6" strokeLinecap="round" />
-          <g transform="translate(30,-22) rotate(-16)">
-            <rect x="0" y="-4" width="30" height="8" rx="3" fill="#3a2c1c" />
-            <rect x="28" y="-5" width="8" height="10" rx="2" fill="#5a4630" />
-            <circle cx="2" cy="0" r="3" fill="#cfeaff" />
-          </g>
+          {/* l'œil à la longue-vue, tourné vers l'horizon */}
+          <Figure x={0} y={28} s={0.49} facing="right" skin="#c8a882" hair="#4a3a2a" look="ponytail" mood="vexe"
+            garment="coat" coat="#3a4a6a" pants="#2c3448" shoes="#1a1a20"
+            arms={[{ a1: 10, a2: 6 }, { a1: 140, a2: 100 }]}>
+            <g transform="translate(9,-107) rotate(-4)">
+              <rect x="0" y="-6" width="62" height="12" rx="5" fill="#3a2c1c" />
+              <rect x="58" y="-8" width="15" height="16" rx="3" fill="#5a4630" />
+              <circle cx="3" cy="0" r="5" fill="#cfeaff" />
+            </g>
+          </Figure>
         </g>
 
         {/* PUPITRE avec le CAHIER DE CODES */}
@@ -147,23 +144,14 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
             il l'observe et cherche comment l'alimenter en énergie constante */}
         <g transform="translate(600,476)">
           <ellipse cx="0" cy="36" rx="24" ry="7" fill="#241608" opacity="0.5" />
-          {/* habit vert long + jabot */}
-          <path d="M-15 8 Q-19 -16 0 -21 Q19 -16 15 8 L13 34 L-13 34 Z" fill="#2c4636" />
-          <path d="M-9 6 q9 5 18 0" stroke="#1e3226" strokeWidth="2.5" fill="none" />
-          <path d="M0 -17 Q-3 -2 0 12 Q3 -2 0 -17 Z" fill="#e6dfc8" />
-          {/* tête RENVERSÉE en arrière (il regarde en l'air vers la tour) */}
-          <circle cx="-3" cy="-27" r="8.5" fill="#cc9c6c" />
-          <path d="M-11 -30 q8 -6 16 -1 q-1 -8 -8 -9 q-8 0 -8 10" fill="#6a5a48" />
-          <path d="M-11 -28 q-3 4 0 9" stroke="#6a5a48" strokeWidth="3" fill="none" />
-          {/* petit nez pointé vers le haut + regard levé */}
-          <path d="M-9 -27 l-3 -2" stroke="#a8764a" strokeWidth="1.4" strokeLinecap="round" />
-          {/* un bras LEVÉ, l'index pointant les bras du télégraphe (en haut à gauche) */}
-          <path d="M-11 -8 Q-28 -18 -34 -40" stroke="#2c4636" strokeWidth="5" fill="none" strokeLinecap="round" />
-          <path d="M-34 -40 l-3 -7 l6 2" fill="#cc9c6c" stroke="#cc9c6c" strokeWidth="1.4" strokeLinejoin="round" />
-          {/* l'autre main vers son établi (les disques) */}
-          <path d="M13 -6 q14 6 16 18" stroke="#2c4636" strokeWidth="5" fill="none" strokeLinecap="round" />
-          {/* éclair d'idée au-dessus de sa tête */}
-          <path d="M6 -44 l-4 8 l4 -1 l-3 8" stroke="#ffe08a" strokeWidth="2" fill="none" style={{ animation: "pulse 1.8s infinite" }} />
+          {/* habit vert long + jabot ; un bras levé pointe les bras du télégraphe */}
+          <Figure x={0} y={34} s={0.58} facing="left" skin="#d6a67a" hair="#6a5a48" look="slick" mood="surpris"
+            garment="coat" coat="#2c4636" pants="#1e3226" shoes="#1a1a14"
+            arms={[{ a1: 150, a2: 160 }, { a1: 30, a2: 20 }]}>
+            <path d="M0 -88 Q-6 -70 0 -48 Q6 -70 0 -88 Z" fill="#e6dfc8" />
+            {/* éclair d'idée au-dessus de sa tête */}
+            <path d="M12 -140 l-7 14 l7 -2 l-5 14" stroke="#ffe08a" strokeWidth="3.4" fill="none" style={{ animation: "pulse 1.8s infinite" }} />
+          </Figure>
         </g>
 
         {/* LE COIN ATELIER DE VOLTA : disques de zinc & cuivre + chiffons salés */}
@@ -186,17 +174,14 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
 
         {/* L'ESPION tapi derrière un buisson, longue-vue braquée */}
         <g transform="translate(880,486)">
-          {/* buisson */}
+          {/* tapi derrière le buisson : on ne voit que sa tête et sa longue-vue */}
+          <Figure x={-2} y={32} s={0.42} facing="right" skin="#8a7258" hair="#1c1c22" look="short" hat="tricorne" hatColor="#1c1c22" mood="vexe"
+            garment="coat" coat="#2c2c34" pants="#1c1c22" arms={[{ a1: 10, a2: 6 }, { a1: 140, a2: 100 }]}>
+            <g transform="translate(9,-107) rotate(-24)"><rect x="0" y="-6" width="46" height="12" rx="4" fill="#1c1c22" /><circle cx="46" cy="0" r="5.6" fill="#cfeaff" /></g>
+          </Figure>
           <ellipse cx="6" cy="24" rx="40" ry="18" fill="#3a4a24" />
           <ellipse cx="-14" cy="16" rx="20" ry="14" fill="#46592c" />
           <ellipse cx="26" cy="18" rx="22" ry="13" fill="#3e4e26" />
-          {/* silhouette + petite longue-vue qui dépasse */}
-          <g transform="translate(-2,2)">
-            <path d="M-8 6 Q-10 -8 0 -11 Q10 -8 8 6 L6 18 L-6 18 Z" fill="#2c2c34" />
-            <circle cx="0" cy="-16" r="6" fill="#8a7258" />
-            <path d="M-8 -18 q8 -4 16 0" stroke="#1c1c22" strokeWidth="3.5" fill="#1c1c22" />
-            <g transform="translate(6,-18) rotate(-24)"><rect x="0" y="-3" width="20" height="6" rx="2" fill="#1c1c22" /><circle cx="20" cy="0" r="2.4" fill="#cfeaff" /></g>
-          </g>
         </g>
       </PLayer>
 

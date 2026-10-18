@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 6 — Tableau : l'imprimerie en effervescence (départ)
@@ -96,14 +97,12 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
           <rect x="40" y="-30" width="16" height="130" fill="url(#im-wood)" />
           <rect x="-64" y="-40" width="128" height="14" fill="#6e4c2e" />
           <rect x="-6" y="-24" width="12" height="54" fill="#8a8c92" />
-          <path d="M6 -8 h64" stroke="#5a3f24" strokeWidth="7" strokeLinecap="round" />
+          <path d="M6 -8 L70 20" stroke="#5a3f24" strokeWidth="7" strokeLinecap="round" />
           <rect x="-34" y="36" width="68" height="14" fill="#7a5636" />
           {/* pressier qui tire la barre */}
-          <g transform="translate(78,50)">
-            <path d="M-10 4 Q-13 -13 0 -16 Q13 -13 10 4 L7 28 L-7 28 Z" fill="#6a5a40" />
-            <circle cx="0" cy="-22" r="7" fill="#c8a882" />
-            <path d="M-6 -8 q-14 -4 -18 -18" stroke="#c8a882" strokeWidth="4" fill="none" strokeLinecap="round" />
-          </g>
+          <Figure x={78} y={78} s={0.5} facing="left" skin="#c8a882" hair="#3a2818" look="short" mood="colere"
+            garment="jacket" coat="#6a5a40" apron="#8a7a5a" pants="#3a3020" shoes="#2a2018"
+            arms={[{ a1: 170, a2: 185 }, { a1: 20, a2: 10 }]} />
         </g>
         {/* étagère de caractères + pots d'encre */}
         <g transform="translate(560,320)">
@@ -138,21 +137,15 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
             à la main, l'autre main sur la hanche — l'air du patron */}
         <g transform="translate(762,462)">
           <ellipse cx="0" cy="44" rx="30" ry="8" fill="#241608" opacity="0.5" />
-          {/* habit long brun + gilet bordeaux */}
-          <path d="M-17 42 Q-22 -12 0 -22 Q22 -12 17 42 Z" fill="#4a3226" />
-          <path d="M-9 -14 L9 -14 L6 30 L-6 30 Z" fill="#6a2530" />
-          {[6, 18].map((y, i) => <circle key={i} cx="0" cy={y} r="2" fill="#c8a84a" />)}
-          {/* cravate blanche */}
-          <path d="M-5 -18 Q0 -8 5 -18 L3 -4 Q0 0 -3 -4 Z" fill="#efe9dc" />
-          {/* tête + catogan poudré + bésicles */}
-          <circle cx="0" cy="-28" r="8.5" fill="#cc9c6c" />
-          <path d="M-9 -30 q9 -7 18 0 q-1 -8 -9 -8 q-8 0 -9 8" fill="#c8bfb0" />
-          <ellipse cx="-9" cy="-24" rx="4" ry="3.4" fill="#c8bfb0" /><ellipse cx="9" cy="-24" rx="4" ry="3.4" fill="#c8bfb0" />
-          <g stroke="#2a2218" strokeWidth="1" fill="none"><circle cx="-3" cy="-27" r="3" /><circle cx="4" cy="-27" r="3" /><path d="M-0.2 -27 h1.4" /></g>
-          {/* un bras tient une épreuve, l'autre sur la hanche */}
-          <path d="M-12 -8 q-12 6 -10 18" stroke="#4a3226" strokeWidth="5" fill="none" strokeLinecap="round" />
-          <path d="M12 -8 q14 2 16 14" stroke="#4a3226" strokeWidth="5" fill="none" strokeLinecap="round" />
-          <g transform="translate(30,8) rotate(10)"><rect x="-10" y="-12" width="20" height="26" rx="1" fill="#efe6ce" /><path d="M-6 -6 h12 M-6 -1 h9 M-6 4 h12" stroke="#7a6a4a" strokeWidth="1" opacity="0.7" /></g>
+          {/* habit long brun, gilet bordeaux, cravate ; une épreuve à la main, l'autre sur la hanche */}
+          <Figure x={0} y={44} s={0.68} skin="#d0a478" hair="#d0ccc4" look="short" glasses wrinkles mood="vexe"
+            garment="coat" coat="#4a3226" pants="#3a2418" shoes="#1a1410"
+            arms={[{ a1: 40, a2: -60 }, { a1: 40, a2: 20 }]}>
+            <path d="M-11 -88 L11 -88 L9 -30 L-9 -30 Z" fill="#6a2530" />
+            {[-62, -46].map((y) => <circle key={y} cx="0" cy={y} r="2.4" fill="#c8a84a" />)}
+            <path d="M-6 -90 Q0 -76 6 -90 L4 -72 Q0 -66 -4 -72 Z" fill="#efe9dc" />
+            <g transform="translate(46,-44) rotate(10)"><rect x="-14" y="-18" width="28" height="36" rx="1.4" fill="#efe6ce" stroke="#7a6a4a" strokeWidth="0.6" /><path d="M-9 -9 h18 M-9 -2 h13 M-9 5 h18" stroke="#7a6a4a" strokeWidth="1.4" opacity="0.7" /></g>
+          </Figure>
         </g>
 
         {/* épave de MARTINE, contre une presse */}

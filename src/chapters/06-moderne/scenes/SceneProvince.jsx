@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 6 — Tableau 1 : en province, le vol de la montgolfière
@@ -86,12 +87,11 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
       <PLayer depth={2}>
         {[[340, 388, "#7a3a4a"], [386, 392, "#3a5a7a"], [430, 386, "#6a5a2a"], [476, 392, "#5a3a6a"], [636, 388, "#7a4a2a"], [684, 392, "#3a5a4a"], [730, 386, "#8a3a3a"]].map(([x, y, c], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
-            <path d="M-13 44 Q-16 2 0 -6 Q16 2 13 44 Z" fill={c} />
-            {/* tête levée vers le ciel */}
-            <circle cx="1" cy="-14" r="8" fill="#cc9c6c" />
-            <path d={`M-7 -18 q8 -6 16 -2`} stroke="#3a2c1c" strokeWidth="3" fill="none" />
-            {/* un bras qui pointe le ballon */}
-            <path d="M8 -2 q14 -8 16 -22" stroke={c} strokeWidth="5" fill="none" strokeLinecap="round" />
+            {/* tête levée vers le ciel, un bras qui pointe le ballon */}
+            <Figure x={0} y={48} s={0.6} skin="#cc9c6c" hair={["#3a2c1c", "#5a3a20", "#1e140c", "#7a5a3a"][i % 4]}
+              look={["ponytail", "bun", "short", "long", "curls", "ponytail", "bob"][i]} hat={i === 2 || i === 5 ? "tricorne" : null}
+              mood="surpris" garment={i % 2 ? "dress" : "coat"} coat={c} pants="#3a2c1c"
+              arms={[{ a1: 10, a2: 6 }, { a1: 160, a2: 168 }]} />
           </g>
         ))}
       </PLayer>
@@ -106,23 +106,18 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
         {/* JULES le journaliste, penché sur son carnet, la plume à la main */}
         <g transform="translate(200,472)">
           <ellipse cx="0" cy="46" rx="26" ry="7" fill="#160f08" opacity="0.4" />
-          {/* habit bleu */}
-          <path d="M-16 46 Q-20 2 0 -8 Q20 2 16 46 Z" fill="#2c4658" />
-          <path d="M-11 8 q11 6 22 0" stroke="#1c3040" strokeWidth="2.5" fill="none" />
-          {/* jabot clair */}
-          <path d="M0 -4 Q-4 14 0 30 Q4 14 0 -4 Z" fill="#e6dfc8" />
-          {/* tête + catogan */}
-          <circle cx="0" cy="-22" r="9" fill="#d2a472" />
-          <path d="M-9 -24 q9 -7 18 0 q-2 -8 -9 -8 q-7 0 -9 8" fill="#5a3f28" />
-          <path d="M8 -22 q8 2 8 12" stroke="#5a3f28" strokeWidth="3" fill="none" />
-          {/* bras qui écrit sur un carnet */}
-          <path d="M10 2 q16 2 20 12" stroke="#2c4658" strokeWidth="6" fill="none" strokeLinecap="round" />
-          <g transform="translate(30,16) rotate(-8)">
-            <rect x="-14" y="-8" width="28" height="18" rx="1.5" fill="#efe9d6" />
-            <path d="M-9 -3 h18 M-9 2 h14" stroke="#8a7a5a" strokeWidth="1" opacity="0.7" />
-            {/* la plume qui court */}
-            <path d="M8 -4 q10 -12 6 -22" stroke="#f4efe2" strokeWidth="2.5" fill="none" />
-          </g>
+          {/* habit bleu, jabot clair, catogan ; il écrit sur son carnet */}
+          <Figure x={0} y={46} s={0.64} skin="#dcae82" hair="#4a3020" look="ponytail" mood="content"
+            garment="coat" coat="#2c4658" pants="#1c3040" shoes="#1a1410"
+            arms={[{ a1: 20, a2: -40 }, { a1: 40, a2: 10 }]}>
+            <path d="M0 -88 Q-6 -70 0 -48 Q6 -70 0 -88 Z" fill="#e6dfc8" />
+            <g transform="translate(40,-42) rotate(-8)">
+              <rect x="-22" y="-12" width="44" height="28" rx="2.4" fill="#efe9d6" stroke="#8a7a5a" strokeWidth="0.6" />
+              <path d="M-14 -4 h28 M-14 4 h22" stroke="#8a7a5a" strokeWidth="1.5" opacity="0.7" />
+              {/* la plume qui court */}
+              <path d="M-4 -6 q16 -18 10 -34" stroke="#f4efe2" strokeWidth="3.6" fill="none" />
+            </g>
+          </Figure>
         </g>
 
         {/* LA TABLE de Jules avec son encrier et sa plume dessus */}
@@ -205,12 +200,9 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
           <path d="M-14 -14 q14 -8 30 0 l-2 8 q-14 -6 -26 0 Z" fill="#3a2414" />
           <rect x="-20" y="-6" width="14" height="14" rx="2" fill="#6e4c2e" /><circle cx="-13" cy="1" r="2.4" fill="#a83828" />
           {/* le postillon debout, tenant la bride */}
-          <g transform="translate(-52,2)">
-            <path d="M-9 4 Q-12 -14 0 -17 Q12 -14 9 4 L7 26 L-7 26 Z" fill="#3a4a8a" />
-            <circle cx="0" cy="-24" r="7.5" fill="#cc9c6c" />
-            <path d="M-9 -28 h18 l-3 -5 h-12 Z" fill="#2c2c3a" />
-            <path d="M8 -8 q14 -2 20 6" stroke="#cc9c6c" strokeWidth="3.5" fill="none" strokeLinecap="round" />
-          </g>
+          <Figure x={-52} y={28} s={0.47} facing="right" skin="#cc9c6c" hair="#3a2818" look="ponytail" hat="tricorne" hatColor="#2c2c3a" mood="content"
+            garment="coat" coat="#3a4a8a" trim="#c8a84a" pants="#e8e0c8" shoes="#1a1410"
+            arms={[{ a1: 10, a2: 6 }, { a1: 70, a2: 60 }]} />
         </g>
 
         {/* épave de MARTINE, échouée dans un coin de la place */}
