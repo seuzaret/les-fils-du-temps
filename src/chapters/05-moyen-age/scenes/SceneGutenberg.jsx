@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau : l'atelier de Gutenberg (Mayence)
@@ -139,11 +140,9 @@ export default function SceneGutenberg({ collect, action, reveal, made = [], mod
           <rect x="-30" y="72" width="60" height="30" fill="#efe6ce" transform="rotate(-2)" />
           <path d="M-22 82 h44 M-22 88 h34 M-22 94 h40" stroke="#5a4a3a" strokeWidth="1" opacity="0.7" />
           {/* imprimeur qui actionne */}
-          <g transform="translate(110,60)">
-            <path d="M-11 4 Q-14 -14 0 -18 Q14 -14 11 4 L8 30 L-8 30 Z" fill="#5a4a30" />
-            <circle cx="0" cy="-24" r="8" fill="#c8a882" />
-            <path d="M-8 -8 q-14 -2 -18 -18" stroke="#c8a882" strokeWidth="4" fill="none" strokeLinecap="round" />
-          </g>
+          <Figure x={110} y={86} s={0.78} skin="#c8a882" hair="#3a2818" look="mid" mood="colere"
+            garment="tunic" coat="#5a4a30" apron="#8a7a5a" pants="#3a3020" shoes="#2a2018"
+            arms={[{ a1: 165, a2: 175 }, { a1: 30, a2: 20 }]} />
         </g>
 
         {/* RÉSULTAT (msg_imprimerie) : une PILE de feuilles toutes IDENTIQUES,
@@ -164,23 +163,19 @@ export default function SceneGutenberg({ collect, action, reveal, made = [], mod
             C'est ce ratage qui va lui donner l'idée des lettres séparées. */}
         <g transform="translate(486,478)">
           <ellipse cx="0" cy="30" rx="24" ry="7" fill="#160f08" opacity="0.6" />
-          {/* la robe longue d'artisan-bourgeois */}
-          <path d="M-15 30 Q-19 -2 0 -19 Q19 -2 15 30 Z" fill="#3e3a52" />
-          <path d="M-11 10 q11 5 22 0" stroke="#2a2740" strokeWidth="2.5" fill="none" />
-          {/* la tête, barbe fournie, toque */}
-          <circle cx="0" cy="-29" r="9.5" fill="#c8a882" />
-          <path d="M-10 -33 q0 -9 10 -9 q10 0 10 9 Z" fill="#2c2438" />
-          <path d="M-11 -34 h22" stroke="#2c2438" strokeWidth="3" />
-          <path d="M-7 -23 q7 11 14 -1" stroke="#8a7a6a" strokeWidth="3.5" fill="none" />
-          {/* les deux mains qui présentent le bloc gravé fendu */}
-          <path d="M-14 -6 q-12 8 -12 16" stroke="#c8a882" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-          <path d="M14 -6 q12 8 12 16" stroke="#c8a882" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-          <g transform="translate(0,12)">
-            <rect x="-20" y="-8" width="40" height="20" rx="1.5" fill="#7a5636" />
-            <path d="M-16 -4 h13 M-16 1 h11 M-16 6 h14 M5 -4 h11 M5 1 h13" stroke="#3a2a18" strokeWidth="1.2" />
-            {/* la fêlure qui a tout gâché */}
-            <path d="M-2 -9 l4 9 l-3 5 l4 8" stroke="#1a1008" strokeWidth="2" fill="none" />
-          </g>
+          {/* robe longue d'artisan-bourgeois, toque ; il présente le bloc gravé fendu */}
+          <Figure x={0} y={30} s={0.74} skin="#cf9f70" hair="#9a948a" look="ring" beard="long" hat="toque" hatColor="#2a3a30" hatColor2="#1a2a22" wrinkles mood="vexe"
+            garment="robe" coat="#3e3a52" trim="#2a2740" pants="#2a2740" shoes="#1a1820"
+            arms={[{ a1: 20, a2: -10 }, { a1: 20, a2: -10 }]}>
+            <g transform="translate(0,-32)">
+              <rect x="-36" y="-14" width="72" height="36" rx="2.6" fill="#7a5636" stroke="#3a2a18" strokeWidth="0.8" />
+              <path d="M-29 -7 h23 M-29 2 h20 M-29 11 h25 M9 -7 h20 M9 2 h23" stroke="#3a2a18" strokeWidth="2.1" />
+              {/* la fêlure qui a tout gâché */}
+              <path d="M-4 -16 l7 16 l-5 9 l7 14" stroke="#1a1008" strokeWidth="3.6" fill="none" />
+            </g>
+            <circle cx="-22.9" cy="-46" r="4.4" fill="#cf9f70" stroke="#8a6040" strokeWidth="0.6" />
+            <circle cx="22.9" cy="-46" r="4.4" fill="#cf9f70" stroke="#8a6040" strokeWidth="0.6" />
+          </Figure>
         </g>
       </PLayer>
 
@@ -191,11 +186,11 @@ export default function SceneGutenberg({ collect, action, reveal, made = [], mod
       {/* le « ? » de Gutenberg : cache en jeu 2 (pas de quete d'imprimerie) */}
       {!made.includes("msg_imprimerie") && mode !== "jeu2" && (
         <>
-          <g transform="translate(478,376)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(466,358)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
-          <Hotspot cx={498} cy={386} r={28} label="parler à Gutenberg" reveal={reveal} onClick={() => action("gutenberg")} />
+          <Hotspot cx={486} cy={446} r={40} label="parler à Gutenberg" reveal={reveal} onClick={() => action("gutenberg")} />
         </>
       )}
 

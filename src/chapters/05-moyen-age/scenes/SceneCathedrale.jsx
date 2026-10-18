@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau adjacent : LE CHANTIER DE LA CATHÉDRALE
@@ -235,24 +236,13 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         {/* LE MAÎTRE VERRIER accroupi devant un panneau de vitrail en construction */}
         <g transform="translate(320,500)">
           <ellipse cx="0" cy="30" rx="26" ry="4" fill="#0a0604" opacity="0.55" />
-          {/* jambes accroupies */}
-          <path d="M-18 26 Q-14 6 -2 10 L18 24 Q24 28 20 30 L-20 30 Q-22 28 -18 26 Z" fill="#3a5828" />
-          {/* tunique bleu-gris */}
-          <path d="M-14 12 Q-16 -14 0 -20 Q16 -14 14 12 Z" fill="#5a6878" stroke="#2a2838" strokeWidth="0.5" />
-          <path d="M-14 12 L14 12 L18 24 L-18 24 Z" fill="#4a5868" opacity="0.85" />
-          {/* épaules */}
-          <ellipse cx="-14" cy="-8" rx="5" ry="4" fill="#c8946a" />
-          <ellipse cx="14" cy="-8" rx="5" ry="4" fill="#c8946a" />
-          {/* bras qui tient un fer à souder */}
-          <path d="M14 -6 L28 4" stroke="#c8946a" strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M28 4 L38 10" stroke="#3a2010" strokeWidth="2" strokeLinecap="round" />
-          <rect x="38" y="8" width="6" height="4" fill="#8a5828" />
-          {/* tête + chaperon noir */}
-          <ellipse cx="0" cy="-30" rx="10" ry="12" fill="#c8946a" stroke="#5a3818" strokeWidth="0.5" />
-          <path d="M-11 -32 q0 -14 6 -14 q8 4 12 -2 q4 4 4 12 z" fill="#1a1408" />
-          <circle cx="-3" cy="-30" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-30" r="1.2" fill="#0a0806" />
-          <path d="M-2 -22 q4 3 8 0" stroke="#3a2010" strokeWidth="0.8" fill="none" />
+          {/* à genoux, fer à souder vers le panneau */}
+          <Figure x={0} y={30} s={0.71} pose="kneel" facing="right" skin="#c8946a" hair="#3a2010" look="short" beard="short" mood="vexe"
+            hat="beret" hatColor="#1a1408" garment="tunic" coat="#5a6878" pants="#3a5828" shoes="#2a2010" apron="#8a7a60"
+            arms={[{ a1: 20, a2: -10 }, { a1: 50, a2: 80 }]}>
+            <path d="M50 -50 L70 -38" stroke="#3a2010" strokeWidth="3" strokeLinecap="round" />
+            <rect x="68" y="-40" width="9" height="5" fill="#8a5828" transform="rotate(30 72 -38)" />
+          </Figure>
         </g>
         {/* petit panneau de vitrail posé au sol devant lui */}
         <g transform="translate(360,510)">

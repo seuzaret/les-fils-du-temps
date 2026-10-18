@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau 2 : le monastère du frère Jorge
@@ -90,15 +91,15 @@ export default function SceneMonastere({ collect, action, reveal, made = [], fla
         {/* LE FRÈRE JORGE au pupitre : coule brune, tonsure, penché */}
         <g transform="translate(560,470)">
           <ellipse cx="0" cy="34" rx="30" ry="7" fill="#160f08" opacity="0.6" />
-          <path d="M-20 6 Q-26 -22 0 -26 Q26 -22 20 6 L16 32 L-16 32 Z" fill="#5a4632" />
-          <path d="M-20 6 Q0 12 20 6 L17 18 Q0 24 -17 18 Z" fill="#463726" />
-          {/* corde à la taille */}
-          <path d="M-16 4 Q0 12 16 4" stroke="#c8b488" strokeWidth="2" fill="none" opacity="0.7" />
-          {/* tête : couronne de cheveux + tonsure rasée */}
-          <circle cx="0" cy="-22" r="8" fill="#c8a882" />
-          <path d="M-8 -24 Q-9 -32 0 -33 Q9 -32 8 -24 Q4 -28 0 -28 Q-4 -28 -8 -24 Z" fill="#6a5238" />
-          {/* bras qui écrit */}
-          <path d="M14 -6 q14 4 18 14" stroke="#5a4632" strokeWidth="6" fill="none" strokeLinecap="round" />
+          {/* assis, penché sur la page : coule brune, tonsure, plume à la main */}
+          <g transform="rotate(6 0 34)">
+            <Figure x={0} y={34} s={0.64} pose="sit" facing="right" skin="#c8986c" hair="#5a3a20" look="ring" mood="content"
+              garment="robe" coat="#5a4632" trim="#c8b488" pants="#463726" shoes="#2a2014"
+              arms={[{ a1: 30, a2: -30 }, { a1: 50, a2: 70 }]}>
+              <path d="M-22 -86 Q0 -74 22 -86 L18 -76 Q0 -66 -18 -76 Z" fill="#463726" />
+              <path d="M51 -45 L62 -64" stroke="#efe6ce" strokeWidth="1.8" strokeLinecap="round" />
+            </Figure>
+          </g>
         </g>
         {/* le pupitre + page enluminée + bougie (la flamme = support) */}
         <g transform="translate(620,486)">

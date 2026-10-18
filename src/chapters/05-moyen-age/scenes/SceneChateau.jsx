@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau 1 : la salle du trône de Charles Bannister
@@ -151,20 +152,16 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
           <rect x="-58" y="70" width="16" height="40" rx="3" fill="url(#cs-throne)" />
           <rect x="42" y="70" width="16" height="40" rx="3" fill="url(#cs-throne)" />
 
-          {/* CHARLES assis : robe pourpre bordée d'hermine, cercle d'or */}
-          <path d="M-26 108 Q-32 44 0 34 Q32 44 26 108 Z" fill="#7a2a44" />
-          <path d="M-26 108 Q0 118 26 108 L22 100 Q0 108 -22 100 Z" fill="#efe9dc" />
-          <path d="M-20 60 Q0 70 20 60" stroke="#e6c25a" strokeWidth="3" fill="none" />
-          {/* mains posées, une tenant un sceptre court */}
-          <circle cx="-20" cy="66" r="5" fill="#c8a882" />
-          <circle cx="20" cy="66" r="5" fill="#c8a882" />
-          <path d="M20 66 v-26" stroke="#a8801f" strokeWidth="3" /><circle cx="20" cy="40" r="4" fill="#e6c25a" />
-          {/* tête + barbe courte + cercle d'or */}
-          <circle cx="0" cy="20" r="13" fill="#d2a878" />
-          <path d="M-11 22 q11 14 22 0 q-2 12 -11 12 q-9 0 -11 -12" fill="#6a4a2e" />
-          <path d="M-12 12 q12 -8 24 0 q-4 -8 -12 -8 q-8 0 -12 8" fill="#5a3f24" />
-          <path d="M-13 12 q13 -6 26 0 l0 -4 q-13 -5 -26 0 Z" fill="#e6c25a" stroke="#a8801f" strokeWidth="1" />
-          <circle cx="0" cy="9" r="2.4" fill="#9a2530" />
+          {/* CHARLES assis : robe pourpre bordée d'hermine, cercle d'or, sceptre court */}
+          <Figure x={0} y={108} s={1} pose="sit" skin="#cf9f70" hair="#5a3a20" look="short" beard="short" hat="circlet"
+            garment="robe" coat="#7a2a44" trim="#e6c25a" pants="#5a1a30" shoes="#3a1420"
+            arms={[{ a1: 15, a2: -30 }, { a1: 15, a2: -30 }]}>
+            <path d="M-20 -64 Q0 -52 20 -64" stroke="#e6c25a" strokeWidth="3" fill="none" />
+            <path d="M-28 -8 Q0 0 28 -8 L28 -2 Q0 6 -28 -2 Z" fill="#efe9dc" />
+            {[-20, -8, 4, 16].map((x) => <path key={x} d={`M${x} -5 v3`} stroke="#1a1414" strokeWidth="1.6" />)}
+            <path d="M15 -30 v-30" stroke="#a8801f" strokeWidth="3" /><circle cx="15" cy="-62" r="4" fill="#e6c25a" />
+            <circle cx="15.4" cy="-29.6" r="4.4" fill="#cf9f70" stroke="#8a6040" strokeWidth="0.6" />
+          </Figure>
         </g>
 
         {/* deux ARMURES décoratives sur socle, contre les murs */}
@@ -189,23 +186,20 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
         {[[398, 452, 1], [602, 452, -1]].map(([x, y, s], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
             <ellipse cx="0" cy="42" rx="20" ry="6" fill="#0a0603" opacity="0.5" />
-            {/* jambes + tunique */}
-            <path d="M-13 42 Q-17 2 0 -6 Q17 2 13 42 Z" fill="#3a5a7a" />
-            <path d="M-13 20 Q0 28 13 20" stroke="#2a4460" strokeWidth="2.5" fill="none" />
-            {/* plastron + tabard */}
-            <path d="M-11 6 L11 6 L8 34 L-8 34 Z" fill="#aeb6c2" opacity="0.85" />
-            {/* tête + heaume conique */}
-            <circle cx="0" cy="-14" r="9" fill="#c8a882" />
-            <path d="M-9 -16 Q0 -34 9 -16 Z" fill="#9aa2b0" />
-            <path d="M-9 -16 h18 M-3 -16 v-12" stroke="#7a8290" strokeWidth="1.6" />
-            {/* bras + lance (côté extérieur) + bouclier (côté intérieur) */}
-            <path d={`M${13 * s} -4 q${16 * s} 4 ${16 * s} 18`} stroke="#c8a882" strokeWidth="4" fill="none" strokeLinecap="round" />
-            <path d={`M${29 * s} -40 v80`} stroke="#6a4c2e" strokeWidth="3.4" />
-            <path d={`M${29 * s} -40 l${-5 * s} 12 l${5 * s} -2 l${5 * s} 2 Z`} fill="#c2cad6" />
-            <g transform={`translate(${-16 * s},14)`}>
-              <path d="M-11 -14 L11 -14 L11 6 Q0 20 -11 6 Z" fill="#9a2530" />
-              <path d="M0 -14 v34 M-11 -4 h22" stroke="#e6c25a" strokeWidth="1.8" />
-            </g>
+            {/* casque à nasal, tunique aux couleurs, lance (côté extérieur), écu (côté intérieur) */}
+            <Figure x={0} y={42} s={0.53} skin="#c8a882" hair="#4a3020" look="short" beard={i ? "short" : "stubble"} hat="helm"
+              garment="tunic" coat="#3a5a7a" trim="#2a4460" pants="#5a5a60" shoes="#2a2a30"
+              arms={s > 0 ? [{ a1: 14, a2: 30 }, { a1: 30, a2: 30 }] : [{ a1: 30, a2: 30 }, { a1: 14, a2: 30 }]}
+              behind={<g>
+                <path d={`M${38 * s} -150 v150`} stroke="#6a4c2e" strokeWidth="6" />
+                <path d={`M${38 * s} -150 l${-9 * s} 22 l${9 * s} -4 l${9 * s} 4 Z`} fill="#c2cad6" />
+              </g>}>
+              <path d="M-15 -84 L15 -84 L12 -40 L-12 -40 Z" fill="#aeb6c2" opacity="0.8" />
+              <g transform={`translate(${-24 * s},-50)`}>
+                <path d="M-18 -24 L18 -24 L18 10 Q0 34 -18 10 Z" fill="#9a2530" stroke="#5a1018" strokeWidth="1" />
+                <path d="M0 -24 v56 M-18 -6 h36" stroke="#e6c25a" strokeWidth="3" />
+              </g>
+            </Figure>
           </g>
         ))}
       </PLayer>
@@ -219,31 +213,29 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
         {/* LE PAYSAN agenouillé, mains jointes, suppliant (devant, à gauche) */}
         <g transform="translate(348,500)">
           <ellipse cx="0" cy="30" rx="30" ry="8" fill="#0a0603" opacity="0.5" />
-          {/* jambe repliée + tunique brune rapiécée */}
-          <path d="M-22 30 Q-24 8 -4 4 Q6 2 14 8 Q26 16 22 30 Z" fill="#7a5a38" />
-          <path d="M2 10 l10 4 M-10 12 l-6 6" stroke="#5a4026" strokeWidth="1.6" />
-          {/* buste penché en avant, mains jointes */}
-          <path d="M-14 8 Q-20 -14 -2 -20 Q14 -22 16 -6 L10 8 Z" fill="#8a6a44" />
-          <circle cx="-4" cy="-24" r="8" fill="#c8a882" />
-          <path d="M-12 -26 q8 -6 16 -2" stroke="#5a4632" strokeWidth="3" fill="none" />
-          {/* mains jointes tendues vers le trône */}
-          <path d="M4 -12 q16 -2 22 4" stroke="#c8a882" strokeWidth="5" fill="none" strokeLinecap="round" />
-          <circle cx="27" cy="-7" r="5" fill="#d2b088" />
+          {/* à genoux, penché vers le trône, mains jointes */}
+          <g transform="rotate(10 0 30)">
+            <Figure x={0} y={30} s={0.64} pose="kneel" facing="right" skin="#c8a882" hair="#5a4632" look="mid" beard="stubble" mood="vexe"
+              garment="tunic" coat="#8a6a44" pants="#7a5a38" shoes="#3a2a18"
+              arms={[{ a1: -10, a2: -145 }, { a1: -10, a2: -145 }]}>
+              <path d="M-14 -40 l7 3 M10 -34 l-5 5" stroke="#5a4026" strokeWidth="2" />
+            </Figure>
+          </g>
         </g>
 
         {/* LE PRÊTRE debout, en aube sombre, tenant un livre (à droite) */}
         <g transform="translate(676,494)">
           <ellipse cx="0" cy="38" rx="22" ry="7" fill="#0a0603" opacity="0.5" />
-          <path d="M-16 38 Q-18 -8 0 -18 Q18 -8 16 38 Z" fill="#2c2a34" />
-          <path d="M0 -18 v56" stroke="#4a4856" strokeWidth="2" opacity="0.6" />
-          {/* étole */}
-          <path d="M-8 -14 L-4 30 M8 -14 L4 30" stroke="#7a2a44" strokeWidth="3" />
-          <circle cx="0" cy="-26" r="8.5" fill="#c8a882" />
-          <path d="M-9 -30 q9 -4 18 0 q-2 -7 -9 -7 q-7 0 -9 7" fill="#5a5060" />
-          {/* mains tenant un petit livre */}
-          <path d="M-12 -4 q-8 6 -6 14 M12 -4 q8 6 6 14" stroke="#c8a882" strokeWidth="4" fill="none" strokeLinecap="round" />
-          <rect x="-11" y="8" width="22" height="15" rx="1.5" fill="#5a2a2e" />
-          <path d="M0 8 v15" stroke="#3a1a1e" strokeWidth="1.4" />
+          {/* aube sombre, étole pourpre, petit livre à deux mains */}
+          <Figure x={0} y={38} s={0.6} skin="#c8a882" hair="#5a5060" look="ring" mood="vexe"
+            garment="robe" coat="#2c2a34" pants="#2c2a34" shoes="#1a1820" belt={false}
+            arms={[{ a1: 20, a2: -40 }, { a1: 20, a2: -40 }]}>
+            <path d="M-9 -88 L-6 -10 M9 -88 L6 -10" stroke="#7a2a44" strokeWidth="5" />
+            <rect x="-17" y="-60" width="34" height="24" rx="2" fill="#5a2a2e" stroke="#3a1a1e" strokeWidth="0.8" />
+            <path d="M0 -60 v24" stroke="#3a1a1e" strokeWidth="2" />
+            <circle cx="-14.4" cy="-50" r="4.4" fill="#c8a882" stroke="#8a6a50" strokeWidth="0.6" />
+            <circle cx="14.4" cy="-50" r="4.4" fill="#c8a882" stroke="#8a6a50" strokeWidth="0.6" />
+          </Figure>
         </g>
 
         {/* PANIER DE FIL DE LAINE coloré (à gauche, au sol) */}

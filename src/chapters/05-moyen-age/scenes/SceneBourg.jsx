@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau adjacent : LA PLACE DU BOURG
@@ -246,33 +247,16 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
           {/* estrade */}
           <rect x="-24" y="30" width="48" height="20" fill="#8a5a2e" stroke="#3a1810" strokeWidth="0.6" />
           <ellipse cx="0" cy="50" rx="30" ry="3" fill="#0a0604" opacity="0.55" />
-          {/* jambes en collants (chausses) */}
-          <path d="M-6 30 L-6 4 M6 30 L6 4" stroke="#c85028" strokeWidth="6" strokeLinecap="round" />
-          {/* pourpoint vert */}
-          <path d="M-14 8 Q-16 -14 0 -20 Q16 -14 14 8 Z" fill="#3a5828" stroke="#1a2810" strokeWidth="0.6" />
-          {/* ceinture à boucle */}
-          <rect x="-14" y="4" width="28" height="4" fill="#3a2010" />
-          <rect x="-2" y="3" width="4" height="6" fill="#c8a848" />
-          {/* épaules */}
-          <ellipse cx="-14" cy="-8" rx="5" ry="4" fill="#3a5828" />
-          <ellipse cx="14" cy="-8" rx="5" ry="4" fill="#3a5828" />
-          {/* bras qui tient parchemin ouvert */}
-          <path d="M-14 -6 L-24 -14" stroke="#c8946a" strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M14 -6 L24 -14" stroke="#c8946a" strokeWidth="3.5" strokeLinecap="round" />
-          <g transform="translate(0,-14)">
-            <rect x="-26" y="-6" width="52" height="18" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.5" />
-            <path d="M-26 -6 L-30 -8 L-30 12 L-26 12 Z M26 -6 L30 -8 L30 12 L26 12 Z" fill="#c8a878" />
-            <path d="M-22 -2 h44 M-22 2 h44 M-22 6 h44 M-22 10 h44" stroke="#5a3818" strokeWidth="0.3" />
-          </g>
-          {/* tête */}
-          <ellipse cx="0" cy="-32" rx="10" ry="12" fill="#c8946a" stroke="#5a3818" strokeWidth="0.5" />
-          {/* chaperon rouge avec cornet */}
-          <path d="M-11 -34 q0 -14 6 -14 q8 4 12 -2 q4 4 4 12 z" fill="#c85028" stroke="#5a1810" strokeWidth="0.6" />
-          <path d="M8 -46 q6 -6 12 0 q-6 6 -12 0 Z" fill="#c85028" stroke="#5a1810" strokeWidth="0.5" />
-          {/* traits */}
-          <circle cx="-3" cy="-32" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-32" r="1.2" fill="#0a0806" />
-          <path d="M-3 -26 q3 2 6 0" stroke="#5a2818" strokeWidth="0.8" fill="none" />
+          {/* pourpoint vert, chausses rouges, chaperon ; le parchemin tenu à deux mains */}
+          <Figure x={0} y={30} s={0.58} skin="#c8946a" hair="#3a2418" look="short" mood="surpris" hat="beret" hatColor="#c85028"
+            garment="jacket" coat="#3a5828" trim="#3a2010" pants="#c85028" shoes="#3a2010"
+            arms={[{ a1: 30, a2: 0 }, { a1: 30, a2: 0 }]}>
+            <rect x="-26" y="-62" width="52" height="26" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.8" />
+            <path d="M-26 -62 L-31 -65 L-31 -33 L-26 -36 Z M26 -62 L31 -65 L31 -33 L26 -36 Z" fill="#c8a878" stroke="#5a3818" strokeWidth="0.6" />
+            <path d="M-21 -56 h42 M-21 -50 h42 M-21 -44 h36" stroke="#5a3818" strokeWidth="0.6" />
+            <circle cx="-29" cy="-47" r="4.4" fill="#c8946a" stroke="#8a5a3a" strokeWidth="0.6" />
+            <circle cx="29" cy="-47" r="4.4" fill="#c8946a" stroke="#8a5a3a" strokeWidth="0.6" />
+          </Figure>
         </g>
         <g transform="translate(700,415)" style={{ animation: "float 2s ease-in-out infinite" }}>
           <circle r="14" fill="#ffd166" stroke="#8a5a20" strokeWidth="2" />
@@ -282,18 +266,12 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
         {/* MOINE mendiant assis contre le mur avec bol */}
         <g transform="translate(380,502)">
           <ellipse cx="0" cy="34" rx="24" ry="4" fill="#0a0604" opacity="0.5" />
-          {/* robe brune à capuche */}
-          <path d="M-18 34 L-18 -20 Q-14 -30 0 -30 Q14 -30 18 -20 L18 34 Z" fill="#6a4020" stroke="#2a1408" strokeWidth="0.6" />
-          <path d="M-18 -14 Q0 -6 18 -14" stroke="#3a2010" strokeWidth="0.6" fill="none" />
-          {/* corde à la taille */}
-          <path d="M-16 10 q16 4 32 0" stroke="#e0d0a0" strokeWidth="1.5" fill="none" />
-          {/* visage dans capuche */}
-          <ellipse cx="0" cy="-28" rx="8" ry="10" fill="#a08068" stroke="#5a3818" strokeWidth="0.4" />
-          <circle cx="-3" cy="-28" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-28" r="1.2" fill="#0a0806" />
-          {/* bol tendu */}
-          <path d="M-8 -8 L-16 4" stroke="#a08068" strokeWidth="3" strokeLinecap="round" />
-          <path d="M-24 4 Q-24 12 -16 14 L-8 14 Q0 12 0 4 Z" fill="#5a3818" stroke="#2a1408" strokeWidth="0.5" />
+          {/* assis contre le mur, capuche, corde à la taille, bol tendu */}
+          <Figure x={0} y={34} s={0.84} pose="ground" skin="#a08068" hair="#5a4030" look="ring" hood hoodColor="#6a4020" mood="vexe"
+            garment="robe" coat="#6a4020" trim="#e0d0a0" pants="#5a3818" shoes="#3a2010"
+            arms={[{ a1: 30, a2: -40 }, { a1: 14, a2: -20 }]}>
+            <path d="M-28 -18 Q-28 -8 -18 -6 L-8 -6 Q2 -8 2 -18 Z" fill="#5a3818" stroke="#2a1408" strokeWidth="0.7" />
+          </Figure>
         </g>
 
         {/* Ephemere : plume d'oie + bout de bougie (disparaissent au ramassage) */}

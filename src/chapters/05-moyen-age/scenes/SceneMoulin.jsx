@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau : le moulin à papier (extérieur)
@@ -140,15 +141,15 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
         {/* LE PAPETIER dans l'atelier, qui plonge son tamis dans la CUVE */}
         <g transform="translate(590,470)">
           {/* le papetier, tablier de cuir */}
-          <g transform="translate(-46,-6)">
+          <g transform="translate(-38,-6)">
             <ellipse cx="0" cy="46" rx="20" ry="6" fill="#160f08" opacity="0.4" />
-            <path d="M-16 42 Q-20 2 0 -8 Q20 2 16 42 Z" fill="#8a5a34" />
-            <path d="M-13 8 q13 6 26 0" stroke="#5a3a1e" strokeWidth="2.5" fill="none" />
-            <circle cx="0" cy="-20" r="10" fill="#cc9c6c" />
-            <path d="M-10 -24 q10 -6 20 0 q-2 -8 -10 -8 q-8 0 -10 8" fill="#eae4d4" />
-            {/* bras tendus vers la cuve, tenant le tamis */}
-            <path d="M12 -8 q22 -2 36 8" stroke="#cc9c6c" strokeWidth="5" fill="none" strokeLinecap="round" />
-            <g transform="translate(50,2) rotate(12)">
+            {/* penché vers la cuve, tablier de cuir, le tamis à bout de bras */}
+            <g transform="rotate(10 0 42)">
+              <Figure x={0} y={42} s={0.585} skin="#d4a474" hair="#5a3a20" look="short" beard="short" mood="content" hat="cap" hatColor="#e2d8c0"
+                garment="tunic" coat="#7a6a50" apron="#8a5a34" pants="#5a4630" shoes="#3a2a18"
+                arms={[{ a1: -40, a2: -80 }, { a1: 70, a2: 90 }]} />
+            </g>
+            <g transform="translate(42,2) rotate(12)">
               <rect x="-3" y="-14" width="30" height="20" rx="2" fill="#8a6a3a" />
               <rect x="1" y="-10" width="22" height="12" fill="#cabf90" />
               <path d="M1 -4 h22 M8 -10 v12 M15 -10 v12" stroke="#9a8a5a" strokeWidth="0.7" opacity="0.7" />
@@ -174,26 +175,22 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
             il crie sa marchandise (à gauche, sur le chemin) */}
         <g transform="translate(150,486)">
           <ellipse cx="0" cy="40" rx="34" ry="9" fill="#160f08" opacity="0.4" />
-          {/* la hotte d'osier pleine de chiffons colorés (dans le dos) */}
-          <g transform="translate(20,-2)">
-            <path d="M-4 6 Q-8 -22 14 -26 Q34 -22 30 6 Z" fill="#9a6a3a" />
-            <path d="M-2 -4 q16 5 30 0 M0 -14 q14 5 26 0" stroke="#6e4c24" strokeWidth="1.4" fill="none" opacity="0.6" />
-            {[["#a8302a", 2, -24], ["#2a6a9a", 16, -28], ["#c8b060", 26, -22], ["#3a8a4a", 10, -22], ["#8a4a8a", 22, -14]].map(([c, x, y], i) => (
-              <path key={i} d={`M${x} ${y} q5 -6 10 0 q-2 5 -5 6 q-4 -1 -5 -6`} fill={c} />
-            ))}
-          </g>
-          {/* le personnage, tunique brune, bâton de marche */}
-          <path d="M-16 40 Q-20 0 -2 -10 Q16 -2 12 40 Z" fill="#6e5030" />
-          <path d="M-14 16 q12 6 24 0" stroke="#4e3820" strokeWidth="2.5" fill="none" />
-          <circle cx="-4" cy="-24" r="9" fill="#cc9c6c" />
-          {/* chaperon (capuche pointue) */}
-          <path d="M-14 -26 Q-6 -40 6 -30 Q10 -22 2 -18 Q-12 -18 -14 -26 Z" fill="#7a3a2a" />
-          <path d="M6 -30 q10 -2 12 8" stroke="#7a3a2a" strokeWidth="5" fill="none" strokeLinecap="round" />
-          {/* main en porte-voix près de la bouche */}
-          <path d="M-12 -8 q-14 4 -16 -8" stroke="#cc9c6c" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-          <path d="M-26 -18 q-4 6 2 10" stroke="#cc9c6c" strokeWidth="4" fill="none" strokeLinecap="round" />
-          {/* bâton */}
-          <path d="M12 -6 L22 40" stroke="#5a3f24" strokeWidth="3" strokeLinecap="round" />
+          {/* tourné vers le chemin, une main en porte-voix ; hotte de chiffons, bâton */}
+          <Figure x={0} y={40} s={0.6} facing="left" skin="#cc9c6c" hair="#4a3020" look="short" beard="stubble" mood="surpris"
+            hood hoodColor="#7a3a2a" garment="tunic" coat="#6e5030" pants="#5a4030" shoes="#3a2818"
+            arms={[{ a1: 100, a2: -110 }, { a1: 20, a2: 10 }]}
+            behind={<g>
+              <path d="M34 -76 L40 0" stroke="#5a3f24" strokeWidth="5" strokeLinecap="round" />
+              <g transform="translate(14,-70) scale(1.4)">
+                <path d="M-4 6 Q-8 -22 14 -26 Q34 -22 30 6 Z" fill="#9a6a3a" />
+                <path d="M-2 -4 q16 5 30 0 M0 -14 q14 5 26 0" stroke="#6e4c24" strokeWidth="1.4" fill="none" opacity="0.6" />
+                {[["#a8302a", 2, -24], ["#2a6a9a", 16, -28], ["#c8b060", 26, -22], ["#3a8a4a", 10, -22], ["#8a4a8a", 22, -14]].map(([c, x, y], i) => (
+                  <path key={i} d={`M${x} ${y} q5 -6 10 0 q-2 5 -5 6 q-4 -1 -5 -6`} fill={c} />
+                ))}
+              </g>
+            </g>}>
+            <path d="M14 -90 L22 -54" stroke="#5a3a1e" strokeWidth="2.4" />
+          </Figure>
 
           {/* la bulle « Chiffons ! » qui pulse */}
           <g transform="translate(-58,-52)" style={{ animation: "glow 1.8s ease-in-out infinite" }}>

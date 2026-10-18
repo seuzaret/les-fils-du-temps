@@ -23,7 +23,7 @@
                curls | afro | slick | ring (couronne de chauve) | bald
      beard     true/"full" | "short" | "goatee" | "long" | "royal" |
                "postiche" | "stubble"        mustache : true | "handlebar"
-     hat       headband | crown | nemes | leather | cap | toque | beret |
+     hat       headband | crown | nemes | leather | helm | cap | toque | beret |
                brim | tophat | kepi | hardhat | laurel | coif | turban |
                flatcap | hood
      facing    front | left | right (trois-quarts : les traits tournent)
@@ -149,6 +149,15 @@ function Hat({ hat, c, c2, f }) {
         </g>
       );
     }
+    case "helm":   // casque conique d'acier à nasal (Moyen Âge)
+      return (
+        <g>
+          <path d="M-14.4 -3.6 Q-14.6 -14 0 -23 Q14.6 -14 14.4 -3.6 Q0 -8.4 -14.4 -3.6 Z" fill={c || "#9aa2b0"} stroke={s} strokeWidth="0.6" />
+          <path d="M-14.4 -3.6 Q0 -8.4 14.4 -3.6" stroke={shade(c || "#9aa2b0", -0.3)} strokeWidth="1.8" fill="none" />
+          <path d="M-5 -19 Q-9 -12 -10 -6" stroke="#fff" strokeWidth="1.2" opacity="0.35" fill="none" />
+          <rect x="-1.5" y="-7" width="3" height="11" rx="1" fill={c || "#9aa2b0"} stroke={s} strokeWidth="0.5" />
+        </g>
+      );
     case "leather":
       return (
         <g>
