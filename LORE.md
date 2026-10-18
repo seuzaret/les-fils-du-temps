@@ -120,5 +120,6 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 8. Texte exact qui amène à taper l'adresse, et rôle du « monde /Martine/ ».
 
 ## 10. Dette de code connue
-- Acte « Le Puits s'organise » de `FinJeu2.jsx` : les niveaux affichés (+2 SERRE… −2 SERVEURS) ne correspondent pas à ceux de Jeu 3 (`levels.js` : Surface, Communal, Habitat, Services, Hydroponie, Serveurs −3).
+- Séquence « Le Puits s'organise » (`FinJeu2Scenes.jsx`, `SceneLevels`) : les niveaux affichés (+2 SERRE… −2 SERVEURS) ne correspondent pas à ceux de Jeu 3 (`levels.js` : Surface, Communal, Habitat, Services, Hydroponie, Serveurs −3).
+- Fin de Jeu 2 refaite en tableaux plein écran (2026-10-18) : `FinJeu2.jsx` (textes), `cineKit.jsx` (lecteur : carte-titre noire, tableaux, noir entre chaque), `FinJeu2Scenes.jsx` (14 décors). Le tableau « Chambre N-27 » recoupe le début de `BunkerAwake.jsx` (« Une lumière blanche, froide… ») : à harmoniser.
 - Pas de fiche ni de PNJ pour la salle des dormants (à créer si elle est visitable).

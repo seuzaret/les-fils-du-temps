@@ -15,7 +15,7 @@ export default function CheatPanel({
   chapters, jeu2, mode, chapterIndex, jeu2Target, jeu2Notes,
   onFillFrise,
   onPlayChapter,
-  onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab,
+  onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab, onCheatFinJeu2,
   onNewGameJeu2, onNewGameJeu3,
   onCheatJeu3Kova,
   onCheatJeu3Archives,
@@ -58,7 +58,12 @@ export default function CheatPanel({
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 2 (Al3x1A) :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={onNewGameJeu2}>🎲 Démarrer nouveau Jeu 2</button>
-        <button style={CHEAT_BTN} onClick={() => onSetScreen("finJeu2")} title="Fin du Jeu 2 : acte 0, acte 1, puis Jeu 2B (la veille du Puits)">🥂 Fin Jeu 2 → Jeu 2B</button>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", marginTop: 2 }}>Fin du Jeu 2 (cinématiques) :</div>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 4 }}>
+          {[["💊 Remède", 0], ["🧠 Mémoire", 1], ["🥂 Jeu 2B", 2], ["🕳 Puits", 3], ["🌑 Discern.", 4]].map(([l, ph]) => (
+            <button key={ph} style={{ ...CHEAT_BTN, width: "auto", flex: "1 1 45%" }} onClick={() => onCheatFinJeu2(ph)}>{l}</button>
+          ))}
+        </div>
         <button style={CHEAT_BTN}
           onClick={() => { if (mode === "jeu2" && jeu2Target >= 0) { onSetChapterIndex(jeu2Target); onSetTab(jeu2[jeu2Target].al3x1aHotspot.tab); } }}
           title="Aller directement au chapitre cible d'Al3x1A">📍 Aller à Al3x1A</button>

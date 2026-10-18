@@ -10,6 +10,8 @@
    tout ce qui compte est dessiné plus haut.
    ============================================================ */
 
+/* Paysage : le décor remplit l'écran (rogné). Portrait (téléphone) : décor entier, centré. */
+const PAR = () => (typeof window !== "undefined" && window.innerHeight > window.innerWidth * 1.1 ? "xMidYMid meet" : "xMidYMid slice");
 const FILL = { position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" };
 
 const polar = (r, deg) => {
@@ -81,7 +83,7 @@ export function PortraitLea({ mood = "neutre" }) {
 /* ───────────────────────── 1 · le Puits ───────────────────────── */
 export function StageChantier() {
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
       <defs>
         <linearGradient id="j2c-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#080d18" /><stop offset="55%" stopColor="#152036" /><stop offset="100%" stopColor="#262130" />
@@ -227,7 +229,7 @@ export function StageChantier() {
 /* ───────────────────────── 2 · l'atelier de Léa ───────────────────────── */
 export function StageAtelier() {
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
       <defs>
         <linearGradient id="j2a-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#0c1820" /><stop offset="100%" stopColor="#14242c" />
@@ -352,7 +354,7 @@ export function StageToast({ raised = false }) {
     { x: 580, y: 360, tx: 570, ty: 280, c: "#ffe2a8" },
   ];
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
       <defs>
         <linearGradient id="j2t-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#0b1018" /><stop offset="100%" stopColor="#2a2028" />

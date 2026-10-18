@@ -171,6 +171,7 @@ export default function App() {
      "rester". Les 2 derniers sont des faux souvenirs — MARTINE les
      réécrit au voyage retour. Révélé à la confrontation jeu 3. */
   const [jeu2EndChoice, setJeu2EndChoice] = useState(null);
+  const [finJeu2Start, setFinJeu2Start] = useState(0); // triche : séquence de FinJeu2 par laquelle commencer (0 = remède … 4 = discernement)
   const [openNote, setOpenNote] = useState(null);  // { chapitre } → affiche la modale de note
   const [openRetrouvailles, setOpenRetrouvailles] = useState(false);
   const [tab, setTab] = useState(CHAPTERS[0].startScene); // tableau courant
@@ -1375,6 +1376,7 @@ export default function App() {
       onPlayChapter={playChapter}
       onSetChapterIndex={setChapterIndex}
       onSetScreen={setScreen}
+      onCheatFinJeu2={(ph) => { setFinJeu2Start(ph); setScreen("finJeu2"); }}
       onSetEpiChoice={setEpiChoice}
       onSetTab={setTab}
       onNewGameJeu2={newGameJeu2}
@@ -1852,6 +1854,8 @@ export default function App() {
       <>
         {cheatPanel}
         <FinJeu2
+          key={finJeu2Start}
+          startPhase={finJeu2Start}
           prenom={prenom}
           remede={jeu2Target >= 0 ? JEU2[jeu2Target]?.remede : null}
           endChoice={jeu2EndChoice}
@@ -2585,7 +2589,7 @@ export default function App() {
           remede={JEU2[jeu2Target]?.remede}
           chapitreNom={CHAPTERS[jeu2Target]?.epoque || ""}
           onChoice={(c) => setJeu2EndChoice(c)}
-          onDone={() => { setOpenRetrouvailles(false); setScreen("finJeu2"); }} />
+          onDone={() => { setOpenRetrouvailles(false); setFinJeu2Start(0); setScreen("finJeu2"); }} />
       )}
 
       {modal?.type === "taille_silex" && (

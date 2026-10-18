@@ -162,8 +162,9 @@ function PortraitMira({ mood = "neutre" }) {
   );
 }
 
-/* Al3x1A apparaît dans un CADRE-photo posé sur la MARTINE-jumelle. */
-function PortraitAl3x1ACadre({ mood = "neutre" }) {
+/* Al3x1A apparaît dans un CADRE-photo posé sur la MARTINE-jumelle.
+   `frame={false}` : le même visage sans cadre, ruban ni légende (cinématiques). */
+function PortraitAl3x1ACadre({ mood = "neutre", frame = true }) {
   return (
     <svg viewBox="0 0 200 240" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
@@ -171,13 +172,21 @@ function PortraitAl3x1ACadre({ mood = "neutre" }) {
       </defs>
       <rect width="200" height="240" fill="#181820" />
       {/* cadre-photo en bois patiné */}
-      <rect x="16" y="16" width="168" height="208" fill="none" stroke="#8a6838" strokeWidth="8" />
-      <rect x="22" y="22" width="156" height="196" fill="#2a2830" />
+      {frame ? (
+        <>
+          <rect x="16" y="16" width="168" height="208" fill="none" stroke="#8a6838" strokeWidth="8" />
+          <rect x="22" y="22" width="156" height="196" fill="#2a2830" />
+        </>
+      ) : <rect width="200" height="240" fill="#2a2830" />}
       {/* halo mémoire */}
       <circle cx="100" cy="100" r="70" fill="#f0e0c0" opacity="0.12" />
       {/* ruban noir de deuil sur le coin haut-droit du cadre */}
-      <path d="M170 20 L184 20 L184 40 L172 46 L162 40 Z" fill="#1a1408" opacity="0.9" />
-      <path d="M174 24 l6 8" stroke="#3a2818" strokeWidth="0.6" />
+      {frame && (
+        <>
+          <path d="M170 20 L184 20 L184 40 L172 46 L162 40 Z" fill="#1a1408" opacity="0.9" />
+          <path d="M174 24 l6 8" stroke="#3a2818" strokeWidth="0.6" />
+        </>
+      )}
       {/* épaules / tunique de voyage grise */}
       <path d="M30 220 L30 175 Q30 150 60 143 L140 143 Q170 150 170 175 L170 220 Z" fill="url(#ca-tunique)" stroke="#3a4048" strokeWidth="1.2" />
       {/* insigne chronaute sur l'épaule (petit compas) */}
@@ -207,7 +216,7 @@ function PortraitAl3x1ACadre({ mood = "neutre" }) {
       {/* légère cicatrice fine sur la joue (souvenir de voyage) */}
       <path d="M124 92 l4 8" stroke="#8a5828" strokeWidth="0.6" opacity="0.6" />
       {/* légende sous le portrait */}
-      <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2035</text>
+      {frame && <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2035</text>}
     </svg>
   );
 }
@@ -217,6 +226,7 @@ const PORTRAITS = { elias: PortraitElias, mira: PortraitMira, camille: PortraitA
 /* Export : la portrait d'Elias est réutilisée dans l'écran ÉPILOGUE
    pour son ultime question sur le support à choisir. */
 export { PortraitElias, PortraitMira };
+export const PortraitAl3x1A = (props) => <PortraitAl3x1ACadre {...props} frame={false} />;
 const NAMES = { elias: "Elias", mira: "Mira", camille: "Portrait d'Al3x1A" };
 
 /* -------------------- DÉCOR DE LA STATION -------------------- */

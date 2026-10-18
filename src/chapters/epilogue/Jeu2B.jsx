@@ -3,6 +3,7 @@ import { Avatar } from "../../engine/Martine.jsx";
 import { PortraitElias, PortraitMira } from "./StationChronautes.jsx";
 import { PortraitLea, StageChantier, StageAtelier, StageToast } from "./Jeu2BDecors.jsx";
 import { playClink, playSleepHum } from "../../engine/sfx.js";
+import { useTypewriter } from "./cineKit.jsx";
 
 /* ============================================================
    JEU 2B — LA VEILLE DU PUITS (2047)
@@ -21,26 +22,6 @@ import { playClink, playSleepHum } from "../../engine/sfx.js";
    Clic / Entrée / Espace : réplique suivante. Les choix n'ont pas
    de « bonne » réponse : ils ne changent que les répliques.
    ============================================================ */
-
-/* Machine à écrire locale. `done` et `shown` sont déduits du texte COURANT :
-   au changement de réplique, l'ancien texte affiché n'est jamais pris pour fini
-   (sinon l'endormissement partirait dès le premier rendu de la dernière réplique). */
-function useTypewriter(text, speed = 18) {
-  const [typed, setTyped] = useState("");
-  const pos = useRef(0); // l'intervalle et skip() partagent la position
-  useEffect(() => {
-    setTyped(""); pos.current = 0;
-    if (!text) return;
-    const iv = setInterval(() => {
-      pos.current += 1;
-      setTyped(text.slice(0, pos.current));
-      if (pos.current >= text.length) clearInterval(iv);
-    }, speed);
-    return () => clearInterval(iv);
-  }, [text, speed]);
-  const shown = text.startsWith(typed) ? typed : "";
-  return { shown, done: shown === text, skip: () => { pos.current = text.length; setTyped(text); } };
-}
 
 /* ───────────────────────── Le script ───────────────────────── */
 const SCRIPT = [
