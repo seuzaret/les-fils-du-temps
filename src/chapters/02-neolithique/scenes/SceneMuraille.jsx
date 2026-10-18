@@ -50,11 +50,25 @@ export default function SceneMuraille({ collect, action, reveal, queteQui }) {
 
       {/* ═══ couche lointaine : la mer + la cité blanche sur sa colline ═══ */}
       <PLayer depth={1}>
-        {/* la mer, à gauche */}
-        <path d="M0 300 L360 300 L360 372 L0 372 Z" fill="url(#mu-sea)" />
-        {/* chemin doré du soleil sur l'eau */}
-        <path d="M90 306 L210 306 L250 368 L60 368 Z" fill="#ffe0a0" opacity="0.28" />
-        {[314, 330, 346, 360].map((y, i) => <path key={i} d={`M0 ${y} q40 ${i % 2 ? 3 : -3} 80 0 t80 0 t80 0 t80 0`} stroke="#d8dce0" strokeWidth="1.4" fill="none" opacity="0.4" />)}
+        {/* la mer, qui s'étend jusque derrière la cité */}
+        <path d="M-40 300 L1040 300 L1040 372 L340 372 L340 440 L-40 440 Z" fill="url(#mu-sea)" />
+        {/* un cap rocheux au loin, à gauche */}
+        <path d="M-40 300 L-40 284 L10 280 L40 270 L70 274 L96 286 L130 296 L150 300 Z" fill="#7a6a78" opacity="0.8" />
+        {/* reflet du soleil : une colonne de paillettes */}
+        <ellipse cx="150" cy="340" rx="70" ry="40" fill="#ffe0a0" opacity="0.16" filter="url(#mu-blur)" />
+        {Array.from({ length: 14 }).map((_, i) => {
+          const y = 304 + i * 9, w = 12 + i * 6, x = 150 - w / 2 + ((i * 29) % 9) - 4;
+          return <path key={`g${i}`} d={`M${x.toFixed(1)} ${y} h${w.toFixed(1)}`} stroke={i % 3 ? "#ffe6a8" : "#fff8dc"} strokeWidth={1.4 + i * 0.08} strokeLinecap="round" opacity={0.75 - i * 0.03}>
+            <animate attributeName="opacity" values={`${(0.75 - i * 0.03).toFixed(2)};0.2;${(0.75 - i * 0.03).toFixed(2)}`} dur={`${1.6 + (i % 4) * 0.5}s`} repeatCount="indefinite" />
+          </path>;
+        })}
+        {[314, 330, 346, 362, 380, 398].map((y, i) => <path key={i} d={`M-40 ${y} q40 ${i % 2 ? 3 : -3} 80 0 t80 0 t80 0 t80 0 t80 0`} stroke="#d8dce0" strokeWidth="1.4" fill="none" opacity="0.4" />)}
+        {/* la plage qui s'avance vers la mer, ligne d'écume */}
+        <path d="M-40 400 Q80 388 200 396 Q290 402 340 380 L340 440 L-40 440 Z" fill="#c8a878" />
+        <path d="M-40 400 Q80 388 200 396 Q290 402 340 380" stroke="#f4f0e8" strokeWidth="3" fill="none" opacity="0.8">
+          <animate attributeName="d" values="M-40 400 Q80 388 200 396 Q290 402 340 380;M-40 396 Q80 384 200 392 Q290 398 340 377;M-40 400 Q80 388 200 396 Q290 402 340 380" dur="5s" repeatCount="indefinite" />
+        </path>
+        <path d="M-40 406 Q80 396 200 402 Q290 408 340 388" stroke="#9a9080" strokeWidth="5" fill="none" opacity="0.4" />
         {/* une barque au loin */}
         <path d="M240 344 q14 6 28 0 l-4 8 l-20 0 Z" fill="#3a3428" opacity="0.7" />
         <path d="M254 344 l0 -14" stroke="#3a3428" strokeWidth="1.4" opacity="0.7" />
@@ -129,8 +143,8 @@ export default function SceneMuraille({ collect, action, reveal, queteQui }) {
         <path d="M0 560 L0 430 Q320 412 640 434 Q840 448 1000 428 L1000 560 Z" fill="#2c1c10" opacity="0.26" filter="url(#mu-mottle)" />
         <ellipse cx="580" cy="500" rx="420" ry="46" fill="#5a4630" opacity="0.25" />
         {/* la grève mouillée qui rejoint la mer, à gauche */}
-        <path d="M0 452 Q120 440 240 460 L240 560 L0 560 Z" fill="#9a9080" opacity="0.5" />
-        <path d="M0 456 Q120 444 236 464" stroke="#e8dcc0" strokeWidth="2" fill="none" opacity="0.5" />
+        <path d="M-20 452 Q120 440 240 460 Q300 490 270 530 Q250 560 260 580 L-20 580 Z" fill="#9a9080" opacity="0.45" />
+        <path d="M-20 456 Q120 444 236 464 Q294 492 266 530" stroke="#e8dcc0" strokeWidth="2" fill="none" opacity="0.5" />
         {/* galets mouillés */}
         {[[90, 520, 10], [150, 540, 7], [210, 522, 9]].map(([x, y, r], i) => (
           <g key={i}><ellipse cx={x + r} cy={y + 2} rx={r * 1.4} ry={r * 0.35} fill="#1c1420" opacity="0.4" /><ellipse cx={x} cy={y} rx={r} ry={r * 0.6} fill={i % 2 ? "#6e5a48" : "#564636"} /><path d={`M${x - r * 0.6} ${y - r * 0.3} q${r * 0.6} -${r * 0.4} ${r * 1.2} 0`} stroke="#e8d4a8" strokeWidth="1.4" fill="none" opacity="0.6" /></g>
