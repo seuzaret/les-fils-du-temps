@@ -2,6 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { playMaterialize } from './sfx.js';
 import TimeMachine from './TimeMachine.jsx';
 import PaleoArrivalDecor from './PaleoArrivalDecor.jsx';
+import NightStreetDecor from './NightStreetDecor.jsx';
+import CabinBackdrop from './CabinBackdrop.jsx';
 import { Avatar } from './Martine.jsx';
 import SceneFrame from './SceneFrame.jsx';
 import { Arm, Figure } from "./chars.jsx";
@@ -210,52 +212,116 @@ function SlideNight({ onNext, silent = false }) {
             <stop offset="0%" stopColor="#3a80c8" stopOpacity="0.35" />
             <stop offset="100%" stopColor="#3a80c8" stopOpacity="0" />
           </radialGradient>
+          <pattern id="s1-paper" width="48" height="56" patternUnits="userSpaceOnUse">
+            <path d="M24 10 l4 8 l-4 8 l-4 -8 Z" fill="#3a4466" opacity="0.5" />
+            <circle cx="0" cy="38" r="1.6" fill="#3a4466" opacity="0.6" /><circle cx="48" cy="38" r="1.6" fill="#3a4466" opacity="0.6" />
+            <path d="M24 0 V56" stroke="#262c40" strokeWidth="0.8" opacity="0.5" />
+          </pattern>
+          <linearGradient id="s1-vign" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#000" stopOpacity="0.55" />
+            <stop offset="18%" stopColor="#000" stopOpacity="0" />
+            <stop offset="82%" stopColor="#000" stopOpacity="0" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0.5" />
+          </linearGradient>
+          <linearGradient id="s1-beam" x1="1" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#c8d4f4" stopOpacity="0.02" />
+            <stop offset="55%" stopColor="#c8d4f4" stopOpacity="0.07" />
+            <stop offset="100%" stopColor="#c8d4f4" stopOpacity="0.1" />
+          </linearGradient>
+          <filter id="s1-blur" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10" /></filter>
+          <linearGradient id="s1-street" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0a0a2a" />
+            <stop offset="70%" stopColor="#222850" />
+            <stop offset="100%" stopColor="#3a2c50" />
+          </linearGradient>
         </defs>
 
-        {/* MUR + SOL */}
+        {/* MUR (papier peint à losanges) + corniche */}
         <rect width="1200" height="680" fill="url(#s1-wall)" />
-        {/* Papier peint subtil : rayures verticales */}
-        {[100, 200, 300, 400, 900, 1000, 1100].map((x, i) => (
-          <line key={i} x1={x} y1="0" x2={x} y2="520" stroke="#28303a" strokeWidth="0.8" opacity="0.35" />
-        ))}
+        <rect width="1200" height="516" fill="url(#s1-paper)" />
+        <rect width="1200" height="14" fill="#0a0d18" />
+        <rect y="14" width="1200" height="3" fill="#2a3048" opacity="0.8" />
+        {/* SOL : plancher en lattes, en perspective */}
         <rect y="520" width="1200" height="160" fill="url(#s1-floor)" />
-        <path d="M0 520 L1200 520" stroke="#0a0806" strokeWidth="1.5" />
-        {/* Plinthe */}
-        <rect y="514" width="1200" height="8" fill="#141820" />
-        {/* Lattes du plancher en perspective */}
-        {[100, 300, 500, 800, 1000].map((x, i) => (
-          <path key={i} d={`M${x} 520 L${x + (x - 600) * 0.15} 680`} stroke="#0a0604" strokeWidth="0.8" opacity="0.55" />
+        {[[520, 534], [534, 551], [551, 572], [572, 598], [598, 630], [630, 668], [668, 712]].map(([y0, y1], r) => (
+          <g key={r}>
+            <path d={`M0 ${y1} H1200`} stroke="#140a06" strokeWidth={0.8 + r * 0.25} opacity="0.7" />
+            {Array.from({ length: 7 }).map((_, k) => {
+              const x0 = ((k * 190 + r * 97) % 1260) - 30;
+              const xs = (x) => 600 + (x - 600) * (1 + (y0 - 520) / 260);
+              return <path key={k} d={`M${xs(x0).toFixed(0)} ${y0} L${(600 + (x0 - 600) * (1 + (y1 - 520) / 260)).toFixed(0)} ${y1}`} stroke="#140a06" strokeWidth="1" opacity="0.6" />;
+            })}
+            <path d={`M0 ${y0 + 2} H1200`} stroke="#6a4a30" strokeWidth="1" opacity="0.18" />
+          </g>
         ))}
+        {/* Plinthe */}
+        <rect y="512" width="1200" height="10" fill="#141820" />
+        <rect y="512" width="1200" height="2" fill="#2e3448" />
+        {/* ombres aux angles de la pièce */}
+        <rect width="1200" height="680" fill="url(#s1-vign)" />
         {/* Tapis rond au sol */}
         <ellipse cx="600" cy="620" rx="220" ry="42" fill="#5a2820" stroke="#3a1810" strokeWidth="1.5" opacity="0.85" />
         <ellipse cx="600" cy="614" rx="220" ry="42" fill="#8a3820" opacity="0.6" />
         <ellipse cx="600" cy="614" rx="190" ry="34" fill="none" stroke="#c8a848" strokeWidth="1" opacity="0.5" />
+        <ellipse cx="600" cy="614" rx="140" ry="24" fill="none" stroke="#c87040" strokeWidth="5" opacity="0.35" />
+        <ellipse cx="600" cy="614" rx="70" ry="12" fill="#a04828" opacity="0.4" />
+        {Array.from({ length: 36 }).map((_, i) => {
+          const t = (i / 36) * Math.PI * 2;
+          const x = 600 + Math.cos(t) * 221, y = 616 + Math.sin(t) * 43;
+          return <path key={i} d={`M${x.toFixed(1)} ${y.toFixed(1)} l${(Math.cos(t) * 6).toFixed(1)} ${(Math.sin(t) * 3).toFixed(1)}`} stroke="#c8a070" strokeWidth="1.4" opacity="0.5" />;
+        })}
 
-        {/* GRANDE FENÊTRE à droite avec lune, ciel étoilé, silhouette de ville */}
+        {/* GRANDE FENÊTRE à droite : la nuit, la lune, la rue d'en face */}
         <g>
-          <rect x="820" y="80" width="300" height="360" fill="url(#s1-sky)" stroke="#3a2818" strokeWidth="6" />
-          {/* Croisillons */}
-          <line x1="970" y1="80" x2="970" y2="440" stroke="#3a2818" strokeWidth="4" />
-          <line x1="820" y1="260" x2="1120" y2="260" stroke="#3a2818" strokeWidth="4" />
-          {/* Étoiles */}
-          {[[860, 120], [920, 140], [1010, 100], [1080, 160], [960, 200], [890, 210], [1050, 230], [900, 300], [1020, 340], [860, 380], [1090, 400]].map(([x, y], i) => (
-            <circle key={i} cx={x} cy={y} r={i % 3 === 0 ? 1.6 : 1} fill="#e8eef5" opacity={0.55 + (i % 4) * 0.12} />
+          <rect x="814" y="74" width="312" height="372" fill="#2a1a10" />
+          <rect x="820" y="80" width="300" height="360" fill="url(#s1-street)" />
+          {[[860, 120], [920, 140], [1010, 100], [1080, 196], [960, 200], [890, 210], [1050, 230], [900, 290], [1000, 300], [846, 250], [940, 110]].map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r={i % 3 === 0 ? 1.6 : 1} fill="#e8eef5" opacity={0.55 + (i % 4) * 0.12}>
+              {i % 4 === 0 && <animate attributeName="opacity" values="0.9;0.3;0.9" dur={`${3 + i % 3}s`} repeatCount="indefinite" />}
+            </circle>
           ))}
           {/* Lune */}
-          <circle cx="1050" cy="150" r="34" fill="url(#s1-moon)" />
+          <circle cx="1050" cy="150" r="60" fill="url(#s1-moon)" opacity="0.5" />
           <circle cx="1050" cy="150" r="28" fill="#f8ecd0" />
           <circle cx="1060" cy="145" r="4" fill="#c8bda0" opacity="0.65" />
           <circle cx="1042" cy="160" r="3" fill="#c8bda0" opacity="0.55" />
-          {/* Silhouette de ville au fond de la fenêtre */}
-          <path d="M820 400 L820 380 L850 380 L850 360 L890 360 L890 400 L920 400 L920 370 L960 370 L960 400 L1000 400 L1000 350 L1030 350 L1030 400 L1060 400 L1060 380 L1090 380 L1090 400 L1120 400 L1120 400 Z" fill="#0a0e18" />
-          {/* 2-3 fenêtres allumées lointaines */}
-          <rect x="900" y="380" width="3" height="4" fill="#ffd870" opacity="0.85" />
-          <rect x="1010" y="365" width="3" height="4" fill="#e0a848" opacity="0.75" />
+          <ellipse cx="1000" cy="186" rx="80" ry="5" fill="#141a3a" opacity="0.7" />
+          {/* toits d'en face, un lampadaire, une fenêtre allumée */}
+          <path d="M820 440 L820 372 L866 340 L912 372 L912 360 L972 318 L1032 360 L1032 380 L1070 354 L1120 386 L1120 440 Z" fill="#0e1226" />
+          <rect x="884" y="386" width="10" height="12" fill="#ffd870" opacity="0.8" />
+          <rect x="1048" y="396" width="9" height="11" fill="#7ab0ff" opacity="0.6" />
+          <rect x="986" y="330" width="9" height="22" fill="#0e1226" />
+          <circle cx="1088" cy="402" r="22" fill="url(#s1-nightlight)" />
+          <path d="M1092 440 V404 Q1092 398 1086 398" stroke="#1a1c2c" strokeWidth="2.4" fill="none" />
+          <circle cx="1086" cy="400" r="2.6" fill="#ffe8a8" />
+          {/* croisillons + reflets sur les vitres */}
+          <line x1="970" y1="80" x2="970" y2="440" stroke="#3a2818" strokeWidth="5" />
+          <line x1="820" y1="260" x2="1120" y2="260" stroke="#3a2818" strokeWidth="5" />
+          <path d="M840 240 L900 100 M850 420 L910 290 M990 240 L1030 140" stroke="#fff" strokeWidth="6" opacity="0.05" />
+          {/* rebord intérieur */}
+          <rect x="804" y="440" width="332" height="12" rx="2" fill="#4a3018" />
+          <rect x="804" y="440" width="332" height="3" fill="#7a5030" />
+          <g transform="translate(850,424)">
+            <rect x="-10" y="4" width="20" height="14" rx="2" fill="#8a4a2a" />
+            <path d="M-6 4 Q-10 -12 -2 -16 M0 4 Q2 -18 8 -14 M4 4 Q12 -6 10 -12" stroke="#4a7a3a" strokeWidth="2.6" fill="none" strokeLinecap="round" />
+          </g>
         </g>
+        {/* rai de lune qui traverse la pièce et dessine la fenêtre au sol */}
+        <path d="M830 96 L1110 96 L720 640 L420 640 Z" fill="url(#s1-beam)" filter="url(#s1-blur)" />
+        <g opacity="0.16" fill="#d4dcf8">
+          <path d="M520 560 L700 560 L640 640 L430 640 Z" />
+        </g>
+        <path d="M610 560 L535 640 M475 600 L670 600" stroke="#1a1f30" strokeWidth="4" opacity="0.18" />
         {/* Rideaux */}
         <path d="M810 70 L810 460 Q820 100 830 90 Q835 250 830 460 Z" fill="#5a3820" stroke="#1a0e08" strokeWidth="1.2" opacity="0.9" />
         <path d="M1130 70 L1130 460 Q1120 100 1110 90 Q1105 250 1110 460 Z" fill="#5a3820" stroke="#1a0e08" strokeWidth="1.2" opacity="0.9" />
         <path d="M810 70 L1130 70 L1130 90 L810 90 Z" fill="#3a2010" />
+        <path d="M800 76 H1140" stroke="#8a6a3a" strokeWidth="4" strokeLinecap="round" />
+        <g stroke="#2a1608" strokeWidth="1.4" opacity="0.6" fill="none">
+          <path d="M816 100 Q820 280 816 452 M823 100 Q826 280 824 452" />
+          <path d="M1124 100 Q1120 280 1124 452 M1117 100 Q1114 280 1116 452" />
+        </g>
+        <path d="M806 300 q14 6 28 0 M1106 300 q14 6 28 0" stroke="#c8a848" strokeWidth="3" fill="none" />
         {/* Traînée de lune dans la chambre */}
         <ellipse cx="820" cy="530" rx="180" ry="60" fill="url(#s1-moonlight)" transform="rotate(-18 820 530)" />
 
@@ -324,6 +390,10 @@ function SlideNight({ onNext, silent = false }) {
           <text x="55" y="122" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fontWeight="800" fill="#e8dfc8" fontStyle="italic">CONCERT</text>
         </g>
 
+        {/* ombres portées des meubles */}
+        <ellipse cx="330" cy="558" rx="260" ry="18" fill="#000" opacity="0.4" />
+        <ellipse cx="690" cy="590" rx="110" ry="10" fill="#000" opacity="0.4" />
+        <ellipse cx="530" cy="528" rx="130" ry="8" fill="#000" opacity="0.3" />
         {/* LIT à gauche-centre, plus grand */}
         <g>
           {/* Tête de lit en bois */}
@@ -342,6 +412,11 @@ function SlideNight({ onNext, silent = false }) {
           <rect x="270" y="410" width="90" height="34" rx="6" fill="#c8a888" stroke="#3a2818" strokeWidth="1" />
           {/* Une petite bosse qui suggère quelqu'un qui dort sous la couette */}
           <path d="M300 440 Q380 425 460 440 L460 500 L300 500 Z" fill="#c8a888" opacity="0.7" />
+          <path d="M300 440 Q380 425 460 440" stroke="#fff6e0" strokeWidth="2" fill="none" opacity="0.45" />
+          <path d="M330 470 q30 -10 60 0 M400 486 q24 -8 50 2 M180 470 q30 6 60 -2" stroke="#8a6a50" strokeWidth="1.4" fill="none" opacity="0.5" />
+          <path d="M120 494 H570 V500 H120 Z" fill="#000" opacity="0.18" />
+          {/* bout de couette qui tombe sur le côté */}
+          <path d="M560 432 Q586 440 584 470 Q582 500 572 520 L560 520 Z" fill="#d8ccb0" stroke="#3a2818" strokeWidth="1" />
           {/* Pieds du lit */}
           <rect x="94" y="530" width="14" height="26" fill="#1a0e08" />
           <rect x="556" y="530" width="14" height="26" fill="#1a0e08" />
@@ -482,6 +557,13 @@ function SlideNight({ onNext, silent = false }) {
           <ellipse cx="60" cy="-3" rx="24" ry="8" fill="#c88060" />
         </g>
 
+        {/* pile de BD au pied du lit, une chaussette égarée */}
+        <g transform="translate(300,622)">
+          <rect x="-26" y="-8" width="52" height="8" fill="#3a80c8" stroke="#141820" strokeWidth="0.8" transform="rotate(-3)" />
+          <rect x="-22" y="-16" width="46" height="8" fill="#e8c048" stroke="#141820" strokeWidth="0.8" transform="rotate(4)" />
+          <rect x="-24" y="-24" width="48" height="8" fill="#c83a2a" stroke="#141820" strokeWidth="0.8" transform="rotate(-2)" />
+        </g>
+        <path d="M880 640 q10 -14 24 -10 q8 4 2 10 q-10 2 -16 10 Z" fill="#e8e0d0" opacity="0.8" />
         {/* PLANTE en pot au sol à gauche */}
         <g transform="translate(40,540)">
           <rect x="-24" y="20" width="48" height="60" fill="#5a3018" stroke="#1a0e08" strokeWidth="1.2" />
@@ -585,110 +667,7 @@ function SlideOutside({ onNext }) {
             <stop offset="100%" stopColor="#ffc060" stopOpacity="0" />
           </radialGradient>
         </defs>
-        {/* CIEL nocturne */}
-        <rect width="1200" height="500" fill="url(#s3-sky)" />
-        {/* Étoiles nombreuses */}
-        {[[80, 60], [180, 100], [280, 40], [420, 80], [560, 50], [640, 110], [720, 70], [340, 130], [500, 120],
-          [820, 60], [880, 130], [960, 90], [1020, 60], [1080, 120], [1140, 80], [80, 180], [220, 220], [380, 200],
-          [640, 220], [780, 200], [980, 200], [1120, 220]].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r={i % 3 === 0 ? 1.6 : 1} fill="#fff" opacity={0.55 + (i % 4) * 0.1} />
-        ))}
-        {/* Lune plus imposante */}
-        <circle cx="200" cy="130" r="130" fill="url(#s3-moon)" />
-        <circle cx="200" cy="130" r="52" fill="#f0e4c8" opacity="0.95" />
-        <circle cx="212" cy="122" r="10" fill="#c8bda0" opacity="0.5" />
-        <circle cx="188" cy="140" r="6" fill="#c8bda0" opacity="0.5" />
-        {/* Nuage discret sur la lune */}
-        <path d="M120 150 Q160 140 200 148 Q240 138 280 148 Q320 158 280 168 Q220 172 160 170 Q100 168 120 150" fill="#0a0e28" opacity="0.35" />
-
-        {/* Silhouettes de collines au fond */}
-        <path d="M0 460 Q200 400 400 440 Q600 380 800 430 Q1000 400 1200 440 L1200 500 L0 500 Z" fill="#0a0e18" opacity="0.8" />
-
-        {/* QUARTIER : maisons de banlieue en enfilade */}
-        <g fill="#0a0e18">
-          {/* Maison à gauche : la maison du joueur (fenêtre allumée = sa chambre) */}
-          <path d="M60 490 L60 380 L200 300 L340 380 L340 490 Z" />
-          <rect x="60" y="380" width="280" height="110" fill="#141820" />
-          {/* Fenêtre allumée (chambre du joueur) */}
-          <rect x="180" y="400" width="50" height="46" fill="#141018" stroke="#3a2818" strokeWidth="1.5" />
-          <rect x="184" y="404" width="42" height="38" fill="#ffc060" opacity="0.85">
-            <animate attributeName="opacity" values="0.7;0.9;0.7" dur="4s" repeatCount="indefinite" />
-          </rect>
-          <line x1="205" y1="400" x2="205" y2="446" stroke="#3a2818" strokeWidth="1.2" />
-          <line x1="184" y1="423" x2="226" y2="423" stroke="#3a2818" strokeWidth="1.2" />
-          {/* Halo warm de la fenêtre */}
-          <circle cx="205" cy="423" r="60" fill="url(#s3-window)" />
-          {/* Porte */}
-          <rect x="100" y="430" width="34" height="60" fill="#3a2010" stroke="#5a3818" strokeWidth="1.2" />
-          <circle cx="127" cy="462" r="1.6" fill="#c8a848" />
-          {/* Cheminée avec fumée */}
-          <rect x="260" y="320" width="20" height="40" fill="#3a2010" />
-          <path d="M270 320 Q265 300 275 285 Q270 265 280 250" stroke="#8a9098" strokeWidth="4" fill="none" opacity="0.4">
-            <animate attributeName="opacity" values="0.2;0.5;0.2" dur="5s" repeatCount="indefinite" />
-          </path>
-        </g>
-        {/* Autres maisons en enfilade au loin, sombres */}
-        <g fill="#0a0e18" opacity="0.9">
-          <path d="M380 490 L380 420 L440 380 L500 420 L500 490 Z" />
-          <path d="M540 490 L540 400 L620 350 L700 400 L700 490 Z" />
-          <path d="M740 490 L740 430 L800 390 L860 430 L860 490 Z" />
-          <path d="M900 490 L900 410 L980 360 L1060 410 L1060 490 Z" />
-          <path d="M1100 490 L1100 430 L1160 400 L1200 430 L1200 490 Z" />
-          {/* fenêtres allumées éparses */}
-          <rect x="446" y="440" width="8" height="10" fill="#c8a848" opacity="0.7" />
-          <rect x="620" y="420" width="8" height="10" fill="#e0a848" opacity="0.6" />
-          <rect x="980" y="420" width="8" height="10" fill="#c8a848" opacity="0.55" />
-        </g>
-
-        {/* Arbre à gauche */}
-        <g transform="translate(30,420)">
-          <rect x="-4" y="20" width="10" height="60" fill="#3a2010" />
-          <circle r="30" fill="#1a3020" stroke="#0a1810" strokeWidth="0.8" />
-          <circle cx="-10" cy="-14" r="18" fill="#1a3020" opacity="0.9" />
-          <circle cx="16" cy="-10" r="18" fill="#1a3020" opacity="0.9" />
-        </g>
-        {/* Arbre à droite */}
-        <g transform="translate(1100,440)">
-          <rect x="-4" y="20" width="10" height="60" fill="#3a2010" />
-          <circle r="32" fill="#1a3020" stroke="#0a1810" strokeWidth="0.8" />
-          <circle cx="-14" cy="-12" r="18" fill="#1a3020" opacity="0.9" />
-          <circle cx="18" cy="-8" r="16" fill="#1a3020" opacity="0.9" />
-        </g>
-
-        {/* RUE / SOL */}
-        <rect y="500" width="1200" height="180" fill="#141018" />
-        <path d="M0 520 L1200 520" stroke="#2a2028" strokeWidth="1.5" />
-        {/* Bordure trottoir */}
-        <rect y="500" width="1200" height="8" fill="#2a2830" />
-        {/* Marquage bandes centrales */}
-        {[80, 240, 400, 560, 720, 880, 1040].map((x, i) => (
-          <rect key={i} x={x} y="600" width="60" height="6" fill="#c8a848" opacity="0.55" />
-        ))}
-        {/* Ligne de bord de route */}
-        <rect y="558" width="1200" height="2" fill="#5a5040" opacity="0.4" />
-
-        {/* Lampadaire à gauche avec halo */}
-        <g>
-          <circle cx="440" cy="360" r="60" fill="url(#s3-lamp)" />
-          <rect x="436" y="180" width="6" height="330" fill="#3a3a3a" />
-          <path d="M440 200 L500 200 L498 214 L440 214 Z" fill="#3a3a3a" />
-          <circle cx="498" cy="210" r="10" fill="#ffe8a0" opacity="0.95" />
-        </g>
-        {/* Deuxième lampadaire à droite */}
-        <g>
-          <circle cx="960" cy="380" r="55" fill="url(#s3-lamp)" />
-          <rect x="956" y="200" width="6" height="310" fill="#3a3a3a" />
-          <path d="M960 220 L900 220 L902 234 L960 234 Z" fill="#3a3a3a" />
-          <circle cx="902" cy="230" r="10" fill="#ffe8a0" opacity="0.95" />
-        </g>
-
-        {/* Boîte aux lettres au premier plan */}
-        <g transform="translate(150,540)">
-          <rect x="-3" y="0" width="6" height="60" fill="#3a3a3a" />
-          <rect x="-20" y="-20" width="40" height="30" rx="6" fill="#8a1010" stroke="#3a0000" strokeWidth="1.2" />
-          <rect x="-16" y="-16" width="10" height="6" fill="#0a0806" />
-          <path d="M-20 -6 L-4 -14 L-4 -6 Z" fill="#c8a848" />
-        </g>
+        <NightStreetDecor />
 
         {/* Halo qui grandit puis se stabilise (position adaptée au centre du sol) */}
         <circle cx="600" cy="580" r="0" fill="url(#s3-halo)">
@@ -945,12 +924,7 @@ function SlideRules({ onNext }) {
                 <stop offset="100%" stopColor="#5eff9e" stopOpacity="0" />
               </radialGradient>
             </defs>
-            <rect width="800" height="340" fill="url(#s4b-cabin2)" />
-            <ellipse cx="400" cy="60" rx="260" ry="34" fill="#000814" stroke="#5a7898" strokeWidth="3" />
-            {[[300, 50], [360, 66], [400, 46], [460, 68], [520, 54]].map(([cx, cy], i) => (
-              <circle key={i} cx={cx} cy={cy} r={i % 2 ? 1.4 : 1} fill="#fff" opacity="0.75" />
-            ))}
-            <circle cx="400" cy="200" r="180" fill="url(#s4b-glow2)" />
+            <CabinBackdrop w={800} h={340} uid="s4b2" glowY={200} />
             {/* Bulle centrée : question de MARTINE (ou sa réponse) */}
             <g transform="translate(400,200)">
               <rect x="-260" y="-70" width="520" height="140" fill="#0e1a30" stroke="#5eff9e" strokeWidth="2.5" rx="12" />
@@ -1020,12 +994,7 @@ function SlideRules({ onNext }) {
                 <stop offset="100%" stopColor="#5eff9e" stopOpacity="0" />
               </radialGradient>
             </defs>
-            <rect width="800" height="520" fill="url(#s4b-cabin3)" />
-            <ellipse cx="400" cy="40" rx="260" ry="24" fill="#000814" stroke="#5a7898" strokeWidth="3" />
-            {[[300, 34], [360, 46], [400, 30], [460, 48], [520, 36]].map(([cx, cy], i) => (
-              <circle key={i} cx={cx} cy={cy} r={i % 2 ? 1.4 : 1} fill="#fff" opacity="0.75" />
-            ))}
-            <circle cx="400" cy="290" r="230" fill="url(#s4b-glow3)" />
+            <CabinBackdrop w={800} h={520} uid="s4b3" glowY={290} />
             {/* Bandeau titre */}
             <g transform="translate(400,90)">
               <rect x="-260" y="-22" width="520" height="44" fill="#0a1428" stroke="#5eff9e" strokeWidth="2.5" rx="8" />
@@ -1105,12 +1074,7 @@ function SlideMartineReparee({ onNext }) {
             <stop offset="100%" stopColor="#5eff9e" stopOpacity="0" />
           </radialGradient>
         </defs>
-        <rect width="800" height="340" fill="url(#s4c-cabin)" />
-        <ellipse cx="400" cy="60" rx="260" ry="34" fill="#000814" stroke="#5a7898" strokeWidth="3" />
-        {[[300, 50], [360, 66], [400, 46], [460, 68], [520, 54]].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r={i % 2 ? 1.4 : 1} fill="#fff" opacity="0.75" />
-        ))}
-        <circle cx="400" cy="200" r="180" fill="url(#s4c-glow)" />
+        <CabinBackdrop w={800} h={340} uid="s4c" glowY={200} />
         <g transform="translate(400,200)">
           <rect x="-260" y="-60" width="520" height="120" fill="#0e1a30" stroke="#5eff9e" strokeWidth="2.5" rx="12" />
           <text x="0" y="-36" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="#5eff9e" letterSpacing="3.5">MARTINE</text>
