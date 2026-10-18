@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Dunes, Glitter, Haze, Palm, Ridge, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau 2 : les bords du Nil (Égypte)
@@ -42,7 +43,17 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
 
       {/* ═══ couche lointaine : rive d'en face + pylône à hiéroglyphes ═══ */}
       <PLayer depth={1}>
-        <path d="M0 300 Q250 290 500 298 Q750 306 1000 296 L1000 372 L0 372 Z" fill="#c69a5e" />
+        {/* falaises du désert qui bordent la vallée, au loin */}
+        <Ridge id="nl-r0" seed={211} y={262} amp={46} rough={0.45} depth={6} fill="#d8a878" lit="#f0c896" light={-1} />
+        <Haze id="nl-h0" y0={220} y1={290} color="#f4dca0" opacity={0.5} />
+        <Dunes id="nl-d0" seed={213} y={292} amp={14} n={6} fill="#dcb47a" light={-1} />
+        {/* la bande verte des cultures, sur la rive d'en face */}
+        <path d="M-40 300 Q250 290 500 298 Q750 306 1040 296 L1040 324 L-40 324 Z" fill="#6a8a3a" />
+        <path d="M-40 300 Q250 290 500 298 Q750 306 1040 296" stroke="#9ab050" strokeWidth="3" fill="none" />
+        {Array.from({ length: 20 }).map((_, i) => <path key={i} d={`M${i * 52 - 20} 302 l40 18`} stroke="#4e6e2a" strokeWidth="2" opacity="0.5" />)}
+        <path d="M-40 316 L1040 316 L1040 324 L-40 324 Z" fill="#7a6a3a" />
+        {/* palmeraie lointaine */}
+        {[40, 90, 300, 360, 420, 640, 690, 1000].map((x, i) => <Palm key={i} x={x} y={304} h={38 + (i % 3) * 8} lean={(i % 2 ? 4 : -4)} color="#3e5e2a" trunk="#6a5434" dates={false} seed={i + 3} />)}
         <g transform="translate(800,300)">
           <path d="M-90 0 L-78 -110 L-40 -118 L-40 0 Z" fill="url(#nl-temple)" />
           <path d="M90 0 L78 -110 L40 -118 L40 0 Z" fill="url(#nl-temple)" />
@@ -52,20 +63,18 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
           ))}
           <path d="M-40 -18 L40 -18 L34 0 L-34 0 Z" fill="#241608" />
         </g>
-        {[[130, 300, 1], [190, 296, 0.8], [940, 298, 0.9]].map(([x, y, s], i) => (
-          <g key={i} transform={`translate(${x},${y}) scale(${s})`}>
-            <path d="M0 0 L-3 -64 L3 -64 Z" fill="#6e4c2e" />
-            <path d="M0 -64 q-32 -6 -50 14 M0 -64 q32 -6 50 14 M0 -64 q-22 -24 -36 -32 M0 -64 q22 -24 36 -32 M0 -64 q0 -28 0 -42" stroke="#4a6a30" strokeWidth="4" fill="none" />
-          </g>
-        ))}
+        <Palm x={130} y={318} h={120} lean={-14} seed={1} />
+        <Palm x={196} y={316} h={96} lean={10} seed={2} />
+        <Palm x={940} y={318} h={110} lean={-8} seed={5} />
       </PLayer>
 
       {/* ═══ couche intermédiaire : le Nil + la felouque ═══ */}
       <PLayer depth={2}>
-        <rect y="322" width="1000" height="102" fill="url(#nl-water)" />
-        <path d="M200 328 L280 328 L300 418 L180 418 Z" fill="#ffe09a" opacity="0.25" />
+        <rect x="-40" y="322" width="1080" height="102" fill="url(#nl-water)" />
+        <rect x="-40" y="322" width="1080" height="5" fill="#4e6e2a" opacity="0.4" />
+        <Glitter x={240} y0={328} y1={418} w0={16} w1={110} blurId="nl-blur" />
         {[338, 360, 384, 406].map((y, i) => (
-          <path key={i} d={`M0 ${y} q120 ${i % 2 ? 4 : -4} 240 0 t240 0 t240 0 t240 0`} stroke="#cfe0da" strokeWidth="1.5" fill="none" opacity="0.4" />
+          <path key={i} d={`M-40 ${y} q120 ${i % 2 ? 4 : -4} 240 0 t240 0 t240 0 t240 0 t240 0`} stroke="#cfe0da" strokeWidth="1.5" fill="none" opacity="0.4" />
         ))}
         <g transform="translate(520,350)">
           <path d="M-46 30 Q0 44 46 30 L38 40 Q0 50 -38 40 Z" fill="#6e4c2e" />
@@ -102,6 +111,9 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
         <path d="M0 560 L0 418 Q250 402 520 424 Q760 442 1000 416 L1000 560 Z" fill="url(#nl-sand)" />
         <path d="M0 560 L0 418 Q250 402 520 424 Q760 442 1000 416 L1000 560 Z" fill="#3c2c18" opacity="0.28" filter="url(#nl-grain)" />
         <ellipse cx="500" cy="502" rx="440" ry="52" fill="#8a6c40" opacity="0.3" />
+        <Speckle seed={215} x0={0} x1={1000} y0={424} y1={560} n={320} colors={["#a07a46", "#f0d8a0", "#7a5a30", "#c8a060"]} opacity={0.5} />
+        {/* limon sombre et humide le long de l'eau */}
+        <path d="M-40 420 Q250 404 520 426 Q760 444 1040 418 L1040 432 Q760 456 520 438 Q250 418 -40 434 Z" fill="#6a5030" opacity="0.5" />
 
         {/* L'ACACIA du désert (support) : canopée plate, tronc, entaille à sève */}
         <g transform="translate(70,432)">
