@@ -4,6 +4,7 @@ import TimeMachine from './TimeMachine.jsx';
 import PaleoArrivalDecor from './PaleoArrivalDecor.jsx';
 import { Avatar } from './Martine.jsx';
 import SceneFrame from './SceneFrame.jsx';
+import { Arm, Figure } from "./chars.jsx";
 
 /* ============================================================
    INTRO — 6 tableaux INTERACTIFS.
@@ -1337,40 +1338,38 @@ function SlideArrival({ onDone }) {
             {/* Membre du clan 1 : autour du feu, plus grand */}
             <g transform="translate(300,550)" onClick={onDone} style={{ cursor: 'pointer' }}>
               <circle cx="0" cy="-14" r="66" fill="none" stroke="#5eff9e" strokeWidth="2.5" strokeDasharray="4 4" opacity="0.85" style={{ animation: 'personneCall 1.6s ease-in-out infinite' }} />
-              <path d="M-22 28 L-22 -14 Q-22 -26 -14 -26 L14 -26 Q22 -26 22 -14 L22 28 Z" fill="#5a3818" />
-              <ellipse cx="0" cy="-38" rx="16" ry="18" fill="#e0a878" />
-              <path d="M-14 -42 q0 -10 8 -12 q6 4 10 -4 q4 8 10 4 q8 4 10 12 z" fill="#3a1808" />
-              <circle cx="-5" cy="-38" r="1.6" fill="#0a0806" />
-              <circle cx="5" cy="-38" r="1.6" fill="#0a0806" />
-              <path d="M-4 -32 q4 3 8 0" stroke="#3a1808" strokeWidth="1" fill="none" strokeLinecap="round" />
-              {/* Lance dans la main */}
-              <path d="M22 0 L46 -20" stroke="#3a1808" strokeWidth="3" strokeLinecap="round" />
-              <path d="M46 -20 L42 -24 L52 -20 L46 -14 Z" fill="#c8a848" />
+              <Figure x={0} y={92} s={1.23} skin="#e0a878" hair="#3a1808" look="mid" beard="short" mood="content"
+                garment="fur" coat="#5a3818" pants="#4a2e18" shoes="#3a2412" belt={false}
+                arms={[{ a1: 12, a2: 6 }, { a1: 40, a2: 70 }]}
+                behind={<g>
+                  <path d="M30 -30 L78 -128" stroke="#3a1808" strokeWidth="3.4" strokeLinecap="round" />
+                  <path d="M78 -128 L72 -128 L84 -142 L84 -124 Z" fill="#c8a848" />
+                </g>} />
               <text x="0" y="-88" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="15" fontWeight="700" fill="#5eff9e" style={{ animation: 'personneCall 1.6s ease-in-out infinite' }}>◉ Rejoins-les</text>
             </g>
             {/* Membre du clan 2 */}
             <g transform="translate(450,520)" onClick={onDone} style={{ cursor: 'pointer' }}>
               <circle cx="0" cy="-24" r="52" fill="none" stroke="#5eff9e" strokeWidth="2" strokeDasharray="4 4" opacity="0.75" style={{ animation: 'personneCall 1.8s ease-in-out infinite' }} />
-              <path d="M-18 44 L-18 -18 Q-18 -28 -10 -28 L10 -28 Q18 -28 18 -18 L18 44 Z" fill="#4a3020" />
-              <ellipse cx="0" cy="-38" rx="12" ry="14" fill="#d0a068" />
-              <path d="M-12 -42 q0 -8 5 -10 q5 2 8 -3 q3 5 8 3 q5 4 8 10 z" fill="#2a1808" />
-              <circle cx="-4" cy="-38" r="1.4" fill="#0a0806" />
-              <circle cx="4" cy="-38" r="1.4" fill="#0a0806" />
-              <path d="M18 -6 L34 -28" stroke="#3a1808" strokeWidth="3.4" strokeLinecap="round" />
-              <path d="M34 -28 L30 -32 L40 -28 L34 -22 Z" fill="#c8a848" />
+              <Figure x={0} y={60} s={0.92} skin="#d0a068" hair="#2a1808" look="braids" mood="content"
+                garment="fur" coat="#4a3020" pants="#3a2414" shoes="#2a1a0e" belt={false}
+                arms={[{ a1: 12, a2: 6 }, { a1: 30, a2: 60 }]}
+                behind={<g>
+                  <path d="M36 -30 L60 -120" stroke="#3a1808" strokeWidth="3.6" strokeLinecap="round" />
+                  <path d="M60 -120 L54 -122 L64 -136 L66 -118 Z" fill="#c8a848" />
+                </g>} />
             </g>
             {/* Enfant du clan qui salue */}
             <g transform="translate(550,570)" onClick={onDone} style={{ cursor: 'pointer' }}>
               <circle cx="0" cy="-14" r="40" fill="none" stroke="#5eff9e" strokeWidth="1.8" strokeDasharray="4 4" opacity="0.7" style={{ animation: 'personneCall 2s ease-in-out infinite' }} />
-              <path d="M-12 26 L-12 -12 Q-12 -20 -6 -20 L6 -20 Q12 -20 12 -12 L12 26 Z" fill="#8a5030" />
-              <ellipse cx="0" cy="-28" rx="9" ry="10" fill="#e0a878" />
-              <circle cx="-3" cy="-28" r="1" fill="#0a0806" />
-              <circle cx="3" cy="-28" r="1" fill="#0a0806" />
-              <path d="M-3 -24 q3 2 6 0" stroke="#3a1808" strokeWidth="0.8" fill="none" strokeLinecap="round" />
-              {/* Petit bras levé qui salue */}
-              <path d="M-12 -8 L-22 -20" stroke="#e0a878" strokeWidth="3" strokeLinecap="round">
-                <animateTransform attributeName="transform" type="rotate" values="0 -12 -8; -18 -12 -8; 0 -12 -8" dur="1.8s" repeatCount="indefinite" />
-              </path>
+              <Figure x={0} y={45} s={0.69} skin="#e0a878" hair="#3a1808" look="short" mood="content"
+                garment="fur" coat="#8a5030" pants="#6a3a20" shoes="#3a2412" belt={false} arms={[]}>
+                <Arm side={1} a1={12} a2={6} coat="#8a5030" skin="#e0a878" />
+                {/* petit bras levé qui salue */}
+                <g>
+                  <animateTransform attributeName="transform" type="rotate" values="0 -19.5 -84; -18 -19.5 -84; 0 -19.5 -84" dur="1.8s" repeatCount="indefinite" />
+                  <Arm side={-1} a1={150} a2={175} coat="#8a5030" skin="#e0a878" />
+                </g>
+              </Figure>
             </g>
           </g>
         )}
