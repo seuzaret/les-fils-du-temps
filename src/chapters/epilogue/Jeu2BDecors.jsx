@@ -1,3 +1,5 @@
+import { Bust } from "./cineChars.jsx";
+
 /* ============================================================
    JEU 2B — décors et portrait de Léa
    ------------------------------------------------------------
@@ -314,36 +316,6 @@ export function StageAtelier() {
 }
 
 /* ───────────────────────── 3 · la salle commune ───────────────────────── */
-function Bust({ x, y, skin, cloth, kind, s = 1 }) {
-  return (
-    <g transform={`translate(${x},${y}) scale(${s})`}>
-      <path d="M-56 90 Q-56 30 -24 22 L24 22 Q56 30 56 90 Z" fill={cloth} stroke="#0a0f18" strokeWidth="1.5" />
-      <rect x="-9" y="8" width="18" height="18" fill={skin} />
-      {kind === "braids" && (
-        <g fill="#1a1408">
-          <path d="M-26 -8 Q-28 36 -34 62 L-26 62 Q-20 30 -18 4 Z" />
-          <path d="M26 -8 Q28 36 34 62 L26 62 Q20 30 18 4 Z" />
-        </g>
-      )}
-      <ellipse cx="0" cy="-6" rx="24" ry="29" fill={skin} stroke="#5a3818" strokeWidth="1.2" />
-      {kind === "braids" && <path d="M-26 -10 Q-28 -40 0 -42 Q28 -40 26 -10 Q10 -24 0 -22 Q-10 -24 -26 -10 Z" fill="#1a1408" />}
-      {kind === "white" && (
-        <g fill="#e8e8e0" stroke="#8a8880" strokeWidth="0.8">
-          <path d="M-25 -12 Q-24 -40 0 -40 Q24 -40 25 -12 Q12 -26 0 -24 Q-12 -26 -25 -12 Z" />
-          <path d="M-16 6 Q0 34 16 6 Q14 20 6 26 Q0 30 -6 26 Q-14 20 -16 6 Z" />
-        </g>
-      )}
-      {kind === "curls" && (
-        <g fill="#b8501f" stroke="#7a3412" strokeWidth="0.8">
-          {[[-20, -26, 11], [0, -34, 12], [20, -26, 11], [-27, -10, 8], [27, -10, 8]].map(([cx, cy, r], i) => <circle key={i} cx={cx} cy={cy} r={r} />)}
-        </g>
-      )}
-      <circle cx="-8" cy="-5" r="2" fill="#1a1008" /><circle cx="8" cy="-5" r="2" fill="#1a1008" />
-      <path d="M-7 8 q7 4 14 0" stroke="#5a2818" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-    </g>
-  );
-}
-
 export function StageToast({ raised = false }) {
   /* verres au repos (x, y) → point de tintement (tx, ty), à droite de Léa et
      à gauche d'Elias pour ne pas masquer les visages. Le dernier verre est celui du joueur. */
@@ -393,9 +365,9 @@ export function StageToast({ raised = false }) {
       </g>
 
       {/* convives, derrière la table */}
-      <Bust x={290} y={236} skin="#c8946a" cloth="#3a5878" kind="braids" />
-      <Bust x={430} y={242} skin="#f4cfae" cloth="#2f7f86" kind="curls" />
-      <Bust x={730} y={236} skin="#e0b898" cloth="#8a6848" kind="white" />
+      <Bust x={290} y={222} skin="#c8946a" cloth="#3a5878" hair="#1a1408" look="braids" mood="content" />
+      <Bust x={430} y={228} skin="#f4cfae" cloth="#2f7f86" hair="#b8501f" look="curls" mood="content" />
+      <Bust x={730} y={222} skin="#e0b898" cloth="#8a6848" hair="#e8e8e0" look="short" beard mood="vexe" />
 
       {/* longue table nappée */}
       <path d="M90 300 L910 300 L990 396 L10 396 Z" fill="#e8e0d0" stroke="#9a8a6a" strokeWidth="1.5" />

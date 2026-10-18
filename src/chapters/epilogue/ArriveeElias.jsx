@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { PortraitElias } from "./StationChronautes.jsx";
+import { HeadBack, HeadFront } from "./cineChars.jsx";
 
 /* ============================================================
    ÉPILOGUE — ARRIVÉE À LA STATION DES CHRONAUTES
@@ -146,16 +147,10 @@ export default function ArriveeElias({ prenom, onDone }) {
           <g>
             <animateTransform attributeName="transform" type="translate"
               values="0 0; 0.4 0; 0 0; -0.4 0; 0 0" dur="2.4s" repeatCount="indefinite" />
-            <ellipse cx="0" cy="-58" rx="22" ry="26" fill="#e0b898" stroke="#5a3818" strokeWidth="0.8" />
-            {/* cheveux blancs */}
-            <path d="M-20 -74 q6 -22 20 -22 q14 0 20 22 q-8 -6 -20 -4 q-12 -2 -20 4 Z" fill="#e8e8e0" />
-            {/* barbe blanche */}
-            <path d="M-14 -46 q14 18 28 0 q-2 12 -8 18 q-6 4 -12 0 q-6 -6 -8 -18 z" fill="#e8e8e0" />
-            {/* yeux fatigués */}
-            <circle cx="-6" cy="-58" r="1.6" fill="#2a3860" />
-            <circle cx="6" cy="-58" r="1.6" fill="#2a3860" />
-            {/* rides */}
-            <path d="M-14 -50 q4 2 8 2 M14 -50 q-4 2 -8 2" stroke="#8a6828" strokeWidth="0.6" fill="none" opacity="0.5" />
+            <g transform="translate(0,-58) scale(1.72)">
+              <HeadBack look="short" hair="#e8e8e0" />
+              <HeadFront skin="#e0b898" hair="#e8e8e0" look="short" beard mood="vexe" />
+            </g>
           </g>
         </g>
       </svg>

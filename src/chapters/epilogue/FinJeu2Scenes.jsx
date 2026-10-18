@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import TimeMachine from "../../engine/TimeMachine.jsx";
 import { PortraitElias, PortraitAl3x1A } from "./StationChronautes.jsx";
+import { Figure } from "./cineChars.jsx";
 import { playMaterialize, playPhonePing } from "../../engine/sfx.js";
 
 /* ============================================================
@@ -53,38 +54,6 @@ function Stars({ n = 60, h = 260, seed = 7 }) {
       <animate attributeName="opacity" values="0.3;1;0.3" dur={`${2 + (i % 4)}s`} repeatCount="indefinite" />
     </circle>
   ));
-}
-
-/* Personnage debout, origine aux pieds, ~118 unités de haut. */
-function Figure({ x, y, s = 1, skin = "#e0a878", hair = "#3a2818", coat = "#3a80c8", pants = "#3a2818", look = "short", beard = false, hood = false, back = false, arms = [14, -14], cane = false, children }) {
-  return (
-    <g transform={`translate(${x},${y}) scale(${s})`}>
-      <ellipse cx="0" cy="2" rx="26" ry="5" fill="#000" opacity="0.45" />
-      <rect x="-10" y="-34" width="8" height="34" rx="2" fill={pants} />
-      <rect x="2" y="-34" width="8" height="34" rx="2" fill={pants} />
-      {arms.map((a, i) => (
-        <g key={i} transform={`translate(${i ? 18 : -18},-82) rotate(${a})`}>
-          <rect x="-4.5" y="0" width="9" height="40" rx="4.5" fill={coat} stroke="#141c26" strokeWidth="0.6" />
-          <circle cx="0" cy="41" r="4.8" fill={skin} />
-        </g>
-      ))}
-      <path d="M-21 -82 Q-22 -91 -12 -93 L12 -93 Q22 -91 21 -82 L25 -30 L-25 -30 Z" fill={coat} stroke="#141c26" strokeWidth="0.8" />
-      {hood && <path d="M-18 -100 Q-19 -126 0 -126 Q19 -126 18 -100 L23 -86 L-23 -86 Z" fill={hair} />}
-      <circle cx="0" cy="-106" r="14" fill={back ? hair : skin} stroke="#5a3018" strokeWidth="0.6" />
-      {!back && !hood && <path d="M-14.5 -108 Q0 -128 14.5 -108 L14.5 -103 Q0 -113 -14.5 -103 Z" fill={hair} />}
-      {!back && look === "long" && <path d="M-14 -108 Q-19 -90 -17 -76 M14 -108 Q19 -90 17 -76" stroke={hair} strokeWidth="5" fill="none" strokeLinecap="round" />}
-      {!back && look === "braids" && <path d="M-13 -102 L-16 -78 M13 -102 L16 -78" stroke={hair} strokeWidth="4" fill="none" strokeLinecap="round" />}
-      {!back && (
-        <g>
-          <circle cx="-5" cy="-106" r="1.5" fill="#1a1008" /><circle cx="5" cy="-106" r="1.5" fill="#1a1008" />
-          <path d="M-4 -99 q4 3 8 0" stroke="#5a2818" strokeWidth="1.1" fill="none" strokeLinecap="round" />
-        </g>
-      )}
-      {beard && !back && <path d="M-11 -102 Q0 -84 11 -102 Q9 -92 4 -88 L-4 -88 Q-9 -92 -11 -102 Z" fill="#e8e8e0" />}
-      {cane && <path d="M30 -46 L36 0" stroke="#5a4028" strokeWidth="3.5" strokeLinecap="round" />}
-      {children}
-    </g>
-  );
 }
 
 /* Silhouette de la station (de nuit), pour les tableaux d'extérieur. */
@@ -184,15 +153,17 @@ export function SceneDescent({ ctx }) {
       <g transform="translate(478,396)">
         <g style={{ ...an("fjFade", 700, 500), transformBox: "fill-box", transformOrigin: "50% 100%" }}>
           <g style={{ animation: "fjSway 2.8s ease-in-out infinite", transformBox: "fill-box", transformOrigin: "50% 100%" }}>
-            <Figure x={0} y={0} s={1.85} skin="#d0a888" hair="#c8a848" coat="#a04ce8" pants="#3a2818" hood arms={[26, -8]}>
-              <circle cx="-9" cy="-60" r="3.6" fill="#c8a848" stroke="#5a3818" strokeWidth="0.6" />
+            <Figure x={0} y={0} s={1.75} skin="#d0a888" hair="#4a3020" hood hoodColor="#8a7a3a" coat="#a04ce8" garment="coat" mood="vexe"
+              arms={[{ a1: 42, a2: 34 }, { a1: 10, a2: 6 }]}>
+              <circle cx="-9" cy="-72" r="3.4" fill="#c8a848" stroke="#5a4020" strokeWidth="0.7" />
+              <path d="M-9 -74.5 V-69.5 M-11.5 -72 H-6.5" stroke="#5a4020" strokeWidth="0.7" />
             </Figure>
           </g>
         </g>
       </g>
       {/* Elias arrive en courant */}
       <g style={an("fjRun", 1500, 1000)}>
-        <Figure x={742} y={400} s={1.9} skin="#c8a888" hair="#e8e8e0" coat="#5a4028" beard arms={[38, -62]} />
+        <Figure x={742} y={402} s={1.8} skin="#c8a888" hair="#e8e8e0" coat="#5a4028" garment="coat" beard mood="surpris" stride={7} arms={[{ a1: 58, a2: 70 }, { a1: 62, a2: 48 }]} />
         <text x="742" y="146" textAnchor="middle" fontFamily="Georgia,serif" fontSize="40" fontWeight="800" fill="#ffd166" style={an("fjFade", 400, 2300)}>!</text>
       </g>
     </Stage>
@@ -390,15 +361,15 @@ export function SceneReunion() {
       {/* foule au fond */}
       {CROWD.map(([x, skin, coat], i) => (
         <g key={i} style={{ animation: "fjSway 3.4s ease-in-out infinite", animationDelay: `${i * 0.3}s`, transformBox: "fill-box", transformOrigin: "50% 100%" }}>
-          <Figure x={x} y={392} s={0.62} skin={skin} coat={coat} hair={["#3a2818", "#5a3818", "#8a5828", "#a89078"][i % 4]} arms={[10, -10]} />
+          <Figure x={x} y={392} s={0.58} skin={skin} coat={coat} garment={i % 3 === 0 ? "coat" : "jacket"} look={["short", "long", "bun", "curls"][i % 4]} hair={["#3a2818", "#5a3818", "#8a5828", "#a89078"][i % 4]} mood="content" arms={[{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }]} />
         </g>
       ))}
       {/* la femme et son mari s'avancent l'un vers l'autre */}
       <g style={an("fjMeetL", 2400, 600, "ease-in-out")}>
-        <Figure x={350} y={402} s={1.95} skin="#d8a880" hair="#3a2818" coat="#c88060" look="long" arms={[18, -34]} />
+        <Figure x={350} y={404} s={1.8} skin="#d8a880" hair="#3a2818" coat="#c88060" garment="coat" look="long" mood="surpris" arms={[{ a1: 12, a2: 8 }, { a1: 78, a2: 92 }]} />
       </g>
       <g style={an("fjMeetR", 2400, 600, "ease-in-out")}>
-        <Figure x={650} y={402} s={1.95} skin="#c8a080" hair="#a8a0a0" coat="#3a80c8" arms={[34, -18]} />
+        <Figure x={650} y={404} s={1.8} skin="#c8a080" hair="#a8a0a0" coat="#3a80c8" garment="jacket" mood="surpris" arms={[{ a1: 78, a2: 92 }, { a1: 12, a2: 8 }]} />
       </g>
       {/* ils se reconnaissent */}
       <g style={an("fjFade", 500, 1000)}>
@@ -469,7 +440,7 @@ export function SceneFrown() {
         <text x="760" y="198" textAnchor="middle" fontFamily={MONO} fontSize="17" fontWeight="800" fill="#7fd8ff" letterSpacing="4">MÉMOIRE</text>
         <text x="760" y="226" textAnchor="middle" fontFamily={MONO} fontSize="17" fontWeight="800" fill="#7fd8ff" letterSpacing="4">COMMUNE</text>
         {[[660, "#e0a878", "#3a80c8"], [720, "#c8a888", "#8a3820"], [800, "#e0d0b0", "#5eff9e"], [860, "#e0a878", "#a04ce8"]].map(([x, skin, coat], i) => (
-          <Figure key={i} x={x} y={396} s={0.8} skin={skin} coat={coat} arms={[150, -150]} />
+          <Figure key={i} x={x} y={398} s={0.74} skin={skin} coat={coat} look={["short", "bun", "curls", "long"][i % 4]} hair={["#3a2818", "#5a3818", "#8a5828", "#2a1a10"][i % 4]} mood="content" arms={[{ a1: 150, a2: 168 }, { a1: 150, a2: 168 }]} />
         ))}
       </g>
       {/* Elias, au premier plan, sourcils froncés */}
@@ -638,7 +609,7 @@ export function SceneElderElias() {
       {/* Elias, très vieux, de dos, s'éloigne avec sa canne */}
       <g style={{ ...an("fjWalk", 9000, 1800, "ease-in") }}>
         <g transform="translate(470,420)">
-          <Figure x={0} y={0} s={1.9} hair="#e8e8e0" coat="#3a2818" pants="#2a2018" back cane arms={[6, -10]} />
+          <Figure x={0} y={0} s={1.8} hair="#e8e8e0" coat="#3a2818" pants="#2a2018" garment="coat" back cane arms={[{ a1: 5, a2: 3 }, { a1: 6, a2: 4 }]} />
         </g>
       </g>
     </Stage>

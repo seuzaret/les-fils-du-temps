@@ -122,4 +122,5 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 ## 10. Dette de code connue
 - Séquence « Le Puits s'organise » (`FinJeu2Scenes.jsx`, `SceneLevels`) : les niveaux affichés (+2 SERRE… −2 SERVEURS) ne correspondent pas à ceux de Jeu 3 (`levels.js` : Surface, Communal, Habitat, Services, Hydroponie, Serveurs −3).
 - Fin de Jeu 2 refaite en tableaux plein écran (2026-10-18) : `FinJeu2.jsx` (textes), `cineKit.jsx` (lecteur : carte-titre noire, tableaux, noir entre chaque), `FinJeu2Scenes.jsx` (14 décors). Le tableau « Chambre N-27 » recoupe le début de `BunkerAwake.jsx` (« Une lumière blanche, froide… ») : à harmoniser.
+- Personnages des cinématiques de fin de Jeu 2 : `cineChars.jsx` (`Head`, `Figure`, `Bust`). Cheveux et barbe sont des arcs de la même ellipse que le visage (rien ne dépasse). Utilisé aussi pour le portrait d'Elias (`StationChronautes.jsx`) et sa silhouette dans `ArriveeElias.jsx`. Les autres personnages du jeu (chapitres 1 à 10, Jeu 3) gardent leur dessin d'origine.
 - Pas de fiche ni de PNJ pour la salle des dormants (à créer si elle est visitable).

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import CarnetElias from "./CarnetElias.jsx";
 import ArriveeElias from "./ArriveeElias.jsx";
+import { HeadBack, HeadFront } from "./cineChars.jsx";
 
 /* Petit hook TYPEWRITER local — révèle un texte lettre par lettre.
    Repart de zéro dès que `text` change. `skip()` affiche tout d'un coup. */
@@ -62,7 +63,6 @@ const DIALOGUES_PAR_PERSO = {
 
 /* -------------------- PORTRAITS SVG -------------------- */
 function PortraitElias({ mood = "neutre" }) {
-  const eyes = mood === "content" ? -1 : mood === "vexe" ? 1.5 : 0;
   return (
     <svg viewBox="0 0 200 240" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
@@ -77,31 +77,11 @@ function PortraitElias({ mood = "neutre" }) {
       <path d="M60 150 L100 175 L140 150" stroke="#5a3818" strokeWidth="1.5" fill="none" />
       {/* cou */}
       <ellipse cx="100" cy="135" rx="18" ry="14" fill="#e0b898" />
-      {/* tête */}
-      <ellipse cx="100" cy="80" rx="52" ry="60" fill="#e0b898" stroke="#5a3818" strokeWidth="1.5" />
-      {/* cheveux blancs mi-longs */}
-      <path d="M52 60 Q60 20 100 18 Q140 20 148 60 Q152 90 145 105 L138 100 Q140 60 130 45 Q100 30 70 45 Q60 60 62 100 L55 105 Q48 90 52 60 Z" fill="#e8e8e0" stroke="#8a8880" strokeWidth="1" />
-      {/* barbe blanche courte */}
-      <path d="M60 115 Q80 145 100 148 Q120 145 140 115 Q140 130 125 140 Q100 145 75 140 Q60 130 60 115 Z" fill="#e8e8e0" stroke="#8a8880" strokeWidth="0.6" />
-      {/* moustache */}
-      <path d="M78 108 Q90 112 100 110 Q110 112 122 108 Q118 115 100 115 Q82 115 78 108 Z" fill="#e8e8e0" />
-      {/* yeux sages */}
-      <ellipse cx="82" cy="82" rx="6" ry="4" fill="#f8f4e8" />
-      <ellipse cx="118" cy="82" rx="6" ry="4" fill="#f8f4e8" />
-      <circle cx={82 + eyes} cy="82" r="2.6" fill="#2a3860" />
-      <circle cx={118 + eyes} cy="82" r="2.6" fill="#2a3860" />
-      {/* sourcils blancs broussailleux */}
-      <path d="M74 72 q6 -4 16 -2 M112 70 q6 -4 16 2" stroke="#e8e8e0" strokeWidth="3" fill="none" strokeLinecap="round" />
-      {/* rides autour des yeux */}
-      <path d="M70 88 q4 4 8 4 M126 88 q-4 4 -8 4" stroke="#8a6828" strokeWidth="0.6" fill="none" opacity="0.5" />
-      {/* nez */}
-      <path d="M100 88 L96 105 L104 105" stroke="#8a6828" strokeWidth="1" fill="none" />
-      {/* bouche */}
-      {mood === "content"
-        ? <path d="M84 122 Q100 132 116 122" stroke="#5a3818" strokeWidth="2" fill="none" strokeLinecap="round" />
-        : mood === "vexe"
-        ? <path d="M84 128 Q100 122 116 128" stroke="#5a3818" strokeWidth="2" fill="none" strokeLinecap="round" />
-        : <path d="M86 125 L114 125" stroke="#5a3818" strokeWidth="2" strokeLinecap="round" />}
+      {/* tête : la tête commune des cinématiques (cheveux et barbe suivent le même contour) */}
+      <g transform="translate(100,80) scale(4)">
+        <HeadBack look="short" hair="#e8e8e0" />
+        <HeadFront skin="#e0b898" hair="#e8e8e0" look="short" beard mood={mood} />
+      </g>
       {/* petite médaille pendue au cou (symbole des chronautes) */}
       <circle cx="100" cy="180" r="8" fill="#c8a848" stroke="#8a6820" strokeWidth="1" />
       <path d="M100 172 L100 168" stroke="#8a6820" strokeWidth="1" />
@@ -424,14 +404,11 @@ function DecorStation({ onClickPerso, done }) {
         {/* bras qui s'ouvrent en accueil */}
         <path d="M-20 -8 Q-34 8 -38 26" stroke="#e0b898" strokeWidth="8" fill="none" strokeLinecap="round" />
         <path d="M20 -8 Q34 8 38 26" stroke="#e0b898" strokeWidth="8" fill="none" strokeLinecap="round" />
-        {/* tête */}
-        <ellipse cx="0" cy="-38" rx="13" ry="16" fill="#e0b898" stroke="#5a3818" strokeWidth="0.8" />
-        {/* cheveux blancs */}
-        <path d="M-11 -46 q4 -16 11 -18 q7 2 11 18 q-4 -4 -11 -2 q-7 -2 -11 2 Z" fill="#e8e8e0" />
-        {/* barbe */}
-        <path d="M-8 -32 q8 12 16 0 q-1 8 -5 12 q-4 3 -6 0 q-4 -4 -5 -12 z" fill="#e8e8e0" />
-        <circle cx="-4" cy="-38" r="1.4" fill="#2a3860" />
-        <circle cx="4" cy="-38" r="1.4" fill="#2a3860" />
+        {/* tête commune (cheveux et barbe affleurent le contour) */}
+        <g transform="translate(0,-38)">
+          <HeadBack look="short" hair="#e8e8e0" />
+          <HeadFront skin="#e0b898" hair="#e8e8e0" look="short" beard mood="neutre" />
+        </g>
         {/* médaille au cou */}
         <circle cx="0" cy="-10" r="4.5" fill="#c8a848" stroke="#8a6820" strokeWidth="0.6" />
       </g>
