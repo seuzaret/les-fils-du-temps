@@ -14,7 +14,7 @@ import BigDialogue from "../BigDialogue.jsx";
 const JORGE_STYLE = {
   color: "#5a4028", pants: "#28303a", hair: "#8a8070", skin: "#c8a888",
   facing: "front", accessory: null, activity: "crossed",
-  bald: true, beard: "#8a8070",
+  bald: true, beard: "#8a8070", glasses: true,
 };
 
 /* Infos par destination pour les révélations progressives de Jorge.
@@ -203,7 +203,7 @@ export default function BunkerPrison({ onGo, j3 }) {
                 <PnjSprite x={120} y={260}
                   color={JORGE_STYLE.color} pants={JORGE_STYLE.pants}
                   hair={JORGE_STYLE.hair} skin={JORGE_STYLE.skin}
-                  bald beard={JORGE_STYLE.beard}
+                  bald beard={JORGE_STYLE.beard} glasses
                   facing="front" activity="crossed"
                   nom="Jorge" role="Détenu"
                   active={doneCount < 3}

@@ -195,7 +195,7 @@ export function HeadFront({
   skin = "#e0a878", hair = "#3a2818", look = "short", beard = false, mustache = false, mood = "neutre",
   hood = false, hoodColor = "#6a5a8a", back = false, facing = "front",
   hat = null, hatColor, hatColor2, glasses = false, earrings = null, paint = false, scar = false,
-  freckles = false, kohl = false, lips = null, blush = true,
+  freckles = false, kohl = false, lips = null, blush = true, beardColor,
 }) {
   if (back) return hat && hat !== "hood" && hat !== "coif" ? <Hat hat={hat} c={hatColor || "#5a4030"} c2={hatColor2} f={0} /> : null;
   const f = F(facing);
@@ -231,11 +231,11 @@ export function HeadFront({
       {paint && <path d={`M${-11 + dx} 3.2 l4.4 -0.8 M${-10.8 + dx} 5.6 l3.8 -0.6`} stroke="#b5451f" strokeWidth="1.1" strokeLinecap="round" opacity="0.7" />}
       {scar && <path d={`M${7.6 + dx} 1.6 l1.6 3.4`} stroke={shade(skin, -0.32)} strokeWidth="0.45" strokeLinecap="round" />}
       {/* barbe : région basse de la MÊME ellipse */}
-      {beardKind && <Beard kind={beardKind} hair={hair} dx={dx} />}
+      {beardKind && <Beard kind={beardKind} hair={beardColor || hair} dx={dx} />}
       {(mustache || (beardKind && !["goatee", "postiche", "stubble"].includes(beardKind))) && (
         mustache === "handlebar"
-          ? <path d={`M${dx} 5.4 Q${dx - 3} 4 ${dx - 6.4} 6.4 Q${dx - 8.4} 7 ${dx - 8} 4.8 M${dx} 5.4 Q${dx + 3} 4 ${dx + 6.4} 6.4 Q${dx + 8.4} 7 ${dx + 8} 4.8`} stroke={hair} strokeWidth="1.6" fill="none" strokeLinecap="round" />
-          : <path d={`M${dx - 5} 6.2 Q${dx - 2} 4.2 ${dx} 5.2 Q${dx + 2} 4.2 ${dx + 5} 6.2 Q${dx + 2} 6.8 ${dx} 6 Q${dx - 2} 6.8 ${dx - 5} 6.2 Z`} fill={hair} stroke={shade(hair, -0.2)} strokeWidth="0.4" />
+          ? <path d={`M${dx} 5.4 Q${dx - 3} 4 ${dx - 6.4} 6.4 Q${dx - 8.4} 7 ${dx - 8} 4.8 M${dx} 5.4 Q${dx + 3} 4 ${dx + 6.4} 6.4 Q${dx + 8.4} 7 ${dx + 8} 4.8`} stroke={beardColor || hair} strokeWidth="1.6" fill="none" strokeLinecap="round" />
+          : <path d={`M${dx - 5} 6.2 Q${dx - 2} 4.2 ${dx} 5.2 Q${dx + 2} 4.2 ${dx + 5} 6.2 Q${dx + 2} 6.8 ${dx} 6 Q${dx - 2} 6.8 ${dx - 5} 6.2 Z`} fill={beardColor || hair} stroke={shade(beardColor || hair, -0.2)} strokeWidth="0.4" />
       )}
       {/* traits */}
       <path d={brows[0]} transform={`translate(${dx},0)`} stroke={browCol} strokeWidth={browW} fill="none" strokeLinecap="round" />

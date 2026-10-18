@@ -16,7 +16,7 @@ import { tirerFiches, anneeOf } from "./fiches.js";
 const JORGE_STYLE = {
   color: "#3a2818", pants: "#1a1408", hair: "#8a8070", skin: "#c8a888",
   facing: "front", accessory: "coat", activity: "write",
-  bald: true, beard: "#8a8070",
+  bald: true, beard: "#8a8070", glasses: true,
 };
 
 /* Textes variant selon le numéro de passe (triIdx = 1, 2 ou 3). */

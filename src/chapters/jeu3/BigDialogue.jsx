@@ -47,6 +47,7 @@ export default function BigDialogue({
         <div style={{ flex: "0 0 220px", background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 6, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44`, overflow: "hidden" }}>
           <svg viewBox="58 180 84 230" style={{ width: "100%", height: "auto" }}>
             <PnjSprite x={100} y={400}
+              {...speakerStyle}
               color={speakerStyle.color || "#3a2818"}
               pants={speakerStyle.pants || "#1a1408"}
               hair={speakerStyle.hair || "#c8b090"}

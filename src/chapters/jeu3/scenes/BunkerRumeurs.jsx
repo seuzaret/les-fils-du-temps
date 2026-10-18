@@ -7,6 +7,7 @@ import { getMissionOrder } from "../missions.js";
 const VEZ_STYLE = {
   color: "#3a2818", pants: "#1a1408", hair: "#c8b090",
   skin: "#c8a888", facing: "front", accessory: "robe", activity: "write",
+  look: "slick", beard: "#a89070", beardKind: "goatee",
 };
 
 /* ============================================================
@@ -312,6 +313,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
         <PnjSprite
           x={600} y={400}
           color="#3a2818" pants="#1a1408" hair="#c8b090" skin="#c8a888"
+          look="slick" beard="#a89070" beardKind="goatee"
           facing="front" accessory="robe" activity="write"
           nom="Juge Vez" role="Juge des Rumeurs"
           heard={phase !== "briefing"}

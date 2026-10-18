@@ -62,6 +62,8 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
             <PnjSprite key={p.id}
               x={p.pose.x} y={p.pose.y}
               color={p.color} hair={p.hair} pants={p.pants} skin={p.skin}
+              look={p.look} hat={p.hat} hatColor={p.hatColor} hatColor2={p.hatColor2} mustache={p.mustache} glasses={p.glasses} earrings={p.earrings}
+              mood={p.mood} bald={p.bald} beard={p.beard} beardKind={p.beardKind}
               facing={p.facing || "front"}
               pose={p.poseKind || "stand"} accessory={p.accessory || null}
               activity={p.activity || null}

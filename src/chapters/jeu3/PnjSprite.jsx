@@ -20,19 +20,29 @@
                    "hammer" | "torch" | "pray" | "crossed" | "cup" | null
                    (Si présente : remplace les bras par-dessus la posture
                     de base et ajoute l'outil + une petite animation.)
+     look, hat, glasses, earrings, mood, beardKind — options de la tête
+                   commune (engine/chars.jsx) ; `bald` = couronne de cheveux,
+                   `beard` = couleur de la barbe
      nom, role   — étiquettes affichées sous le personnage
      heard       — pastille verte ✓ si vrai
      active      — halo doré pulsant si vrai
      onClick     — callback clic
    ============================================================ */
 import { useState } from "react";
+import { HeadBack, HeadFront, shade } from "../../engine/chars.jsx";
 
 export default function PnjSprite({
   x, y, color = "#5a5060", pants = "#3a2818", hair = "#2a1808", skin = "#e0a878",
   facing = "front", pose = "stand", accessory = null, activity = null,
-  bald = false, beard = null,
+  bald = false, beard = null, look, hat, hatColor, hatColor2, glasses, earrings, mood, beardKind, mustache,
   nom = "?", role = "", heard = false, active = false, onClick, onSmalltalk,
 }) {
+  const head = {
+    skin, hair, facing, look: bald ? "ring" : (look || "short"),
+    beard: beard ? (beardKind || "full") : false, beardColor: beard || undefined,
+    hat: hat || (accessory === "hardhat" ? "hardhat" : null), hatColor, hatColor2, glasses, earrings, mustache, mood: mood || "neutre",
+  };
+  const headY = pose === "sit" ? -86 : -96;
   const hasActivity = !!activity;
   const [hover, setHover] = useState(false);
   return (
@@ -54,19 +64,22 @@ export default function PnjSprite({
       {/* Ombre au sol */}
       <ellipse cx="0" cy="0" rx="18" ry="4" fill="#000" opacity="0.35" />
 
+      {/* cheveux longs / chignon : derrière le corps */}
+      <g transform={`translate(0,${headY}) scale(0.92)`}><HeadBack {...head} /></g>
+
       {/* Corps selon la pose (les bras par défaut sont cachés si le PNJ
           est en activité — l'activité dessinera ses propres bras). */}
       {pose === "sit" ? <SitBody color={color} pants={pants} skin={skin} facing={facing} hideArms={hasActivity} /> :
                         <StandBody color={color} pants={pants} skin={skin} facing={facing} hideArms={hasActivity} />}
 
       {/* Accessoire de métier (par-dessus la tunique) */}
-      {accessory && <Accessory kind={accessory} facing={facing} pose={pose} />}
+      {accessory && accessory !== "hardhat" && <Accessory kind={accessory} facing={facing} pose={pose} />}
 
       {/* Activité (bras + outil + animation) */}
-      {hasActivity && <Activity kind={activity} skin={skin} facing={facing} pose={pose} />}
+      {hasActivity && <Activity kind={activity} skin={skin} color={color} facing={facing} pose={pose} />}
 
       {/* Tête + cheveux + visage — orientation selon `facing` */}
-      <Head hair={hair} skin={skin} facing={facing} bald={bald} beard={beard} />
+      <g transform={`translate(0,${headY}) scale(0.92)`}><HeadFront {...head} /></g>
 
       {/* Pastille "déjà entendu" */}
       {heard && (
@@ -96,57 +109,49 @@ export default function PnjSprite({
   );
 }
 
-/* ═══ CORPS DEBOUT ═══ */
-function StandBody({ color, pants, skin, facing, hideArms = false }) {
-  if (facing === "left") {
-    return (
-      <g>
-        <rect x="-8" y="-40" width="7" height="40" fill={pants} stroke="#0a0806" strokeWidth="0.6" />
-        <rect x="1"  y="-40" width="7" height="40" fill={pants} stroke="#0a0806" strokeWidth="0.6" opacity="0.85" />
-        <ellipse cx="-4" cy="-1" rx="6" ry="2" fill="#141c26" />
-        <ellipse cx="4"  cy="-1" rx="6" ry="2" fill="#141c26" opacity="0.85" />
-        <path d="M-14 -84 Q-18 -70 -16 -42 L 12 -42 Q 14 -70 10 -84 Z" fill={color} stroke="#0a0806" strokeWidth="0.8" />
-        {!hideArms && (
-          <>
-            <path d="M-14 -80 Q-24 -70 -22 -56 Q-20 -50 -14 -50" stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-            <circle cx="-14" cy="-50" r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
-          </>
-        )}
-      </g>
-    );
-  }
-  if (facing === "right") {
-    return (
-      <g>
-        <rect x="-8" y="-40" width="7" height="40" fill={pants} stroke="#0a0806" strokeWidth="0.6" opacity="0.85" />
-        <rect x="1"  y="-40" width="7" height="40" fill={pants} stroke="#0a0806" strokeWidth="0.6" />
-        <ellipse cx="-4" cy="-1" rx="6" ry="2" fill="#141c26" opacity="0.85" />
-        <ellipse cx="4"  cy="-1" rx="6" ry="2" fill="#141c26" />
-        <path d="M-10 -84 Q-14 -70 -12 -42 L 16 -42 Q 18 -70 14 -84 Z" fill={color} stroke="#0a0806" strokeWidth="0.8" />
-        {!hideArms && (
-          <>
-            <path d="M14 -80 Q24 -70 22 -56 Q20 -50 14 -50" stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-            <circle cx="14" cy="-50" r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
-          </>
-        )}
-      </g>
-    );
-  }
-  /* front */
+/* Manche (vêtement) + main : deux traits superposés pour le contour. */
+function Sleeve({ d, color }) {
   return (
     <g>
-      <rect x="-9" y="-40" width="8" height="40" fill={pants} stroke="#0a0806" strokeWidth="0.6" />
-      <rect x="1"  y="-40" width="8" height="40" fill={pants} stroke="#0a0806" strokeWidth="0.6" />
-      <ellipse cx="-5" cy="-1" rx="6" ry="2" fill="#141c26" />
-      <ellipse cx="5"  cy="-1" rx="6" ry="2" fill="#141c26" />
-      <path d="M-16 -84 Q-20 -68 -18 -42 L 18 -42 Q 20 -68 16 -84 Z" fill={color} stroke="#0a0806" strokeWidth="0.8" />
-      <path d="M-8 -84 Q0 -80 8 -84" stroke="#0a0806" strokeWidth="0.6" fill="none" opacity="0.5" />
+      <path d={d} stroke={shade(color, -0.3)} strokeWidth="8.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+      <path d={d} stroke={color} strokeWidth="7" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    </g>
+  );
+}
+const Hand = ({ x, y, skin }) => <circle cx={x} cy={y} r="4" fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />;
+
+/* Tronc commun (debout : haut à -86, bas à -42 ; assis : décalé de +10). */
+function Torso({ color, skin, dy = 0 }) {
+  const dark = shade(color, -0.25);
+  const y = (v) => v + dy;
+  return (
+    <g>
+      <rect x="-4.2" y={y(-92)} width="8.4" height="10" rx="2" fill={shade(skin, -0.1)} />
+      <path d={`M-17 ${y(-80)} Q-17 ${y(-86)} -10 ${y(-86.6)} L-4.2 ${y(-86)} L0 ${y(-82.4)} L4.2 ${y(-86)} L10 ${y(-86.6)} Q17 ${y(-86)} 17 ${y(-80)} L16.4 ${y(-44)} Q0 ${y(-40.6)} -16.4 ${y(-44)} Z`} fill={color} stroke={dark} strokeWidth="0.8" strokeLinejoin="round" />
+      <path d={`M-4.2 ${y(-86)} L0 ${y(-82.4)} L4.2 ${y(-86)}`} fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.5" />
+      <path d={`M0 ${y(-82.4)} L0 ${y(-47)}`} stroke={dark} strokeWidth="0.6" opacity="0.5" />
+      <path d={`M-16.4 ${y(-47)} Q0 ${y(-44)} 16.4 ${y(-47)}`} stroke={dark} strokeWidth="1.4" fill="none" />
+    </g>
+  );
+}
+
+/* ═══ CORPS DEBOUT ═══ */
+function StandBody({ color, pants, skin, facing, hideArms = false }) {
+  const f = facing === "left" ? -1 : facing === "right" ? 1 : 0;
+  const dp = shade(pants, -0.2);
+  return (
+    <g>
+      <rect x="-9.4" y="-44" width="8.2" height="42" rx="3" fill={pants} stroke={dp} strokeWidth="0.6" />
+      <rect x="1.2" y="-44" width="8.2" height="42" rx="3" fill={pants} stroke={dp} strokeWidth="0.6" />
+      <ellipse cx={-5.2 + f * 2} cy="-1.6" rx="6" ry="2.8" fill="#141c26" />
+      <ellipse cx={5.2 + f * 2} cy="-1.6" rx="6" ry="2.8" fill="#141c26" />
+      <Torso color={color} skin={skin} />
       {!hideArms && (
         <>
-          <path d="M-18 -80 Q-26 -66 -22 -50" stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-          <path d="M 18 -80 Q 26 -66 22 -50" stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-          <circle cx="-22" cy="-50" r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
-          <circle cx=" 22" cy="-50" r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
+          <Sleeve d={`M-16.6 -80 L${-20 + (f < 0 ? -2 : 0)} -64 L${-19 + (f < 0 ? -4 : 0)} -51`} color={color} />
+          <Sleeve d={`M16.6 -80 L${20 + (f > 0 ? 2 : 0)} -64 L${19 + (f > 0 ? 4 : 0)} -51`} color={color} />
+          <Hand x={-19 + (f < 0 ? -4 : 0)} y={-48} skin={skin} />
+          <Hand x={19 + (f > 0 ? 4 : 0)} y={-48} skin={skin} />
         </>
       )}
     </g>
@@ -155,83 +160,22 @@ function StandBody({ color, pants, skin, facing, hideArms = false }) {
 
 /* ═══ CORPS ASSIS (sur un banc, jambes pendantes) ═══ */
 function SitBody({ color, pants, skin, hideArms = false }) {
+  const dp = shade(pants, -0.2);
   return (
     <g>
-      <path d="M-10 -30 Q-14 -6 -6 0 L 6 0 Q 14 -6 10 -30 Z" fill={pants} stroke="#0a0806" strokeWidth="0.6" />
-      <ellipse cx="-5" cy="0" rx="6" ry="2" fill="#141c26" />
-      <ellipse cx="5"  cy="0" rx="6" ry="2" fill="#141c26" />
-      <path d="M-16 -74 Q-20 -60 -16 -32 L 16 -32 Q 20 -60 16 -74 Z" fill={color} stroke="#0a0806" strokeWidth="0.8" />
+      <rect x="-12" y="-34" width="11" height="9" rx="4" fill={pants} stroke={dp} strokeWidth="0.6" />
+      <rect x="1" y="-34" width="11" height="9" rx="4" fill={pants} stroke={dp} strokeWidth="0.6" />
+      <rect x="-10.4" y="-28" width="8.4" height="27" rx="3" fill={shade(pants, -0.05)} stroke={dp} strokeWidth="0.6" />
+      <rect x="2" y="-28" width="8.4" height="27" rx="3" fill={shade(pants, -0.05)} stroke={dp} strokeWidth="0.6" />
+      <ellipse cx="-6" cy="-0.8" rx="6" ry="2.6" fill="#141c26" />
+      <ellipse cx="6" cy="-0.8" rx="6" ry="2.6" fill="#141c26" />
+      <Torso color={color} skin={skin} dy={10} />
       {!hideArms && (
-        <path d="M-16 -60 Q-8 -50 0 -46 Q 8 -50 16 -60" stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-      )}
-    </g>
-  );
-}
-
-/* ═══ TÊTE (avec cheveux et visage — orientation) ═══ */
-function Head({ hair, skin, facing, bald = false, beard = null }) {
-  return (
-    <g transform="translate(0,-96)">
-      {/* cou */}
-      <rect x="-4" y="6" width="8" height="10" fill={skin} stroke="#5a3018" strokeWidth="0.5" />
-      {/* tête ovale */}
-      <ellipse rx="12" ry="14" fill={skin} stroke="#5a3018" strokeWidth="0.8" />
-      {/* Crâne chauve : liseré clair sur la tempe pour le volume */}
-      {bald && (
-        <path d="M-9 -10 Q0 -14 9 -10" stroke="#5a3018" strokeWidth="0.4" fill="none" opacity="0.6" />
-      )}
-      {/* Couronne de cheveux (demi-tour arrière, caractéristique des chauves) */}
-      {bald && facing === "front" && (
-        <path d="M-12 2 Q-13 -4 -11 -6 L-9 -6 L-9 2 Z M12 2 Q13 -4 11 -6 L9 -6 L9 2 Z" fill={hair} />
-      )}
-      {bald && facing === "left" && (
-        <path d="M-11 -2 Q-13 -4 -10 -6 L-6 -4 L-6 2 Z" fill={hair} />
-      )}
-      {bald && facing === "right" && (
-        <path d="M11 -2 Q13 -4 10 -6 L6 -4 L6 2 Z" fill={hair} />
-      )}
-      {/* Cheveux : la coupe change avec l'orientation */}
-      {!bald && facing === "front" && (
-        <path d="M-11 -6 q0 -14 6 -16 q4 2 5 -4 q3 4 5 -2 q4 3 6 8 q0 8 -1 14 Z" fill={hair} />
-      )}
-      {!bald && facing === "left" && (
-        <path d="M-11 -6 q0 -14 6 -16 q6 -2 8 4 q0 12 -2 16 L-4 -2 Z" fill={hair} />
-      )}
-      {!bald && facing === "right" && (
-        <path d="M11 -6 q0 -14 -6 -16 q-6 -2 -8 4 q0 12 2 16 L4 -2 Z" fill={hair} />
-      )}
-      {/* Visage : yeux + bouche différents selon l'orientation */}
-      {facing === "front" && (
         <>
-          <circle cx="-4" cy="0" r="1.3" fill="#0a0806" />
-          <circle cx=" 4" cy="0" r="1.3" fill="#0a0806" />
-          <path d="M-3 5 Q0 7 3 5" stroke="#5a2818" strokeWidth="0.9" fill="none" strokeLinecap="round" />
+          <Sleeve d="M-16.6 -70 L-19 -54 L-9 -40" color={color} />
+          <Sleeve d="M16.6 -70 L19 -54 L9 -40" color={color} />
+          <Hand x={-8} y={-38} skin={skin} /><Hand x={8} y={-38} skin={skin} />
         </>
-      )}
-      {facing === "left" && (
-        <>
-          {/* Un œil visible (le gauche), nez qui saille à gauche */}
-          <circle cx="-2" cy="0" r="1.3" fill="#0a0806" />
-          <path d="M-10 2 Q-11 4 -9 5" stroke="#5a3018" strokeWidth="0.5" fill="none" />
-          <path d="M-4 5 Q-1 6 1 5" stroke="#5a2818" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-        </>
-      )}
-      {facing === "right" && (
-        <>
-          <circle cx="2" cy="0" r="1.3" fill="#0a0806" />
-          <path d="M10 2 Q11 4 9 5" stroke="#5a3018" strokeWidth="0.5" fill="none" />
-          <path d="M4 5 Q1 6 -1 5" stroke="#5a2818" strokeWidth="0.9" fill="none" strokeLinecap="round" />
-        </>
-      )}
-      {/* Barbe (recouvre la bouche + le menton + les joues) */}
-      {beard && facing === "front" && (
-        <path d="M-10 4 Q-11 10 -6 13 Q0 15 6 13 Q11 10 10 4 Q7 7 4 7 Q0 9 -4 7 Q-7 7 -10 4 Z" fill={beard} stroke="#2a1808" strokeWidth="0.4" />
-      )}
-      {beard && facing === "left" && (
-        <path d="M-9 4 Q-11 10 -6 13 Q-2 14 1 11 Q3 8 2 4 Q-2 7 -5 6 Q-7 6 -9 4 Z" fill={beard} stroke="#2a1808" strokeWidth="0.4" />
-      )}
-      {beard && facing === "right" && (
-        <path d="M9 4 Q11 10 6 13 Q2 14 -1 11 Q-3 8 -2 4 Q2 7 5 6 Q7 6 9 4 Z" fill={beard} stroke="#2a1808" strokeWidth="0.4" />
       )}
     </g>
   );
@@ -322,15 +266,14 @@ function Accessory({ kind, facing, pose }) {
    Rendue APRÈS le corps (donc devant). Dessine ses propres bras
    dans une pose adaptée à l'activité, et anime l'outil discrètement.
    L'ancre est y=0 (pieds) ; les mains typiques sont vers y=-55/-70. */
-function Activity({ kind, skin, facing, pose }) {
+function Activity({ kind, skin, color = "#5a5060", facing, pose }) {
   const isSit = pose === "sit";
   const shoulderY = isSit ? -70 : -80;
   const handY = isSit ? -50 : -55;
   const arm = (fromX, fromY, toX, toY) => (
-    <path d={`M${fromX} ${fromY} Q${(fromX + toX) / 2} ${(fromY + toY) / 2 + 4} ${toX} ${toY}`}
-      stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
+    <Sleeve d={`M${fromX} ${fromY} Q${(fromX + toX) / 2 + (fromX < 0 ? -4 : 4)} ${(fromY + toY) / 2 + 2} ${toX} ${toY}`} color={color} />
   );
-  const hand = (x, y) => <circle cx={x} cy={y} r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />;
+  const hand = (x, y) => <Hand x={x} y={y} skin={skin} />;
 
   switch (kind) {
     case "wipe": {
@@ -466,7 +409,7 @@ function Activity({ kind, skin, facing, pose }) {
         <g>
           {arm(-18, shoulderY, -4, y)}
           {arm(18, shoulderY, 4, y)}
-          <ellipse cx="0" cy={y} rx="6" ry="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
+          <ellipse cx="0" cy={y} rx="6" ry="4" fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />
           <line x1="-3" y1={y - 2} x2="3" y2={y - 2} stroke="#8a5030" strokeWidth="0.5" />
         </g>
       );
@@ -476,10 +419,9 @@ function Activity({ kind, skin, facing, pose }) {
       const y = handY + 6;
       return (
         <g>
-          <path d={`M-18 ${shoulderY} Q-6 ${y - 4} 12 ${y}`} stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-          <path d={`M18 ${shoulderY} Q6 ${y - 4} -12 ${y}`} stroke={skin} strokeWidth="7" fill="none" strokeLinecap="round" />
-          <circle cx="12" cy={y} r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
-          <circle cx="-12" cy={y} r="4" fill={skin} stroke="#8a5030" strokeWidth="0.6" />
+          <Sleeve d={`M-17 ${shoulderY} Q-8 ${y - 2} 12 ${y}`} color={color} />
+          <Sleeve d={`M17 ${shoulderY} Q8 ${y - 2} -12 ${y}`} color={shade(color, -0.06)} />
+          <Hand x={12} y={y} skin={skin} /><Hand x={-12} y={y} skin={skin} />
         </g>
       );
     }

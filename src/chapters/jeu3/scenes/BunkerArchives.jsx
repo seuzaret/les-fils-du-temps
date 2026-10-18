@@ -276,7 +276,7 @@ export default function BunkerArchives({ onGo, j3 }) {
         {jorgePresent && (
           <PnjSprite x={700} y={400}
             color="#3a2818" pants="#1a1408" hair="#8a8070" skin="#c8a888"
-            bald beard="#8a8070"
+            bald beard="#8a8070" glasses
             facing="front" accessory="coat" activity="write"
             nom="Jorge" role="Archiviste"
             heard={!triReady && (tri1 || tri2 || tri3)}
