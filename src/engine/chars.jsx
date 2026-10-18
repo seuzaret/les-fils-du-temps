@@ -302,8 +302,8 @@ export function HeadFront({
           <path d={`M${eyes[0].x + 3.4} -1.8 Q${dx} -3 ${eyes[1].x - 3.4} -1.8`} fill="none" />
         </g>
       )}
-      {earrings && f <= 0 && <circle cx={RX + 0.4} cy="4.6" r="1.3" fill={earrings} />}
-      {earrings && f >= 0 && <circle cx={-RX - 0.4} cy="4.6" r="1.3" fill={earrings} />}
+      {earrings && f <= 0 && <circle cx={RX + 0.4} cy="4.6" r="1.3" fill={earrings === true ? "#e8c050" : earrings} />}
+      {earrings && f >= 0 && <circle cx={-RX - 0.4} cy="4.6" r="1.3" fill={earrings === true ? "#e8c050" : earrings} />}
       {hat && hat !== "hood" && <Hat hat={hat} c={hatColor || "#5a4030"} c2={hatColor2} f={f} />}
     </g>
   );
@@ -319,6 +319,7 @@ export function Head(props) {
 const GARMENT = {
   jacket: { hem: 1, w: 20.5 }, tunic: { hem: 15, w: 23.5 }, coat: { hem: 28, w: 25 },
   robe: { hem: 46, w: 27 }, dress: { hem: 34, w: 30 }, fur: { hem: 18, w: 25 }, toga: { hem: 32, w: 25 },
+  kilt: { hem: 22, w: 23 },   // torse nu + pagne (coat = couleur du pagne)
 };
 const HIP = { stand: -48, sit: -30, kneel: -26, ground: -16 };
 
@@ -356,6 +357,7 @@ export function Figure(props) {
     arms = [{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }], children, behind,
   } = props;
   const g = GARMENT[garment] || GARMENT.jacket;
+  const kilt = garment === "kilt";
   const hip = HIP[pose] ?? HIP.stand;
   const dy = hip - HIP.stand;            // tout le haut du corps descend de dy
   const coatDark = shade(coat, -0.22);
@@ -400,16 +402,22 @@ export function Figure(props) {
       {/* cou */}
       <rect x="-4.6" y={sh(-93)} width="9.2" height="10" rx="2" fill={shade(skin, -0.1)} />
       {/* tronc */}
-      <path d={torso} fill={coat} stroke={coatDark} strokeWidth="0.9" strokeLinejoin="round" />
+      <path d={torso} fill={kilt ? skin : coat} stroke={kilt ? shade(skin, -0.3) : coatDark} strokeWidth="0.9" strokeLinejoin="round" />
+      {kilt && (
+        <g>
+          <path d={`M-20.4 ${hip - 5} L20.4 ${hip - 5} L${g.w} ${hemY} Q0 ${hemY + 3.4} ${-g.w} ${hemY} Z`} fill={coat} stroke={coatDark} strokeWidth="0.8" />
+          <path d={`M-12 ${hip - 3} L-13.4 ${hemY} M-5 ${hip - 3} L-5.6 ${hemY + 1.6} M5 ${hip - 3} L5.6 ${hemY + 1.6} M12 ${hip - 3} L13.4 ${hemY}`} stroke={coatDark} strokeWidth="0.6" opacity="0.6" />
+        </g>
+      )}
       {furHem && <path d={furHem} fill={coat} stroke={coatDark} strokeWidth="0.8" />}
       {garment === "fur" && <path d={`M-14 ${sh(-76)} q5 -3 9 0 M4 ${sh(-70)} q5 -3 9 0 M-10 ${sh(-60)} q5 -3 9 0 M6 ${sh(-54)} q5 -3 9 0`} stroke={coatDark} strokeWidth="1.1" fill="none" opacity="0.6" />}
       {garment === "toga" && <path d={`M-21 ${sh(-86)} Q-6 ${sh(-80)} 20 ${hip - 4} L20 ${hip + 8} Q-4 ${sh(-62)} -21 ${sh(-74)} Z`} fill={coat2 || shade(coat, 0.1)} stroke={coatDark} strokeWidth="0.6" />}
       {coat2 && garment === "jacket" && <path d={`M-4.8 ${sh(-91.4)} L0 ${sh(-87.6)} L4.8 ${sh(-91.4)} L7 ${hip - 2} L-7 ${hip - 2} Z`} fill={coat2} stroke={coatDark} strokeWidth="0.6" />}
       {apron && <path d={`M-12 ${sh(-80)} L12 ${sh(-80)} L14 ${hemY - 1} Q0 ${hemY + 1} -14 ${hemY - 1} Z`} fill={apron} stroke={shade(apron, -0.25)} strokeWidth="0.7" />}
-      <path d={`M-4.8 ${sh(-91.4)} L0 ${sh(-87.6)} L4.8 ${sh(-91.4)}`} fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />
+      {!kilt && <path d={`M-4.8 ${sh(-91.4)} L0 ${sh(-87.6)} L4.8 ${sh(-91.4)}`} fill={skin} stroke={shade(skin, -0.3)} strokeWidth="0.6" />}
       {belt && <path d={`M-20 ${hip - 2} Q0 ${hip + 1} 20 ${hip - 2}`} stroke={trim || coatDark} strokeWidth={trim ? 2.4 : 1.8} fill="none" />}
-      {!apron && garment !== "toga" && <path d={`M0 ${sh(-87.6)} L0 ${hip - 4}`} stroke={coatDark} strokeWidth="0.7" opacity="0.55" />}
-      {arms.map((a, i) => <Arm key={i} side={i ? 1 : -1} a1={a.a1} a2={a.a2} coat={coat} skin={skin} sy={sh(-84)} bare={bareArms} />)}
+      {!apron && garment !== "toga" && !kilt && <path d={`M0 ${sh(-87.6)} L0 ${hip - 4}`} stroke={coatDark} strokeWidth="0.7" opacity="0.55" />}
+      {arms.map((a, i) => <Arm key={i} side={i ? 1 : -1} a1={a.a1} a2={a.a2} coat={coat} skin={skin} sy={sh(-84)} bare={bareArms || kilt} />)}
       {cane && <path d={`M30 ${sh(-48)} L35 -1`} stroke="#6a4a2a" strokeWidth="3.6" strokeLinecap="round" />}
       <g transform={`translate(0,${-106 + dy})`}><HeadFront {...props} /></g>
       {children}

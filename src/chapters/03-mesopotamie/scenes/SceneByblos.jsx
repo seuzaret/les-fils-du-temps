@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau adjacent : LE PORT DE BYBLOS
@@ -144,31 +145,17 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         {/* LE CHARPENTIER phénicien accroupi près du bateau, maillet levé */}
         <g transform="translate(390,494)">
           <ellipse cx="0" cy="34" rx="24" ry="4" fill="#0a0604" opacity="0.55" />
-          {/* jambes accroupies */}
-          <path d="M-18 30 Q-14 8 -2 12 L20 28 Q26 34 22 34 L-20 34 Q-24 32 -18 30 Z" fill="#6a4028" stroke="#2a1810" strokeWidth="0.6" />
-          {/* tunique courte (chiton) rayée */}
-          <path d="M-16 20 Q-14 -14 0 -20 Q14 -14 16 20 Z" fill="#c85028" stroke="#5a1810" strokeWidth="0.6" />
-          <path d="M-14 -8 h28 M-15 0 h30 M-16 10 h32" stroke="#8a2010" strokeWidth="0.5" />
-          {/* épaules bronzées */}
-          <ellipse cx="-16" cy="-8" rx="6" ry="4" fill="#a06838" />
-          <ellipse cx="16" cy="-8" rx="6" ry="4" fill="#a06838" />
-          {/* bras levé qui frappe */}
-          <path d="M16 -8 L28 -28" stroke="#a06838" strokeWidth="4" strokeLinecap="round" />
-          {/* maillet en bois */}
-          <g transform="translate(28,-30) rotate(-30)">
-            <rect x="-2" y="0" width="4" height="20" fill="#5a3818" />
-            <rect x="-8" y="-8" width="16" height="10" rx="1.5" fill="#8a5a2e" stroke="#2a1810" strokeWidth="0.6" />
-          </g>
-          {/* tête */}
-          <ellipse cx="0" cy="-30" rx="12" ry="14" fill="#a06838" stroke="#3a2010" strokeWidth="0.6" />
-          {/* cheveux noirs bouclés (mode phénicienne) + barbe soignée */}
-          <path d="M-12 -34 q0 -12 6 -14 q6 4 8 -2 q4 6 8 4 q6 4 6 12" stroke="#1a1408" strokeWidth="1.5" fill="none" />
-          <path d="M-10 -26 q3 8 10 8 q7 0 10 -8 q0 8 -3 12 q-5 3 -8 2 q-4 1 -7 -2 q-3 -4 -2 -12 z" fill="#2a1a10" />
-          {/* traits */}
-          <circle cx="-3" cy="-30" r="1.4" fill="#0a0806" />
-          <circle cx="3" cy="-30" r="1.4" fill="#0a0806" />
-          {/* boucle d'oreille en or */}
-          <circle cx="-12" cy="-28" r="1.4" fill="#f0c848" stroke="#5a3010" strokeWidth="0.3" />
+          <Figure x={0} y={34} s={0.76} pose="kneel" skin="#a06838" look="curls" hair="#1a1408" beard="short" beardColor="#2a1a10" earrings
+            garment="tunic" coat="#c85028" pants="#6a4028" shoes="#3a2414" bareArms mood="colere"
+            arms={[{ a1: 40, a2: 70 }, { a1: 150, a2: 120 }]}>
+            {/* rayures du chiton */}
+            <path d="M-20 -50 h40 M-21 -40 h42 M-22 -30 h44" stroke="#8a2010" strokeWidth="0.8" opacity="0.7" />
+            {/* maillet en bois, levé pour frapper */}
+            <g transform="translate(44.6,-85) rotate(28)">
+              <rect x="-2.6" y="-24" width="5.2" height="28" rx="1.4" fill="#5a3818" />
+              <rect x="-11" y="-36" width="22" height="13" rx="2" fill="#8a5a2e" stroke="#2a1810" strokeWidth="0.8" />
+            </g>
+          </Figure>
         </g>
         {/* Amphores de pourpre à droite (le fameux commerce phénicien) */}
         <g transform="translate(560,510)">

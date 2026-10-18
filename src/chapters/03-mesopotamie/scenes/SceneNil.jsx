@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau 2 : les bords du Nil (Égypte)
@@ -186,24 +187,18 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
         {/* LE PHARAON SNÉFROU (droite) : némès rayé, pagne blanc, sceptre */}
         <g transform="translate(730,472)">
           <ellipse cx="0" cy="30" rx="24" ry="7" fill="#241608" opacity="0.45" />
-          {/* pagne blanc (shendyt) */}
-          <path d="M-14 30 Q-14 2 0 -2 Q14 2 14 30 Z" fill="#eee6d2" />
-          <path d="M0 -2 L0 30 M-7 6 v22 M7 6 v22" stroke="#c8bc9e" strokeWidth="1.4" />
-          {/* torse nu + large collier */}
-          <path d="M-13 4 Q-16 -14 0 -20 Q16 -14 13 4 Q0 10 -13 4 Z" fill="#c08a4e" />
-          <path d="M-11 -8 q11 7 22 0" stroke="#c89a2a" strokeWidth="3" fill="none" />
-          <path d="M-9 -3 q9 5 18 0" stroke="#2f6a9a" strokeWidth="2" fill="none" opacity="0.8" />
-          {/* bras d'accueil, tendu */}
-          <path d="M13 -8 q16 0 22 10" stroke="#c08a4e" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-          {/* le sceptre */}
-          <path d="M-15 -16 L-20 34" stroke="#6e4c2e" strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M-20 -18 q-5 -2 -5 -8 q5 2 5 8 M-20 -18 q5 -2 5 -8 q-5 2 -5 8" fill="#c89a2a" />
-          {/* tête + némès rayé + barbe postiche */}
-          <circle cx="0" cy="-30" r="9" fill="#c08a4e" />
-          <path d="M-11 -32 Q-11 -44 0 -44 Q11 -44 11 -32 L9 -20 L4 -30 L-4 -30 L-9 -20 Z" fill="url(#nl-nemes)" />
-          <path d="M-9 -40 h18 M-8 -36 h16 M-7 -32 h14" stroke="#2f6a9a" strokeWidth="1.6" opacity="0.8" />
-          <path d="M-2 -21 L2 -21 L1 -12 Q0 -10 -1 -12 Z" fill="#2e2013" />
-          <circle cx="0" cy="-44" r="2" fill="#c8382e" />
+          <Figure x={0} y={30} s={0.57} skin="#c48c52" hair="#1a1008" look="bald" beard="postiche" kohl hat="nemes" hatColor="#e8c040" hatColor2="#2a50a0"
+            garment="kilt" coat="#eee6d2" trim="#c89a2a" pants="#c48c52" shoes="#8a6a3a"
+            arms={[{ a1: 12, a2: -10 }, { a1: 75, a2: 60 }]}
+            behind={<g>
+              {/* le sceptre, tenu de la main gauche */}
+              <path d="M-18 -104 L-23 -1" stroke="#6e4c2e" strokeWidth="5" strokeLinecap="round" />
+              <path d="M-18 -106 q-8 -3 -8 -13 q8 3 8 13 M-18 -106 q8 -3 8 -13 q-8 3 -8 13" fill="#c89a2a" />
+            </g>}>
+            {/* large collier ousekh */}
+            <path d="M-12 -87 Q0 -76 12 -87" stroke="#c89a2a" strokeWidth="5" fill="none" />
+            <path d="M-11 -82 Q0 -72 11 -82" stroke="#2f6a9a" strokeWidth="2.6" fill="none" opacity="0.85" />
+          </Figure>
         </g>
         {queteQui === "snefrou" && (
           <g transform="translate(712,378)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>

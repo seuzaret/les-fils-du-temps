@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau adjacent : LE CHANTIER DE LA PYRAMIDE
@@ -173,45 +174,27 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         {/* CONTREMAÎTRE égyptien (à droite du chantier) avec son rouleau */}
         <g transform="translate(500,480)">
           <ellipse cx="0" cy="42" rx="20" ry="4" fill="#0a0604" opacity="0.55" />
-          {/* pagne blanc plissé (chendjit) */}
-          <path d="M-14 40 L-12 8 L12 8 L14 40 Z" fill="#f0e8d0" stroke="#8a6838" strokeWidth="0.6" />
-          <path d="M-10 12 l0 28 M-4 12 l0 28 M2 12 l0 28 M8 12 l0 28" stroke="#8a6838" strokeWidth="0.5" />
-          {/* torse nu bronzé */}
-          <path d="M-12 8 Q-14 -14 0 -20 Q14 -14 12 8 Z" fill="#a06838" stroke="#3a2010" strokeWidth="0.5" />
-          {/* collier ousekh (large collier égyptien) */}
-          <path d="M-10 -8 Q0 -2 10 -8" fill="#f0c848" stroke="#8a5820" strokeWidth="0.6" />
-          <path d="M-8 -6 Q0 -1 8 -6 M-6 -4 Q0 1 6 -4" stroke="#3a80a8" strokeWidth="0.6" fill="none" />
-          {/* épaules */}
-          <ellipse cx="-14" cy="-8" rx="5" ry="4" fill="#a06838" />
-          <ellipse cx="14" cy="-8" rx="5" ry="4" fill="#a06838" />
-          {/* bras qui tient un rouleau de papyrus */}
-          <path d="M14 -6 L28 6" stroke="#a06838" strokeWidth="4" strokeLinecap="round" />
-          <g transform="translate(28,6) rotate(20)">
-            <rect x="-2" y="-10" width="18" height="12" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.6" />
-            <path d="M-2 -8 h18 M-2 -6 h18 M-2 -4 h18 M-2 -2 h18" stroke="#8a5828" strokeWidth="0.4" />
-          </g>
-          {/* tête + coiffe némès rayée bleu/or */}
-          <ellipse cx="0" cy="-32" rx="12" ry="14" fill="#a06838" stroke="#3a2010" strokeWidth="0.6" />
-          <path d="M-14 -36 q0 -8 4 -12 q10 -6 20 0 q4 4 4 12 z" fill="#3a80a8" stroke="#1a1408" strokeWidth="0.6" />
-          <path d="M-14 -32 h28 M-14 -30 h28" stroke="#f0c848" strokeWidth="0.5" />
-          <path d="M-14 -32 L-16 -18 L-8 -12" fill="#3a80a8" stroke="#1a1408" strokeWidth="0.5" />
-          <path d="M14 -32 L16 -18 L8 -12" fill="#3a80a8" stroke="#1a1408" strokeWidth="0.5" />
-          {/* yeux à l'égyptienne, khôl allongé */}
-          <path d="M-6 -32 q3 -2 5 0 l1 1 M0 -32 q3 -2 5 0 l1 1" stroke="#0a0604" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-          <circle cx="-3" cy="-31" r="1.2" fill="#0a0604" />
-          <circle cx="3" cy="-31" r="1.2" fill="#0a0604" />
-          {/* barbiche postiche pharaonique (petite) */}
-          <path d="M-1 -20 L0 -14 L1 -20 L1 -14 L-1 -14 Z" fill="#3a2818" />
+          <Figure x={0} y={42} s={0.7} skin="#a06838" hair="#1a1408" look="short" kohl hat="nemes" hatColor="#3a80a8" hatColor2="#f0c848"
+            garment="kilt" coat="#f0e8d0" trim="#8a6838" pants="#a06838" shoes="#6a4a2a"
+            arms={[{ a1: 10, a2: 6 }, { a1: 50, a2: 80 }]}>
+            <path d="M-12 -87 Q0 -76 12 -87" stroke="#f0c848" strokeWidth="5" fill="none" />
+            <path d="M-11 -82 Q0 -72 11 -82" stroke="#3a80a8" strokeWidth="2" fill="none" />
+            {/* rouleau de papyrus */}
+            <g transform="translate(50,-72) rotate(14)">
+              <rect x="-1" y="-15" width="26" height="17" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.8" />
+              <path d="M2 -11 h20 M2 -8 h20 M2 -5 h20 M2 -2 h20" stroke="#8a5828" strokeWidth="0.6" />
+              <rect x="-3" y="-17" width="4" height="21" rx="2" fill="#d8bc88" stroke="#5a3818" strokeWidth="0.6" />
+            </g>
+          </Figure>
         </g>
         {/* Ouvrier au sol qui pousse un bloc (au premier plan gauche) */}
         <g transform="translate(340,510)">
-          <ellipse cx="0" cy="14" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
-          {/* buste penché */}
-          <path d="M-14 12 Q-16 -8 0 -14 Q16 -8 14 12 Z" fill="#8a5828" stroke="#3a2010" strokeWidth="0.5" />
-          <ellipse cx="4" cy="-20" rx="9" ry="10" fill="#a06838" transform="rotate(20 4 -20)" />
-          {/* bras poussant */}
-          <path d="M12 -4 L28 -8" stroke="#a06838" strokeWidth="4" strokeLinecap="round" />
-          {/* bloc devant lui */}
+          <ellipse cx="4" cy="14" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
+          {/* penché, les deux mains contre le bloc */}
+          <g transform="rotate(18 0 14)">
+            <Figure x={0} y={14} s={0.32} stride={10} facing="right" skin="#a06838" hair="#1a1008" look="short" mood="colere"
+              garment="kilt" coat="#e8dcc0" pants="#a06838" shoes="#6a4a2a" arms={[{ a1: -70, a2: -80 }, { a1: 85, a2: 85 }]} />
+          </g>
           <rect x="28" y="-14" width="22" height="20" fill="#e0c088" stroke="#5a3820" strokeWidth="0.8" />
           <path d="M30 -8 l18 0 M30 -2 l18 0" stroke="#8a6838" strokeWidth="0.4" />
         </g>

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau : la côte phénicienne
@@ -111,10 +112,9 @@ export default function ScenePhenicie({ collect, action, reveal, made = [], mode
 
         {/* un marchand phénicien assis au comptoir */}
         <g transform="translate(560,486)">
-          <path d="M-11 4 Q-14 -14 0 -17 Q14 -14 11 4 L8 24 L-8 24 Z" fill="#7a3f34" />
-          <circle cx="0" cy="-25" r="8" fill="#a06a44" />
-          <path d="M-8 -30 q8 -6 16 0 q-2 -6 -8 -6 q-7 0 -8 6" fill="#2c1c12" />
-          <path d="M8 -4 q10 -2 14 4" stroke="#a06a44" strokeWidth="4" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={26} s={0.58} pose="sit" skin="#a06a44" hair="#2c1c12" look="curls" beard="full" beardColor="#2c1c12" earrings
+            garment="robe" coat="#7a3f34" trim="#c89a4a" pants="#5a2e26" shoes="#3a2418"
+            arms={[{ a1: 62, a2: 84 }, { a1: 14, a2: -20 }]} />
         </g>
 
         {/* TABLETTE À GRAVER — ouvre le mini-jeu « Écris MARTINE » */}

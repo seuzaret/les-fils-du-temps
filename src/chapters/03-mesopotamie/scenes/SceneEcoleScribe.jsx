@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau adjacent : L'ÉCOLE DU SCRIBE (Edubba)
@@ -111,48 +112,28 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
       <PLayer depth={1}>
         {/* LE MAÎTRE UMMIA (assis au centre-droit, sur natte, canne posée) */}
         <g transform="translate(680,470)">
-          {/* ombre */}
           <ellipse cx="0" cy="26" rx="34" ry="5" fill="#0a0604" opacity="0.5" />
-          {/* jambes croisées */}
-          <path d="M-30 20 Q-20 8 -6 12 L18 24 Q28 28 24 30 L-24 30 Q-32 28 -30 20 Z" fill="#5a3818" stroke="#2a1810" strokeWidth="0.6" />
-          {/* tunique blanche à franges */}
-          <path d="M-22 20 Q-20 -16 0 -22 Q20 -16 22 20 Z" fill="#e8dcc0" stroke="#5a3818" strokeWidth="0.6" />
-          <path d="M-22 20 l0 4 M-14 20 l0 4 M-6 20 l0 4 M2 20 l0 4 M10 20 l0 4 M18 20 l0 4" stroke="#8a6a48" strokeWidth="1.2" strokeLinecap="round" />
-          {/* épaules */}
-          <ellipse cx="-18" cy="-8" rx="6" ry="5" fill="#c8946a" />
-          <ellipse cx="18" cy="-8" rx="6" ry="5" fill="#c8946a" />
-          {/* tête */}
-          <ellipse cx="0" cy="-30" rx="14" ry="16" fill="#c8946a" stroke="#5a3818" strokeWidth="0.6" />
-          {/* crâne rasé + barbe soignée noire bouclée (mode sumérienne) */}
-          <path d="M-12 -30 q-2 -12 6 -14 q6 4 6 -2 q4 6 8 -2 q4 6 4 14" stroke="#2a1a10" strokeWidth="1.5" fill="none" />
-          <path d="M-9 -22 q3 10 9 10 q6 0 9 -10 q1 4 -1 12 q-4 4 -8 3 q-6 1 -8 -3 q-2 -8 -1 -12 z" fill="#1a1408" />
-          {/* boucles de la barbe */}
-          <path d="M-6 -14 q2 3 4 0 M0 -12 q2 3 4 0 M-2 -18 q2 3 4 0" stroke="#2a1a10" strokeWidth="0.5" fill="none" />
-          {/* traits sévères */}
-          <circle cx="-4" cy="-30" r="1.6" fill="#0a0806" />
-          <circle cx="4" cy="-30" r="1.6" fill="#0a0806" />
-          <path d="M-7 -34 q3 -2 5 0 M2 -34 q3 -2 5 0" stroke="#2a1a10" strokeWidth="0.8" fill="none" />
-          {/* bras qui tient une canne */}
-          <path d="M22 -8 L46 22" stroke="#c8946a" strokeWidth="4" strokeLinecap="round" />
-          <path d="M46 22 L54 44" stroke="#3a2418" strokeWidth="3" strokeLinecap="round" />
+          <Figure x={0} y={30} s={0.81} pose="ground" skin="#c8946a" look="bald" hair="#2a1a10" beard="full" beardColor="#1a1408" mood="vexe" kohl
+            garment="robe" coat="#e8dcc0" pants="#5a3818" shoes="#3a2418" trim="#8a6a48"
+            arms={[{ a1: 20, a2: -30 }, { a1: 40, a2: 24 }]}>
+            {/* la canne posée, tenue de la main droite */}
+            <path d="M34 -40 L46 2" stroke="#3a2418" strokeWidth="3.6" strokeLinecap="round" />
+          </Figure>
         </g>
         {/* 2 APPRENTIS courbés sur leur tablette (à gauche) */}
         {[[260, 480], [360, 484]].map(([x, y], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
             <ellipse cx="0" cy="22" rx="24" ry="4" fill="#0a0604" opacity="0.5" />
-            {/* jambes croisées */}
-            <path d="M-20 16 Q-14 6 -4 10 L14 20 Q22 24 18 26 L-18 26 Q-24 24 -20 16 Z" fill="#6a4028" />
-            {/* buste courbé en avant */}
-            <path d="M-14 18 Q-18 -10 -2 -16 Q14 -10 18 12 Q10 20 -6 20 Z" fill={i === 0 ? "#c8a848" : "#a86828"} stroke="#3a2010" strokeWidth="0.5" />
-            {/* tête courbée */}
-            <ellipse cx="4" cy="-20" rx="9" ry="11" fill="#c8946a" transform="rotate(15 4 -20)" />
-            <path d="M-3 -24 q4 -8 10 -6 q4 2 6 6" stroke="#2a1a10" strokeWidth="1.5" fill="none" />
-            {/* bras qui tient calame */}
-            <path d="M8 0 L18 12" stroke="#c8946a" strokeWidth="3.5" strokeLinecap="round" />
-            <path d="M18 12 L26 20" stroke="#5a3818" strokeWidth="1.2" strokeLinecap="round" />
-            {/* tablette sur les genoux */}
-            <rect x="6" y="18" width="26" height="18" rx="2" fill="url(#ec-argile)" stroke="#3a1810" strokeWidth="0.6" />
-            <path d="M10 24 l2 -2 l2 2 M16 24 l2 -2 l2 2 M22 24 l2 -2 l2 2 M10 30 l2 -2 l2 2 M16 30 l2 -2 l2 2" stroke="#3a1810" strokeWidth="0.5" fill="none" />
+            {/* courbé sur sa tablette, calame à la main */}
+            <g transform="rotate(6 0 26)">
+              <Figure x={0} y={26} s={0.62} pose="ground" facing="right" skin="#c8946a" look={i ? "mid" : "short"} hair="#2a1a10" mood="vexe"
+                garment="tunic" coat={i === 0 ? "#c8a848" : "#a86828"} pants="#6a4028" shoes="#3a2418"
+                arms={[{ a1: 20, a2: -40 }, { a1: 20, a2: -40 }]}>
+                <rect x="-17" y="-24" width="34" height="20" rx="2.4" fill="url(#ec-argile)" stroke="#3a1810" strokeWidth="0.8" />
+                <path d="M-12 -16 l3 -3 l3 3 M-4 -16 l3 -3 l3 3 M4 -16 l3 -3 l3 3 M-12 -9 l3 -3 l3 3 M-4 -9 l3 -3 l3 3" stroke="#3a1810" strokeWidth="0.8" fill="none" />
+                <path d="M14 -19 L22 -32" stroke="#5a3818" strokeWidth="2" strokeLinecap="round" />
+              </Figure>
+            </g>
           </g>
         ))}
 

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau 1 : la cité d'Ur (tableau de départ)
@@ -172,22 +173,19 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
           <rect x="-52" y="30" width="104" height="20" fill="#9a6e3e" />
           <rect x="-52" y="30" width="104" height="6" fill="#b8894e" />
           <path d="M-52 36 h104" stroke="#6e4c28" strokeWidth="1" opacity="0.5" />
-          {/* le roi, châle de laine à touffes (kaunakès) */}
           <ellipse cx="0" cy="30" rx="22" ry="6" fill="#241608" opacity="0.4" />
-          <path d="M-16 30 Q-20 -2 0 -20 Q20 -2 16 30 Z" fill="url(#uk-wool)" />
-          <g stroke="#b0a077" strokeWidth="1.4" fill="none" opacity="0.7">
-            <path d="M-15 6 q7 5 14 0 q7 5 15 0 M-16 16 q8 5 16 0 q8 5 16 0 M-15 26 q7 5 15 0" />
-          </g>
-          {/* tête + coiffe royale + barbe */}
-          <circle cx="0" cy="-27" r="9" fill="#b0855c" />
-          <path d="M-9 -30 q9 -12 18 0 q-2 -8 -9 -8 q-7 0 -9 8 Z" fill="#8a6636" />
-          <path d="M-9 -33 q9 -4 18 0" stroke="#c89a2a" strokeWidth="2" fill="none" />
-          {/* barbe bouclée */}
-          <path d="M-8 -22 Q-9 -6 0 2 Q9 -6 8 -22 Q0 -16 -8 -22 Z" fill="#2e2013" />
-          <path d="M-6 -18 q6 3 12 0 M-6 -12 q6 3 12 0" stroke="#1e150c" strokeWidth="1" fill="none" opacity="0.6" />
-          {/* le sceptre */}
-          <path d="M16 -18 L22 34" stroke="#6e4c2e" strokeWidth="3.5" strokeLinecap="round" />
-          <circle cx="16" cy="-20" r="4" fill="#c89a2a" />
+          {/* le roi, robe de laine à touffes (kaunakès), sceptre */}
+          <Figure x={0} y={30} s={0.54} skin="#c6965f" hair="#1a1008" look="short" beard="royal" kohl hat="turban" hatColor="#8a6a3e" hatColor2="#e8c050"
+            garment="robe" coat="#d8c8a0" pants="#6e4c2e" shoes="#5a3a20" belt={false}
+            arms={[{ a1: 12, a2: -8 }, { a1: 25, a2: 40 }]}
+            behind={<g>
+              <path d="M38 -94 L43 -1" stroke="#6e4c2e" strokeWidth="5.6" strokeLinecap="round" />
+              <circle cx="38" cy="-97" r="6.6" fill="#c89a2a" />
+            </g>}>
+            <g stroke="#a89470" strokeWidth="2" fill="none" opacity="0.8">
+              <path d="M-23 -64 q6 7 12 0 q6 7 12 0 q6 7 12 0 q6 7 11 0 M-25 -44 q6 7 12 0 q6 7 12 0 q6 7 13 0 q6 7 12 0 M-27 -22 q7 7 13 0 q7 7 13 0 q7 7 13 0 q7 7 14 0" />
+            </g>
+          </Figure>
         </g>
         {queteQui === "mesannepada" && (
           <g transform="translate(232,368)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
@@ -213,19 +211,15 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
         {/* NARÂM-SÎN le collecteur, devant l'étable (droite) */}
         <g transform="translate(700,486)">
           <ellipse cx="0" cy="26" rx="22" ry="6" fill="#241608" opacity="0.45" />
-          <path d="M-13 26 Q-17 -4 0 -18 Q17 -4 13 26 Z" fill="#e0d4b8" />
-          <path d="M-13 26 Q-17 -4 0 -18 Q17 -4 13 26 Z" fill="#8a7a52" opacity="0.28" filter="url(#uk-grain)" />
-          <path d="M-11 8 q11 5 22 0" stroke="#b8a67e" strokeWidth="2" fill="none" />
-          {/* tête rasée de scribe */}
-          <circle cx="0" cy="-27" r="9" fill="#a8764a" />
-          {/* la tablette qu'il tient */}
-          <path d="M-13 -4 q-12 6 -16 16" stroke="#a8764a" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-          <g transform="translate(-32,16) rotate(-10)">
-            <rect x="-9" y="-7" width="18" height="14" rx="2" fill="#a67c46" />
-            <path d="M-5 -3 l3 1.6 M0 -3 l3 1.6 M-5 2 l3 1.6" stroke="#5c3f22" strokeWidth="1.1" />
-          </g>
-          {/* l'autre bras à la tête, dépité */}
-          <path d="M13 -6 q14 -6 12 -22" stroke="#a8764a" strokeWidth="4.5" fill="none" strokeLinecap="round" />
+          {/* crâne rasé de scribe ; tablette dans une main, l'autre à la tête, dépité */}
+          <Figure x={0} y={26} s={0.5} skin="#c0926a" hair="#2a1a10" look="bald" kohl mood="vexe"
+            garment="robe" coat="#e0d4b8" trim="#b8a67e" pants="#6e5a3a" shoes="#4a3a24"
+            arms={[{ a1: 30, a2: 60 }, { a1: 150, a2: -120 }]}>
+            <g transform="translate(-50,-50) rotate(-10)">
+              <rect x="-18" y="-14" width="36" height="28" rx="4" fill="#a67c46" stroke="#5c3f22" strokeWidth="0.8" />
+              <path d="M-10 -6 l6 3.2 M0 -6 l6 3.2 M-10 4 l6 3.2" stroke="#5c3f22" strokeWidth="2" />
+            </g>
+          </Figure>
         </g>
         {queteQui === "naram" && (
           <g transform="translate(682,388)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
