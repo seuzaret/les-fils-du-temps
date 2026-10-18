@@ -2,6 +2,7 @@ import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Birds } from "./decor.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Ridge, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : la rivière
@@ -81,9 +82,10 @@ export default function SceneRiviere({ collect, action, reveal, flags, queteQui 
 
       {/* ═══ couche lointaine : collines bleutées ═══ */}
       <PLayer depth={1}>
-      <path d="M0 302 L92 258 L158 226 L204 252 L262 232 L330 288 L398 250 L462 224 L520 246 L586 232 L648 286 L708 258 L772 236 L838 268 L902 244 L1000 296 L1000 420 L0 420 Z" fill="url(#r1mMid)" opacity="0.95" />
+      <Ridge id="r1-r1" seed={83} y={300} amp={96} rough={0.6} fill="#58629a" lit="#8a88b8" light={-1} snow="#e4dcec" snowLine={232} />
       <rect y="288" width="1000" height="26" fill="#ffe6b0" opacity="0.18" filter="url(#r1blur)" />
-      <path d="M0 352 Q110 306 220 330 Q330 354 440 322 Q550 292 660 328 Q770 362 880 330 Q940 316 1000 334 L1000 430 L0 430 Z" fill="url(#r1mNear)" />
+      <Ridge id="r1-r2" seed={89} y={350} amp={56} rough={0.5} fill="url(#r1mNear)" lit="#5a4a6a" light={-1} />
+      <TreeLine seed={91} y={372} n={44} h={[18, 34]} kinds={["conifer"]} colors={["#2c2838", "#33303e", "#28243a"]} light={-1} jitter={8} />
       <rect y="340" width="1000" height="22" fill="#ffe6b0" opacity="0.14" filter="url(#r1blur)" />
       </PLayer>
 
@@ -93,21 +95,22 @@ export default function SceneRiviere({ collect, action, reveal, flags, queteQui 
       <rect y="380" width="1000" height="40" fill="#4a3a2c" />
       <rect y="380" width="1000" height="40" fill="#2c2014" opacity="0.5" filter="url(#r1grain)" />
       {/* sapins de l'autre rive, sombres à contre-jour */}
-      {[[80, 392, 0.7], [150, 396, 0.55], [930, 390, 0.75], [860, 396, 0.5]].map(([x, y, s], i) => (
-        <g key={i} transform={`translate(${x},${y}) scale(${s})`}>
-          <path d="M-3 0 L3 0 L2 -18 L-2 -18 Z" fill="#221a10" />
-          <path d="M0 -92 L20 -60 L10 -62 L28 -34 L14 -36 L34 -8 L-34 -8 L-14 -36 L-28 -34 L-10 -62 L-20 -60 Z" fill="#243028" />
-          <path d="M-20 -60 L0 -92 L8 -78" stroke="#54724a" strokeWidth="2" fill="none" opacity="0.4" />
-        </g>
-      ))}
+      <TreeLine seed={93} x0={20} x1={220} y={398} n={6} h={[50, 80]} kinds={["conifer"]} colors={["#243028", "#1e2a24"]} light={-1} jitter={4} />
+      <TreeLine seed={97} x0={820} x1={990} y={396} n={5} h={[56, 86]} kinds={["conifer"]} colors={["#243028", "#1e2a24"]} light={-1} jitter={4} />
       {[240, 320, 620, 700, 780].map((x, i) => (
         <path key={i} d={`M${x} 400 q-4 -14 -9 -17 M${x} 400 q0 -16 5 -21 M${x} 400 q4 -12 10 -15`} stroke="#3c4626" strokeWidth="2" fill="none" opacity="0.8" />
       ))}
       {/* LA RIVIÈRE au petit matin */}
       <rect y="404" width="1000" height="100" fill="url(#r1water)" />
       {/* le chemin doré du soleil sur l'eau */}
-      <path d="M252 408 L328 408 L364 502 L212 502 Z" fill="#ffd88a" opacity="0.3" />
-      <path d="M268 412 L312 412 L336 500 L240 500 Z" fill="#fff2c4" opacity="0.25" />
+      {/* reflet du soleil : une colonne de petites vaguelettes dorées, plus large vers nous */}
+      <ellipse cx="290" cy="454" rx="70" ry="50" fill="#ffd88a" opacity="0.14" filter="url(#r1blur)" />
+      {Array.from({ length: 16 }).map((_, i) => {
+        const y = 410 + i * 6, w = 14 + i * 4.2, x = 290 - w / 2 + ((i * 37) % 9) - 4;
+        return <path key={`sp${i}`} d={`M${x.toFixed(1)} ${y} h${w.toFixed(1)}`} stroke={i % 3 ? "#ffe6a8" : "#fff8dc"} strokeWidth={1.4 + i * 0.08} strokeLinecap="round" opacity={0.75 - i * 0.025}>
+          <animate attributeName="opacity" values={`${(0.75 - i * 0.025).toFixed(2)};0.2;${(0.75 - i * 0.025).toFixed(2)}`} dur={`${1.6 + (i % 4) * 0.5}s`} repeatCount="indefinite" />
+        </path>;
+      })}
       {[[240, 430, 70], [290, 452, 90], [258, 474, 80], [306, 490, 60]].map(([x, y, w], i) => (
         <path key={i} d={`M${x} ${y} q${w / 2} ${i % 2 ? 3 : -3} ${w} 0`} stroke="#fff2c4" strokeWidth="2.2" fill="none" opacity="0.5" style={{ animation: `ripple ${2.4 + (i % 3) * 0.8}s ease-in-out infinite` }} />
       ))}
