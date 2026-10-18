@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 3 — Les artisans de la cité  (PEINTURE FINE)
@@ -130,16 +131,8 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
         {/* JALA la potière, penchée sur son ouvrage */}
         <g transform="translate(258,468)">
           <ellipse cx="0" cy="28" rx="22" ry="6" fill="#2a1c10" opacity="0.4" />
-          <path d="M-14 28 Q-19 -3 0 -20 Q19 -3 14 28 Z" fill="#3a6a8a" />
-          <path d="M-14 28 Q-19 -3 0 -20 Q19 -3 14 28 Z" fill="#25506e" opacity="0.3" filter="url(#ar-grain)" />
-          <path d="M-12 6 Q0 12 12 6" stroke="#25506e" strokeWidth="2.5" fill="none" opacity="0.6" />
-          {/* liseré de lumière */}
-          <path d="M-12 24 Q-16 0 -2 -18" stroke="#bfe0f0" strokeWidth="2" fill="none" opacity="0.4" />
-          <circle cx="0" cy="-28" r="9.5" fill="#c89a6e" />
-          <path d="M-10 -32 q0 -11 10 -11 q10 0 10 11 q-3 -8 -10 -8 q-7 0 -10 8 Z" fill="#3a2a1c" />
-          <path d="M8 -26 q3 4 3 8" stroke="#3a2a1c" strokeWidth="2" fill="none" />
-          {/* bras vers le tour */}
-          <path d="M12 -6 q14 6 16 18" stroke="#c89a6e" strokeWidth="4.5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={28} s={0.53} facing="right" skin="#cf9f72" hair="#4a3020" look="bun" hat="headband" hatColor="#b84828" mood="content"
+            garment="dress" coat="#3a6a8a" apron="#b09878" pants="#3a2818" arms={[{ a1: 10, a2: 6 }, { a1: 40, a2: 72 }]} />
         </g>
         {queteQui === "jala" && (
           <g transform="translate(240,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
@@ -188,15 +181,8 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
         {/* AHMID le marchand, main tendue vers ses bêtes */}
         <g transform="translate(680,470)">
           <ellipse cx="0" cy="30" rx="23" ry="6" fill="#2a1c10" opacity="0.4" />
-          <path d="M-15 30 Q-19 -4 0 -22 Q19 -4 15 30 Z" fill="#9a6432" />
-          <path d="M-15 30 Q-19 -4 0 -22 Q19 -4 15 30 Z" fill="#6a4420" opacity="0.28" filter="url(#ar-grain)" />
-          <path d="M-14 8 q14 7 28 0" stroke="#6a4420" strokeWidth="3" fill="none" />
-          <path d="M-13 26 Q-16 2 -2 -20" stroke="#e0c090" strokeWidth="2" fill="none" opacity="0.4" />
-          <circle cx="0" cy="-30" r="10" fill="#b0855c" />
-          {/* coiffe de tissu clair (au lieu d'un capuchon sombre) */}
-          <path d="M-11 -30 Q-11 -43 0 -43 Q11 -43 11 -30 Q4 -37 0 -37 Q-4 -37 -11 -30 Z" fill="#e6dcc4" />
-          <path d="M-11 -30 q11 4 22 0" stroke="#c4b493" strokeWidth="1.4" fill="none" opacity="0.7" />
-          <path d="M14 -6 q15 -2 22 6" stroke="#b0855c" strokeWidth="4.5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={30} s={0.57} facing="right" skin="#b8885a" hair="#1a1408" hat="keffieh" hatColor="#e2d6bc" hatColor2="#5a3a20" mood="content"
+            garment="robe" coat="#9a6432" pants="#5a3a20" arms={[{ a1: 8, a2: 4 }, { a1: 76, a2: 88 }]} />
         </g>
         {queteQui === "ahmid" && (
           <g transform="translate(662,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>

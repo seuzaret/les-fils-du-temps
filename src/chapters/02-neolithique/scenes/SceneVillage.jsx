@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : le village (tableau de départ)
@@ -132,13 +133,8 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
         {/* LA POTIÈRE au travail sur son TOUR (le pot prend forme en tournant) */}
         <g transform="translate(330,470)">
           <ellipse cx="0" cy="30" rx="30" ry="7" fill="#241608" opacity="0.5" />
-          <path d="M-14 6 Q-18 -14 0 -18 Q18 -14 14 6 L10 24 L-10 24 Z" fill="#7a4f34" />
-          <path d="M-14 6 Q0 12 14 6 L12 16 Q0 20 -12 16 Z" fill="#63402a" />
-          <circle cx="0" cy="-26" r="9" fill="#8a5c3c" />
-          <path d="M2 -32 q7 -6 15 -1 q-3 -6 -9 -6 q-6 0 -6 7" fill="#3a2415" />
-          <path d="M8 -30 q4 3 4 9" stroke="#ffce7a" strokeWidth="1.6" fill="none" opacity="0.5" />
-          {/* le bras qui façonne le pot */}
-          <path d="M10 -4 q16 0 22 14" stroke="#8a5c3c" strokeWidth="5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={30} s={0.64} pose="sit" facing="right" skin="#9a6a44" hair="#3a2415" look="bun" mood="content"
+            garment="dress" coat="#7a4f34" pants="#63402a" bareArms arms={[{ a1: 30, a2: 50 }, { a1: 48, a2: 84 }]} />
           {/* LE TOUR : la roue tourne (rayons animés), le pot monte dessus */}
           <g transform="translate(36,14)">
             <ellipse cx="0" cy="20" rx="16" ry="8" fill="#3a2a1a" />
@@ -221,9 +217,8 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
         {/* LE BERGER perplexe (compter le troupeau au marché) */}
         <g transform="translate(700,474)">
           <ellipse cx="0" cy="30" rx="20" ry="6" fill="#241608" opacity="0.5" />
-          <path d="M-11 4 Q-14 -14 0 -17 Q14 -14 11 4 L8 26 L-8 26 Z" fill="#6a4a30" />
-          <circle cx="0" cy="-25" r="8" fill="#8a5c3c" />
-          <path d="M6 -18 q10 -6 12 -16" stroke="#8a5c3c" strokeWidth="4" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={30} s={0.52} skin="#9a6a44" hair="#3a2415" look="short" beard="short" mood="vexe"
+            garment="tunic" coat="#6a4a30" pants="#4a3020" arms={[{ a1: 10, a2: 6 }, { a1: 150, a2: -110 }]} />
           <text x="16" y="-30" fontSize="14" fill="#e8eef5" fontFamily="ui-monospace,monospace" opacity="0.85" style={{ animation: "drift 3s ease-in-out infinite" }}>?</text>
           <text x="-20" y="-24" fontSize="10" fill="#c8d4e2" fontFamily="ui-monospace,monospace" opacity="0.6" style={{ animation: "drift 4s ease-in-out infinite" }}>?</text>
         </g>

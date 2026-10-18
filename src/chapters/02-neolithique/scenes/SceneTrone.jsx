@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 2 — La salle du roi Tannis  (PEINTURE FINE)
@@ -117,26 +118,13 @@ export default function SceneTrone({ collect, action, reveal, queteQui }) {
 
         {/* LE ROI TANNIS, assis, couronné */}
         <g transform="translate(500,392)">
-          <path d="M-26 46 Q-32 -6 0 -24 Q32 -6 26 46 Z" fill="#7a2a4a" />
-          <path d="M-26 46 Q-32 -6 0 -24 Q32 -6 26 46 Z" fill="#5a1c38" opacity="0.3" filter="url(#tr-grain)" />
-          <path d="M-24 44 Q-12 8 0 -22 M26 44 Q14 10 2 -20" stroke="#5a1c38" strokeWidth="3" fill="none" />
-          {/* le liseré de lumière du toit sur son épaule */}
-          <path d="M-4 -22 Q16 -14 24 6" stroke="#ffe9b0" strokeWidth="2.4" fill="none" opacity="0.5" />
-          {/* collier d'or */}
-          <path d="M-16 -6 Q0 8 16 -6" stroke="#e0b040" strokeWidth="4.5" fill="none" />
-          <circle cx="0" cy="4" r="3" fill="#e0b040" />
-          {/* tête + barbe */}
-          <circle cx="0" cy="-36" r="13" fill="#c89a6e" />
-          <path d="M-9 -26 q9 12 18 0 l-2 14 q-7 5 -14 0 Z" fill="#4a3324" />
-          <path d="M-8 -40 q8 -6 16 0" stroke="#3a2618" strokeWidth="2" fill="none" />
-          {/* LA COURONNE d'or à pointes + gemme */}
-          <path d="M-15 -46 L15 -46 L15 -54 L9 -64 L4 -54 L0 -66 L-4 -54 L-9 -64 L-15 -54 Z" fill="#e0b040" stroke="#a8842a" strokeWidth="1.2" />
-          <circle cx="0" cy="-57" r="2.5" fill="#c8382e" />
-          <path d="M-13 -50 q13 -6 26 0" stroke="#fff0b0" strokeWidth="1.2" fill="none" opacity="0.7" />
-          {/* le sceptre */}
-          <path d="M20 -12 q14 -2 16 -32" stroke="#c89a6e" strokeWidth="5.5" fill="none" strokeLinecap="round" />
-          <path d="M36 -50 L36 24" stroke="#8a6a3a" strokeWidth="4.5" strokeLinecap="round" />
-          <circle cx="36" cy="-52" r="7" fill="#e0b040" stroke="#a8842a" strokeWidth="1.5" />
+          <Figure x={0} y={46} s={0.93} pose="sit" skin="#c6965f" hair="#1a1408" hat="crown" hatColor="#e0b040" earrings="#e0b040"
+            garment="robe" coat="#7a2a4a" pants="#5a1c38" arms={[{ a1: 14, a2: -20 }, { a1: 40, a2: 150 }]}>
+            <path d="M-14 -66 Q0 -54 14 -66" stroke="#e0b040" strokeWidth="4.5" fill="none" />
+            <circle cx="0" cy="-58" r="3" fill="#e0b040" />
+          </Figure>
+          <path d="M38 -50 L38 24" stroke="#8a6a3a" strokeWidth="4.5" strokeLinecap="round" />
+          <circle cx="38" cy="-52" r="7" fill="#e0b040" stroke="#a8842a" strokeWidth="1.5" />
         </g>
         {/* le « ? » doré : c'est au tour du roi */}
         {queteQui === "tannis" && (

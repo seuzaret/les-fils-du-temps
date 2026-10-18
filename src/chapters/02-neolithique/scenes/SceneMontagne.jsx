@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 5 — La mine de cuivre, en montagne  (PEINTURE FINE)
@@ -134,25 +135,16 @@ export default function SceneMontagne({ collect, action, reveal, made = [], quet
         {/* ÖTZI, accroupi, emmitouflé, sa hache de cuivre */}
         <g transform="translate(540,486)">
           <ellipse cx="0" cy="24" rx="22" ry="6" fill="#1c160e" opacity="0.5" />
-          <path d="M-14 24 Q-20 -2 0 -18 Q20 -2 14 24 Z" fill="#7a5e40" />
-          <path d="M-14 24 Q-20 -2 0 -18 Q20 -2 14 24 Z" fill="#4a3824" opacity="0.3" filter="url(#mo-grain)" />
-          {/* touffes de fourrure */}
-          <path d="M-14 4 Q0 10 14 4 L12 15 Q0 21 -12 15 Z" fill="#5a4630" />
-          <path d="M-13 -6 q4 -4 8 -2 M-2 -10 q4 -3 8 -1 M6 -4 q4 -3 8 -1" stroke="#8a6e4a" strokeWidth="1.6" fill="none" opacity="0.6" />
-          {/* liseré de lumière froide */}
-          <path d="M-12 20 Q-17 -2 -2 -16" stroke="#cfd8e0" strokeWidth="1.8" fill="none" opacity="0.4" />
-          {/* tête sous capuchon */}
-          <path d="M-10 -16 Q0 -28 10 -16 Q11 -8 0 -6 Q-11 -8 -10 -16 Z" fill="#6a5238" />
-          <circle cx="0" cy="-15" r="6.5" fill="#b08a68" />
-          <path d="M-4 -16 q4 3 8 0" stroke="#3a2a1c" strokeWidth="1.4" fill="none" />
+          <Figure x={0} y={24} s={0.53} pose="ground" skin="#bf9068" hair="#3a2a1a" mood="vexe" hood hoodColor="#6a5238" wrinkles
+            garment="fur" coat="#7a5e40" pants="#5a4630" arms={[{ a1: 14, a2: -12 }, { a1: 20, a2: -10 }]} />
           {/* haleine dans le froid */}
           <ellipse cx="12" cy="-13" rx="9" ry="4" fill="#f0f4f8" opacity="0.5" style={{ animation: "drift 3.5s ease-in-out infinite" }} />
-          {/* jambe qui dépasse (là se posent les tatouages) */}
-          <path d="M-8 22 l-4 18" stroke="#b08a68" strokeWidth="6" strokeLinecap="round" />
+          {/* mollet découvert, jambière retroussée (là se posent les tatouages) */}
+          <ellipse cx="-12.5" cy="17" rx="6" ry="3.4" fill="#bf9068" stroke="#8a6040" strokeWidth="0.6" />
           {soigne && (
-            <g stroke="#20202a" strokeWidth="1.6" strokeLinecap="round" style={{ animation: "fadein 1s ease-out" }}>
-              <path d="M-14 30 h6 M-14 33 h6 M-14 36 h6" />
-              <path d="M-11 40 l4 4 M-7 40 l-4 4" />
+            <g stroke="#20202a" strokeWidth="1.1" strokeLinecap="round" style={{ animation: "fadein 1s ease-out" }}>
+              <path d="M-16 15.4 v3.2 M-14 15 v3.6 M-12 15 v3.6" />
+              <path d="M-9.6 15.4 l2.4 2.6 M-7.2 15.4 l-2.4 2.6" />
             </g>
           )}
           {/* la hache de cuivre posée à côté */}

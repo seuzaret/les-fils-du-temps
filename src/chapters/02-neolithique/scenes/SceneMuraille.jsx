@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 1 — La porte de la cité  (PEINTURE FINE)
@@ -137,30 +138,14 @@ export default function SceneMuraille({ collect, action, reveal, queteQui }) {
 
         {/* GUNA, le garde — cuirasse de cuir, lance, bouclier rond */}
         <g transform="translate(388,440)">
-          <ellipse cx="0" cy="30" rx="28" ry="8" fill="#2a1c10" opacity="0.5" />
-          {/* la lance, plantée */}
+          <ellipse cx="0" cy="46" rx="28" ry="7" fill="#2a1c10" opacity="0.5" />
           <path d="M34 -60 L30 46" stroke="#6e4c2e" strokeWidth="4.5" strokeLinecap="round" />
           <path d="M34 -60 l-6 14 l6 5 l6 -5 Z" fill="#8d8d97" stroke="#dfe3ec" strokeWidth="1" />
-          {/* les jambes */}
-          <path d="M-8 24 l-2 22 M8 24 l3 22" stroke="#5a3f24" strokeWidth="7" strokeLinecap="round" />
-          {/* la tunique de peau + cuirasse */}
-          <path d="M-16 26 Q-22 -8 0 -22 Q22 -8 16 26 Z" fill="#7a5636" />
-          <path d="M-16 26 Q-22 -8 0 -22 Q22 -8 16 26 Z" fill="#2c1a0c" opacity="0.35" filter="url(#mu-grain)" />
-          <path d="M-14 4 q14 6 28 0" stroke="#5a3f24" strokeWidth="3" fill="none" />
-          <path d="M-12 -10 L12 -10 L8 6 L-8 6 Z" fill="#8a5a34" opacity="0.7" />
-          {/* liseré de lumière du matin (soleil à gauche) */}
-          <path d="M-16 20 Q-22 -8 0 -22" stroke="#ffe0a8" strokeWidth="2" fill="none" opacity="0.55" />
-          {/* le bras qui tient la lance */}
-          <path d="M12 -6 q16 -2 22 8" stroke="#c89a6e" strokeWidth="5" fill="none" strokeLinecap="round" />
-          {/* la tête, casque de cuir, barbe */}
-          <circle cx="0" cy="-30" r="10" fill="#c89a6e" />
-          <path d="M-10 -33 q1 -12 10 -11 q11 1 10 12 q-4 -6 -10 -6 q-7 0 -10 5 Z" fill="#4a3324" />
-          <path d="M-6 -22 q6 8 12 0 l-2 6 q-4 3 -8 0 Z" fill="#3a2a1c" />
-          <path d="M4 -34 q5 3 4 10" stroke="#ffe0a8" strokeWidth="1.6" fill="none" opacity="0.5" />
-          {/* le bouclier rond au bras gauche */}
-          <ellipse cx="-20" cy="2" rx="14" ry="16" fill="#8a5a34" stroke="#5a3f24" strokeWidth="2.5" />
-          <circle cx="-20" cy="2" r="4" fill="#c8a860" />
-          <path d="M-20 -12 v28 M-32 2 h24" stroke="#5a3f24" strokeWidth="1.4" opacity="0.5" />
+          <Figure x={0} y={46} s={0.72} skin="#c6965f" hair="#2c2013" hat="leather" hatColor="#7a4e2c"
+            garment="tunic" coat="#7a5636" pants="#5a3f24" trim="#5a3f24" arms={[{ a1: 30, a2: 50 }, { a1: 36, a2: 4 }]} />
+          <ellipse cx="-24" cy="-2" rx="14" ry="16" fill="#8a5a34" stroke="#5a3f24" strokeWidth="2.5" />
+          <circle cx="-24" cy="-2" r="4" fill="#c8a860" />
+          <path d="M-24 -16 v28 M-36 -2 h24" stroke="#5a3f24" strokeWidth="1.4" opacity="0.5" />
         </g>
         {/* le « ? » doré : c'est au tour de Guna */}
         {queteQui === "guna" && (

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 4 — La plaine aux mégalithes  (PEINTURE FINE)
@@ -135,11 +136,9 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
             <g transform="translate(636,458)">
               <path d="M-20 -4 L92 2" stroke="#8a6a42" strokeWidth="3.5" fill="none" opacity="0.85" />
               {[0, 30, 60].map((dx, i) => (
-                <g key={i} transform={`translate(${dx},${(i % 2) * 6})`}>
-                  <path d="M-6 6 Q-10 -12 4 -15 Q14 -12 8 6 L6 26 L-8 26 Z" fill={i % 2 ? "#7a4f34" : "#6a4a30"} transform="rotate(-14)" />
-                  <path d="M-6 6 Q-10 -12 4 -15 Q14 -12 8 6" fill="#4a3020" opacity="0.25" filter="url(#pl-grain)" transform="rotate(-14)" />
-                  <circle cx="-5" cy="-19" r="6.5" fill="#8a5c3c" />
-                  <path d="M-2 -14 q10 4 12 12" stroke="#8a5c3c" strokeWidth="3" fill="none" strokeLinecap="round" />
+                <g key={i} transform={`translate(${dx},${(i % 2) * 6}) rotate(-14)`}>
+                  <Figure x={0} y={26} s={0.34} facing="right" skin={["#8a5c3c", "#a87650", "#9a6a46"][i]} hair="#2a1c10" look={["short", "ring", "short"][i]} beard={i === 1 ? "short" : false}
+                    garment="tunic" coat={i % 2 ? "#7a4f34" : "#6a4a30"} pants="#4a3020" bareArms stride={10} arms={[{ a1: 70, a2: 84 }, { a1: 64, a2: 80 }]} />
                 </g>
               ))}
             </g>
@@ -166,14 +165,8 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
         {/* IMIR le prêtre, bras levés vers le ciel */}
         <g transform="translate(300,472)">
           <ellipse cx="0" cy="28" rx="22" ry="6" fill="#241c12" opacity="0.4" />
-          <path d="M-15 28 Q-19 -4 0 -20 Q19 -4 15 28 Z" fill="#ece2d0" />
-          <path d="M-15 28 Q-19 -4 0 -20 Q19 -4 15 28 Z" fill="#c8bca0" opacity="0.2" filter="url(#pl-grain)" />
-          <path d="M-15 28 Q-8 4 0 -18" stroke="#8a2438" strokeWidth="3" fill="none" />
-          <path d="M13 24 Q17 0 3 -18" stroke="#fff6e0" strokeWidth="2" fill="none" opacity="0.5" />
-          <circle cx="0" cy="-28" r="9.5" fill="#c89a6e" />
-          <path d="M-10 -30 q10 -11 20 0 Z" fill="#8a8078" />
-          <path d="M-10 -30 q10 -6 20 0" stroke="#6a6058" strokeWidth="1.2" fill="none" />
-          <path d="M-12 -6 q-15 -8 -17 -26 M12 -6 q15 -8 17 -26" stroke="#c89a6e" strokeWidth="4" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={28} s={0.53} skin="#c0926a" hair="#2a1a10" look="bald" paint
+            garment="toga" coat="#ece2d0" coat2="#8a2438" pants="#c8bca0" arms={[{ a1: 150, a2: 166 }, { a1: 150, a2: 166 }]} />
         </g>
         {queteQui === "imir" && (
           <g transform="translate(282,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
@@ -185,12 +178,8 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
         {/* DOKA le tailleur, accroupi, maillet en main */}
         <g transform="translate(560,484)">
           <ellipse cx="0" cy="22" rx="20" ry="6" fill="#241c12" opacity="0.4" />
-          <path d="M-12 22 Q-16 -2 0 -14 Q16 -2 12 22 Z" fill="#7a5636" />
-          <path d="M-12 22 Q-16 -2 0 -14 Q16 -2 12 22 Z" fill="#4a3020" opacity="0.25" filter="url(#pl-grain)" />
-          <circle cx="0" cy="-20" r="8.5" fill="#b0855c" />
-          <path d="M-8 -23 q8 -8 16 0 Z" fill="#3a2a1c" />
-          <path d="M-5 -16 q5 5 10 0" stroke="#3a2a1c" strokeWidth="2" fill="none" />
-          <path d="M10 -6 q13 2 15 12" stroke="#b0855c" strokeWidth="4" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={22} s={0.5} pose="kneel" facing="right" skin="#b8885a" hair="#3a2818" hat="headband" hatColor="#6a4628" mood="colere"
+            garment="tunic" coat="#7a5636" pants="#5a3f24" bareArms arms={[{ a1: 20, a2: -10 }, { a1: 60, a2: 84 }]} />
           <g transform="translate(25,8)"><rect x="-7" y="-7" width="14" height="12" rx="2" fill="#8a5a34" /><rect x="-2" y="5" width="4" height="12" fill="#5a3f24" /><path d="M-7 -3 h14" stroke="#5a3820" strokeWidth="1.2" /></g>
         </g>
         {queteQui === "doka" && (

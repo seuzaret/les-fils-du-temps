@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : la lande aux mégalithes (Bretagne)
@@ -125,9 +126,13 @@ export default function SceneLande({ collect, action, reveal, made = [] }) {
           {[0, 34, 66, 98].map((dx, i) => (
             <g key={i} transform={`translate(${dx},${(i % 2) * 6})`}>
               <ellipse cx="0" cy="34" rx="12" ry="4" fill="#20240f" opacity="0.4" />
-              <path d="M-6 6 Q-10 -12 4 -15 Q14 -12 8 6 L6 26 L-8 26 Z" fill={i % 2 ? "#7a4f34" : "#6a4a30"} transform="rotate(-14)" />
-              <circle cx="-4" cy="-20" r="6.5" fill="#8a5c3c" />
-              <path d="M4 -8 q14 -2 22 4" stroke="#8a5c3c" strokeWidth="4" fill="none" strokeLinecap="round" />
+              {/* penché en avant, la corde tirée par-dessus l'épaule */}
+              <g transform="rotate(9 0 34)">
+                <Figure x={0} y={34} s={0.5} stride={7} facing="right" skin="#8a5c3c"
+                  look={["short", "braids", "mid", "bun"][i]} hair={["#2a1a10", "#3a2414", "#1e140c", "#4a3020"][i]} beard={i === 0 || i === 2 ? "short" : false}
+                  garment="tunic" coat={i % 2 ? "#7a4f34" : "#6a4a30"} pants="#4a3a26" shoes="#3a2a18" mood="colere"
+                  arms={[{ a1: 70, a2: 30 }, { a1: -40, a2: -60 }]} />
+              </g>
             </g>
           ))}
           <path d="M-14 -6 L128 2" stroke="#8a6a42" strokeWidth="3" fill="none" opacity="0.85" />

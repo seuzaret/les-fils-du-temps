@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : le col de la montagne (l'homme des glaces)
@@ -114,18 +115,11 @@ export default function SceneCol({ collect, action, reveal, made = [] }) {
         {/* L'HOMME DES GLACES, emmitouflé, arc à côté, haleine visible */}
         <g transform="translate(300,470)">
           <ellipse cx="0" cy="34" rx="26" ry="7" fill="#2e281e" opacity="0.5" />
-          <path d="M-16 6 Q-22 -16 0 -20 Q22 -16 16 6 L12 30 L-12 30 Z" fill="#6a5238" />
-          <path d="M-16 6 Q-22 -16 0 -20 Q22 -16 16 6 L12 30 L-12 30 Z" fill="#4a3a28" opacity="0.4" filter="url(#cl-grain)" />
-          <path d="M-16 6 Q0 12 16 6 L14 18 Q0 24 -14 18 Z" fill="#5a4630" />
-          <path d="M-14 2 l-4 4 M14 2 l4 4 M-10 22 l-3 5 M10 22 l3 5" stroke="#4a3a28" strokeWidth="1.8" />
-          <path d="M-10 -18 Q0 -30 10 -18 Q12 -8 0 -6 Q-12 -8 -10 -18 Z" fill="#7a6244" />
-          <circle cx="0" cy="-16" r="6" fill="#b08a68" />
-          {/* haleine */}
+          <Figure x={0} y={34} s={0.68} pose="ground" skin="#bf9068" hair="#3a2a1a" mood="vexe" hood hoodColor="#7a6244" wrinkles
+            garment="fur" coat="#6a5238" pants="#5a4630" arms={[{ a1: 14, a2: -12 }, { a1: 16, a2: -14 }]} />
           <ellipse cx="11" cy="-14" rx="9" ry="4" fill="#f0f4f8" opacity="0.45" style={{ animation: "drift 3.5s ease-in-out infinite" }} filter="url(#cl-blur)" />
-          {/* arc appuyé */}
           <path d="M24 34 Q40 0 30 -34" stroke="#6e4c2e" strokeWidth="3" fill="none" />
           <path d="M24 34 L30 -34" stroke="#c9b48a" strokeWidth="1.2" opacity="0.7" />
-          {/* aiguille d'os sur la fourrure */}
           <g transform="translate(-22,10) rotate(-30)">
             <rect x="-1" y="-10" width="2" height="20" rx="1" fill="#e8e0cc" />
             <circle cx="0" cy="-10" r="2" fill="#e8e0cc" />
