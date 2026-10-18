@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Ridge, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : la lande aux mégalithes (Bretagne)
@@ -37,23 +38,29 @@ export default function SceneLande({ collect, action, reveal, made = [] }) {
 
       {/* ═══ ciel breton, bas et mouvant ═══ */}
       <rect width="1000" height="560" fill="url(#ld-sky)" />
-      <g filter="url(#ld-blur)">
-        <ellipse cx="220" cy="86" rx="170" ry="20" fill="#767e88" opacity="0.5" />
-        <ellipse cx="560" cy="66" rx="210" ry="18" fill="#828a92" opacity="0.45" />
-        <ellipse cx="850" cy="104" rx="150" ry="16" fill="#6e7680" opacity="0.5" />
-      </g>
+      {/* masses de nuages bas, ventrus, avec le dessous sombre */}
+      <Clouds id="ld-cl1" seed={9} items={[[140, 80, 300], [470, 56, 360], [860, 92, 300], [320, 150, 200], [980, 170, 180]]} color="#9aa2aa" shadow="#5a6270" opacity="0.85" drift={30} />
+      <Clouds id="ld-cl2" seed={13} items={[[100, 64, 200], [440, 40, 240], [820, 72, 220]]} color="#c8ccd0" opacity="0.55" drift={24} />
       {/* trouée de lumière pâle qui perce les nuages */}
-      <path d="M660 40 L760 40 L820 250 L600 250 Z" fill="#f4f4e8" opacity="0.16" filter="url(#ld-blur)" />
+      <path d="M660 40 L760 40 L840 250 L580 250 Z" fill="#f4f4e8" opacity="0.14" filter="url(#ld-blur)" />
       <ellipse cx="700" cy="150" rx="120" ry="66" fill="#f4f4e8" opacity="0.3" filter="url(#ld-blur)" />
 
       {/* ═══ couche lointaine : la mer grise ═══ */}
       <PLayer depth={1}>
         <rect y="250" width="1000" height="82" fill="url(#ld-sea)" />
         {/* reflet pâle de la trouée sur l'eau */}
-        <path d="M660 254 L740 254 L760 328 L620 328 Z" fill="#e4e8e0" opacity="0.2" />
+        <path d="M660 254 L740 254 L770 330 L610 330 Z" fill="#e4e8e0" opacity="0.22" filter="url(#ld-blur)" />
         {[262, 284, 306, 322].map((y, i) => (
-          <path key={i} d={`M0 ${y} q120 ${i % 2 ? 4 : -4} 240 0 t240 0 t240 0 t240 0`} stroke="#c4ccce" strokeWidth="1.5" fill="none" opacity="0.4" />
+          <path key={i} d={`M-40 ${y} q120 ${i % 2 ? 4 : -4} 240 0 t240 0 t240 0 t240 0 t240 0`} stroke="#c4ccce" strokeWidth="1.5" fill="none" opacity="0.4" />
         ))}
+        {/* côte lointaine et falaises */}
+        <path d="M-40 266 L-40 250 L20 246 L60 240 L92 242 L130 236 L168 240 L200 238 L236 246 L262 244 L300 252 L340 258 L380 264 L400 266 Z" fill="#7a8288" />
+        <path d="M20 246 L60 240 L92 242 L130 236 L168 240" stroke="#a8aeb0" strokeWidth="2" fill="none" opacity="0.6" />
+        <path d="M-40 266 L400 266" stroke="#e8ece8" strokeWidth="1.4" opacity="0.5" />
+        {/* écume qui frappe les îlots */}
+        <path d="M150 320 q30 -6 60 0 M876 316 q24 -5 48 0" stroke="#eef2f0" strokeWidth="2" fill="none" opacity="0.7">
+          <animate attributeName="opacity" values="0.7;0.2;0.7" dur="3s" repeatCount="indefinite" />
+        </path>
         {/* îlots de granit dans la mer */}
         <ellipse cx="180" cy="322" rx="30" ry="9" fill="#5a564e" />
         <ellipse cx="900" cy="318" rx="24" ry="8" fill="#5a564e" />
@@ -63,6 +70,7 @@ export default function SceneLande({ collect, action, reveal, made = [] }) {
       <PLayer depth={2}>
         <path d="M0 330 Q250 300 500 328 Q750 356 1000 322 L1000 440 L0 440 Z" fill="url(#ld-land)" />
         <path d="M0 330 Q250 300 500 328 Q750 356 1000 322 L1000 440 L0 440 Z" fill="#2c3018" opacity="0.3" filter="url(#ld-grain)" />
+        <Speckle seed={81} x0={0} x1={1000} y0={326} y1={440} n={420} colors={["#8a5a7a", "#a8a050", "#4a5030", "#6a7a38", "#c89a40"]} r={[0.6, 1.6]} opacity={0.6} />
         {/* alignement (clin d'œil à Carnac) : menhirs qui rapetissent au loin */}
         {[[110, 336, 48], [178, 340, 62], [252, 338, 54], [332, 342, 66], [906, 330, 52], [846, 336, 42], [792, 340, 34]].map(([x, y, h], i) => (
           <g key={i}>
@@ -86,6 +94,15 @@ export default function SceneLande({ collect, action, reveal, made = [] }) {
         <path d="M0 560 L0 430 Q250 408 520 432 Q760 452 1000 428 L1000 560 Z" fill="url(#ld-land)" />
         <path d="M0 560 L0 430 Q250 408 520 432 Q760 452 1000 428 L1000 560 Z" fill="#20240f" opacity="0.32" filter="url(#ld-mottle)" />
         <ellipse cx="500" cy="500" rx="420" ry="50" fill="#33381f" opacity="0.4" />
+        <Speckle seed={83} x0={0} x1={1000} y0={436} y1={560} n={360} colors={["#8a5a7a", "#a8a050", "#2a3018", "#6a7a38"]} r={[0.8, 2.2]} opacity={0.55} />
+        {/* touffes de bruyère et d'ajonc en fleur */}
+        {[[60, 470, "#b06a9a"], [150, 530, "#e8c040"], [250, 520, "#b06a9a"], [600, 540, "#e8c040"], [880, 526, "#b06a9a"], [960, 480, "#e8c040"], [30, 540, "#e8c040"]].map(([x, y, f], i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={y} rx="22" ry="8" fill="#3a4224" />
+            <ellipse cx={x - 4} cy={y - 4} rx="14" ry="6" fill="#4a5430" />
+            {Array.from({ length: 7 }).map((_, k) => <circle key={k} cx={x - 14 + k * 4.6} cy={y - 6 + (k % 2) * 3} r="1.8" fill={f} opacity="0.9" />)}
+          </g>
+        ))}
 
         {/* LA GRANDE DALLE couchée sur des rondins — tant que le mégalithe
             n'est pas encore dressé */}
