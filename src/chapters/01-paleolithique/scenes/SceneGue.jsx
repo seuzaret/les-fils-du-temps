@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Haze, Reflect, Ridge, Rock, Speckle, TreeLine, Grass } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : LE GUÉ DE LA RIVIÈRE
@@ -14,50 +15,26 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
-        <linearGradient id="gu-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#a8b8c8" /><stop offset="60%" stopColor="#c0c8b8" /><stop offset="100%" stopColor="#d0d0a8" /></linearGradient>
-        <linearGradient id="gu-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a9db4" /><stop offset="50%" stopColor="#5480a0" /><stop offset="100%" stopColor="#2a4868" /></linearGradient>
+        <linearGradient id="gu-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6e96c0" /><stop offset="55%" stopColor="#a8c0d4" /><stop offset="100%" stopColor="#e4e4d0" /></linearGradient>
+        <linearGradient id="gu-water" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8aa8b8" /><stop offset="35%" stopColor="#5a8aa4" /><stop offset="100%" stopColor="#24425e" /></linearGradient>
         <linearGradient id="gu-rive" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6a4830" /><stop offset="100%" stopColor="#2a1a10" /></linearGradient>
         <radialGradient id="gu-stone" cx="30%" cy="30%" r="70%"><stop offset="0%" stopColor="#9a8878" /><stop offset="70%" stopColor="#6a5848" /><stop offset="100%" stopColor="#3a2818" /></radialGradient>
         <filter id="gu-shimmer"><feTurbulence type="turbulence" baseFrequency="0.9" numOctaves="1" seed="5" /><feColorMatrix values="0 0 0 0 0.9 0 0 0 0 0.95 0 0 0 0 1 0 0 0 0.25 0" /></filter>
       </defs>
 
+      {/* ═══ ciel de fin de matinée, nuages, montagnes bleues ═══ */}
+      <rect x="-40" y="-20" width="1080" height="300" fill="url(#gu-sky)" />
+      <Clouds id="gu-cl" seed={4} items={[[140, 46, 150], [470, 30, 190], [800, 58, 140], [640, 92, 90]]} color="#fbf6ea" shadow="#c8ccd0" opacity="0.8" drift={20} />
       <PLayer depth={4}>
-        <rect width="1000" height="240" fill="url(#gu-sky)" />
-        {/* nuages doux */}
-        {[[120, 60, 60], [420, 80, 80], [780, 55, 50]].map(([x, y, r], i) => (
-          <g key={i} opacity="0.55">
-            <ellipse cx={x} cy={y} rx={r} ry="10" fill="#f0e8d0" />
-            <ellipse cx={x - 20} cy={y + 4} rx={r - 20} ry="7" fill="#f0e8d0" />
-          </g>
-        ))}
-        {/* collines vertes lointaines derrière la forêt */}
-        <path d="M0 240 L0 200 Q200 170 400 195 Q600 175 800 200 Q900 190 1000 200 L1000 240 Z" fill="#5a6a48" opacity="0.65" />
-        {/* forêt profonde sur l'autre rive */}
-        <path d="M0 240 L0 180 Q100 140 200 180 Q300 130 400 170 Q500 120 600 160 Q700 140 800 170 Q900 130 1000 180 L1000 240 Z" fill="#2a3818" opacity="0.92" />
-        {/* silhouettes de bouleaux améliorées, écorce blanche typique */}
-        {[80, 180, 320, 460, 620, 780, 920].map((x, i) => {
-          const h = 60 + (i % 3) * 14;
-          const foliageR = 22 + (i % 2) * 4;
-          return (
-            <g key={i} transform={`translate(${x},240)`}>
-              {/* ombre au sol */}
-              <ellipse cx="0" cy="2" rx="8" ry="2" fill="#0a0604" opacity="0.5" />
-              {/* tronc bouleau avec base plus large */}
-              <path d={`M-3 0 L-2 -${h} L2 -${h} L3 0 Z`} fill="#f0e8d8" stroke="#8a7860" strokeWidth="0.3" />
-              {/* marques noires horizontales typiques du bouleau */}
-              <path d={`M-2 -${Math.floor(h*0.2)} h4 M-2 -${Math.floor(h*0.4)} h4 M-2 -${Math.floor(h*0.6)} h4 M-2 -${Math.floor(h*0.8)} h4`} stroke="#2a1e10" strokeWidth="1.2" strokeLinecap="round" />
-              {/* petits nœuds */}
-              <circle cx="0" cy={-Math.floor(h*0.5)} r="0.8" fill="#3a2818" />
-              {/* feuillage — 3 lobes empilés pour volume */}
-              <ellipse cx="-4" cy={-(h + 6)} rx={foliageR - 4} ry={foliageR - 8} fill="#3a5820" opacity="0.85" />
-              <ellipse cx="4" cy={-(h + 4)} rx={foliageR - 6} ry={foliageR - 10} fill="#4a6828" opacity="0.85" />
-              <ellipse cx="0" cy={-(h + 14)} rx={foliageR - 2} ry={foliageR - 6} fill="#4a6a2a" opacity="0.9" />
-              {/* mini touches jaunes = feuilles au soleil */}
-              <circle cx={-6} cy={-(h + 12)} r="1.5" fill="#c8c058" opacity="0.7" />
-              <circle cx={4} cy={-(h + 8)} r="1.2" fill="#b0a848" opacity="0.6" />
-            </g>
-          );
-        })}
+        <Ridge id="gu-r1" seed={14} y={204} amp={104} rough={0.62} fill="#7088a8" lit="#a8bcd4" light={-1} snow="#eef2f6" snowLine={132} />
+        <Haze id="gu-h1" y0={160} y1={222} color="#dce4e8" opacity={0.45} />
+        <Ridge id="gu-r2" seed={23} y={222} amp={40} fill="#6a8466" lit="#87a07a" light={-1} />
+        {/* forêt profonde sur l'autre rive : conifères au fond, bouleaux devant */}
+        <TreeLine seed={5} y={232} n={52} h={[22, 44]} kinds={["conifer"]} colors={["#2a4030", "#304a34", "#24382a"]} light={-1} />
+        <TreeLine seed={9} y={240} n={13} h={[44, 74]} kinds={["birch", "birch", "leafy"]} colors={["#5a7a32", "#6a8a3a", "#4a6a2a"]} light={-1} />
+        {/* l'autre rive : graviers et herbes au pied des arbres */}
+        <path d="M-40 236 Q200 232 420 238 Q640 234 1040 238 L1040 250 L-40 250 Z" fill="#7a7258" />
+        <path d="M-40 246 Q300 242 620 247 Q820 244 1040 246 L1040 250 L-40 250 Z" fill="#5a5444" />
         {/* vol de petits oiseaux au loin en V */}
         <g opacity="0.6" transform="translate(560,120)">
           <path d="M0 0 q-3 -3 -6 0 M0 0 q3 -3 6 0" stroke="#3a2818" strokeWidth="1" fill="none" strokeLinecap="round" />
@@ -68,12 +45,16 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
 
       <PLayer depth={3}>
         {/* la rivière large — bande d'eau bleu-gris qui traverse */}
-        <rect y="240" width="1000" height="200" fill="url(#gu-water)" />
+        <rect x="-40" y="248" width="1080" height="200" fill="url(#gu-water)" />
+        <Reflect id="gu-ref" axisY={249} opacity={0.5} blur={3}>
+          <TreeLine seed={5} y={232} n={52} h={[22, 44]} kinds={["conifer"]} colors={["#2a4030", "#304a34", "#24382a"]} light={-1} />
+          <TreeLine seed={9} y={240} n={13} h={[44, 74]} kinds={["birch", "birch", "leafy"]} colors={["#5a7a32", "#6a8a3a", "#4a6a2a"]} light={-1} />
+        </Reflect>
+        <rect x="-40" y="248" width="1080" height="4" fill="#c8d8e0" opacity="0.5" />
         {/* voile de miroitement (turbulence) */}
-        <rect y="240" width="1000" height="200" filter="url(#gu-shimmer)" opacity="0.7" />
+        <rect x="-40" y="248" width="1080" height="200" filter="url(#gu-shimmer)" opacity="0.5" />
         {/* reflets de forêt sur l'eau (bandes sombres inversées) */}
-        <path d="M0 240 L1000 240 L1000 280 L0 280 Z" fill="#2a3818" opacity="0.35" />
-        <path d="M80 250 q40 8 80 0 q40 -6 80 4 M320 260 q40 6 80 -2 M580 254 q40 8 80 0 q40 -8 80 2" stroke="#1a2810" strokeWidth="2" fill="none" opacity="0.5" />
+
 
         {/* remous, courants — étalés jusqu'à la rive droite */}
         {[260, 300, 340, 380, 420].map((y, i) => (
@@ -84,24 +65,15 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
           <ellipse key={i} cx={x} cy={y} rx="18" ry="2.5" fill="#f8f8e8" opacity="0.55" style={{ animation: `float ${2.5 + (i % 3) * 0.3}s ease-in-out infinite` }} />
         ))}
 
-        {/* 5 GROSSES PIERRES du gué en zigzag — mieux modelées */}
-        {[[120, 380], [260, 340], [420, 380], [580, 340], [740, 380]].map(([x, y], i) => (
-          <g key={i} transform={`translate(${x},${y})`}>
-            {/* ombre + halo mouillé autour de la pierre */}
-            <ellipse cx="0" cy="14" rx="52" ry="8" fill="#0a1420" opacity="0.55" />
-            <ellipse cx="0" cy="10" rx="46" ry="5" fill="#2a4058" opacity="0.5" />
-            {/* corps pierre avec gradient radial */}
-            <path d="M-40 0 Q-30 -22 0 -24 Q30 -22 40 0 L36 8 Q0 12 -36 8 Z" fill="url(#gu-stone)" stroke="#1a1408" strokeWidth="1.5" />
-            {/* strates */}
-            <path d="M-32 -6 q30 -8 62 -2 M-30 4 q28 -4 58 -2" stroke="#3a2818" strokeWidth="0.6" fill="none" opacity="0.7" />
-            {/* reflet lumineux au sommet */}
-            <ellipse cx="-8" cy="-12" rx="14" ry="6" fill="#c8b8a0" opacity="0.55" />
-            {/* mousses vertes au niveau de l'eau */}
-            <path d="M-38 4 q4 -4 8 0 q-4 4 -8 0 Z" fill="#5a7030" opacity="0.85" />
-            <path d="M30 6 q4 -4 8 0 q-4 4 -8 0 Z" fill="#5a7030" opacity="0.8" />
-            {/* petites gouttes qui coulent */}
-            <circle cx="-20" cy="8" r="0.8" fill="#b0d0e8" opacity="0.7" />
-            <circle cx="20" cy="10" r="0.8" fill="#b0d0e8" opacity="0.7" />
+        {/* 5 GROSSES PIERRES du gué en zigzag : plus petites au loin, écume au pied */}
+        {[[120, 384, 1.0], [260, 344, 0.82], [420, 384, 1.04], [580, 344, 0.84], [740, 384, 0.98]].map(([x, y, k], i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={y + 4} rx={56 * k} ry={9 * k} fill="#0a1420" opacity="0.45" />
+            <Rock x={x} y={y} w={84 * k} h={30 * k} color={["#8a7c6c", "#7a7064", "#867a6a", "#7c7266", "#8a7e70"][i]} light={-1} seed={i * 7 + 3} moss="#5a7030" />
+            <path d={`M${x - 46 * k} ${y + 2} q${12 * k} -4 ${24 * k} 0 q${12 * k} 4 ${24 * k} 0 q${12 * k} -4 ${24 * k} 0 q${12 * k} 4 ${22 * k} 0`} stroke="#e8f4fa" strokeWidth="2" fill="none" opacity="0.65">
+              <animate attributeName="opacity" values="0.65;0.25;0.65" dur={`${2.2 + i * 0.3}s`} repeatCount="indefinite" />
+            </path>
+            <path d={`M${x + 40 * k} ${y + 3} q${16 * k} 2 ${30 * k} 8`} stroke="#d8ecf4" strokeWidth="1.4" fill="none" opacity="0.5" />
           </g>
         ))}
 
@@ -168,6 +140,18 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
         <path d="M0 446 q40 -1.5 80 0 q40 1.5 80 0 q40 -1.5 80 0 q40 1.5 80 0 q40 -1.5 80 0 q40 1.5 80 0 q40 -1.5 80 0 q40 1.5 80 0 q40 -1.5 80 0 q40 1.5 80 0 q40 -1.5 80 0 q40 1.5 80 0" stroke="#c0d8e8" strokeWidth="0.8" fill="none" opacity="0.6" />
         {/* sable/limon plus clair devant la ligne d'eau */}
         <path d="M0 448 L1000 448 L1000 470 L0 470 Z" fill="#8a6a48" opacity="0.5" />
+        {/* grain du sol, galets, herbes */}
+        <Speckle seed={3} x0={0} x1={1000} y0={452} y1={560} n={260} colors={["#3a2414", "#9a7a58", "#5a3e26", "#b8a080"]} opacity={0.5} />
+        <path d="M-10 500 Q250 488 520 500 Q760 510 1010 494 L1010 560 L-10 560 Z" fill="#2a1a10" opacity="0.35" />
+        {[[260, 486, 1], [470, 494, 2], [640, 480, 3], [790, 500, 4], [900, 486, 5], [190, 520, 6]].map(([x, y, sd]) => (
+          <Grass key={sd} x={x} y={y} seed={sd} color="#5a6a2a" s={0.9} flower={sd % 2 ? "#f0d048" : null} />
+        ))}
+        {/* bois flotté échoué */}
+        <g transform="translate(780,478) rotate(-6)">
+          <path d="M-60 0 Q-20 -8 40 -4 L64 -10 L60 -4 L40 2 Q-20 6 -60 6 Z" fill="#a89478" stroke="#5a4a38" strokeWidth="1" />
+          <path d="M-50 1 Q0 -4 40 -1" stroke="#7a6a58" strokeWidth="1" fill="none" />
+          <ellipse cx="-60" cy="3" rx="3" ry="4" fill="#8a7860" stroke="#5a4a38" strokeWidth="0.8" />
+        </g>
         {/* cailloux au bord — plus variés, plus texturés */}
         {[[80, 460, 1], [140, 466, 0.7], [220, 470, 1.1], [560, 470, 0.9], [620, 466, 0.6], [720, 460, 1.2], [880, 468, 0.8], [940, 462, 0.7]].map(([x, y, s], i) => (
           <g key={i} transform={`translate(${x},${y}) scale(${s})`}>
