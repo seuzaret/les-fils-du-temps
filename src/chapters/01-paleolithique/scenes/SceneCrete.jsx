@@ -2,6 +2,7 @@ import { useState } from "react";
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Haze, Ridge, Rock, Speckle, TreeLine, Grass } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : LE POINT DE VUE (crête)
@@ -28,8 +29,8 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
-        <linearGradient id="cr-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c0c8d8" /><stop offset="40%" stopColor="#e8d8b0" /><stop offset="80%" stopColor="#f0c88a" /><stop offset="100%" stopColor="#b8a078" /></linearGradient>
-        <linearGradient id="cr-plaine" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#a89068" /><stop offset="50%" stopColor="#886a40" /><stop offset="100%" stopColor="#5a4028" /></linearGradient>
+        <linearGradient id="cr-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6c90bc" /><stop offset="40%" stopColor="#b8c8d4" /><stop offset="75%" stopColor="#f0dcb0" /><stop offset="100%" stopColor="#f0c88a" /></linearGradient>
+        <linearGradient id="cr-plaine" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#b8a878" /><stop offset="40%" stopColor="#a08a50" /><stop offset="100%" stopColor="#6a5430" /></linearGradient>
         <linearGradient id="cr-rock" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a7868" /><stop offset="60%" stopColor="#5a4838" /><stop offset="100%" stopColor="#2a1a10" /></linearGradient>
         <radialGradient id="cr-sun" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff4c8" stopOpacity="1" /><stop offset="40%" stopColor="#f8e098" stopOpacity="0.9" /><stop offset="100%" stopColor="#f8c058" stopOpacity="0" /></radialGradient>
         <filter id="cr-grain"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="9" /><feColorMatrix values="0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.3 0" /></filter>
@@ -37,7 +38,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
 
       <PLayer depth={5}>
         {/* ciel dégradé matin, plus riche */}
-        <rect width="1000" height="380" fill="url(#cr-sky)" />
+        <rect x="-40" y="-20" width="1080" height="420" fill="url(#cr-sky)" />
         {/* halo solaire */}
         <circle cx="720" cy="140" r="120" fill="url(#cr-sun)" />
         {/* rayons de soleil */}
@@ -50,13 +51,8 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         {/* soleil */}
         <circle cx="720" cy="140" r="42" fill="#f8f0d0" opacity="0.85" />
         <circle cx="720" cy="140" r="28" fill="#fff8d8" opacity="0.95" />
-        {/* nuages allongés — plusieurs couches */}
-        {[[80, 100, 90, 8], [280, 80, 100, 10], [500, 110, 110, 9], [860, 90, 80, 7], [180, 130, 60, 5], [620, 60, 70, 6]].map(([x, y, rx, ry], i) => (
-          <g key={i}>
-            <ellipse cx={x} cy={y} rx={rx} ry={ry} fill="#f8f0d8" opacity="0.75" />
-            <ellipse cx={x - rx / 3} cy={y + ry - 1} rx={rx - 20} ry={ry - 2} fill="#f0e0c0" opacity="0.55" />
-          </g>
-        ))}
+        {/* nuages allongés */}
+        <Clouds id="cr-cl" seed={8} items={[[110, 92, 180], [330, 70, 210], [540, 112, 150], [900, 84, 170], [210, 140, 110]]} color="#fbf3e2" shadow="#d8c8b0" opacity="0.8" drift={16} />
         {/* Vol d'oiseaux en V au loin */}
         <g opacity="0.55" transform="translate(300,180)">
           {[[0, 0], [-14, 6], [14, 6], [-26, 12], [26, 12], [-38, 18], [38, 18]].map(([x, y], i) => (
@@ -86,17 +82,27 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
       </PLayer>
 
       <PLayer depth={4}>
-        {/* chaîne lointaine bleu-lavande (arrière) */}
-        <path d="M0 380 L0 280 L100 230 L200 260 L320 210 L440 250 L560 220 L680 260 L800 220 L900 250 L1000 240 L1000 380 Z" fill="#8898b0" opacity="0.5" />
-        {/* couche intermédiaire un peu plus sombre */}
-        <path d="M0 380 L0 260 L120 200 L220 240 L340 180 L460 220 L580 190 L700 230 L820 200 L1000 240 L1000 380 Z" fill="#6a7898" opacity="0.7" />
-        {/* neige au sommet des plus hauts pics */}
-        <path d="M120 200 l14 8 l-8 6 l-4 -6 z M340 180 l16 12 l-10 4 l-6 -8 z M580 190 l12 8 l-6 4 l-6 -6 z" fill="#f0f0e8" opacity="0.75" />
+        {/* trois plans de montagnes : bleu glacé au loin, plus sombre devant */}
+        <Ridge id="cr-r1" seed={31} y={262} amp={120} rough={0.6} fill="#8a9cbc" lit="#c0cce0" light={1} snow="#f4f4f0" snowLine={190} />
+        <Haze id="cr-h1" y0={200} y1={290} color="#e8e0d0" opacity={0.5} />
+        <Ridge id="cr-r2" seed={47} y={300} amp={84} rough={0.58} fill="#6c7c98" lit="#9aa6bc" light={1} snow="#e8ece8" snowLine={232} />
+        <Haze id="cr-h2" y0={250} y1={330} color="#f0dcb0" opacity={0.45} />
+        <Ridge id="cr-r3" seed={53} y={350} amp={60} rough={0.55} fill="#6a7458" lit="#8a9068" light={1} />
+        <TreeLine seed={12} y={350} x0={-20} x1={1020} n={70} h={[10, 20]} kinds={["conifer"]} colors={["#3a4a34", "#46553a", "#34442e"]} light={1} jitter={10} />
+        <Haze id="cr-h3" y0={320} y1={390} color="#f0d8a8" opacity={0.4} />
       </PLayer>
 
       <PLayer depth={3}>
         {/* la plaine en contrebas */}
-        <path d="M0 380 L1000 380 L1000 480 L0 480 Z" fill="url(#cr-plaine)" />
+        <path d="M-40 372 Q260 360 520 370 Q760 380 1040 366 L1040 480 L-40 480 Z" fill="url(#cr-plaine)" />
+        <Speckle seed={21} x0={-20} x1={1020} y0={376} y1={480} n={420} colors={["#7a6a38", "#c8b880", "#5a6a30", "#8a7840"]} r={[0.5, 1.4]} opacity={0.55} />
+        {/* bosquets et ombres de nuages qui passent sur la plaine */}
+        <TreeLine seed={17} y={392} x0={560} x1={700} n={10} h={[12, 22]} kinds={["conifer", "leafy"]} colors={["#3a4a2a", "#4a5a30"]} light={1} jitter={6} />
+        <TreeLine seed={19} y={404} x0={40} x1={150} n={7} h={[12, 22]} kinds={["conifer", "leafy"]} colors={["#3a4a2a", "#4a5a30"]} light={1} jitter={6} />
+        <TreeLine seed={27} y={398} x0={860} x1={990} n={8} h={[12, 22]} kinds={["conifer", "leafy"]} colors={["#3a4a2a", "#4a5a30"]} light={1} jitter={6} />
+        <ellipse cx="180" cy="392" rx="160" ry="10" fill="#4a3a20" opacity="0.18">
+          <animateTransform attributeName="transform" type="translate" values="0 0; 260 0; 0 0" dur="80s" repeatCount="indefinite" />
+        </ellipse>
         {/* texture grain sur la plaine */}
         <rect x="0" y="380" width="1000" height="100" filter="url(#cr-grain)" opacity="0.35" />
         {/* touches de végétation basse (buissons) sur la plaine */}
@@ -180,6 +186,8 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         `}</style>
         {/* rivière qui serpente — plus détaillée */}
         <path d="M0 430 Q200 410 400 430 Q600 450 800 425 Q900 415 1000 425 L1000 445 Q900 435 800 445 Q600 470 400 450 Q200 430 0 450 Z" fill="#6a95b0" opacity="0.9" />
+        <path d="M0 434 Q200 416 400 436 Q600 456 800 431 Q900 421 1000 430" stroke="#f8f0d8" strokeWidth="2" fill="none" opacity="0.45" />
+        <path d="M0 450 Q200 430 400 450 Q600 470 800 445 Q900 435 1000 445" stroke="#5a7a50" strokeWidth="3" fill="none" opacity="0.6" />
         {/* reflets sur la rivière */}
         <path d="M100 428 q60 -4 120 0 M400 442 q80 6 160 0 M700 432 q60 -2 120 0" stroke="#c8dce8" strokeWidth="0.8" fill="none" opacity="0.65" />
         {/* berges sombres */}
@@ -207,18 +215,14 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         {/* strates de la roche */}
         <path d="M0 500 q200 4 400 -2 q200 -4 400 2 q100 3 200 -2" stroke="#3a2818" strokeWidth="0.8" fill="none" opacity="0.55" />
         <path d="M0 522 q200 -6 400 0 q200 6 400 -2 q100 -3 200 2" stroke="#4a3828" strokeWidth="0.6" fill="none" opacity="0.55" />
-        {/* affleurements rocheux avec plus de profondeur */}
-        <g>
-          <path d="M180 510 Q220 486 280 496 Q320 486 360 510 L360 540 L180 540 Z" fill="#6a5848" stroke="#2a1810" strokeWidth="0.8" />
-          <path d="M188 508 Q220 492 280 502 Q320 492 356 508" stroke="#8a7868" strokeWidth="0.6" fill="none" opacity="0.7" />
-          {/* fissure */}
-          <path d="M220 510 l4 24 M300 500 l-2 30" stroke="#1a0e04" strokeWidth="0.7" fill="none" opacity="0.7" />
-        </g>
-        <g>
-          <path d="M620 510 Q660 486 720 496 Q780 486 840 510 L840 540 L620 540 Z" fill="#6a5848" stroke="#2a1810" strokeWidth="0.8" />
-          <path d="M628 508 Q660 492 720 502 Q780 492 836 508" stroke="#8a7868" strokeWidth="0.6" fill="none" opacity="0.7" />
-          <path d="M680 500 l-3 26 M760 502 l2 30" stroke="#1a0e04" strokeWidth="0.7" fill="none" opacity="0.7" />
-        </g>
+        {/* affleurements rocheux */}
+        <Rock x={270} y={538} w={190} h={46} color="#6a5a4a" light={1} seed={13} moss="#5a6a30" />
+        <Rock x={730} y={540} w={220} h={50} color="#6e5e4e" light={1} seed={17} moss="#5a6a30" />
+        <Rock x={60} y={520} w={110} h={40} color="#7a6a5a" light={1} seed={2} moss="#5a6a30" />
+        <Rock x={960} y={526} w={130} h={48} color="#6e5e50" light={1} seed={5} moss="#5a6a30" />
+        <Rock x={520} y={540} w={80} h={22} color="#7a6a5a" light={1} seed={9} />
+        <Speckle seed={6} x0={0} x1={1000} y0={490} y1={560} n={200} colors={["#2a1a10", "#9a8878", "#5a4838"]} opacity={0.5} />
+        {[[330, 496, 1], [610, 492, 2], [900, 498, 3], [40, 492, 4]].map(([x, y, sd]) => <Grass key={sd} x={x} y={y} seed={sd} color="#7a7a3a" s={0.8} />)}
         {/* mousses / lichens variés (orange + vert) */}
         {[[100, 495], [400, 485], [560, 500], [880, 495]].map(([x, y], i) => (
           <path key={i} d={`M${x} ${y} q6 -4 12 0 q-6 4 -12 0 Z`} fill="#5a6a30" opacity="0.75" />
