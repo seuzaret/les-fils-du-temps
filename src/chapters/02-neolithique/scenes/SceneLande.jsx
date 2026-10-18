@@ -1,7 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
-import { Clouds, Ridge, Speckle } from "../../../engine/scenery.jsx";
+import { Clouds, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 — Tableau : la lande aux mégalithes (Bretagne)

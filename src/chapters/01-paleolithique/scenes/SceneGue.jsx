@@ -1,7 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
-import { Clouds, Haze, Reflect, Ridge, Rock, Speckle, TreeLine, Grass } from "../../../engine/scenery.jsx";
+import { Clouds, Grass, Haze, Reflect, Ridge, Rock, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : LE GUÉ DE LA RIVIÈRE

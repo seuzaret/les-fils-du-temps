@@ -2,7 +2,7 @@ import { useState } from "react";
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
-import { Clouds, Haze, Ridge, Rock, Speckle, TreeLine, Grass } from "../../../engine/scenery.jsx";
+import { Clouds, Grass, Haze, Ridge, Rock, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 1 — Tableau : LE POINT DE VUE (crête)

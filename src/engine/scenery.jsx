@@ -269,3 +269,74 @@ export function Canopy({ cx, cy, rx, ry, color = "#2c4030", light = -1, seed = 1
     </g>
   );
 }
+
+/* reflet du soleil sur l'eau : colonne de paillettes qui scintillent */
+export function Glitter({ x, y0, y1, w0 = 12, w1 = 90, n = 14, color = "#fff2c4", color2 = "#ffe6a8", blurId }) {
+  return (
+    <g>
+      {blurId && <ellipse cx={x} cy={(y0 + y1) / 2} rx={w1 * 0.7} ry={(y1 - y0) * 0.5} fill={color2} opacity="0.14" filter={`url(#${blurId})`} />}
+      {Array.from({ length: n }).map((_, i) => {
+        const t = i / (n - 1);
+        const y = y0 + t * (y1 - y0), w = w0 + t * (w1 - w0), xx = x - w / 2 + ((i * 29) % 9) - 4;
+        const o = (0.8 - t * 0.4).toFixed(2);
+        return (
+          <path key={i} d={`M${xx.toFixed(1)} ${y.toFixed(1)} h${w.toFixed(1)}`} stroke={i % 3 ? color2 : color} strokeWidth={(1.3 + t * 1.4).toFixed(2)} strokeLinecap="round" opacity={o}>
+            <animate attributeName="opacity" values={`${o};0.18;${o}`} dur={`${1.5 + (i % 4) * 0.5}s`} repeatCount="indefinite" />
+          </path>
+        );
+      })}
+    </g>
+  );
+}
+
+/* dunes : crêtes douces (courbes) avec versant à l'ombre */
+export function Dunes({ id, seed = 1, y, amp = 40, x0 = -40, x1 = 1040, n = 5, fill = "#d8b878", shadow, light = -1, bottom = 700 }) {
+  const r = rng(seed);
+  const pts = Array.from({ length: n + 1 }, (_, i) => [x0 + (i / n) * (x1 - x0) + (i && i < n ? (r() - 0.5) * 60 : 0), y - r() * amp]);
+  let d = `M${x0} ${bottom} L${pts[0][0]} ${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < n; i++) {
+    const [ax, ay] = pts[i], [bx, by] = pts[i + 1];
+    const mx = (ax + bx) / 2;
+    d += ` Q${(ax + (mx - ax) * 0.9).toFixed(1)} ${(Math.min(ay, by) - amp * 0.3).toFixed(1)} ${mx.toFixed(1)} ${((ay + by) / 2 - amp * 0.15).toFixed(1)} T${bx.toFixed(1)} ${by.toFixed(1)}`;
+  }
+  d += ` L${x1} ${bottom} Z`;
+  const S = shadow || shade(fill, -0.12);
+  return (
+    <g>
+      <defs><clipPath id={`${id}-c`}><path d={d} /></clipPath></defs>
+      <path d={d} fill={fill} />
+      <g clipPath={`url(#${id}-c)`}>
+        <path d={d} fill={S} transform={`translate(${(-light * amp * 0.6).toFixed(1)},${(amp * 0.35).toFixed(1)})`} opacity="0.7" />
+        <path d={d} fill={fill} transform={`translate(${(-light * amp * 0.25).toFixed(1)},${(amp * 0.6).toFixed(1)})`} />
+      </g>
+    </g>
+  );
+}
+
+/* palmier dattier : stipe courbe, palmes retombantes, régimes */
+export function Palm({ x, y, h = 120, lean = 10, color = "#4a6a32", trunk = "#7a6040", dates = true, seed = 1 }) {
+  const r = rng(seed);
+  const tx = lean, ty = -h;
+  const fronds = Array.from({ length: 9 }, (_, i) => -170 + i * 40 + (r() - 0.5) * 16);
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <path d={`M-4 0 Q${tx * 0.2 - 3} ${ty * 0.5} ${tx - 2.4} ${ty} L${tx + 2.4} ${ty} Q${tx * 0.2 + 3} ${ty * 0.5} 4 0 Z`} fill={trunk} />
+      {Array.from({ length: Math.floor(h / 9) }).map((_, i) => {
+        const t = i / (h / 9), px = tx * t * t * 0.9, py = ty * t;
+        return <path key={i} d={`M${(px - 4 + t * 1.6).toFixed(1)} ${py.toFixed(1)} l${(8 - t * 3).toFixed(1)} -2`} stroke={shade(trunk, -0.25)} strokeWidth="1.4" />;
+      })}
+      {fronds.map((a, i) => {
+        const rad = (a * Math.PI) / 180, L = h * (0.42 + r() * 0.14);
+        const ex = tx + Math.cos(rad) * L, ey = ty + Math.sin(rad) * L * 0.55 + L * 0.35;
+        const cx = tx + Math.cos(rad) * L * 0.5, cy = ty + Math.sin(rad) * L * 0.5 - L * 0.12;
+        return (
+          <g key={i}>
+            <path d={`M${tx} ${ty} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`} stroke={i % 2 ? color : shade(color, -0.12)} strokeWidth="5.5" fill="none" strokeLinecap="round" />
+            <path d={`M${tx} ${ty} Q${cx.toFixed(1)} ${cy.toFixed(1)} ${ex.toFixed(1)} ${ey.toFixed(1)}`} stroke={shade(color, 0.16)} strokeWidth="1.4" fill="none" strokeDasharray="2 3" opacity="0.8" />
+          </g>
+        );
+      })}
+      {dates && <g fill="#a85a20"><circle cx={tx - 5} cy={ty + 8} r="3" /><circle cx={tx - 1} cy={ty + 10} r="3" /><circle cx={tx + 5} cy={ty + 8} r="3" /></g>}
+    </g>
+  );
+}

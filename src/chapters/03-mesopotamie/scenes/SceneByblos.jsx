@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Glitter, Haze, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau adjacent : LE PORT DE BYBLOS
@@ -27,9 +28,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         {/* soleil bas */}
         <circle cx="840" cy="180" r="130" fill="url(#by-soleil)" />
         <circle cx="840" cy="180" r="36" fill="#fff4c8" />
-        {/* traînée de nuages */}
-        <ellipse cx="240" cy="90" rx="130" ry="8" fill="#f0e0c0" opacity="0.6" />
-        <ellipse cx="480" cy="140" rx="100" ry="6" fill="#f0e0c0" opacity="0.55" />
+        <Clouds id="by-cl" seed={31} items={[[240, 90, 220], [500, 136, 170], [80, 150, 120]]} color="#f8e8d0" shadow="#e0b898" opacity="0.75" drift={16} />
         {/* mouettes qui planent */}
         <g opacity="0.7" transform="translate(340,160)" style={{ animation: "float 5s ease-in-out infinite" }}>
           <path d="M0 0 q-4 -4 -8 0 M0 0 q4 -4 8 0" stroke="#f0e8d0" strokeWidth="1.6" fill="none" strokeLinecap="round" />
@@ -44,18 +43,22 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
       </PLayer>
 
       <PLayer depth={4}>
-        {/* Collines côtières du Liban (mont Liban en arrière) */}
-        <path d="M0 320 L0 220 Q150 180 300 210 Q450 240 600 200 Q750 220 900 190 L1000 210 L1000 320 Z" fill="#8a7898" opacity="0.6" />
-        {/* cèdres du Liban stylisés sur les crêtes */}
-        {[80, 260, 460, 640, 820].map((x, i) => {
-          const y = 210 + (i % 2) * 8;
-          return (
-            <g key={i} transform={`translate(${x},${y})`}>
-              <path d="M0 0 L0 -14" stroke="#3a2818" strokeWidth="1" />
-              <path d="M-8 -8 L8 -8 L0 -14 Z M-10 -3 L10 -3 L0 -9 Z" fill="#2a4020" opacity="0.9" />
-            </g>
-          );
-        })}
+        {/* le mont Liban, neigeux au loin, puis les collines couvertes de cèdres */}
+        <Ridge id="by-r0" seed={181} y={240} amp={110} rough={0.6} fill="#9a88a8" lit="#d8b8b8" light={1} snow="#f4ece8" snowLine={156} />
+        <Haze id="by-h0" y0={170} y1={260} color="#f8d8b0" opacity={0.45} />
+        <Ridge id="by-r1" seed={183} y={290} amp={70} rough={0.55} fill="#5a6a4a" lit="#8a8a5a" light={1} />
+        <TreeLine seed={185} y={284} n={60} h={[12, 24]} kinds={["conifer"]} colors={["#2e4228", "#36502e", "#2a3a24"]} light={1} jitter={16} />
+        <Haze id="by-h1" y0={250} y1={320} color="#f8d8b0" opacity={0.35} />
+        {/* la ville de Byblos sur son promontoire, à gauche */}
+        <path d="M-40 320 L-40 290 Q40 280 120 286 Q180 292 210 320 Z" fill="#a8906a" />
+        {[[10, 284, 26, 20], [40, 278, 30, 26], [76, 282, 24, 22], [104, 288, 28, 18], [140, 294, 22, 16]].map(([x, y, w, h], i) => (
+          <g key={i}>
+            <rect x={x} y={y - h} width={w} height={h} fill="#e8dcc0" />
+            <rect x={x} y={y - h} width={w} height="3" fill="#c8b890" />
+            <rect x={x + w / 2 - 3} y={y - h + 6} width="5" height="7" fill="#5a4630" />
+          </g>
+        ))}
+        <rect x="56" y="232" width="18" height="30" fill="#d8c8a0" /><path d="M54 232 h22 l-4 -8 h-14 Z" fill="#b8863a" />
       </PLayer>
 
       <PLayer depth={3}>
@@ -64,6 +67,8 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         {/* vagues */}
         <path d="M0 340 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0" stroke="#a8d0e8" strokeWidth="0.8" fill="none" opacity="0.7" />
         <path d="M0 360 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0 q60 -3 120 0" stroke="#78a8c8" strokeWidth="0.8" fill="none" opacity="0.65" />
+        <rect x="-40" y="320" width="1080" height="4" fill="#e8f0f0" opacity="0.4" />
+        <Glitter x={840} y0={324} y1={398} w0={14} w1={110} />
         {/* reflets brillants animés */}
         {[[120, 350], [340, 356], [560, 348], [780, 356], [900, 344]].map(([x, y], i) => (
           <ellipse key={i} cx={x} cy={y} rx="16" ry="1.6" fill="#f8f8e8" opacity="0.55" style={{ animation: `float ${2.4 + (i % 3) * 0.3}s ease-in-out infinite` }} />
@@ -91,11 +96,23 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
 
       <PLayer depth={2}>
         {/* plage / sable devant */}
-        <path d="M0 400 L1000 400 L1000 560 L0 560 Z" fill="url(#by-sable)" />
-        {/* petites vagues qui viennent lécher la plage */}
-        <path d="M0 402 q50 -2 100 0 q50 2 100 0 q50 -2 100 0 q50 2 100 0 q50 -2 100 0 q50 2 100 0 q50 -2 100 0 q50 2 100 0 q50 -2 100 0 q50 2 100 0" stroke="#c0dce8" strokeWidth="0.8" fill="none" opacity="0.7" />
-        {/* limite mouillée */}
-        <path d="M0 405 L1000 405 L1000 420 L0 420 Z" fill="#8a7048" opacity="0.5" />
+        <path d="M-40 404 Q200 394 460 402 Q720 410 1040 396 L1040 560 L-40 560 Z" fill="url(#by-sable)" />
+        {/* sable mouillé, plus sombre et brillant, puis l'écume qui va et vient */}
+        <path d="M-40 404 Q200 394 460 402 Q720 410 1040 396 L1040 418 Q720 430 460 422 Q200 414 -40 424 Z" fill="#a08050" opacity="0.55" />
+        <path d="M-40 404 Q200 394 460 402 Q720 410 1040 396" stroke="#f4f4ec" strokeWidth="3.5" fill="none" opacity="0.85">
+          <animate attributeName="d" values="M-40 404 Q200 394 460 402 Q720 410 1040 396;M-40 410 Q200 400 460 408 Q720 416 1040 402;M-40 404 Q200 394 460 402 Q720 410 1040 396" dur="5s" repeatCount="indefinite" />
+        </path>
+        <Speckle seed={201} x0={-20} x1={1020} y0={420} y1={560} n={340} colors={["#c8a870", "#fff0d0", "#8a6a40", "#e0c890"]} opacity={0.5} />
+        {/* rondins de cèdre empilés et copeaux, côté droit */}
+        <g transform="translate(900,452)">
+          {[[0, 0], [24, 0], [48, 0], [12, -18], [36, -18], [24, -36]].map(([dx, dy], i) => (
+            <g key={i}>
+              <rect x={dx - 60} y={dy - 9} width="80" height="18" rx="9" fill="#8a5a2e" />
+              <ellipse cx={dx + 20} cy={dy} rx="8" ry="9" fill="#c89060" stroke="#6a4020" strokeWidth="1.2" />
+              <circle cx={dx + 20} cy={dy} r="3" fill="none" stroke="#8a5a2e" strokeWidth="1" />
+            </g>
+          ))}
+        </g>
         {/* traces de pas dans le sable */}
         {[[140, 470], [180, 484], [220, 470], [260, 484]].map(([x, y], i) => (
           <ellipse key={i} cx={x} cy={y} rx="6" ry="3" fill="#5a4028" opacity="0.4" />
