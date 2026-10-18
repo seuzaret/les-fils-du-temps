@@ -116,7 +116,7 @@ export default function BriefingMission({ prenom, onAccept }) {
       <div style={{ position: "relative", maxWidth: 720, margin: "0 auto", zIndex: 2 }}>
         {/* Titre de la salle */}
         <div style={{ textAlign: "center", marginTop: 4 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 4, color: "#7fd8ff", opacity: 0.75 }}>SALLE TEMPORELLE · 2287</div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 4, color: "#7fd8ff", opacity: 0.75 }}>SALLE TEMPORELLE · 2045</div>
           <h1 style={{ fontFamily: "ui-monospace,monospace", fontSize: 26, fontWeight: 700, color: "#ffd166", letterSpacing: 2, margin: "4px 0 0", textShadow: "0 0 14px rgba(255,209,102,0.5)" }}>LA MISSION</h1>
         </div>
 
@@ -131,7 +131,7 @@ export default function BriefingMission({ prenom, onAccept }) {
           <div style={{ width: 120, textAlign: "center", opacity: step.speaker === "martine" ? 1 : 0.55, transition: "opacity 0.35s" }}>
             <div style={{ width: 110, height: 130, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 12, border: `2px solid ${step.speaker === "martine" ? "#5eff9e" : "#3a4058"}`, boxShadow: step.speaker === "martine" ? "0 0 18px rgba(94,255,158,0.4)" : "none", transition: "all 0.35s", background: "#0a1420" }}>
               <div style={{ transform: "scale(1.35)" }}>
-                <Avatar mood={step.mood || (step.speaker === "martine" ? "content" : "neutre")} size={70} date="2287" talking={step.speaker === "martine" && !done} />
+                <Avatar mood={step.mood || (step.speaker === "martine" ? "content" : "neutre")} size={70} date="2045" talking={step.speaker === "martine" && !done} />
               </div>
             </div>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: step.speaker === "martine" ? "#5eff9e" : "#8a97ad", marginTop: 6 }}>MARTINE</div>

@@ -205,7 +205,7 @@ const CHOICES = [
     emoji: "🚀",
     color: "#5eff9e",
     reply: "Tu as raison. Ils ont besoin de la personne qui a trouvé le remède, pas juste du remède. On rentre.",
-    confirm: "Al3x1A monte avec toi dans ta MARTINE. Direction 2287.",
+    confirm: "Al3x1A monte avec toi dans ta MARTINE. Direction 2045.",
   },
   {
     id: "laisser",

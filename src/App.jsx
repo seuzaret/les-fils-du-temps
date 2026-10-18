@@ -1842,7 +1842,7 @@ export default function App() {
     );
   }
 
-  /* ---------- écran CHRONAUTES : rencontre au futur (2287) ---------------
+  /* ---------- écran CHRONAUTES : rencontre au futur (2045) ---------------
      S'affiche juste après le saut depuis le DERNIER chapitre, avant
      l'épilogue. Elias, Mira, portrait-cadre d'Al3x1A. Séquence de
      dialogues scriptée. Fin de la séquence → écran épilogue. */
@@ -2729,7 +2729,7 @@ export default function App() {
           setSosOpen(false);
           if (isLastChapter) setEpiChoice(null);
           /* On ouvre le vaisseau temporel AUSSI pour le dernier saut
-             (XXIe → station des chronautes en 2287), pour que la
+             (XXIe → station des chronautes en 2045), pour que la
              transition soit tangible et symétrique avec les autres. */
           setVesselOpen(true);
         }} />
@@ -2749,8 +2749,8 @@ export default function App() {
             made={[]} inv={[]} flags={{}} queteQui={null} mode="jeu1" bare />
         ) : null;
         /* Label pour le dernier saut : on ne va pas à un chapitre, on va à
-           la station des chronautes en 2287. */
-        const finalLabel = isLastChapter ? "STATION DES CHRONAUTES · 2287" : label;
+           la station des chronautes en 2045. */
+        const finalLabel = isLastChapter ? "STATION DES CHRONAUTES · 2045" : label;
         /* Palier de difficulté de la boussole temporelle, mappé sur
            l'avancée dans la frise. 1..4 — plus on avance, plus ça serre. */
         const compassLevel = chapterIndex <= 1 ? 1 : chapterIndex <= 4 ? 2 : chapterIndex <= 6 ? 3 : 4;

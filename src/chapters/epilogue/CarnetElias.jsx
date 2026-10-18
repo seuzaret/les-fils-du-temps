@@ -9,9 +9,9 @@ import { useState } from "react";
    Navigation : ‹ Précédent · Suivant ›. Skippable.
    ------------------------------------------------------------
    0. Couverture           (« carnet d'un survivant », signé)
-   1. Notre monde d'avant  (2200, hyperconnecté)
-   2. Le grand silence     (tout s'éteint)
-   3. Cinq siècles envolés (les supports numériques disparaissent)
+   1. Notre monde          (2045, hyperconnecté)
+   2. Les premières pannes (serveurs, satellites, écrans lâchent un à un)
+   3. Ce qui s'efface      (les supports numériques deviennent illisibles)
    4. Ce qui a tenu        (paroies, livres, vitraux)
    5. La maladie de la mémoire
    ------------------------------------------------------------
@@ -71,7 +71,7 @@ function P0() {
       </g>
 
       {/* Date + lieu */}
-      <text x="400" y="360" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#c9a54a" letterSpacing="4" opacity="0.85">STATION DES CHRONAUTES · 2287</text>
+      <text x="400" y="360" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#c9a54a" letterSpacing="4" opacity="0.85">STATION DES CHRONAUTES · 2045</text>
 
       {/* Note manuscrite / dédicace */}
       <g transform="translate(400,390)">
@@ -84,7 +84,7 @@ function P0() {
   );
 }
 
-/* ─── Planche 1 : 2200, la ville hyperconnectée ─── */
+/* ─── Planche 1 : 2045, la ville hyperconnectée ─── */
 function P1() {
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
@@ -157,7 +157,7 @@ function P1() {
   );
 }
 
-/* ─── Planche 2 : le grand silence ─── */
+/* ─── Planche 2 : les premières pannes ─── */
 function P2() {
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
@@ -213,7 +213,7 @@ function P2() {
   );
 }
 
-/* ─── Planche 3 : cinq siècles envolés ─── */
+/* ─── Planche 3 : ce qui s'efface ─── */
 function P3() {
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
@@ -473,16 +473,16 @@ function P5() {
 
 /* ─── Séquence complète ─── */
 const PLANCHES = [
-  { titre: "Carnet d'Elias",            date: "2287",   Vignette: P0, cover: true,
-    texte: "Je m'appelle Elias. Je vis à la station des chronautes. J'écris ces pages pour que ce qui nous est arrivé ne s'efface pas tout à fait. Tourne, si tu veux lire." },
-  { titre: "Notre monde d'avant",       date: "vers 2200",   Vignette: P1,
-    texte: "Notre ville ne s'endormait jamais. Écrans partout, réseaux partout — et nous, la tête dedans. C'était il y a longtemps, avant ma naissance. Mes grands-parents me l'ont raconté." },
-  { titre: "Le grand silence",          date: "un matin",    Vignette: P2,
-    texte: "Un matin, tout s'est éteint. Serveurs, satellites, écrans, téléphones. Personne n'a jamais su rallumer. On a d'abord cru à une panne. Puis les jours ont passé." },
-  { titre: "Cinq siècles envolés",      date: "les années suivantes", Vignette: P3,
-    texte: "Photos, films, livres, courrier : tout était sur des supports qu'on ne savait plus lire. Les enfants demandaient ce qu'était une clé USB. On n'avait rien à leur montrer." },
+  { titre: "Carnet d'Elias",            date: "2045",   Vignette: P0, cover: true,
+    texte: "Je m'appelle Elias. Je vis à la station des chronautes. J'écris ces pages pour que ce qui nous arrive ne s'efface pas tout à fait. Tourne, si tu veux lire." },
+  { titre: "Notre monde",               date: "aujourd'hui",   Vignette: P1,
+    texte: "Notre ville ne s'endort jamais. Écrans partout, réseaux partout — et nous, la tête dedans. Tout paraît solide, fait pour durer. Ça ne l'est pas." },
+  { titre: "Les premières pannes",      date: "ces dernières années",    Vignette: P2,
+    texte: "Un matin, un serveur s'est éteint. Puis un autre. Des satellites, des écrans, des réseaux entiers ne répondent plus. On a d'abord cru à de simples pannes. Puis elles se sont multipliées." },
+  { titre: "Ce qui s'efface",           date: "chaque année", Vignette: P3,
+    texte: "Photos, films, livres, courrier : tout est sur des supports qu'on ne sait déjà plus lire. Les enfants demandent ce qu'est une clé USB. On n'a rien à leur montrer." },
   { titre: "Ce qui a tenu",             date: "à travers les âges", Vignette: P4,
-    texte: "Il restait ce que le temps avait déjà éprouvé : parois gravées, livres imprimés, stèles, vitraux. Ce sont eux qui nous ont rendu, morceau par morceau, un peu de mémoire." },
+    texte: "Il reste ce que le temps a déjà éprouvé : parois gravées, livres imprimés, stèles, vitraux. Ce sont eux qui nous rendent, morceau par morceau, un peu de mémoire." },
   { titre: "La maladie de la mémoire",  date: "aujourd'hui", Vignette: P5,
     texte: "Mais quelque chose nous ronge. On perd nos souvenirs, un peu chaque jour. Certains oublient jusqu'à leur propre nom. Ceux qui oublient tout oublient même qu'ils oublient. C'est le pire." },
 ];

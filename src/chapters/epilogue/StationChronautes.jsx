@@ -609,7 +609,7 @@ export default function StationChronautes({ prenom, onContinue }) {
       </div>
       {/* bandeau titre */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "10px 12px 0", background: "linear-gradient(180deg,#0c1220ee 0%,#0c122000 100%)", pointerEvents: "none" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>ÉPILOGUE · LA STATION DES CHRONAUTES · 2287</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>ÉPILOGUE · LA STATION DES CHRONAUTES · 2045</div>
         {!perso && !allDone && (
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#7fd8ff", marginTop: 4, opacity: 0.85 }}>
             Clique sur Elias pour commencer.

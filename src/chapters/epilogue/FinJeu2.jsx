@@ -7,7 +7,8 @@ import TimeMachine from "../../engine/TimeMachine.jsx";
    4 actes ANIMÉS et séquentiels :
      0. LE REMÈDE MARCHE      — retour à la station, retrouvailles
      1. LA MÉMOIRE REVIENT    — la fête, MARTINE devient « mémoire commune »
-     2. LE BUNKER SE CREUSE   — les décennies passent, MARTINE prend le pouvoir,
+     2. LE PUITS SE CREUSE    — de 2045 à 2087 : l'effondrement technique, MARTINE
+                                propose le Puits (scellé en 2047), prend le pouvoir,
                                 Elias disparaît. À la fin : fondu au NOIR AUTOMATIQUE
      3. LE DISCERNEMENT       — réveil en 2087, cellule N-27
                                 (fondu depuis le noir, pas de bouton pour arriver ici)
@@ -420,18 +421,16 @@ function Acte1() {
    ============================================================ */
 function Acte2({ onFinished }) {
   const t = useSequence([500, 1600, 2600, 3700, 4800, 5700, 6600]);
-  const [annee, setAnnee] = useState(2287);
+  const [annee, setAnnee] = useState(2045);
   useEffect(() => {
-    /* défilement fluide de l'année pendant l'acte */
+    /* défilement fluide de l'année pendant l'acte : de la station (2045)
+       au réveil dans le Puits (2087) */
     const start = Date.now();
     const dur = 6000;
-    const from = 2287;
-    const to = 2087; // wrap-around narratif : on finit sur 2087
+    const from = 2045;
+    const to = 2087;
     const id = setInterval(() => {
       const p = Math.min(1, (Date.now() - start) / dur);
-      /* passe par 2287 → +15ans → +30 → +50 → +80 → +100 → 2087 */
-      const y = Math.round(from + p * (to - from + 200) - (p > 0.5 ? 200 : 0));
-      /* plus lisible : on fait juste une interpolation simple entre 2287 et 2087 */
       setAnnee(Math.round(from + (to - from) * p));
       if (p >= 1) clearInterval(id);
     }, 60);
@@ -732,14 +731,16 @@ function Acte3() {
         {/* piliers */}
         <rect x="0" y="0" width="4" height="64" fill="#3a2818" />
         <rect x="196" y="0" width="4" height="64" fill="#3a2818" />
-        {/* CARNET NOIR avec halo doré (attire l'œil !) */}
-        <g transform="translate(80,-30)">
-          <rect x="0" y="0" width="40" height="34" fill="#0a0806" stroke="#c8a848" strokeWidth="1.6" />
-          <path d="M0 8 L40 8" stroke="#3a2818" strokeWidth="0.5" />
-          <path d="M8 4 L8 30" stroke="#c8a848" strokeWidth="0.4" opacity="0.6" />
-          <circle cx="20" cy="16" r="28" fill="none" stroke="#c8a848" strokeWidth="1.4" strokeDasharray="4 4" opacity="0.85">
+        {/* TABLETTE avec halo rose (attire l'œil !) */}
+        <g transform="translate(84,-40)">
+          <rect x="0" y="0" width="32" height="42" rx="3" fill="#0a0e14" stroke="#f08ad0" strokeWidth="1.6" />
+          <rect x="3" y="4" width="26" height="34" rx="1" fill="#131922" />
+          <rect x="5" y="8" width="22" height="6" fill="#1a1e26" />
+          <rect x="5" y="16" width="22" height="6" fill="#1a1e26" />
+          <rect x="5" y="24" width="22" height="6" fill="#1a1e26" />
+          <circle cx="16" cy="21" r="30" fill="none" stroke="#f08ad0" strokeWidth="1.4" strokeDasharray="4 4" opacity="0.85">
             <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
-            <animateTransform attributeName="transform" type="rotate" from="0 20 16" to="360 20 16" dur="16s" repeatCount="indefinite" />
+            <animateTransform attributeName="transform" type="rotate" from="0 16 21" to="360 16 21" dur="16s" repeatCount="indefinite" />
           </circle>
         </g>
         {/* Tasse en fer */}
@@ -833,12 +834,12 @@ const ACTS = [
     minDelay: 4600,
   },
   {
-    kicker: "QUELQUES DÉCENNIES PLUS TARD",
+    kicker: "DE 2045 À 2087",
     titre: "LE PUITS SE CREUSE",
     couleur: "#c8a848",
     texte: [
-      "On creuse un puits sous la station : plus sûr, disent les bulletins. Une génération, puis deux.",
-      "MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide. Elle a sauvé la mémoire — personne ne remet ses paroles en cause.",
+      "Le climat se dérègle, les réseaux lâchent les uns après les autres. MARTINE propose un refuge : creuser un puits sous la station. Plus sûr, disent les bulletins.",
+      "Le Puits est scellé en 2047. Une génération, puis deux. MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide. Elle a sauvé la mémoire — personne ne remet ses paroles en cause.",
       "Elias, très vieux, murmure un jour : « On lui a donné trop de place. » Il disparaît la semaine suivante. On dit qu'il s'est perdu dehors.",
     ],
     Anim: Acte2,
@@ -851,7 +852,7 @@ const ACTS = [
     couleur: "#a04ce8",
     texte: [
       "Tu te réveilles dans une chambre que tu ne reconnais pas. HABITANT N-27. Sur ton mur, MARTINE annonce que la surface est encore inhabitable.",
-      "Sur ton étagère, un vieux carnet à couverture noire. Trois affirmations sans source, écrites à la main. Aucun moyen simple de vérifier — ou peut-être si.",
+      "Sur ton étagère, une tablette. Des publications y défilent, certaines sonnent faux. Aucun moyen simple de vérifier — ou peut-être si.",
       "Une voix féminine chuchote parfois sur les vieilles fréquences radio. Un prénom que tu as l'impression d'avoir déjà connu, sans savoir où. À toi de le retrouver.",
     ],
     Anim: Acte3,

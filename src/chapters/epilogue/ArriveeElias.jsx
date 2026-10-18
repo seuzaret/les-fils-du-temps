@@ -163,7 +163,7 @@ export default function ArriveeElias({ prenom, onDone }) {
       {/* ═══ bandeau titre ═══ */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>
-          ÉPILOGUE · STATION DES CHRONAUTES · 2287
+          ÉPILOGUE · STATION DES CHRONAUTES · 2045
         </div>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>
           … le portail vient de se refermer …
