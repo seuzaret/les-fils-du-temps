@@ -15,17 +15,25 @@
    Composants :
      Figure    — personnage en pied, origine aux pieds (≈ 125 de haut
                  debout). Poses : stand | sit | kneel | ground.
+                 garment : jacket | tunic | coat | robe | dress | fur | toga |
+                 kilt (torse nu + pagne) | tee (col rond) ; shortSleeves,
+                 bareArms, apron, cape, back (vue de dos), arms, behind,
+                 children (coordonnées de la figure, voir handPos).
+     Arm       — un bras seul (gestes animés : envelopper dans un <g>
+                 avec animateTransform autour de l'épaule ±19.5, -84).
      Bust      — épaules + tête, origine au centre du visage.
      Portrait  — gros plan 300×340 pour les dialogues.
 
    Options de tête (communes aux trois) :
      look      short | long | mid | braids | bun | sidebun | ponytail |
-               curls | afro | slick | ring (couronne de chauve) | bald
+               curls | afro | slick | ring (couronne de chauve) | bald |
+               rolls | bob
      beard     true/"full" | "short" | "goatee" | "long" | "royal" |
-               "postiche" | "stubble"        mustache : true | "handlebar"
-     hat       headband | crown | nemes | leather | helm | tricorne | visor | wwhelm | cap | toque | beret |
-               brim | tophat | kepi | hardhat | laurel | coif | turban |
-               flatcap | hood
+               "postiche" | "stubble" | "chops"   mustache : true | "handlebar"
+     hat       headband | crown | nemes | leather | helm (nasal) |
+               tricorne | visor | wwhelm (casque 39-45) | cap | toque |
+               beret | brim | tophat | kepi | pillbox | hardhat | laurel |
+               coif | keffieh | turban | flatcap | hood
      facing    front | left | right (trois-quarts : les traits tournent)
      mood      neutre | content | vexe | colere | surpris
      glasses, earrings, paint (traits d'ocre), scar, freckles, kohl, lips
