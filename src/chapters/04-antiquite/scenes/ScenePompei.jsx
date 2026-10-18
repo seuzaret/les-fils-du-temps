@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { PompeiDefs, PompeiFond } from "./fond.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 4 · Tableau 1 — Devant la villa de Caius
@@ -123,8 +124,9 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
         <g transform="translate(300,494)">
           {[[-40, 0, "#8a5a3a"], [-18, 6, "#9a6a4a"], [4, -2, "#7a4a34"], [26, 8, "#a86a4a"], [46, 2, "#8a5a3a"], [12, 14, "#6a4a34"], [-30, 12, "#9a6a4a"]].map(([x, y, c], i) => (
             <g key={i} transform={`translate(${x},${y})`}>
-              <path d="M-8 24 Q-10 -2 0 -12 Q10 -2 8 24 Z" fill={c} />
-              <circle cx="0" cy="-18" r="6" fill="#c89868" />
+              <Figure x={0} y={24} s={0.4} facing="right" skin={["#c89868", "#b07a50", "#d8a878", "#a06a44"][i % 4]} coat={c}
+                look={["short", "bun", "curls", "long", "short", "mid", "braids"][i]} hair={["#3a2418", "#1e140c", "#4a3020", "#2a1a10"][i % 4]}
+                beard={i === 2 ? "short" : false} garment={i % 3 === 1 ? "dress" : "tunic"} pants="#6a4a34" shoes="#3a2418" mood={i % 2 ? "surpris" : null} />
             </g>
           ))}
         </g>
@@ -132,13 +134,9 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
         {/* CAIUS le marchand, en toge, devant sa villa */}
         <g transform="translate(640,484)">
           <ellipse cx="0" cy="28" rx="24" ry="7" fill="#241608" opacity="0.4" />
-          <path d="M-16 28 Q-22 -6 0 -20 Q22 -6 16 28 Z" fill="#efe7d2" />
-          <path d="M-14 6 q14 8 28 0 M-12 18 q12 6 24 0" stroke="#c4b898" strokeWidth="2" fill="none" opacity="0.6" />
-          <path d="M-10 -10 Q0 4 16 24" stroke="#8a2a4a" strokeWidth="5" fill="none" opacity="0.8" />
-          <circle cx="0" cy="-30" r="9.5" fill="#c89868" />
-          <path d="M-9 -33 q9 -8 18 0 q-2 -7 -9 -7 q-7 0 -9 7 Z" fill="#4a3020" />
-          <path d="M-11 -30 q11 -8 22 0" stroke="#6a8a3a" strokeWidth="2" fill="none" opacity="0.7" />
-          <path d="M14 -6 q16 2 20 14" stroke="#c89868" strokeWidth="4.5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={28} s={0.55} skin="#cfa070" hair="#3a2818" look="short" mood="content" hat="laurel"
+            garment="toga" coat="#efe7d2" coat2="#8a2a4a" pants="#cfa070" shoes="#5a3a20"
+            arms={[{ a1: 10, a2: 4 }, { a1: 60, a2: 40 }]} />
         </g>
         {queteQui === "caius" && (
           <g transform="translate(622,384)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
@@ -150,12 +148,10 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
         {/* ARGOS l'esclave, près de la foule */}
         <g transform="translate(430,492)">
           <ellipse cx="0" cy="24" rx="20" ry="6" fill="#241608" opacity="0.4" />
-          <path d="M-12 24 Q-15 -2 0 -15 Q15 -2 12 24 Z" fill="#b89a6a" />
-          <path d="M-10 6 q10 4 20 0" stroke="#96784a" strokeWidth="2" fill="none" />
-          <circle cx="0" cy="-24" r="8" fill="#b0855c" />
-          <path d="M-8 -26 q8 -7 16 0 q-2 -6 -8 -6 q-6 0 -8 6 Z" fill="#3a2a1c" />
-          <path d="M11 -8 q10 -4 16 2" stroke="#b0855c" strokeWidth="4" fill="none" strokeLinecap="round" />
-          <path d="M27 -8 q6 2 6 8 q-6 -1 -8 3" fill="none" stroke="#b0855c" strokeWidth="2.4" strokeLinecap="round" />
+          {/* tourné vers la foule, une main en porte-voix */}
+          <Figure x={0} y={24} s={0.45} facing="left" skin="#b0855c" hair="#3a2a1c" look="short" mood="surpris"
+            garment="tunic" coat="#b89a6a" pants="#b0855c" shoes="#4a3424"
+            arms={[{ a1: 100, a2: -110 }, { a1: 10, a2: 6 }]} />
         </g>
         {/* les ONDES de la voix d'Argos vers la foule (façon wifi) : elles
             n'apparaissent qu'au moment où l'annonce est lancée, puis s'estompent */}

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 4 — Tableau adjacent : LES THERMES DE POMPÉI
@@ -135,33 +136,19 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
           <rect x="-30" y="24" width="60" height="16" fill="#8a5a2e" stroke="#3a1810" strokeWidth="0.6" />
           <rect x="-26" y="40" width="6" height="8" fill="#3a2010" />
           <rect x="20" y="40" width="6" height="8" fill="#3a2010" />
-          {/* jambes */}
-          <path d="M-10 24 L-14 4 M10 24 L14 4" stroke="#a06838" strokeWidth="6" strokeLinecap="round" />
-          {/* torse nu, serviette blanche à la taille */}
-          <path d="M-14 8 Q-16 -14 0 -20 Q16 -14 14 8 Z" fill="#a06838" stroke="#3a2010" strokeWidth="0.5" />
-          <path d="M-16 4 L16 4 L18 20 L-18 20 Z" fill="#f0e8d0" stroke="#8a7860" strokeWidth="0.4" />
-          <path d="M-14 8 h28 M-15 12 h30 M-16 16 h32" stroke="#8a7860" strokeWidth="0.3" />
-          {/* tête romaine */}
-          <ellipse cx="0" cy="-30" rx="10" ry="12" fill="#c8946a" stroke="#5a3818" strokeWidth="0.5" />
-          <path d="M-9 -34 q-2 -8 4 -10 q6 4 8 -2 q4 6 3 12" stroke="#3a2418" strokeWidth="1.4" fill="none" />
-          <circle cx="-3" cy="-30" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-30" r="1.2" fill="#0a0806" />
-          {/* main levée qui gesticule */}
-          <path d="M14 -6 L28 -14" stroke="#c8946a" strokeWidth="3.5" strokeLinecap="round" />
+          <Figure x={0} y={42} s={0.7} pose="sit" skin="#b88050" hair="#3a2418" look="short" mood="content"
+            garment="kilt" coat="#f0e8d0" pants="#b88050" shoes="#6a4a2a" belt={false}
+            arms={[{ a1: 14, a2: -30 }, { a1: 70, a2: 110 }]} />
         </g>
         {/* baigneur 2 debout face au 1er */}
         <g transform="translate(680,490)">
           <ellipse cx="0" cy="42" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
-          {/* jambes */}
-          <path d="M-6 42 L-6 8 M6 42 L6 8" stroke="#a06838" strokeWidth="6" strokeLinecap="round" />
-          {/* torse avec toge légère */}
-          <path d="M-14 8 Q-16 -14 0 -20 Q16 -14 14 8 Z" fill="#a06838" stroke="#3a2010" strokeWidth="0.5" />
-          <path d="M-14 -4 Q-4 -10 14 -4 L16 12 L-16 12 Z" fill="#f0e8d0" stroke="#8a7860" strokeWidth="0.4" />
-          {/* tête */}
-          <ellipse cx="0" cy="-30" rx="10" ry="12" fill="#c8946a" stroke="#5a3818" strokeWidth="0.5" />
-          <path d="M-9 -34 q-2 -8 4 -10 q6 4 8 -2 q4 6 3 12" stroke="#3a2418" strokeWidth="1.4" fill="none" />
-          <circle cx="-3" cy="-30" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-30" r="1.2" fill="#0a0806" />
+          {/* serviette nouée à la taille, une autre sur l'épaule */}
+          <Figure x={0} y={42} s={0.68} skin="#c8946a" hair="#3a2418" look="ring" beard="short" beardColor="#5a4030" mood="surpris"
+            garment="kilt" coat="#f0e8d0" pants="#c8946a" shoes="#6a4a2a" belt={false}
+            arms={[{ a1: 12, a2: 4 }, { a1: 20, a2: -50 }]}>
+            <path d="M-22 -88 Q-6 -70 18 -50 L20 -42 Q-4 -60 -22 -76 Z" fill="#e8e0c8" stroke="#8a7860" strokeWidth="0.7" />
+          </Figure>
         </g>
         {/* Petits objets thermaux : strigile + fiole d'huile posés (collectable action) */}
         <g transform="translate(280,510)">

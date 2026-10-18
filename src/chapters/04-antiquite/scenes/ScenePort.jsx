@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 4 — Tableau adjacent : LE PORT DE POMPÉI
@@ -161,6 +162,10 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
       <PLayer depth={1}>
         {/* LE MARCHAND au comptoir, notant sur son volumen */}
         <g transform="translate(560,500)">
+          {/* le marchand, debout derrière son comptoir, stylet à la main */}
+          <Figure x={0} y={46} s={0.7} skin="#c8946a" hair="#3a2418" look="short" beard="short" mood="vexe"
+            garment="toga" coat="#f0e8d0" coat2="#7a2044" pants="#5a3a20" shoes="#3a2418"
+            arms={[{ a1: 30, a2: -24 }, { a1: 30, a2: -20 }]} />
           {/* comptoir de pierre */}
           <rect x="-40" y="20" width="80" height="30" fill="url(#po-quai)" stroke="#2a1810" strokeWidth="0.6" />
           <ellipse cx="0" cy="50" rx="44" ry="4" fill="#0a0604" opacity="0.55" />
@@ -170,40 +175,23 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
             <path d="M-30 -6 L-36 -8 L-36 8 L-30 8 Z M30 -6 L36 -8 L36 8 L30 8 Z" fill="#c8a878" stroke="#5a3818" strokeWidth="0.5" />
             <path d="M-24 -3 h48 M-24 0 h48 M-24 3 h48 M-24 6 h48" stroke="#5a3818" strokeWidth="0.3" />
           </g>
-          {/* torse penché du marchand qui écrit */}
-          <path d="M-14 20 Q-16 -10 0 -18 Q16 -10 14 20 Z" fill="#a06838" stroke="#3a2010" strokeWidth="0.5" />
-          {/* toge blanche par-dessus */}
-          <path d="M-16 8 L-20 20 L16 20 L20 8 Q4 -6 -16 8 Z" fill="#f0e8d0" stroke="#8a7860" strokeWidth="0.4" />
-          <path d="M-4 -14 L-4 8" stroke="#7a2044" strokeWidth="1.4" />
-          {/* bras qui tient un stylet */}
-          <path d="M12 -4 L28 12" stroke="#c8946a" strokeWidth="3.5" strokeLinecap="round" />
-          <path d="M28 12 L34 20" stroke="#3a2418" strokeWidth="1" strokeLinecap="round" />
-          {/* tête */}
-          <ellipse cx="0" cy="-28" rx="10" ry="12" fill="#c8946a" stroke="#5a3818" strokeWidth="0.5" />
-          <path d="M-9 -32 q-2 -8 4 -10 q6 4 8 -2 q4 4 6 -2 q4 6 3 12" stroke="#3a2418" strokeWidth="1.4" fill="none" />
-          <circle cx="-3" cy="-28" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-28" r="1.2" fill="#0a0806" />
-          {/* petite barbe soignée */}
-          <path d="M-4 -20 q4 3 8 0" stroke="#3a2418" strokeWidth="1.2" fill="none" />
+          {/* le stylet */}
+          <path d="M16 12 L22 20" stroke="#3a2418" strokeWidth="1.4" strokeLinecap="round" />
         </g>
         {/* Débardeur qui porte une amphore sur l'épaule */}
         <g transform="translate(400,510)">
           <ellipse cx="0" cy="30" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
-          {/* jambes musclées */}
-          <path d="M-6 30 L-6 4 M6 30 L6 4" stroke="#a06838" strokeWidth="6" strokeLinecap="round" />
-          {/* torse nu */}
-          <path d="M-14 4 Q-16 -18 0 -24 Q16 -18 14 4 Z" fill="#a06838" stroke="#3a2010" strokeWidth="0.5" />
-          {/* pagne */}
-          <path d="M-14 4 L14 4 L18 20 L-18 20 Z" fill="#c88a52" stroke="#5a3818" strokeWidth="0.4" />
-          {/* bras qui tient une amphore sur l'épaule */}
-          <path d="M-12 -12 L-24 -22" stroke="#a06838" strokeWidth="3.5" strokeLinecap="round" />
-          <g transform="translate(-24,-30)">
-            <path d="M-10 6 Q-10 22 -4 26 L4 26 Q10 22 10 6 Q10 -8 0 -12 Q-10 -8 -10 6 Z" fill="url(#po-amphore)" stroke="#3a1810" strokeWidth="0.6" />
-            <path d="M-10 -2 Q-16 -6 -10 -12 M10 -2 Q16 -6 10 -12" stroke="#5a3818" strokeWidth="1.4" fill="none" />
-          </g>
-          {/* tête */}
-          <ellipse cx="0" cy="-34" rx="9" ry="10" fill="#a06838" stroke="#3a2010" strokeWidth="0.5" />
-          <path d="M-8 -36 q-2 -6 4 -8 q6 4 8 -2" stroke="#3a2418" strokeWidth="1.2" fill="none" />
+          {/* torse nu, pagne, l'amphore calée sur l'épaule gauche */}
+          <Figure x={0} y={30} s={0.6} skin="#a06838" hair="#2a1a10" look="short" beard="stubble" mood="colere"
+            garment="kilt" coat="#c88a52" pants="#a06838" shoes="#5a3818"
+            arms={[{ a1: 150, a2: 170 }, { a1: 12, a2: 8 }]}
+            behind={<g>
+              {/* amphore couchée sur l'épaule : pied pointu à gauche, col à droite */}
+              <path d="M-70 -120 Q-62 -136 -40 -138 Q-16 -138 -6 -128 L2 -126 L2 -116 L-6 -114 Q-16 -104 -40 -104 Q-62 -106 -70 -120 Z" fill="url(#po-amphore)" stroke="#3a1810" strokeWidth="1" />
+              <rect x="1" y="-128" width="5" height="14" rx="1.5" fill="#a86a3a" stroke="#3a1810" strokeWidth="0.8" />
+              <path d="M-7 -129 q0 -10 -12 -9 M-7 -113 q0 10 -12 9" stroke="#5a3818" strokeWidth="2.4" fill="none" />
+              <path d="M-52 -128 q12 -4 30 -2" stroke="#e8b080" strokeWidth="2" fill="none" opacity="0.5" />
+            </g>} />
         </g>
 
         {/* Ephemere : oursin séché + morceau de corde (disparaissent au ramassage) */}

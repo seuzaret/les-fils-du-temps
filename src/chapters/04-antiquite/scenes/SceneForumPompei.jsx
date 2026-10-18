@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 4 — Tableau adjacent : LE FORUM DE POMPÉI
@@ -177,29 +178,16 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
           <rect x="-16" y="28" width="6" height="18" fill="#3a2010" />
           <rect x="10" y="28" width="6" height="18" fill="#3a2010" />
           <ellipse cx="0" cy="48" rx="24" ry="3" fill="#0a0604" opacity="0.5" />
-          {/* jambes */}
-          <path d="M-8 10 L-8 -18 M8 10 L8 -18" stroke="#e8dcc0" strokeWidth="6" strokeLinecap="round" />
-          {/* toge blanche */}
-          <path d="M-16 8 Q-20 -20 -4 -30 Q4 -32 12 -30 Q20 -20 16 8 Z" fill="#f0e8d0" stroke="#8a7860" strokeWidth="0.6" />
-          <path d="M-14 -12 Q-4 -22 14 -8 Q4 0 -14 -6 Z" fill="#e0d8c0" stroke="#8a7860" strokeWidth="0.4" />
-          {/* bande pourpre (laticlave) */}
-          <path d="M-4 -28 L-4 8" stroke="#7a2044" strokeWidth="2" />
-          {/* bras droit levé haranguant */}
-          <path d="M12 -22 L26 -46" stroke="#c8946a" strokeWidth="4" strokeLinecap="round" />
-          <path d="M26 -46 L34 -50" stroke="#c8946a" strokeWidth="3" strokeLinecap="round" />
-          {/* tête + cheveux courts romains */}
-          <ellipse cx="0" cy="-42" rx="10" ry="12" fill="#c8946a" stroke="#5a3818" strokeWidth="0.5" />
-          <path d="M-9 -46 q-2 -8 4 -10 q6 4 8 -2 q4 4 6 -2 q4 6 3 12" stroke="#3a2418" strokeWidth="1.4" fill="none" />
-          {/* traits */}
-          <circle cx="-3" cy="-42" r="1.2" fill="#0a0806" />
-          <circle cx="3" cy="-42" r="1.2" fill="#0a0806" />
-          <path d="M-3 -36 q3 2 6 0" stroke="#5a2818" strokeWidth="0.8" fill="none" />
-          {/* rouleau dans la main gauche */}
-          <path d="M-16 -12 L-24 -8" stroke="#c8946a" strokeWidth="3" strokeLinecap="round" />
-          <g transform="translate(-26,-8) rotate(30)">
-            <rect x="-2" y="-8" width="12" height="10" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.5" />
-            <path d="M-2 -6 h12 M-2 -4 h12 M-2 -2 h12" stroke="#8a5828" strokeWidth="0.3" />
-          </g>
+          {/* le crieur, toge à bande pourpre, bras levé, rouleau à la main */}
+          <Figure x={0} y={10} s={0.49} skin="#c8946a" hair="#3a2418" look="short" mood="surpris"
+            garment="toga" coat="#f0e8d0" coat2="#e0d8c0" trim="#7a2044" pants="#c8946a" shoes="#6a4a2a"
+            arms={[{ a1: 30, a2: 50 }, { a1: 150, a2: 160 }]}>
+            <path d="M-6 -90 L-6 -18" stroke="#7a2044" strokeWidth="3.4" opacity="0.85" />
+            <g transform="translate(-48,-58) rotate(30)">
+              <rect x="-4" y="-16" width="24" height="20" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.8" />
+              <path d="M-2 -11 h20 M-2 -6 h20 M-2 -1 h20" stroke="#8a5828" strokeWidth="0.6" />
+            </g>
+          </Figure>
         </g>
         <g transform="translate(200,432)" style={{ animation: "float 2s ease-in-out infinite" }}>
           <circle r="14" fill="#ffd166" stroke="#8a5a20" strokeWidth="2" />
@@ -209,15 +197,16 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         {/* Un lapidicida (graveur) accroupi devant la stèle */}
         <g transform="translate(390,516)">
           <ellipse cx="0" cy="18" rx="18" ry="3" fill="#0a0604" opacity="0.5" />
-          <path d="M-14 14 Q-10 4 -2 6 L12 16 Q18 20 14 20 L-14 20 Q-18 18 -14 14 Z" fill="#7a4820" />
-          <path d="M-12 10 Q-14 -12 0 -18 Q14 -12 12 10 Z" fill="#a86828" stroke="#3a2010" strokeWidth="0.5" />
-          <ellipse cx="0" cy="-24" rx="8" ry="10" fill="#c8946a" transform="rotate(20 0 -24)" />
-          <path d="M-6 -26 q4 -6 8 -4 q4 2 5 4" stroke="#3a2418" strokeWidth="1.2" fill="none" />
-          {/* bras avec burin et maillet */}
-          <path d="M-12 -6 L-24 -14 L-32 -20" stroke="#c8946a" strokeWidth="3" strokeLinecap="round" />
-          <path d="M12 -6 L22 -12" stroke="#c8946a" strokeWidth="3" strokeLinecap="round" />
-          <rect x="22" y="-16" width="8" height="4" fill="#5a3818" />
-          <path d="M-34 -22 L-28 -30" stroke="#3a2418" strokeWidth="1.4" strokeLinecap="round" />
+          {/* à genoux devant la stèle : burin contre la pierre, maillet levé */}
+          <Figure x={0} y={18} s={0.5} pose="kneel" facing="right" skin="#c8946a" hair="#3a2418" look="short" beard="stubble" mood="vexe"
+            garment="tunic" coat="#a86828" pants="#7a4820" shoes="#3a2418" apron="#c8b088"
+            arms={[{ a1: 120, a2: 150 }, { a1: 70, a2: 90 }]}>
+            <path d="M54 -54 L70 -58" stroke="#8a8a90" strokeWidth="3" strokeLinecap="round" />
+            <g transform="translate(-45,-85) rotate(-30)">
+              <rect x="-2.4" y="-4" width="4.8" height="22" rx="1.2" fill="#5a3818" />
+              <rect x="-9" y="-13" width="18" height="10" rx="2" fill="#8a5a2e" stroke="#2a1810" strokeWidth="0.8" />
+            </g>
+          </Figure>
         </g>
 
         {/* Ephemere : denier romain + amphore cassée (disparaissent au ramassage) */}
