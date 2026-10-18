@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Bust, Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau 6 : le NICKELODEON (New York, mai 1912)
@@ -103,8 +104,10 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
           [90, 490], [170, 484], [240, 496], [320, 486], [400, 494], [480, 486], [560, 496], [640, 484], [820, 492]
         ].map(([x, y], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
-            <path d="M-14 0 Q-16 -22 0 -30 Q16 -22 14 0 L10 12 L-10 12 Z" fill="#0a0604" />
-            <circle cx="0" cy="-36" r="8" fill="#0a0604" />
+            {/* spectateur vu de dos, en ombre chinoise : chignons, chapeaux, casquettes */}
+            <Bust x={0} y={-36} s={0.62} back skin="#0a0604" hair="#0a0604" cloth="#0a0604" collar="none"
+              look={["bun", "short", "long", "short", "bob", "ring", "bun", "short", "curls"][i]}
+              hat={[null, "flatcap", null, "brim", null, "tophat", "pillbox", null, null][i]} hatColor="#0a0604" hatColor2="#0a0604" />
           </g>
         ))}
       </PLayer>
@@ -113,27 +116,11 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
       <PLayer depth={3}>
         <g transform="translate(720,490)">
           <rect x="-24" y="-16" width="48" height="60" rx="4" fill="#3a0808" />
-          <path d="M-14 -12 Q-16 -46 0 -56 Q16 -46 14 -12 L10 0 L-10 0 Z" fill="#3a5a7a" />
-          <circle cx="0" cy="-64" r="9" fill="#e0b084" />
-          <path d="M-8 -70 q4 -6 16 -2 q2 -4 -8 -4 q-10 0 -8 6 Z" fill="#7a3a1a" />
-          <path d="M-10 -72 Q-4 -80 8 -78 Q14 -76 10 -68 L-8 -68 Z" fill="#3a2418" />
-          <path d="M-12 -68 h20" stroke="#2a1808" strokeWidth="1.5" />
-          {/* une larme */}
-          <circle cx="-4" cy="-60" r="1" fill="#7fd8ff" style={{ animation: "glow 3s ease-in-out infinite" }} />
-        </g>
-
-        {/* LA CABINE DE PROJECTION (au fond à droite) */}
-        <g transform="translate(920,470)">
-          <rect x="-60" y="-70" width="60" height="70" fill="#1c1006" stroke="#5a3010" strokeWidth="3" />
-          <rect x="-48" y="-58" width="20" height="16" fill="#a8801f" opacity="0.6" />
-          <circle cx="-20" cy="-42" r="10" fill="#5a3010" />
-          <circle cx="-20" cy="-42" r="6" fill="none" stroke="#a8801f" strokeWidth="1" />
-          <circle cx="-20" cy="-20" r="10" fill="#5a3010" />
-          <circle cx="-20" cy="-20" r="6" fill="none" stroke="#a8801f" strokeWidth="1" />
-          <rect x="-14" y="-34" width="14" height="10" fill="#2a1608" />
-          <g style={{ transformOrigin: "-30px -20px", animation: done ? "spin 1.6s linear infinite" : "none" }}>
-            <rect x="-38" y="-22" width="14" height="4" fill="#a89878" />
-          </g>
+          <Figure x={0} y={28} s={0.69} pose="sit" skin="#e4b48a" hair="#8a3a1a" look="short" freckles mood="vexe" hat="flatcap" hatColor="#3a2418"
+            garment="jacket" coat="#3a5a7a" pants="#2a3a4a" shoes="#1a1410" arms={[{ a1: 14, a2: -30 }, { a1: 14, a2: -30 }]}>
+            {/* une larme */}
+            <circle cx="-5" cy="-84" r="1.6" fill="#7fd8ff" style={{ animation: "glow 3s ease-in-out infinite" }} />
+          </Figure>
         </g>
 
         {/* « ? » de l'ouvreuse (tant qu'elle guide) */}
@@ -144,13 +131,14 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
             values="140,490; 200,492; 240,494; 200,492; 140,490; 100,488; 140,490"
             keyTimes="0; 0.15; 0.3; 0.45; 0.6; 0.8; 1"
             dur="18s" repeatCount="indefinite" />
-          <path d="M-14 -50 Q-18 -80 0 -90 Q18 -80 14 -50 L12 0 L-12 0 Z" fill="#3a0808" />
-          <circle cx="0" cy="-98" r="8" fill="#e0b084" />
-          <path d="M-8 -100 Q-6 -110 0 -110 Q6 -110 8 -100 Z" fill="#3a2818" />
-          <g transform="translate(16,-40)">
-            <rect x="0" y="-4" width="14" height="8" rx="2" fill="#a89878" />
-            <ellipse cx="20" cy="0" rx="14" ry="8" fill="#ffe8b0" opacity="0.5" style={{ animation: "glow 2.4s ease-in-out infinite" }} />
-          </g>
+          <Figure x={0} y={0} s={0.92} skin="#e8bc94" hair="#7a5030" look="bun" earrings="#f4f0e4" lips="#b02030" mood="content"
+            hat="pillbox" hatColor="#7a1a24" hatColor2="#e8c040" garment="dress" coat="#5a1418" trim="#e8c040" pants="#3a0808" shoes="#1a0606"
+            arms={[{ a1: 10, a2: 6 }, { a1: 40, a2: 20 }]}>
+            <g transform="translate(38,-50)">
+              <rect x="0" y="-5" width="16" height="10" rx="2" fill="#a89878" />
+              <ellipse cx="24" cy="0" rx="16" ry="9" fill="#ffe8b0" opacity="0.5" style={{ animation: "glow 2.4s ease-in-out infinite" }} />
+            </g>
+          </Figure>
         </g>
       </PLayer>
 

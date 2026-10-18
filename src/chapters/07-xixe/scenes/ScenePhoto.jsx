@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau 2 : le STUDIO du DAGUERRÉOTYPIST (Californie, ~1855)
@@ -80,22 +81,14 @@ export default function ScenePhoto({ collect, action, reveal, made = [], flags =
 
         {/* JAMES O'SULLIVAN — assis raide, endimanché, la tête calée dans le fer */}
         <g transform="translate(720,398)">
-          <path d="M-30 0 Q-38 -70 -18 -90 L18 -90 Q38 -70 30 0 L26 -12 L-26 -12 Z" fill="#1c1610" />
-          <path d="M-16 -90 L0 -70 L16 -90 L14 -30 L-14 -30 Z" fill="#7a5220" />
-          <path d="M-8 -60 Q0 -50 8 -60" stroke="#e6c25a" strokeWidth="2" fill="none" />
-          <circle cx="8" cy="-60" r="3" fill="#e6c25a" />
-          <path d="M-6 -92 Q0 -82 6 -92 L4 -76 Q0 -72 -4 -76 Z" fill="#efe6d2" />
-          <path d="M-2 -80 L2 -80 L2 -60 L-2 -60 Z" fill="#0a0a10" />
-          <path d="M-24 -12 L-18 60 L-6 60 L-4 -12 Z" fill="#1c1610" />
-          <path d="M4 -12 L6 60 L18 60 L24 -12 Z" fill="#1c1610" />
-          <circle cx="-18" cy="0" r="6" fill="#e0b084" />
-          <circle cx="18" cy="0" r="6" fill="#e0b084" />
-          {/* tête */}
-          <path d="M0 -158 c14 0 22 12 22 26 c0 14 -8 24 -22 24 c-14 0 -22 -10 -22 -24 c0 -14 8 -26 22 -26 Z" fill="#e0b084" />
-          <path d="M-6 -122 q6 -3 12 0 q-2 -4 -6 -4 q-4 0 -6 4 Z" fill="#a85a2a" />
-          <circle cx="-7" cy="-134" r="1.6" fill="#3a6a8a" />
-          <circle cx="7" cy="-134" r="1.6" fill="#3a6a8a" />
-          <path d="M-22 -138 Q-20 -158 0 -158 Q20 -158 22 -138 Q18 -150 0 -150 Q-18 -150 -22 -138 Z" fill="#b0602c" />
+          {/* assis raide, endimanché, la tête calée dans le fer */}
+          <Figure x={0} y={60} s={2.18} pose="sit" skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="vexe"
+            garment="jacket" coat="#1c1610" coat2="#7a5220" pants="#1c1610" shoes="#0a0806"
+            arms={[{ a1: 10, a2: -20 }, { a1: 10, a2: -20 }]}>
+            <path d="M-4 -60 Q0 -55 4 -60" stroke="#e6c25a" strokeWidth="1" fill="none" />
+            <circle cx="4" cy="-60" r="1.4" fill="#e6c25a" />
+            <path d="M-1 -72 L1 -72 L1 -62 L-1 -62 Z" fill="#0a0a10" />
+          </Figure>
         </g>
 
         {/* LA CHAMBRE PHOTOGRAPHIQUE (grand appareil en bois, sur trépied) */}
@@ -189,12 +182,11 @@ export default function ScenePhoto({ collect, action, reveal, made = [], flags =
 
         {/* LE PHOTOGRAPHE — la tête sous le voile noir, un bras qui tient le déclencheur */}
         <g transform="translate(200,398)">
-          <path d="M-16 0 Q-20 -50 0 -66 Q20 -50 16 0 L12 -6 L-12 -6 Z" fill="#3a2814" />
-          <path d="M-16 0 Q-20 -50 0 -66 Q20 -50 16 0 L12 -6 L-12 -6 Z" fill="#0a0806" opacity="0.3" filter="url(#dg-grain)" />
-          <path d="M-14 -60 Q-24 -80 -6 -92 L14 -92 Q28 -76 20 -60 Z" fill="#0a0806" />
-          <path d="M14 -30 q28 -14 46 -18" stroke="#3a2814" strokeWidth="6" fill="none" strokeLinecap="round" />
-          <path d="M-12 -6 L-12 60 L-4 60 L-2 -6 Z" fill="#3a2814" />
-          <path d="M2 -6 L4 60 L12 60 L12 -6 Z" fill="#3a2814" />
+          <Figure x={0} y={60} s={1.37} facing="right" skin="#dcb282" hair="#5a3a20" look="slick" beard="chops" mustache
+            garment="coat" coat="#3a2814" pants="#2a1c0e" shoes="#140c06" arms={[{ a1: 10, a2: 6 }, { a1: 75, a2: 70 }]}>
+            {/* la tête sous le voile noir, qui retombe sur l'arrière de la chambre */}
+            <path d="M-19 -86 Q-27 -114 -6 -127 L16 -127 Q34 -122 44 -108 L40 -96 Q28 -104 22 -86 Z" fill="#0a0806" />
+          </Figure>
         </g>
 
         {/* Une pendule murale (la pose fait ~15 secondes) */}

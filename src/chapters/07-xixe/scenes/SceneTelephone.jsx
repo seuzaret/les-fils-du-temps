@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau 4 : le téléphone transcontinental
@@ -173,24 +174,15 @@ export default function SceneTelephone({ collect, action, reveal, made = [], que
         {/* SEAN O'SULLIVAN debout, en costume, main sur le combiné */}
         <g transform="translate(560,376)">
           <ellipse cx="0" cy="94" rx="34" ry="8" fill="#160f08" opacity="0.5" />
-          {/* costume */}
-          <path d="M-24 92 Q-30 6 0 -8 Q30 6 24 92 Z" fill="#4a5a6a" />
-          <path d="M-18 92 L-12 40 M18 92 L12 40" stroke="#2a3846" strokeWidth="2" opacity="0.6" />
-          {/* chemise + cravate rayée verte/or */}
-          <path d="M-6 -6 L6 -6 L8 44 L-8 44 Z" fill="#efe9dc" />
-          <path d="M-2 8 L2 8 L4 48 L-4 48 Z" fill="#2a6a3a" />
-          {[10, 20, 30].map((y, i) => <path key={i} d={`M-3 ${y} l6 0`} stroke="#e0b040" strokeWidth="1.2" />)}
-          {/* tête + cheveux auburn foncés en arrière */}
-          <circle cx="0" cy="-24" r="12" fill="#e0b084" />
-          <path d="M-11 -26 q10 -7 22 0 q-2 -10 -11 -10 q-9 0 -11 10" fill="#7a3a1a" />
-          <path d="M-11 -26 Q-10 -14 0 -16 Q10 -14 11 -26 Z" fill="#e0b084" />
-          <path d="M8 -24 q6 2 6 10" stroke="#7a3a1a" strokeWidth="3" fill="none" />
-          {/* bras qui tient le combiné à l'oreille (droite) */}
-          <path d="M14 -6 Q26 -12 22 -26" stroke="#4a5a6a" strokeWidth="6" fill="none" strokeLinecap="round" />
-          <ellipse cx="22" cy="-28" rx="5" ry="8" fill="#2a2418" />
-          <path d="M18 -28 q4 -2 8 0" stroke="#e0b040" strokeWidth="1" fill="none" />
-          {/* bras gauche qui tient la colonne / mène au fil */}
-          <path d="M-14 -4 q-14 -6 -14 -18" stroke="#4a5a6a" strokeWidth="6" fill="none" strokeLinecap="round" />
+          {/* costume, cravate rayée ; le combiné à l'oreille */}
+          <Figure x={0} y={74} s={0.92} skin="#e4b48a" hair="#8a3a1a" look="short" freckles mood="content"
+            garment="jacket" coat="#4a5a6a" coat2="#efe9dc" pants="#2a3846" shoes="#141418"
+            arms={[{ a1: 40, a2: -30 }, { a1: 150, a2: -135 }]}>
+            <path d="M-2 -86 L2 -86 L4 -52 L-4 -52 Z" fill="#2a6a3a" />
+            {[-80, -70, -60].map((y) => <path key={y} d={`M-3 ${y} h6`} stroke="#e0b040" strokeWidth="1.2" />)}
+            <ellipse cx="17" cy="-104" rx="5.4" ry="9" fill="#2a2418" />
+            <path d="M13 -104 q4 -2 8 0" stroke="#e0b040" strokeWidth="1" fill="none" />
+          </Figure>
         </g>
       </PLayer>
 

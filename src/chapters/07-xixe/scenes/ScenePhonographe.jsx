@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau 4 : le SALON du PHONOGRAPHE (New York, 1878)
@@ -127,46 +128,22 @@ export default function ScenePhonographe({ action, reveal, made = [], queteQui }
           <rect x="-58" y="-90" width="12" height="130" rx="4" fill="#4a2814" />
           <rect x="46" y="-90" width="12" height="130" rx="4" fill="#4a2814" />
           <rect x="-48" y="-102" width="96" height="20" rx="6" fill="#5a3018" />
-          {/* corps : redingote noire, cravate */}
-          <path d="M-24 -60 Q-30 -110 0 -122 Q30 -110 24 -60 L20 -50 L-20 -50 Z" fill="#1c1610" />
-          <path d="M-8 -122 L0 -110 L8 -122 L6 -80 L-6 -80 Z" fill="#efe6d2" />
-          <path d="M-3 -110 L3 -110 L3 -84 L-3 -84 Z" fill="#0a0a10" />
-          {/* le bras qui se tend vers le cornet a sa gauche, avec un
-              petit mouvement d'oscillation vertical (comme s'il actionnait
-              la manivelle a chaque tour). */}
-          <g>
-            <animateTransform attributeName="transform" type="translate"
-              values="0,0; 0,3; 0,0" dur="1.6s" repeatCount="indefinite" />
-            <path d="M-22 -100 q-50 -8 -80 8" stroke="#e0b084" strokeWidth="6" fill="none" strokeLinecap="round" />
-            {/* petite main (rond) au bout du bras, pres du cornet */}
-            <circle cx="-102" cy="-93" r="4" fill="#e0b084" />
-          </g>
-          {/* la tête — cheveux blancs, moustache blanche, petites lunettes rondes */}
-          <path d="M0 -150 c14 0 22 12 22 26 c0 14 -8 24 -22 24 c-14 0 -22 -10 -22 -24 c0 -14 8 -26 22 -26 Z" fill="#e0b084" />
-          <path d="M-20 -134 Q-16 -156 0 -158 Q16 -156 20 -134 Q10 -148 0 -148 Q-10 -148 -20 -134 Z" fill="#e8e4dc" />
-          <path d="M-6 -114 q6 -3 12 0 q-2 -4 -6 -4 q-4 0 -6 4 Z" fill="#e8e4dc" />
-          <path d="M-6 -114 q-3 3 -5 3 M6 -114 q3 3 5 3" stroke="#e8e4dc" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-          <circle cx="-7" cy="-126" r="6" fill="none" stroke="#5a4030" strokeWidth="1.2" />
-          <circle cx="7" cy="-126" r="6" fill="none" stroke="#5a4030" strokeWidth="1.2" />
-          <path d="M-1 -126 h2" stroke="#5a4030" strokeWidth="1.2" />
-          <circle cx="-7" cy="-126" r="1.6" fill="#3a6a8a" />
-          <circle cx="7" cy="-126" r="1.6" fill="#3a6a8a" />
+          {/* redingote noire, cravate ; il tend le bras vers le cornet */}
+          <Figure x={0} y={22} s={1.7} pose="sit" skin="#dcac8a" hair="#e8e4dc" look="ring" glasses mustache="handlebar" wrinkles mood="content"
+            garment="coat" coat="#1c1610" pants="#141010" shoes="#0a0806"
+            arms={[{ a1: 84, a2: 94 }, { a1: 14, a2: -30 }]}>
+            <path d="M-5 -73 L0 -66 L5 -73 L4 -50 L-4 -50 Z" fill="#efe6d2" />
+            <path d="M-1.6 -66 L1.6 -66 L1.6 -52 L-1.6 -52 Z" fill="#0a0a10" />
+          </Figure>
         </g>
 
         {/* LE FILS DE JAMES (~30 ans) — debout, tournant la manivelle du phono */}
         <g transform="translate(360,410)">
-          <path d="M-16 -60 Q-20 -110 0 -122 Q20 -110 16 -60 L12 -50 L-12 -50 Z" fill="#4a5a6a" />
-          <path d="M-8 -122 L0 -110 L8 -122 L6 -80 L-6 -80 Z" fill="#efe6d2" />
-          <path d="M-3 -110 L3 -110 L3 -80 L-3 -80 Z" fill="#3a2820" />
-          <path d="M-12 -50 L-8 40 L-2 40 L-2 -50 Z" fill="#2c3846" />
-          <path d="M2 -50 L2 40 L8 40 L12 -50 Z" fill="#2c3846" />
-          {/* bras qui tourne la manivelle à droite */}
-          <path d="M14 -90 q40 -6 60 20" stroke="#4a5a6a" strokeWidth="6" fill="none" strokeLinecap="round" />
-          {/* tête — cheveux courts auburn */}
-          <path d="M0 -150 c12 0 20 10 20 24 c0 14 -8 22 -20 22 c-12 0 -20 -8 -20 -22 c0 -14 8 -24 20 -24 Z" fill="#e0b084" />
-          <path d="M-18 -134 Q-14 -154 0 -156 Q14 -154 18 -134 Q10 -146 0 -146 Q-10 -146 -18 -134 Z" fill="#7a3a1a" />
-          <circle cx="-6" cy="-128" r="1.5" fill="#3a6a8a" />
-          <circle cx="6" cy="-128" r="1.5" fill="#3a6a8a" />
+          <Figure x={0} y={40} s={1.58} skin="#e4b48a" hair="#8a3a1a" look="short" freckles mood="content"
+            garment="jacket" coat="#4a5a6a" coat2="#efe6d2" pants="#2c3846" shoes="#1a1a20"
+            arms={[{ a1: 10, a2: 6 }, { a1: 60, a2: 80 }]}>
+            <path d="M-1.6 -86 L1.6 -86 L1.6 -60 L-1.6 -60 Z" fill="#3a2820" />
+          </Figure>
         </g>
 
         {/* lampe à pétrole suspendue */}

@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Arm, Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau 1 : la cabane du télégraphe (Far West)
@@ -139,16 +140,8 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
       <PLayer depth={2}>
         {/* le télégraphiste assis derrière le bureau (à droite), au manipulateur */}
         <g transform="translate(540,372)">
-          <path d="M-26 96 Q-34 22 -4 10 Q10 4 24 10 Q36 22 30 96 Z" fill="#3a4152" />
-          <circle cx="2" cy="-8" r="14" fill="#d8a884" />
-          <path d="M-12 -12 q-2 -16 14 -15 q15 1 11 15 q-4 -6 -13 -6 q-10 0 -12 7 Z" fill="#4a3a30" />
-          {/* visière verte de télégraphiste */}
-          <path d="M-13 -14 q15 -6 28 0 l0 5 q-14 -4 -28 0 Z" fill="#2a6a3a" />
-          <path d="M-4 -2 q7 3 13 0" stroke="#4a3a30" strokeWidth="2.2" fill="none" />
-          {/* manchettes + bras vers l'appareil */}
-          <path d="M-4 18 q8 26 -14 40" stroke="#2c3242" strokeWidth="7" fill="none" strokeLinecap="round" />
-          <path d="M-18 58 q-24 4 -44 16" stroke="#d8a884" strokeWidth="6" fill="none" strokeLinecap="round" />
-          <rect x="-30" y="30" width="10" height="12" fill="#e6dfc8" />
+          <Figure x={0} y={87} s={1.08} pose="sit" skin="#d8a884" hair="#4a3a30" look="short" mood="content" hat="visor" hatColor="#2a6a3a"
+            garment="jacket" coat="#3a4152" coat2="#e6dfc8" pants="#2c3242" shoes="#141418" arms={[{ a1: 30, a2: -40 }, { a1: 20, a2: -10 }]} />
         </g>
       </PLayer>
 
@@ -196,35 +189,23 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
         {/* JESSIE TOMBSTONE, prospecteur surexcité, brandissant sa pépite d'or */}
         <g transform="translate(196,458)">
           <ellipse cx="0" cy="52" rx="30" ry="8" fill="#160f08" opacity="0.5" />
-          {/* jambes/pantalon + bottes */}
-          <path d="M-15 52 l-2 -30 h10 l1 30 Z" fill="#4a3a2a" /><path d="M2 52 l1 -30 h10 l-2 30 Z" fill="#4a3a2a" />
-          <path d="M-19 52 h12 v4 h-14 Z" fill="#2c1c10" /><path d="M5 52 h12 v4 h-14 Z" fill="#2c1c10" />
-          {/* chemise à carreaux rouge + bretelles */}
-          <path d="M-18 24 Q-22 -6 0 -12 Q22 -6 18 24 Z" fill="#a83a2c" />
-          <path d="M-16 24 h32 M-14 8 h28 M-12 -4 h24" stroke="#7a241c" strokeWidth="1.4" opacity="0.6" />
-          <path d="M-14 -6 h4 v30 h-4 Z M10 -6 h4 v30 h-4 Z" fill="#4a3320" />
-          {/* tête barbue + grand chapeau de prospecteur */}
-          <circle cx="0" cy="-24" r="11" fill="#d8a878" />
-          <path d="M-11 -18 Q-14 4 0 8 Q14 4 11 -18 Q6 -8 0 -8 Q-6 -8 -11 -18 Z" fill="#7a5a3a" />
-          <g stroke="#5a4028" strokeWidth="1" fill="none" opacity="0.5"><path d="M-7 -14 q5 16 14 20 M8 -14 q-3 16 -12 20" /></g>
-          <path d="M-13 -26 q13 -8 26 0" stroke="#5a4028" strokeWidth="3" fill="none" />
-          <path d="M-18 -30 Q0 -46 18 -30 Q10 -34 0 -34 Q-10 -34 -18 -30 Z" fill="#6a4c2e" />
-          <path d="M-18 -30 q18 6 36 0" stroke="#4a3218" strokeWidth="3" fill="none" />
-          {/* bras LEVÉ brandissant la pépite d'or, qui AGITE en cadence
-              (pivote autour de l'epaule) — appel du public. */}
-          <g style={{ transformOrigin: "14px -6px" }}>
-            <animateTransform attributeName="transform" type="rotate"
-              values="-25; 15; -25" dur="1.6s" repeatCount="indefinite" />
-            <path d="M14 -6 Q30 -18 30 -38" stroke="#a83a2c" strokeWidth="6" fill="none" strokeLinecap="round" />
-            <g transform="translate(30,-44)">
-              <path d="M-7 4 L-3 -6 L6 -4 L4 6 Z" fill="#ffd44a" stroke="#c8961e" strokeWidth="1.4" />
-              <path d="M-3 -1 l3 3" stroke="#fff6c8" strokeWidth="1.4" />
-              {[[-10, -8], [10, -6], [0, -12]].map(([x, y], i) => <path key={i} d={`M${x} ${y} l2 2 l-2 2 l-2 -2 Z`} fill="#fff2b0" style={{ animation: `twinkle ${1.4 + i * 0.3}s ease-in-out infinite` }} />)}
+          {/* chemise à carreaux, bretelles, chapeau de prospecteur ; batée dans une main */}
+          <Figure x={0} y={52} s={0.72} skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="surpris" hat="brim" hatColor="#6a4c2e" hatColor2="#4a3218"
+            garment="jacket" coat="#a83a2c" pants="#4a3a2a" shoes="#2c1c10" arms={[{ a1: 30, a2: -50 }]}>
+            <path d="M-17 -64 h28 M-18 -76 h30" stroke="#7a241c" strokeWidth="1.6" opacity="0.6" />
+            <path d="M-11 -90 v42 M11 -90 v42" stroke="#4a3320" strokeWidth="3.6" />
+            <g transform="translate(-24,-46)"><ellipse cx="0" cy="0" rx="17" ry="7" fill="#3a3a42" /><ellipse cx="0" cy="-1.4" rx="11" ry="4.2" fill="#5a5040" /><circle cx="-3" cy="-1.4" r="1.7" fill="#ffd44a" /><circle cx="4" cy="0" r="1.4" fill="#ffd44a" /></g>
+            {/* bras LEVÉ brandissant la pépite d'or, qui s'agite en cadence */}
+            <g>
+              <animateTransform attributeName="transform" type="rotate" values="-25 19.5 -84; 15 19.5 -84; -25 19.5 -84" dur="1.6s" repeatCount="indefinite" />
+              <Arm side={1} a1={150} a2={170} coat="#a83a2c" skin="#e4b48a" />
+              <g transform="translate(32,-122)">
+                <path d="M-10 6 L-4 -8 L8 -6 L6 8 Z" fill="#ffd44a" stroke="#c8961e" strokeWidth="1.8" />
+                <path d="M-4 -1 l4 4" stroke="#fff6c8" strokeWidth="1.8" />
+                {[[-14, -11], [14, -8], [0, -17]].map(([x, y], i) => <path key={i} d={`M${x} ${y} l3 3 l-3 3 l-3 -3 Z`} fill="#fff2b0" style={{ animation: `twinkle ${1.4 + i * 0.3}s ease-in-out infinite` }} />)}
+              </g>
             </g>
-          </g>
-          {/* l'autre main tient une batée avec des paillettes */}
-          <path d="M-14 -4 q-16 6 -18 18" stroke="#a83a2c" strokeWidth="5.5" fill="none" strokeLinecap="round" />
-          <g transform="translate(-34,16)"><ellipse cx="0" cy="0" rx="12" ry="5" fill="#3a3a42" /><ellipse cx="0" cy="-1" rx="8" ry="3" fill="#5a5040" /><circle cx="-2" cy="-1" r="1.2" fill="#ffd44a" /><circle cx="3" cy="0" r="1" fill="#ffd44a" /></g>
+          </Figure>
         </g>
 
         {/* épave de MARTINE dans un coin */}

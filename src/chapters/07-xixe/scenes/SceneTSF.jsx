@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau : la STATION MARCONI (côte, nuit du 15 avril 1912)
@@ -158,15 +159,12 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
 
         {/* MARCONI : il scrute la nuit vers le navire */}
         <g transform="translate(238,494)">
-          <path d="M-13 6 Q-17 -16 0 -20 Q17 -16 13 6 L11 32 L-11 32 Z" fill="#26303e" />
-          <path d="M-13 6 Q-17 -16 0 -20 Q17 -16 13 6 L11 32 L-11 32 Z" fill="#0a0e14" opacity="0.3" filter="url(#ts-grain)" />
-          <circle cx="0" cy="-30" r="9" fill="#c89a76" />
-          <path d="M-9 -34 q2 -10 10 -9 q9 1 8 9 Z" fill="#2c2420" />
-          {/* casque d'écoute sur les oreilles */}
-          <path d="M-10 -32 a10 10 0 0 1 20 0" stroke="#4a5460" strokeWidth="2.5" fill="none" />
-          <circle cx="-10" cy="-30" r="3" fill="#4a5460" /><circle cx="10" cy="-30" r="3" fill="#4a5460" />
-          {/* bras tendu vers le large */}
-          <path d="M12 -8 q22 -6 32 -20" stroke="#c89a76" strokeWidth="5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={32} s={0.585} facing="right" skin="#d0a67e" hair="#1a1008" look="slick" mustache mood="vexe"
+            garment="coat" coat="#26303e" pants="#1a2028" shoes="#0a0e14" arms={[{ a1: 10, a2: 6 }, { a1: 110, a2: 100 }]}>
+            {/* casque d'écoute sur les oreilles */}
+            <path d="M-14 -108 A14 14 0 0 1 14 -108" stroke="#4a5460" strokeWidth="3" fill="none" />
+            <circle cx="-13.6" cy="-104" r="4.2" fill="#4a5460" /><circle cx="13.6" cy="-104" r="4.2" fill="#4a5460" />
+          </Figure>
         </g>
 
         {[80, 660, 940].map((x, i) => <path key={i} d={`M${x} 470 q-4 -14 -9 -18 M${x} 470 q0 -16 5 -20`} stroke="#2e3a24" strokeWidth="2.2" fill="none" opacity="0.7" />)}

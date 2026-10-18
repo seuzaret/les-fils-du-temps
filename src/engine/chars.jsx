@@ -23,7 +23,7 @@
                curls | afro | slick | ring (couronne de chauve) | bald
      beard     true/"full" | "short" | "goatee" | "long" | "royal" |
                "postiche" | "stubble"        mustache : true | "handlebar"
-     hat       headband | crown | nemes | leather | helm | tricorne | cap | toque | beret |
+     hat       headband | crown | nemes | leather | helm | tricorne | visor | cap | toque | beret |
                brim | tophat | kepi | hardhat | laurel | coif | turban |
                flatcap | hood
      facing    front | left | right (trois-quarts : les traits tournent)
@@ -149,6 +149,13 @@ function Hat({ hat, c, c2, f }) {
         </g>
       );
     }
+    case "visor":   // visière de celluloïd verte (télégraphiste, typographe)
+      return (
+        <g>
+          <path d="M-13.6 -6.4 Q0 -10.6 13.6 -6.4" stroke={shade(c || "#2a6a3a", -0.2)} strokeWidth="2.2" fill="none" />
+          <path d="M-14.6 -6.4 Q0 -11.4 14.6 -6.4 L16.4 -1.8 Q0 -7 -16.4 -1.8 Z" fill={c || "#2a6a3a"} opacity="0.88" stroke={s} strokeWidth="0.5" />
+        </g>
+      );
     case "tricorne":   // chapeau à trois cornes (XVIIIe s.), galon c2
       return (
         <g>
@@ -340,7 +347,7 @@ const GARMENT = {
 };
 const HIP = { stand: -48, sit: -30, kneel: -26, ground: -16 };
 
-function Arm({ side, a1, a2, coat, skin, sy, bare }) {
+export function Arm({ side, a1, a2, coat, skin, sy = -84, bare = false }) {
   const sx = side * 19.5, L1 = 19, L2 = 18;
   const r1 = (a1 * Math.PI) / 180, r2 = (a2 * Math.PI) / 180;
   const ex = sx + side * Math.sin(r1) * L1, ey = sy + Math.cos(r1) * L1;

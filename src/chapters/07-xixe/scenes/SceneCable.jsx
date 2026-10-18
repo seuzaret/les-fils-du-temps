@@ -1,5 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau-ÉNIGME : « Relier deux continents ? »
@@ -163,38 +164,25 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
             l'Irlande — il rêve de joindre sa famille de l'autre côté */}
         <g transform="translate(706,470)">
           <ellipse cx="0" cy="34" rx="18" ry="6" fill="#160f08" opacity="0.5" />
-          {/* gilet + chemise à carreaux */}
-          <path d="M-13 6 Q-17 -16 0 -20 Q17 -16 13 6 L11 32 L-11 32 Z" fill="#6a4a30" />
-          <path d="M-8 -14 L0 -6 L8 -14 L6 12 L-6 12 Z" fill="#a8352a" />
-          <path d="M-4 -8 q4 12 8 0" stroke="#e6c25a" strokeWidth="1.6" fill="none" />
-          {/* tête barbe auburn + chapeau repoussé */}
-          <circle cx="1" cy="-28" r="9" fill="#e0b084" />
-          <path d="M-8 -22 Q-9 -8 1 -6 Q11 -8 10 -22 Q6 -14 1 -14 Q-4 -14 -8 -22 Z" fill="#b0602c" />
-          <path d="M-9 -30 q10 -6 20 0 q-2 -8 -10 -8 q-8 0 -10 8" fill="#b0602c" />
-          <path d="M-11 -32 q12 -7 24 0 l0 -3 q-12 -6 -24 0 Z" fill="#7a5230" />
-          {/* bras appuyé au bastingage, l'autre pointant l'horizon */}
-          <path d="M11 -6 q18 -6 26 -20" stroke="#6a4a30" strokeWidth="5" fill="none" strokeLinecap="round" />
-          <path d="M-11 -4 q-8 4 -8 14" stroke="#6a4a30" strokeWidth="5" fill="none" strokeLinecap="round" />
+          {/* gilet rouge, chapeau repoussé ; un bras au bastingage, l'autre pointe l'horizon */}
+          <Figure x={0} y={32} s={0.57} skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="content" hat="brim" hatColor="#8a5a30" hatColor2="#3a2818"
+            garment="jacket" coat="#6a4a30" coat2="#a8352a" pants="#4a3a2a" shoes="#2a1a10"
+            arms={[{ a1: 20, a2: 10 }, { a1: 120, a2: 110 }]}>
+            <path d="M-6 -72 q6 14 12 0" stroke="#e6c25a" strokeWidth="2" fill="none" />
+          </Figure>
         </g>
 
         {/* L'INGÉNIEUR : debout, il regarde vers l'Amérique */}
         <g transform="translate(540,470)">
-          <path d="M-13 6 Q-17 -16 0 -20 Q17 -16 13 6 L11 34 L-11 34 Z" fill="#3a3a4a" />
-          <path d="M-13 6 Q-17 -16 0 -20 Q17 -16 13 6 L11 34 L-11 34 Z" fill="#12121c" opacity="0.22" filter="url(#cb-grain)" />
-          <circle cx="0" cy="-30" r="9" fill="#d8a884" />
-          {/* haut-de-forme d'ingénieur */}
-          <path d="M-10 -36 h20 M-7 -50 h14 v14 h-14 Z" fill="#241c20" />
-          <path d="M-6 -26 q6 8 12 0" stroke="#6a4a38" strokeWidth="3" fill="none" />
-          {/* bras tendu vers le large */}
-          <path d="M11 -8 q20 -4 30 -18" stroke="#d8a884" strokeWidth="5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={34} s={0.6} facing="right" skin="#d8a884" hair="#6a4a38" look="short" beard="short" beardColor="#6a4a38" hat="tophat" hatColor="#241c20"
+            garment="coat" coat="#3a3a4a" pants="#2a2a34" shoes="#141418"
+            arms={[{ a1: 10, a2: 6 }, { a1: 110, a2: 100 }]} />
         </g>
 
         {/* un matelot qui surveille le câble */}
         <g transform="translate(430,452)">
-          <path d="M-9 4 Q-12 -12 0 -15 Q12 -12 9 4 L7 22 L-7 22 Z" fill="#3a4a6a" />
-          <circle cx="0" cy="-22" r="7" fill="#c8a882" />
-          <path d="M-9 -24 h18 M-6 -30 h12 v6 h-12 Z" fill="#e8e4da" />
-          <path d="M7 -6 q12 -2 16 6" stroke="#c8a882" strokeWidth="3.5" fill="none" strokeLinecap="round" />
+          <Figure x={0} y={22} s={0.41} skin="#c8a882" hair="#3a2818" look="short" hat="cap" hatColor="#e8e4da" mood="vexe"
+            garment="jacket" coat="#3a4a6a" pants="#2a3448" shoes="#141418" arms={[{ a1: 10, a2: 6 }, { a1: 60, a2: 100 }]} />
         </g>
 
         <path d="M0 500 h1000" stroke="#3a2a18" strokeWidth="4" opacity="0.5" />
