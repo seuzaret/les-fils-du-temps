@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Haze, Ridge, Rock, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 5 — La mine de cuivre, en montagne  (PEINTURE FINE)
@@ -40,32 +41,30 @@ export default function SceneMontagne({ collect, action, reveal, made = [], quet
         <ellipse key={i} cx={x} cy={y} rx={90 * s} ry="20" fill="#e6ecf0" opacity="0.28" filter="url(#mo-blur)" style={{ animation: `drift ${6 + i}s ease-in-out infinite` }} />
       ))}
 
-      {/* ═══ sommets lointains, enneigés ═══ */}
+      {/* ═══ sommets lointains, enneigés, puis contreforts ═══ */}
       <PLayer depth={1}>
-        <path d="M0 300 L160 140 L300 280 L460 110 L640 290 L820 150 L1000 300 L1000 360 L0 360 Z" fill="url(#mo-far)" opacity="0.85" />
-        {/* les calottes de neige : le haut blanc, qui épouse chaque sommet */}
-        <g fill="#f6f9fb">
-          <path d="M160 140 L114 186 L150 176 L188 184 L205 186 Z" />
-          <path d="M460 110 L406 168 L442 156 L472 166 L516 170 Z" />
-          <path d="M820 150 L760 196 L800 186 L838 194 L876 196 Z" />
-        </g>
-        {/* ombre douce sur le versant droit de chaque calotte */}
-        <g fill="#cdd6dc" opacity="0.8">
-          <path d="M160 140 L188 184 L205 186 L176 168 Z" />
-          <path d="M460 110 L472 166 L516 170 L478 150 Z" />
-          <path d="M820 150 L838 194 L876 196 L836 176 Z" />
-        </g>
-        <path d="M0 300 L160 140 L300 280 L460 110 L640 290 L820 150 L1000 300" stroke="#4a5464" strokeWidth="1.4" fill="none" opacity="0.3" />
+        <Ridge id="mo-r0" seed={121} y={260} amp={170} rough={0.62} fill="#7a8498" lit="#b8c0d0" light={-1} snow="#f6f9fb" snowLine={176} />
+        <Haze id="mo-h0" y0={180} y1={290} color="#dce4ea" opacity={0.5} />
+        <Ridge id="mo-r1" seed={127} y={330} amp={110} rough={0.58} fill="#565c64" lit="#8a8e94" light={-1} snow="#eef2f4" snowLine={252} />
+        <rect x="-40" y="330" width="1080" height="80" fill="#4a5450" />
+        <TreeLine seed={131} x0={240} x1={1020} y={344} n={46} h={[14, 26]} kinds={["conifer"]} colors={["#2e3a34", "#34403a"]} light={-1} jitter={10} snow="#e8eef0" />
+        <TreeLine seed={133} x0={240} x1={1020} y={384} n={34} h={[22, 38]} kinds={["conifer"]} colors={["#26322c", "#2c3832"]} light={-1} jitter={12} snow="#e8eef0" />
+        <Haze id="mo-h1" y0={300} y1={390} color="#d6dccc" opacity={0.4} />
+        {/* alpage pierreux qui descend vers le camp */}
+        <Ridge id="mo-r2" seed={137} y={448} amp={70} rough={0.5} fill="#6e7058" lit="#8c8c6a" light={-1} />
+        <Speckle seed={73} x0={240} x1={1000} y0={392} y1={446} n={160} colors={["#4a4c3a", "#a8a48a", "#5a5a48"]} opacity={0.45} />
+        {[[420, 404], [560, 420], [700, 398], [830, 414], [940, 400]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx={30 + (i % 2) * 14} ry="5" fill="#eef2f4" opacity="0.75" />)}
       </PLayer>
 
       {/* ═══ la paroi de la montagne + l'entrée de mine ═══ */}
       <PLayer depth={2}>
-        <path d="M0 560 L0 190 Q120 168 210 258 Q292 344 250 448 Q312 508 268 560 Z" fill="url(#mo-rock)" />
-        <path d="M0 560 L0 190 Q120 168 210 258 Q292 344 250 448 Q312 508 268 560 Z" fill="#241c14" opacity="0.28" filter="url(#mo-mottle)" />
+        <path d="M-40 560 L-40 186 L40 176 L84 188 L122 180 L168 206 L196 236 L222 252 L236 290 L262 318 L256 352 L276 392 L262 430 L284 470 L272 520 L280 560 Z" fill="url(#mo-rock)" />
+        <path d="M-40 560 L-40 186 L40 176 L84 188 L122 180 L168 206 L196 236 L222 252 L236 290 L262 318 L256 352 L276 392 L262 430 L284 470 L272 520 L280 560 Z" fill="#241c14" opacity="0.28" filter="url(#mo-mottle)" />
         {/* strates de la roche */}
         <path d="M20 260 Q120 250 200 300 M10 360 Q110 350 210 400 M14 460 Q90 456 180 500" stroke="#3a342c" strokeWidth="2" fill="none" opacity="0.4" />
         {/* neige accrochée aux corniches */}
-        <path d="M0 190 Q120 168 210 258 Q150 240 60 254 Q20 260 0 250 Z" fill="url(#mo-snow)" opacity="0.55" />
+        <path d="M-40 186 L40 176 L84 188 L122 180 L168 206 L196 236 L222 252 L170 238 L120 226 L70 230 L20 222 L-40 226 Z" fill="url(#mo-snow)" opacity="0.8" />
+        <path d="M168 206 L196 236 L222 252 L236 290 L262 318 L256 352 L276 392" stroke="#c8c0b4" strokeWidth="3" fill="none" opacity="0.4" strokeLinejoin="round" />
         {/* l'entrée de mine, sombre, étayée */}
         <path d="M58 432 Q54 340 122 320 Q188 336 182 432 Z" fill="#160f0a" />
         <path d="M62 432 Q60 350 122 332" stroke="#a89e90" strokeWidth="2" fill="none" opacity="0.3" />
@@ -80,6 +79,9 @@ export default function SceneMontagne({ collect, action, reveal, made = [], quet
         <rect y="440" width="1000" height="120" fill="url(#mo-ground)" />
         <rect y="440" width="1000" height="120" fill="#241c12" opacity="0.34" filter="url(#mo-mottle)" />
         <ellipse cx="560" cy="504" rx="430" ry="48" fill="#1c160e" opacity="0.3" />
+        <Speckle seed={71} x0={260} x1={1000} y0={446} y1={560} n={260} colors={["#2e281e", "#a09684", "#5a5046", "#c8c0b4"]} opacity={0.5} />
+        <Rock x={960} y={470} w={110} h={46} color="#6e665c" light={-1} seed={19} />
+        <Rock x={880} y={452} w={60} h={24} color="#7a7268" light={-1} seed={21} />
         {/* plaques de neige au sol */}
         {[[360, 520], [640, 532], [900, 512]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx="46" ry="10" fill="#e8eef2" opacity="0.4" filter="url(#mo-blur)" />)}
         {/* cailloux épars */}
