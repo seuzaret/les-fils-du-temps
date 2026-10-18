@@ -43,6 +43,12 @@ export default function SceneInterieur({ collect, action, reveal, made = [], que
           <stop offset="0%" stopColor="#402c1a" />
           <stop offset="100%" stopColor="#150d07" />
         </linearGradient>
+        <radialGradient id="g1boss" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stopColor="#ffe6b4" stopOpacity="0.32" />
+          <stop offset="55%" stopColor="#c89a62" stopOpacity="0.08" />
+          <stop offset="100%" stopColor="#1a0e06" stopOpacity="0.35" />
+        </radialGradient>
+        <clipPath id="g1paroiclip"><path d="M372 74 Q440 44 540 56 Q640 34 760 52 Q890 58 946 112 Q926 196 944 286 Q934 384 914 468 Q800 496 650 488 Q512 498 402 462 Q382 384 394 300 Q368 208 386 132 Q368 100 372 74 Z" /></clipPath>
         <filter id="g1blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="8" /></filter>
         <filter id="g1grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
@@ -62,53 +68,33 @@ export default function SceneInterieur({ collect, action, reveal, made = [], que
       <path d="M0 0 L1000 0 L1000 90 Q700 40 380 66 Q140 84 0 60 Z" fill="#1c1209" />
       <path d="M0 0 L1000 0 L1000 90 Q700 40 380 66 Q140 84 0 60 Z" fill="#0f0a05" opacity="0.5" filter="url(#g1mottle)" />
 
-      {/* ═══ couche intermédiaire : entrée, parois latérales, concrétions ═══ */}
-      <PLayer depth={2}>
-      {/* l'ouverture, à gauche : le matin entre */}
-      <path d="M0 110 Q130 200 96 560 L0 560 Z" fill="url(#g1day)" />
-      <path d="M0 150 Q100 230 82 520 L0 540 Z" fill="#fff8dc" opacity="0.5" filter="url(#g1blur)" />
-      {/* silhouettes dehors : arbres frais du matin */}
-      <path d="M10 300 l7 -44 l7 44 M34 342 l9 -56 l9 56 M22 380 l5 -30 l5 30" stroke="#5a6a52" strokeWidth="5" opacity="0.65" fill="none" />
-      {/* paroi latérale gauche, léchée par la lumière */}
-      <path d="M0 60 Q190 96 96 250 Q34 348 122 560 L0 560 Z" fill="#2c1c10" />
-      <path d="M0 60 Q190 96 96 250 Q34 348 122 560 L0 560 Z" fill="#160d06" opacity="0.55" filter="url(#g1grain)" />
-      <path d="M150 120 Q110 210 100 260 M130 300 q-16 60 -6 120" stroke="#0e0805" strokeWidth="3" fill="none" opacity="0.6" />
-      <path d="M96 250 Q60 330 100 440" stroke="#c99e66" strokeWidth="2.5" fill="none" opacity="0.35" />
-      {/* paroi latérale droite, dans l'ombre */}
-      <path d="M1000 40 Q830 70 894 210 Q952 340 856 560 L1000 560 Z" fill="#1e1208" />
-      <path d="M1000 40 Q830 70 894 210 Q952 340 856 560 L1000 560 Z" fill="#120b05" opacity="0.6" filter="url(#g1grain)" />
-      <path d="M900 120 q-14 60 -2 120 M880 300 q-10 60 4 130" stroke="#0c0704" strokeWidth="3" fill="none" opacity="0.5" />
-      {/* stalactites : formes irrégulières, luisantes côté entrée */}
-      {[[298, 74, 16, "#3c2818"], [352, 46, 10, "#2e1d12"], [414, 66, 13, "#33210f"], [478, 88, 18, "#3c2818"], [548, 58, 11, "#2e1d12"], [610, 78, 15, "#33210f"], [684, 44, 9, "#281808"], [758, 70, 16, "#2e1d12"], [842, 52, 10, "#241505"]].map(([x, h, w, c], i) => (
-        <g key={i}>
-          <path d={`M${x - w} 62 Q${x - w * 0.3} ${62 + h * 0.6} ${x} ${62 + h + (i % 3) * 14} Q${x + w * 0.3} ${62 + h * 0.6} ${x + w} 62 Z`} fill={c} />
-          <path d={`M${x - w * 0.5} 66 Q${x - w * 0.15} ${62 + h * 0.5} ${x - w * 0.1} ${62 + h * 0.8}`} stroke="#c99e66" strokeWidth="1.6" fill="none" opacity={0.3 - (i % 3) * 0.07} />
-          {i % 3 === 0 && <circle cx={x} cy={62 + h + (i % 3) * 14 + 2} r="1.4" fill="#ffedb8" opacity="0.5" />}
-        </g>
-      ))}
-      {/* la chauve-souris endormie */}
-      <g transform="translate(716,96)">
-        <path d="M0 0 q-6 2 -7 9 q3 -2 7 -1 q4 -1 7 1 q-1 -7 -7 -9 Z" fill="#0d0805" />
-        <circle cx="0" cy="9" r="3" fill="#0d0805" />
-      </g>
-      {/* stalagmites répondantes */}
-      {[[336, 66], [724, 88], [806, 50], [552, 40]].map(([x, h], i) => (
-        <g key={i}>
-          <path d={`M${x - 20} 560 Q${x - 6} ${560 - h * 0.55} ${x} ${560 - h} Q${x + 6} ${560 - h * 0.55} ${x + 20} 560 Z`} fill="#33210f" />
-          <path d={`M${x - 8} ${560 - h * 0.3} Q${x - 3} ${560 - h * 0.7} ${x} ${560 - h + 4}`} stroke="#c99e66" strokeWidth="1.4" fill="none" opacity="0.25" />
-        </g>
-      ))}
-      </PLayer>
-
+      {/* fond rocheux de la galerie, à peine visible dans la pénombre */}
+      <path d="M90 70 Q300 50 520 60 Q760 40 1000 70 L1000 480 L90 480 Z" fill="#20150c" />
+      <path d="M90 70 Q300 50 520 60 Q760 40 1000 70 L1000 480 L90 480 Z" fill="#0c0804" opacity="0.6" filter="url(#g1mottle)" />
+      <path d="M160 120 q40 80 10 160 M250 90 q-20 120 20 220 M320 140 q30 90 -6 200" stroke="#120a05" strokeWidth="6" fill="none" opacity="0.5" />
       {/* ═══ couche lointaine : LA GRANDE PAROI, baignée de matin ═══ */}
       <PLayer depth={1}>
-      <path d="M380 60 Q700 30 940 90 L920 470 Q640 500 400 460 Z" fill="url(#g1paroi)" />
+      <path d="M372 74 Q440 44 540 56 Q640 34 760 52 Q890 58 946 112 Q926 196 944 286 Q934 384 914 468 Q800 496 650 488 Q512 498 402 462 Q382 384 394 300 Q368 208 386 132 Q368 100 372 74 Z" fill="url(#g1paroi)" />
       {/* textures : marbrures + grain + piquetage */}
-      <path d="M380 60 Q700 30 940 90 L920 470 Q640 500 400 460 Z" fill="#1c1006" opacity="0.3" filter="url(#g1mottle)" />
-      <path d="M380 60 Q700 30 940 90 L920 470 Q640 500 400 460 Z" fill="#221408" opacity="0.55" filter="url(#g1grain)" />
+      <path d="M372 74 Q440 44 540 56 Q640 34 760 52 Q890 58 946 112 Q926 196 944 286 Q934 384 914 468 Q800 496 650 488 Q512 498 402 462 Q382 384 394 300 Q368 208 386 132 Q368 100 372 74 Z" fill="#1c1006" opacity="0.3" filter="url(#g1mottle)" />
+      <path d="M372 74 Q440 44 540 56 Q640 34 760 52 Q890 58 946 112 Q926 196 944 286 Q934 384 914 468 Q800 496 650 488 Q512 498 402 462 Q382 384 394 300 Q368 208 386 132 Q368 100 372 74 Z" fill="#221408" opacity="0.55" filter="url(#g1grain)" />
       {[[470, 150], [540, 210], [610, 130], [680, 250], [750, 180], [820, 300], [500, 330], [590, 390], [700, 350], [780, 420], [860, 220], [430, 260]].map(([x, y], i) => (
         <ellipse key={i} cx={x} cy={y} rx={2.4 + (i % 3)} ry={1.5 + (i % 2)} fill="#241608" opacity="0.4" />
       ))}
+      {/* relief de la paroi : bosses éclairées par le haut-gauche, coulées de calcite */}
+      <g clipPath="url(#g1paroiclip)">
+        {[[470, 140, 90, 70], [620, 110, 120, 66], [800, 130, 110, 80], [520, 280, 110, 90], [700, 250, 130, 100], [880, 300, 80, 110], [470, 410, 100, 60], [640, 420, 140, 70], [820, 430, 110, 60]].map(([x, y, rx, ry], i) => (
+          <g key={i}>
+            <ellipse cx={x} cy={y} rx={rx} ry={ry} fill="url(#g1boss)" />
+            <path d={`M${x + rx * 0.2} ${y + ry * 0.9} Q${x + rx * 0.9} ${y + ry * 0.6} ${x + rx * 0.95} ${y - ry * 0.2}`} stroke="#1a0e06" strokeWidth="5" fill="none" opacity="0.3" />
+          </g>
+        ))}
+        {[[452, 40, 180], [566, 40, 120], [690, 30, 220], [842, 50, 150], [905, 80, 260]].map(([x, y, h], i) => (
+          <path key={i} d={`M${x} ${y} q-6 ${h * 0.3} 2 ${h * 0.55} q6 ${h * 0.25} -2 ${h * 0.45}`} stroke="#f4e2c0" strokeWidth={4 + (i % 2) * 3} fill="none" opacity="0.13" strokeLinecap="round" />
+        ))}
+      </g>
+      {/* ourlet sombre du pourtour de la paroi */}
+      <path d="M372 74 Q440 44 540 56 Q640 34 760 52 Q890 58 946 112 Q926 196 944 286 Q934 384 914 468 Q800 496 650 488 Q512 498 402 462 Q382 384 394 300 Q368 208 386 132 Q368 100 372 74 Z" fill="none" stroke="#1a0e06" strokeWidth="10" opacity="0.55" />
       {/* strates douces + fissures */}
       <path d="M420 120 q160 -18 380 6 M410 220 q200 -14 430 10 M415 330 q180 -10 400 12" stroke="#33210f" strokeWidth="3" fill="none" opacity="0.35" />
       <path d="M600 90 q-8 60 6 110 q10 40 -4 80 M780 130 q10 50 -2 95 M520 300 q6 40 -2 80" stroke="#241408" strokeWidth="2.5" fill="none" opacity="0.55" />
@@ -174,6 +160,54 @@ export default function SceneInterieur({ collect, action, reveal, made = [], que
           ))}
         </g>
       )}
+      </PLayer>
+
+      {/* ═══ couche intermédiaire : entrée, parois latérales, concrétions ═══ */}
+      <PLayer depth={2}>
+      {/* la voûte passe DEVANT le haut de la paroi : ombre portée douce */}
+      <path d="M-10 60 Q200 84 372 92 Q450 70 540 78 Q650 58 760 72 Q890 78 1010 100 L1010 150 Q880 120 760 112 Q640 100 540 116 Q440 108 372 132 Q200 120 -10 100 Z" fill="#0c0804" opacity="0.55" filter="url(#g1blur)" />
+      <path d="M-10 -10 L1010 -10 L1010 98 Q890 74 760 68 Q650 52 540 72 Q450 62 372 86 Q200 78 -10 64 Z" fill="#1c1209" />
+      <path d="M-10 -10 L1010 -10 L1010 98 Q890 74 760 68 Q650 52 540 72 Q450 62 372 86 Q200 78 -10 64 Z" fill="#0f0a05" opacity="0.5" filter="url(#g1mottle)" />
+      <path d="M372 86 Q450 62 540 72 Q650 52 760 68 Q890 74 1010 98" stroke="#c99e66" strokeWidth="2" fill="none" opacity="0.22" />
+      {/* l'ouverture, à gauche : le matin entre */}
+      <path d="M0 110 Q130 200 96 560 L0 560 Z" fill="url(#g1day)" />
+      <path d="M0 150 Q100 230 82 520 L0 540 Z" fill="#fff8dc" opacity="0.5" filter="url(#g1blur)" />
+      {/* silhouettes dehors : arbres frais du matin */}
+      <path d="M10 300 l7 -44 l7 44 M34 342 l9 -56 l9 56 M22 380 l5 -30 l5 30" stroke="#5a6a52" strokeWidth="5" opacity="0.65" fill="none" />
+      {/* paroi latérale gauche, léchée par la lumière */}
+      <path d="M0 60 Q190 96 96 250 Q34 348 122 560 L0 560 Z" fill="#2c1c10" />
+      <path d="M0 60 Q190 96 96 250 Q34 348 122 560 L0 560 Z" fill="#160d06" opacity="0.55" filter="url(#g1grain)" />
+      <path d="M150 120 Q110 210 100 260 M130 300 q-16 60 -6 120" stroke="#0e0805" strokeWidth="3" fill="none" opacity="0.6" />
+      <path d="M96 250 Q60 330 100 440" stroke="#c99e66" strokeWidth="2.5" fill="none" opacity="0.35" />
+      {/* un pilier de roche (stalagmite soudée à la voûte) cache le bord gauche de la paroi */}
+      <path d="M354 70 Q392 120 380 200 Q368 280 392 360 Q404 420 384 480 L424 480 Q432 400 418 330 Q404 250 420 170 Q428 110 410 70 Z" fill="#26180d" />
+      <path d="M354 70 Q392 120 380 200 Q368 280 392 360 Q404 420 384 480 L424 480 Q432 400 418 330 Q404 250 420 170 Q428 110 410 70 Z" fill="#100a05" opacity="0.5" filter="url(#g1grain)" />
+      <path d="M362 84 Q388 130 376 204 Q366 280 388 360" stroke="#d8aa70" strokeWidth="2.4" fill="none" opacity="0.35" />
+      <path d="M402 120 q-6 40 2 80 M396 260 q8 40 -2 90" stroke="#0e0805" strokeWidth="2" fill="none" opacity="0.6" />
+      {/* paroi latérale droite, dans l'ombre */}
+      <path d="M1000 40 Q830 70 894 210 Q952 340 856 560 L1000 560 Z" fill="#1e1208" />
+      <path d="M1000 40 Q830 70 894 210 Q952 340 856 560 L1000 560 Z" fill="#120b05" opacity="0.6" filter="url(#g1grain)" />
+      <path d="M900 120 q-14 60 -2 120 M880 300 q-10 60 4 130" stroke="#0c0704" strokeWidth="3" fill="none" opacity="0.5" />
+      {/* stalactites : formes irrégulières, luisantes côté entrée */}
+      {[[298, 74, 16, "#3c2818"], [352, 46, 10, "#2e1d12"], [414, 66, 13, "#33210f"], [478, 88, 18, "#3c2818"], [548, 58, 11, "#2e1d12"], [610, 78, 15, "#33210f"], [684, 44, 9, "#281808"], [758, 70, 16, "#2e1d12"], [842, 52, 10, "#241505"]].map(([x, h, w, c], i) => (
+        <g key={i}>
+          <path d={`M${x - w} 60 Q${x - w * 0.3} ${70 + h * 0.6} ${x} ${70 + h + (i % 3) * 14} Q${x + w * 0.3} ${70 + h * 0.6} ${x + w} 60 Z`} fill={c} />
+          <path d={`M${x - w * 0.5} 66 Q${x - w * 0.15} ${62 + h * 0.5} ${x - w * 0.1} ${62 + h * 0.8}`} stroke="#c99e66" strokeWidth="1.6" fill="none" opacity={0.3 - (i % 3) * 0.07} />
+          {i % 3 === 0 && <circle cx={x} cy={62 + h + (i % 3) * 14 + 2} r="1.4" fill="#ffedb8" opacity="0.5" />}
+        </g>
+      ))}
+      {/* la chauve-souris endormie */}
+      <g transform="translate(716,96)">
+        <path d="M0 0 q-6 2 -7 9 q3 -2 7 -1 q4 -1 7 1 q-1 -7 -7 -9 Z" fill="#0d0805" />
+        <circle cx="0" cy="9" r="3" fill="#0d0805" />
+      </g>
+      {/* stalagmites répondantes */}
+      {[[336, 66], [724, 88], [806, 50], [552, 40]].map(([x, h], i) => (
+        <g key={i}>
+          <path d={`M${x - 20} 560 Q${x - 6} ${560 - h * 0.55} ${x} ${560 - h} Q${x + 6} ${560 - h * 0.55} ${x + 20} 560 Z`} fill="#33210f" />
+          <path d={`M${x - 8} ${560 - h * 0.3} Q${x - 3} ${560 - h * 0.7} ${x} ${560 - h + 4}`} stroke="#c99e66" strokeWidth="1.4" fill="none" opacity="0.25" />
+        </g>
+      ))}
       </PLayer>
 
       {/* ═══ premier plan : le sol, la flaque, l'atelier de taille ═══ */}
