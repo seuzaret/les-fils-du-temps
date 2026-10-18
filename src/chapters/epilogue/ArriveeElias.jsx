@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { PortraitElias } from "./StationChronautes.jsx";
-import { HeadBack, HeadFront } from "./cineChars.jsx";
+import { Figure } from "./cineChars.jsx";
 
 /* ============================================================
    ÉPILOGUE — ARRIVÉE À LA STATION DES CHRONAUTES
@@ -116,20 +116,13 @@ export default function ArriveeElias({ prenom, onDone }) {
             values="560 340; 559 341; 560 340; 561 339; 560 340"
             dur="3.6s" repeatCount="indefinite" />
           <ellipse cx="0" cy="72" rx="46" ry="8" fill="#0a0603" opacity="0.6" />
-          {/* jambes tunique */}
-          <rect x="-20" y="14" width="14" height="58" fill="#8a6848" stroke="#5a3820" strokeWidth="0.6" />
-          <rect x="6" y="14" width="14" height="58" fill="#8a6848" stroke="#5a3820" strokeWidth="0.6" />
-          {/* tunique */}
-          <path d="M-38 20 Q-40 -22 -6 -34 L6 -34 Q40 -22 38 20 Z" fill="#c8a878" stroke="#5a3818" strokeWidth="0.8" />
-          {/* épaules */}
-          <ellipse cx="-32" cy="-18" rx="9" ry="7" fill="#e0b898" />
-          <ellipse cx="32" cy="-18" rx="9" ry="7" fill="#e0b898" />
-          {/* bras qui tend le carnet (bras droit tendu vers le joueur) */}
-          <path d="M32 -14 Q46 4 60 20" stroke="#e0b898" strokeWidth="12" fill="none" strokeLinecap="round" />
+          {/* tunique de lin ; le bras droit tend le carnet vers le joueur */}
+          <Figure x={0} y={72} s={1.3} skin="#e0b898" hair="#e8e8e0" look="short" beard mood="vexe"
+            garment="tunic" coat="#c8a878" pants="#8a6848" shoes="#4a3420" arms={[{ a1: 20, a2: 10 }, { a1: 40, a2: 30 }]} />
           {dernier && (
-            <g transform="translate(66,26)">
+            <g transform="translate(60,14)">
               <animateTransform attributeName="transform" type="translate"
-                values="66 26; 66 22; 66 26" dur="1.6s" repeatCount="indefinite" />
+                values="60 14; 60 10; 60 14" dur="1.6s" repeatCount="indefinite" />
               {/* carnet tendu */}
               <rect x="-16" y="-20" width="32" height="42" fill="#5a3818" stroke="#3a2418" strokeWidth="1.2" rx="1" />
               <rect x="-14" y="-18" width="28" height="38" fill="#8a6838" />
@@ -141,17 +134,6 @@ export default function ArriveeElias({ prenom, onDone }) {
               </ellipse>
             </g>
           )}
-          {/* main gauche qui tremble un peu */}
-          <path d="M-32 -14 Q-42 6 -46 22" stroke="#e0b898" strokeWidth="10" fill="none" strokeLinecap="round" />
-          {/* tête (grosse par rapport aux plans standards) */}
-          <g>
-            <animateTransform attributeName="transform" type="translate"
-              values="0 0; 0.4 0; 0 0; -0.4 0; 0 0" dur="2.4s" repeatCount="indefinite" />
-            <g transform="translate(0,-58) scale(1.72)">
-              <HeadBack look="short" hair="#e8e8e0" />
-              <HeadFront skin="#e0b898" hair="#e8e8e0" look="short" beard mood="vexe" />
-            </g>
-          </g>
         </g>
       </svg>
 

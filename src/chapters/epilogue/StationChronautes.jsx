@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import CarnetElias from "./CarnetElias.jsx";
 import ArriveeElias from "./ArriveeElias.jsx";
-import { HeadBack, HeadFront, AL3X1A_LOOK } from "../../engine/chars.jsx";
+import { Figure, HeadBack, HeadFront, AL3X1A_LOOK } from "../../engine/chars.jsx";
 export { AL3X1A_LOOK };
 
 /* Petit hook TYPEWRITER local — révèle un texte lettre par lettre.
@@ -92,7 +92,6 @@ function PortraitElias({ mood = "neutre" }) {
 }
 
 function PortraitMira({ mood = "neutre" }) {
-  const eyes = mood === "content" ? -1 : mood === "vexe" ? 1.5 : 0;
   return (
     <svg viewBox="0 0 200 240" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
@@ -107,38 +106,12 @@ function PortraitMira({ mood = "neutre" }) {
       <path d="M68 176 L68 172 L76 172 L76 176 M82 176 L82 172 L88 172 L88 176" stroke="#c8b8a0" strokeWidth="1.4" />
       {/* col en V */}
       <path d="M60 148 L100 168 L140 148" stroke="#0e1830" strokeWidth="1.5" fill="none" />
-      {/* cou */}
-      <ellipse cx="100" cy="135" rx="16" ry="12" fill="#c8946a" />
-      {/* tête ovale */}
-      <ellipse cx="100" cy="80" rx="50" ry="58" fill="#c8946a" stroke="#5a3818" strokeWidth="1.5" />
-      {/* tresses noires attachées de chaque côté */}
-      <path d="M52 60 Q52 30 78 22 Q92 20 100 22 Q108 20 122 22 Q148 30 148 60 L150 90 L142 88 Q145 60 138 45 Q125 30 100 28 Q75 30 62 45 Q55 60 58 88 L50 90 Z" fill="#1a1408" />
-      {/* tresses qui descendent */}
-      <path d="M52 70 Q42 100 46 140 L52 138 Q50 100 58 74 Z" fill="#1a1408" />
-      <path d="M148 70 Q158 100 154 140 L148 138 Q150 100 142 74 Z" fill="#1a1408" />
-      {/* rubans de couleur dans les tresses */}
-      <rect x="45" y="115" width="10" height="4" fill="#e86028" />
-      <rect x="145" y="115" width="10" height="4" fill="#7fd8ff" />
-      {/* yeux vifs */}
-      <ellipse cx="82" cy="82" rx="6" ry="4.5" fill="#f8f4e8" />
-      <ellipse cx="118" cy="82" rx="6" ry="4.5" fill="#f8f4e8" />
-      <circle cx={82 + eyes} cy="82" r="2.8" fill="#2a1810" />
-      <circle cx={118 + eyes} cy="82" r="2.8" fill="#2a1810" />
-      {/* sourcils marqués */}
-      <path d="M74 72 q6 -3 16 -1 M112 71 q6 -3 16 1" stroke="#1a1408" strokeWidth="2.4" fill="none" strokeLinecap="round" />
-      {/* nez */}
-      <path d="M100 88 L97 105 L103 105" stroke="#8a5828" strokeWidth="1" fill="none" />
-      {/* bouche */}
-      {mood === "content"
-        ? <path d="M84 120 Q100 130 116 120" stroke="#5a1818" strokeWidth="2" fill="none" strokeLinecap="round" />
-        : mood === "vexe"
-        ? <path d="M84 126 Q100 120 116 126" stroke="#5a1818" strokeWidth="2" fill="none" strokeLinecap="round" />
-        : <path d="M86 124 L114 124" stroke="#5a1818" strokeWidth="2" strokeLinecap="round" />}
-      {/* rouge à lèvres discret */}
-      <path d="M84 120 Q100 128 116 120" stroke="#c85028" strokeWidth="0.8" fill="none" opacity="0.6" />
-      {/* boucle d'oreille en spirale */}
-      <circle cx="50" cy="100" r="3" fill="none" stroke="#c8a848" strokeWidth="1.2" />
-      <circle cx="150" cy="100" r="3" fill="none" stroke="#c8a848" strokeWidth="1.2" />
+      {/* cou + tête commune du kit (tresses aux rubans orange et bleu) */}
+      <rect x="86" y="118" width="28" height="34" rx="6" fill="#b88660" />
+      <g transform="translate(100,84) scale(3.85)">
+        <HeadBack skin="#c8946a" hair="#1a1408" look="braids" earrings="#c8a848" lips="#c85028" />
+        <HeadFront skin="#c8946a" hair="#1a1408" look="braids" earrings="#c8a848" lips="#c85028" mood={mood} />
+      </g>
     </svg>
   );
 }
@@ -374,25 +347,11 @@ function DecorStation({ onClickPerso, done }) {
         {/* zone cliquable élargie invisible */}
         <rect x="-50" y="-60" width="100" height="130" fill="transparent" />
         <ellipse cx="0" cy="66" rx="30" ry="4" fill="#0a0604" opacity="0.55" />
-        {/* jambes en pantalon de lin */}
-        <rect x="-14" y="20" width="10" height="46" fill="#8a6848" stroke="#5a3820" strokeWidth="0.6" />
-        <rect x="4" y="20" width="10" height="46" fill="#8a6848" stroke="#5a3820" strokeWidth="0.6" />
-        {/* tunique large */}
-        <path d="M-22 30 Q-24 -12 -4 -22 L4 -22 Q24 -12 22 30 Z" fill="#c8a878" stroke="#5a3818" strokeWidth="0.8" />
-        <path d="M-6 -20 L-6 30 M6 -20 L6 30" stroke="#8a6848" strokeWidth="0.5" />
-        {/* épaules */}
-        <ellipse cx="-20" cy="-10" rx="6" ry="5" fill="#e0b898" />
-        <ellipse cx="20" cy="-10" rx="6" ry="5" fill="#e0b898" />
-        {/* bras qui s'ouvrent en accueil */}
-        <path d="M-20 -8 Q-34 8 -38 26" stroke="#e0b898" strokeWidth="8" fill="none" strokeLinecap="round" />
-        <path d="M20 -8 Q34 8 38 26" stroke="#e0b898" strokeWidth="8" fill="none" strokeLinecap="round" />
-        {/* tête commune (cheveux et barbe affleurent le contour) */}
-        <g transform="translate(0,-38)">
-          <HeadBack look="short" hair="#e8e8e0" />
-          <HeadFront skin="#e0b898" hair="#e8e8e0" look="short" beard mood="neutre" />
-        </g>
-        {/* médaille au cou */}
-        <circle cx="0" cy="-10" r="4.5" fill="#c8a848" stroke="#8a6820" strokeWidth="0.6" />
+        {/* tunique de lin, bras ouverts en accueil, médaille des chronautes */}
+        <Figure x={0} y={68} s={1} skin="#e0b898" hair="#e8e8e0" look="short" beard mood="neutre"
+          garment="tunic" coat="#c8a878" pants="#8a6848" shoes="#4a3420" arms={[{ a1: 30, a2: 20 }, { a1: 30, a2: 20 }]}>
+          <circle cx="0" cy="-80" r="4.5" fill="#c8a848" stroke="#8a6820" strokeWidth="0.6" />
+        </Figure>
       </g>
       {/* « ? » au-dessus d'Elias — jaune tant qu'il n'a pas fini de parler ;
           vert ✓ entre les étapes, PUIS RE-JAUNE une fois tous les autres
@@ -414,29 +373,12 @@ function DecorStation({ onClickPerso, done }) {
       <g transform="translate(660,335)" onClick={() => onClickPerso?.("mira")} style={{ cursor: "pointer" }}>
         <rect x="-40" y="-60" width="90" height="120" fill="transparent" />
         <ellipse cx="0" cy="52" rx="24" ry="4" fill="#0a0604" opacity="0.55" />
-        {/* jambes en salopette */}
-        <rect x="-10" y="-4" width="8" height="54" fill="#3a5878" stroke="#0e1830" strokeWidth="0.6" />
-        <rect x="2" y="-4" width="8" height="54" fill="#3a5878" stroke="#0e1830" strokeWidth="0.6" />
-        {/* torse en veste d'ingénieure */}
-        <path d="M-18 4 Q-20 -22 -4 -30 L4 -30 Q20 -22 18 4 Z" fill="#3a5878" stroke="#0e1830" strokeWidth="0.6" />
-        {/* poche outils */}
-        <rect x="-14" y="-14" width="12" height="14" fill="#2a4868" stroke="#0e1830" strokeWidth="0.4" />
-        <path d="M-11 -18 L-11 -22 L-6 -22 L-6 -18" stroke="#c8b8a0" strokeWidth="1.2" />
-        {/* épaules */}
-        <ellipse cx="-16" cy="-18" rx="5" ry="4" fill="#c8946a" />
-        <ellipse cx="16" cy="-18" rx="5" ry="4" fill="#c8946a" />
-        {/* bras droit qui pointe la MARTINE-jumelle */}
-        <path d="M18 -14 Q30 -22 44 -30" stroke="#c8946a" strokeWidth="5" strokeLinecap="round" fill="none" />
-        {/* tête */}
-        <ellipse cx="0" cy="-42" rx="12" ry="14" fill="#c8946a" stroke="#5a3818" strokeWidth="0.6" />
-        {/* tresses attachées */}
-        <path d="M-12 -50 q4 -14 12 -14 q8 0 12 14 q-4 -2 -12 0 q-8 -2 -12 0 Z" fill="#1a1408" />
-        <path d="M-12 -40 L-14 -14 M12 -40 L14 -14" stroke="#1a1408" strokeWidth="3" strokeLinecap="round" />
-        {/* rubans dans les tresses */}
-        <rect x="-15" y="-24" width="4" height="2" fill="#e86028" />
-        <rect x="11" y="-24" width="4" height="2" fill="#7fd8ff" />
-        <circle cx="-4" cy="-42" r="1.4" fill="#2a1810" />
-        <circle cx="4" cy="-42" r="1.4" fill="#2a1810" />
+        {/* veste d'ingénieure à poche à outils ; elle pointe la MARTINE-jumelle */}
+        <Figure x={0} y={53} s={0.9} skin="#c8946a" hair="#1a1408" look="braids" earrings="#c8a848" lips="#c85028" mood="content"
+          garment="jacket" coat="#3a5878" pants="#3a5878" shoes="#1a2030" arms={[{ a1: 12, a2: 6 }, { a1: 120, a2: 110 }]}>
+          <rect x="-16" y="-72" width="13" height="15" fill="#2a4868" stroke="#0e1830" strokeWidth="0.5" />
+          <path d="M-13 -76 v-4 h6 v4" stroke="#c8b8a0" strokeWidth="1.3" fill="none" />
+        </Figure>
       </g>
       {/* « ? » au-dessus de Mira — apparaît quand Elias a été écouté */}
       {done?.elias && !done?.mira && (
