@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { playMaterialize } from './sfx.js';
 import TimeMachine from './TimeMachine.jsx';
+import PaleoArrivalDecor from './PaleoArrivalDecor.jsx';
 import { Avatar } from './Martine.jsx';
 import SceneFrame from './SceneFrame.jsx';
 
@@ -521,20 +522,21 @@ function SlideMessage({ onNext }) {
           <text x="-70" y="-149" fontFamily="ui-monospace,monospace" fontSize="9" fill="#c8e6cf">● en ligne</text>
           {/* Bulle blanche du message (largeur 216, centrée dans le tel) */}
           <g transform="translate(-108,-124)">
-            <rect x="0" y="0" width="216" height="264" rx="8" fill="#fff" stroke="#e0e0e0" strokeWidth="0.5" />
+            <rect x="0" y="0" width="216" height="272" rx="8" fill="#fff" stroke="#e0e0e0" strokeWidth="0.5" />
             <text x="108" y="22" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">« Je m'appelle Al3x1a.</text>
             <text x="108" y="38" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Je viens du futur.</text>
-            <text x="108" y="62" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ici, une maladie</text>
-            <text x="108" y="78" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">efface la mémoire</text>
-            <text x="108" y="94" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">de tout le monde.</text>
-            <text x="108" y="118" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ma famille</text>
-            <text x="108" y="134" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">est en danger.</text>
-            <text x="108" y="150" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Le remède est caché</text>
-            <text x="108" y="166" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">dans le passé.</text>
-            <text x="108" y="190" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">MARTINE va se poser</text>
-            <text x="108" y="206" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">devant chez toi.</text>
-            <text x="108" y="232" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#111b21">Sors. »</text>
-            <text x="200" y="252" textAnchor="end" fontFamily="ui-monospace,monospace" fontSize="8" fill="#8696a0">03:14</text>
+            <text x="108" y="58" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ici, une maladie</text>
+            <text x="108" y="74" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">efface la mémoire</text>
+            <text x="108" y="90" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">de tout le monde.</text>
+            <text x="108" y="110" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ma famille</text>
+            <text x="108" y="126" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">est en danger.</text>
+            <text x="108" y="146" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic" fontWeight="600">Ceci te concerne aussi.</text>
+            <text x="108" y="166" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Le remède est caché</text>
+            <text x="108" y="182" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">dans le passé.</text>
+            <text x="108" y="202" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">MARTINE va se poser</text>
+            <text x="108" y="218" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">devant chez toi.</text>
+            <text x="108" y="244" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#111b21">Sors. »</text>
+            <text x="200" y="263" textAnchor="end" fontFamily="ui-monospace,monospace" fontSize="8" fill="#8696a0">03:14</text>
           </g>
           <text x="0" y="176" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#8696a0">touche pour ouvrir</text>
           <rect x="-40" y="204" width="80" height="3" rx="1.5" fill="#5a6a80" />
@@ -1292,158 +1294,7 @@ function SlideArrival({ onDone }) {
   return (
     <div style={{ animation: 'fadeIn 1s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
       <svg viewBox="0 0 1200 680" style={{ display: 'block', width: '100%', height: '100%' }} preserveAspectRatio="xMidYMid meet">
-        <defs>
-          <linearGradient id="s6-sky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#5a3820" />
-            <stop offset="55%" stopColor="#e0a848" />
-            <stop offset="100%" stopColor="#c86040" />
-          </linearGradient>
-          <linearGradient id="s6-ground" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#8a4028" />
-            <stop offset="100%" stopColor="#3a1808" />
-          </linearGradient>
-          <radialGradient id="s6-fire" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffd870" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#ff5030" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="s6-sun" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#ffe870" stopOpacity="0.55" />
-            <stop offset="100%" stopColor="#ffe870" stopOpacity="0" />
-          </radialGradient>
-          <linearGradient id="s6-river" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#7fd8ff" stopOpacity="0.65" />
-            <stop offset="100%" stopColor="#3a80c8" stopOpacity="0.55" />
-          </linearGradient>
-        </defs>
-
-        {/* CIEL crépuscule */}
-        <rect width="1200" height="440" fill="url(#s6-sky)" />
-        {/* Halo solaire large */}
-        <circle cx="870" cy="320" r="220" fill="url(#s6-sun)" />
-        {/* Soleil couchant */}
-        <circle cx="870" cy="320" r="70" fill="#ffe870" opacity="0.85" />
-        <circle cx="870" cy="320" r="52" fill="#fff4b0" opacity="0.95" />
-        <circle cx="870" cy="320" r="28" fill="#fff" opacity="0.7" />
-        {/* Nuages plumes chauds */}
-        <path d="M100 200 Q220 190 340 210 Q460 200 580 215 Q500 230 380 224 Q260 220 160 218 Q120 216 100 200" fill="#8a3820" opacity="0.45" />
-        <path d="M700 180 Q820 170 940 190 Q1060 180 1160 195 Q1080 210 960 202 Q840 200 740 200 Q710 200 700 180" fill="#8a3820" opacity="0.35" />
-        {/* Étoiles pâles au-dessus */}
-        {[[80, 60], [260, 50], [440, 40], [640, 65], [960, 55], [1120, 45]].map(([x, y], i) => (
-          <circle key={i} cx={x} cy={y} r={i % 2 ? 1.2 : 0.8} fill="#f0e4c8" opacity={0.45 + (i % 3) * 0.1} />
-        ))}
-        {/* Oiseaux au loin */}
-        <path d="M480 180 q6 -8 12 0 q6 -8 12 0" stroke="#3a2010" strokeWidth="1.5" fill="none" opacity="0.8" />
-        <path d="M560 160 q4 -6 8 0 q4 -6 8 0" stroke="#3a2010" strokeWidth="1.2" fill="none" opacity="0.7" />
-
-        {/* MONTAGNES lointaines et proches */}
-        <path d="M0 440 L0 340 L120 290 L240 320 L380 280 L500 310 L680 260 L820 300 L980 270 L1120 310 L1200 300 L1200 440 Z" fill="#5a4058" opacity="0.5" />
-        <path d="M0 440 L0 320 L120 220 L240 310 L380 200 L510 300 L620 190 L740 290 L860 230 L980 300 L1100 240 L1200 270 L1200 440 Z" fill="#3a2010" />
-        {/* Neige au sommet des pics */}
-        <path d="M370 210 L380 200 L392 214 L382 220 Z" fill="#f0e4c8" opacity="0.75" />
-        <path d="M612 200 L620 190 L630 204 L622 208 Z" fill="#f0e4c8" opacity="0.75" />
-        <path d="M852 240 L860 230 L870 244 L862 248 Z" fill="#f0e4c8" opacity="0.75" />
-
-        {/* FORÊT en arrière-plan */}
-        <g fill="#1a2a10">
-          {[40, 90, 140, 190, 240, 290, 360, 410, 460, 520, 580, 640, 700, 760, 820, 880, 940, 1000, 1060, 1120, 1170].map((x, i) => {
-            const h = 34 + (i % 5) * 10;
-            const y = 440;
-            return (
-              <g key={i} transform={`translate(${x},${y})`}>
-                <path d={`M0 0 L-${h/3} 0 L-${h/4} -${h*0.6} L-${h/5} -${h*0.6} L0 -${h} L${h/5} -${h*0.6} L${h/4} -${h*0.6} L${h/3} 0 Z`} />
-                <rect x="-1.6" y="-4" width="3.2" height="6" fill="#3a2010" />
-              </g>
-            );
-          })}
-        </g>
-
-        {/* MAMMOUTH imposant à gauche */}
-        <g transform="translate(220,410)">
-          <ellipse cx="0" cy="0" rx="66" ry="36" fill="#1a0e04" />
-          <ellipse cx="-58" cy="-4" rx="26" ry="20" fill="#1a0e04" />
-          <path d="M-80 6 Q-100 26 -92 42 Q-80 46 -74 32" stroke="#1a0e04" strokeWidth="8" fill="none" strokeLinecap="round" />
-          <path d="M-74 -6 Q-88 -14 -84 -22 M-74 -4 Q-84 -12 -70 -20" stroke="#e8dfc8" strokeWidth="3" fill="none" strokeLinecap="round" />
-          <circle cx="-66" cy="-6" r="2" fill="#f0d090" />
-          {/* Poils */}
-          <path d="M-40 -30 L-30 -20 M-20 -34 L-14 -22 M0 -34 L4 -22 M20 -30 L18 -20 M40 -28 L34 -18" stroke="#0a0602" strokeWidth="1.5" opacity="0.7" />
-          {/* Pattes */}
-          <rect x="-42" y="28" width="14" height="36" fill="#1a0e04" />
-          <rect x="-16" y="30" width="14" height="34" fill="#1a0e04" />
-          <rect x="14" y="30" width="14" height="34" fill="#1a0e04" />
-          <rect x="36" y="28" width="14" height="36" fill="#1a0e04" />
-        </g>
-
-        {/* Petit troupeau de cerfs au fond droit */}
-        <g fill="#3a2010" opacity="0.8">
-          <g transform="translate(1080,420)">
-            <ellipse cx="0" cy="0" rx="14" ry="7" />
-            <ellipse cx="-14" cy="-4" rx="5" ry="6" />
-            <path d="M-18 -8 L-20 -14 M-14 -8 L-12 -14" stroke="#3a2010" strokeWidth="1" fill="none" />
-            <rect x="-8" y="6" width="2" height="8" />
-            <rect x="-2" y="6" width="2" height="8" />
-            <rect x="4" y="6" width="2" height="8" />
-            <rect x="10" y="6" width="2" height="8" />
-          </g>
-          <g transform="translate(1120,428) scale(0.8)">
-            <ellipse cx="0" cy="0" rx="14" ry="7" />
-            <ellipse cx="-14" cy="-4" rx="5" ry="6" />
-            <rect x="-8" y="6" width="2" height="8" />
-            <rect x="8" y="6" width="2" height="8" />
-          </g>
-        </g>
-
-        {/* SOL */}
-        <rect y="440" width="1200" height="240" fill="url(#s6-ground)" />
-        {/* Herbe folle */}
-        {[[60, 480], [180, 490], [340, 500], [500, 495], [660, 500], [820, 505], [980, 500], [1140, 495]].map(([x, y], i) => (
-          <g key={i} transform={`translate(${x},${y})`}>
-            <path d="M-4 0 L-4 -10 M0 0 L0 -14 M4 0 L4 -8" stroke="#5a4020" strokeWidth="1" fill="none" strokeLinecap="round" />
-          </g>
-        ))}
-        {/* Pierres éparses */}
-        {[[100, 500], [420, 520], [620, 500], [860, 540], [1060, 520]].map(([cx, cy], i) => (
-          <ellipse key={i} cx={cx} cy={cy} rx="14" ry="4" fill="#5a3020" opacity="0.7" />
-        ))}
-
-        {/* RIVIÈRE qui traverse le fond */}
-        <path d="M0 500 Q150 490 300 508 Q450 520 600 510 Q750 500 900 512 Q1050 522 1200 510 L1200 540 Q1050 552 900 542 Q750 530 600 540 Q450 550 300 538 Q150 520 0 530 Z" fill="url(#s6-river)" />
-        {/* Reflet sur la rivière */}
-        <path d="M100 512 L200 510 M400 516 L500 514 M700 516 L800 516 M1000 520 L1100 518" stroke="#e8eef5" strokeWidth="0.8" opacity="0.5" />
-
-        {/* GRANDE PIERRE avec peinture rupestre au premier plan gauche */}
-        <g transform="translate(90,560)">
-          <path d="M0 40 Q10 -20 50 -40 Q100 -50 140 -20 Q150 30 100 60 Q40 66 0 40 Z" fill="#5a3020" stroke="#2a1010" strokeWidth="2" />
-          {/* Dessins rupestres : main + auroch stylisé + ligne de spirales */}
-          <path d="M30 20 q6 -12 14 -8 q4 -12 10 -6 q8 -8 12 -2 q6 -6 10 0 q0 12 -6 16 q-12 6 -20 4 q-14 -2 -20 -4" fill="#8a1010" opacity="0.85" />
-          <path d="M70 -14 Q84 -22 96 -12 L92 -6 Q100 -8 100 0 Q90 6 80 2 Q70 4 66 -6 Z M96 -18 L106 -22 M98 -14 L110 -12" stroke="#3a0000" strokeWidth="1.5" fill="none" opacity="0.85" />
-        </g>
-
-        {/* TENTE / HUTTE près du feu */}
-        <g transform="translate(340,560)">
-          <path d="M-46 44 L0 -30 L46 44 Z" fill="#5a3020" stroke="#2a1010" strokeWidth="2" />
-          <path d="M-46 44 L0 -30 L46 44 Z" fill="none" stroke="#3a1808" strokeWidth="1.2" strokeDasharray="4 4" opacity="0.75" />
-          {/* Ouverture */}
-          <path d="M-8 44 L0 20 L8 44 Z" fill="#141008" />
-          {/* Perches qui dépassent */}
-          <line x1="0" y1="-30" x2="-8" y2="-46" stroke="#3a1808" strokeWidth="2" />
-          <line x1="0" y1="-30" x2="6" y2="-44" stroke="#3a1808" strokeWidth="2" />
-          <line x1="0" y1="-30" x2="0" y2="-50" stroke="#3a1808" strokeWidth="2" />
-        </g>
-
-        {/* FEU du clan (plus imposant) */}
-        <g transform="translate(180,600)">
-          <circle r="72" fill="url(#s6-fire)" style={{ animation: 'firePulse 1.4s ease-in-out infinite' }} />
-          {/* Bûches croisées */}
-          <path d="M-28 10 L28 6 M-22 16 L28 14 M-20 22 L22 18" stroke="#3a1808" strokeWidth="6" strokeLinecap="round" />
-          {/* Flammes */}
-          <path d="M-12 -2 Q-10 -22 0 -30 Q6 -18 4 -2 Z" fill="#ffd870" />
-          <path d="M-6 0 Q-2 -12 4 -18 Q6 -8 4 0 Z" fill="#ff8030" />
-          <path d="M0 -6 Q2 -14 6 -18 Q8 -10 6 -4 Z" fill="#fff4b0" />
-          {/* Fumée qui monte */}
-          <path d="M0 -30 Q-6 -50 4 -70 Q-4 -90 6 -110" stroke="#8a9098" strokeWidth="5" fill="none" opacity="0.35" strokeLinecap="round">
-            <animate attributeName="opacity" values="0.2;0.4;0.2" dur="3s" repeatCount="indefinite" />
-          </path>
-        </g>
+        <PaleoArrivalDecor />
 
         {/* Le VAISSEAU posé plus grand */}
         <g transform="translate(900,600) scale(0.9)">
@@ -1525,7 +1376,6 @@ function SlideArrival({ onDone }) {
         )}
 
         <style>{`
-          @keyframes firePulse { 0%, 100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
           @keyframes personneCall { 0%, 100% { opacity: 0.75; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
         `}</style>
       </svg>
