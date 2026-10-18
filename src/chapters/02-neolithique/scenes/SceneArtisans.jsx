@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Ridge, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 3 — Les artisans de la cité  (PEINTURE FINE)
@@ -29,6 +30,11 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
           <feComposite in="a" in2="SourceGraphic" operator="in" />
         </filter>
+        <pattern id="ar-bricks" width="40" height="16" patternUnits="userSpaceOnUse">
+          <rect width="40" height="16" fill="none" />
+          <path d="M0 15.5 H40 M20 0 V8 M0 8 H40 M0 8 V16 M40 8 V16" stroke="#7a5c34" strokeWidth="1" opacity="0.5" />
+          <path d="M2 2 h14 M24 10 h12" stroke="#e8d0a0" strokeWidth="1" opacity="0.25" />
+        </pattern>
         <filter id="ar-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6" /></filter>
       </defs>
 
@@ -38,11 +44,37 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
 
       {/* ═══ fond lointain : le grand mur + les maisons blanches ═══ */}
       <PLayer depth={1}>
-        {/* le grand mur de la cité */}
+        {/* au-delà du mur : collines et palmiers dattiers qui dépassent */}
+        <Ridge id="ar-r0" seed={171} y={150} amp={40} rough={0.5} fill="#a8b4b8" lit="#c8d0cc" light={-1} />
+        {[[60, 150, 70], [150, 150, 84], [640, 150, 76], [890, 150, 88], [960, 150, 66]].map(([x, y, h], i) => (
+          <g key={i} transform={`translate(${x},${y})`}>
+            <path d={`M0 0 Q${4 - i} ${-h * 0.5} ${2 + (i % 2) * 4} ${-h}`} stroke="#7a6040" strokeWidth="4" fill="none" />
+            {[-150, -110, -70, -30, 10, 50].map((a, k) => {
+              const r = (a * Math.PI) / 180;
+              return <path key={k} d={`M${2 + (i % 2) * 4} ${-h} q${(Math.cos(r) * 18).toFixed(1)} ${(Math.sin(r) * 10 - 6).toFixed(1)} ${(Math.cos(r) * 32).toFixed(1)} ${(Math.sin(r) * 18 + 4).toFixed(1)}`} stroke={k % 2 ? "#5a7a3a" : "#4a6a32"} strokeWidth="4" fill="none" strokeLinecap="round" />;
+            })}
+          </g>
+        ))}
+        {/* le grand mur de la cité : briques crues, contreforts, usure */}
         <rect y="150" width="1000" height="210" fill="url(#ar-wall)" />
+        <rect y="150" width="1000" height="210" fill="url(#ar-bricks)" />
         <rect y="150" width="1000" height="210" fill="#5a4022" opacity="0.22" filter="url(#ar-mottle)" />
-        <path d="M0 158 h1000 M0 214 h1000 M0 272 h1000 M0 326 h1000" stroke="#7a5c34" strokeWidth="1.6" opacity="0.4" />
-        {[80, 300, 540, 780].map((x, i) => <path key={i} d={`M${x} 150 v210`} stroke="#7a5c34" strokeWidth="1.4" opacity="0.3" />)}
+        {[40, 250, 700, 910].map((x, i) => (
+          <g key={i}>
+            <rect x={x} y="146" width="44" height="214" fill="#c8ac7c" />
+            <rect x={x} y="146" width="44" height="214" fill="url(#ar-bricks)" />
+            <rect x={x + 30} y="146" width="14" height="214" fill="#6a4c2a" opacity="0.35" />
+            <rect x={x + 44} y="150" width="18" height="210" fill="#5a4022" opacity="0.18" />
+          </g>
+        ))}
+        {/* traces de pluie et de réparations sur l'enduit */}
+        <path d="M130 160 q4 40 -2 80 M380 160 q-3 30 2 64 M600 160 q4 50 -3 100 M820 160 q3 36 -1 70" stroke="#8a6a40" strokeWidth="5" opacity="0.18" fill="none" />
+        <rect x="150" y="250" width="60" height="30" fill="#d8bc8a" opacity="0.5" /><rect x="560" y="230" width="44" height="26" fill="#b89c6c" opacity="0.5" />
+        {/* la grande porte sous la tour, et la campagne qu'on aperçoit */}
+        <path d="M472 360 L472 248 Q503 220 534 248 L534 360 Z" fill="#a8b8a8" />
+        <path d="M472 300 Q503 292 534 300 L534 360 L472 360 Z" fill="#9a9a6a" />
+        <path d="M472 360 L472 248 Q503 220 534 248 L534 360" fill="none" stroke="#6a4c2a" strokeWidth="6" />
+        <path d="M466 360 L466 244 Q503 210 540 244 L540 360" fill="none" stroke="#e0c894" strokeWidth="2" opacity="0.5" />
         {Array.from({ length: 20 }).map((_, i) => <rect key={i} x={i * 52} y="136" width="30" height="16" fill="#b59662" stroke="#8a6e46" strokeWidth="0.5" />)}
         <rect x="466" y="92" width="74" height="60" fill="#b89a66" /><rect x="466" y="84" width="74" height="12" fill="#9a7e52" />
         {[478, 500, 522].map((x, i) => <rect key={i} x={x} y="78" width="12" height="8" fill="#a88a5a" />)}
@@ -68,6 +100,9 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
         <rect y="352" width="1000" height="208" fill="#4a3620" opacity="0.28" filter="url(#ar-mottle)" />
         <path d="M0 430 h1000 M0 500 h1000" stroke="#5a442a" strokeWidth="1.4" opacity="0.3" />
         <ellipse cx="500" cy="470" rx="470" ry="64" fill="#5a4426" opacity="0.24" />
+        <Speckle seed={95} x0={0} x1={1000} y0={356} y1={560} n={340} colors={["#8a6e46", "#e0c890", "#5a442a", "#b0905a"]} opacity={0.45} />
+        {/* ombre portée du grand mur sur la place */}
+        <path d="M-20 352 L1020 352 L1020 372 Q500 384 -20 370 Z" fill="#5a4022" opacity="0.3" />
         {/* quelques pavés / cailloux */}
         {[[420, 428], [560, 448], [640, 420], [340, 456], [480, 512]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx="9" ry="4" fill="#8a6e46" opacity="0.4" />)}
 
