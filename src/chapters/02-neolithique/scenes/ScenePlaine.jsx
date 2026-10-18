@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Grass, Haze, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 2 · Tableau 4 — La plaine aux mégalithes  (PEINTURE FINE)
@@ -38,15 +39,16 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
       <rect width="1000" height="560" fill="url(#pl-sky)" />
       <circle cx="300" cy="140" r="46" fill="#fff0b8" opacity="0.7" />
       <ellipse cx="300" cy="140" rx="200" ry="150" fill="url(#pl-sun)" />
-      {[[180, 96, 1], [520, 74, 1.3], [760, 120, 0.9]].map(([x, y, s], i) => (
-        <g key={i} transform={`translate(${x},${y}) scale(${s})`} opacity="0.5" style={{ animation: `drift ${5 + i}s ease-in-out infinite` }}>
-          <ellipse cx="0" cy="0" rx="46" ry="13" fill="#f4f0e2" /><ellipse cx="26" cy="-6" rx="30" ry="11" fill="#f4f0e2" /><ellipse cx="-24" cy="-3" rx="26" ry="10" fill="#f4f0e2" />
-        </g>
-      ))}
+      <Clouds id="pl-cl" seed={21} items={[[170, 92, 180], [520, 66, 230], [790, 112, 170], [640, 160, 110]]} color="#f8f4e8" shadow="#c8c8c0" opacity="0.8" drift={18} />
 
       {/* ═══ fond : collines + tombes des rois (tumulus) au loin ═══ */}
       <PLayer depth={1}>
+        {/* collines bleutées très loin, puis bocage */}
+        <Ridge id="pl-r0" seed={151} y={282} amp={40} rough={0.5} fill="#8a9ab0" lit="#a8b4c4" light={-1} />
+        <Haze id="pl-h0" y0={250} y1={300} color="#e2dcc0" opacity={0.45} />
         <path d="M0 300 Q250 272 500 292 Q750 314 1000 288 L1000 360 L0 360 Z" fill="url(#pl-hill)" />
+        <TreeLine seed={153} x0={-20} x1={560} y={294} n={30} h={[12, 22]} kinds={["leafy", "leafy", "conifer"]} colors={["#4a5a30", "#56663a", "#3e4e2a"]} light={-1} jitter={8} />
+        <TreeLine seed={157} x0={880} x1={1020} y={296} n={7} h={[12, 22]} kinds={["leafy"]} colors={["#4a5a30", "#56663a"]} light={-1} jitter={6} />
         <path d="M0 300 Q250 272 500 292 Q750 314 1000 288 L1000 360 L0 360 Z" fill="#3a4020" opacity="0.2" filter="url(#pl-mottle)" />
         {/* les tumulus (tombes des rois), silhouettes solennelles */}
         {[[620, 300, 1], [720, 296, 1.35], [828, 306, 0.85]].map(([x, y, s], i) => (
@@ -68,9 +70,14 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
 
       {/* ═══ la plaine + le fleuve ═══ */}
       <PLayer depth={2}>
-        <rect y="330" width="1000" height="230" fill="url(#pl-land)" />
-        <rect y="330" width="1000" height="230" fill="#2e3418" opacity="0.24" filter="url(#pl-mottle)" />
+        <path d="M-40 336 Q160 318 380 328 Q600 340 820 324 Q930 318 1040 330 L1040 560 L-40 560 Z" fill="url(#pl-land)" />
+        <path d="M-40 336 Q160 318 380 328 Q600 340 820 324 Q930 318 1040 330 L1040 560 L-40 560 Z" fill="#2e3418" opacity="0.24" filter="url(#pl-mottle)" />
+        <path d="M-40 336 Q160 318 380 328 Q600 340 820 324 Q930 318 1040 330" stroke="#b8b878" strokeWidth="3" fill="none" opacity="0.4" />
+        {/* une haie basse qui court sur la crête de la plaine */}
+        <TreeLine seed={159} x0={380} x1={560} y={334} n={10} h={[16, 26]} kinds={["leafy"]} colors={["#4a5a30", "#56663a"]} light={-1} jitter={4} />
         <ellipse cx="450" cy="486" rx="450" ry="64" fill="#2e3416" opacity="0.24" />
+        <Speckle seed={91} x0={0} x1={820} y0={334} y1={560} n={420} colors={["#a8a860", "#5a6a30", "#c8b860", "#4a5428"]} r={[0.6, 1.8]} opacity={0.5} />
+        {[[60, 470, 1], [300, 540, 2], [460, 460, 3], [620, 530, 4], [760, 470, 5], [140, 540, 6]].map(([x, y, sd]) => <Grass key={sd} x={x} y={y} seed={sd} color="#6a7a38" s={1.1} flower={sd % 2 ? "#e8d040" : "#f0f0f0"} />)}
         {/* touffes d'herbe éparses */}
         {[[120, 420], [240, 452], [380, 500], [520, 430], [700, 508], [180, 490], [820, 452]].map(([x, y], i) => (
           <g key={i} stroke="#7a8446" strokeWidth="2" strokeLinecap="round" opacity="0.55">
