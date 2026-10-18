@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import CarnetElias from "./CarnetElias.jsx";
 import ArriveeElias from "./ArriveeElias.jsx";
-import { HeadBack, HeadFront } from "./cineChars.jsx";
+import { HeadBack, HeadFront, AL3X1A_LOOK } from "../../engine/chars.jsx";
+export { AL3X1A_LOOK };
 
 /* Petit hook TYPEWRITER local — révèle un texte lettre par lettre.
    Repart de zéro dès que `text` change. `skip()` affiche tout d'un coup. */
@@ -143,60 +144,41 @@ function PortraitMira({ mood = "neutre" }) {
 }
 
 /* Al3x1A apparaît dans un CADRE-photo posé sur la MARTINE-jumelle.
-   `frame={false}` : le même visage sans cadre, ruban ni légende (cinématiques). */
+   `frame={false}` : le même visage sans cadre, ruban ni légende (cinématiques).
+   Apparence canonique (partagée avec AL3X1A_LOOK) : tunique de voyage grise,
+   insigne chronaute doré, cheveux bruns mi-longs + chignon de côté, frange,
+   fine cicatrice sur la joue. */
 function PortraitAl3x1ACadre({ mood = "neutre", frame = true }) {
   return (
     <svg viewBox="0 0 200 240" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
-        <linearGradient id="ca-tunique" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#a0a0b0" /><stop offset="100%" stopColor="#606878" /></linearGradient>
+        <linearGradient id="ca-tunique" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a929e" /><stop offset="100%" stopColor="#5a626e" /></linearGradient>
       </defs>
       <rect width="200" height="240" fill="#181820" />
-      {/* cadre-photo en bois patiné */}
       {frame ? (
         <>
           <rect x="16" y="16" width="168" height="208" fill="none" stroke="#8a6838" strokeWidth="8" />
           <rect x="22" y="22" width="156" height="196" fill="#2a2830" />
         </>
       ) : <rect width="200" height="240" fill="#2a2830" />}
-      {/* halo mémoire */}
-      <circle cx="100" cy="100" r="70" fill="#f0e0c0" opacity="0.12" />
-      {/* ruban noir de deuil sur le coin haut-droit du cadre */}
+      <circle cx="100" cy="98" r="72" fill="#f0e0c0" opacity="0.12" />
+      <g transform="translate(100,86) scale(3.5)"><HeadBack {...AL3X1A_LOOK} /></g>
+      {/* épaules / tunique de voyage grise, col montant */}
+      <path d="M30 222 L30 182 Q30 152 62 146 L138 146 Q170 152 170 182 L170 222 Z" fill="url(#ca-tunique)" stroke="#3a4048" strokeWidth="1.4" />
+      <rect x="84" y="118" width="32" height="34" rx="6" fill="#c09474" />
+      <path d="M78 146 L84 134 L116 134 L122 146 Q100 154 78 146 Z" fill="#7a828e" stroke="#3a4048" strokeWidth="1.2" />
+      <path d="M100 152 L100 222" stroke="#3a4048" strokeWidth="1" opacity="0.6" />
+      {/* insigne chronaute (petit compas) */}
+      <circle cx="62" cy="172" r="8" fill="#c8a848" stroke="#5a4020" strokeWidth="1" />
+      <path d="M62 166 L62 178 M56 172 L68 172" stroke="#5a4020" strokeWidth="1" />
+      <g transform="translate(100,86) scale(3.5)"><HeadFront {...AL3X1A_LOOK} mood={mood} /></g>
       {frame && (
         <>
           <path d="M170 20 L184 20 L184 40 L172 46 L162 40 Z" fill="#1a1408" opacity="0.9" />
           <path d="M174 24 l6 8" stroke="#3a2818" strokeWidth="0.6" />
+          <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2035</text>
         </>
       )}
-      {/* épaules / tunique de voyage grise */}
-      <path d="M30 220 L30 175 Q30 150 60 143 L140 143 Q170 150 170 175 L170 220 Z" fill="url(#ca-tunique)" stroke="#3a4048" strokeWidth="1.2" />
-      {/* insigne chronaute sur l'épaule (petit compas) */}
-      <circle cx="60" cy="165" r="7" fill="#c8a848" stroke="#5a4020" strokeWidth="0.8" />
-      <path d="M60 160 L60 170 M55 165 L65 165" stroke="#5a4020" strokeWidth="0.8" />
-      {/* cou */}
-      <ellipse cx="100" cy="132" rx="15" ry="12" fill="#d0a888" />
-      {/* tête ovale */}
-      <ellipse cx="100" cy="80" rx="48" ry="56" fill="#d0a888" stroke="#5a3818" strokeWidth="1.2" />
-      {/* cheveux mi-longs attachés (chignon flou), traits androgynes */}
-      <path d="M55 62 Q60 25 100 22 Q140 25 145 62 L148 90 L140 88 Q142 60 132 45 Q100 30 68 45 Q58 60 60 88 L52 90 Z" fill="#4a3828" />
-      {/* frange souple */}
-      <path d="M65 55 Q75 40 100 42 Q125 40 135 55 Q125 62 100 60 Q75 62 65 55 Z" fill="#3a2818" />
-      {/* petit chignon sur le côté */}
-      <ellipse cx="145" cy="70" rx="8" ry="6" fill="#4a3828" />
-      {/* yeux calmes, ouverts */}
-      <ellipse cx="82" cy="82" rx="6" ry="4" fill="#f8f4e8" />
-      <ellipse cx="118" cy="82" rx="6" ry="4" fill="#f8f4e8" />
-      <circle cx="82" cy="82" r="2.6" fill="#3a2818" />
-      <circle cx="118" cy="82" r="2.6" fill="#3a2818" />
-      {/* sourcils fins et doux */}
-      <path d="M74 74 q8 -3 16 -1 M112 73 q8 -3 16 1" stroke="#3a2818" strokeWidth="1.6" fill="none" strokeLinecap="round" />
-      {/* nez fin */}
-      <path d="M100 88 L98 105 L102 105" stroke="#8a5828" strokeWidth="0.8" fill="none" />
-      {/* léger sourire mystérieux */}
-      <path d="M86 122 Q100 128 114 122" stroke="#5a2818" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      {/* légère cicatrice fine sur la joue (souvenir de voyage) */}
-      <path d="M124 92 l4 8" stroke="#8a5828" strokeWidth="0.6" opacity="0.6" />
-      {/* légende sous le portrait */}
-      {frame && <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2035</text>}
     </svg>
   );
 }

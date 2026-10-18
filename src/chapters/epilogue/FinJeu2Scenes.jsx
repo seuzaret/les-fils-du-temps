@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import TimeMachine from "../../engine/TimeMachine.jsx";
-import { PortraitElias, PortraitAl3x1A } from "./StationChronautes.jsx";
+import { PortraitElias, PortraitAl3x1A, AL3X1A_LOOK } from "./StationChronautes.jsx";
 import { Figure } from "./cineChars.jsx";
 import { playMaterialize, playPhonePing } from "../../engine/sfx.js";
 
@@ -153,7 +153,7 @@ export function SceneDescent({ ctx }) {
       <g transform="translate(478,396)">
         <g style={{ ...an("fjFade", 700, 500), transformBox: "fill-box", transformOrigin: "50% 100%" }}>
           <g style={{ animation: "fjSway 2.8s ease-in-out infinite", transformBox: "fill-box", transformOrigin: "50% 100%" }}>
-            <Figure x={0} y={0} s={1.75} skin="#d0a888" hair="#4a3020" hood hoodColor="#8a7a3a" coat="#a04ce8" garment="coat" mood="vexe"
+            <Figure x={0} y={0} s={1.75} {...AL3X1A_LOOK} coat="#6a7280" coat2="#7a828e" pants="#3a3a44" garment="coat" mood="vexe"
               arms={[{ a1: 42, a2: 34 }, { a1: 10, a2: 6 }]}>
               <circle cx="-9" cy="-72" r="3.4" fill="#c8a848" stroke="#5a4020" strokeWidth="0.7" />
               <path d="M-9 -74.5 V-69.5 M-11.5 -72 H-6.5" stroke="#5a4020" strokeWidth="0.7" />
@@ -224,7 +224,7 @@ export function SceneTest({ ctx }) {
       <g transform="translate(110,430)">
         <path d="M-90 130 Q-90 20 -20 4 Q40 -4 90 30 L90 130 Z" fill="#0a1218" stroke="#5eff9e" strokeWidth="1.5" opacity="0.95" />
         <circle cx="-4" cy="-44" r="46" fill="#0a1218" stroke="#5eff9e" strokeWidth="1.5" />
-        <path d="M-48 -52 Q-4 -100 40 -52" fill="#c8a848" opacity="0.5" />
+        <path d="M-48 -52 Q-4 -100 40 -52" fill="#4a3020" opacity="0.9" /><circle cx="44" cy="-62" r="14" fill="#4a3020" opacity="0.9" />
       </g>
       <g transform="translate(900,440)">
         <path d="M-90 130 Q-90 22 -20 6 Q40 -2 90 30 L90 130 Z" fill="#0a1218" stroke="#7fd8ff" strokeWidth="1.5" opacity="0.95" />

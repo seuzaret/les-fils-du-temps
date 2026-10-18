@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { HeadBack, HeadFront } from "../../engine/chars.jsx";
+import { AL3X1A_LOOK } from "./StationChronautes.jsx";
 /* ============================================================
    RETROUVAILLES AVEC AL3X1A
    ------------------------------------------------------------
@@ -139,9 +141,13 @@ function Decor({ amb, remede, mood }) {
       <g transform="translate(500,175)">
         {/* halo d'accueil doux */}
         <ellipse cx="0" cy="60" rx="90" ry="130" fill={amb.accent} opacity="0.08" />
+        <g transform="scale(3.1)"><HeadBack {...AL3X1A_LOOK} /></g>
+        <rect x="-11" y="30" width="22" height="14" rx="4" fill="#c09474" />
         {/* tunique */}
-        <path d="M -50 200 L -50 90 Q -50 55 -20 48 L 20 48 Q 50 55 50 90 L 50 200 Z"
+        <path d="M -66 200 L -64 96 Q -62 60 -26 52 L 26 52 Q 62 60 64 96 L 66 200 Z"
           fill="#6a7280" stroke="#2a2e38" strokeWidth="1.5" />
+        <path d="M -20 52 L -15 40 L 15 40 L 20 52 Q 0 60 -20 52 Z" fill="#7a828e" stroke="#2a2e38" strokeWidth="1.2" />
+        <path d="M 0 58 L 0 200" stroke="#2a2e38" strokeWidth="1" opacity="0.5" />
         {/* insigne */}
         <circle cx="-30" cy="105" r="7" fill="#c8a848" stroke="#5a4020" strokeWidth="0.8" />
         <path d="M -30 100 L -30 110 M -35 105 L -25 105" stroke="#5a4020" strokeWidth="0.8" />
@@ -149,28 +155,10 @@ function Decor({ amb, remede, mood }) {
         <path d="M -40 150 l 6 12" stroke="#2a2e38" strokeWidth="1.2" />
         <path d="M 32 175 l -5 8" stroke="#2a2e38" strokeWidth="1.2" />
         {/* cou */}
-        <ellipse cx="0" cy="42" rx="14" ry="10" fill="#d0a888" />
-        {/* tête */}
-        <ellipse cx="0" cy="0" rx="40" ry="48" fill="#d0a888" stroke="#5a3818" strokeWidth="1.3" />
-        {/* cheveux */}
-        <path d="M -42 -18 Q -38 -50 0 -52 Q 38 -50 42 -18 L 44 12 L 36 10 Q 38 -12 30 -25 Q 0 -38 -30 -25 Q -38 -12 -36 10 L -44 12 Z" fill="#4a3828" />
-        {/* yeux */}
-        <ellipse cx="-15" cy="4" rx="5" ry="3.5" fill="#f8f4e8" />
-        <ellipse cx="15" cy="4" rx="5" ry="3.5" fill="#f8f4e8" />
-        <circle cx={-15 + (mood === "content" ? -0.8 : 0)} cy="4" r="2.2" fill="#3a2818" />
-        <circle cx={15 + (mood === "content" ? -0.8 : 0)} cy="4" r="2.2" fill="#3a2818" />
-        {/* sourcils */}
-        <path d="M -22 -4 q 6 -3 12 -1 M 10 -5 q 6 -2 12 1" stroke="#3a2818" strokeWidth="1.4" fill="none" strokeLinecap="round" />
-        {/* nez */}
-        <path d="M 0 10 L -2 22 L 2 22" stroke="#8a5828" strokeWidth="0.7" fill="none" />
-        {/* bouche */}
-        {mood === "content" ? (
-          <path d="M -14 34 Q 0 46 14 34" stroke="#5a2818" strokeWidth="2.2" fill="none" strokeLinecap="round" />
-        ) : (
-          <path d="M -12 38 Q 0 34 12 38" stroke="#5a2818" strokeWidth="1.8" fill="none" strokeLinecap="round" />
-        )}
+        {/* tête : la tête commune (kit), apparence canonique d'Al3x1a */}
+        <g transform="scale(3.1)"><HeadFront {...AL3X1A_LOOK} mood={mood === "content" ? "content" : "neutre"} /></g>
         {/* larme */}
-        {mood === "content" && <circle cx="-18" cy="14" r="1.4" fill="#7fd8ff" opacity="0.9"><animate attributeName="cy" values="14;22;14" dur="4s" repeatCount="indefinite" /></circle>}
+        {mood === "content" && <circle cx="-15" cy="6" r="1.6" fill="#7fd8ff" opacity="0.9"><animate attributeName="cy" values="6;16;6" dur="4s" repeatCount="indefinite" /></circle>}
       </g>
 
       {/* Bandeau lieu, en haut */}
