@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 3 — Tableau adjacent : L'ÉCOLE DU SCRIBE (Edubba)
@@ -20,6 +21,9 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         <linearGradient id="ec-sol" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a5a34" /><stop offset="100%" stopColor="#4a3020" /></linearGradient>
         <linearGradient id="ec-argile" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c8956a" /><stop offset="100%" stopColor="#8a5f34" /></linearGradient>
         <radialGradient id="ec-lampe" cx="50%" cy="30%" r="70%"><stop offset="0%" stopColor="#ffe4a8" stopOpacity="0.85" /><stop offset="70%" stopColor="#f8b048" stopOpacity="0.4" /><stop offset="100%" stopColor="#f8a848" stopOpacity="0" /></radialGradient>
+        <linearGradient id="ec-side" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#1a0e06" stopOpacity="0.75" /><stop offset="100%" stopColor="#1a0e06" stopOpacity="0" /></linearGradient>
+        <linearGradient id="ec-shaft" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#ffe6b0" stopOpacity="0.32" /><stop offset="100%" stopColor="#ffe6b0" stopOpacity="0" /></linearGradient>
+        <filter id="ec-blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6" /></filter>
         <filter id="ec-grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" /><feColorMatrix values="0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.4 0" /></filter>
       </defs>
 
@@ -40,6 +44,32 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         <rect x="60" y="60" width="120" height="30" fill="none" stroke="#3a1810" strokeWidth="1.5" />
         <rect x="820" y="60" width="120" height="30" fill="#e0b878" opacity="0.55" />
         <rect x="820" y="60" width="120" height="30" fill="none" stroke="#3a1810" strokeWidth="1.5" />
+        {/* le ciel par les fentes d'aération, et les rais de lumière qui descendent */}
+        <rect x="64" y="64" width="112" height="22" fill="#a8c8e0" opacity="0.85" />
+        <rect x="824" y="64" width="112" height="22" fill="#a8c8e0" opacity="0.85" />
+        <path d="M64 88 L176 88 L330 440 L190 440 Z" fill="url(#ec-shaft)" filter="url(#ec-blur)" />
+        <path d="M824 88 L936 88 L810 440 L670 440 Z" fill="url(#ec-shaft)" filter="url(#ec-blur)" />
+        {/* plafond de troncs de palmier */}
+        <rect x="-40" y="-20" width="1080" height="34" fill="#3a2818" />
+        {Array.from({ length: 12 }).map((_, i) => (
+          <g key={i}>
+            <ellipse cx={i * 90 - 10} cy="14" rx="40" ry="10" fill="#5a3e24" />
+            <ellipse cx={i * 90 - 10} cy="12" rx="38" ry="6" fill="#7a5634" />
+            <path d={`M${i * 90 - 44} 12 h68`} stroke="#3a2818" strokeWidth="1" opacity="0.6" />
+          </g>
+        ))}
+        {/* les angles de la pièce dans l'ombre */}
+        <rect x="-40" y="0" width="160" height="440" fill="url(#ec-side)" />
+        <rect x="880" y="0" width="160" height="440" fill="url(#ec-side)" transform="translate(1920,0) scale(-1,1)" />
+        {/* niches creusées dans le mur, remplies de tablettes */}
+        {[[30, 330], [930, 330]].map(([x, y], i) => (
+          <g key={i}>
+            <rect x={x - 26} y={y - 46} width="52" height="56" fill="#2a180c" />
+            <path d={`M${x - 26} ${y - 46} h52 v56`} stroke="#c89a62" strokeWidth="1.4" fill="none" opacity="0.4" />
+            {[0, 1, 2].map((k) => <rect key={k} x={x - 22 + k * 15} y={y - 8} width="13" height="16" rx="2" fill="#a8784a" stroke="#5a3818" strokeWidth="0.6" />)}
+            {[0, 1, 2].map((k) => <rect key={`b${k}`} x={x - 22 + k * 15} y={y - 34} width="13" height="16" rx="2" fill="#b8865a" stroke="#5a3818" strokeWidth="0.6" />)}
+          </g>
+        ))}
         {/* halo de lampe au centre */}
         <ellipse cx="500" cy="140" rx="220" ry="80" fill="url(#ec-lampe)" />
         {/* poussière qui danse dans le rai de lumière */}
@@ -93,6 +123,11 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         {/* SOL de terre battue */}
         <rect y="440" width="1000" height="120" fill="url(#ec-sol)" />
         <rect y="440" width="1000" height="120" fill="#2a1810" opacity="0.25" filter="url(#ec-grain)" />
+        <rect y="436" width="1000" height="6" fill="#5a3818" />
+        <Speckle seed={251} x0={0} x1={1000} y0={444} y1={560} n={220} colors={["#3a2414", "#a07850", "#5a3e26"]} opacity={0.4} />
+        {/* taches de lumière des rais sur le sol */}
+        <ellipse cx="260" cy="452" rx="90" ry="12" fill="#ffe6b0" opacity="0.14" filter="url(#ec-blur)" />
+        <ellipse cx="740" cy="452" rx="90" ry="12" fill="#ffe6b0" opacity="0.14" filter="url(#ec-blur)" />
         {/* tapis / natte au sol devant les élèves — tressage détaillé */}
         <ellipse cx="500" cy="500" rx="380" ry="34" fill="#5a3820" opacity="0.75" />
         {/* motif tressage */}
