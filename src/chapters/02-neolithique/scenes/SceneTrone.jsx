@@ -36,12 +36,33 @@ export default function SceneTrone({ collect, action, reveal, queteQui }) {
       <rect width="1000" height="560" fill="url(#tr-wall)" />
       <rect width="1000" height="560" fill="#2a1c10" opacity="0.3" filter="url(#tr-mottle)" />
       <rect width="1000" height="560" fill="#241608" opacity="0.14" filter="url(#tr-grain)" />
-      {/* poutres du plafond, en haut */}
-      <rect y="0" width="1000" height="26" fill="#3a2818" />
-      {[80, 240, 400, 600, 760, 920].map((x, i) => <rect key={i} x={x} y="0" width="16" height="40" fill="#2e2014" />)}
+      {/* les murs latéraux en perspective : la salle a de la profondeur */}
+      <path d="M-40 -20 L130 60 L130 404 L-40 470 Z" fill="#3e2c1c" />
+      <path d="M-40 -20 L130 60 L130 404 L-40 470 Z" fill="#1a1008" opacity="0.35" filter="url(#tr-mottle)" />
+      <path d="M1040 -20 L870 60 L870 404 L1040 470 Z" fill="#3a2818" />
+      <path d="M1040 -20 L870 60 L870 404 L1040 470 Z" fill="#1a1008" opacity="0.4" filter="url(#tr-mottle)" />
+      <path d="M130 60 L130 404 M870 60 L870 404" stroke="#2a1c10" strokeWidth="4" />
+      {/* poteaux de bois qui portent le toit */}
+      {[[146, 0.9], [854, 0.9], [40, 1.2], [960, 1.2]].map(([x, k], i) => (
+        <g key={i}>
+          <rect x={x - 11 * k} y="20" width={22 * k} height={470 - 20} fill="#4a3220" />
+          <rect x={x - 11 * k} y="20" width={7 * k} height={450} fill="#7a5638" opacity="0.6" />
+          <path d={`M${x - 8 * k} 120 h${16 * k} M${x - 8 * k} 300 h${16 * k}`} stroke="#2a1a0c" strokeWidth="3" />
+        </g>
+      ))}
+      {/* charpente du plafond, solives qui fuient vers le fond */}
+      <path d="M-40 -20 L1040 -20 L870 60 L130 60 Z" fill="#2e2014" />
+      {Array.from({ length: 9 }).map((_, i) => {
+        const xb = 130 + i * 92.5, xt = -40 + i * 135;
+        return <path key={i} d={`M${xt} -20 L${xb} 60`} stroke="#4a3420" strokeWidth="7" />;
+      })}
+      <path d="M130 60 L870 60" stroke="#4a3420" strokeWidth="8" />
+      {/* l'ouverture du toit : un carré de ciel */}
+      <path d="M440 -20 L560 -20 L548 30 L452 30 Z" fill="#9ab8d0" />
+      <path d="M440 -20 L560 -20 L548 30 L452 30 Z" fill="none" stroke="#1a1008" strokeWidth="4" />
 
       {/* le RAI DE LUMIÈRE qui tombe de l'ouverture du toit sur le trône */}
-      <path d="M430 26 L570 26 L640 470 L360 470 Z" fill="#ffe9b0" opacity="0.12" filter="url(#tr-blur)" />
+      <path d="M452 30 L548 30 L640 470 L360 470 Z" fill="#ffe9b0" opacity="0.14" filter="url(#tr-blur)" />
       <ellipse cx="500" cy="330" rx="230" ry="210" fill="url(#tr-glow)" />
 
       {/* ═══ décor mural : fresques, crâne de taureau, peaux ═══ */}
@@ -97,7 +118,21 @@ export default function SceneTrone({ collect, action, reveal, queteQui }) {
         {/* sol dallé */}
         <rect y="404" width="1000" height="156" fill="url(#tr-floor)" />
         <rect y="406" width="1000" height="154" fill="#241608" opacity="0.3" filter="url(#tr-mottle)" />
-        <path d="M0 452 h1000 M0 510 h1000 M300 410 v150 M700 410 v150" stroke="#2c1c10" strokeWidth="1.6" opacity="0.4" />
+        {/* dalles de pierre en perspective */}
+        {[[404, 420], [420, 444], [444, 478], [478, 524], [524, 590]].map(([y0, y1], r) => (
+          <g key={r}>
+            <path d={`M-40 ${y1} H1040`} stroke="#2c1c10" strokeWidth={1.4 + r * 0.4} opacity="0.5" />
+            {Array.from({ length: 9 }).map((_, k) => {
+              const x = -60 + k * 140 + (r % 2) * 70;
+              const f0 = 1 + (y0 - 404) / 120, f1 = 1 + (y1 - 404) / 120;
+              return <path key={k} d={`M${(500 + (x - 500) * f0).toFixed(0)} ${y0} L${(500 + (x - 500) * f1).toFixed(0)} ${y1}`} stroke="#2c1c10" strokeWidth="1.4" opacity="0.45" />;
+            })}
+          </g>
+        ))}
+        {/* peau d'ours étendue devant l'estrade */}
+        <path d="M380 500 Q360 486 392 478 Q430 470 500 472 Q570 470 608 478 Q640 486 620 500 Q640 514 606 522 Q560 532 500 530 Q440 532 394 522 Q360 514 380 500 Z" fill="#6a4a2e" />
+        <path d="M400 500 Q450 490 500 492 Q550 490 600 500" stroke="#8a6a46" strokeWidth="3" fill="none" opacity="0.6" />
+        <path d="M380 500 l-16 -6 M380 500 l-14 8 M620 500 l16 -6 M620 500 l14 8" stroke="#5a3e24" strokeWidth="5" strokeLinecap="round" />
         <ellipse cx="500" cy="478" rx="360" ry="44" fill="#241608" opacity="0.35" />
         {/* tache de lumière au sol, sous le rai */}
         <ellipse cx="500" cy="452" rx="150" ry="22" fill="#ffe9b0" opacity="0.12" filter="url(#tr-blur)" />
