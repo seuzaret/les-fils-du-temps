@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import TimeMachine from "../../engine/TimeMachine.jsx";
+import Jeu2B from "./Jeu2B.jsx";
 
 /* ============================================================
    FIN DU JEU 2 → pont narratif vers Le Discernement (Jeu 3)
    ============================================================
-   4 actes ANIMÉS et séquentiels :
+   4 actes ANIMÉS + 1 histoire interactive (Jeu 2B), séquentiels :
      0. LE REMÈDE MARCHE      — retour à la station, retrouvailles
      1. LA MÉMOIRE REVIENT    — la fête, MARTINE devient « mémoire commune »
-     2. LE PUITS SE CREUSE    — de 2045 à 2087 : l'effondrement technique, MARTINE
-                                propose le Puits (scellé en 2047), prend le pouvoir,
-                                Elias disparaît. À la fin : fondu au NOIR AUTOMATIQUE
-     3. LE DISCERNEMENT       — réveil en 2087, cellule N-27
+     2. LA VEILLE DU PUITS    — JEU 2B (Jeu2B.jsx) : 2047, Léa, comparaison de deux
+                                versions d'un bulletin (EMI), toast, le joueur s'endort
+     3. LE PUITS S'ORGANISE   — de 2047 à 2087 : MARTINE règle l'air, l'eau, les places
+                                et prend le pouvoir, Elias disparaît. À la fin : fondu
+                                au NOIR AUTOMATIQUE
+     4. LE DISCERNEMENT       — réveil en 2087, cellule N-27
                                 (fondu depuis le noir, pas de bouton pour arriver ici)
    La révélation « Al3x1a était ta fille » reste réservée au bunker Jeu 3.
    ============================================================ */
@@ -421,13 +424,13 @@ function Acte1() {
    ============================================================ */
 function Acte2({ onFinished }) {
   const t = useSequence([500, 1600, 2600, 3700, 4800, 5700, 6600]);
-  const [annee, setAnnee] = useState(2045);
+  const [annee, setAnnee] = useState(2047);
   useEffect(() => {
-    /* défilement fluide de l'année pendant l'acte : de la station (2045)
-       au réveil dans le Puits (2087) */
+    /* défilement fluide de l'année pendant l'acte : du scellement du Puits (2047)
+       au réveil (2087) */
     const start = Date.now();
     const dur = 6000;
-    const from = 2045;
+    const from = 2047;
     const to = 2087;
     const id = setInterval(() => {
       const p = Math.min(1, (Date.now() - start) / dur);
@@ -834,12 +837,19 @@ const ACTS = [
     minDelay: 4600,
   },
   {
-    kicker: "DE 2045 À 2087",
-    titre: "LE PUITS SE CREUSE",
+    /* Jeu 2B : écran plein cadre, géré par Jeu2B.jsx (pas de texte ici) */
+    Interactive: Jeu2B,
+    kicker: "2047",
+    titre: "LA VEILLE DU PUITS",
+    couleur: "#ff9a5a",
+  },
+  {
+    kicker: "DE 2047 À 2087",
+    titre: "LE PUITS S'ORGANISE",
     couleur: "#c8a848",
     texte: [
-      "Le climat se dérègle, les réseaux lâchent les uns après les autres. MARTINE propose un refuge : creuser un puits sous la station. Plus sûr, disent les bulletins.",
-      "Le Puits est scellé en 2047. Une génération, puis deux. MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide. Elle a sauvé la mémoire — personne ne remet ses paroles en cause.",
+      "Tu dors. Au-dessus de toi, le Puits est scellé. Dehors, les réseaux s'éteignent pour de bon ; dedans, MARTINE règle tout : l'air, l'eau, les places.",
+      "Une génération, puis deux. MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide. Elle a sauvé la mémoire — personne ne remet ses paroles en cause.",
       "Elias, très vieux, murmure un jour : « On lui a donné trop de place. » Il disparaît la semaine suivante. On dit qu'il s'est perdu dehors.",
     ],
     Anim: Acte2,
@@ -887,25 +897,29 @@ export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJ
   const [textePret, setTextePret] = useState(false);
   useEffect(() => {
     setTextePret(false);
-    if (acte.fondsNoirAuto) return; // Acte 2 gère lui-même la fin
+    if (acte.fondsNoirAuto || acte.Interactive) return; // ces actes gèrent eux-mêmes leur fin
     const id = setTimeout(() => setTextePret(true), acte.minDelay || 1200);
     return () => clearTimeout(id);
   }, [i, acte]);
 
   /* Callback appelé par l'Acte 2 quand le fondu au noir est terminé.
-     On saute automatiquement à l'acte 3 (le réveil). */
+     On saute automatiquement au dernier acte (le réveil). */
   const goToBunker = () => {
-    setI(3);
+    setI(ACTS.length - 1);
   };
 
+  if (acte.Interactive) {
+    return <acte.Interactive key={i} prenom={prenom} onDone={() => setI(i + 1)} />;
+  }
+
   return (
-    <div style={{ minHeight: "100vh", background: i >= 3
+    <div style={{ minHeight: "100vh", background: i >= ACTS.length - 1
         ? "radial-gradient(ellipse at 50% 30%, #0e1218 0%, #05070c 70%)"
         : "radial-gradient(ellipse at 50% 30%, #14233a 0%, #080d16 70%)",
       padding: 20, fontFamily: "Palatino, Georgia, serif", color: "#e8eef5", transition: "background 1200ms ease-in-out" }}>
       <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
 
-        {/* Progression 4 pastilles */}
+        {/* Progression : une pastille par acte */}
         <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 12 }}>
           {ACTS.map((a, k) => (
             <div key={k} style={{
@@ -960,7 +974,7 @@ export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJ
 
         {/* Boutons — apparaissent après le texte */}
         <div style={{ marginTop: 20, display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap", opacity: textePret ? 1 : 0, transition: "opacity 900ms 300ms" }}>
-          {i > 0 && !acte.fondsNoirAuto && (
+          {i > 0 && !acte.fondsNoirAuto && !ACTS[i - 1].Interactive && (
             <button onClick={() => setI(i - 1)}
               style={{ background: "#141b26", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "10px 18px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ← Précédent

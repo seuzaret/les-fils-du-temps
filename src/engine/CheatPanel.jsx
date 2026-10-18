@@ -58,6 +58,7 @@ export default function CheatPanel({
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 2 (Al3x1A) :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={onNewGameJeu2}>🎲 Démarrer nouveau Jeu 2</button>
+        <button style={CHEAT_BTN} onClick={() => onSetScreen("finJeu2")} title="Fin du Jeu 2 : acte 0, acte 1, puis Jeu 2B (la veille du Puits)">🥂 Fin Jeu 2 → Jeu 2B</button>
         <button style={CHEAT_BTN}
           onClick={() => { if (mode === "jeu2" && jeu2Target >= 0) { onSetChapterIndex(jeu2Target); onSetTab(jeu2[jeu2Target].al3x1aHotspot.tab); } }}
           title="Aller directement au chapitre cible d'Al3x1A">📍 Aller à Al3x1A</button>

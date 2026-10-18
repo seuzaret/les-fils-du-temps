@@ -94,7 +94,7 @@ function Decor({ amb, remede, mood }) {
         <path d="M 42 40 L 38 46 M 56 60 L 62 58 M 48 50 L 44 56" stroke="#1a1008" strokeWidth="1.2" fill="none" strokeLinecap="round" opacity="0.7" />
         {/* écran de bord éteint */}
         <rect x="30" y="66" width="40" height="13" rx="3" fill="#0c1410" stroke="#3a2418" strokeWidth="1.5" />
-        <text x="50" y="75.5" textAnchor="middle" fontSize="8.5" fill="#3a4048" fontFamily="ui-monospace,monospace" letterSpacing="0.5">HS · 2277</text>
+        <text x="50" y="75.5" textAnchor="middle" fontSize="8.5" fill="#3a4048" fontFamily="ui-monospace,monospace" letterSpacing="0.5">HS · 2035</text>
         {/* hublot-œil éteint */}
         <circle cx="50" cy="52" r="11" fill="#3a4048" stroke="#3a2418" strokeWidth="2.5" />
         <path d="M43 50 L57 54 M43 54 L57 50" stroke="#5a5a64" strokeWidth="2" strokeLinecap="round" />

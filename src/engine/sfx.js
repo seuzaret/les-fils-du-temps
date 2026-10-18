@@ -137,3 +137,34 @@ export function playCountdown(n) {
     o2.start(t0); o2.stop(t0 + dur + 0.02);
   }
 }
+
+/* Tintement de deux verres : trois partiels métalliques très brefs. */
+export function playClink() {
+  const a = ctx(); if (!a) return;
+  const t0 = a.currentTime;
+  [[2637, 0.12, 0.9], [3951, 0.07, 0.6], [1760, 0.1, 0.5]].forEach(([f, v, d]) => {
+    const o = a.createOscillator(); o.type = "sine"; o.frequency.value = f;
+    const g = a.createGain();
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(v, t0 + 0.004);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + d * 0.6);
+    o.connect(g); g.connect(a.destination);
+    o.start(t0); o.stop(t0 + d * 0.6 + 0.05);
+  });
+}
+
+/* Bourdonnement grave qui s'étouffe : l'endormissement (sinus filtré, descend d'une octave). */
+export function playSleepHum(durationMs = 3200) {
+  const a = ctx(); if (!a) return;
+  const t0 = a.currentTime, dur = durationMs / 1000;
+  const o = a.createOscillator(); o.type = "sine";
+  o.frequency.setValueAtTime(110, t0);
+  o.frequency.exponentialRampToValueAtTime(55, t0 + dur);
+  const f = a.createBiquadFilter(); f.type = "lowpass"; f.frequency.value = 300;
+  const g = a.createGain();
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(0.18, t0 + 0.6);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+  o.connect(f); f.connect(g); g.connect(a.destination);
+  o.start(t0); o.stop(t0 + dur + 0.05);
+}

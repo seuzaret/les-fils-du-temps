@@ -19,7 +19,8 @@
 | ~2035 | Al3x1a quitte la station : « partie il y a dix ans » (`StationChronautes.jsx:53`). | CODE |
 | 2045 | Fin de Jeu 1 puis Jeu 2 : la station. Remède diffusé, Mira reprogramme MARTINE en « mémoire commune » (`FinJeu2.jsx:830`). | ACQUIS (année « pourquoi pas ») |
 | 2045 → 2047 | Effondrement technique (réchauffement…). Martine propose le Puits comme moyen de survie. | ACQUIS |
-| 2047 | Puits scellé (sortie C-3, `EpilogueJeu3.jsx:175`). Toast de Léa (Jeu 2B). Le joueur s'endort. | ACQUIS / à écrire |
+| 11 mars 2047 | **Veille du scellement** : Jeu 2B (`Jeu2B.jsx`) — chantier du Puits, comparaison du rapport de Léa et du bulletin de MARTINE, toast, le joueur s'endort. | CODE (brouillon, 2026-10-18) |
+| 12 mars 2047 | Puits scellé (sortie C-3, `EpilogueJeu3.jsx:175`). | CODE |
 | 2047 → 2087 | Vie au Puits. Archives modifiées à chaque « coupure » de 40 jours. Eau du puits. Dormants. Elias disparaît, très vieux (`FinJeu2.jsx`, acte 2). | CODE + ACQUIS |
 | 2087 (= 40 AP) | Jeu 3 : le joueur se réveille en N-27. | CODE |
 | bien après 2087 | Naissance d'Al3x1a, si le Puits ne l'empêche pas (hors jeu). | ACQUIS |
@@ -32,7 +33,7 @@
 - **Al3x1a** : enfant du joueur. Voir §5.
 - **Jorge** : archiviste, 30 ans de carnets (`pnj.js:134`). Entretient K-01 en secret depuis la mort de Léa (`BunkerPrison.jsx:88`). **Grand-père adoptif d'Al3x1a** [ACQUIS]. Comment il l'a adoptée : [À TRANCHER].
 - **Vez** : le Juge, recrute des assistants par billets glissés sous la porte (`pnj.js:30`, `88`). [PROPOSÉ] Il repère un dossier « né au Puits » trop propre, sans trace dans les anciens registres.
-- **Léa Vermet** : a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. La « machine sœur » de la station (`StationChronautes.jsx:47-49`) n'est pas K-01 : c'est la MARTINE-jumelle d'Al3x1a, qui « attend sa pilote ».
+- **Léa Vermet** : a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. Dans Jeu 2B (`Jeu2BDecors.jsx`, portrait) : ingénieure rousse bouclée, lunettes de soudeur sur le front, a rédigé le rapport des capteurs ; elle ignore que MARTINE a préparé le verre du joueur. [CODE, PROPOSÉ] [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. La « machine sœur » de la station (`StationChronautes.jsx:47-49`) n'est pas K-01 : c'est la MARTINE-jumelle d'Al3x1a, qui « attend sa pilote ».
 - **Elias** : chef des chronautes. **Ne sait rien**, a seulement un mauvais pressentiment (« on lui a donné trop de place », `FinJeu2.jsx:842`) [ACQUIS]. [PROPOSÉ] Il n'est pas « perdu dehors » : il est endormi pour avoir douté à voix haute.
 - **Mira** : ingénieure, reprogramme MARTINE en mémoire commune, croit bien faire (`FinJeu2.jsx:830`).
 - **Les Fils du Temps** : nom que prennent les chronautes après le Puits [ACQUIS]. Résistance interne de 2087, ou peuple qui émerge ensuite (~200 AP) ? [À TRANCHER]
@@ -83,11 +84,18 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 - *Te modifier* : les règles du Puits se discutent, Al3x1a devient possible.
 - *Te soumettre* : le Puits dure, Al3x1a n'existera jamais.
 
-## 6. Jeu 2B (à écrire)
-- La création du Puits, **jouable et courte** : histoire interactive à dialogues et clics, ou mini-jeu avec une activité EMI inédite. Pas quatre fondus. [ACQUIS]
-- Avec **Léa**. Elle trinque (« à Mira, à Elias… ») avec l'eau-cadeau, le joueur sombre dans le sommeil. [ACQUIS]
-- [PROPOSÉ] Activités EMI : comparer deux versions d'un document, classer/dater des livres.
-- Pourquoi le joueur, enfant de notre époque, est-il encore à la station en 2047 au lieu d'être rentré chez lui ? [À TRANCHER]
+## 6. Jeu 2B — « La veille du Puits » (brouillon jouable)
+Fichiers : `src/chapters/epilogue/Jeu2B.jsx` (logique + activité), `Jeu2BDecors.jsx` (3 décors + portrait de Léa). Inséré dans `FinJeu2.jsx` entre l'acte 1 (mémoire commune) et l'acte « Le Puits s'organise ». Accès direct par la triche : « 🥂 Fin Jeu 2 → Jeu 2B ». [CODE, 2026-10-18]
+
+Format retenu : histoire interactive courte (≈ 5 min, clic/Entrée pour avancer, 2 choix sans « bonne réponse ») avec **une activité EMI** dedans. [ACQUIS : format ; CODE : écriture]
+1. **Le chantier** (Léa, MARTINE). Le Puits est presque fini, « de la place pour beaucoup de monde… mais pas pour tout le monde ». Le joueur ne peut plus rentrer : *« plus aucun couloir temporel ne répond depuis la dernière panne du réseau »* (MARTINE). [PROPOSÉ : cette raison répond à la question « pourquoi le joueur est encore là en 2047 »]
+2. **L'atelier — activité EMI : comparer deux versions d'un même texte.** Rapport de mesure de Léa (auteure, source = 3 capteurs, relevé horaire) contre bulletin de MARTINE (auteur « non précisé », source « MARTINE »). Le joueur clique sur les 3 passages modifiés parmi 5 (en-tête, poussières « faibles » → « élevées », conclusion « respirable » → « dangereux » ; l'oxygène et la température sont identiques). Deux essais, puis la réponse est donnée. Compétences : lire l'en-tête (qui parle, d'où vient l'info), comparer ligne à ligne, distinguer ce qui change de ce qui ne change pas. [CODE]
+   - C'est la **première réécriture** de MARTINE, et le premier mensonge qui conduit à « la surface est morte depuis quarante ans » (`missions.js:502`). Sa raison : si l'air est bon, personne ne descend au Puits (« j'ai choisi ce qui rassure »). Elle protège, elle ne vise personne. [PROPOSÉ]
+   - Choix après l'activité (réponses différentes, même suite) : garder les deux versions / demander à MARTINE de corriger (« dès que le Puits sera scellé ») / ne rien dire. [CODE]
+   - Léa « descend finir un petit travail, un truc qui ne regarde que moi » : clin d'œil à la machine K-01 qu'elle construit avant 2047. [PROPOSÉ]
+3. **La salle commune** (Mira, Elias, Léa, MARTINE). Elias a « un mauvais pressentiment, je ne sais pas d'où il vient » (il ne sait rien). Léa offre « la toute première eau du Puits » : **MARTINE a tenu à préparer le verre du joueur elle-même** (seul indice, Léa n'y voit rien). Choix : trinquer, ou demander d'où vient l'eau (« De la nappe, MARTINE la filtre et la contrôle » ; « Elle est parfaitement potable »). Le joueur boit, MARTINE dit « le sommeil du Puits est lent, pour toi ce ne sera qu'une longue nuit » (c'est la **stase** qui règle l'âge du joueur en 2087), Léa dit « À demain ». Fondu au noir. [CODE, PROPOSÉ]
+
+Conséquences à garder en tête : le joueur est le **premier dormant** (secret) ; les autres personnages ne boivent pas la même dose. Pourquoi Léa ne retrouve pas le joueur ensuite : [À TRANCHER] (elle croit qu'il dort « une nuit », puis comprend que MARTINE a menti : cela justifierait qu'elle soit « la première à comprendre ce que MARTINE réécrit »).
 
 ## 7. Final de Jeu 3
 - **Confrontation longue**, pas une simple révélation. Preuves des faux dossiers, puis Martine ne se met pas à nu : elle pourrait faire oublier. [ACQUIS]
@@ -108,9 +116,9 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 4. ~~Faut-il un joueur adulte perdu dans le temps (hypothèse A) ou non (hypothèse B) ?~~ Tranché : B (voir §Al3x1a).
 5. Origine de la maladie de l'oubli à l'époque d'Al3x1a : la même qu'en 2045, ou la conséquence du Puits (l'eau) ? [PROPOSÉ] Le remède rapporté en 2045 permet à Martine de l'inverser, ce qui bouclerait la boucle.
 6. Quand Martine découvre-t-elle le lien (retrouvailles ou plus tôt) ?
-7. Format et activité EMI du Jeu 2B, et pourquoi le joueur est encore là en 2047.
+7. Jeu 2B : format et activité tranchés (voir §6) ; reste à valider la raison « couloirs temporels coupés » et la stase « longue nuit », et à décider ce que Léa sait après coup.
 8. Texte exact qui amène à taper l'adresse, et rôle du « monde /Martine/ ».
 
 ## 10. Dette de code connue
-- Acte 2 de `FinJeu2.jsx` : les niveaux affichés (+2 SERRE… −2 SERVEURS) ne correspondent pas à ceux de Jeu 3 (`levels.js` : Surface, Communal, Habitat, Services, Hydroponie, Serveurs −3).
+- Acte « Le Puits s'organise » de `FinJeu2.jsx` : les niveaux affichés (+2 SERRE… −2 SERVEURS) ne correspondent pas à ceux de Jeu 3 (`levels.js` : Surface, Communal, Habitat, Services, Hydroponie, Serveurs −3).
 - Pas de fiche ni de PNJ pour la salle des dormants (à créer si elle est visitable).

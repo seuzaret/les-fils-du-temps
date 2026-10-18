@@ -207,7 +207,7 @@ function PortraitAl3x1ACadre({ mood = "neutre" }) {
       {/* légère cicatrice fine sur la joue (souvenir de voyage) */}
       <path d="M124 92 l4 8" stroke="#8a5828" strokeWidth="0.6" opacity="0.6" />
       {/* légende sous le portrait */}
-      <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2277</text>
+      <text x="100" y="235" textAnchor="middle" fontSize="9" fontFamily="ui-monospace,monospace" letterSpacing="1.5" fill="#8a7860">AL3X1A · DISPARUE 2035</text>
     </svg>
   );
 }
@@ -216,7 +216,7 @@ const PORTRAITS = { elias: PortraitElias, mira: PortraitMira, camille: PortraitA
 
 /* Export : la portrait d'Elias est réutilisée dans l'écran ÉPILOGUE
    pour son ultime question sur le support à choisir. */
-export { PortraitElias };
+export { PortraitElias, PortraitMira };
 const NAMES = { elias: "Elias", mira: "Mira", camille: "Portrait d'Al3x1A" };
 
 /* -------------------- DÉCOR DE LA STATION -------------------- */
@@ -389,7 +389,7 @@ function DecorStation({ onClickPerso, done }) {
         <path d="M-4 -10 L-8 4 L-2 -2 L2 -2 L8 4 L4 -10" fill="#1a1408" stroke="#0a0806" strokeWidth="0.5" />
         {/* plaque gravée */}
         <rect x="-24" y="6" width="48" height="10" fill="#c8b8a0" stroke="#5a4028" strokeWidth="0.5" />
-        <text x="0" y="14" textAnchor="middle" fontSize="6" fontFamily="Georgia, serif" fontWeight="700" fill="#3a2818">AL3X1A · 2277</text>
+        <text x="0" y="14" textAnchor="middle" fontSize="6" fontFamily="Georgia, serif" fontWeight="700" fill="#3a2818">AL3X1A · 2035</text>
       </g>
 
       {/* Câbles pendants du plafond (côté désaffecté) */}
