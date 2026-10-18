@@ -31,8 +31,40 @@ export default function SceneBibliotheque({ collect, action, reveal, made = [] }
       <rect width="1000" height="560" fill="#6a4a2a" opacity="0.14" filter="url(#bi-grain)" />
       <rect y="392" width="1000" height="168" fill="url(#bi-floor)" />
       <rect y="392" width="1000" height="168" fill="#3c2c18" opacity="0.26" filter="url(#bi-grain)" />
-      <path d="M0 392 h1000" stroke="#5a4026" strokeWidth="3" opacity="0.5" />
-      {[...Array(14)].map((_, i) => <path key={i} d={`M${40 + i * 74} 392 L${20 + i * 84} 560`} stroke="#5a4026" strokeWidth="1" opacity="0.25" />)}
+      {/* décor peint à la romaine : soubassement rouge à panneaux, frise, corniche */}
+      <rect x="-40" y="300" width="1080" height="92" fill="#8a2a20" />
+      {Array.from({ length: 9 }).map((_, i) => (
+        <g key={i}>
+          <rect x={i * 120 - 30} y="312" width="96" height="68" fill="none" stroke="#e8c86a" strokeWidth="1.6" opacity="0.7" />
+          <path d={`M${i * 120 + 18} 330 q-8 10 0 20 q8 10 0 20`} stroke="#2a1a14" strokeWidth="1.6" fill="none" opacity="0.5" />
+        </g>
+      ))}
+      <rect x="-40" y="296" width="1080" height="6" fill="#2a1a14" />
+      <rect x="-40" y="0" width="1080" height="44" fill="#9a7a50" />
+      <rect x="-40" y="40" width="1080" height="8" fill="#6a4a2a" />
+      {Array.from({ length: 50 }).map((_, i) => <rect key={i} x={i * 22 - 40} y="44" width="10" height="8" fill="#6a4a2a" />)}
+      {Array.from({ length: 7 }).map((_, i) => <rect key={`b${i}`} x={i * 170 - 30} y="0" width="26" height="40" fill="#6a4a2a" />)}
+      {/* colonnes peintes en trompe-l'œil qui rythment le mur */}
+      {[340, 690].map((x) => (
+        <g key={x}>
+          <rect x={x - 10} y="60" width="20" height="236" fill="#e8dcc0" />
+          <rect x={x + 2} y="60" width="8" height="236" fill="#b8a888" />
+          <rect x={x - 14} y="54" width="28" height="10" fill="#d8c8a8" />
+          <rect x={x - 14} y="290" width="28" height="8" fill="#d8c8a8" />
+        </g>
+      ))}
+      {/* sol : dallage de marbre bicolore en perspective */}
+      {[[392, 404], [404, 420], [420, 442], [442, 472], [472, 512], [512, 566]].map(([y0, y1], r) => (
+        Array.from({ length: 22 }).map((_, c) => {
+          if ((c + r) % 2) return null;
+          const X = (k, y) => 500 + (k * 56 - 616) * (1 + (y - 392) / 130);
+          return <path key={`${r}-${c}`} d={`M${X(c, y0).toFixed(1)} ${y0} L${X(c + 1, y0).toFixed(1)} ${y0} L${X(c + 1, y1).toFixed(1)} ${y1} L${X(c, y1).toFixed(1)} ${y1} Z`} fill="#e8dcc0" opacity="0.35" />;
+        })
+      ))}
+      <path d="M-40 392 h1080" stroke="#5a4026" strokeWidth="3" opacity="0.5" />
+      {/* la lumière de la fenêtre tombe en biais sur le sol */}
+      <path d="M726 268 L906 268 L840 560 L560 560 Z" fill="#fff0c8" opacity="0.1" filter="url(#bi-blur)" />
+      <ellipse cx="740" cy="470" rx="150" ry="30" fill="#fff0c8" opacity="0.14" filter="url(#bi-blur)" />
 
       {/* ═══ LA FENÊTRE (droite) : le soleil, le Vésuve et 3 maisons ═══ */}
       <g transform="translate(730,96)">
@@ -49,7 +81,9 @@ export default function SceneBibliotheque({ collect, action, reveal, made = [] }
           <path d="M-4 96 h168" stroke="#cfe0da" strokeWidth="1.4" opacity="0.5" />
           {/* le VÉSUVE qui fume, au centre */}
           <g transform="translate(108,96)">
-            <path d="M-56 0 L-16 -62 Q0 -72 16 -62 L56 0 Z" fill="#63634a" />
+            <path d="M-60 0 Q-34 -30 -16 -60 Q0 -70 16 -60 Q34 -30 60 0 Z" fill="#63634a" />
+            <path d="M0 -66 Q20 -40 60 0 L20 0 Q14 -30 0 -66 Z" fill="#4a4a38" opacity="0.6" />
+            <path d="M-60 0 Q-40 -18 -24 -26 Q-6 -20 10 -22 Q36 -14 60 0 Z" fill="#5a7a40" opacity="0.85" />
             <path d="M-16 -62 Q0 -72 16 -62 L9 -55 Q0 -62 -9 -55 Z" fill="#454534" />
             <ellipse cx="0" cy="-62" rx="8" ry="2.6" fill="#e0762e" opacity="0.6" style={{ animation: "pulse 3.2s ease-in-out infinite" }} />
             <path d="M0 -66 q-8 -18 6 -30 q-10 4 -4 -18" stroke="#c8bcae" strokeWidth="6" fill="none" opacity="0.4" style={{ animation: "drift 7s ease-in-out infinite" }} filter="url(#bi-blur)" />
