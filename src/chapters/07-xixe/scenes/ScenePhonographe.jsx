@@ -22,6 +22,9 @@ export default function ScenePhonographe({ action, reveal, made = [], queteQui }
         <linearGradient id="ph-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#5a3820" /><stop offset="100%" stopColor="#2a1608" /></linearGradient>
         <linearGradient id="ph-table" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a5a30" /><stop offset="100%" stopColor="#4a2c14" /></linearGradient>
         <radialGradient id="ph-lamp" cx="50%" cy="0%" r="80%"><stop offset="0%" stopColor="#ffe8b0" stopOpacity="0.6" /><stop offset="100%" stopColor="#ffe8b0" stopOpacity="0" /></radialGradient>
+        <filter id="ph-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7" /></filter>
+        <linearGradient id="ph-marble" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#e8e0d4" /><stop offset="100%" stopColor="#a89a8a" /></linearGradient>
+        <linearGradient id="ph-drape" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#3a1a14" /><stop offset="50%" stopColor="#6a2a1e" /><stop offset="100%" stopColor="#3a1a14" /></linearGradient>
         <filter id="ph-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.4 0" result="a" />
@@ -32,15 +35,73 @@ export default function ScenePhonographe({ action, reveal, made = [], queteQui }
       {/* ═══ mur tapissé de bordeaux (papier peint Belle Époque) ═══ */}
       <rect width="1000" height="440" fill="url(#ph-wall)" />
       <rect width="1000" height="440" fill="#2a1808" opacity="0.15" filter="url(#ph-grain)" />
-      <g fill="#3a1c10" opacity="0.5">
-        {[80, 200, 320, 440, 560, 680, 800, 920].map((x, i) =>
-          [60, 160, 260, 360].map((y, j) => (
-            <path key={`${i}-${j}`} d={`M${x} ${y} l6 -8 l6 8 l-6 8 Z m0 0 l-6 -8 l-6 8 l6 8 Z`} />
-          ))
+      {/* motif de damas, en quinconce */}
+      <g fill="#3a1c10" opacity="0.42">
+        {Array.from({ length: 13 }).map((_, i) =>
+          Array.from({ length: 5 }).map((_, j) => {
+            const x = i * 80 + (j % 2) * 40 + 20, y = 100 + j * 60;
+            return <path key={`${i}-${j}`} d={`M${x} ${y - 16} q10 8 0 16 q-10 -8 0 -16 Z M${x - 12} ${y + 4} q12 -2 12 8 q-12 2 -12 -8 Z M${x + 12} ${y + 4} q-12 -2 -12 8 q12 2 12 -8 Z M${x - 1} ${y + 10} h2 v8 h-2 Z`} />;
+          })
         )}
       </g>
+      {/* frise haute et cimaise */}
+      <rect width="1000" height="60" fill="#3a1a10" opacity="0.6" />
+      <rect y="58" width="1000" height="6" fill="#8a5a32" />
+      <rect y="64" width="1000" height="2" fill="#2a1208" />
       <path d="M0 340 h1000" stroke="#2a1808" strokeWidth="4" />
+      {/* lambris d'acajou, panneaux moulurés */}
       <rect y="340" width="1000" height="60" fill="#3a2010" />
+      <rect y="336" width="1000" height="6" fill="#6a4020" />
+      {Array.from({ length: 11 }).map((_, i) => <rect key={i} x={i * 94 + 8} y="350" width="80" height="40" fill="none" stroke="#24120a" strokeWidth="2" />)}
+      {Array.from({ length: 11 }).map((_, i) => <path key={`h${i}`} d={`M${i * 94 + 9} 351 h78`} stroke="#7a4a28" strokeWidth="1" opacity="0.5" />)}
+
+      {/* LA CHEMINÉE de marbre : feu, pendule et chandeliers sur le manteau */}
+      <g transform="translate(150,400)">
+        <circle cx="0" cy="-50" r="70" fill="#ff9a4a" opacity="0.18" filter="url(#ph-blur)" style={{ animation: "glow 2.2s ease-in-out infinite" }} />
+        <rect x="-86" y="-118" width="172" height="12" fill="url(#ph-marble)" />
+        <rect x="-80" y="-106" width="22" height="106" fill="url(#ph-marble)" />
+        <rect x="58" y="-106" width="22" height="106" fill="url(#ph-marble)" />
+        <rect x="-58" y="-106" width="116" height="16" fill="url(#ph-marble)" />
+        <path d="M-58 0 L-58 -76 Q0 -100 58 -76 L58 0 Z" fill="#140806" />
+        <path d="M-30 0 q4 -26 14 -30 q-2 14 10 18 q2 -20 14 -28 q4 18 16 26 q4 -8 10 -10 q0 14 -6 24 Z" fill="#ff8a3c" style={{ animation: "glow 1.4s ease-in-out infinite" }} />
+        <path d="M-16 0 q4 -14 10 -16 q2 8 8 10 q2 -10 8 -14 q2 10 6 20 Z" fill="#ffe08a" />
+        <rect x="-36" y="-6" width="72" height="6" fill="#2a1a10" />
+        <rect x="-92" y="0" width="184" height="8" fill="#8a7e70" />
+        {/* pendule de cheminée */}
+        <g transform="translate(0,-118)">
+          <path d="M-18 0 L-18 -26 Q0 -40 18 -26 L18 0 Z" fill="#c8a040" />
+          <circle cx="0" cy="-18" r="8" fill="#f0e6d0" stroke="#7a5a20" strokeWidth="1.4" />
+          <path d="M0 -18 v-5 M0 -18 l4 2" stroke="#2a1a10" strokeWidth="1" />
+        </g>
+        {[-60, 60].map((x) => (
+          <g key={x} transform={`translate(${x},-118)`}>
+            <path d="M-6 0 h12 l-3 -6 h-6 Z M-1.5 -6 v-14" stroke="#c8a040" strokeWidth="2" fill="#c8a040" />
+            <rect x="-2" y="-30" width="4" height="10" fill="#efe6d2" />
+            <path d="M0 -30 q-2 -4 0 -7 q2 3 0 7 Z" fill="#ffd08a" />
+          </g>
+        ))}
+      </g>
+
+      {/* LA FENÊTRE à lourds rideaux : en face, une maison de grès brun, un
+          bec de gaz dans la rue du soir */}
+      <g transform="translate(900,190)">
+        <rect x="-60" y="-110" width="120" height="200" fill="#1a2238" />
+        <rect x="-60" y="-110" width="120" height="200" fill="#3a3040" opacity="0.4" />
+        <rect x="-60" y="-50" width="120" height="140" fill="#5a3a2c" />
+        {[[-44, -36], [-10, -36], [24, -36], [-44, 16], [-10, 16], [24, 16]].map(([x, y], i) => (
+          <rect key={i} x={x} y={y} width="18" height="30" fill={i % 3 === 1 ? "#ffd88a" : "#2a1a14"} opacity={i % 3 === 1 ? 0.8 : 1} />
+        ))}
+        <circle cx="-30" cy="70" r="18" fill="#ffe0a0" opacity="0.4" filter="url(#ph-blur)" />
+        <path d="M-30 90 v-26" stroke="#1a1410" strokeWidth="2.4" /><rect x="-34" y="60" width="8" height="10" fill="#ffe0a0" />
+        <path d="M-60 -110 h120 M0 -110 v200 M-60 -10 h120" stroke="#2a1a10" strokeWidth="5" />
+        <rect x="-60" y="-110" width="120" height="200" fill="none" stroke="#2a1a10" strokeWidth="8" />
+        {/* rideaux de velours retenus par des embrasses, cantonnière */}
+        <path d="M-80 -124 L-40 -124 Q-30 -20 -54 30 Q-44 70 -60 110 L-84 110 Z" fill="url(#ph-drape)" />
+        <path d="M80 -124 L40 -124 Q30 -20 54 30 Q44 70 60 110 L84 110 Z" fill="url(#ph-drape)" />
+        <path d="M-58 26 q8 8 16 0 M58 26 q-8 8 -16 0" stroke="#c8a040" strokeWidth="3" fill="none" />
+        <path d="M-90 -130 h180 v16 Q60 -96 0 -110 Q-60 -96 -90 -114 Z" fill="#5a1e16" />
+        <path d="M-90 -130 h180" stroke="#c8a040" strokeWidth="3" />
+      </g>
 
       {/* Un CADRE au mur : le daguerréotype de James JEUNE (héritage narratif du T2) */}
       <g transform="translate(120,120)">
@@ -58,8 +119,18 @@ export default function ScenePhonographe({ action, reveal, made = [], queteQui }
       {/* ═══ le sol parqueté ═══ */}
       <PLayer depth={2}>
         <path d="M0 560 L0 400 L1000 400 L1000 560 Z" fill="url(#ph-floor)" />
-        {[420, 460, 500, 540].map((y, i) => <path key={i} d={`M0 ${y} h1000`} stroke="#1a0c04" strokeWidth="1" opacity="0.5" />)}
-        {[200, 400, 600, 800].map((x, i) => <path key={i} d={`M${x} 400 v160`} stroke="#1a0c04" strokeWidth="1" opacity="0.4" />)}
+        {Array.from({ length: 24 }).map((_, i) => {
+          const x = -180 + i * 60;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.6).toFixed(0)} 400 L${x} 560`} stroke="#1a0c04" strokeWidth="1.2" opacity="0.45" />;
+        })}
+        <rect y="398" width="1000" height="5" fill="#1a0c04" />
+        {/* le tapis d'Orient sous la table */}
+        <path d="M290 424 L710 424 L800 548 L200 548 Z" fill="#6a1e16" />
+        <path d="M304 430 L696 430 L776 542 L224 542 Z" fill="none" stroke="#c8a040" strokeWidth="3" opacity="0.7" />
+        <path d="M322 438 L678 438 L748 534 L252 534 Z" fill="#2a2a4a" opacity="0.5" />
+        <path d="M342 446 L658 446 L722 526 L278 526 Z" fill="#8a2a1e" />
+        {Array.from({ length: 7 }).map((_, i) => <path key={i} d={`M${420 + i * 26} 470 l13 -12 l13 12 l-13 12 Z`} fill="#c8a040" opacity="0.4" />)}
+        {Array.from({ length: 30 }).map((_, i) => <path key={`f${i}`} d={`M${200 + i * 20.7} 548 v6`} stroke="#d8c8a0" strokeWidth="1.4" opacity="0.6" />)}
       </PLayer>
 
       {/* ═══ premier plan : la TABLE + LE PHONOGRAPHE + James âgé + son fils ═══ */}
