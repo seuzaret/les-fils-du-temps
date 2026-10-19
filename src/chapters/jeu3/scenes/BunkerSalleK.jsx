@@ -15,6 +15,7 @@
    ============================================================ */
 import { useState, useEffect, useMemo, useRef } from "react";
 import INVENTIONS from "../../../engine/inventions-meta.json";
+import { PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    Petits sons générés en Web Audio — pas de fichiers externes.
@@ -429,7 +430,34 @@ function SalleKDecor({ lit, tableauOuvert, portalOnline, onSwitch, digits, onBum
       {/* Mur et sol */}
       <rect width="1000" height="520" fill="url(#sk-wall)" />
       <rect width="1000" height="340" fill="url(#sk-brick)" opacity="0.5" />
+      {/* salpêtre et coulures d'humidité sur la brique, plâtre qui s'écaille */}
+      {lit && (
+        <g>
+          {[[300, 70, 70], [610, 60, 90], [960, 90, 60], [40, 70, 50]].map(([x, y, h], i) => (
+            <path key={`hu${i}`} d={`M${x} ${y} q-6 ${h * 0.5} 2 ${h} q6 ${h * 0.4} -2 ${h * 0.8}`} stroke="#3a2a1a" strokeWidth={8 + i * 2} strokeLinecap="round" opacity="0.25" fill="none" />
+          ))}
+          {[[640, 300, 60, 24], [30, 320, 40, 20]].map(([x, y, w, h], i) => (
+            <ellipse key={`sp${i}`} cx={x} cy={y} rx={w} ry={h} fill="#c8c0a8" opacity="0.08" />
+          ))}
+          <path d="M688 96 l40 -6 l12 22 l-30 14 l-24 -10 Z" fill="#8a7a5a" opacity="0.35" />
+        </g>
+      )}
       <rect y="380" width="1000" height="140" fill="url(#sk-floor)" />
+      {/* carrelage en perspective, sous une épaisse couche de poussière */}
+      <PerspFloor y0={380} y1={520} step={80} rows={4} joint="#000000" opacity={lit ? 0.45 : 0.2} />
+      {lit && (
+        <g>
+          {Array.from({ length: 140 }).map((_, i) => (
+            <circle key={`du${i}`} cx={(i * 131) % 1000} cy={386 + ((i * 53) % 130)} r={0.8 + (i % 3) * 0.5} fill="#b8a888" opacity="0.18" />
+          ))}
+          <ellipse cx="500" cy="440" rx="460" ry="60" fill="#a89878" opacity="0.06" />
+        </g>
+      )}
+      {/* TES traces de pas dans la poussière : de la porte jusqu'au milieu de la pièce */}
+      {Array.from({ length: 11 }).map((_, i) => {
+        const t = i / 10, x = 900 - t * 520, y = 470 - t * 50 + (i % 2) * 8;
+        return <ellipse key={`fp${i}`} cx={x} cy={y} rx={7 - t * 2} ry={3 - t} fill={lit ? "#0e0804" : "#050302"} opacity={lit ? 0.45 : 0.25} transform={`rotate(-8 ${x} ${y})`} />;
+      })}
       <rect y="376" width="1000" height="8" fill={lit ? "#1a1008" : "#030202"} />
 
       {/* Plafond, poutres, tuyaux */}
@@ -467,6 +495,51 @@ function SalleKDecor({ lit, tableauOuvert, portalOnline, onSwitch, digits, onBum
       <Cobweb cx="18" cy="42" r={60} lit={lit} />
       <Cobweb cx="982" cy="42" r={70} lit={lit} />
       <Cobweb cx="18" cy="520" r={48} lit={lit} />
+
+      {/* cône de lumière de l'ampoule, plein de poussière */}
+      {lit && <path d="M488 118 L512 118 L640 400 L360 400 Z" fill="#ffd870" opacity="0.06" />}
+
+      {/* étagère murale : classeurs « PROTOCOLE K », sous la poussière */}
+      <g transform="translate(772,150)">
+        <rect x="-80" y="128" width="160" height="6" fill={lit ? "#5a3818" : "#060402"} />
+        <path d="M-70 134 l10 14 M70 134 l-10 14" stroke={lit ? "#3a2010" : "#030202"} strokeWidth="3" />
+        {/* classeurs */}
+        {Array.from({ length: 8 }).map((_, k) => (
+          <g key={k}>
+            <rect x={-74 + k * 19} y={86} width="16" height="42" fill={lit ? ["#5a2a18", "#2a3a4a", "#4a4a2a", "#3a2a3a"][k % 4] : "#050403"} />
+            <rect x={-71 + k * 19} y={96} width="10" height="14" fill={lit ? "#d8cca8" : "#0a0806"} opacity="0.8" />
+          </g>
+        ))}
+        {lit && <text x="0" y="142" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#8a7050" letterSpacing="2">PROTOCOLE K · 2041–2047</text>}
+        {/* la poussière accumulée sur les dessus */}
+        {lit && <path d="M-74 86 h150" stroke="#b8a888" strokeWidth="2" opacity="0.35" />}
+      </g>
+      {/* horloge arrêtée et calendrier jamais tourné : mars 2047 */}
+      <g transform="translate(282,96)">
+        <circle r="18" fill={lit ? "#e8dfc8" : "#0a0806"} stroke={lit ? "#5a3818" : "#060402"} strokeWidth="3" />
+        <path d="M0 0 L-6 -10 M0 0 L10 2" stroke={lit ? "#1a0e08" : "#030202"} strokeWidth="1.8" strokeLinecap="round" />
+        {lit && <path d="M-12 -6 L10 8" stroke="#5a4028" strokeWidth="0.8" opacity="0.7" />}
+      </g>
+      <g transform="translate(286,170)">
+        <rect x="-24" y="-16" width="48" height="56" fill={lit ? "#efe6d2" : "#0a0806"} />
+        <rect x="-24" y="-16" width="48" height="14" fill={lit ? "#8a1a1a" : "#060404"} />
+        {lit && <text x="0" y="-6" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="800" fill="#f0e8d0">MARS 2047</text>}
+        {lit && Array.from({ length: 20 }).map((_, k) => <rect key={k} x={-20 + (k % 5) * 8.5} y={2 + Math.floor(k / 5) * 8} width="6" height="5" fill="#a8a088" opacity="0.6" />)}
+        {lit && <circle cx="-3.3" cy="12.5" r="5.5" fill="none" stroke="#c81010" strokeWidth="1.2" />}
+      </g>
+      {/* une chaise renversée et des feuillets éparpillés au sol */}
+      <g transform="translate(430,452)">
+        {/* dossier à plat sur le sol, assise dressée, pieds en l'air */}
+        <path d="M-30 0 L10 -4 L14 4 L-26 8 Z" fill={lit ? "#5a3818" : "#060402"} />
+        <path d="M-26 -2 L-24 -30 L14 -34 L12 -6" fill="none" stroke={lit ? "#3a2010" : "#060402"} strokeWidth="5" strokeLinejoin="round" />
+        <path d="M-24 -30 L-40 -44 M14 -34 L4 -50" stroke={lit ? "#3a2010" : "#060402"} strokeWidth="4" strokeLinecap="round" />
+      </g>
+      {lit && [[560, 420, -12], [600, 436, 18], [640, 414, 6], [520, 452, -24], [690, 446, 30]].map(([x, y, a], i) => (
+        <g key={`pa${i}`} transform={`translate(${x},${y}) rotate(${a})`}>
+          <rect x="-12" y="-8" width="24" height="16" fill="#d8ccb0" opacity="0.8" />
+          <path d="M-8 -3 h16 M-8 1 h12 M-8 5 h14" stroke="#7a6a50" strokeWidth="0.6" />
+        </g>
+      ))}
 
       {/* ═══ PORTAIL TEMPOREL — gauche ═══ */}
       <PortailArche lit={lit} portalOnline={portalOnline} onClick={onPortalClick} />
@@ -574,6 +647,8 @@ function SalleKDecor({ lit, tableauOuvert, portalOnline, onSwitch, digits, onBum
           </circle>
         </g>
       ))}
+
+      <Vignette id="sk-vig" strength={lit ? 0.5 : 0.7} />
 
       {/* Plaque K-01 */}
       {lit && (
