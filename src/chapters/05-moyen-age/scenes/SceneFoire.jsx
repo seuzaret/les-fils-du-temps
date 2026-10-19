@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Bust, Figure } from "../../../engine/chars.jsx";
+import { Clouds, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau adjacent : LA FOIRE AUX LIVRES DE
@@ -28,11 +29,10 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
       <PLayer depth={5}>
         <rect width="1000" height="360" fill="url(#fo-sky)" />
         {/* nuages */}
-        <ellipse cx="200" cy="70" rx="100" ry="7" fill="#f0e0c0" opacity="0.55" />
-        <ellipse cx="560" cy="90" rx="120" ry="8" fill="#f0e0c0" opacity="0.5" />
-        <ellipse cx="820" cy="60" rx="80" ry="6" fill="#f0e0c0" opacity="0.5" />
+        <Clouds id="fo-cl" seed={91} items={[[200, 70, 200], [560, 90, 240], [840, 60, 160]]} color="#fbf4e4" shadow="#d0c8b8" opacity="0.75" drift={16} />
         {/* collines lointaines vertes */}
-        <path d="M0 360 L0 260 Q200 240 400 250 Q600 260 800 245 L1000 250 L1000 360 Z" fill="#5a6a48" opacity="0.6" />
+        <Ridge id="fo-r0" seed={93} y={262} amp={44} rough={0.5} fill="#7a8a68" lit="#98a47a" light={-1} />
+        <TreeLine seed={95} y={290} n={40} h={[12, 22]} kinds={["leafy", "conifer"]} colors={["#4a5a34", "#56663a"]} light={-1} jitter={12} />
 
         {/* SKYLINE MEDIEVALE : silhouette continue de toits, murailles et
             un clocher — remplit l'horizon a la place du vide. */}
@@ -131,6 +131,26 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
             <path d="M0 -14 L40 22 L34 26 L-4 -10 Z" fill="#e0c088" stroke="#5a3818" strokeWidth="0.6" />
           </g>
         </g>
+        {/* LA PLACE DU MARCHÉ : elle part du pied de la muraille et vient jusqu'à nous */}
+        <rect x="-40" y="356" width="1080" height="210" fill="url(#fo-sol)" />
+        <rect x="-40" y="356" width="1080" height="14" fill="#5a4630" opacity="0.6" />
+        {/* pavés ronds en perspective : rangées de plus en plus grandes */}
+        {Array.from({ length: 11 }).map((_, r) => {
+          const y = 364 + r * r * 1.8 + r * 6, k = 0.4 + r * 0.16;
+          return Array.from({ length: Math.ceil(1080 / (22 * k)) }).map((_, c) => (
+            <ellipse key={`${r}-${c}`} cx={(-40 + c * 22 * k + (r % 2) * 11 * k).toFixed(1)} cy={y.toFixed(1)} rx={(9 * k).toFixed(1)} ry={(3.4 * k).toFixed(1)} fill={(r + c) % 3 ? "#8a7454" : "#9a8460"} stroke="#4a3820" strokeWidth={(0.6 * k).toFixed(2)} opacity="0.8" />
+          ));
+        })}
+        <Speckle seed={281} x0={0} x1={1000} y0={360} y1={560} n={220} colors={["#3a2814", "#c8b088", "#5a4630"]} opacity={0.4} />
+        {/* étals lointains, contre la muraille */}
+        {[[60, 352, "#a83a2a"], [300, 350, "#3a6a8a"], [470, 352, "#c8a040"], [640, 350, "#5a7a3a"], [870, 352, "#a83a2a"]].map(([x, y, c], i) => (
+          <g key={i}>
+            <path d={`M${x - 34} ${y - 26} L${x + 34} ${y - 26} L${x + 28} ${y - 38} L${x - 28} ${y - 38} Z`} fill={c} />
+            {[-24, -8, 8, 24].map((dx) => <path key={dx} d={`M${x + dx} ${y - 26} l2 -12`} stroke="#f0e8d0" strokeWidth="3" opacity="0.5" />)}
+            <rect x={x - 30} y={y - 26} width="3" height="26" fill="#5a3818" /><rect x={x + 27} y={y - 26} width="3" height="26" fill="#5a3818" />
+            <rect x={x - 30} y={y - 10} width="60" height="6" fill="#7a5230" />
+          </g>
+        ))}
       </PLayer>
 
       <PLayer depth={4}>
@@ -189,14 +209,6 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
       </PLayer>
 
       <PLayer depth={2}>
-        {/* sol de terre battue */}
-        <rect y="440" width="1000" height="120" fill="url(#fo-sol)" />
-        {/* pavés */}
-        {Array.from({ length: 24 }).map((_, i) => {
-          const x = (i * 45) % 1000;
-          const y = 440 + Math.floor(i / 20) * 60;
-          return <path key={i} d={`M${x} ${y} l40 0 l-4 22 l-36 0 z`} fill="none" stroke="#3a2010" strokeWidth="0.4" opacity="0.4" />;
-        })}
         {/* petits pavés supplémentaires */}
         {[[500, 490], [700, 500], [900, 510]].map(([x, y], i) => (
           <ellipse key={i} cx={x} cy={y} rx="6" ry="2" fill="#5a4028" opacity="0.6" />
