@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau adjacent : LA PLACE DU BOURG
@@ -29,11 +30,14 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
 
       <PLayer depth={5}>
         {/* nuages */}
-        <ellipse cx="240" cy="80" rx="90" ry="7" fill="#f0e0c0" opacity="0.55" />
-        <ellipse cx="620" cy="110" rx="110" ry="8" fill="#f0e0c0" opacity="0.5" />
+        <Clouds id="bg-cl" seed={97} items={[[240, 80, 200], [620, 106, 240], [900, 70, 140]]} color="#fbf4e4" shadow="#d0c8b8" opacity="0.75" drift={16} />
         {/* ═══ REMPART + VILLE MÉDIÉVALE en silhouette au fond ═══ */}
         {/* rempart avec créneaux qui traverse toute la scène */}
         <rect x="0" y="240" width="1000" height="100" fill="#8a7860" opacity="0.75" />
+        {Array.from({ length: 6 }).map((_, r) => Array.from({ length: 26 }).map((_, c) => (
+          <rect key={`${r}-${c}`} x={c * 40 + (r % 2) * 20 - 20} y={244 + r * 16} width="40" height="16" fill="none" stroke="#5a4a38" strokeWidth="0.8" opacity="0.4" />
+        )))}
+        <rect x="0" y="240" width="1000" height="4" fill="#a89878" opacity="0.6" />
         {/* créneaux au sommet du rempart */}
         {Array.from({ length: 25 }).map((_, i) => (
           <rect key={i} x={i * 40} y="232" width="20" height="12" fill="#8a7860" opacity="0.75" />
@@ -96,6 +100,20 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
           <path d="M-12 30 L-4 30 L-4 50 Q-8 54 -12 50 Z M12 30 L4 30 L4 50 Q8 54 12 50 Z" fill="#2a1810" />
           <circle cx="0" cy="80" r="8" fill="#2a1810" stroke="#8a6828" strokeWidth="1" />
         </g>
+        {/* la rue pavée qui part du rempart et vient jusqu'à nous (pavés en perspective) */}
+        <rect x="-40" y="338" width="1080" height="230" fill="url(#bg-sol)" />
+        <rect x="-40" y="338" width="1080" height="10" fill="#5a4630" opacity="0.55" />
+        {Array.from({ length: 13 }).map((_, r) => {
+          const y = 346 + r * r * 1.15 + r * 6, k = 0.36 + r * 0.13;
+          return Array.from({ length: Math.ceil(1080 / (22 * k)) }).map((_, c) => (
+            <ellipse key={`${r}-${c}`} cx={(-40 + c * 22 * k + (r % 2) * 11 * k).toFixed(1)} cy={y.toFixed(1)} rx={(9 * k).toFixed(1)} ry={(3.4 * k).toFixed(1)} fill={(r + c) % 3 ? "#8a7454" : "#9a8460"} stroke="#4a3820" strokeWidth={(0.6 * k).toFixed(2)} opacity="0.8" />
+          ));
+        })}
+        <Speckle seed={291} x0={0} x1={1000} y0={342} y1={560} n={220} colors={["#3a2814", "#c8b088", "#5a4630"]} opacity={0.4} />
+        {/* ombres au pied des maisons */}
+        {[[160, 402, 120], [500, 382, 80], [860, 402, 110]].map(([x, y, w]) => <ellipse key={x} cx={x + 14} cy={y} rx={w} ry="9" fill="#2a1c10" opacity="0.35" />)}
+        {/* le caniveau central, légèrement creusé */}
+        <path d="M500 340 Q505 450 520 568" stroke="#3a2c1c" strokeWidth="6" fill="none" opacity="0.35" />
       </PLayer>
 
       <PLayer depth={4}>
@@ -162,14 +180,6 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
       </PLayer>
 
       <PLayer depth={3}>
-        {/* SOL empierré */}
-        <rect y="440" width="1000" height="120" fill="url(#bg-sol)" />
-        {/* pavés inégaux */}
-        {Array.from({ length: 30 }).map((_, i) => {
-          const x = (i * 35) % 1000;
-          const y = 440 + Math.floor(i / 20) * 60;
-          return <path key={i} d={`M${x} ${y} l30 0 l-3 20 l-27 0 z`} fill="none" stroke="#3a2010" strokeWidth="0.4" opacity="0.5" />;
-        })}
         {/* PUITS au centre */}
         <g transform="translate(500,470)">
           <ellipse cx="0" cy="34" rx="30" ry="4" fill="#0a0604" opacity="0.55" />
