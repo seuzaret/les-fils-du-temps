@@ -1,5 +1,6 @@
 import PnjRoom from "../PnjRoom.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    Cantine (niveau +1) — grande salle commune.
@@ -26,7 +27,9 @@ export default function BunkerCantine({ onGo, j3 }) {
       </defs>
       {/* Mur du fond + sol carrelé en perspective */}
       <rect width="1000" height="520" fill="url(#cnt-wall)" />
+      <ConcretePanels y0={60} y1={380} seed={60} opacity={1} />
       <rect y="380" width="1000" height="140" fill="url(#cnt-floor)" />
+      <PerspFloor y0={380} y1={520} step={80} rows={4} opacity={0.4} />
       {/* Ligne de fuite du sol */}
       <path d="M0 380 L1000 380" stroke="#2a1808" strokeWidth="1" />
       {[80, 220, 400, 600, 780, 920].map((x, i) => (
@@ -37,6 +40,7 @@ export default function BunkerCantine({ onGo, j3 }) {
 
       {/* Plafond avec poutres structurelles */}
       <rect x="0" y="0" width="1000" height="60" fill="#1a1a10" />
+      <CeilingPipes y={30} seed={65} />
       {[200, 500, 800].map((x, i) => (
         <g key={i}>
           <rect x={x - 6} y="60" width="12" height="30" fill="#2a1810" />
@@ -198,6 +202,7 @@ export default function BunkerCantine({ onGo, j3 }) {
           <text x="0" y="29" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="4" fill="#5a4028">10 kg</text>
         </g>
       ))}
+      <Vignette id="cantine-vig" strength={0.45} />
     </>
   );
   return <PnjRoom titre="🍲 CANTINE COMMUNE — NIVEAU +1" bg={bg} pnjList={PNJ_ROOMS.cantine} j3={j3} onGo={onGo} />;

@@ -1,3 +1,4 @@
+import { ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
 /* ============================================================
    JEU 3 — Couloir du niveau +1 (Communal) — v2 cyberpunk
    ------------------------------------------------------------
@@ -24,6 +25,7 @@ export default function BunkerHubHaut({ onGo }) {
         </linearGradient>
       </defs>
       <rect width="900" height="460" fill="url(#hh-wall)" />
+      <ConcretePanels x0={0} x1={900} y0={56} y1={360} w={112} seed={43} stain="#4a3010" />
 
       {/* Tuyauteries plafond (grosse dorée + secondaires) */}
       <path d="M0 24 L900 24" stroke="#c8a848" strokeWidth="8" opacity="0.9" />
@@ -51,6 +53,7 @@ export default function BunkerHubHaut({ onGo }) {
       ))}
       {/* Sol carrelé */}
       <rect y="360" width="900" height="100" fill="url(#hh-floor)" />
+      <g transform="translate(-50,0)"><PerspFloor y0={360} y1={460} step={70} rows={3} opacity={0.45} /></g>
       {[0, 100, 200, 400, 500, 700, 800].map((x) => (
         <path key={x} d={`M${x} 360 L${x - 40} 460`} stroke="#3a2818" strokeWidth="1" opacity="0.55" />
       ))}

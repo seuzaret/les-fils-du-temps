@@ -1,5 +1,6 @@
 import PnjRoom from "../PnjRoom.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    Serres hydroponiques (niveau -2) — production alimentaire.
@@ -34,7 +35,9 @@ export default function BunkerSerres({ onGo, j3 }) {
         </linearGradient>
       </defs>
       <rect width="1000" height="520" fill="url(#sr-wall)" />
+      <ConcretePanels y0={50} y1={380} seed={79} opacity={0.6} />
       <rect y="380" width="1000" height="140" fill="url(#sr-floor)" />
+      <PerspFloor y0={380} y1={520} step={80} rows={4} opacity={0.4} />
       <path d="M0 380 L1000 380" stroke="#050a08" strokeWidth="1" />
       {/* Perspective sol : dalles béton avec joints humides */}
       {[80, 240, 500, 760, 920].map((x, i) => (
@@ -44,6 +47,7 @@ export default function BunkerSerres({ onGo, j3 }) {
 
       {/* PLAFOND — tuyauterie d'eau + condensation */}
       <rect x="0" y="0" width="1000" height="50" fill="#0a1810" />
+      <CeilingPipes y={22} seed={84} />
       <path d="M0 20 L1000 20" stroke="#3a80c8" strokeWidth="5" opacity="0.85" />
       <path d="M0 30 L1000 30" stroke="#5a6270" strokeWidth="2" opacity="0.7" />
       <path d="M0 38 L1000 38" stroke="#5eff9e" strokeWidth="1" opacity="0.55" />
@@ -187,6 +191,7 @@ export default function BunkerSerres({ onGo, j3 }) {
       </g>
 
       <style>{`@keyframes srHoist { 0% { transform: translate(0,80px); } 100% { transform: translate(0,-40px); } }`}</style>
+      <Vignette id="serres-vig" strength={0.45} />
     </>
   );
   return <PnjRoom titre="🌱 SERRES HYDROPONIQUES — NIVEAU -2" bg={bg} pnjList={PNJ_ROOMS.serres} j3={j3} onGo={onGo} />;

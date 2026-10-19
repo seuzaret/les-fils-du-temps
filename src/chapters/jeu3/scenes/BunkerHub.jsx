@@ -1,3 +1,4 @@
+import { ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
 /* ============================================================
    JEU 3 — Couloir du niveau 0 (Habitat) — v2 : 4 chambres
    ------------------------------------------------------------
@@ -29,6 +30,7 @@ export default function BunkerHub({ onGo, j3 }) {
         </linearGradient>
       </defs>
       <rect width="1200" height="480" fill="url(#hb0-wall)" />
+      <ConcretePanels x0={0} x1={1200} y0={50} y1={370} w={120} seed={41} />
 
       {/* PLAFOND CYBERPUNK : plusieurs tubes + câbles */}
       <path d="M0 22 L1200 22" stroke="#3a4048" strokeWidth="6" opacity="0.85" />
@@ -91,6 +93,7 @@ export default function BunkerHub({ onGo, j3 }) {
 
       {/* Sol */}
       <rect y="370" width="1200" height="110" fill="url(#hb0-floor)" />
+      <g transform="translate(100,0)"><PerspFloor y0={370} y1={480} step={90} rows={3} opacity={0.4} /></g>
       {/* Plinthe */}
       <rect y="366" width="1200" height="8" fill="#141c26" stroke="#0a0e14" strokeWidth="0.5" />
       <path d="M0 390 L1200 390" stroke="#1a2028" strokeWidth="1" />

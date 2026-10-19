@@ -1,5 +1,6 @@
 import PnjRoom from "../PnjRoom.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    Chapelle des Anciens (niveau +1) — grande nef sous voûtes.
@@ -30,7 +31,9 @@ export default function BunkerChapelle({ onGo, j3 }) {
         </linearGradient>
       </defs>
       <rect width="1000" height="520" fill="url(#chp-wall)" />
+      <ConcretePanels y0={40} y1={380} seed={55} opacity={0.5} />
       <rect y="380" width="1000" height="140" fill="url(#chp-floor)" />
+      <PerspFloor y0={380} y1={520} step={80} rows={4} opacity={0.4} />
 
       {/* PLAFOND VOÛTÉ (courbes qui suggèrent une nef gothique) */}
       <path d="M0 0 Q500 100 1000 0 L1000 60 Q500 130 0 60 Z" fill="#1a1008" />
@@ -119,6 +122,7 @@ export default function BunkerChapelle({ onGo, j3 }) {
           </path>
         </g>
       ))}
+      <Vignette id="chapelle-vig" strength={0.45} />
     </>
   );
   return <PnjRoom titre="✧ CHAPELLE DES ANCIENS — NIVEAU +1" bg={bg} pnjList={PNJ_ROOMS.chapelle} j3={j3} onGo={onGo} />;

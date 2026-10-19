@@ -1,5 +1,6 @@
 import PnjRoom from "../PnjRoom.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    Atelier des Ingénieurs (niveau -1) — grande halle technique.
@@ -25,7 +26,9 @@ export default function BunkerAtelier({ onGo, j3 }) {
         </radialGradient>
       </defs>
       <rect width="1000" height="520" fill="url(#atl-wall)" />
+      <ConcretePanels y0={50} y1={380} seed={64} opacity={1} />
       <rect y="380" width="1000" height="140" fill="url(#atl-floor)" />
+      <PerspFloor y0={380} y1={520} step={80} rows={4} opacity={0.4} />
       <path d="M0 380 L1000 380" stroke="#0a0604" strokeWidth="1" />
       {/* Sol : dalles métalliques diamantées suggérées */}
       {[100, 220, 380, 500, 620, 780, 900].map((x, i) => (
@@ -34,6 +37,7 @@ export default function BunkerAtelier({ onGo, j3 }) {
       <path d="M0 440 L1000 440" stroke="#0a0604" strokeWidth="0.7" opacity="0.55" />
       {/* Plafond avec poutres apparentes */}
       <rect x="0" y="0" width="1000" height="50" fill="#1a1408" />
+      <CeilingPipes y={22} seed={69} />
       <path d="M0 50 L1000 50" stroke="#3a2010" strokeWidth="2" />
       {[100, 400, 700].map((x, i) => (
         <g key={i}>
@@ -156,6 +160,7 @@ export default function BunkerAtelier({ onGo, j3 }) {
         @keyframes atlSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }
         @keyframes atlSparkFlick { 0% { opacity: 1; } 50% { opacity: 0.15; } 100% { opacity: 1; } }
       `}</style>
+      <Vignette id="atelier-vig" strength={0.45} />
     </>
   );
   return <PnjRoom titre="⚙ ATELIER DES INGÉNIEURS — NIVEAU -1" bg={bg} pnjList={PNJ_ROOMS.atelier} j3={j3} onGo={onGo} />;

@@ -1,5 +1,6 @@
 import PnjRoom from "../PnjRoom.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
+import { CeilingPipes, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    Infirmerie (niveau -1) — carrelage clair, ambiance froide.
@@ -21,8 +22,16 @@ export default function BunkerInfirmerie({ onGo, j3 }) {
         </linearGradient>
       </defs>
       <rect width="1000" height="520" fill="url(#inf-wall)" />
+      {/* faïence murale : carreaux blancs à joints gris, frise verte à mi-hauteur */}
+      <g opacity="0.5">
+        {Array.from({ length: 41 }).map((_, i) => <path key={`fv${i}`} d={`M${i * 25} 60 V380`} stroke="#8a94a4" strokeWidth="0.7" />)}
+        {Array.from({ length: 13 }).map((_, i) => <path key={`fh${i}`} d={`M0 ${60 + i * 25} H1000`} stroke="#8a94a4" strokeWidth="0.7" />)}
+      </g>
+      <rect y="250" width="1000" height="10" fill="#3a8a6a" opacity="0.55" />
+      <rect y="260" width="1000" height="120" fill="#c8d4dc" opacity="0.08" />
       {/* Plafond */}
       <rect x="0" y="0" width="1000" height="60" fill="#3a4048" />
+      <CeilingPipes y={34} seed={17} tint="#6a7482" />
       {/* Néons blancs alignés */}
       {[200, 500, 800].map((x, i) => (
         <rect key={i} x={x - 40} y="20" width="80" height="10" rx="2" fill="#e8eef5" opacity="0.85" />
@@ -191,6 +200,7 @@ export default function BunkerInfirmerie({ onGo, j3 }) {
         <rect x="-30" y="0" width="60" height="18" fill="#141c26" stroke="#5eff9e" strokeWidth="0.6" />
         <text x="0" y="12" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="800" fill="#5eff9e" letterSpacing="2">SILENCE</text>
       </g>
+      <Vignette id="inf-vig" strength={0.35} />
     </>
   );
   return <PnjRoom titre="⚕ INFIRMERIE — SECTEUR B" bg={bg} pnjList={PNJ_ROOMS.infirmerie} j3={j3} onGo={onGo} />;

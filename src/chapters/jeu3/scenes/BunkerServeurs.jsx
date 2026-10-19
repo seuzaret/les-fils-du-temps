@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { CONFRONTATION } from "../missions.js";
+import { ConcretePanels } from "../bunkerKit.jsx";
 
 /* ============================================================
    JEU 3 — SCÈNE : « Salle des serveurs de MARTINE » (finale)
@@ -74,7 +75,36 @@ export default function BunkerServeurs({ prenom, j3 }) {
         </radialGradient>
       </defs>
       <rect width="800" height="380" fill="url(#sv-wall)" />
+      <ConcretePanels x0={0} x1={800} y0={30} y1={330} w={100} seed={77} joint="#03060a" bolt="#1a2430" stain="#0a1a14" opacity={0.7} />
+      {/* plafond : chemins de câbles */}
+      <rect width="800" height="30" fill="#04070c" />
+      {[10, 20].map((y) => <rect key={y} x="0" y={y} width="800" height="5" fill="#1a2430" />)}
+      {/* au fond, d'autres rangées de baies qui se perdent dans le noir */}
+      {[300, 330, 440, 470].map((x, i) => (
+        <g key={`far${i}`} opacity="0.6">
+          <rect x={x} y="110" width="26" height="170" fill="#0c121a" stroke="#05080c" strokeWidth="1" />
+          {Array.from({ length: 10 }).map((_, k) => <circle key={k} cx={x + 7 + (k % 2) * 12} cy={122 + Math.floor(k / 2) * 30} r="1.4" fill={k % 3 ? "#5eff9e" : "#ffb04a"} opacity="0.7" />)}
+        </g>
+      ))}
+      {/* les câbles de TOUTES les baies convergent vers MARTINE */}
+      {[110, 230, 570, 690, 40, 760].map((x, i) => (
+        <path key={`cv${i}`} d={`M${x} 34 Q${(x + 400) / 2} ${70 + (i % 3) * 14} 400 108`} stroke={["#1a2a1e", "#22302a", "#14241a"][i % 3]} strokeWidth={5 - (i % 2) * 2} fill="none" />
+      ))}
+      {[0, 1, 2, 3, 4].map((i) => (
+        <circle key={`pk${i}`} r="2.2" fill="#5eff9e" opacity="0.8">
+          <animateMotion dur={`${2.4 + i * 0.5}s`} repeatCount="indefinite" path={`M${[110, 230, 570, 690, 40][i]} 34 Q${([110, 230, 570, 690, 40][i] + 400) / 2} ${70 + (i % 3) * 14} 400 108`} />
+        </circle>
+      ))}
       <rect y="330" width="800" height="50" fill="#050810" />
+      {/* caillebotis du sol, reflets verts, brume froide */}
+      {Array.from({ length: 18 }).map((_, i) => { const x = -200 + i * 70; return <path key={`gr${i}`} d={`M${(400 + (x - 400) * 0.6).toFixed(0)} 330 L${x} 380`} stroke="#14202a" strokeWidth="1" />; })}
+      {[342, 358].map((y) => <path key={y} d={`M0 ${y} H800`} stroke="#14202a" strokeWidth="1" />)}
+      <ellipse cx="400" cy="350" rx="200" ry="14" fill="#5eff9e" opacity="0.1" />
+      {[0, 1].map((i) => (
+        <ellipse key={`fg${i}`} cx={300 + i * 200} cy="336" rx="220" ry="14" fill="#a8d8e8" opacity="0.06">
+          <animate attributeName="cx" values={`${300 + i * 200};${340 + i * 160};${300 + i * 200}`} dur={`${14 + i * 4}s`} repeatCount="indefinite" />
+        </ellipse>
+      ))}
       {/* Baies de serveurs en perspective */}
       {[
         { x: 60, w: 100, h: 240 },
@@ -93,6 +123,17 @@ export default function BunkerServeurs({ prenom, j3 }) {
           {/* Panneaux étroits */}
           {[120, 160, 200].map((y) => (
             <rect key={y} x="4" y={y} width={b.w - 8} height="4" fill="#3a4048" />
+          ))}
+          {/* rails, unités de serveurs et voyants ambre */}
+          <rect x="2" y="2" width="4" height={b.h - 4} fill="#2a3440" /><rect x={b.w - 6} y="2" width="4" height={b.h - 4} fill="#2a3440" />
+          {Array.from({ length: 9 }).map((_, k) => (
+            <g key={`u${k}`}>
+              <rect x="8" y={84 + k * 17} width={b.w - 16} height="13" rx="1.5" fill="#0e151e" stroke="#26303c" strokeWidth="0.8" />
+              <circle cx={b.w - 16} cy={90 + k * 17} r="1.6" fill={(k + i) % 4 ? "#5eff9e" : "#ffb04a"}>
+                <animate attributeName="opacity" values="1;0.2;1" dur={`${0.6 + ((k * 7 + i) % 5) * 0.3}s`} repeatCount="indefinite" />
+              </circle>
+              <path d={`M14 ${90 + k * 17} h${b.w - 44}`} stroke="#1a2430" strokeWidth="3" />
+            </g>
           ))}
         </g>
       ))}

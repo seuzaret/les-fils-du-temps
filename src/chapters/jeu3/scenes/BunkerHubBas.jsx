@@ -1,4 +1,5 @@
 import { getMissionOrder } from "../missions.js";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    JEU 3 — Couloir du niveau -1 (Services) — v2 cyberpunk
@@ -61,6 +62,7 @@ export default function BunkerHubBas({ onGo, j3 }) {
         </linearGradient>
       </defs>
       <rect width="1000" height="460" fill="url(#hb-wall)" />
+      <ConcretePanels y0={40} y1={366} seed={16} opacity={1} />
 
       {/* PLAFOND CYBERPUNK : câbles bundlés, tuyauterie, néons */}
       <path d="M0 16 L1000 16" stroke="#3a4048" strokeWidth="6" opacity="0.85" />
@@ -121,6 +123,7 @@ export default function BunkerHubBas({ onGo, j3 }) {
 
       {/* Sol technique */}
       <rect y="370" width="1000" height="90" fill="url(#hb-floor)" />
+      <PerspFloor y0={370} y1={460} step={80} rows={4} opacity={0.4} />
       {/* Plinthe */}
       <rect y="366" width="1000" height="8" fill="#28303a" stroke="#0a0e14" strokeWidth="0.5" />
       {/* Grille de sol technique */}

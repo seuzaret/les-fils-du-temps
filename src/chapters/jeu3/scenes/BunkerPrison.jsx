@@ -10,6 +10,7 @@
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import BigDialogue from "../BigDialogue.jsx";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 const JORGE_STYLE = {
   color: "#5a4028", pants: "#28303a", hair: "#8a8070", skin: "#c8a888",
@@ -137,10 +138,13 @@ export default function BunkerPrison({ onGo, j3 }) {
           </radialGradient>
         </defs>
         <rect width="1000" height="520" fill="url(#pr-wall)" />
+        <ConcretePanels y0={40} y1={380} seed={86} opacity={1} />
         <rect y="380" width="1000" height="140" fill="url(#pr-floor)" />
+        <PerspFloor y0={380} y1={520} step={80} rows={4} opacity={0.4} />
 
         {/* Plafond : rails et néons verts clignotants */}
         <rect y="0" width="1000" height="40" fill="#0a0e14" />
+        <CeilingPipes y={12} seed={91} />
         {[150, 500, 850].map((x, i) => (
           <g key={i}>
             <rect x={x - 40} y="20" width="80" height="4" fill="#8aff9e" opacity="0.7">

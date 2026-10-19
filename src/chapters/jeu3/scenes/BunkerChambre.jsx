@@ -1,6 +1,7 @@
 import { useState } from "react";
 import MediadexPanel from "../MediadexPanel.jsx";
 import TchatinePanel from "../TchatinePanel.jsx";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 /* ============================================================
    JEU 3 — SCÈNE : « Ma chambre » (N-27)
@@ -49,10 +50,13 @@ export default function BunkerChambre({ onGo, j3 }) {
         </defs>
         {/* Murs + plafond + sol en perspective */}
         <rect width="1000" height="520" fill="url(#bc-wall)" />
+        <ConcretePanels y0={70} y1={400} seed={44} opacity={1} />
         <rect x="0" y="0" width="1000" height="70" fill="#1a1e26" />
+        <CeilingPipes y={40} seed={49} />
         <rect x="340" y="24" width="320" height="14" rx="3" fill="#e8eef5" opacity="0.85" />
         <ellipse cx="500" cy="42" rx="260" ry="200" fill="url(#bc-light)" />
         <rect x="0" y="400" width="1000" height="120" fill="url(#bc-floor)" />
+        <PerspFloor y0={400} y1={520} step={80} rows={4} opacity={0.4} />
         <path d="M0 400 L1000 400" stroke="#3a4048" strokeWidth="1" />
         {[80, 200, 380, 620, 800, 920].map((x) => (
           <path key={x} d={`M${x} 400 L${x + (x - 500) * 0.13} 520`} stroke="#0a0e14" strokeWidth="1" opacity="0.6" />

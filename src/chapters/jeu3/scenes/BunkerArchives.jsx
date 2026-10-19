@@ -11,6 +11,7 @@
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import ArchivistQuest from "../archives/ArchivistQuest.jsx";
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 
 export default function BunkerArchives({ onGo, j3 }) {
   const mission = j3.missions.appel;
@@ -65,9 +66,12 @@ export default function BunkerArchives({ onGo, j3 }) {
         </defs>
         {/* Murs + sol */}
         <rect width="1000" height="520" fill="url(#ar-wall)" />
+        <ConcretePanels y0={60} y1={380} seed={78} opacity={1} />
         <rect y="380" width="1000" height="140" fill="url(#ar-floor)" />
+        <PerspFloor y0={380} y1={520} step={80} rows={4} opacity={0.4} />
         {/* Plafond avec caillebotis technique */}
         <rect x="0" y="0" width="1000" height="60" fill="#0a0e14" />
+        <CeilingPipes y={30} seed={83} />
         {[0, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720, 780, 840, 900, 960].map((x) => (
           <line key={x} x1={x} y1="0" x2={x} y2="60" stroke="#141c26" strokeWidth="1" />
         ))}

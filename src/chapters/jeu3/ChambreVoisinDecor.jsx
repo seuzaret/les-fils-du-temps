@@ -6,6 +6,8 @@
    objets particuliers (extras) et sa couleur d'accent.
    Utilisé comme `bg` dans PnjRoom.
    ============================================================ */
+import { CeilingPipes, ConcretePanels, PerspFloor, Vignette, WallVent } from "./bunkerKit.jsx";
+
 export default function ChambreVoisinDecor({ num, accent = "#7fd8ff", extras = null, litColor = "#5a3018", bureauColor = "#5a4028" }) {
   return (
     <>
@@ -25,9 +27,16 @@ export default function ChambreVoisinDecor({ num, accent = "#7fd8ff", extras = n
       </defs>
       {/* Mur + sol + plafond */}
       <rect width="1000" height="520" fill={`url(#cv-wall-${num})`} />
+      <ConcretePanels y0={30} y1={400} seed={parseInt(String(num).replace(/\D/g, ""), 10) || 7} />
       <rect y="0" width="1000" height="30" fill="#141820" />
+      <CeilingPipes y={6} seed={(parseInt(String(num).replace(/\D/g, ""), 10) || 7) + 3} />
+      <WallVent x={740} y={70} w={60} h={36} />
       <rect y="400" width="1000" height="120" fill={`url(#cv-floor-${num})`} />
+      <PerspFloor y0={400} step={70} rows={4} joint="#0a0604" opacity={0.45} />
+      <rect y="394" width="1000" height="8" fill="#141820" />
       <path d="M0 400 L1000 400" stroke="#0a0806" strokeWidth="1" />
+      {/* lumière de la lampe de bureau posée sur le sol */}
+      <ellipse cx="560" cy="430" rx="160" ry="22" fill={accent} opacity="0.08" />
       {/* Bandeau plafond + néon */}
       <rect x="380" y="26" width="220" height="8" rx="2" fill={accent} opacity="0.55" />
       <circle cx="490" cy="70" r="140" fill={`url(#cv-lamp-${num})`} />
@@ -126,6 +135,7 @@ export default function ChambreVoisinDecor({ num, accent = "#7fd8ff", extras = n
       </g>
 
       {extras}
+      <Vignette id={`cv-vig-${num}`} strength={0.45} />
     </>
   );
 }
