@@ -26,6 +26,7 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
         <linearGradient id="en-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6a604a" /><stop offset="100%" stopColor="#2c281c" /></linearGradient>
         <linearGradient id="en-baie" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#4a4438" /><stop offset="50%" stopColor="#332e26" /><stop offset="100%" stopColor="#221e18" /></linearGradient>
         <radialGradient id="en-tube" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffd870" stopOpacity="1" /><stop offset="100%" stopColor="#ffa848" stopOpacity="0" /></radialGradient>
+        <filter id="en-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" /></filter>
         <radialGradient id="en-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffdb6a" stopOpacity="0.4" /><stop offset="100%" stopColor="#ffdb6a" stopOpacity="0" /></radialGradient>
       </defs>
 
@@ -34,7 +35,38 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
         <rect width="1000" height="560" fill="url(#en-wall)" />
         {allume && <rect width="1000" height="440" fill="url(#en-glow)" opacity="0.9" />}
         {/* fenêtres hautes avec store — atmosphère bureau militaire américain */}
-        {[100, 500].map((x, i) => (
+        {/* plafond : tubes fluorescents (nouveauté des années 40) et gaine de ventilation */}
+        <rect x="-40" y="-10" width="1080" height="22" fill="#1e1a14" />
+        {[150, 400, 650, 900].map((x) => (
+          <g key={x}>
+            <path d={`M${x - 50} 12 v6 M${x + 50} 12 v6`} stroke="#141210" strokeWidth="1.4" />
+            <rect x={x - 60} y="18" width="120" height="7" rx="3" fill="#e8f0e8" />
+            <ellipse cx={x} cy="30" rx="90" ry="16" fill="#e8f4e0" opacity="0.16" filter="url(#en-blur)" />
+          </g>
+        ))}
+        <rect x="-40" y="112" width="1080" height="16" fill="#3a362c" />
+        <rect x="-40" y="112" width="1080" height="3" fill="#5a5444" />
+        {[60, 200, 340, 660, 800].map((x) => <rect key={x} x={x + 30} y="126" width="40" height="8" fill="#2a2620" />)}
+        {/* plaque de l'Ordnance Department */}
+        <g transform="translate(330,74)">
+          <rect x="-74" y="-16" width="148" height="32" fill="#2a2418" stroke="#8a7a50" strokeWidth="1.4" />
+          <text x="0" y="-3" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7.5" fill="#d8c890" letterSpacing="0.6">U.S. ARMY ORDNANCE</text>
+          <text x="0" y="9" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6.5" fill="#a89870" letterSpacing="0.4">MOORE SCHOOL · 1946</text>
+        </g>
+        {/* au fond, dans l'angle du « U » : la suite des panneaux, plus loin */}
+        <g>
+          <rect x="440" y="196" width="200" height="190" fill="#1a1712" />
+          {Array.from({ length: 6 }).map((_, k) => (
+            <g key={k}>
+              <rect x={446 + k * 32} y="204" width="28" height="170" fill="#2a261e" stroke="#0a0806" strokeWidth="1" />
+              {Array.from({ length: 7 }).map((_, r) => [0, 1].map((c) => (
+                <rect key={`${r}-${c}`} x={450 + k * 32 + c * 12} y={212 + r * 20} width="8" height="13" rx="1.5" fill={allume && (r + c + k) % 3 ? "#ffb848" : "#3a3428"} opacity="0.85" />
+              )))}
+            </g>
+          ))}
+          <rect x="440" y="196" width="200" height="190" fill="#0a0806" opacity="0.35" />
+        </g>
+        {[100, 700].map((x, i) => (
           <g key={i}>
             <rect x={x} y="40" width="140" height="60" fill="#8a9098" opacity="0.6" />
             {[45, 55, 65, 75, 85].map((y, j) => (
@@ -71,6 +103,20 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
                 </g>
               );
             }))}
+            {/* bandeau de néons (affichage de l'accumulateur) */}
+            <rect x={x + 6} y="144" width="108" height="10" fill="#141210" />
+            {Array.from({ length: 10 }).map((_, k) => (
+              <circle key={`n${k}`} cx={x + 12 + k * 10.6} cy="149" r="2.2" fill={allume && (k + i) % 3 !== 1 ? "#ff7a4a" : "#3a2a20"}>
+                {allume && k % 2 === 0 && <animate attributeName="opacity" values="1;0.3;1" dur={`${0.6 + ((k + i) % 4) * 0.25}s`} repeatCount="indefinite" />}
+              </circle>
+            ))}
+            {/* commutateurs rotatifs */}
+            {[0, 1, 2, 3].map((k) => (
+              <g key={`k${k}`} transform={`translate(${x + 22 + k * 25},368)`}>
+                <circle r="6" fill="#1a1712" stroke="#6a6250" strokeWidth="1" />
+                <path d={`M0 0 L${[4, -3, 0, 5][k]} ${[-4, -5, -6, 2][k]}`} stroke="#d8d0b0" strokeWidth="1.6" strokeLinecap="round" />
+              </g>
+            ))}
             {/* petite étiquette panneau */}
             <rect x={x + 20} y="380" width="80" height="14" fill="#0a0806" />
             <text x={x + 60} y="390" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#ffcf78">PANEL {String.fromCharCode(65 + i)}</text>
@@ -88,6 +134,14 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
           </g>
         ))}
 
+        {/* les gros faisceaux de câbles qui courent d'une baie à l'autre */}
+        {[[40, 440], [640, 900]].map(([a, b], i) => (
+          <g key={i}>
+            <path d={`M${a} 136 H${b}`} stroke="#141210" strokeWidth="9" />
+            <path d={`M${a} 134 H${b}`} stroke="#3a362c" strokeWidth="2" />
+            {Array.from({ length: Math.floor((b - a) / 40) }).map((_, k) => <path key={k} d={`M${a + 20 + k * 40} 131 v10`} stroke="#5a5444" strokeWidth="2" />)}
+          </g>
+        ))}
         {/* FENTE-lecteur de fiches sur la baie de gauche (PANEL A) : quand
             les fiches sont chargees, une pile de cartes perforees depasse. */}
         <g transform="translate(100,300)">
@@ -149,6 +203,18 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
       {/* ═══ sol + tables + plugboard ═══ */}
       <PLayer depth={2.5}>
         <rect y="440" width="1000" height="120" fill="url(#en-floor)" />
+        {/* dalles de linoléum en damier, en perspective */}
+        {Array.from({ length: 5 }).map((_, r) => {
+          const y0 = 440 + r * r * 3.2 + r * 10, y1 = 440 + (r + 1) * (r + 1) * 3.2 + (r + 1) * 10;
+          return Array.from({ length: 16 }).map((_, c) => {
+            const xa = -300 + c * 100, xb = xa + 100;
+            const k0 = 0.62 + (y0 - 440) / 300, k1 = 0.62 + (y1 - 440) / 300;
+            const X = (x, k) => (500 + (x - 500) * k).toFixed(1);
+            return (r + c) % 2 ? <path key={`${r}-${c}`} d={`M${X(xa, k0)} ${y0} L${X(xb, k0)} ${y0} L${X(xb, k1)} ${y1} L${X(xa, k1)} ${y1} Z`} fill="#2a261c" opacity="0.5" /> : null;
+          });
+        })}
+        <rect y="438" width="1000" height="5" fill="#141210" />
+        {allume && <ellipse cx="300" cy="450" rx="320" ry="22" fill="#ffb848" opacity="0.14" filter="url(#en-blur)" />}
         {/* PLUGBOARD debout à gauche : grand tableau avec des trous et des câbles pendants */}
         <g transform="translate(490,300)">
           <rect x="-56" y="0" width="112" height="140" fill="#2a2418" stroke="#0a0806" strokeWidth="2" />
