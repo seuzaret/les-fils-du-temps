@@ -25,6 +25,7 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
         <linearGradient id="ci-curtain" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a1818" /><stop offset="100%" stopColor="#3a0808" /></linearGradient>
         <linearGradient id="ci-screen" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#efe9dc" /><stop offset="100%" stopColor="#b8b0a0" /></linearGradient>
         <radialGradient id="ci-beam" cx="90%" cy="100%" r="140%"><stop offset="0%" stopColor="#ffe8b0" stopOpacity="0.35" /><stop offset="100%" stopColor="#ffe8b0" stopOpacity="0" /></radialGradient>
+        <filter id="ci-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9" /></filter>
         <filter id="ci-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
@@ -35,7 +36,42 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
       {/* ═══ la salle obscure ═══ */}
       <rect width="1000" height="560" fill="url(#ci-wall)" />
       <rect width="1000" height="560" fill="#000" opacity="0.15" filter="url(#ci-grain)" />
+      {/* plafond de tôle emboutie, à caissons */}
+      <rect x="-40" y="-10" width="1080" height="50" fill="#1e1018" />
+      {Array.from({ length: 26 }).map((_, i) => (
+        <g key={i}>
+          <rect x={i * 40 - 18} y="4" width="34" height="28" fill="none" stroke="#3a2420" strokeWidth="1.4" />
+          <circle cx={i * 40 - 1} cy="18" r="4" fill="none" stroke="#3a2420" strokeWidth="1" />
+        </g>
+      ))}
       <path d="M0 40 h1000" stroke="#5a3010" strokeWidth="4" opacity="0.6" />
+      {/* pilastres et appliques électriques (ampoules à filament, en veilleuse) */}
+      {[34, 966].map((x) => (
+        <g key={x}>
+          <rect x={x - 22} y="40" width="44" height="420" fill="#24121a" />
+          <rect x={x - 22} y="40" width="5" height="420" fill="#3a2028" />
+          <rect x={x - 26} y="40" width="52" height="12" fill="#3a2028" />
+          <circle cx={x} cy="184" r="30" fill="#ffd08a" opacity="0.22" filter="url(#ci-blur)" />
+          <path d={`M${x} 196 v-14`} stroke="#a8801f" strokeWidth="2" />
+          <circle cx={x} cy="178" r="5" fill="#ffd08a" opacity="0.7" />
+          <path d={`M${x - 9} 196 q9 8 18 0`} stroke="#a8801f" strokeWidth="2" fill="none" />
+        </g>
+      ))}
+      {/* l'affiche du film, et la porte de sortie avec son « EXIT » rouge */}
+      <g transform="translate(118,270)">
+        <rect x="-38" y="-56" width="76" height="104" fill="#0a0406" />
+        <rect x="-34" y="-52" width="68" height="96" fill="#c8b48a" opacity="0.55" />
+        <text x="0" y="-36" textAnchor="middle" fontFamily="Georgia,serif" fontSize="8" fill="#3a0808" style={{ fontWeight: 700 }}>SAVED FROM</text>
+        <text x="0" y="-26" textAnchor="middle" fontFamily="Georgia,serif" fontSize="8" fill="#3a0808" style={{ fontWeight: 700 }}>THE TITANIC</text>
+        <path d="M-22 0 Q0 8 22 0 L16 8 L-16 8 Z M-14 0 v-8 M-4 0 v-10 M6 0 v-9" stroke="#2a1608" strokeWidth="2" fill="#2a1608" opacity="0.8" />
+        <path d="M-30 14 q15 -4 30 0 t30 0" stroke="#3a1808" strokeWidth="1.2" fill="none" opacity="0.6" />
+        <text x="0" y="34" textAnchor="middle" fontFamily="Georgia,serif" fontStyle="italic" fontSize="6.5" fill="#3a0808">with Miss Dorothy Gibson</text>
+      </g>
+      <g transform="translate(930,300)">
+        <rect x="-34" y="-30" width="68" height="44" fill="#0a0406" />
+        <text x="0" y="-4" textAnchor="middle" fontFamily="Georgia,serif" fontSize="18" fill="#c8a050" style={{ fontWeight: 700 }}>5¢</text>
+        <text x="0" y="8" textAnchor="middle" fontFamily="Georgia,serif" fontSize="6" fill="#c8a050" letterSpacing="1">ADMISSION</text>
+      </g>
       {[100, 300, 500, 700, 900].map((x, i) => (
         <g key={i} transform={`translate(${x},40)`}>
           <path d="M-20 0 q20 -30 40 0 Z" fill="#5a3010" opacity="0.6" />
@@ -96,8 +132,29 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
         <animate attributeName="opacity" values="0.7;0.9;0.75;0.85;0.7" dur="0.5s" repeatCount="indefinite" />
       </path>
 
+      {/* poussières qui dansent dans le faisceau */}
+      {Array.from({ length: 16 }).map((_, i) => {
+        const t = ((i * 37) % 100) / 100, x0 = 940 - t * 440 + ((i * 13) % 60) - 30, y0 = 500 - t * 270;
+        return (
+          <circle key={i} cx={x0} cy={y0} r={0.8 + (i % 3) * 0.4} fill="#fff4d0" opacity="0.5">
+            <animate attributeName="cy" values={`${y0};${y0 - 8};${y0}`} dur={`${5 + (i % 5)}s`} repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.1;0.6;0.1" dur={`${3 + (i % 4)}s`} repeatCount="indefinite" />
+          </circle>
+        );
+      })}
+
       {/* ═══ la SALLE : rangées de fauteuils (silhouettes en contre-jour) ═══ */}
       <PLayer depth={2}>
+        {/* le PIANISTE qui accompagne le film muet, sous l'écran */}
+        <g transform="translate(250,462)">
+          <rect x="-46" y="-70" width="92" height="70" fill="#140a08" />
+          <rect x="-50" y="-74" width="100" height="6" fill="#24140e" />
+          <rect x="-42" y="-30" width="84" height="6" fill="#d8ccb0" opacity="0.35" />
+          <rect x="-20" y="-64" width="24" height="16" fill="#e6dcc2" opacity="0.35" />
+          <circle cx="34" cy="-80" r="14" fill="#ffd08a" opacity="0.3" filter="url(#ci-blur)" />
+          <path d="M34 -74 v-8 M28 -82 h12 l-3 -6 h-6 Z" stroke="#a8801f" strokeWidth="1.5" fill="#a8801f" />
+          <Bust x={-4} y={-36} s={0.6} back skin="#0a0604" hair="#0a0604" cloth="#0a0604" collar="none" look="short" />
+        </g>
         <path d="M0 560 L0 460 L1000 460 L1000 560 Z" fill="url(#ci-carpet)" />
         <path d="M0 460 h1000" stroke="#1a0804" strokeWidth="3" />
         {[
@@ -110,10 +167,48 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
               hat={[null, "flatcap", null, "brim", null, "tophat", "pillbox", null, null][i]} hatColor="#0a0604" hatColor2="#0a0604" />
           </g>
         ))}
+        {/* les dossiers de bois des fauteuils, liserés par la lumière de l'écran */}
+        {[[506, 28, 0], [536, 30, 14]].map(([y, w, off], r) => (
+          <g key={r}>
+            {Array.from({ length: 22 }).map((_, i) => (
+              <g key={i}>
+                <rect x={i * (w + 16) - 20 + off} y={y} width={w + 12} height="60" rx="5" fill="#120806" />
+                <path d={`M${i * (w + 16) - 16 + off} ${y + 2} h${w + 4}`} stroke="#8a5a3a" strokeWidth="1.4" opacity="0.4" />
+              </g>
+            ))}
+          </g>
+        ))}
       </PLayer>
 
       {/* ═══ SEAN, 15 ans, seul au premier rang, ému ═══ */}
       <PLayer depth={3}>
+        {/* LA CABINE DE PROJECTION en tôle (ininflammable, obligatoire après
+            les incendies de pellicule) : le faisceau sort de sa lucarne */}
+        <g transform="translate(870,380)">
+          <rect x="0" y="0" width="180" height="190" fill="#2a2420" />
+          <rect x="0" y="0" width="6" height="190" fill="#4a4038" />
+          {Array.from({ length: 6 }).map((_, r) => Array.from({ length: 5 }).map((_, c) => <circle key={`${r}-${c}`} cx={14 + c * 34} cy={12 + r * 34} r="1.6" fill="#5a5048" />))}
+          <path d="M0 64 h180 M0 150 h180" stroke="#1a1612" strokeWidth="2" />
+          {/* la lucarne : objectif et lueur */}
+          <rect x="30" y="104" width="84" height="32" fill="#0a0806" />
+          <circle cx="66" cy="120" r="12" fill="#ffe8b0" opacity="0.9" style={{ animation: "glow 0.5s ease-in-out infinite" }} />
+          <circle cx="66" cy="120" r="26" fill="#ffe8b0" opacity="0.35" filter="url(#ci-blur)" />
+          {/* au-dessus : les deux bobines du projecteur dépassent du toit */}
+          <g transform="translate(62,-8)">
+            {[-20, 22].map((x, k) => (
+              <g key={k} transform={`translate(${x},-14)`}>
+                <circle r="16" fill="#3a3430" stroke="#6a6058" strokeWidth="2" />
+                <g>
+                  <animateTransform attributeName="transform" type="rotate" values="0;360" dur="2s" repeatCount="indefinite" />
+                  <path d="M-12 0 h24 M0 -12 v24" stroke="#6a6058" strokeWidth="2" />
+                </g>
+                <circle r="3" fill="#8a8078" />
+              </g>
+            ))}
+            <path d="M-20 2 Q0 10 22 2" stroke="#1a1612" strokeWidth="2" fill="none" />
+          </g>
+          <rect x="0" y="-4" width="180" height="6" fill="#4a4038" />
+        </g>
         <g transform="translate(720,490)">
           <rect x="-24" y="-16" width="48" height="60" rx="4" fill="#3a0808" />
           <Figure x={0} y={28} s={0.69} pose="sit" skin="#e4b48a" hair="#8a3a1a" look="short" freckles mood="vexe" hat="flatcap" hatColor="#3a2418"
