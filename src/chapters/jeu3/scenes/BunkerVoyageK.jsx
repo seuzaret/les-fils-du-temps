@@ -2,22 +2,21 @@
    JEU 3 — SCÈNE : « Voyage via Chronographe K-01 » (Phase 5)
    ------------------------------------------------------------
    Lue depuis la Salle K après choix d'une destination. Flash court
-   puis affichage du décor Jeu 1 associé (SceneImprimerie, SceneChappe,
-   SceneTSF) en toile de fond, et un panneau narratif en bas qui
-   livre la vérité historique (ce que Jorge voulait restaurer).
+   puis le décor du lieu et de la date : un tableau du Jeu 1 quand il
+   montre le bon endroit (atelier de Gutenberg, tour de Chappe, ENIAC),
+   sinon un décor dédié (voyageKDecors.jsx : Signal Hill 1901, atelier
+   de Daguerre 1839, Boston 1876, Menlo Park 1877, Grand Café 1895).
    Les hotspots du décor Jeu 1 ne sont pas interactifs ici (props
-   stubbés) — c'est une visite d'observation.
+   stubbés, mode « jeu2 » : ni « ? » de quête ni anachronismes) —
+   c'est une visite d'observation. Les zones des PNJs : x = pieds,
+   y ≈ hauteur de la poitrine.
    « Rapporter ▸ » pose voyageK_<id>_done et renvoie à la Salle K.
    ============================================================ */
 import { useEffect, useState, useMemo } from "react";
-import SceneImprimerie from "../../06-moderne/scenes/SceneImprimerie.jsx";
+import SceneGutenberg from "../../05-moyen-age/scenes/SceneGutenberg.jsx";
 import SceneChappe from "../../06-moderne/scenes/SceneChappe.jsx";
-import SceneTSF from "../../07-xixe/scenes/SceneTSF.jsx";
-import ScenePhoto from "../../07-xixe/scenes/ScenePhoto.jsx";
-import ScenePhonographe from "../../07-xixe/scenes/ScenePhonographe.jsx";
-import SceneLumiere from "../../07-xixe/scenes/SceneLumiere.jsx";
-import SceneTelephone from "../../07-xixe/scenes/SceneTelephone.jsx";
 import SceneEniac from "../../08-xxe/scenes/SceneEniac.jsx";
+import { VKBell, VKDaguerre, VKEdison, VKFallback, VKLumiere, VKSignalHill } from "../voyageKDecors.jsx";
 
 const noop = () => {};
 
@@ -25,17 +24,16 @@ const noop = () => {};
    une liste de PNJs cliquables (zones invisibles sur la scène). Le PNJ
    avec right:true livre la vraie histoire (verite) — les autres donnent
    une ligne « bateau » en guise de déviation. */
-const DEST = {
+export const DEST = {
   gutenberg: {
     annee: "~1450", lieu: "Mayence (Saint-Empire romain germanique)",
     titre: "L'atelier de Johannes Gutenberg",
-    Scene: SceneImprimerie,
-    /* Un seul personnage visible dans ce décor Jeu 1 (le rédacteur-
-       imprimeur « Sigismond »). Pour le voyage K, c'est Gutenberg
-       lui-même. Hotspot original en (762, 438). */
+    Scene: SceneGutenberg,
+    /* Le tableau du chapitre 5 : Gutenberg (pieds en 486,508) et son
+       compagnon pressier à la presse (pieds en 790,516). */
     pnjs: [
       {
-        id: "gutenberg", x: 762, y: 438, right: true,
+        id: "gutenberg", x: 486, y: 449, right: true,
         question: "Est-ce que vous confirmez que vous avez bien inventé la presse à caractères mobiles en métal, ici à Mayence, autour de 1450 ?",
         lignes: [
           "— Oui. Je suis Johannes Gutenberg. Mayence, 1450.",
@@ -43,49 +41,57 @@ const DEST = {
           "— Avec cette presse à vis et une encre grasse, j'imprime une Bible — 42 lignes par colonne. On la nommera plus tard la B42.",
         ],
       },
+      {
+        id: "pressier", x: 790, y: 454,
+        lignes: ["— Moi, je tire le barreau de la presse, du matin au soir. Les lettres, c'est le maître qui les fond. Va lui demander, il est là, devant le foyer."],
+      },
     ],
   },
   chappe: {
     annee: "1794", lieu: "Ligne Paris–Lille",
     titre: "La tour de Claude Chappe",
     Scene: SceneChappe,
-    /* Positions des sprites dessinés dans SceneChappe :
-         opérateur translate(360,470), Volta translate(600,476),
-         espion translate(880,486). */
+    /* Pieds des personnages dans SceneChappe : opérateur (360,498),
+       Volta (600,510), espion tapi derrière son buisson (878,518). */
     pnjs: [
       {
-        id: "chappe", x: 360, y: 470, right: true,
+        id: "chappe", x: 360, y: 435, right: true,
         question: "Est-ce que vous confirmez que vous avez tendu le premier télégraphe entre Paris et Lille, en 1794, et que c'est un télégraphe OPTIQUE ?",
         lignes: [
-          "— Oui. Je suis Claude Chappe. La ligne va de Paris à Lille, inaugurée l'été dernier.",
+          "— Oui. Je suis Claude Chappe. La ligne va de Paris à Lille ; elle fonctionne depuis cet été.",
           "— Ce n'est pas un télégraphe électrique — l'électricité ne porte pas encore de messages. C'est de la télégraphie OPTIQUE : des bras articulés en haut de chaque tour, chaque posture est une lettre, lue à la longue-vue par la tour d'à côté.",
           "— Tout à l'heure, en moins d'une heure, le gouvernement a appris la reprise de Condé-sur-l'Escaut aux Autrichiens. Avant moi, il fallait deux jours à cheval.",
         ],
       },
       {
-        id: "volta", x: 600, y: 476,
+        id: "volta", x: 600, y: 445,
         lignes: ["— Je m'appelle Volta. Je bricole une pile dans mon coin — rien à voir avec les bras articulés d'en haut. Si tu veux comprendre la ligne, va parler à l'opérateur sur sa tour."],
       },
       {
-        id: "espion", x: 880, y: 486,
+        id: "espion", x: 878, y: 455,
         lignes: ["— Chut… ne me regarde pas. Je ne suis que de passage. On raconte que ces tours parlent sans ouvrir la bouche. J'aimerais savoir comment, mais personne ne me répondra."],
       },
     ],
   },
   marconi: {
-    annee: "12 décembre 1901", lieu: "Poldhu (Cornouailles) → Signal Hill (Terre-Neuve)",
-    titre: "La station de Guglielmo Marconi",
-    Scene: SceneTSF,
-    /* Hotspot original : Marconi en (238, 468). */
+    annee: "12 décembre 1901", lieu: "Signal Hill (Terre-Neuve) ← Poldhu (Cornouailles)",
+    titre: "Marconi à l'écoute, à Signal Hill",
+    Scene: VKSignalHill,
+    /* Marconi assis au récepteur (pieds 400,482), George Kemp près de
+       la fenêtre (pieds 830,500). */
     pnjs: [
       {
-        id: "marconi", x: 238, y: 468, right: true,
-        question: "Est-ce que vous confirmez que vous avez envoyé le premier signal radio à travers l'Atlantique, ici depuis Poldhu, en décembre 1901 ?",
+        id: "marconi", x: 400, y: 412, right: true,
+        question: "Est-ce que vous confirmez que le premier signal radio a traversé l'Atlantique en décembre 1901, envoyé depuis Poldhu, en Cornouailles ?",
         lignes: [
-          "— Oui. Je suis Guglielmo Marconi. Nuit du 12 décembre 1901, Poldhu, Cornouailles.",
-          "— À 3 400 kilomètres de là, à Signal Hill, Terre-Neuve, un de mes récepteurs écoute. L'antenne crache un S en Morse — trois points — répété sans relâche.",
-          "— Vers midi, je l'ai entendu : trois clics, à travers l'Atlantique, sans aucun fil. L'ionosphère sert de miroir — personne ne le sait encore. C'est la première preuve.",
+          "— Oui. Je suis Guglielmo Marconi. 12 décembre 1901, Signal Hill, à Terre-Neuve.",
+          "— À 3 500 kilomètres d'ici, de l'autre côté de l'océan, mon équipe de Poldhu, en Cornouailles, émet la lettre S en Morse — trois points — encore et encore.",
+          "— Ici, le vent a emporté notre ballon ; l'antenne pend sous un cerf-volant. Vers midi et demi, dans l'écouteur : trois petits clics. Le signal a traversé l'Atlantique sans aucun fil.",
         ],
+      },
+      {
+        id: "kemp", x: 830, y: 420,
+        lignes: ["— George Kemp, son assistant. Moi, je surveille le cerf-volant : avec ce vent, il tire sur le fil comme un cheval fou. C'est M. Marconi qui écoute — c'est à lui qu'il faut demander."],
       },
     ],
   },
@@ -96,57 +102,71 @@ const DEST = {
   daguerre: {
     annee: "1839", lieu: "Paris",
     titre: "L'atelier de Louis Daguerre",
-    Scene: ScenePhoto,
+    Scene: VKDaguerre,
     pnjs: [{
-      id: "daguerre", x: 200, y: 360, right: true,
+      id: "daguerre", x: 420, y: 420, right: true,
       question: "Est-ce que vous confirmez que c'est Louis Daguerre qui a mis au point le premier procédé photographique utilisable, le daguerréotype, en 1839 ?",
       lignes: [
-        "— Oui. Nous sommes à Paris, en 1839. Louis Daguerre travaille sur ses plaques depuis des années.",
-        "— On expose une plaque de cuivre argentée aux vapeurs d'iode, puis à la lumière à travers une chambre noire, et enfin aux vapeurs de mercure.",
-        "— Une image apparaît — nette, fine, unique. L'Académie des sciences vient d'annoncer le procédé au monde entier.",
+        "— Oui. Je suis Louis Daguerre. Paris, 1839. Je travaille sur ces plaques depuis des années.",
+        "— Une plaque de cuivre argentée passe aux vapeurs d'iode, puis à la lumière, dans la chambre noire, et enfin aux vapeurs de mercure. On la fixe ensuite dans de l'eau salée.",
+        "— L'image apparaît — nette, fine, unique : on ne peut pas la copier. En janvier, François Arago a présenté le procédé à l'Académie des sciences.",
       ],
+    }, {
+      id: "isidore", x: 880, y: 422,
+      lignes: ["— Isidore Niépce, son associé. Mon père, Nicéphore, a fixé la première image vers 1827… il lui fallait des jours de pose. Mais ce procédé-ci, c'est M. Daguerre qui l'a mis au point : parle-lui."],
     }],
   },
   bell: {
     annee: "1876", lieu: "Boston (États-Unis)",
     titre: "Le laboratoire d'Alexander Graham Bell",
-    Scene: SceneTelephone,
+    Scene: VKBell,
     pnjs: [{
-      id: "bell", x: 560, y: 370, right: true,
+      id: "bell", x: 420, y: 418, right: true,
       question: "Est-ce que vous confirmez que c'est Alexander Graham Bell qui a breveté le premier téléphone en 1876 ?",
       lignes: [
-        "— Oui. 10 mars 1876, Boston. Alexander Graham Bell vient de passer son premier appel : « Mr. Watson, come here, I want to see you. »",
-        "— Deux fils, deux combinés, une vibration qui devient électricité et redevient vibration. On parle à distance pour la première fois.",
-        "— Le brevet a été déposé trois jours plus tôt. Il y aura une bataille juridique avec Elisha Gray — mais c'est Bell qui gagne.",
+        "— Oui. Je suis Alexander Graham Bell. Boston, 10 mars 1876. Je viens de dire dans l'appareil : « Mr. Watson, come here, I want to see you. »",
+        "— La voix fait vibrer une membrane, la vibration fait varier un courant électrique, et au bout du fil le courant refait vibrer une membrane : on parle à distance.",
+        "— Mon brevet m'a été accordé il y a trois jours. Elisha Gray avait déposé un dossier le même jour que moi : il y aura des procès, mais c'est mon brevet qui sera retenu.",
       ],
+    }, {
+      id: "watson", x: 750, y: 335,
+      lignes: ["— Thomas Watson, son assistant. J'étais dans l'autre pièce, l'oreille collée au récepteur… et j'ai entendu sa voix, mot pour mot ! L'idée, c'est la sienne : demande-lui."],
     }],
   },
   edison: {
     annee: "1877", lieu: "Menlo Park (New Jersey)",
     titre: "Le laboratoire de Thomas Edison",
-    Scene: ScenePhonographe,
+    Scene: VKEdison,
     pnjs: [{
-      id: "edison", x: 720, y: 310, right: true,
+      id: "edison", x: 440, y: 418, right: true,
       question: "Est-ce que vous confirmez que c'est Thomas Edison qui a inventé le phonographe en 1877 ?",
       lignes: [
-        "— Oui. Décembre 1877, Menlo Park, New Jersey. Thomas Edison a crié dans un cornet relié à une pointe qui a tracé des sillons sur une feuille d'étain enroulée.",
-        "— On a repassé la pointe sur les mêmes sillons. Et une voix est sortie du cornet. « Mary had a little lamb… »",
-        "— Pour la première fois dans l'histoire, on peut CONSERVER un son. L'oubli devient optionnel.",
+        "— Oui. Je suis Thomas Edison. Décembre 1877, Menlo Park, New Jersey. J'ai crié dans l'embouchure : ma voix fait vibrer une pointe qui creuse un sillon dans une feuille d'étain enroulée sur le cylindre.",
+        "— On repasse la pointe dans le même sillon… et la voix ressort : « Mary had a little lamb… »",
+        "— Pour la première fois, on peut CONSERVER un son et le réécouter. Avant, une voix s'éteignait pour toujours.",
       ],
+    }, {
+      id: "kruesi", x: 830, y: 420,
+      lignes: ["— John Kruesi, mécanicien. J'ai construit la machine d'après son croquis, en quelques jours. Je ne croyais pas qu'elle parlerait ! Pour le reste, demande à M. Edison."],
     }],
   },
   lumiere: {
-    annee: "1895", lieu: "Lyon → Paris",
+    annee: "1895", lieu: "Paris, boulevard des Capucines",
     titre: "La première projection des frères Lumière",
-    Scene: SceneLumiere,
+    Scene: VKLumiere,
+    /* Le 28 décembre 1895, Louis et Auguste ne sont pas à Paris : c'est
+       leur père, Antoine, qui reçoit le public au Grand Café. */
     pnjs: [{
-      id: "lumiere", x: 720, y: 440, right: true,
+      id: "lumiere", x: 150, y: 420, right: true,
       question: "Est-ce que vous confirmez que ce sont les frères Lumière qui ont inventé le cinématographe, projeté pour la première fois en 1895 ?",
       lignes: [
-        "— Oui. 28 décembre 1895, salon indien du Grand Café, boulevard des Capucines à Paris.",
-        "— Auguste et Louis Lumière, lyonnais, projettent une dizaine de courts films devant un public payant. « La Sortie de l'usine Lumière », « L'Arrivée d'un train »…",
-        "— Ils appellent leur appareil le CINÉMATOGRAPHE : il filme ET il projette. Ils en vendront quelques-uns ; ils pensent que « le cinéma est une invention sans avenir ».",
+        "— Oui. Je suis Antoine Lumière, leur père. Mes fils Louis et Auguste ont mis au point l'appareil à Lyon ; ce soir, 28 décembre 1895, c'est moi qui reçois le public, au salon indien du Grand Café.",
+        "— Dix petits films d'une minute, devant un public qui a payé sa place : « La Sortie de l'usine Lumière à Lyon », « Le Jardinier », « Le Repas de bébé »…",
+        "— L'appareil s'appelle le CINÉMATOGRAPHE : il filme ET il projette. Un certain Georges Méliès voulait me l'acheter ce soir ; j'ai refusé — à mon avis, c'est une invention sans avenir…",
       ],
+    }, {
+      id: "spectatrice", x: 790, y: 438,
+      lignes: ["— Vous avez vu ? Les ouvrières sortent de l'usine comme pour de vrai ! Je n'y comprends rien — demandez donc au monsieur à la barbe blanche, à l'entrée : c'est le père des inventeurs."],
     }],
   },
   eniac: {
@@ -155,7 +175,7 @@ const DEST = {
     Scene: SceneEniac,
     pnjs: [{
       id: "eniac", x: 830, y: 370, right: true,
-      question: "Est-ce que vous confirmez que l'ENIAC, mis en service en 1946, est bien le premier ordinateur électronique entièrement numérique ?",
+      question: "Est-ce que vous confirmez que l'ENIAC, présenté au public en 1946, est le premier ordinateur électronique programmable à usage général ?",
       lignes: [
         "— Oui. 1946, université de Pennsylvanie, Philadelphie. Je suis Kay McNulty, une des six programmeuses.",
         "— 17 000 tubes à vide, 30 tonnes, 150 kilowatts. On branche et débranche des câbles pour « programmer », on glisse des cartes perforées pour les données.",
@@ -268,8 +288,8 @@ export default function BunkerVoyageK({ onGo, j3 }) {
       {/* Décor Jeu 1 (ou fallback) PLEIN CADRE, hotspots neutralisés. */}
       <div style={{ pointerEvents: "none", position: "absolute", inset: 0 }}>
         {Scene
-          ? <Scene collect={noop} action={noop} reveal={false} made={[]} queteQui={null} mode="jeu3" />
-          : <FallbackDecor kind={info.kind} />}
+          ? <Scene collect={noop} action={noop} reveal={false} made={[]} queteQui={null} mode="jeu2" />
+          : <VKFallback kind={info.kind} />}
       </div>
 
       {/* Zones cliquables des PNJs, alignées sur le viewBox 1000×560.
@@ -447,154 +467,6 @@ function resolveDest(target) {
   const annee = String(target);
   const picked = FALLBACKS[Math.floor(Math.random() * FALLBACKS.length)];
   return { ...picked, annee, Scene: null, destId: null, rightSeen: false };
-}
-
-/* Silhouette générique d'un passant/figurant (robe sombre + capuche). */
-function Silhouette({ x, y, tint = "#28202a" }) {
-  return (
-    <g transform={`translate(${x},${y})`}>
-      <ellipse cx="0" cy="40" rx="18" ry="4" fill="#000" opacity="0.4" />
-      <path d="M-14 20 Q-18 0 -4 -6 L4 -6 Q18 0 14 20 Z" fill={tint} stroke="#0a0608" strokeWidth="0.6" />
-      <rect x="-6" y="20" width="12" height="40" fill="#1a1418" />
-      <circle cx="0" cy="-14" r="10" fill="#5a4848" stroke="#1a0e08" strokeWidth="0.5" />
-    </g>
-  );
-}
-
-/* Petits décors abstraits pour les époques non documentées : 3 variantes
-   tirées au hasard (ruelle, forêt, désert). */
-function FallbackDecor({ kind = "ruelle" }) {
-  if (kind === "foret") {
-    return (
-      <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice"
-        style={{ width: "100%", height: "100%" }}>
-        <defs>
-          <linearGradient id="fb-sky-f" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0d1420" />
-            <stop offset="100%" stopColor="#1a2228" />
-          </linearGradient>
-          <linearGradient id="fb-ground-f" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#141a14" />
-            <stop offset="100%" stopColor="#060806" />
-          </linearGradient>
-        </defs>
-        <rect width="1000" height="420" fill="url(#fb-sky-f)" />
-        <rect y="420" width="1000" height="140" fill="url(#fb-ground-f)" />
-        {/* Lune froide, haute */}
-        <circle cx="760" cy="110" r="36" fill="#c8d0d8" opacity="0.55" />
-        <circle cx="760" cy="110" r="52" fill="#c8d0d8" opacity="0.08" />
-        {/* Étoiles éparses */}
-        {[[120,80],[220,140],[340,60],[480,110],[620,70],[880,160],[940,90]].map(([cx,cy],i)=>(
-          <circle key={i} cx={cx} cy={cy} r="1.2" fill="#e0e8f0" opacity="0.7" />
-        ))}
-        {/* Sapins au second plan */}
-        {[80,180,260,420,500,580,760,860,940].map((x,i)=>{
-          const h = 160 + (i % 3) * 30;
-          const base = 440;
-          return (
-            <polygon key={`b${i}`} points={`${x-30},${base} ${x+30},${base} ${x},${base-h}`}
-              fill="#0a1210" opacity="0.9" />
-          );
-        })}
-        {/* Sapins au premier plan */}
-        {[40,320,680,980].map((x,i)=>{
-          const h = 220;
-          const base = 500;
-          return (
-            <polygon key={`f${i}`} points={`${x-50},${base} ${x+50},${base} ${x},${base-h}`}
-              fill="#060a08" />
-          );
-        })}
-        {/* Yeux dans la nuit */}
-        <circle cx="500" cy="470" r="1.6" fill="#ffd870" opacity="0.8" />
-        <circle cx="508" cy="470" r="1.6" fill="#ffd870" opacity="0.8" />
-        <Silhouette x={300} y={430} />
-        <Silhouette x={680} y={420} />
-        <text x="500" y="535" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="12"
-          fill="#6a7a7a" fontStyle="italic" letterSpacing="2">
-          une forêt la nuit, à une époque indéfinie
-        </text>
-      </svg>
-    );
-  }
-  if (kind === "desert") {
-    return (
-      <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice"
-        style={{ width: "100%", height: "100%" }}>
-        <defs>
-          <linearGradient id="fb-sky-d" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2a1a20" />
-            <stop offset="60%" stopColor="#6a3a2a" />
-            <stop offset="100%" stopColor="#a85a3a" />
-          </linearGradient>
-          <linearGradient id="fb-dune1" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#4a2820" />
-            <stop offset="100%" stopColor="#1a1008" />
-          </linearGradient>
-          <linearGradient id="fb-dune2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#2a1810" />
-            <stop offset="100%" stopColor="#080604" />
-          </linearGradient>
-        </defs>
-        <rect width="1000" height="380" fill="url(#fb-sky-d)" />
-        {/* Soleil couchant */}
-        <circle cx="500" cy="360" r="70" fill="#ffb060" opacity="0.9" />
-        <circle cx="500" cy="360" r="110" fill="#ffb060" opacity="0.2" />
-        {/* Dunes au loin */}
-        <path d="M0 380 Q 200 320 400 360 T 800 350 T 1000 370 L 1000 420 L 0 420 Z"
-          fill="url(#fb-dune1)" />
-        {/* Dunes au premier plan */}
-        <path d="M0 440 Q 150 400 350 440 T 700 450 T 1000 440 L 1000 560 L 0 560 Z"
-          fill="url(#fb-dune2)" />
-        {/* Palmier solitaire */}
-        <g transform="translate(100,440)">
-          <rect x="-3" y="-70" width="6" height="70" fill="#1a1008" />
-          <path d="M0 -70 Q -30 -80 -50 -60" stroke="#1a1008" strokeWidth="3" fill="none" />
-          <path d="M0 -70 Q 30 -80 50 -60" stroke="#1a1008" strokeWidth="3" fill="none" />
-          <path d="M0 -70 Q -20 -95 -30 -90" stroke="#1a1008" strokeWidth="3" fill="none" />
-          <path d="M0 -70 Q 20 -95 30 -90" stroke="#1a1008" strokeWidth="3" fill="none" />
-        </g>
-        <Silhouette x={320} y={430} tint="#2a1810" />
-        <Silhouette x={660} y={440} tint="#2a1810" />
-        <text x="500" y="535" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="12"
-          fill="#8a6a5a" fontStyle="italic" letterSpacing="2">
-          un désert au crépuscule, à une époque indéfinie
-        </text>
-      </svg>
-    );
-  }
-  /* Default : ruelle */
-  return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice"
-      style={{ width: "100%", height: "100%" }}>
-      <defs>
-        <linearGradient id="fb-sky-r" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#1a1428" />
-          <stop offset="100%" stopColor="#28202a" />
-        </linearGradient>
-        <linearGradient id="fb-ground-r" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2a2420" />
-          <stop offset="100%" stopColor="#0a0608" />
-        </linearGradient>
-      </defs>
-      <rect width="1000" height="400" fill="url(#fb-sky-r)" />
-      <rect y="400" width="1000" height="160" fill="url(#fb-ground-r)" />
-      {/* Horizon flou avec silhouettes de bâtiments indéfinis */}
-      {[100, 220, 380, 520, 680, 820].map((x, i) => (
-        <rect key={i} x={x} y={340 - (i % 3) * 20} width="60" height="80" fill="#1a1418" opacity="0.8" />
-      ))}
-      {/* Lune pâle */}
-      <circle cx="800" cy="140" r="40" fill="#8a7a80" opacity="0.6" />
-      {/* Pavé mouillé reflets */}
-      <ellipse cx="500" cy="500" rx="300" ry="12" fill="#2a3240" opacity="0.3" />
-      <Silhouette x={350} y={390} />
-      <Silhouette x={650} y={410} />
-      <text x="500" y="535" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="12"
-        fill="#5a5a70" fontStyle="italic" letterSpacing="2">
-        une ruelle, quelque part, à une époque indéfinie
-      </text>
-    </svg>
-  );
 }
 
 /* Flash court entre K et le passé (et retour). */
