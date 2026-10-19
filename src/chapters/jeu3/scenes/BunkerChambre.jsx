@@ -58,10 +58,28 @@ export default function BunkerChambre({ onGo, j3 }) {
         <rect x="0" y="400" width="1000" height="120" fill="url(#bc-floor)" />
         <PerspFloor y0={400} y1={520} step={80} rows={4} opacity={0.4} />
         <path d="M0 400 L1000 400" stroke="#3a4048" strokeWidth="1" />
-        {[80, 200, 380, 620, 800, 920].map((x) => (
-          <path key={x} d={`M${x} 400 L${x + (x - 500) * 0.13} 520`} stroke="#0a0e14" strokeWidth="1" opacity="0.6" />
-        ))}
-        <path d="M0 460 L1000 460" stroke="#0a0e14" strokeWidth="0.6" opacity="0.5" />
+        {/* tapis tressé, carton d'arrivée, baskets */}
+        <ellipse cx="420" cy="470" rx="230" ry="30" fill="#3a3448" opacity="0.8" />
+        <ellipse cx="420" cy="470" rx="200" ry="24" fill="none" stroke="#5a5470" strokeWidth="3" opacity="0.7" />
+        <ellipse cx="420" cy="470" rx="160" ry="18" fill="none" stroke="#4a4460" strokeWidth="3" opacity="0.7" />
+        <g transform="translate(110,486)">
+          <path d="M-40 0 L40 0 L40 -40 L-40 -40 Z" fill="#a8845a" stroke="#5a4028" strokeWidth="1.5" />
+          <path d="M-40 -40 L-30 -52 L50 -52 L40 -40 Z" fill="#c8a070" stroke="#5a4028" strokeWidth="1.2" />
+          <path d="M40 0 L50 -12 L50 -52 L40 -40 Z" fill="#8a6a44" />
+          <rect x="-26" y="-30" width="40" height="12" fill="#efe9dc" /><text x="-6" y="-21" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#3a2818">N-27 · EFFETS</text>
+        </g>
+        <g transform="translate(640,500)">
+          <path d="M-20 0 q0 -10 10 -12 l14 4 q8 2 10 8 Z" fill="#e8e8f0" stroke="#5a6270" strokeWidth="1" />
+          <path d="M6 4 q0 -10 10 -12 l14 4 q8 2 10 8 Z" fill="#e8e8f0" stroke="#5a6270" strokeWidth="1" />
+          <path d="M-16 -4 h20 M10 0 h20" stroke="#c83a2a" strokeWidth="1.6" />
+        </g>
+        {/* une carte postale de la surface, punaisée près de l'armoire */}
+        <g transform="translate(222,150) rotate(-6)">
+          <rect x="-18" y="-12" width="36" height="24" fill="#f4f0e4" />
+          <rect x="-16" y="-10" width="32" height="14" fill="#7ab0d8" /><circle cx="8" cy="-6" r="3" fill="#f2c14e" />
+          <path d="M-16 4 L-6 -2 L2 2 L16 -4 L16 4 Z" fill="#4a8a4a" />
+          <circle cx="0" cy="-12" r="1.6" fill="#c83a2a" />
+        </g>
 
         {/* ARMOIRE HAUTE à gauche */}
         <g transform="translate(80,180)">

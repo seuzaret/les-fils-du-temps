@@ -1,4 +1,4 @@
-import { ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
+import { Caution, ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
 /* ============================================================
    JEU 3 — Couloir du niveau 0 (Habitat) — v2 : 4 chambres
    ------------------------------------------------------------
@@ -102,6 +102,28 @@ export default function BunkerHub({ onGo, j3 }) {
 
       {/* Numéros de niveau sur le mur */}
       <text x="600" y="130" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="46" fill="#7fd8ff" opacity="0.12" fontWeight="900" letterSpacing="10">NIVEAU 0 · HABITAT</text>
+
+      {/* panneau d'affichage : avis de MARTINE, dessin d'enfant, petites annonces */}
+      <g transform="translate(1110,190)">
+        <rect x="-56" y="-60" width="112" height="120" fill="#5a4a34" stroke="#2a2014" strokeWidth="3" />
+        <rect x="-50" y="-54" width="56" height="44" fill="#e8e2d0" transform="rotate(-3)" />
+        <text x="-22" y="-40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#8a1a1a" transform="rotate(-3)">AVIS · MARTINE</text>
+        {[-32, -26, -20].map((y) => <path key={y} d={`M-46 ${y} h40`} stroke="#5a5a6a" strokeWidth="1" transform="rotate(-3)" />)}
+        <rect x="10" y="-50" width="38" height="34" fill="#f4f0e4" transform="rotate(4)" />
+        <circle cx="22" cy="-38" r="5" fill="#f2c14e" transform="rotate(4)" /><path d="M14 -24 q8 -8 16 0 q6 -6 12 0" stroke="#3a9a4a" strokeWidth="2" fill="none" transform="rotate(4)" />
+        {[[-44, 8], [-14, 12], [16, 6]].map(([x, y], i) => <g key={i}><rect x={x} y={y} width="26" height="34" fill={["#a8d8f0", "#f0e070", "#efe9dc"][i]} /><path d={`M${x + 4} ${y + 10} h18 M${x + 4} ${y + 16} h14`} stroke="#5a5a6a" strokeWidth="0.8" />{[0, 1, 2, 3].map((k) => <path key={k} d={`M${x + 3 + k * 6} ${y + 26} v8`} stroke="#5a5a6a" strokeWidth="0.6" />)}</g>)}
+        {[[-48, -56], [44, -56], [-48, 54], [44, 54]].map(([x, y], i) => <circle key={`pp${i}`} cx={x} cy={y} r="2" fill="#c83a2a" />)}
+      </g>
+      {/* extincteur et son pictogramme */}
+      <g transform="translate(1060,330)">
+        <rect x="-10" y="-40" width="20" height="40" rx="8" fill="#c83a2a" /><rect x="-6" y="-48" width="12" height="8" fill="#2a2a2e" />
+        <path d="M6 -46 q14 0 12 18" stroke="#2a2a2e" strokeWidth="2.4" fill="none" />
+        <rect x="-14" y="-78" width="28" height="22" fill="#c83a2a" /><text x="0" y="-63" textAnchor="middle" fontSize="12" fill="#fff">🧯</text>
+      </g>
+      {/* flaque d'eau de condensation qui reflète les néons */}
+      <ellipse cx="760" cy="440" rx="70" ry="7" fill="#7fd8ff" opacity="0.12" />
+      <ellipse cx="760" cy="440" rx="40" ry="3" fill="#e8eef5" opacity="0.12" />
+      <Caution x={20} y={404} w={150} h={6} id="hub-cau" />
 
       {/* Ascenseur à gauche */}
       <g transform="translate(30,140)" onClick={() => onGo("elevator")} style={{ cursor: "pointer" }}
