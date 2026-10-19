@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : Salon, 21 juillet 1969, 3h56 du matin.
@@ -25,6 +26,9 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
         <linearGradient id="s69-tv" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a5030" /><stop offset="100%" stopColor="#3a1e10" /></linearGradient>
         <radialGradient id="s69-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#f0f0e8" stopOpacity="0.85" /><stop offset="100%" stopColor="#f0f0e8" stopOpacity="0" /></radialGradient>
         <radialGradient id="s69-lava" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ff8830" stopOpacity="0.55" /><stop offset="100%" stopColor="#ff8830" stopOpacity="0" /></radialGradient>
+        <radialGradient id="s69-night" cx="50%" cy="64%" r="75%"><stop offset="0%" stopColor="#0a1030" stopOpacity="0" /><stop offset="45%" stopColor="#0a1030" stopOpacity="0.08" /><stop offset="100%" stopColor="#0a1030" stopOpacity="0.38" /></radialGradient>
+        <radialGradient id="s69-tvlight" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#cfe0ff" stopOpacity="0.28" /><stop offset="100%" stopColor="#cfe0ff" stopOpacity="0" /></radialGradient>
+        <linearGradient id="s69-drape" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#8a3a14" /><stop offset="50%" stopColor="#c86a2a" /><stop offset="100%" stopColor="#8a3a14" /></linearGradient>
         <linearGradient id="s69-lava-fluid" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#ffb060" /><stop offset="100%" stopColor="#e04a10" /></linearGradient>
       </defs>
 
@@ -32,9 +36,34 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#s69-wall)" />
         {/* motifs géométriques années 60 */}
-        {[...Array(6)].map((_, r) => [...Array(12)].map((_, c) => (
-          <circle key={`p-${r}-${c}`} cx={40 + c * 82} cy={40 + r * 70} r="6" fill="#a86a30" opacity="0.4" />
-        )))}
+        {/* papier peint « op art » : grands ronds emboîtés, en quinconce */}
+        {[...Array(7)].map((_, r) => [...Array(13)].map((_, c) => {
+          const x = c * 82 + (r % 2) * 41, y = 20 + r * 66;
+          return (
+            <g key={`p-${r}-${c}`} opacity="0.32">
+              <circle cx={x} cy={y} r="26" fill="none" stroke="#a86a30" strokeWidth="6" />
+              <circle cx={x} cy={y} r="12" fill={(r + c) % 3 ? "#d89a50" : "#9a5a24"} />
+            </g>
+          );
+        }))}
+        {/* l'horloge-soleil (3 h 56 du matin) */}
+        <g transform="translate(570,130)">
+          {Array.from({ length: 24 }).map((_, k) => {
+            const a = (k * 15 * Math.PI) / 180, r1 = 22, r2 = k % 2 ? 44 : 52;
+            return <path key={k} d={`M${(Math.cos(a) * r1).toFixed(1)} ${(Math.sin(a) * r1).toFixed(1)} L${(Math.cos(a) * r2).toFixed(1)} ${(Math.sin(a) * r2).toFixed(1)}`} stroke="#c8962e" strokeWidth={k % 2 ? 2 : 3} />;
+          })}
+          {Array.from({ length: 12 }).map((_, k) => { const a = (k * 30 * Math.PI) / 180; return <circle key={`b${k}`} cx={(Math.cos(a) * 52).toFixed(1)} cy={(Math.sin(a) * 52).toFixed(1)} r="3" fill="#e8b84a" />; })}
+          <circle r="22" fill="#f0e2c0" stroke="#c8962e" strokeWidth="3" />
+          <path d="M0 0 L8 3 M0 0 L-3 -16" stroke="#2a1a10" strokeWidth="2" strokeLinecap="round" />
+          <circle r="2" fill="#2a1a10" />
+        </g>
+        {/* suspension « boule » éteinte */}
+        <g transform="translate(660,0)">
+          <path d="M0 0 v70" stroke="#3a2418" strokeWidth="1.5" />
+          <circle cx="0" cy="92" r="24" fill="#e86a2a" />
+          <path d="M-24 92 a24 24 0 0 0 48 0" fill="#c84a1a" />
+          <ellipse cx="-8" cy="82" rx="6" ry="9" fill="#ffb070" opacity="0.5" />
+        </g>
 
         {/* FENÊTRE haute donnant sur Paris — c'est la nuit (3h56 du matin) */}
         <g>
@@ -62,6 +91,14 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
           ))}
         </g>
 
+        {/* rideaux à motifs, tirés sur les côtés */}
+        <rect x="684" y="64" width="252" height="10" rx="4" fill="#3a2418" />
+        {[[680, 712], [908, 940]].map(([a, b], i) => (
+          <g key={i}>
+            <path d={`M${a} 70 L${b} 70 Q${(a + b) / 2 + (i ? -6 : 6)} 170 ${b + (i ? 2 : -2)} 260 L${a} 260 Z`} fill="url(#s69-drape)" />
+            {[0, 1, 2, 3].map((k) => <circle key={k} cx={(a + b) / 2} cy={100 + k * 44} r="7" fill="none" stroke="#f0b060" strokeWidth="2" opacity="0.6" />)}
+          </g>
+        ))}
         {/* tableau abstrait cadre orange à gauche */}
         <g transform="translate(80,100)">
           <rect x="0" y="0" width="80" height="60" fill="#e83820" stroke="#3a1608" strokeWidth="3" />
@@ -307,15 +344,26 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
         {/* moquette orange */}
         <rect y="440" width="1000" height="120" fill="url(#s69-floor)" />
         <rect y="440" width="1000" height="4" fill="#5a2010" opacity="0.6" />
+        {/* moquette à poils longs */}
+        <Speckle seed={901} x0={0} x1={1000} y0={446} y1={558} n={260} colors={["#ff8a50", "#a83a14", "#c85020"]} r={[0.8, 2]} opacity={0.5} />
+        {/* le tapis rond sous la table basse */}
+        <ellipse cx="500" cy="494" rx="190" ry="34" fill="#5a2a10" opacity="0.85" />
+        <ellipse cx="500" cy="494" rx="150" ry="26" fill="none" stroke="#e8b060" strokeWidth="5" opacity="0.6" />
+        <ellipse cx="500" cy="494" rx="104" ry="18" fill="none" stroke="#f0d090" strokeWidth="3" opacity="0.5" />
+        {/* la lueur bleutée de la télé sur la moquette */}
+        <ellipse cx="500" cy="470" rx="260" ry="50" fill="url(#s69-tvlight)" />
 
-        {/* CANAPÉ skaï marron à droite */}
+        {/* CANAPÉ skaï marron à droite : accoudoirs arrondis, pieds fuselés */}
         <g>
-          <rect x="740" y="380" width="240" height="90" fill="url(#s69-couch)" stroke="#1a0e04" strokeWidth="2" />
-          <rect x="720" y="380" width="30" height="90" fill="#3a2010" />
-          <rect x="740" y="380" width="240" height="20" fill="#5a3820" />
-          {/* coussins */}
-          <rect x="750" y="386" width="70" height="14" rx="4" fill="#6a4028" />
-          <rect x="830" y="386" width="70" height="14" rx="4" fill="#6a4028" />
+          <ellipse cx="855" cy="474" rx="140" ry="8" fill="#1a0e04" opacity="0.4" />
+          <path d="M748 362 Q748 350 760 350 L950 350 Q962 350 962 362 L962 420 L748 420 Z" fill="url(#s69-couch)" stroke="#1a0e04" strokeWidth="2" />
+          {[760, 828, 896].map((x) => <rect key={x} x={x} y="356" width="62" height="56" rx="10" fill="#5a3820" stroke="#2a1a10" strokeWidth="1.4" />)}
+          <rect x="738" y="414" width="234" height="40" rx="8" fill="#4a3020" stroke="#1a0e04" strokeWidth="2" />
+          {[750, 822, 894].map((x) => <rect key={x} x={x} y="408" width="70" height="20" rx="7" fill="#6a4028" stroke="#2a1a10" strokeWidth="1.2" />)}
+          <path d="M720 466 L720 392 Q720 378 736 378 L752 378 L752 454 Z" fill="#3a2010" stroke="#1a0e04" strokeWidth="1.6" />
+          <path d="M990 466 L990 392 Q990 378 974 378 L958 378 L958 454 Z" fill="#3a2010" stroke="#1a0e04" strokeWidth="1.6" />
+          <path d="M742 454 l-6 18 M962 454 l6 18 M800 454 l-3 16 M910 454 l3 16" stroke="#8a5a30" strokeWidth="4" strokeLinecap="round" />
+          <path d="M770 360 q20 -4 40 0" stroke="#8a6040" strokeWidth="2" fill="none" opacity="0.6" />
         </g>
 
         {/* TABLE BASSE devant */}
@@ -393,6 +441,10 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
 
         {/* « ? » de quête au-dessus de Nathalie */}
       </PLayer>
+
+      {/* la nuit : seule la télé (et la lampe à lave) éclaire la pièce */}
+      <rect width="1000" height="560" fill="url(#s69-night)" style={{ pointerEvents: "none" }} />
+      <ellipse cx="500" cy="360" rx="200" ry="150" fill="url(#s69-tvlight)" style={{ pointerEvents: "none" }} />
 
       {/* ═══ zones cliquables ═══ */}
       <Hotspot cx={340} cy={460} r={54} label="Nathalie" reveal={reveal} onClick={() => action("nathalie")} />
