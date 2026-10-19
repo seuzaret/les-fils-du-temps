@@ -26,6 +26,7 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
         <linearGradient id="c85-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a7098" /><stop offset="100%" stopColor="#2a4058" /></linearGradient>
         <linearGradient id="c85-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a5828" /><stop offset="100%" stopColor="#3a2010" /></linearGradient>
         <linearGradient id="c85-bed" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#c83028" /><stop offset="100%" stopColor="#8a1a18" /></linearGradient>
+        <filter id="c85-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" /></filter>
         <linearGradient id="c85-desk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#a06840" /><stop offset="100%" stopColor="#5a3018" /></linearGradient>
       </defs>
 
@@ -33,11 +34,20 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#c85-wall)" />
         {/* motif géométrique 80s */}
-        {[...Array(6)].map((_, r) => [...Array(12)].map((_, c) => (
-          <g key={`m-${r}-${c}`} transform={`translate(${40 + c * 82},${30 + r * 68})`}>
-            <path d="M-3 -3 L3 -3 L0 3 Z" fill="#68a0c0" opacity="0.4" />
-          </g>
-        )))}
+        {/* papier peint « Memphis » : triangles, zigzags, ronds pastel */}
+        {[...Array(7)].map((_, r) => [...Array(13)].map((_, c) => {
+          const x = 30 + c * 80 + (r % 2) * 40, y = 26 + r * 64, k = (r * 7 + c * 3) % 4;
+          return (
+            <g key={`m-${r}-${c}`} transform={`translate(${x},${y}) rotate(${(r * 37 + c * 23) % 60 - 30})`} opacity="0.4">
+              {k === 0 && <path d="M-6 4 L0 -6 L6 4 Z" fill="#f0a0c0" />}
+              {k === 1 && <path d="M-8 0 l4 -4 l4 4 l4 -4 l4 4" stroke="#f8e070" strokeWidth="2" fill="none" />}
+              {k === 2 && <circle r="4" fill="none" stroke="#7ad8c0" strokeWidth="2" />}
+              {k === 3 && <rect x="-3" y="-3" width="6" height="6" fill="#68a0c0" />}
+            </g>
+          );
+        }))}
+        {/* plinthe */}
+        <rect y="430" width="1000" height="12" fill="#1e2e40" />
 
         {/* FENÊTRE sur la ville — vue de banlieue années 80, ciel d'après-midi orangé */}
         <g>
@@ -112,7 +122,30 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       <PLayer depth={2.5}>
         {/* sol parquet */}
         <rect y="440" width="1000" height="120" fill="url(#c85-floor)" />
-        <path d="M0 460 h1000 M0 480 h1000 M0 500 h1000 M0 520 h1000" stroke="#5a3818" strokeWidth="0.6" opacity="0.5" />
+        {Array.from({ length: 24 }).map((_, i) => {
+          const x = -200 + i * 62;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.62).toFixed(0)} 440 L${x} 560`} stroke="#3a2010" strokeWidth="1.1" opacity="0.5" />;
+        })}
+        {[452, 470, 494, 526].map((y, i) => <path key={y} d={`M${i * 70} ${y} h${160 + i * 20} M${520 - i * 40} ${y} h${200 - i * 10}`} stroke="#3a2010" strokeWidth="0.9" opacity="0.4" />)}
+        <rect y="438" width="1000" height="4" fill="#2a1608" />
+        {/* tapis à motifs géométriques */}
+        <path d="M250 470 L560 470 L600 540 L210 540 Z" fill="#2a3a6a" />
+        <path d="M262 476 L548 476 L584 534 L226 534 Z" fill="none" stroke="#f0a0c0" strokeWidth="2" opacity="0.8" />
+        {Array.from({ length: 8 }).map((_, i) => <path key={i} d={`M${290 + i * 36} 500 l10 -12 l10 12 Z`} fill={["#f8e070", "#7ad8c0", "#f0a0c0"][i % 3]} opacity="0.7" />)}
+        {/* le soleil couchant de la fenêtre sur le parquet */}
+        <path d="M470 444 L640 444 L700 520 L520 520 Z" fill="#f8b060" opacity="0.12" filter="url(#c85-blur)" />
+        {/* sac de sport, pile de BD et vinyles par terre */}
+        <g transform="translate(300,500)">
+          <ellipse cx="0" cy="14" rx="44" ry="6" fill="#0a0604" opacity="0.4" />
+          <path d="M-40 12 Q-44 -10 -26 -14 L26 -14 Q44 -10 40 12 Z" fill="#2a5aa0" />
+          <path d="M-40 0 h80" stroke="#f0f0f0" strokeWidth="3" />
+          <path d="M-14 -14 q14 -16 28 0" stroke="#1a1a2a" strokeWidth="3" fill="none" />
+          <path d="M-8 -6 l6 -4 l10 2" stroke="#f0f0f0" strokeWidth="2" fill="none" />
+        </g>
+        <g transform="translate(940,514)">
+          {[0, 1, 2, 3].map((k) => <rect key={k} x={-22 + (k % 2) * 3} y={-k * 6} width="40" height="6" fill={["#e83820", "#f8b800", "#3a80c8", "#5aa030"][k]} stroke="#2a1608" strokeWidth="0.6" />)}
+          <g transform="translate(-60,-4) rotate(-10)"><rect x="-18" y="-18" width="36" height="36" fill="#1a1a1a" /><circle r="14" fill="#0a0a0a" /><circle r="5" fill="#e83820" /></g>
+        </g>
 
         {/* BORNE d'ARCADE plantee au sol entre le lit et le bureau, avec
             un ecran ou tourne un Pac-Man. Un clic ouvre le mini-jeu. */}
@@ -192,13 +225,29 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
         </g>
         {/* LIT à gauche */}
         <g>
+          <ellipse cx="120" cy="470" rx="110" ry="8" fill="#0a0604" opacity="0.4" />
+          {/* tête de lit en pin */}
+          <rect x="22" y="320" width="14" height="146" rx="3" fill="#a06840" />
+          <rect x="22" y="320" width="14" height="4" fill="#c8905a" />
           <rect x="30" y="380" width="180" height="80" fill="url(#c85-bed)" stroke="#3a1808" strokeWidth="2" />
           <rect x="30" y="380" width="180" height="16" fill="#e0c880" />
           <path d="M30 396 Q60 400 100 396 Q140 400 180 396 Q210 400 210 396" stroke="#a0803a" strokeWidth="1.4" fill="none" />
+          {/* couette à rayures diagonales */}
+          {Array.from({ length: 8 }).map((_, i) => <path key={i} d={`M${40 + i * 22} 400 l18 58`} stroke="#f8e070" strokeWidth="4" opacity="0.5" />)}
+          <rect x="202" y="380" width="8" height="80" fill="#3a0a08" opacity="0.6" />
+          <path d="M210 386 v74" stroke="#2a0a08" strokeWidth="6" />
           {/* oreiller défait */}
           <rect x="40" y="360" width="60" height="26" rx="6" fill="#e8e0d0" transform="rotate(-8 70 373)" />
           {/* couverture chiffonnée */}
           <path d="M110 400 Q130 388 150 402 Q170 386 200 400 L200 458 L110 458 Z" fill="#8a1a10" />
+          <path d="M120 412 q14 -6 28 4 M160 410 q14 -8 30 2" stroke="#5a0a08" strokeWidth="1.6" fill="none" opacity="0.7" />
+          {/* le Rubik's Cube abandonné sur le lit */}
+          <g transform="translate(148,392) rotate(-12)">
+            <path d="M0 -12 L12 -6 L0 0 L-12 -6 Z" fill="#f0f0f0" stroke="#111" strokeWidth="0.8" />
+            <path d="M-12 -6 L0 0 L0 14 L-12 8 Z" fill="#e83820" stroke="#111" strokeWidth="0.8" />
+            <path d="M12 -6 L0 0 L0 14 L12 8 Z" fill="#3a80c8" stroke="#111" strokeWidth="0.8" />
+            <path d="M-6 -9 L6 -3 M6 -9 L-6 -3 M-12 -1 L0 5 M-6 -3 v14 M12 -1 L0 5 M6 -3 v14" stroke="#111" strokeWidth="0.6" />
+          </g>
         </g>
 
         {/* BUREAU à droite */}
@@ -206,6 +255,13 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
           <rect x="460" y="360" width="450" height="20" fill="url(#c85-desk)" stroke="#2a1608" strokeWidth="2" />
           <rect x="475" y="380" width="20" height="80" fill="#3a1e10" />
           <rect x="880" y="380" width="20" height="80" fill="#3a1e10" />
+          {/* lampe d'architecte rouge */}
+          <g transform="translate(480,360)">
+            <rect x="-10" y="-4" width="20" height="4" fill="#c82828" />
+            <path d="M0 -4 L14 -44 L-6 -70" stroke="#c82828" strokeWidth="3" fill="none" />
+            <path d="M-6 -70 l-16 6 l10 14 Z" fill="#c82828" />
+            <ellipse cx="-14" cy="-52" rx="16" ry="8" fill="#ffe8a0" opacity="0.35" filter="url(#c85-blur)" />
+          </g>
           {/* tiroirs sous le bureau */}
           <rect x="700" y="380" width="180" height="80" fill="url(#c85-desk)" stroke="#2a1608" strokeWidth="1.5" />
           <rect x="710" y="392" width="160" height="30" fill="#5a3018" stroke="#8a5828" strokeWidth="1" />
