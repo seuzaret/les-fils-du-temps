@@ -288,7 +288,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
         ))}
         <g transform="translate(400,504)">
           {/* assise par terre, de dos, tournée vers la télé : longs cheveux noirs, chouchou rose */}
-          <Figure x={0} y={23} s={0.69} pose="ground" back skin="#f0d0a8" hair="#1a1a1a" look="long"
+          <Figure x={0} y={23} s={0.897} pose="ground" back skin="#f0d0a8" hair="#1a1a1a" look="long"
             garment="tee" coat="#e878a0" pants="#3a5074" shoes="#e8e8e0" belt={false} arms={[{ a1: 18, a2: 6 }, { a1: 18, a2: 6 }]}>
             <ellipse cx="0" cy="-90" rx="6" ry="3.4" fill="#f8b0c8" />
           </Figure>
@@ -358,7 +358,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       )}
       <Hotspot cx={310} cy={388} r={30} label="parler à Papa" reveal={reveal} onClick={() => action("papa_jt")} />
       <Hotspot cx={155} cy={410} r={28} label="parler à Maman" reveal={reveal} onClick={() => action("maman_jt")} />
-      <Hotspot cx={400} cy={484} r={28} label="parler à l'ado" reveal={reveal} onClick={() => action("ado_jt")} />
+      <Hotspot cx={400} cy={471} r={34} label="parler à l'ado" reveal={reveal} onClick={() => action("ado_jt")} />
       <Hotspot cx={880} cy={368} r={30} label="parler à Grand-père" reveal={reveal} onClick={() => action("grandpere_jt")} />
     </svg>
   );

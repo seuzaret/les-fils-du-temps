@@ -137,7 +137,7 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
         <g transform="translate(200,472)">
           <ellipse cx="0" cy="46" rx="26" ry="7" fill="#160f08" opacity="0.4" />
           {/* habit bleu, jabot clair, catogan ; il écrit sur son carnet */}
-          <Figure x={0} y={46} s={0.64} skin="#dcae82" hair="#4a3020" look="ponytail" mood="content"
+          <Figure x={0} y={46} s={0.819} skin="#dcae82" hair="#4a3020" look="ponytail" mood="content"
             garment="coat" coat="#2c4658" pants="#1c3040" shoes="#1a1410"
             arms={[{ a1: 20, a2: -40 }, { a1: 40, a2: 10 }]}>
             <path d="M0 -88 Q-6 -70 0 -48 Q6 -70 0 -88 Z" fill="#e6dfc8" />
@@ -230,7 +230,7 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
           <path d="M-14 -14 q14 -8 30 0 l-2 8 q-14 -6 -26 0 Z" fill="#3a2414" />
           <rect x="-20" y="-6" width="14" height="14" rx="2" fill="#6e4c2e" /><circle cx="-13" cy="1" r="2.4" fill="#a83828" />
           {/* le postillon debout, tenant la bride */}
-          <Figure x={-52} y={28} s={0.47} facing="right" skin="#cc9c6c" hair="#3a2818" look="ponytail" hat="tricorne" hatColor="#2c2c3a" mood="content"
+          <Figure x={-52} y={28} s={0.658} facing="right" skin="#cc9c6c" hair="#3a2818" look="ponytail" hat="tricorne" hatColor="#2c2c3a" mood="content"
             garment="coat" coat="#3a4a8a" trim="#c8a84a" pants="#e8e0c8" shoes="#1a1410"
             arms={[{ a1: 10, a2: 6 }, { a1: 70, a2: 60 }]} />
         </g>
@@ -265,11 +265,11 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
       {/* le « ? » de Jules */}
       {queteQui === "jules" && (
         <>
-          <g transform="translate(182,398)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(182,377)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
-          <Hotspot cx={200} cy={452} r={30} label="parler à Jules" reveal={reveal} onClick={() => action("jules")} />
+          <Hotspot cx={200} cy={434} r={36} label="parler à Jules" reveal={reveal} onClick={() => action("jules")} />
         </>
       )}
 

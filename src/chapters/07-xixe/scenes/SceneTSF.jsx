@@ -211,7 +211,7 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
 
         {/* MARCONI : il scrute la nuit vers le navire */}
         <g transform="translate(238,494)">
-          <Figure x={0} y={32} s={0.585} facing="right" skin="#d0a67e" hair="#1a1008" look="slick" mustache mood="vexe"
+          <Figure x={0} y={32} s={0.819} facing="right" skin="#d0a67e" hair="#1a1008" look="slick" mustache mood="vexe"
             garment="coat" coat="#26303e" pants="#1a2028" shoes="#0a0e14" arms={[{ a1: 10, a2: 6 }, { a1: 110, a2: 100 }]}>
             {/* casque d'écoute sur les oreilles */}
             <path d="M-14 -108 A14 14 0 0 1 14 -108" stroke="#4a5460" strokeWidth="3" fill="none" />
@@ -224,7 +224,7 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
       <rect width="1000" height="560" fill="#0a1020" opacity="0.08" style={{ pointerEvents: "none" }} />
 
       {/* ═══ zones cliquables ═══ */}
-      <Hotspot cx={238} cy={468} r={50} label="Marconi" reveal={reveal} onClick={() => action("marconi")} />
+      <Hotspot cx={238} cy={445} r={60} label="Marconi" reveal={reveal} onClick={() => action("marconi")} />
       {/* la porte de la cabine : ouvre l'etabli d'outils tant qu'on n'a
           pas encore recupere quelque chose la-bas et que le sos n'est pas
           parti. Reste cliquable meme si on a deja gagne l'antenne, pour

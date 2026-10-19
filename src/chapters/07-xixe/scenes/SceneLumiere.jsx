@@ -210,8 +210,8 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
           <rect x="0" y="-4" width="180" height="6" fill="#4a4038" />
         </g>
         <g transform="translate(720,490)">
-          <rect x="-24" y="-16" width="48" height="60" rx="4" fill="#3a0808" />
-          <Figure x={0} y={28} s={0.69} pose="sit" skin="#e4b48a" hair="#8a3a1a" look="short" freckles mood="vexe" hat="flatcap" hatColor="#3a2418"
+          <rect x="-30" y="-34" width="60" height="78" rx="5" fill="#3a0808" />
+          <Figure x={0} y={28} s={0.862} pose="sit" skin="#e4b48a" hair="#8a3a1a" look="short" freckles mood="vexe" hat="flatcap" hatColor="#3a2418"
             garment="jacket" coat="#3a5a7a" pants="#2a3a4a" shoes="#1a1410" arms={[{ a1: 14, a2: -30 }, { a1: 14, a2: -30 }]}>
             {/* une larme */}
             <circle cx="-5" cy="-84" r="1.6" fill="#7fd8ff" style={{ animation: "glow 3s ease-in-out infinite" }} />
@@ -241,7 +241,7 @@ export default function SceneLumiere({ action, reveal, made = [], queteQui }) {
 
       {/* ═══ zones cliquables ═══ */}
       <Hotspot cx={140} cy={430} r={46} label="l'ouvreuse" reveal={reveal} onClick={() => action("ouvreuse")} />
-      <Hotspot cx={720} cy={440} r={36} label="Sean, 15 ans" reveal={reveal} onClick={() => action("sean-jeune")} />
+      <Hotspot cx={720} cy={423} r={43} label="Sean, 15 ans" reveal={reveal} onClick={() => action("sean-jeune")} />
       {!done && (
         <Hotspot cx={880} cy={430} r={60} label="la cabine de projection — tourner la manivelle" reveal={reveal} onClick={() => action("projecteur")} />
       )}

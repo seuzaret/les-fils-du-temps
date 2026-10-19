@@ -274,7 +274,7 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
         <g transform="translate(762,462)">
           <ellipse cx="0" cy="44" rx="30" ry="8" fill="#241608" opacity="0.5" />
           {/* habit long brun, gilet bordeaux, cravate ; une épreuve à la main, l'autre sur la hanche */}
-          <Figure x={0} y={44} s={0.68} skin="#d0a478" hair="#d0ccc4" look="short" glasses wrinkles mood="vexe"
+          <Figure x={0} y={44} s={0.816} skin="#d0a478" hair="#d0ccc4" look="short" glasses wrinkles mood="vexe"
             garment="coat" coat="#4a3226" pants="#3a2418" shoes="#1a1410"
             arms={[{ a1: 40, a2: -60 }, { a1: 40, a2: 20 }]}>
             <path d="M-11 -88 L11 -88 L9 -30 L-9 -30 Z" fill="#6a2530" />
@@ -378,16 +378,16 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
       {/* le « ? » de Sigismond (tant qu'il est le personnage de la quête) */}
       {queteQui === "sigismond" && (
         <>
-          <g transform="translate(744,352)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(744,336)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
-          <Hotspot cx={762} cy={438} r={26} label="parler à Sigismond" reveal={reveal} onClick={() => action("sigismond")} />
+          <Hotspot cx={762} cy={424} r={31} label="parler à Sigismond" reveal={reveal} onClick={() => action("sigismond")} />
         </>
       )}
 
       {/* Sigismond, cible de dépôt : on lui apporte l'article → la gazette */}
-      <Hotspot cx={762} cy={452} r={44} label="donner l'article à Sigismond" item="sigismond" reveal={reveal} onClick={() => action("sigismond")} />
+      <Hotspot cx={762} cy={441} r={53} label="donner l'article à Sigismond" item="sigismond" reveal={reveal} onClick={() => action("sigismond")} />
       <Hotspot cx={910} cy={502} r={34} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
 
       {mode !== "jeu2" && (

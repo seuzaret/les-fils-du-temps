@@ -256,7 +256,7 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
         <g transform="translate(196,458)">
           <ellipse cx="0" cy="52" rx="30" ry="8" fill="#160f08" opacity="0.5" />
           {/* chemise à carreaux, bretelles, chapeau de prospecteur ; batée dans une main */}
-          <Figure x={0} y={52} s={0.72} skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="surpris" hat="brim" hatColor="#6a4c2e" hatColor2="#4a3218"
+          <Figure x={0} y={52} s={0.828} skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="surpris" hat="brim" hatColor="#6a4c2e" hatColor2="#4a3218"
             garment="jacket" coat="#a83a2c" pants="#4a3a2a" shoes="#2c1c10" arms={[{ a1: 30, a2: -50 }]}>
             <path d="M-17 -64 h28 M-18 -76 h30" stroke="#7a241c" strokeWidth="1.6" opacity="0.6" />
             <path d="M-11 -90 v42 M11 -90 v42" stroke="#4a3320" strokeWidth="3.6" />
@@ -307,7 +307,7 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
       <rect width="1000" height="560" fill="#181008" opacity="0.08" style={{ pointerEvents: "none" }} />
 
       {/* ═══ zones cliquables ═══ */}
-      <Hotspot cx={200} cy={430} r={40} label="James O'Sullivan" reveal={reveal} onClick={() => action("james")} />
+      <Hotspot cx={201} cy={418} r={46} label="James O'Sullivan" reveal={reveal} onClick={() => action("james")} />
       {!tg && (
         <Hotspot cx={306} cy={476} r={40} label="le manipulateur Morse" item="code_morse" reveal={reveal} onClick={() => collect("code_morse")} />
       )}

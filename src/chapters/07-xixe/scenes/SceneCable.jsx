@@ -235,7 +235,7 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
         <g transform="translate(706,470)">
           <ellipse cx="0" cy="34" rx="18" ry="6" fill="#160f08" opacity="0.5" />
           {/* gilet rouge, chapeau repoussé ; un bras au bastingage, l'autre pointe l'horizon */}
-          <Figure x={0} y={32} s={0.57} skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="content" hat="brim" hatColor="#8a5a30" hatColor2="#3a2818"
+          <Figure x={0} y={32} s={0.826} skin="#e4b48a" hair="#a0522d" look="short" mustache="handlebar" freckles mood="content" hat="brim" hatColor="#8a5a30" hatColor2="#3a2818"
             garment="jacket" coat="#6a4a30" coat2="#a8352a" pants="#4a3a2a" shoes="#2a1a10"
             arms={[{ a1: 20, a2: 10 }, { a1: 120, a2: 110 }]}>
             <path d="M-6 -72 q6 14 12 0" stroke="#e6c25a" strokeWidth="2" fill="none" />
@@ -244,14 +244,14 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
 
         {/* L'INGÉNIEUR : debout, il regarde vers l'Amérique */}
         <g transform="translate(540,470)">
-          <Figure x={0} y={34} s={0.6} facing="right" skin="#d8a884" hair="#6a4a38" look="short" beard="short" beardColor="#6a4a38" hat="tophat" hatColor="#241c20"
+          <Figure x={0} y={34} s={0.81} facing="right" skin="#d8a884" hair="#6a4a38" look="short" beard="short" beardColor="#6a4a38" hat="tophat" hatColor="#241c20"
             garment="coat" coat="#3a3a4a" pants="#2a2a34" shoes="#141418"
             arms={[{ a1: 10, a2: 6 }, { a1: 110, a2: 100 }]} />
         </g>
 
         {/* un matelot qui surveille le câble */}
         <g transform="translate(430,452)">
-          <Figure x={0} y={22} s={0.41} skin="#c8a882" hair="#3a2818" look="short" hat="cap" hatColor="#e8e4da" mood="vexe"
+          <Figure x={0} y={22} s={0.574} skin="#c8a882" hair="#3a2818" look="short" hat="cap" hatColor="#e8e4da" mood="vexe"
             garment="jacket" coat="#3a4a6a" pants="#2a3448" shoes="#141418" arms={[{ a1: 10, a2: 6 }, { a1: 60, a2: 100 }]} />
         </g>
 
@@ -260,8 +260,8 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
       <rect width="1000" height="560" fill="#141810" opacity="0.05" style={{ pointerEvents: "none" }} />
 
       {/* ═══ zones cliquables ═══ */}
-      <Hotspot cx={706} cy={452} r={34} label="James O'Sullivan" reveal={reveal} onClick={() => action("james")} />
-      <Hotspot cx={540} cy={444} r={48} label="l'ingénieur" reveal={reveal} onClick={() => action("field")} />
+      <Hotspot cx={706} cy={430} r={41} label="James O'Sullivan" reveal={reveal} onClick={() => action("james")} />
+      <Hotspot cx={540} cy={423} r={58} label="l'ingénieur" reveal={reveal} onClick={() => action("field")} />
       {!built && (
         <>
           <Hotspot cx={300} cy={468} r={64} label="câble" item="cable" reveal={reveal} onClick={() => collect("cable")} />
