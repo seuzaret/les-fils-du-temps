@@ -9,6 +9,7 @@
      Ridge                — chaîne de montagnes/collines, avec neige
                             optionnelle (au-dessus d'une altitude) et
                             versant éclairé
+     Hill / smoothPath    — colline au profil imposé (points choisis)
      Haze                 — voile de brume entre deux plans
      Clouds               — bancs de nuages doux, peuvent dériver
      Conifer / Leafy / Birch / TreeLine — arbres seuls ou lisière
@@ -73,6 +74,35 @@ export function Ridge({ id, seed, x0 = -40, x1 = 1040, y, amp, rough = 0.55, dep
         )}
         <path d={d} fill={fill} transform={`translate(${sx.toFixed(1)},${sy.toFixed(1)})`} />
         {snow && <rect x={x0} y={y - amp * 1.6} width={x1 - x0} height={Math.max(0, snowLine - (y - amp * 1.6) - sy)} fill={shade(snow, -0.12)} transform={`translate(${sx.toFixed(1)},${sy.toFixed(1)})`} clipPath={`url(#${id}-clip)`} opacity="0" />}
+      </g>
+    </g>
+  );
+}
+
+/* profil lissé passant par des points choisis (Catmull-Rom → Bézier),
+   fermé vers le bas : pour une colline qui doit porter un objet précis */
+export function smoothPath(pts, bottom = 700) {
+  let d = `M${pts[0][0]} ${bottom} L${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+    const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+    d += ` C${c1[0].toFixed(1)} ${c1[1].toFixed(1)} ${c2[0].toFixed(1)} ${c2[1].toFixed(1)} ${p2[0]} ${p2[1]}`;
+  }
+  return d + ` L${pts[pts.length - 1][0]} ${bottom} Z`;
+}
+
+/* Colline au profil imposé : liseré éclairé côté lumière ; les enfants
+   (champs, haies, bosquets) sont découpés à sa silhouette */
+export function Hill({ id, points, fill, lit, light = -1, rim = 6, bottom = 700, opacity = 1, children }) {
+  const d = smoothPath(points, bottom);
+  return (
+    <g opacity={opacity}>
+      <defs><clipPath id={`${id}-clip`}><path d={d} /></clipPath></defs>
+      <path d={d} fill={lit || fill} />
+      <g clipPath={`url(#${id}-clip)`}>
+        <path d={d} fill={fill} transform={`translate(${(-light * rim * 1.4).toFixed(1)},${rim})`} />
+        {children}
       </g>
     </g>
   );

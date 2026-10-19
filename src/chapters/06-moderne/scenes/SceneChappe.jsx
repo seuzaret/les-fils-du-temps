@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Grass, Haze, Hill, Leafy, Ridge, Rock, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 6 — Tableau : la tour de Chappe
@@ -24,8 +25,8 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
         </linearGradient>
         <radialGradient id="cp-sun" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff0c8" /><stop offset="50%" stopColor="#ffd888" stopOpacity="0.6" /><stop offset="100%" stopColor="#ffd888" stopOpacity="0" /></radialGradient>
         <linearGradient id="cp-hill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a7a4e" /><stop offset="100%" stopColor="#4e4e32" /></linearGradient>
-        <linearGradient id="cp-tower" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#b0a488" /><stop offset="50%" stopColor="#8a7e64" /><stop offset="100%" stopColor="#5e5644" /></linearGradient>
-        <linearGradient id="cp-ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a7c50" /><stop offset="100%" stopColor="#4e4028" /></linearGradient>
+        <linearGradient id="cp-tower" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#5e5644" /><stop offset="55%" stopColor="#8a7e64" /><stop offset="100%" stopColor="#d0b88a" /></linearGradient>
+        <linearGradient id="cp-ground" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9a8a56" /><stop offset="100%" stopColor="#4e4028" /></linearGradient>
         <filter id="cp-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
@@ -36,17 +37,45 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
 
       {/* ═══ ciel de fin de jour ═══ */}
       <rect width="1000" height="560" fill="url(#cp-sky)" />
+      {/* rayons du couchant, très doux */}
+      <g opacity="0.16" filter="url(#cp-blur)">
+        {[-62, -40, -18, 6, 30].map((a, i) => (
+          <path key={i} d={`M760 200 L${760 + Math.cos((a * Math.PI) / 180 + Math.PI) * 900} ${200 + Math.sin((a * Math.PI) / 180 + Math.PI) * 900} L${760 + Math.cos(((a + 7) * Math.PI) / 180 + Math.PI) * 900} ${200 + Math.sin(((a + 7) * Math.PI) / 180 + Math.PI) * 900} Z`} fill="#fff0c8" />
+        ))}
+      </g>
       <circle cx="760" cy="200" r="140" fill="url(#cp-sun)" />
       <circle cx="760" cy="200" r="36" fill="#fff0c8" opacity="0.9" />
-      <path d="M180 110 q8 -8 16 0 M240 132 q6 -6 12 0" stroke="#3a4452" strokeWidth="2.2" fill="none" opacity="0.5" />
+      {/* nuages effilés, dorés par en dessous */}
+      <Clouds id="cp-cl" seed={203} items={[[180, 112, 200], [420, 74, 150], [640, 140, 110], [900, 120, 170], [300, 176, 120]]} color="#f2cfae" shadow="#8a7a9a" opacity={0.7} drift={24} />
+      <path d="M600 168 q60 -6 130 -2 M820 160 q50 -4 110 2 M560 186 q40 -3 90 0" stroke="#ffe0b0" strokeWidth="3" strokeLinecap="round" opacity="0.5" />
+      <path d="M180 110 q8 -8 16 0 M240 132 q6 -6 12 0 M212 150 q5 -5 10 0" stroke="#3a4452" strokeWidth="2.2" fill="none" opacity="0.5" />
 
       {/* ═══ couche lointaine : collines + tour du télégraphe à l'horizon ═══ */}
       <PLayer depth={1}>
-        <path d="M0 300 L150 250 L320 296 L500 244 L700 300 L860 252 L1000 296 L1000 400 L0 400 Z" fill="url(#cp-hill)" />
+        {/* la chaîne lointaine, bleutée, rosie côté soleil */}
+        <Ridge id="cp-r0" seed={201} y={264} amp={40} rough={0.5} fill="#8a86a4" lit="#c8a49a" light={1} />
+        <Haze id="cp-hz0" y0={226} y1={282} color="#f0c090" opacity={0.45} />
+        {/* les coteaux : champs, haies et bosquets ; ils portent le fort de
+            Condé, la tour suivante et (plus tard) la tour-relais */}
+        <Hill id="cp-h1" points={[[-40, 300], [80, 292], [170, 286], [250, 280], [330, 266], [420, 282], [500, 290], [600, 286], [700, 276], [812, 268], [900, 280], [1040, 292]]}
+          fill="#6e6a40" lit="#b0a05a" light={1} rim={5}>
+          {[[-40, 300, 160, "#7a7444"], [120, 296, 150, "#8a7e48"], [380, 290, 160, "#64683c"], [560, 292, 130, "#8a8048"], [700, 284, 150, "#74703e"], [860, 286, 200, "#867a46"]].map(([x, y, w, c], i) => (
+            <path key={i} d={`M${x} ${y + 40} L${x + w * 0.1} ${y - 10} L${x + w} ${y - 14} L${x + w * 0.92} ${y + 40} Z`} fill={c} opacity="0.45" />
+          ))}
+          {/* haies du bocage, en pointillé de petits buissons */}
+          {[[120, 296, 136, 334], [380, 290, 372, 334], [560, 292, 572, 334], [700, 282, 690, 334], [860, 284, 874, 334]].map(([x1, y1, x2, y2], i) => (
+            Array.from({ length: 9 }).map((_, k) => <circle key={`${i}-${k}`} cx={x1 + ((x2 - x1) * k) / 8} cy={y1 + ((y2 - y1) * k) / 8} r={1.8 + k * 0.12} fill="#4a4a26" opacity="0.6" />)
+          ))}
+          <path d="M-40 312 Q300 300 520 306 Q760 312 1040 300" stroke="#4a4a2a" strokeWidth="2" fill="none" opacity="0.4" />
+        </Hill>
+        {[[60, 296], [96, 294], [262, 284], [404, 290], [432, 292], [620, 290], [668, 286], [940, 288], [976, 292]].map(([x, y], i) => (
+          <Leafy key={i} x={x} y={y} s={0.14 + (i % 3) * 0.02} color={["#5a5e30", "#4e5a2c", "#62602e"][i % 3]} light={1} seed={210 + i} />
+        ))}
         {/* CONDÉ reprise, au loin à gauche : une place forte avec le drapeau
             TRICOLORE hissé, un peu de fumée de canon — l'événement du jour */}
         <g transform="translate(170,268)" opacity="0.9">
           <rect x="-46" y="-14" width="92" height="34" fill="#6a6450" />
+          <rect x="16" y="-14" width="30" height="34" fill="#a89878" opacity="0.4" />
           {[-46, -30, -14, 2, 18, 34].map((x, i) => <rect key={i} x={x} y="-22" width="8" height="8" fill="#6a6450" />)}
           <rect x="-16" y="-6" width="14" height="26" fill="#2c2618" />
           {/* mât + drapeau tricolore */}
@@ -57,24 +86,53 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
           <path d="M-40 6 q-10 -8 -4 -18 q-8 4 -6 -8" stroke="#cfc8bc" strokeWidth="4" fill="none" opacity="0.4" style={{ animation: "drift 6s ease-in-out infinite" }} filter="url(#cp-blur)" />
         </g>
         {/* la tour SUIVANTE, au loin (silhouette) */}
-        <g transform="translate(500,244)" opacity="0.7">
+        <g transform="translate(330,268)" opacity="0.7">
           <rect x="-6" y="-30" width="12" height="30" fill="#3a3a2a" />
           <path d="M0 -30 v-16" stroke="#3a3a2a" strokeWidth="2" />
           <path d="M-16 -46 h32" stroke="#3a3a2a" strokeWidth="3" />
           <path d="M-16 -46 l-6 8 M16 -46 l6 -8" stroke="#3a3a2a" strokeWidth="2.4" />
         </g>
-        {/* ligne de brume chaude */}
-        <rect y="288" width="1000" height="24" fill="#e8b878" opacity="0.14" filter="url(#cp-blur)" />
+        <Haze id="cp-hz1" y0={280} y1={336} color="#e8b878" opacity={0.3} />
+        {/* le versant le plus proche, avec ses bosquets */}
+        <Hill id="cp-h2" points={[[-40, 338], [120, 326], [260, 342], [400, 372], [600, 374], [760, 342], [900, 326], [1040, 334]]}
+          fill="#5e5a36" lit="#948850" light={1} rim={6}>
+          <path d="M-40 360 Q200 350 420 392 M600 392 Q800 350 1040 356" stroke="#3e3c22" strokeWidth="2" fill="none" opacity="0.4" />
+        </Hill>
+        <TreeLine seed={221} x0={-20} x1={220} y={334} n={9} h={[16, 30]} kinds={["leafy", "conifer", "leafy"]} colors={["#4a5228", "#3e4822", "#565a2c"]} light={1} jitter={6} />
+        <TreeLine seed={223} x0={800} x1={1020} y={334} n={9} h={[16, 30]} kinds={["leafy", "leafy", "conifer"]} colors={["#4a5228", "#3e4822", "#565a2c"]} light={1} jitter={6} />
       </PLayer>
 
       {/* ═══ couche intermédiaire : LA TOUR de Chappe + sa cabine ═══ */}
       <PLayer depth={2}>
+        {/* le tertre qui porte la tour, et le sentier qui y grimpe */}
+        <Hill id="cp-h3" points={[[250, 404], [370, 362], [450, 336], [550, 334], [640, 360], [760, 404]]} fill="#6e6438" lit="#a8964e" light={1} rim={5} bottom={420}>
+          <path d="M380 420 Q420 380 470 364 Q520 350 506 334" stroke="#b8a070" strokeWidth="9" fill="none" opacity="0.55" strokeLinecap="round" />
+          <ellipse cx="452" cy="338" rx="70" ry="9" fill="#2c2410" opacity="0.28" />
+        </Hill>
+        <Rock x={392} y={372} w={26} h={12} color="#8a7e62" light={1} seed={231} />
+        <Rock x={618} y={364} w={20} h={10} color="#8a7e62" light={1} seed={232} />
+        <Grass x={430} y={350} s={0.6} color="#5a5a2a" seed={233} n={5} />
+        <Grass x={586} y={346} s={0.6} color="#5a5a2a" seed={234} n={5} />
         <g transform="translate(500,330)">
-          {/* fût de maçonnerie */}
+          {/* ombre portée de la tour, allongée vers la gauche (soleil couchant à droite) */}
+          <path d="M-30 0 L30 0 L-120 14 L-170 10 Z" fill="#2c2410" opacity="0.3" />
+          {/* fût de maçonnerie, assises de pierre */}
           <rect x="-30" y="-110" width="60" height="110" fill="url(#cp-tower)" />
           <rect x="-30" y="-110" width="60" height="110" fill="#2c2618" opacity="0.25" filter="url(#cp-grain)" />
-          <path d="M-30 -70 h60 M-30 -36 h60" stroke="#5e5644" strokeWidth="1.4" opacity="0.5" />
+          {Array.from({ length: 11 }).map((_, r) => (
+            <g key={r}>
+              <path d={`M-30 ${-r * 10} h60`} stroke="#5e5644" strokeWidth="0.8" opacity="0.45" />
+              {[-18, -2, 14].map((x, k) => <path key={k} d={`M${x + (r % 2) * 8} ${-r * 10} v-10`} stroke="#5e5644" strokeWidth="0.7" opacity="0.35" />)}
+            </g>
+          ))}
+          {/* corniche + petite cabine de l'opérateur au sommet */}
+          <rect x="-34" y="-114" width="68" height="6" fill="#6e6450" />
+          <rect x="-34" y="-114" width="68" height="2" fill="#d8c090" opacity="0.6" />
+          <rect x="-14" y="-90" width="10" height="14" fill="#2c2416" />
+          <rect x="-13" y="-89" width="8" height="12" fill="#ffd888" opacity="0.35" />
           <rect x="-12" y="-40" width="24" height="40" fill="#2c2416" />
+          <path d="M-12 -40 Q0 -48 12 -40" fill="#2c2416" />
+          <rect x="28" y="-110" width="2" height="110" fill="#fff0c8" opacity="0.35" />
           {/* le mât + le régulateur (grande traverse) et les 2 indicateurs */}
           <path d="M0 -110 v-70" stroke="#3a2c1c" strokeWidth="5" />
           {/* régulateur (barre centrale, inclinée) */}
@@ -92,9 +150,19 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
         <rect y="400" width="1000" height="160" fill="url(#cp-ground)" />
         <rect y="402" width="1000" height="158" fill="#2a2010" opacity="0.32" filter="url(#cp-grain)" />
         <ellipse cx="500" cy="472" rx="440" ry="52" fill="#6e5c38" opacity="0.3" />
-        {[80, 940].map((x, i) => (
-          <path key={i} d={`M${x} 470 q-5 -16 -10 -20 M${x} 470 q0 -18 6 -22 M${x} 470 q6 -14 12 -16`} stroke="#6a6e36" strokeWidth="2.4" fill="none" opacity="0.7" />
-        ))}
+        {/* lisière du plateau : touffes rasantes contre le ciel du couchant */}
+        <path d="M-20 402 Q200 396 400 404 Q620 410 1020 398 L1020 410 L-20 410 Z" fill="#a89458" opacity="0.6" />
+        <Speckle seed={241} x0={0} x1={1000} y0={410} y1={556} n={110} colors={["#4e4028", "#c8b07a", "#6a5a38"]} r={[1, 2.6]} opacity={0.55} />
+        {/* le sentier qui monte vers la tour */}
+        <path d="M120 560 Q260 500 400 470 Q480 452 500 404" stroke="#b8a070" strokeWidth="26" fill="none" opacity="0.28" strokeLinecap="round" />
+        <Grass x={80} y={470} s={1.1} color="#6a6e36" seed={242} n={8} />
+        <Grass x={940} y={470} s={1.1} color="#6a6e36" seed={243} n={8} flower="#e8c860" />
+        <Grass x={30} y={540} s={1.4} color="#5a5e2c" seed={244} n={9} />
+        <Grass x={770} y={548} s={1.2} color="#5a5e2c" seed={245} n={8} flower="#d86a4a" />
+        <Grass x={320} y={420} s={0.7} color="#7a7a40" seed={246} n={5} />
+        <Grass x={720} y={424} s={0.7} color="#7a7a40" seed={247} n={5} />
+        <Rock x={130} y={430} w={40} h={18} color="#8a7e62" light={1} seed={248} moss="#6a6e36" />
+        <Rock x={980} y={530} w={50} h={24} color="#7a6e56" light={1} seed={249} />
 
         {/* LA FOULE DES BADAUDS au pied de la tour, le nez en l'air vers les
             bras du télégraphe — le spectacle nouveau de la Révolution */}
@@ -230,21 +298,6 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
       <Hotspot cx={644} cy={496} r={30} label="zinc & cuivre" item="zinc_cuivre" reveal={reveal} onClick={() => collect("zinc_cuivre")} />
       <Hotspot cx={700} cy={500} r={26} label="saumure" item="saumure" reveal={reveal} onClick={() => collect("saumure")} />
       <Hotspot cx={880} cy={486} r={44} label="l'espion" item="espion" reveal={reveal} onClick={() => collect("espion")} />
-      {/* AMBIANCE : deux nuages qui derivent tres lentement dans le ciel
-          (a la place des oiseaux). Vitesse ralentie pour ne pas distraire. */}
-      <g opacity="0.7">
-        <animateTransform attributeName="transform" type="translate"
-          values="-160,0; 1160,20" dur="140s" repeatCount="indefinite" />
-        <ellipse cx="0" cy="90" rx="70" ry="12" fill="#f0e8d0" />
-        <ellipse cx="30" cy="82" rx="46" ry="10" fill="#f0e8d0" />
-        <ellipse cx="-24" cy="86" rx="40" ry="8" fill="#e8dcc0" />
-      </g>
-      <g opacity="0.6">
-        <animateTransform attributeName="transform" type="translate"
-          values="-200,0; 1200,-10" dur="180s" begin="30s" repeatCount="indefinite" />
-        <ellipse cx="0" cy="150" rx="60" ry="10" fill="#e8dcc0" />
-        <ellipse cx="26" cy="144" rx="38" ry="8" fill="#f0e8d0" />
-      </g>
 </svg>
   );
 }
