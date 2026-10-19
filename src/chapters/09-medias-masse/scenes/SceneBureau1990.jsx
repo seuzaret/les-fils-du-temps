@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : Bureau, 1990. Céline, 25 ans, cadre
@@ -147,6 +148,43 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
             <circle r="1.4" fill="#c8c8c8" />
           </g>
         </g>
+        {/* faux plafond à dalles, pavés lumineux */}
+        <rect x="-40" y="-10" width="1080" height="44" fill="#d8d4cc" />
+        {Array.from({ length: 13 }).map((_, i) => <path key={i} d={`M${-100 + i * 100} -10 L${(500 + (-100 + i * 100 - 500) * 0.9).toFixed(0)} 34`} stroke="#a8a49c" strokeWidth="1.2" />)}
+        <path d="M-40 14 H1040 M-40 34 H1040" stroke="#a8a49c" strokeWidth="1.2" />
+        {[150, 500, 850].map((x) => <g key={x}><rect x={x - 46} y="16" width="92" height="16" fill="#f4f8f8" /><ellipse cx={x} cy="44" rx="110" ry="18" fill="#fff" opacity="0.2" filter="url(#b90-blur)" /></g>)}
+        {/* la FONTAINE À EAU */}
+        <g transform="translate(56,440)">
+          <ellipse cx="0" cy="0" rx="26" ry="5" fill="#0a0e14" opacity="0.4" />
+          <rect x="-20" y="-96" width="40" height="96" rx="4" fill="#e8e4dc" stroke="#9a968c" strokeWidth="1.4" />
+          <rect x="-12" y="-70" width="24" height="16" fill="#3a3c42" />
+          <rect x="-6" y="-64" width="4" height="6" fill="#3a80c8" /><rect x="2" y="-64" width="4" height="6" fill="#c83a2a" />
+          <path d="M-18 -96 Q-18 -150 0 -150 Q18 -150 18 -96 Z" fill="#8ac8e8" opacity="0.7" stroke="#5a98b8" strokeWidth="1" />
+          <path d="M-10 -140 q-4 20 0 40" stroke="#fff" strokeWidth="3" opacity="0.4" fill="none" />
+          <rect x="-24" y="-40" width="10" height="14" fill="#f0ece4" stroke="#b8b4ac" strokeWidth="0.6" />
+        </g>
+        {/* les CLOISONS de l'open space, et un collègue au téléphone */}
+        <g transform="translate(920,440)">
+          <rect x="-90" y="-150" width="200" height="150" fill="#6a7a8a" />
+          <rect x="-90" y="-154" width="200" height="6" rx="2" fill="#4a5664" />
+          <Speckle seed={991} x0={-88} x1={108} y0={-146} y1={-4} n={70} colors={["#5a6a7a", "#7a8a9a"]} r={[0.6, 1.4]} opacity={0.6} perspective={false} />
+          <path d="M10 -150 v150" stroke="#4a5664" strokeWidth="3" />
+          <rect x="-70" y="-176" width="50" height="26" rx="3" fill="#d8c8a0" />
+          <rect x="-64" y="-172" width="38" height="18" fill="#1a3048" />
+          <path d="M30 -150 q20 -14 40 0 Z" fill="#3a5a8a" />
+          <rect x="45" y="-160" width="10" height="10" fill="#d8a884" />
+          <circle cx="50" cy="-170" r="12" fill="#d8a884" />
+          <path d="M38 -170 q0 -14 12 -14 q12 0 12 12 q-4 -6 -12 -6 q-6 0 -12 8 Z" fill="#5a3a24" />
+          <circle cx="61" cy="-169" r="2.4" fill="#c8946a" />
+          <path d="M60 -180 q10 2 8 18" stroke="#d8ccb0" strokeWidth="4" fill="none" strokeLinecap="round" />
+        </g>
+        {/* calendrier 1990 */}
+        <g transform="translate(222,140)">
+          <rect x="-26" y="-34" width="52" height="68" fill="#f4f0e8" stroke="#8a8478" strokeWidth="1" />
+          <rect x="-26" y="-34" width="52" height="18" fill="#c83a2a" />
+          <text x="0" y="-21" textAnchor="middle" fontFamily="Arial,sans-serif" fontSize="9" fontWeight="700" fill="#fff">1990</text>
+          {Array.from({ length: 20 }).map((_, k) => <rect key={k} x={-22 + (k % 5) * 9} y={-10 + Math.floor(k / 5) * 9} width="6" height="6" fill={k === 13 ? "#c83a2a" : "#a8a49c"} opacity="0.7" />)}
+        </g>
       </PLayer>
 
       {/* ═══ BUREAU + PC ═══ */}
@@ -155,6 +193,15 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
         {/* moquette gris-bleu : mottling + grain */}
         <rect y="440" width="1000" height="120" fill="#0a1420" opacity="0.35" filter="url(#b90-mottle)" />
         <rect y="440" width="1000" height="120" fill="#1a2028" opacity="0.35" filter="url(#b90-grain)" />
+        {/* dalles de moquette, posées en damier de sens contrariés */}
+        {Array.from({ length: 4 }).map((_, r) => {
+          const y0 = 440 + r * r * 4 + r * 18, y1 = 440 + (r + 1) * (r + 1) * 4 + (r + 1) * 18;
+          return Array.from({ length: 18 }).map((_, c) => {
+            const xa = -400 + c * 100, k0 = 0.6 + (y0 - 440) / 280, k1 = 0.6 + (y1 - 440) / 280;
+            const X = (x, k) => (500 + (x - 500) * k).toFixed(1);
+            return (r + c) % 2 ? <path key={`${r}-${c}`} d={`M${X(xa, k0)} ${y0} L${X(xa + 100, k0)} ${y0} L${X(xa + 100, k1)} ${y1} L${X(xa, k1)} ${y1} Z`} fill="#3a4252" opacity="0.4" /> : null;
+          });
+        })}
         {/* plinthe */}
         <rect y="438" width="1000" height="4" fill="#5a4838" />
         {/* halo bleuté sous l'écran (lueur cathodique sur la moquette) */}
@@ -221,6 +268,23 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
           <text x="-40" y="34" fontSize="6" fontFamily="ui-monospace,monospace" fill="#5a4028" fontWeight="700">PENTIUM 90</text>
         </g>
 
+        {/* post-it collés au bord de l'écran */}
+        <g transform="translate(560,320)">
+          <rect x="86" y="-36" width="16" height="16" fill="#f8e870" transform="rotate(8 94 -28)" />
+          <rect x="86" y="-14" width="16" height="16" fill="#f8a8c8" transform="rotate(-6 94 -6)" />
+        </g>
+        {/* téléphone à touches beige et mug de café */}
+        <g transform="translate(234,378) scale(0.85)">
+          <path d="M-26 0 L26 0 L22 -18 L-22 -18 Z" fill="#d8ccb0" stroke="#8a7e64" strokeWidth="1" />
+          <path d="M-28 -18 Q0 -30 28 -18 L24 -24 Q0 -34 -24 -24 Z" fill="#c8bca0" stroke="#8a7e64" strokeWidth="1" />
+          {Array.from({ length: 9 }).map((_, k) => <rect key={k} x={-9 + (k % 3) * 7} y={-15 + Math.floor(k / 3) * 4.5} width="5" height="3" rx="0.8" fill="#f0ead8" stroke="#8a7e64" strokeWidth="0.4" />)}
+          <path d="M26 -6 q16 4 12 20 q-4 10 6 16" stroke="#8a7e64" strokeWidth="1.4" fill="none" />
+        </g>
+        <g transform="translate(860,378)">
+          <path d="M-9 0 h18 l-1 -18 h-16 Z" fill="#2a5aa0" />
+          <path d="M9 -14 q7 0 6 6 q-1 5 -7 4" stroke="#2a5aa0" strokeWidth="2.4" fill="none" />
+          <path d="M-3 -22 q-3 -6 2 -10 M3 -22 q-3 -6 2 -10" stroke="#e8e4dc" strokeWidth="1.2" fill="none" opacity="0.5" style={{ animation: "drift 3s ease-in-out infinite" }} />
+        </g>
         {/* CLAVIER + SOURIS À BOULE devant l'écran */}
         <g transform="translate(560,398)">
           <rect x="-60" y="-8" width="120" height="16" rx="2" fill="#e0d0b0" stroke="#5a4028" strokeWidth="1" />
