@@ -1,4 +1,5 @@
-import { Bust } from "./cineChars.jsx";
+import { Bust, Figure } from "./cineChars.jsx";
+import { rng, Speckle } from "../../engine/scenery.jsx";
 
 /* ============================================================
    JEU 2B — décors et portrait de Léa
@@ -8,6 +9,9 @@ import { Bust } from "./cineChars.jsx";
      StageAtelier  : l'atelier de Léa (fond discret, les deux documents
                      de l'activité s'affichent par-dessus)
      StageToast    : la salle commune, la longue table et les verres
+   Décor étoffé avec le kit (scenery.jsx) : roche des voûtes, cuvelage,
+   tuyaux, salle de contrôle, brume du Puits ; établi garni ; cuisine,
+   bocaux, bacs de culture et fresque des enfants dans la salle commune.
    Le bandeau de dialogue occupe le bas de l'écran (≈ y > 410) :
    tout ce qui compte est dessiné plus haut.
    ============================================================ */
@@ -105,18 +109,44 @@ export function StageChantier() {
           <stop offset="0%" stopColor="#ffc880" stopOpacity="0.7" />
           <stop offset="100%" stopColor="#ffc880" stopOpacity="0" />
         </radialGradient>
+        <filter id="j2c-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="9" /></filter>
+        <linearGradient id="j2c-cone" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#ffd8a0" stopOpacity="0.22" /><stop offset="100%" stopColor="#ffd8a0" stopOpacity="0" /></linearGradient>
+        <linearGradient id="j2c-pipe" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6a7488" /><stop offset="50%" stopColor="#3a4254" /><stop offset="100%" stopColor="#1a2030" /></linearGradient>
         <pattern id="j2c-hazard" width="16" height="16" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
           <rect width="8" height="16" fill="#f2c14e" /><rect x="8" width="8" height="16" fill="#1a1408" />
         </pattern>
       </defs>
       <rect width="1000" height="560" fill="url(#j2c-wall)" />
 
+      {/* la roche brute de la caverne, entre les nervures de la voûte */}
+      {(() => { const r = rng(2047); return Array.from({ length: 70 }, (_, i) => {
+        const x = r() * 1060 - 30, y = r() * 200, w = 30 + r() * 70, h = 16 + r() * 34;
+        return <path key={`rk${i}`} d={`M${x} ${y} l${w * 0.4} ${-h * 0.5} l${w * 0.6} ${h * 0.2} l${-w * 0.1} ${h * 0.7} l${-w * 0.7} ${h * 0.1} Z`} fill={r() < 0.5 ? "#1a2438" : "#121a2a"} stroke="#26324a" strokeWidth="0.8" opacity="0.45" />;
+      }); })()}
+      <Speckle seed={2048} x0={0} x1={1000} y0={0} y1={230} n={160} colors={["#3a4a66", "#0a0f1a"]} r={[0.6, 1.6]} opacity={0.5} perspective={false} />
       {/* voûte de la grande salle : nervures */}
       <g stroke="#2c3c58" strokeWidth="2" fill="none" opacity="0.75">
         <path d="M-120 300 Q500 -250 1120 300" />
         <path d="M-40 300 Q500 -150 1040 300" />
         <path d="M60 300 Q500 -60 940 300" />
         <path d="M500 -10 L500 300 M300 20 L250 300 M700 20 L750 300 M130 70 L90 300 M870 70 L910 300" />
+      </g>
+      {/* le cuvelage de béton au fond, ses gros tuyaux et la salle de contrôle */}
+      <rect x="-20" y="150" width="1040" height="86" fill="#1c2436" />
+      {Array.from({ length: 14 }).map((_, i) => <path key={`cv${i}`} d={`M${i * 76} 150 v86`} stroke="#141a28" strokeWidth="2" />)}
+      <rect x="-20" y="150" width="1040" height="4" fill="#2e3a52" />
+      {[176, 196, 214].map((y, i) => (
+        <g key={`tp${y}`}>
+          <rect x="-20" y={y} width="1040" height={10 - i * 2} rx="4" fill="url(#j2c-pipe)" />
+          {Array.from({ length: 9 }).map((_, k) => <rect key={k} x={40 + k * 120 + i * 30} y={y - 2} width="6" height={14 - i * 2} fill="#4a5468" />)}
+        </g>
+      ))}
+      <g transform="translate(500,118)">
+        <rect x="-110" y="0" width="220" height="34" fill="#0c1220" stroke="#4a5a74" strokeWidth="2" />
+        <rect x="-104" y="5" width="208" height="24" fill="#7fd8ff" opacity="0.18" />
+        {[-80, -46, 40, 76].map((x, i) => <g key={x}><circle cx={x} cy="16" r="5" fill="#0a0e18" /><path d={`M${x - 7} 29 q7 -10 14 0 Z`} fill="#0a0e18" /></g>)}
+        {Array.from({ length: 10 }).map((_, k) => <rect key={k} x={-100 + k * 21} y="24" width="12" height="3" fill={["#5eff9e", "#ffb04a", "#7fd8ff"][k % 3]} opacity="0.8" />)}
+        <text x="0" y="-5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#8aa0c0" letterSpacing="2">CONTRÔLE · NIVEAU −120 m</text>
       </g>
       {/* sas latéraux */}
       {[70, 872].map((x) => (
@@ -132,6 +162,7 @@ export function StageChantier() {
             <animate attributeName="opacity" values="0.8;1;0.7;1" dur={`${3 + (i % 3)}s`} repeatCount="indefinite" />
           </circle>
           <circle cx={x} cy={y} r="6" fill="#ffe2b0" />
+          <path d={`M${x - 8} ${y + 4} L${x + 8} ${y + 4} L${x + 40 + (500 - x) * 0.25} 330 L${x - 40 + (500 - x) * 0.25} 330 Z`} fill="url(#j2c-cone)" />
         </g>
       ))}
 
@@ -166,6 +197,15 @@ export function StageChantier() {
           );
         })}
       </g>
+      {/* brume froide qui monte du Puits et s'étire */}
+      {[0, 1, 2, 3].map((i) => (
+        <ellipse key={`mi${i}`} cx={440 + i * 40} cy="300" rx="120" ry="26" fill="#bfe8ff" opacity="0.08" filter="url(#j2c-blur)">
+          <animate attributeName="cy" values="320;200;320" dur={`${12 + i * 3}s`} begin={`${i * 2}s`} repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0;0.12;0" dur={`${12 + i * 3}s`} begin={`${i * 2}s`} repeatCount="indefinite" />
+        </ellipse>
+      ))}
+      {/* bande de danger autour de la lèvre */}
+      <ellipse cx="500" cy="347" rx="322" ry="86" fill="none" stroke="url(#j2c-hazard)" strokeWidth="8" opacity="0.55" />
       {/* lueur froide qui monte du fond */}
       <ellipse cx="500" cy="300" rx="190" ry="60" fill="#7fd8ff" opacity="0.1" />
       {Array.from({ length: 12 }).map((_, i) => (
@@ -202,15 +242,16 @@ export function StageChantier() {
         <text x="105" y="48" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="11" fill="#c8d4e2" letterSpacing="2">DEMAIN · 12 MARS 2047</text>
       </g>
 
-      {/* ouvriers qui font les derniers réglages */}
-      {[[130, 300, 0], [250, 318, 1]].map(([x, y, k]) => (
+      {/* ouvriers qui font les derniers réglages : combinaison orange,
+          bandes réfléchissantes, casque de chantier */}
+      {[[130, 330, 0, "#e8742a", "#d8a888", "#3a2418"], [250, 350, 1, "#e0662a", "#a8704a", "#1a1410"]].map(([x, y, k, c, sk, hr]) => (
         <g key={k} transform={`translate(${x},${y})`}>
           <animateTransform attributeName="transform" type="translate" values={`${x} ${y};${x + 46} ${y};${x} ${y}`} dur={`${9 + k * 3}s`} repeatCount="indefinite" additive="replace" />
-          <ellipse cx="0" cy="26" rx="12" ry="3" fill="#000" opacity="0.4" />
-          <rect x="-7" y="2" width="14" height="22" fill="#e8742a" />
-          <circle cx="0" cy="-5" r="7" fill="#d8a888" />
-          <path d="M-8 -7 Q0 -16 8 -7 Z" fill="#f2c14e" />
-          <rect x="-4" y="22" width="3" height="8" fill="#222a36" /><rect x="1" y="22" width="3" height="8" fill="#222a36" />
+          <Figure x={0} y={0} s={0.46} skin={sk} hair={hr} look="short" hat="hardhat" hatColor="#f2c14e" mood="neutre"
+            garment="jacket" coat={c} pants={c} shoes="#222a36" arms={k ? [{ a1: 10, a2: 6 }, { a1: 60, a2: 90 }] : [{ a1: 30, a2: 60 }, { a1: 10, a2: 6 }]}>
+            <path d="M-20 -62 h40 M-20 -40 h40" stroke="#e8f0d0" strokeWidth="3" opacity="0.85" />
+            {k === 0 && <rect x="-36" y="-56" width="14" height="10" rx="2" fill="#2a3244" stroke="#7fd8ff" strokeWidth="1" />}
+          </Figure>
         </g>
       ))}
       {/* caisses de matériel */}
@@ -244,7 +285,17 @@ export function StageAtelier() {
         </pattern>
       </defs>
       <rect width="1000" height="560" fill="url(#j2a-wall)" />
-      <rect width="1000" height="360" fill="url(#j2a-grid)" />
+      {/* paroi de béton projeté sur la roche, panneaux et joints */}
+      {Array.from({ length: 6 }).map((_, i) => <rect key={`pn${i}`} x={i * 170 - 10} y="30" width="166" height="322" fill={i % 2 ? "#10202a" : "#0e1c24"} stroke="#0a141a" strokeWidth="2" />)}
+      <Speckle seed={2049} x0={0} x1={1000} y0={30} y1={350} n={180} colors={["#1e3440", "#08121a"]} r={[0.6, 1.6]} opacity={0.6} perspective={false} />
+      <rect width="1000" height="360" fill="url(#j2a-grid)" opacity="0.6" />
+      {/* plafond : chemin de câbles, gaine et bande lumineuse */}
+      <rect x="-20" y="0" width="1040" height="30" fill="#0a1218" />
+      <rect x="-20" y="22" width="1040" height="8" rx="3" fill="#2a3a44" />
+      {Array.from({ length: 12 }).map((_, i) => <path key={`cb${i}`} d={`M${i * 90 + 30} 22 v8`} stroke="#4a5a64" strokeWidth="2" />)}
+      <path d="M-20 26 Q200 34 420 26 T860 26 T1040 28" stroke="#c84a2a" strokeWidth="2" fill="none" opacity="0.6" />
+      <rect x="250" y="32" width="500" height="4" rx="2" fill="#bfe8ff" opacity="0.5" />
+      <ellipse cx="500" cy="44" rx="280" ry="14" fill="#bfe8ff" opacity="0.08" />
 
       {/* plan du Puits punaisé au mur */}
       <g transform="translate(500,170)" opacity="0.5">
@@ -265,6 +316,21 @@ export function StageAtelier() {
             ))}
           </g>
         ))}
+      </g>
+      {/* sur les étagères : bobine de fil, maquette du bouchon du Puits, pothos qui retombe */}
+      <g transform="translate(160,124)">
+        <ellipse cx="0" cy="0" rx="12" ry="5" fill="#c86a2a" /><rect x="-12" y="-14" width="24" height="14" fill="#c86a2a" /><ellipse cx="0" cy="-14" rx="12" ry="5" fill="#e8843a" /><ellipse cx="0" cy="-14" rx="4" ry="2" fill="#3a2a1c" />
+      </g>
+      <g transform="translate(118,286)">
+        <ellipse cx="0" cy="0" rx="30" ry="9" fill="#5a6474" /><ellipse cx="0" cy="-4" rx="26" ry="7" fill="#8a94a8" />
+        {Array.from({ length: 8 }).map((_, i) => <path key={i} d={`M0 -4 L${(Math.cos((i * Math.PI) / 4) * 26).toFixed(1)} ${(-4 + Math.sin((i * Math.PI) / 4) * 7).toFixed(1)}`} stroke="#3a4454" strokeWidth="1.2" />)}
+        <ellipse cx="0" cy="-4" rx="8" ry="2.4" fill="#7fd8ff" opacity="0.7" />
+      </g>
+      <g transform="translate(40,70)">
+        <path d="M13 -40 L13 0 M13 -40 L2 0 M13 -40 L24 0" stroke="#8a7a64" strokeWidth="1" />
+        <path d="M0 0 h26 l-4 14 h-18 Z" fill="#c8a070" />
+        <path d="M6 12 q-10 40 -2 90 M14 12 q6 50 -4 120 M20 12 q12 30 8 70" stroke="#3a8a4a" strokeWidth="2" fill="none" />
+        {[[2, 40], [-4, 70], [6, 96], [18, 56], [12, 100], [26, 70], [4, 120]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx="6" ry="4" fill={i % 2 ? "#4aa05a" : "#3a8a4a"} transform={`rotate(${i * 40} ${x} ${y})`} />)}
       </g>
       {/* panneau d'outils, à droite */}
       <g transform="translate(790,86)">
@@ -294,6 +360,23 @@ export function StageAtelier() {
       {/* établi */}
       <rect y="352" width="1000" height="40" fill="#3a2a1c" />
       <rect y="392" width="1000" height="170" fill="#1e150d" />
+      <rect y="352" width="1000" height="4" fill="#5a4230" />
+      {Array.from({ length: 6 }).map((_, i) => <g key={`dr${i}`}><rect x={i * 170 + 10} y="400" width="150" height="44" fill="#251a10" stroke="#120c06" strokeWidth="2" /><rect x={i * 170 + 70} y="418" width="30" height="5" rx="2" fill="#8a7a64" /></g>)}
+      {/* étau, à gauche de l'établi */}
+      <g transform="translate(60,352)">
+        <rect x="-20" y="-8" width="40" height="8" fill="#3a5a88" /><rect x="-16" y="-26" width="12" height="18" fill="#3a5a88" /><rect x="6" y="-26" width="12" height="18" fill="#3a5a88" />
+        <path d="M18 -16 h18" stroke="#8a94a4" strokeWidth="3" /><circle cx="38" cy="-16" r="4" fill="#8a94a4" />
+      </g>
+      {/* imprimante 3D sous la lampe, qui travaille */}
+      <g transform="translate(800,352)">
+        <rect x="-40" y="-80" width="80" height="80" fill="none" stroke="#3a4a52" strokeWidth="4" />
+        <rect x="-36" y="-10" width="72" height="8" fill="#2a3238" />
+        <g><animateTransform attributeName="transform" type="translate" values="-20 0;20 0;-20 0" dur="3s" repeatCount="indefinite" /><rect x="-8" y="-60" width="16" height="12" fill="#e8742a" /><path d="M0 -48 v8" stroke="#ff9a3a" strokeWidth="2" /></g>
+        <path d="M-40 -60 h80" stroke="#5a6a74" strokeWidth="3" />
+        <path d="M-14 -10 q14 -16 28 0 Z" fill="#7fd8ff" opacity="0.7" />
+      </g>
+      {/* vis et rondelles éparpillées */}
+      {[[420, 346], [436, 348], [452, 345], [560, 347], [574, 349], [700, 346]].map(([x, y], i) => <circle key={`vs${i}`} cx={x} cy={y} r={i % 2 ? 2 : 2.8} fill="#8a94a4" stroke="#3a4454" strokeWidth="0.6" />)}
       <g transform="translate(120,352)">
         <rect y="-14" width="120" height="14" fill="#1a3a30" stroke="#0a1a14" strokeWidth="1.5" />
         {[14, 40, 66, 92].map((x, i) => (
@@ -334,12 +417,66 @@ export function StageToast({ raised = false }) {
         <radialGradient id="j2t-warm" cx="50%" cy="40%" r="60%">
           <stop offset="0%" stopColor="#ffb870" stopOpacity="0.4" /><stop offset="100%" stopColor="#ffb870" stopOpacity="0" />
         </radialGradient>
+        <filter id="j2t-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" /></filter>
+        <linearGradient id="j2t-back" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2a2430" /><stop offset="100%" stopColor="#1a161e" /></linearGradient>
         <radialGradient id="j2t-water" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#bdf0ff" stopOpacity="0.8" /><stop offset="100%" stopColor="#bdf0ff" stopOpacity="0" />
         </radialGradient>
       </defs>
       <rect width="1000" height="560" fill="url(#j2t-wall)" />
       <ellipse cx="500" cy="170" rx="520" ry="220" fill="url(#j2t-warm)" />
+
+      {/* la roche de la voûte, à peine visible dans la pénombre */}
+      {(() => { const r = rng(1203); return Array.from({ length: 50 }, (_, i) => {
+        const x = r() * 1060 - 30, y = r() * 150, w = 30 + r() * 60, h = 14 + r() * 26;
+        return <path key={`rk${i}`} d={`M${x} ${y} l${w * 0.4} ${-h * 0.5} l${w * 0.6} ${h * 0.2} l${-w * 0.1} ${h * 0.7} l${-w * 0.7} ${h * 0.1} Z`} fill="#16141e" stroke="#2a2634" strokeWidth="0.8" opacity="0.12" />;
+      }); })()}
+      {/* le mur du fond : passe-plat de la cuisine, étagères de bocaux, bacs
+          de culture sous lampes, et la fresque des enfants (le ciel qu'ils n'ont jamais vu) */}
+      <rect x="-20" y="196" width="1040" height="110" fill="url(#j2t-back)" />
+      <rect x="-20" y="196" width="1040" height="3" fill="#3a3444" />
+      <g transform="translate(110,214)">
+        <rect x="-80" y="0" width="160" height="60" fill="#3a2a1c" stroke="#1a120a" strokeWidth="2" />
+        <rect x="-74" y="6" width="148" height="40" fill="#ffb870" opacity="0.5" />
+        <ellipse cx="0" cy="30" rx="90" ry="40" fill="#ffb870" opacity="0.2" filter="url(#j2t-blur)" />
+        {[-50, -20, 14, 44].map((x, i) => <g key={x}><rect x={x - 6} y={18 - (i % 2) * 4} width="12" height={22 + (i % 2) * 4} rx="3" fill="#5a4a3a" /></g>)}
+        <circle cx="-30" cy="18" r="7" fill="#2a1e14" /><path d="M-40 40 q10 -14 20 0 Z" fill="#2a1e14" />
+        <rect x="-84" y="46" width="168" height="8" fill="#5a4a38" />
+      </g>
+      <g transform="translate(880,206)">
+        {[0, 34, 68].map((y) => <rect key={y} x="-90" y={y + 26} width="180" height="5" fill="#4a3a2c" />)}
+        {Array.from({ length: 15 }).map((_, k) => {
+          const row = Math.floor(k / 5), x = -80 + (k % 5) * 36;
+          return <g key={k}><rect x={x} y={row * 34 + 8} width="20" height="18" rx="3" fill={["#c8763a", "#8aa04a", "#d8b85a", "#a84a3a", "#e8d8b0"][(k + row) % 5]} opacity="0.75" /><rect x={x + 2} y={row * 34 + 4} width="16" height="5" fill="#8a8478" /></g>;
+        })}
+      </g>
+      {/* bacs de culture sous lampes violettes */}
+      <g transform="translate(220,288)">
+        <rect x="-50" y="-10" width="100" height="14" fill="#3a3028" />
+        {[-36, -18, 0, 18, 36].map((x, i) => <path key={x} d={`M${x} -10 q-6 -12 0 -18 q6 6 0 18 M${x} -10 q8 -8 10 -16`} stroke="#5ab04a" strokeWidth="2.4" fill="none" />)}
+        <rect x="-54" y="-50" width="108" height="5" rx="2" fill="#c87aff" opacity="0.8" />
+        <path d="M-54 -45 L-60 -10 L60 -10 L54 -45 Z" fill="#c87aff" opacity="0.08" />
+      </g>
+      {/* fresque des enfants : soleil, arbres, nuages */}
+      <g transform="translate(640,234)" opacity="0.8">
+        <rect x="-50" y="-22" width="100" height="40" fill="#2a4a6a" opacity="0.6" />
+        <circle cx="-26" cy="-8" r="9" fill="#f2c14e" />
+        {[0, 18, 36].map((x) => <g key={x}><rect x={x - 6} y="0" width="3" height="12" fill="#6a4a2a" /><circle cx={x - 4.5} cy="-2" r="7" fill="#4a9a4a" /></g>)}
+        <path d="M-10 -14 q6 -6 12 0 q6 -4 10 2" stroke="#e8e8f0" strokeWidth="3" fill="none" strokeLinecap="round" />
+      </g>
+      {/* d'autres tablées, au fond, dans la pénombre */}
+      {[[40, 294], [86, 290], [940, 292], [972, 296]].map(([x, y], i) => (
+        <g key={`ot${i}`} opacity="0.55"><circle cx={x} cy={y - 26} r="10" fill="#141018" /><path d={`M${x - 16} ${y} q16 -22 32 0 Z`} fill="#141018" /></g>
+      ))}
+      {/* suspensions chaudes au-dessus de la table */}
+      {[240, 760].map((x) => (
+        <g key={`sp${x}`}>
+          <path d={`M${x} 0 v100`} stroke="#3a3444" strokeWidth="1.5" />
+          <path d={`M${x - 20} 116 Q${x} 92 ${x + 20} 116 Z`} fill="#c8963e" />
+          <ellipse cx={x} cy="118" rx="16" ry="4" fill="#ffe2b0" />
+          <path d={`M${x - 18} 118 L${x - 70} 300 L${x + 70} 300 L${x + 18} 118 Z`} fill="#ffd8a0" opacity="0.06" />
+        </g>
+      ))}
 
       {/* voûte + nervures */}
       <g stroke="#2c3850" strokeWidth="1.6" fill="none" opacity="0.7">
@@ -380,8 +517,23 @@ export function StageToast({ raised = false }) {
         <path d="M-14 0 L-18 -34 Q-16 -52 -6 -54 L6 -54 Q16 -52 18 -34 L14 0 Z" fill="#cfefff" stroke="#6aa8c8" strokeWidth="1.5" opacity="0.9" />
         <path d="M-14 -26 L14 -26" stroke="#6aa8c8" strokeWidth="1" opacity="0.8" />
       </g>
-      {/* assiettes */}
+      {/* flaques de lumière chaude des suspensions sur la nappe */}
+      {[240, 760].map((x) => <ellipse key={`lp${x}`} cx={x} cy="330" rx="140" ry="24" fill="#ffcf8a" opacity="0.2" filter="url(#j2t-blur)" />)}
+      {/* assiettes, serviettes, bols */}
       {[200, 330, 470, 640, 770].map((x) => <ellipse key={x} cx={x} cy={350} rx="30" ry="7" fill="#f4eee0" stroke="#bfb298" strokeWidth="1" />)}
+      {[200, 330, 470, 640, 770].map((x, i) => <path key={`sv${x}`} d={`M${x + 34} 344 l12 0 l3 12 l-12 0 Z`} fill={["#a84a3a", "#2f7f86", "#d8b85a"][i % 3]} opacity="0.8" />)}
+      {/* pain de la cantine, bougies */}
+      <g transform="translate(380,322)">
+        <ellipse cx="0" cy="0" rx="28" ry="9" fill="#b8763a" /><ellipse cx="0" cy="-3" rx="24" ry="7" fill="#d8964a" />
+        {[-12, 0, 12].map((x) => <path key={x} d={`M${x - 4} -6 l8 4`} stroke="#8a5a2a" strokeWidth="1.4" />)}
+      </g>
+      {[[150, 316], [520, 312], [720, 314]].map(([x, y], i) => (
+        <g key={`bg${i}`}>
+          <ellipse cx={x} cy={y} rx="22" ry="12" fill="#ffd890" opacity="0.25" filter="url(#j2t-blur)" />
+          <rect x={x - 3} y={y - 14} width="6" height="14" fill="#efe6d2" />
+          <path d={`M${x} ${y - 14} q-3 -5 0 -9 q3 4 0 9 Z`} fill="#ffcf6a"><animate attributeName="opacity" values="1;0.7;1" dur={`${1 + i * 0.3}s`} repeatCount="indefinite" /></path>
+        </g>
+      ))}
 
       {/* verres : se lèvent au moment du toast */}
       {cups.map((c, i) => (
