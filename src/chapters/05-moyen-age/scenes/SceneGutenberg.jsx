@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau : l'atelier de Gutenberg (Mayence)
@@ -27,9 +28,27 @@ export default function SceneGutenberg({ collect, action, reveal, made = [], mod
         <filter id="gt-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6" /></filter>
       </defs>
 
-      {/* ═══ mur de l'atelier ═══ */}
+      {/* ═══ mur de l'atelier : torchis clair entre des pans de bois ═══ */}
       <rect width="1000" height="560" fill="url(#gt-wall)" />
-      <rect width="1000" height="560" fill="#2a1c10" opacity="0.28" filter="url(#gt-grain)" />
+      <rect x="-40" y="0" width="1080" height="400" fill="#b89a74" opacity="0.55" />
+      <rect width="1000" height="560" fill="#2a1c10" opacity="0.22" filter="url(#gt-grain)" />
+      {/* pans de bois : poteaux, sablière, décharges en diagonale */}
+      <g fill="#4a3220">
+        {[-10, 250, 500, 760, 1000].map((x) => <rect key={x} x={x - 9} y="0" width="18" height="400" />)}
+        <rect x="-40" y="262" width="1080" height="14" />
+      </g>
+      <g stroke="#4a3220" strokeWidth="11">
+        <path d="M0 262 L250 140 M500 262 L250 140 M500 262 L760 140 M1000 262 L760 140" opacity="0.9" />
+      </g>
+      <g stroke="#7a5a3a" strokeWidth="2" opacity="0.5">
+        {[-10, 250, 500, 760, 1000].map((x) => <path key={x} d={`M${x - 7} 0 V400`} />)}
+      </g>
+      {/* plafond : solives qui dépassent */}
+      <rect x="-40" y="-10" width="1080" height="34" fill="#3a2818" />
+      {Array.from({ length: 12 }).map((_, i) => <rect key={i} x={i * 92 - 20} y="16" width="26" height="22" fill="#4a3220" />)}
+      {/* coin sombre à droite, ombre portée de la grande presse */}
+      <linearGradient id="gt-side" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#140c06" stopOpacity="0" /><stop offset="100%" stopColor="#140c06" stopOpacity="0.55" /></linearGradient>
+      <rect x="800" y="0" width="240" height="560" fill="url(#gt-side)" />
 
       {/* ═══ couche lointaine : fenêtre + poutres + feuilles qui sèchent ═══ */}
       <PLayer depth={1}>
@@ -65,7 +84,17 @@ export default function SceneGutenberg({ collect, action, reveal, made = [], mod
       <PLayer depth={3}>
         <rect y="400" width="1000" height="160" fill="url(#gt-floor)" />
         <rect y="402" width="1000" height="158" fill="#2c1c10" opacity="0.35" filter="url(#gt-grain)" />
-        <path d="M0 456 h1000 M0 512 h1000 M300 410 v150 M780 410 v150" stroke="#3a2a18" strokeWidth="1.6" opacity="0.5" />
+        {/* plancher : larges planches en perspective */}
+        {Array.from({ length: 18 }).map((_, i) => {
+          const x = -120 + i * 74;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.62).toFixed(0)} 400 L${x} 560`} stroke="#3a2a18" strokeWidth="1.6" opacity="0.5" />;
+        })}
+        {[426, 464, 516].map((y, i) => <path key={y} d={`M${-40 + i * 30} ${y} h${200 + i * 40} M${520 - i * 40} ${y} h${180 + i * 30}`} stroke="#3a2a18" strokeWidth="1.2" opacity="0.4" />)}
+        <rect y="398" width="1000" height="6" fill="#3a2818" />
+        {/* la lumière de la fenêtre tombe sur le plancher */}
+        <path d="M90 260 L230 260 L420 560 L150 560 Z" fill="#f4e8c8" opacity="0.08" filter="url(#gt-blur)" />
+        <ellipse cx="250" cy="470" rx="140" ry="26" fill="#f4e8c8" opacity="0.12" filter="url(#gt-blur)" />
+        <Speckle seed={301} x0={0} x1={1000} y0={404} y1={560} n={160} colors={["#2a1a0c", "#a8885c"]} opacity={0.4} />
         <ellipse cx="500" cy="474" rx="440" ry="52" fill="#6e5232" opacity="0.3" />
 
         {/* LA FONTE DU PLOMB : creuset sur un petit foyer */}
