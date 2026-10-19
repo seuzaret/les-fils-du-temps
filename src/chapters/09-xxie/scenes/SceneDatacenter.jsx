@@ -166,14 +166,53 @@ export default function SceneDatacenter({ collect, action, reveal, made = [], mo
         <path d="M0 560 L0 460 L1000 460 L1000 560 Z" fill="url(#dc-floor)" />
         {/* texture de dalles techniques */}
         <path d="M0 560 L0 460 L1000 460 L1000 560 Z" fill="#0a1018" opacity="0.3" filter="url(#dc-mottle)" />
-        {/* le sol technique, en perspective vers le fond */}
-        <path d="M420 400 L120 560 M580 400 L880 560 M420 400 L580 400" stroke="#2a3244" strokeWidth="2" opacity="0.7" fill="none" />
-        {[440, 480, 530].map((y, i) => <path key={i} d={`M${330 - i * 90} ${y} H${670 + i * 90}`} stroke="#2a3244" strokeWidth="1.6" opacity="0.5" />)}
+        {/* le faux plancher technique : dalles en perspective, dalles perforées
+            (soufflage d'air froid) dans l'allée centrale */}
+        {Array.from({ length: 5 }).map((_, r) => {
+          const y0 = 460 + r * r * 2.4 + r * 10, y1 = 460 + (r + 1) * (r + 1) * 2.4 + (r + 1) * 10;
+          return Array.from({ length: 14 }).map((_, c) => {
+            const xa = -200 + c * 100, k0 = 0.55 + (y0 - 460) / 220, k1 = 0.55 + (y1 - 460) / 220;
+            const X = (x, k) => 500 + (x - 500) * k;
+            const d = `M${X(xa, k0).toFixed(1)} ${y0.toFixed(1)} L${X(xa + 100, k0).toFixed(1)} ${y0.toFixed(1)} L${X(xa + 100, k1).toFixed(1)} ${y1.toFixed(1)} L${X(xa, k1).toFixed(1)} ${y1.toFixed(1)} Z`;
+            const perfo = c >= 6 && c <= 7;
+            return (
+              <g key={`${r}-${c}`}>
+                <path d={d} fill={perfo ? "#26344a" : "none"} stroke="#2a3244" strokeWidth="1.2" opacity="0.75" />
+                {perfo && Array.from({ length: 12 }).map((_, k) => <circle key={k} cx={(X(xa + 12 + (k % 4) * 25, (k0 + k1) / 2)).toFixed(1)} cy={(y0 + (y1 - y0) * (0.25 + Math.floor(k / 4) * 0.25)).toFixed(1)} r={0.8 + r * 0.2} fill="#7fd8ff" opacity="0.35" />)}
+              </g>
+            );
+          });
+        })}
+        {/* reflets des façades de serveurs sur le sol brillant */}
+        {[[140, 1, "#5eff9e"], [244, 0.86, "#5eff9e"], [330, 0.74, "#7fd8ff"], [856, 1, "#7fd8ff"], [752, 0.86, compte ? "#8a1010" : "#7fd8ff"], [666, 0.74, "#5eff9e"]].map(([x, sc, c], i) => (
+          <rect key={`rf${i}`} x={x - 34 * sc} y="462" width={68 * sc} height={60 * sc} fill={c} opacity="0.07" filter="url(#dc-blur)" />
+        ))}
+        {/* le froid soufflé par les dalles perforées, qui monte en volutes */}
+        {[0, 1, 2].map((i) => (
+          <ellipse key={`fm${i}`} cx={470 + i * 30} cy="470" rx="60" ry="10" fill="#cfe8ff" opacity="0.08" filter="url(#dc-blur)">
+            <animate attributeName="cy" values="480;440;480" dur={`${7 + i * 2}s`} repeatCount="indefinite" />
+            <animate attributeName="opacity" values="0.02;0.1;0.02" dur={`${7 + i * 2}s`} repeatCount="indefinite" />
+          </ellipse>
+        ))}
         {/* petits reflets de LED sur le sol (vert/bleu) devant chaque baie */}
         <ellipse cx="140" cy="466" rx="46" ry="4" fill="#5eff9e" opacity="0.12" filter="url(#dc-blur)" />
         <ellipse cx="856" cy="466" rx="46" ry="4" fill="#7fd8ff" opacity="0.12" filter="url(#dc-blur)" />
         <ellipse cx="244" cy="470" rx="34" ry="3" fill="#5eff9e" opacity="0.10" filter="url(#dc-blur)" />
         <ellipse cx="752" cy="470" rx="34" ry="3" fill={compte ? "#8a1010" : "#7fd8ff"} opacity="0.10" filter="url(#dc-blur)" />
+        {/* les chemins de câbles jaunes (fibre optique) qui filent vers le fond */}
+        {[[70, 118, 452, 192], [930, 118, 548, 192]].map(([x0, y0, x1, y1], i) => (
+          <g key={`ct${i}`}>
+            <path d={`M${x0} ${y0} L${x1} ${y1} L${x1} ${y1 + 4} L${x0} ${y0 + 12} Z`} fill="#c8a020" />
+            <path d={`M${x0} ${y0} L${x1} ${y1}`} stroke="#f0d050" strokeWidth="1.6" />
+            {[0.2, 0.45, 0.7].map((t) => <path key={t} d={`M${x0 + (x1 - x0) * t} ${y0 + (y1 - y0) * t + 8 - t * 5} v${30 - t * 24}`} stroke="#c8a020" strokeWidth={4 - t * 3} />)}
+          </g>
+        ))}
+        {/* panneau SORTIE vert, tout au fond de l'allée */}
+        <g transform="translate(500,206)">
+          <rect x="-16" y="-6" width="32" height="12" rx="1.5" fill="#1a8a3a" />
+          <text x="0" y="3" textAnchor="middle" fontFamily="Arial,sans-serif" fontSize="6.5" fontWeight="700" fill="#e8fff0">SORTIE</text>
+          <ellipse cx="0" cy="0" rx="26" ry="12" fill="#5eff9e" opacity="0.2" filter="url(#dc-blur)" />
+        </g>
         {/* fils/câbles qui courent au plafond au-dessus des baies */}
         <path d="M60 96 L940 96" stroke="#3a4456" strokeWidth="1.2" opacity="0.7" />
         <path d="M60 108 L940 108" stroke="#5a3a20" strokeWidth="1" opacity="0.55" />
