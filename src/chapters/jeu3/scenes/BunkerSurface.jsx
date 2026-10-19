@@ -1,3 +1,4 @@
+import { Caution, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 /* ============================================================
    JEU 3 — Niveau +2 : Surface / Sortie scellée C-3
    ------------------------------------------------------------
@@ -32,6 +33,17 @@ export default function BunkerSurface({ onGo, j3 }) {
         </defs>
         {/* Béton brut du sas de sortie */}
         <rect width="900" height="500" fill="url(#sf-wall)" />
+        <ConcretePanels x0={0} x1={900} y0={0} y1={462} w={150} seed={92} stain="#2a1408" joint="#140a04" bolt="#5a4030" />
+        {/* sol du sas, poussière accumulée depuis 40 ans */}
+        <rect y="462" width="900" height="38" fill="#140a06" />
+        <g transform="translate(-50,0)"><PerspFloor y0={462} y1={500} step={80} rows={2} opacity={0.5} /></g>
+        <ellipse cx="450" cy="476" rx="300" ry="10" fill="#8a7a64" opacity="0.12" />
+        {/* bandes de sécurité de part et d'autre du cadre */}
+        <Caution x={40} y={60} w={14} h={400} id="sf-cau1" />
+        <Caution x={846} y={60} w={14} h={400} id="sf-cau2" />
+        {/* chaîne et cadenas ajoutés après coup, au mur */}
+        <path d="M70 120 Q90 200 74 300" stroke="#6a6a70" strokeWidth="4" strokeDasharray="8 4" fill="none" />
+        <path d="M830 120 Q810 200 826 300" stroke="#6a6a70" strokeWidth="4" strokeDasharray="8 4" fill="none" />
         {/* Grosses fissures et joints de béton */}
         <path d="M0 100 L200 120 L100 250 M700 90 L900 140 M300 400 L500 380 L700 420" stroke="#0a0806" strokeWidth="1" opacity="0.6" fill="none" />
         {/* Halo rouge d'avertissement autour de la porte */}
@@ -126,6 +138,7 @@ export default function BunkerSurface({ onGo, j3 }) {
         )}
 
         <style>{`@keyframes sfWheelSpin { from { transform: rotate(0); } to { transform: rotate(360deg); } }`}</style>
+        <Vignette id="sf-vig" w={900} h={500} strength={0.5} />
       </svg>
 
       <div style={{ maxWidth: 800, width: "100%", background: "#2a1408", border: "1px solid #8a1010", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>

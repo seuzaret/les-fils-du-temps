@@ -11,6 +11,8 @@
    Dernière action : "Retour au menu" → onExit().
    ============================================================ */
 import { useState, useEffect } from "react";
+import { Bust } from "../../../engine/chars.jsx";
+import { ConcretePanels, Vignette } from "../bunkerKit.jsx";
 
 function useSequence(steps, active = true) {
   const [t, setT] = useState(0);
@@ -74,6 +76,25 @@ function Acte1Rapport({ prenom }) {
         </linearGradient>
       </defs>
       <rect width="1000" height="460" fill="url(#ep1-wall)" />
+      <ConcretePanels x0={0} x1={1000} y0={0} y1={310} w={125} seed={61} stain="#2a1a08" joint="#050403" bolt="#3a2a18" opacity={0.8} />
+      {/* le bureau de Vez : rayonnages de registres, classeur, horloge */}
+      {[90, 860].map((x, k) => (
+        <g key={`ry${k}`} transform={`translate(${x},70)`} opacity="0.85">
+          <rect x="-60" y="0" width="120" height="220" fill="#1a1208" stroke="#0a0604" strokeWidth="2" />
+          {[0, 1, 2, 3].map((r) => (
+            <g key={r}>
+              <rect x="-56" y={50 + r * 52} width="112" height="4" fill="#3a2810" />
+              {Array.from({ length: 9 }).map((_, j) => <rect key={j} x={-54 + j * 12} y={50 + r * 52 - (34 + ((j + r + k) % 3) * 4)} width="10" height={34 + ((j + r + k) % 3) * 4} fill={["#5a2a18", "#3a3a28", "#6a4a20", "#2a3040"][(j + r) % 4]} />)}
+            </g>
+          ))}
+        </g>
+      ))}
+      <g transform="translate(500,40)">
+        <circle r="18" fill="#e8dfc8" stroke="#5a3818" strokeWidth="3" />
+        <path d="M0 0 v-11 M0 0 l8 3" stroke="#1a0e08" strokeWidth="1.8" strokeLinecap="round" />
+      </g>
+      {/* cône de la lampe, de l'abat-jour jusqu'au bureau */}
+      <path d="M370 210 L390 210 L520 312 L240 312 Z" fill="#ffd870" opacity="0.07" />
       {/* Lampe de bureau avec cône de lumière chaude */}
       <ellipse cx="500" cy="300" rx="280" ry="140" fill="#c8a848" opacity="0.1" />
       <ellipse cx="500" cy="300" rx="180" ry="100" fill="#ffd870" opacity="0.08" />
@@ -84,6 +105,11 @@ function Acte1Rapport({ prenom }) {
           <animate attributeName="opacity" values="0.7;1;0.7" dur="3.5s" repeatCount="indefinite" />
         </ellipse>
       </g>
+      {/* le Juge Vez, à droite, dans son fauteuil à haut dossier */}
+      <path d="M704 312 L704 176 Q760 150 816 176 L816 312 Z" fill="#2a1808" stroke="#0a0604" strokeWidth="2" />
+      <Bust x={760} y={242} s={1.32} skin="#c8a888" hair="#c8b090" look="slick" beard="goatee" beardColor="#a89070" cloth="#3a2818" collar="high" mood="neutre" />
+      {/* toi, à gauche, face à lui */}
+      <Bust x={220} y={246} s={1.26} skin="#c8a888" hair="#5a3818" look="short" cloth="#28303a" collar="round" mood="neutre" />
       {/* Bureau en bois massif */}
       <rect x="100" y="310" width="800" height="20" fill="url(#ep1-wood)" stroke="#1a0e08" strokeWidth="2" />
       <rect x="140" y="330" width="40" height="90" fill="#2a1808" stroke="#1a0e08" strokeWidth="1" />
@@ -108,27 +134,6 @@ function Acte1Rapport({ prenom }) {
           </g>
         );
       })}
-      {/* Juge Vez à droite, enfoncée dans son fauteuil */}
-      <g transform="translate(760,250)">
-        <ellipse cx="0" cy="80" rx="20" ry="4" fill="#000" opacity="0.4" />
-        <rect x="-20" y="20" width="40" height="60" fill="#2a1808" stroke="#1a0e08" strokeWidth="0.8" />
-        <path d="M-24 20 Q-26 0 -14 -6 L14 -6 Q26 0 24 20 Z" fill="#5a3818" stroke="#1a0e08" strokeWidth="0.8" />
-        <circle cx="0" cy="-20" r="14" fill="#c8a888" stroke="#5a3018" strokeWidth="0.8" />
-        <path d="M-12 -24 q0 -14 12 -16 q12 -2 14 6 q-2 10 -6 14 L-6 -22 Z" fill="#c8a848" />
-        <circle cx="-4" cy="-20" r="1.3" fill="#0a0806" />
-        <circle cx="4" cy="-20" r="1.3" fill="#0a0806" />
-        <path d="M-3 -14 Q0 -11 3 -14" stroke="#5a2818" strokeWidth="0.9" fill="none" />
-      </g>
-      {/* Toi, à gauche */}
-      <g transform="translate(220,250)">
-        <ellipse cx="0" cy="80" rx="18" ry="4" fill="#000" opacity="0.4" />
-        <path d="M-14 20 Q-18 0 -4 -6 L4 -6 Q18 0 14 20 Z" fill="#28303a" stroke="#1a0e08" strokeWidth="0.8" />
-        <rect x="-6" y="20" width="12" height="60" fill="#1a1408" />
-        <circle cx="0" cy="-16" r="12" fill="#c8a888" stroke="#5a3018" strokeWidth="0.8" />
-        <path d="M-10 -18 q0 -12 10 -14 q10 -2 12 4 q-2 8 -4 10 L-4 -18 Z" fill="#5a3818" />
-        <circle cx="-3" cy="-16" r="1.1" fill="#0a0806" />
-        <circle cx="3" cy="-16" r="1.1" fill="#0a0806" />
-      </g>
       {/* Bulle de dialogue qui apparaît tardivement */}
       {t > 3 && (
         <g transform="translate(500,80)">
@@ -141,6 +146,7 @@ function Acte1Rapport({ prenom }) {
           </text>
         </g>
       )}
+      <Vignette id="ep1-vig" w={1000} h={460} strength={0.55} />
     </svg>
   );
 }
