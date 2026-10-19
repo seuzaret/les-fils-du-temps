@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Grass, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 6 — Tableau 1 : en province, le vol de la montgolfière
@@ -37,7 +38,7 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
       {/* ═══ ciel ═══ */}
       <rect width="1000" height="560" fill="url(#pv-sky)" />
       <circle cx="140" cy="96" r="30" fill="#fff4d0" opacity="0.85" />
-      {[[260, 96, 120], [820, 76, 140]].map(([x, y, w], i) => <ellipse key={i} cx={x} cy={y} rx={w} ry={12} fill="#f2f2e8" opacity="0.5" />)}
+      <Clouds id="pv-cl" seed={111} items={[[260, 96, 220], [820, 76, 240], [380, 170, 130]]} color="#fbf8ee" shadow="#c8d0d4" opacity="0.75" drift={18} />
 
       {/* ═══ LA MONTGOLFIÈRE qui s'élève et redescend doucement (SMIL) ═══ */}
       <g>
@@ -67,26 +68,45 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
 
       {/* ═══ couche lointaine : le bourg ═══ */}
       <PLayer depth={1}>
-        <path d="M0 320 Q250 300 500 314 Q750 328 1000 306 L1000 380 L0 380 Z" fill="#8a9a66" />
-        {[[120, 316, "#a83a2a"], [210, 320, "#3a6a8a"], [300, 314, "#8a6a3a"], [860, 316, "#a83a2a"], [930, 320, "#3a6a8a"]].map(([x, y, c], i) => (
+        {/* coteaux et bois au loin */}
+        <Ridge id="pv-r0" seed={113} y={302} amp={50} rough={0.5} fill="#8a9ab0" lit="#a8b8c8" light={-1} />
+        <path d="M-40 320 Q250 300 500 314 Q750 328 1040 306 L1040 430 L-40 430 Z" fill="#8a9a66" />
+        <TreeLine seed={115} x0={-20} x1={1020} y={316} n={34} h={[12, 24]} kinds={["leafy", "leafy", "conifer"]} colors={["#5a7a44", "#4e6a3a", "#658149"]} light={-1} jitter={8} />
+        {/* la place du bourg : pavés, et les maisons qui la bordent */}
+        <path d="M-40 380 L1040 380 L1040 432 L-40 432 Z" fill="#b8a888" />
+        {Array.from({ length: 6 }).map((_, r) => Array.from({ length: 60 }).map((_, c) => (
+          <ellipse key={`${r}-${c}`} cx={-40 + c * 18 + (r % 2) * 9} cy={384 + r * 8 + r * r * 0.4} rx={5 + r * 0.6} ry={1.8 + r * 0.25} fill={(r + c) % 3 ? "#a89878" : "#9a8a6a"} opacity="0.8" />
+        )))}
+        {[[120, 380, "#a83a2a"], [210, 380, "#3a6a8a"], [300, 380, "#8a6a3a"], [860, 380, "#a83a2a"], [930, 380, "#3a6a8a"]].map(([x, y, c], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
-            <rect x="-26" y="-58" width="52" height="58" fill="url(#pv-wall)" />
-            <path d="M-32 -58 L0 -84 L32 -58 Z" fill={c} />
+            <ellipse cx="4" cy="2" rx="34" ry="4" fill="#3a2c1c" opacity="0.3" />
+            <rect x="-26" y="-64" width="52" height="64" fill="url(#pv-wall)" />
+            <rect x="12" y="-64" width="14" height="64" fill="#5a4a30" opacity="0.18" />
+            <path d="M-32 -64 L0 -90 L32 -64 Z" fill={c} />
+            <path d="M-32 -64 L32 -64" stroke="#3a2c1c" strokeWidth="2" opacity="0.5" />
+            <rect x="-18" y="-52" width="10" height="12" fill="#3a3a48" /><rect x="8" y="-52" width="10" height="12" fill="#3a3a48" />
+            <path d="M-19 -40 h12 M7 -40 h12" stroke="#e8e0d0" strokeWidth="1.4" />
             <rect x="-8" y="-30" width="16" height="30" fill="#3a2c1c" />
           </g>
         ))}
         {/* le clocher du bourg */}
-        <g transform="translate(430,314)">
-          <rect x="-20" y="-92" width="40" height="92" fill="url(#pv-wall)" />
+        <g transform="translate(430,380)">
+          <rect x="-20" y="-158" width="40" height="66" fill="url(#pv-wall)" />
+          <rect x="-34" y="-92" width="68" height="92" fill="url(#pv-wall)" />
+          <path d="M-38 -92 L0 -112 L38 -92 Z" fill="#6a6052" />
+          <path d="M-12 0 L-12 -40 Q0 -54 12 -40 L12 0 Z" fill="#3a2c1c" />
+          <g transform="translate(0,-66)">
           <path d="M-24 -92 L0 -128 L24 -92 Z" fill="#6a6052" />
           <rect x="-8" y="-70" width="16" height="24" rx="8" fill="#3a2c1c" />
+          </g>
         </g>
       </PLayer>
 
       {/* ═══ couche intermédiaire : la foule des badauds qui regarde en l'air ═══ */}
       <PLayer depth={2}>
-        {[[340, 388, "#7a3a4a"], [386, 392, "#3a5a7a"], [430, 386, "#6a5a2a"], [476, 392, "#5a3a6a"], [636, 388, "#7a4a2a"], [684, 392, "#3a5a4a"], [730, 386, "#8a3a3a"]].map(([x, y, c], i) => (
+        {[[340, 378, "#7a3a4a"], [386, 382, "#3a5a7a"], [430, 376, "#6a5a2a"], [476, 382, "#5a3a6a"], [636, 378, "#7a4a2a"], [684, 382, "#3a5a4a"], [730, 376, "#8a3a3a"]].map(([x, y, c], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
+            <ellipse cx="2" cy="48" rx="14" ry="3" fill="#3a2c1c" opacity="0.3" />
             {/* tête levée vers le ciel, un bras qui pointe le ballon */}
             <Figure x={0} y={48} s={0.6} skin="#cc9c6c" hair={["#3a2c1c", "#5a3a20", "#1e140c", "#7a5a3a"][i % 4]}
               look={["ponytail", "bun", "short", "long", "curls", "ponytail", "bob"][i]} hat={i === 2 || i === 5 ? "tricorne" : null}
@@ -100,7 +120,17 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
       <PLayer depth={3}>
         <rect y="430" width="1000" height="130" fill="url(#pv-ground)" />
         <rect y="432" width="1000" height="128" fill="#2c2012" opacity="0.3" filter="url(#pv-mottle)" />
-        <path d="M0 486 h1000 M260 430 v130 M540 430 v130 M800 430 v130" stroke="#4a3a24" strokeWidth="1.4" opacity="0.4" />
+        {/* bordure de la place : grosses pierres, puis le chemin de terre battue */}
+        {Array.from({ length: 42 }).map((_, i) => (
+          <rect key={i} x={i * 24 + (i % 2) * 3} y="429" width="22" height="7" rx="2" fill={i % 3 ? "#9a8a6a" : "#8a7a5a"} stroke="#5e4c34" strokeWidth="0.8" />
+        ))}
+        <path d="M-20 520 Q300 492 520 500 Q760 508 1020 486" stroke="#4a3a24" strokeWidth="3" fill="none" opacity="0.25" />
+        <path d="M-20 540 Q300 512 520 520 Q760 528 1020 506" stroke="#4a3a24" strokeWidth="3" fill="none" opacity="0.25" />
+        <Speckle seed={161} x0={0} x1={1000} y0={442} y1={556} n={90} colors={["#5e4c34", "#c8b48c", "#7a6444"]} r={[1, 2.4]} opacity={0.6} />
+        <Grass x={18} y={556} s={1.2} color="#6a7a3a" seed={162} n={9} />
+        <Grass x={150} y={446} s={0.8} color="#7a8a44" seed={163} n={6} />
+        <Grass x={560} y={448} s={0.7} color="#7a8a44" seed={164} n={5} flower="#e8d070" />
+        <Grass x={980} y={552} s={1.1} color="#6a7a3a" seed={165} n={8} />
         <ellipse cx="500" cy="500" rx="460" ry="42" fill="#6e5836" opacity="0.25" />
 
         {/* JULES le journaliste, penché sur son carnet, la plume à la main */}
