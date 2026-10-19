@@ -1860,7 +1860,7 @@ export default function App() {
           remede={jeu2Target >= 0 ? JEU2[jeu2Target]?.remede : null}
           endChoice={jeu2EndChoice}
           onRetour={() => { setMode("jeu1"); setScreen("title"); }}
-          onLancerJeu3={() => { setMode("jeu3"); setScreen("jeu3"); }} />
+          onLancerJeu3={() => { setMode("jeu3"); setJeu3Start({ flags: { from_finjeu2: true } }); setJeu3Nonce((n) => n + 1); setScreen("jeu3"); }} />
       </>
     );
   }

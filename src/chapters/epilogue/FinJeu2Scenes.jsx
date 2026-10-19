@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import TimeMachine from "../../engine/TimeMachine.jsx";
 import { PortraitElias, PortraitAl3x1A, AL3X1A_LOOK } from "./StationChronautes.jsx";
 import { Figure } from "./cineChars.jsx";
+import ChambreN27Decor from "../jeu3/ChambreN27Decor.jsx";
 import { playMaterialize, playPhonePing } from "../../engine/sfx.js";
 
 /* ============================================================
@@ -618,66 +619,26 @@ export function SceneElderElias() {
 
 /* ═══════════════════════ ACTE 4 · LE DISCERNEMENT ═══════════════════════ */
 
+/* La chambre N-27 : le MÊME décor que dans le Jeu 3 (ChambreN27Decor),
+   pour qu'on reconnaisse la pièce en lançant le Discernement. */
 function CellRoom({ beat = 0 }) {
   return (
     <>
-      <defs>
-        <linearGradient id="ce-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a2028" /><stop offset="100%" stopColor="#10151c" /></linearGradient>
-        <linearGradient id="ce-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a1e26" /><stop offset="100%" stopColor="#0a0e14" /></linearGradient>
-      </defs>
-      <rect width="1000" height="400" fill="url(#ce-wall)" />
-      <rect y="400" width="1000" height="160" fill="url(#ce-floor)" />
-      <rect y="20" width="1000" height="14" fill="#141c26" /><rect y="34" width="1000" height="2" fill="#3a4048" />
-      {[80, 200, 320, 440, 560, 680, 800, 920].map((x) => <circle key={x} cx={x} cy="27" r="2.5" fill="#5a6270" />)}
-      <rect x="180" y="46" width="640" height="8" fill="#c8d4e2" opacity="0.85"><animate attributeName="opacity" values="0.9;0.4;0.95;0.5;0.9" dur="2.6s" repeatCount="indefinite" /></rect>
-      <ellipse cx="500" cy="90" rx="360" ry="50" fill="#c8d4e2" opacity="0.06" />
-      <g opacity="0.3">{[80, 240, 400, 560, 720, 880].map((x) => <line key={x} x1={x} y1="34" x2={x} y2="400" stroke="#0a0e14" />)}</g>
-      {/* capteurs */}
-      <g transform="translate(100,130)"><rect x="-14" y="-14" width="28" height="28" fill="#141c26" stroke="#5a6270" /><circle r="5" fill="#c85030"><animate attributeName="opacity" values="1;0.4;1" dur="1.4s" repeatCount="indefinite" /></circle><text y="26" textAnchor="middle" fontFamily={MONO} fontSize="7" fill="#8fa3bd">CO₂</text></g>
-      <g transform="translate(180,130)"><rect x="-14" y="-14" width="28" height="28" fill="#141c26" stroke="#5a6270" /><circle r="5" fill="#5eff9e"><animate attributeName="opacity" values="1;0.5;1" dur="2.4s" repeatCount="indefinite" /></circle><text y="26" textAnchor="middle" fontFamily={MONO} fontSize="7" fill="#8fa3bd">AIR</text></g>
-      {/* règles */}
-      <g transform="translate(90,230)" opacity="0.85"><rect x="-32" y="-44" width="64" height="88" fill="#f0e0c0" stroke="#5a3818" /><text y="-26" textAnchor="middle" fontFamily={MONO} fontSize="8" fontWeight="800" fill="#5a3818">RÈGLES</text>{[-14, -4, 6, 16, 26].map((y) => <line key={y} x1="-24" y1={y} x2="24" y2={y} stroke="#5a3818" strokeWidth="0.5" opacity="0.6" />)}</g>
-      {/* lit + le joueur, assis */}
-      <g transform="translate(150,300)">
-        <rect x="0" y="60" width="380" height="80" fill="#5a6270" stroke="#0a0806" strokeWidth="2" />
-        <rect x="4" y="30" width="372" height="30" fill="#5a3018" stroke="#0a0806" />
-        <rect x="14" y="20" width="80" height="24" rx="6" fill="#e8eef5" stroke="#3a4048" />
-        <rect x="0" y="140" width="10" height="18" fill="#3a4048" /><rect x="370" y="140" width="10" height="18" fill="#3a4048" />
-        <path d="M14 44 Q80 40 200 50 Q300 44 380 50 L380 60 L14 60 Z" fill="#3a2818" opacity="0.8" />
-        <g transform="translate(80,-8)">
-          <animateTransform attributeName="transform" type="translate" values="80 -8; 80 -6; 80 -8" dur="4s" repeatCount="indefinite" />
-          <circle r="13" fill="#e0a878" stroke="#5a3018" strokeWidth="0.6" />
-          <path d="M-11 -6 Q0 -16 11 -6 L11 -2 L-11 -2 Z" fill="#3a2818" />
-          <path d="M-4 -11 L-2 -16 M4 -11 L2 -16 M0 -13 L0 -18" stroke="#3a2818" strokeWidth="1" />
-          <circle cx="-4" cy="-1" r="1.4" fill="#2a1810" /><circle cx="4" cy="-1" r="1.4" fill="#2a1810" />
-          <path d="M-17 11 L17 11 L21 62 L-21 62 Z" fill="#3a80c8" stroke="#141c26" strokeWidth="0.8" />
-        </g>
-      </g>
-      {/* panneau mural de MARTINE */}
-      <g transform="translate(850,190)">
-        {beat === 1 && <rect x="-112" y="-82" width="224" height="204" rx="6" fill="none" stroke="#7fd8ff" strokeWidth="3" opacity="0.8"><animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.6s" repeatCount="indefinite" /></rect>}
-        <rect x="-100" y="-70" width="200" height="180" fill="#0a0806" stroke="#7fd8ff" strokeWidth="3" />
-        <rect x="-90" y="-60" width="180" height="160" fill="#141c26" />
-        <text y="-38" textAnchor="middle" fontFamily={MONO} fontSize="11" fontWeight="800" fill="#7fd8ff" letterSpacing="3">BULLETIN N-27</text>
-        <line x1="-80" y1="-30" x2="80" y2="-30" stroke="#7fd8ff" strokeWidth="0.6" opacity="0.6" />
-        <text y="-8" textAnchor="middle" fontFamily="Georgia,serif" fontSize="12" fill="#c8d4e2" fontStyle="italic">« Bienvenue,</text>
-        <text y="10" textAnchor="middle" fontFamily="Georgia,serif" fontSize="12" fill="#c8d4e2" fontStyle="italic">HABITANT N-27. »</text>
-        <text y="34" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#c8d4e2" fontStyle="italic">La surface est</text>
-        <text y="50" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fill="#c8d4e2" fontStyle="italic">encore inhabitable.</text>
-        <text y="72" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#c8d4e2" fontStyle="italic" opacity="0.8">Restez chez vous.</text>
-        <text y="94" textAnchor="middle" fontFamily={MONO} fontSize="8" fill="#5eff9e" letterSpacing="2">— MARTINE —</text>
-        <circle cx="86" cy="-60" r="4" fill="#5eff9e"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.6s" repeatCount="indefinite" /></circle>
-      </g>
-      {/* porte N-27 */}
-      <g transform="translate(962,240)"><rect x="-20" y="-80" width="40" height="180" fill="#0a0e14" stroke="#3a4048" strokeWidth="2" /><circle cx="10" cy="20" r="3" fill="#c8a848" /><rect x="-16" y="-70" width="32" height="14" fill="#e8dfc8" /><text y="-59" textAnchor="middle" fontFamily={MONO} fontSize="9" fontWeight="800" fill="#0a0806">N-27</text></g>
-      {/* étagère (la tablette y est posée) */}
-      <g transform="translate(540,290)">
-        <rect width="200" height="4" fill="#3a2818" /><rect y="60" width="200" height="4" fill="#3a2818" />
-        <rect width="4" height="64" fill="#3a2818" /><rect x="196" width="4" height="64" fill="#3a2818" />
-        <g transform="translate(84,-40)"><rect width="32" height="42" rx="3" fill="#0a0e14" stroke="#f08ad0" strokeWidth="1.6" /><rect x="3" y="4" width="26" height="34" fill="#131922" />
-          <circle cx="16" cy="21" r="30" fill="none" stroke="#f08ad0" strokeWidth="1.4" strokeDasharray="4 4" opacity="0.85"><animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" /><animateTransform attributeName="transform" type="rotate" from="0 16 21" to="360 16 21" dur="16s" repeatCount="indefinite" /></circle></g>
-        <g transform="translate(20,20)"><rect width="14" height="18" fill="#5a6270" stroke="#3a4048" /><ellipse cx="7" rx="7" ry="2" fill="#3a4048" /></g>
-        <g transform="translate(140,-20)"><rect width="6" height="24" fill="#8a3820" /><rect x="6" width="6" height="24" fill="#3a5878" /><rect x="12" y="2" width="6" height="22" fill="#5a4028" /><rect x="18" y="-2" width="6" height="26" fill="#28303a" /></g>
+      <rect width="1000" height="560" fill="#050810" />
+      <rect y="500" width="1000" height="60" fill="#050810" />
+      <g transform="translate(0,20)">
+        <ChambreN27Decor shelfTablet="on"
+          bedExtras={
+            /* toi, assis·e sur le lit, encore groggy */
+            <Figure x={130} y={78} s={0.86} pose="sit" skin="#e0a878" hair="#3a2818" look="short" mood="vexe"
+              garment="tee" coat="#3a80c8" pants="#2a3448" shoes="#1a1e26" arms={[{ a1: 14, a2: -30 }, { a1: 14, a2: -30 }]} />
+          } />
+        {/* l'annonce de MARTINE au mur, soulignée au 2e temps */}
+        {beat === 1 && (
+          <rect x="422" y="82" width="236" height="146" rx="6" fill="none" stroke="#7fd8ff" strokeWidth="3" opacity="0.8">
+            <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.6s" repeatCount="indefinite" />
+          </rect>
+        )}
       </g>
     </>
   );
