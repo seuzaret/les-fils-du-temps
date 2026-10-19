@@ -340,3 +340,45 @@ export function Palm({ x, y, h = 120, lean = 10, color = "#4a6a32", trunk = "#7a
     </g>
   );
 }
+
+/* volcan (Vésuve) : cône aux flancs ravinés, épaulement de la Somma,
+   versant boisé en bas, cratère et panache. Origine au pied, centre. */
+export function Volcano({ x, y, w = 400, h = 200, color = "#6a6070", light = -1, smoke = true, glow = false, green = "#5a6a48", id = "vol", plume = 1 }) {
+  const hw = w / 2, cw = w * 0.075;
+  const cone = `M${-hw} 0 Q${-hw * 0.3} ${-h * 0.1} ${-cw * 1.5} ${-h * 0.92} L${-cw} ${-h} Q${-cw * 0.3} ${-h * 0.985} 0 ${-h * 0.99} Q${cw * 0.4} ${-h * 0.975} ${cw} ${-h * 1.005} L${cw * 1.5} ${-h * 0.92} Q${hw * 0.3} ${-h * 0.1} ${hw} 0 Z`;
+  const somma = `M${-hw} 0 Q${-hw * 0.7} ${-h * 0.42} ${-hw * 0.38} ${-h * 0.62} Q${-hw * 0.24} ${-h * 0.66} ${-hw * 0.16} ${-h * 0.58} Q${-hw * 0.3} ${-h * 0.3} ${-hw * 0.2} 0 Z`;
+  const L = -light; // côté ombre
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <defs><clipPath id={`${id}-c`}><path d={cone} /></clipPath></defs>
+      <path d={somma} fill={shade(color, -0.06)} transform={light > 0 ? "scale(-1,1)" : undefined} />
+      <path d={cone} fill={color} />
+      <g clipPath={`url(#${id}-c)`}>
+        {/* versant à l'ombre */}
+        <path d={`M${L * cw * 0.2} ${-h} Q${L * hw * 0.3} ${-h * 0.5} ${L * hw * 0.8} 0 L${L * hw * 1.2} 0 L${L * hw * 1.2} ${-h * 1.2} Z`} fill={shade(color, -0.2)} opacity="0.7" />
+        {/* ravines qui descendent du cratère */}
+        {[-0.75, -0.45, -0.18, 0.12, 0.4, 0.7].map((k, i) => (
+          <path key={i} d={`M${(k * cw * 1.4).toFixed(1)} ${(-h * 0.97).toFixed(1)} Q${(k * hw * 0.55).toFixed(1)} ${(-h * 0.5).toFixed(1)} ${(k * hw * 1.05).toFixed(1)} 0`} stroke={shade(color, -0.28)} strokeWidth={1.6 + (i % 2)} fill="none" opacity="0.5" />
+        ))}
+        {/* forêts et vignes sur les pentes basses : lisière irrégulière */}
+        <path d={`M${-hw} 0 Q${-hw * 0.5} ${-h * 0.2} 0 ${-h * 0.2} Q${hw * 0.5} ${-h * 0.2} ${hw} 0 Z`} fill={green} opacity="0.9" />
+        {Array.from({ length: 22 }).map((_, i) => {
+          const k = (i / 21) * 2 - 1, yy = -h * 0.2 * (1 - k * k * 0.75);
+          return <circle key={i} cx={(k * hw * 0.92).toFixed(1)} cy={yy.toFixed(1)} r={(w * 0.018 + (i % 3) * w * 0.006).toFixed(1)} fill={i % 2 ? green : shade(green, 0.08)} opacity="0.9" />;
+        })}
+      </g>
+      {/* cratère */}
+      <ellipse cx="0" cy={-h * 0.995} rx={cw * 0.85} ry={cw * 0.16} fill={shade(color, -0.35)} />
+      {glow && <ellipse cx="0" cy={-h} rx={cw * 0.7} ry={cw * 0.14} fill="#e0762e" opacity="0.65"><animate attributeName="opacity" values="0.65;0.3;0.65" dur="3s" repeatCount="indefinite" /></ellipse>}
+      {smoke && (
+        <g opacity={0.55 * plume}>
+          {[0, 1, 2, 3, 4].map((i) => (
+            <ellipse key={i} cx={(i * cw * 0.5 - cw * 0.3).toFixed(1)} cy={(-h - cw * (0.6 + i * 1.1)).toFixed(1)} rx={(cw * (0.6 + i * 0.35) * plume).toFixed(1)} ry={(cw * (0.42 + i * 0.22) * plume).toFixed(1)} fill={i % 2 ? "#b8b0a8" : "#a8a098"}>
+              <animate attributeName="cy" values={`${(-h - cw * (0.6 + i * 1.1)).toFixed(1)};${(-h - cw * (0.9 + i * 1.1)).toFixed(1)};${(-h - cw * (0.6 + i * 1.1)).toFixed(1)}`} dur={`${5 + i}s`} repeatCount="indefinite" />
+            </ellipse>
+          ))}
+        </g>
+      )}
+    </g>
+  );
+}

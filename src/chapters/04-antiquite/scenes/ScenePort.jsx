@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Glitter, Ridge, Speckle, Volcano } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 4 — Tableau adjacent : LE PORT DE POMPÉI
@@ -29,8 +30,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         <circle cx="140" cy="140" r="120" fill="url(#po-soleil)" />
         <circle cx="140" cy="140" r="34" fill="#fff4c8" />
         {/* nuages */}
-        <ellipse cx="360" cy="90" rx="90" ry="6" fill="#f0e0c0" opacity="0.55" />
-        <ellipse cx="620" cy="120" rx="120" ry="8" fill="#f0e0c0" opacity="0.5" />
+        <Clouds id="po-cl" seed={71} items={[[330, 84, 180], [520, 120, 150]]} color="#fbf0dc" shadow="#d8c0a0" opacity="0.7" drift={14} />
         {/* mouettes */}
         <g opacity="0.6" transform="translate(280,180)">
           <path d="M0 0 q-3 -3 -6 0 M0 0 q3 -3 6 0" stroke="#3a2818" strokeWidth="1.2" fill="none" strokeLinecap="round" />
@@ -42,14 +42,8 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
       <PLayer depth={4}>
         {/* LE VÉSUVE — au fond, imposant, fumée ANORMALEMENT dense */}
         <g transform="translate(720,340)">
-          {/* silhouette du volcan */}
-          <path d="M-220 0 L-100 -200 L-30 -200 L120 0 Z" fill="#5a5060" opacity="0.85" />
-          {/* face ombrée à droite */}
-          <path d="M-30 -200 L120 0 L60 0 L-20 -190 Z" fill="#3a3040" opacity="0.7" />
-          {/* neige/roche au sommet */}
-          <path d="M-100 -200 L-30 -200 L-40 -212 L-90 -212 Z" fill="#8a7098" opacity="0.75" />
-          {/* cratère */}
-          <ellipse cx="-65" cy="-208" rx="30" ry="6" fill="#3a2418" />
+          {/* le volcan : cône raviné, épaulement de la Somma, pentes boisées */}
+          <Volcano id="po-vol" x={-65} y={6} w={400} h={214} color="#5e5466" light={-1} smoke={false} green="#4e5a42" />
           {/* PANACHE de fumée dense qui monte, un peu inquiétant */}
           <g style={{ animation: "float 4s ease-in-out infinite" }}>
             <ellipse cx="-70" cy="-236" rx="40" ry="20" fill="#a09880" opacity="0.85" />
@@ -69,13 +63,18 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         {[[220, 200, 2.4], [420, 180, 3], [660, 210, 2], [340, 240, 2.8], [520, 220, 3.4]].map(([x, y, d], i) => (
           <circle key={i} cx={x} cy={y} r="0.9" fill="#5a5060" opacity="0.5" style={{ animation: `float ${d}s ease-in-out infinite` }} />
         ))}
-        {/* Collines de la baie de Naples à gauche */}
-        <path d="M0 380 L0 300 Q100 280 200 300 Q300 320 400 305 L400 380 Z" fill="#8a7098" opacity="0.55" />
+        {/* Collines de la baie de Naples à gauche, avec villas blanches */}
+        <Ridge id="po-r0" seed={251} x0={-40} x1={460} y={346} amp={56} rough={0.5} fill="#8a7a98" lit="#b0a0b8" light={-1} />
+        {[[40, 322], [96, 314], [170, 326], [250, 330], [330, 336]].map(([x, y], i) => (
+          <g key={i}><rect x={x} y={y} width="14" height="9" fill="#ece0cc" /><path d={`M${x - 1} ${y} l8 -4 l8 4 Z`} fill="#b04a30" /></g>
+        ))}
       </PLayer>
 
       <PLayer depth={3}>
         {/* mer */}
-        <rect y="340" width="1000" height="100" fill="url(#po-mer)" />
+        <rect x="-40" y="340" width="1080" height="100" fill="url(#po-mer)" />
+        <rect x="-40" y="340" width="1080" height="3" fill="#e8f0f0" opacity="0.4" />
+        <Glitter x={140} y0={344} y1={436} w0={14} w1={110} />
         {/* vagues */}
         <path d="M0 360 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0" stroke="#a8d0e8" strokeWidth="0.8" fill="none" opacity="0.7" />
         <path d="M0 385 q60 -3 120 0 q60 3 120 0 q60 -3 120 0 q60 3 120 0 q60 -3 120 0" stroke="#78a8c8" strokeWidth="0.8" fill="none" opacity="0.65" />
@@ -84,7 +83,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
           <ellipse key={i} cx={x} cy={y} rx="16" ry="1.6" fill="#f8f8e8" opacity="0.55" style={{ animation: `float ${2.4 + (i % 3) * 0.3}s ease-in-out infinite` }} />
         ))}
         {/* Reflet SOMBRE du Vésuve sur l'eau */}
-        <path d="M620 340 L720 400 L820 340 Z" fill="#3a3040" opacity="0.35" />
+        <path d="M520 340 L655 410 L790 340 Z" fill="#2a2a3a" opacity="0.3" />
         <path d="M700 380 Q720 375 740 380" stroke="#5a5060" strokeWidth="0.6" fill="none" opacity="0.5" />
         {/* NAVIRE MARCHAND romain (corbita) à quai — voile carrée */}
         <g transform="translate(720,370)">
@@ -114,12 +113,19 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
 
       <PLayer depth={2}>
         {/* quai en dalles */}
-        <rect y="440" width="1000" height="120" fill="url(#po-quai)" />
-        {/* joints entre dalles */}
-        {[0, 120, 240, 360, 480, 600, 720, 840].map((x, i) => (
-          <path key={i} d={`M${x} 440 L${x} 560`} stroke="#2a2010" strokeWidth="0.8" opacity="0.5" />
+        <rect x="-40" y="440" width="1080" height="130" fill="url(#po-quai)" />
+        {/* joints entre dalles, en perspective */}
+        {[[440, 458], [458, 482], [482, 516], [516, 570]].map(([y0, y1], r) => (
+          <g key={r}>
+            <path d={`M-40 ${y1} H1040`} stroke="#2a2010" strokeWidth={0.8 + r * 0.4} opacity="0.5" />
+            {Array.from({ length: 10 }).map((_, k) => {
+              const x = -80 + k * 130 + (r % 2) * 65, f0 = 1 + (y0 - 440) / 120, f1 = 1 + (y1 - 440) / 120;
+              return <path key={k} d={`M${(500 + (x - 500) * f0).toFixed(0)} ${y0} L${(500 + (x - 500) * f1).toFixed(0)} ${y1}`} stroke="#2a2010" strokeWidth="1" opacity="0.45" />;
+            })}
+          </g>
         ))}
-        <path d="M0 490 L1000 490" stroke="#2a2010" strokeWidth="0.8" opacity="0.5" />
+        <Speckle seed={253} x0={0} x1={1000} y0={444} y1={560} n={240} colors={["#5a4838", "#c8b8a0", "#3a2c20"]} opacity={0.45} />
+        <rect x="-40" y="440" width="1080" height="10" fill="#7a6a58" />
         {/* bord du quai vers la mer */}
         <path d="M0 440 L1000 440" stroke="#1a1408" strokeWidth="2" />
         {/* anneaux d'amarrage en bronze */}

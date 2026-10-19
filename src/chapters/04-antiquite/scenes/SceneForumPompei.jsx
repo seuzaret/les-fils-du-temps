@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Speckle, Volcano } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 4 — Tableau adjacent : LE FORUM DE POMPÉI
@@ -33,21 +34,9 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         <circle cx="180" cy="80" r="80" fill="#f8e8b8" opacity="0.35" />
         <circle cx="180" cy="80" r="24" fill="#f8e0a0" opacity="0.7" />
         {/* nuages hauts */}
-        <ellipse cx="360" cy="60" rx="90" ry="6" fill="#f0e0c0" opacity="0.55" />
-        <ellipse cx="540" cy="90" rx="120" ry="7" fill="#f0e0c0" opacity="0.5" />
+        <Clouds id="fp-cl" seed={61} items={[[360, 60, 180], [560, 92, 220], [880, 70, 150]]} color="#fbf2e2" shadow="#d8c8b0" opacity="0.7" drift={16} />
         {/* ═══ LE VÉSUVE, imposant, au fond du golfe ═══ */}
-        <g transform="translate(640,320)">
-          {/* silhouette du volcan bleu-gris (perspective lointaine) */}
-          <path d="M-200 0 L-60 -200 L20 -200 L200 0 Z" fill="#6a6070" opacity="0.85" />
-          {/* face ombrée à droite */}
-          <path d="M20 -200 L200 0 L120 0 L10 -190 Z" fill="#3a3040" opacity="0.55" />
-          {/* neige au sommet */}
-          <path d="M-60 -200 L20 -200 L10 -210 L-50 -210 Z" fill="#a89898" opacity="0.75" />
-          {/* cratère fumant */}
-          <ellipse cx="-20" cy="-205" rx="30" ry="6" fill="#2a2018" />
-          <path d="M-30 -212 q4 -14 -2 -22 q-4 -8 4 -18" stroke="#c8b8a0" strokeWidth="4" fill="none" opacity="0.5" strokeLinecap="round" />
-          <path d="M0 -210 q-4 -12 2 -22 q4 -8 -2 -18" stroke="#c8b8a0" strokeWidth="3" fill="none" opacity="0.45" strokeLinecap="round" />
-        </g>
+        <Volcano id="fp-vol" x={640} y={330} w={460} h={210} color="#6a6070" light={-1} green="#5e6a4a" />
         {/* deux mouettes qui passent */}
         <g opacity="0.55" transform="translate(360,180)" style={{ animation: "float 4s ease-in-out infinite" }}>
           <path d="M0 0 q-3 -3 -6 0 M0 0 q3 -3 6 0" stroke="#3a2818" strokeWidth="1.2" fill="none" strokeLinecap="round" />
@@ -127,12 +116,19 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
       <PLayer depth={3}>
         {/* dallage du forum */}
         <rect y="380" width="1000" height="180" fill="url(#fp-dalles)" />
-        {/* grandes dalles rectangulaires */}
-        {[[0, 400], [140, 400], [280, 400], [420, 400], [560, 400], [700, 400], [840, 400],
-          [70, 440], [210, 440], [350, 440], [490, 440], [630, 440], [770, 440], [910, 440],
-          [0, 480], [140, 480], [280, 480], [420, 480], [560, 480], [700, 480], [840, 480]].map(([x, y], i) => (
-          <rect key={i} x={x} y={y} width="140" height="38" fill="none" stroke="#3a3020" strokeWidth="0.8" opacity="0.55" />
+        {/* grandes dalles de travertin, en perspective, avec leurs nuances */}
+        {[[380, 396], [396, 418], [418, 448], [448, 490], [490, 560]].map(([y0, y1], r) => (
+          <g key={r}>
+            {Array.from({ length: 11 }).map((_, k) => {
+              const x = -120 + k * 140 + (r % 2) * 70, f0 = 1 + (y0 - 380) / 120, f1 = 1 + (y1 - 380) / 120;
+              const X0 = 500 + (x - 500) * f0, X1 = 500 + (x - 500) * f1, X2 = 500 + (x + 140 - 500) * f1, X3 = 500 + (x + 140 - 500) * f0;
+              return <path key={k} d={`M${X0.toFixed(0)} ${y0} L${X3.toFixed(0)} ${y0} L${X2.toFixed(0)} ${y1} L${X1.toFixed(0)} ${y1} Z`} fill={["#a89888", "#9a8a7a", "#b0a090", "#948474"][(k + r) % 4]} stroke="#3a3020" strokeWidth="1" strokeOpacity="0.5" opacity="0.55" />;
+            })}
+          </g>
         ))}
+        <Speckle seed={261} x0={0} x1={1000} y0={384} y1={560} n={260} colors={["#5a4838", "#d8c8b0", "#3a3020"]} opacity={0.4} />
+        {/* ornières des chars et pierres de passage */}
+        <path d="M120 560 Q300 470 440 380 M200 560 Q360 470 480 380" stroke="#4a3a2a" strokeWidth="3" fill="none" opacity="0.25" />
         {/* MUR à graffitis à droite */}
         <g transform="translate(560,300)">
           <rect x="0" y="0" width="340" height="130" fill="url(#fp-mur)" stroke="#5a3820" strokeWidth="1" />
