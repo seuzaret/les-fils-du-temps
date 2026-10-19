@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 9 (XXIe) — Tableau : Ta chambre, aujourd'hui.
@@ -38,6 +39,7 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
           <feComposite in="a" in2="SourceGraphic" operator="in" />
         </filter>
+        <filter id="ch-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="8" /></filter>
         <clipPath id="ch-winclip"><rect x="-56" y="-56" width="112" height="112" /></clipPath>
       </defs>
 
@@ -79,6 +81,29 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
 
       {/* ═══ couche lointaine : la fenetre + les POSTERS ═══ */}
       <PLayer depth={1}>
+        {/* panneaux lumineux hexagonaux au mur (qui changent de couleur) */}
+        <g transform="translate(150,120)">
+          {[[0, 0], [30, 17], [30, -17], [60, 0], [0, 34], [-30, 17], [60, 34]].map(([x, y], i) => {
+            const c = ["#ff4aa0", "#4ae0ff", "#a06aff", "#ff4aa0", "#4ae0ff", "#a06aff", "#ffb04a"][i];
+            const hex = "M17 0 L8.5 14.7 L-8.5 14.7 L-17 0 L-8.5 -14.7 L8.5 -14.7 Z";
+            return (
+              <g key={i} transform={`translate(${x},${y})`}>
+                <path d={hex} fill={c} opacity="0.35" filter="url(#ch-blur)" />
+                <path d={hex} fill={c} opacity="0.55" stroke="#0a0a1c" strokeWidth="2">
+                  <animate attributeName="opacity" values="0.55;0.25;0.55" dur={`${3 + (i % 3)}s`} begin={`${i * 0.4}s`} repeatCount="indefinite" />
+                </path>
+              </g>
+            );
+          })}
+        </g>
+        {/* étagère au-dessus du lit : mangas, figurine, plante, enceinte connectée */}
+        <g transform="translate(130,300)">
+          <rect x="-96" y="0" width="192" height="6" fill="#2a2a3a" />
+          {Array.from({ length: 9 }).map((_, k) => <rect key={k} x={-90 + k * 7} y={-30 + (k % 3)} width="6" height={30 - (k % 3)} fill={["#e83a5a", "#3a8ae8", "#f8d040", "#5ac85a", "#e8e8e8"][k % 5]} opacity="0.85" />)}
+          <g transform="translate(0,0)"><rect x="-6" y="-8" width="12" height="8" fill="#e8e4da" /><circle cx="0" cy="-16" r="7" fill="#f0c8a0" /><path d="M-8 -18 q8 -12 16 0 Z" fill="#2a2a3a" /><rect x="-7" y="-10" width="14" height="4" fill="#e83a5a" /></g>
+          <g transform="translate(40,0)"><path d="M-8 0 L-6 -12 L6 -12 L8 0 Z" fill="#e8e4da" /><path d="M0 -12 q-12 -8 -14 -20 M0 -12 q2 -14 8 -22 M0 -12 q10 -6 16 -8" stroke="#3a9a5a" strokeWidth="3" fill="none" strokeLinecap="round" /></g>
+          <g transform="translate(76,0)"><rect x="-10" y="-22" width="20" height="22" rx="8" fill="#2a2a34" /><ellipse cx="0" cy="-22" rx="10" ry="3" fill="#3a3a48" /><ellipse cx="0" cy="-22" rx="7" ry="2" fill="#4ae0ff" opacity="0.7" /></g>
+        </g>
         {/* POSTER MINECRAFT (bloc de terre pixelise) */}
         <g transform="translate(340,110)">
           <rect x="-40" y="-56" width="80" height="112" rx="2" fill="#0a0a10" stroke="#8ac86a" strokeWidth="2" />
@@ -169,8 +194,20 @@ export default function SceneChambre({ collect, action, reveal, made = [], inv =
       <PLayer depth={3}>
         <rect y="408" width="1000" height="152" fill="url(#ch-floor)" />
         <rect y="410" width="1000" height="150" fill="#050510" opacity="0.34" filter="url(#ch-grain)" />
-        {/* bandes du plancher */}
-        <path d="M0 452 h1000 M0 504 h1000 M180 408 v152 M540 408 v152 M840 408 v152" stroke="#180c08" strokeWidth="1.4" opacity="0.5" />
+        {/* lames de parquet en perspective, joints décalés */}
+        {Array.from({ length: 24 }).map((_, i) => {
+          const x = -220 + i * 64;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.62).toFixed(0)} 408 L${x} 560`} stroke="#180c08" strokeWidth="1.2" opacity="0.55" />;
+        })}
+        {[424, 446, 476, 516].map((y, i) => <path key={y} d={`M${i * 80} ${y} h${200 + i * 30} M${560 - i * 50} ${y} h${220 - i * 10}`} stroke="#180c08" strokeWidth="1" opacity="0.45" />)}
+        <rect y="406" width="1000" height="4" fill="#0a0612" />
+        {/* reflets des LED sur le parquet */}
+        <ellipse cx="560" cy="440" rx="300" ry="26" fill="#4ae0ff" opacity="0.12" filter="url(#ch-blur)" />
+        <ellipse cx="200" cy="470" rx="200" ry="22" fill="#ff4aa0" opacity="0.1" filter="url(#ch-blur)" />
+        {/* tapis rond moelleux sous le siège */}
+        <ellipse cx="560" cy="520" rx="170" ry="30" fill="#2a2440" />
+        <ellipse cx="560" cy="520" rx="150" ry="24" fill="none" stroke="#3a3458" strokeWidth="4" />
+        <Speckle seed={1001} x0={400} x1={720} y0={500} y1={544} n={60} colors={["#3a3458", "#1a1630"]} r={[0.8, 1.6]} opacity={0.6} perspective={false} />
 
         {/* LIT pose au sol, cote GAUCHE. Un JEAN plie traine dessus. */}
         <g transform="translate(140,470) scale(1)">
