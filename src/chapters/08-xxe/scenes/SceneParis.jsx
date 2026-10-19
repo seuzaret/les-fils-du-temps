@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Leafy } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 8 — Tableau : Paris occupé, 5 juin 1944, fin d'après-midi.
@@ -103,19 +104,24 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       {/* ═══ TOUR EIFFEL au fond, brumeuse ═══ */}
       <PLayer depth={1.5}>
         <g transform="translate(500,300)" opacity="0.85">
-          {/* silhouette bleutée, un voile de brume par-dessus */}
-          <path d="M-70 0 L-18 -240 L18 -240 L70 0 L42 0 L22 -88 L-22 -88 L-42 0 Z" fill="url(#pa-eiffel)" />
-          {/* premier étage */}
-          <path d="M-42 -66 L42 -66 L38 -88 L-38 -88 Z" fill="url(#pa-eiffel)" />
-          {/* deuxième étage */}
-          <path d="M-26 -154 L26 -154 L22 -178 L-22 -178 Z" fill="url(#pa-eiffel)" />
-          {/* piliers verticaux + treillis de la structure */}
-          {[-58, -42, -26, 0, 26, 42, 58].map((x, i) => (
-            <path key={i} d={`M${x} 0 L${x * 0.32} -240`} stroke="#252b34" strokeWidth="0.7" opacity="0.55" />
-          ))}
-          {/* diagonales entrecroisées : dessine deux X */}
-          <path d="M-42 -66 L42 -240 M42 -66 L-42 -240" stroke="#252b34" strokeWidth="0.4" opacity="0.35" />
-          <path d="M-26 -154 L26 -240 M26 -154 L-26 -240" stroke="#252b34" strokeWidth="0.4" opacity="0.35" />
+          {/* silhouette bleutée : quatre piles galbées, la grande arche,
+              les deux plates-formes, le campanile ; voile de brume en bas */}
+          <path d="M-74 0 Q-46 -70 -20 -150 L-8 -236 L8 -236 L20 -150 Q46 -70 74 0 L50 0 Q28 -56 0 -58 Q-28 -56 -50 0 Z" fill="url(#pa-eiffel)" />
+          <path d="M-44 -66 L44 -66 L40 -80 L-40 -80 Z" fill="#2c323e" />
+          <path d="M-44 -66 h88" stroke="#5a6070" strokeWidth="0.8" opacity="0.6" />
+          <path d="M-24 -150 L24 -150 L22 -160 L-22 -160 Z" fill="#2c323e" />
+          <rect x="-6" y="-246" width="12" height="10" fill="#2c323e" />
+          <path d="M0 -246 v-14" stroke="#2c323e" strokeWidth="2" />
+          {/* treillis : croisillons fins sur les piles */}
+          {Array.from({ length: 9 }).map((_, k) => {
+            const y = -6 - k * 8, w = 74 - k * 4.2;
+            return <path key={k} d={`M${-w} ${y} L${-w + 14} ${y - 8} M${-w + 14} ${y} L${-w} ${y - 8} M${w} ${y} L${w - 14} ${y - 8} M${w - 14} ${y} L${w} ${y - 8}`} stroke="#1e232c" strokeWidth="0.6" opacity="0.6" />;
+          })}
+          {Array.from({ length: 10 }).map((_, k) => {
+            const y = -84 - k * 7, w = 38 - k * 1.8;
+            return <path key={`h${k}`} d={`M${-w} ${y} L${w} ${y - 7} M${w} ${y} L${-w} ${y - 7}`} stroke="#1e232c" strokeWidth="0.5" opacity="0.45" />;
+          })}
+          <path d="M-20 -160 L-8 -236 M20 -160 L8 -236 M-16 -180 L12 -200 M16 -180 L-12 -200 M-12 -205 L8 -222 M12 -205 L-8 -222" stroke="#1e232c" strokeWidth="0.5" opacity="0.5" />
           {/* voile de brume par-dessus la moitié inférieure — perspective atmosphérique */}
           <rect x="-80" y="-40" width="160" height="60" fill="#c8b494" opacity="0.35" filter="url(#pa-blur)" />
           {/* drapeau nazi au sommet — rouge, disque blanc, croix stylisée */}
@@ -126,6 +132,36 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
             <path d="M20 13 L24 17 L20 21 M24 13 L28 17 L24 21 M20 17 L28 17 M24 13 L24 21" stroke="#1a1a1a" strokeWidth="1.6" fill="none" />
           </g>
         </g>
+      </PLayer>
+
+      {/* ═══ L'AVENUE qui file vers la tour : façades en fuite, platanes ═══ */}
+      <PLayer depth={1.5}>
+        <path d="M360 440 L478 302 L522 302 L700 440 Z" fill="#6a6056" />
+        <path d="M360 440 L478 302 L522 302 L700 440 Z" fill="#c8b494" opacity="0.25" />
+        <path d="M430 440 L494 302 M630 440 L508 302" stroke="#8a7a68" strokeWidth="2" opacity="0.5" />
+        {/* façades de gauche, de plus en plus petites et brumeuses */}
+        {[[360, 120, 440, 400, 150, 410], [400, 150, 410, 432, 196, 372], [432, 196, 372, 456, 232, 342], [456, 232, 342, 472, 258, 318]].map(([x0, t0, b0, x1, t1, b1], i) => (
+          <g key={`L${i}`} opacity={0.95 - i * 0.12}>
+            <path d={`M${x0} ${t0} L${x1} ${t1} L${x1} ${b1} L${x0} ${b0} Z`} fill={i % 2 ? "#b8a088" : "#c4ac90"} />
+            {[0.25, 0.5, 0.75].map((f) => <path key={f} d={`M${x0} ${t0 + (b0 - t0) * f} L${x1} ${t1 + (b1 - t1) * f}`} stroke="#5a4838" strokeWidth="0.8" opacity="0.6" />)}
+            {[0.3, 0.7].map((f) => <path key={`v${f}`} d={`M${x0 + (x1 - x0) * f} ${t0 + (t1 - t0) * f + 6} L${x0 + (x1 - x0) * f} ${b0 + (b1 - b0) * f - 10}`} stroke="#3a3440" strokeWidth={4 - i} opacity="0.55" strokeDasharray="8 6" />)}
+            <path d={`M${x0} ${t0} L${x1} ${t1} L${x1} ${t1 - 10 + i * 2} L${x0} ${t0 - 18 + i * 3} Z`} fill="#4a4450" />
+          </g>
+        ))}
+        {/* façades de droite */}
+        {[[700, 120, 440, 640, 150, 410], [640, 150, 410, 588, 196, 372], [588, 196, 372, 552, 232, 342], [552, 232, 342, 530, 258, 318]].map(([x0, t0, b0, x1, t1, b1], i) => (
+          <g key={`R${i}`} opacity={0.95 - i * 0.12}>
+            <path d={`M${x0} ${t0} L${x1} ${t1} L${x1} ${b1} L${x0} ${b0} Z`} fill={i % 2 ? "#a89078" : "#9a846c"} />
+            {[0.25, 0.5, 0.75].map((f) => <path key={f} d={`M${x0} ${t0 + (b0 - t0) * f} L${x1} ${t1 + (b1 - t1) * f}`} stroke="#4a3a2c" strokeWidth="0.8" opacity="0.6" />)}
+            {[0.3, 0.7].map((f) => <path key={`v${f}`} d={`M${x0 + (x1 - x0) * f} ${t0 + (t1 - t0) * f + 6} L${x0 + (x1 - x0) * f} ${b0 + (b1 - b0) * f - 10}`} stroke="#2a2430" strokeWidth={4 - i} opacity="0.55" strokeDasharray="8 6" />)}
+            <path d={`M${x0} ${t0} L${x1} ${t1} L${x1} ${t1 - 10 + i * 2} L${x0} ${t0 - 18 + i * 3} Z`} fill="#3a3440" />
+          </g>
+        ))}
+        {/* les platanes de l'avenue, qui rapetissent vers le fond */}
+        {[[392, 420, 0.42], [432, 382, 0.32], [458, 350, 0.24], [472, 330, 0.18], [668, 420, 0.42], [604, 382, 0.32], [566, 350, 0.24], [544, 330, 0.18]].map(([x, y, sc], i) => (
+          <Leafy key={i} x={x} y={y} s={sc} color={["#5a6a3a", "#66743e", "#526234"][i % 3]} light={1} seed={801 + i} />
+        ))}
+        <rect x="360" y="290" width="340" height="40" fill="#d8c4a0" opacity="0.35" filter="url(#pa-blur)" />
       </PLayer>
 
       {/* ═══ FAÇADES haussmanniennes ═══ */}
