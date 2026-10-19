@@ -263,13 +263,13 @@ export default function SceneInterieur({ collect, action, reveal, made = [], que
           famille… et qui raconte l'histoire du clan aux ancêtres. */}
       <g transform="translate(452,486)">
         <ellipse cx="0" cy="18" rx="32" ry="8" fill="#0e0804" opacity="0.75" />
-        <Figure x={0} y={18} s={0.72} pose="ground" facing="right" skin="#c09064" hair="#e4dccc" look="long" mood="content" paint="dots" wrinkles
+        <Figure x={0} y={18} s={0.922} pose="ground" facing="right" skin="#c09064" hair="#e4dccc" look="long" mood="content" paint="dots" wrinkles
           garment="fur" coat="#6a4a30" pants="#4a3420" bareArms arms={[{ a1: 14, a2: -14 }, { a1: 96, a2: 130 }]} />
         <path d="M-8 -24 Q10 -33 24 -18" stroke="#ffe0a8" strokeWidth="2" fill="none" opacity="0.4" />
       </g>
       {/* le « ? » doré : c'est au tour de Kyan dans la quête */}
       {queteQui === "kyan" && (
-        <g transform="translate(430,392)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+        <g transform="translate(430,375)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
           <path d="M0 0 q0 -22 22 -22 q22 0 22 18 q0 15 -18 20 l0 7" fill="none" stroke="#ffd166" strokeWidth="4" />
           <circle cx="22" cy="34" r="2.8" fill="#ffd166" />
         </g>
@@ -305,7 +305,7 @@ export default function SceneInterieur({ collect, action, reveal, made = [], que
       {/* zones cliquables — hors couches (décalage max « rayon) */}
       <Hotspot cx={640} cy={270} r={150} label="paroi" item="paroi" support reveal={reveal} onClick={() => collect("paroi")} />
       <Hotspot cx={310} cy={498} r={55} label="silex brut" item="silex_brut" reveal={reveal} onClick={() => collect("silex_brut")} />
-      <Hotspot cx={452} cy={462} r={48} label="Kyan" reveal={reveal} onClick={(p) => action("kyan", p)} />
+      <Hotspot cx={452} cy={450} r={58} label="Kyan" reveal={reveal} onClick={(p) => action("kyan", p)} />
     </svg>
   );
 }

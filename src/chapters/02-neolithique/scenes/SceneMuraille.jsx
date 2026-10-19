@@ -155,7 +155,7 @@ export default function SceneMuraille({ collect, action, reveal, queteQui }) {
           <ellipse cx="0" cy="46" rx="28" ry="7" fill="#2a1c10" opacity="0.5" />
           <path d="M34 -60 L30 46" stroke="#6e4c2e" strokeWidth="4.5" strokeLinecap="round" />
           <path d="M34 -60 l-6 14 l6 5 l6 -5 Z" fill="#8d8d97" stroke="#dfe3ec" strokeWidth="1" />
-          <Figure x={0} y={46} s={0.72} skin="#c6965f" hair="#2c2013" hat="leather" hatColor="#7a4e2c"
+          <Figure x={0} y={46} s={0.828} skin="#c6965f" hair="#2c2013" hat="leather" hatColor="#7a4e2c"
             garment="tunic" coat="#7a5636" pants="#5a3f24" trim="#5a3f24" arms={[{ a1: 30, a2: 50 }, { a1: 36, a2: 4 }]} />
           <ellipse cx="-24" cy="-2" rx="14" ry="16" fill="#8a5a34" stroke="#5a3f24" strokeWidth="2.5" />
           <circle cx="-24" cy="-2" r="4" fill="#c8a860" />
@@ -163,7 +163,7 @@ export default function SceneMuraille({ collect, action, reveal, queteQui }) {
         </g>
         {/* le « ? » doré : c'est au tour de Guna */}
         {queteQui === "guna" && (
-          <g transform="translate(370,330)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(370,317)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -22 22 -22 q22 0 22 18 q0 15 -18 20 l0 7" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="22" cy="34" r="2.8" fill="#ffd166" />
           </g>
@@ -188,7 +188,7 @@ export default function SceneMuraille({ collect, action, reveal, queteQui }) {
       <rect width="1000" height="560" fill="#141008" opacity="0.08" style={{ pointerEvents: "none" }} />
 
       {/* zones cliquables */}
-      <Hotspot cx={392} cy={414} r={42} label="Guna, le garde" reveal={reveal} onClick={(p) => action("guna", p)} />
+      <Hotspot cx={393} cy={403} r={48} label="Guna, le garde" reveal={reveal} onClick={(p) => action("guna", p)} />
       <Hotspot cx={140} cy={480} r={34} label="coquillage" item="coquillage" reveal={reveal} onClick={() => collect("coquillage")} />
       {/* la porte elle-même : clic → salle du trône */}
       <Hotspot cx={649} cy={333} r={90} label="entrer dans la cité" reveal={reveal} onClick={() => action("porte_cite")} />

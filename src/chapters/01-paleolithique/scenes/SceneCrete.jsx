@@ -261,7 +261,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         {/* Personnage debout au bord (l'aîné qui observe) — plus détaillé */}
         <g transform="translate(800,480)">
           <ellipse cx="0" cy="44" rx="22" ry="4" fill="#0a0604" opacity="0.55" />
-          <Figure x={0} y={44} s={0.66} skin="#c8946a" hair="#c0b8a8" look="long" beard="long" beardColor="#e0d8c8" wrinkles
+          <Figure x={0} y={44} s={0.825} skin="#c8946a" hair="#c0b8a8" look="long" beard="long" beardColor="#e0d8c8" wrinkles
             garment="coat" coat="#5a3818" pants="#3a2010" trim="#3a2010" arms={[{ a1: 8, a2: 4 }, { a1: 24, a2: -30 }]} />
           <path d="M22 -22 L28 44" stroke="#3a2418" strokeWidth="4" strokeLinecap="round" />
           <path d="M22 -22 q-6 -2 -8 4 q-2 4 4 4 z" fill="#c85028" stroke="#5a1810" strokeWidth="0.4" />
@@ -292,7 +292,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
       </PLayer>
 
       {/* ═══ zones cliquables ═══ */}
-      <Hotspot cx={800} cy={460} r={40} label="l'aîné qui observe" reveal={reveal} onClick={() => action("aine")} />
+      <Hotspot cx={800} cy={444} r={48} label="l'aîné qui observe" reveal={reveal} onClick={() => action("aine")} />
       <Hotspot cx={240} cy={470} r={30} label="petit cairn de pierres" reveal={reveal} onClick={() => action("cairn")} />
       <Hotspot cx={340} cy={447} r={40} label="troupeau au loin" reveal={reveal} onClick={() => action("troupeau_loin")} />
       <Hotspot cx={500} cy={205} r={30} label="un aigle qui plane" reveal={reveal} onClick={() => action("aigle")} />

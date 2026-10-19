@@ -145,7 +145,7 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
         {/* LA POTIÈRE au travail sur son TOUR (le pot prend forme en tournant) */}
         <g transform="translate(330,470)">
           <ellipse cx="0" cy="30" rx="30" ry="7" fill="#241608" opacity="0.5" />
-          <Figure x={0} y={30} s={0.64} pose="sit" facing="right" skin="#9a6a44" hair="#3a2415" look="bun" mood="content"
+          <Figure x={0} y={30} s={0.864} pose="sit" facing="right" skin="#9a6a44" hair="#3a2415" look="bun" mood="content"
             garment="dress" coat="#7a4f34" pants="#63402a" bareArms arms={[{ a1: 30, a2: 50 }, { a1: 48, a2: 84 }]} />
           {/* LE TOUR : la roue tourne (rayons animés), le pot monte dessus */}
           <g transform="translate(36,14)">
@@ -229,7 +229,7 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
         {/* LE BERGER perplexe (compter le troupeau au marché) */}
         <g transform="translate(700,474)">
           <ellipse cx="0" cy="30" rx="20" ry="6" fill="#241608" opacity="0.5" />
-          <Figure x={0} y={30} s={0.52} skin="#9a6a44" hair="#3a2415" look="short" beard="short" mood="vexe"
+          <Figure x={0} y={30} s={0.78} skin="#9a6a44" hair="#3a2415" look="short" beard="short" mood="vexe"
             garment="tunic" coat="#6a4a30" pants="#4a3020" arms={[{ a1: 10, a2: 6 }, { a1: 150, a2: -110 }]} />
           <text x="16" y="-30" fontSize="14" fill="#e8eef5" fontFamily="ui-monospace,monospace" opacity="0.85" style={{ animation: "drift 3s ease-in-out infinite" }}>?</text>
           <text x="-20" y="-24" fontSize="10" fill="#c8d4e2" fontFamily="ui-monospace,monospace" opacity="0.6" style={{ animation: "drift 4s ease-in-out infinite" }}>?</text>
@@ -297,7 +297,7 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
           (Cliquer la personne prend ce qu'elle donne ; cliquer son « ? » l'écoute.) */}
       {!made.includes("msg_poterie") && (
         <>
-          <g transform="translate(322,376)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(322,354)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -306,7 +306,7 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
       )}
       {!made.includes("msg_comptage") && (
         <>
-          <g transform="translate(692,376)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(692,346)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -315,7 +315,7 @@ export default function SceneVillage({ collect, action, reveal, made = [], mode 
       )}
 
       <Hotspot cx={470} cy={500} r={46} label="argile" item="argile" reveal={reveal} onClick={() => collect("argile")} />
-      <Hotspot cx={330} cy={455} r={44} label="potière" item="mains" reveal={reveal} onClick={() => collect("mains")} />
+      <Hotspot cx={330} cy={439} r={53} label="potière" item="mains" reveal={reveal} onClick={() => collect("mains")} />
       <Hotspot cx={150} cy={450} r={50} label="four" item="four" reveal={reveal} onClick={() => collect("four")} />
       <Hotspot cx={590} cy={505} r={42} label="pigments" item="pigments" reveal={reveal} onClick={() => collect("pigments")} />
       <Hotspot cx={820} cy={468} r={70} label="troupeau" item="troupeau" reveal={reveal} onClick={() => collect("troupeau")} />

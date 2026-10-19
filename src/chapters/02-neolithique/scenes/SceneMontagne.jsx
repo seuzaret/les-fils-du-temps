@@ -137,7 +137,7 @@ export default function SceneMontagne({ collect, action, reveal, made = [], quet
         {/* ÖTZI, accroupi, emmitouflé, sa hache de cuivre */}
         <g transform="translate(540,486)">
           <ellipse cx="0" cy="24" rx="22" ry="6" fill="#1c160e" opacity="0.5" />
-          <Figure x={0} y={24} s={0.53} pose="ground" skin="#bf9068" hair="#3a2a1a" mood="vexe" hood hoodColor="#6a5238" wrinkles
+          <Figure x={0} y={24} s={0.901} pose="ground" skin="#bf9068" hair="#3a2a1a" mood="vexe" hood hoodColor="#6a5238" wrinkles
             garment="fur" coat="#7a5e40" pants="#5a4630" arms={[{ a1: 14, a2: -12 }, { a1: 20, a2: -10 }]} />
           {/* haleine dans le froid */}
           <ellipse cx="12" cy="-13" rx="9" ry="4" fill="#f0f4f8" opacity="0.5" style={{ animation: "drift 3.5s ease-in-out infinite" }} />
@@ -156,7 +156,7 @@ export default function SceneMontagne({ collect, action, reveal, made = [], quet
           </g>
         </g>
         {queteQui === "otzi" && (
-          <g transform="translate(522,388)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(522,356)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -176,7 +176,7 @@ export default function SceneMontagne({ collect, action, reveal, made = [], quet
       <rect width="1000" height="560" fill="#12181c" opacity="0.06" style={{ pointerEvents: "none" }} />
 
       {/* zones cliquables — Ötzi + objets/supports */}
-      <Hotspot cx={540} cy={464} r={40} label="Ötzi, le mineur" reveal={reveal} onClick={(p) => action("otzi", p)} />
+      <Hotspot cx={540} cy={432} r={48} label="Ötzi, le mineur" reveal={reveal} onClick={(p) => action("otzi", p)} />
       <Hotspot cx={230} cy={468} r={44} label="filon de cuivre" item="minerai" reveal={reveal} onClick={() => collect("minerai")} />
       <Hotspot cx={384} cy={498} r={38} label="pierre à marteler" item="pierre_marteler" reveal={reveal} onClick={() => collect("pierre_marteler")} />
       <Hotspot cx={760} cy={484} r={50} label="le feu" item="feu" reveal={reveal} onClick={() => collect("feu")} />

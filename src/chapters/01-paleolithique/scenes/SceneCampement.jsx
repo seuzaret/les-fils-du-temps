@@ -205,7 +205,7 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
       {/* LE CONTEUR (toi), enveloppé dans sa fourrure */}
       <g transform="translate(408,442)">
         <ellipse cx="4" cy="34" rx="26" ry="7" fill="#1c1008" opacity="0.7" />
-        <Figure x={0} y={34} s={0.8} pose="ground" skin="#b07a52" hair="#3a2415" look="short" mood="content" hood hoodColor="#6e4a2c"
+        <Figure x={0} y={34} s={0.92} pose="ground" skin="#b07a52" hair="#3a2415" look="short" mood="content" hood hoodColor="#6e4a2c"
           garment="fur" coat="#5c3a22" pants="#4a2e1a" arms={[{ a1: 14, a2: -10 }, { a1: 40, a2: 70 }]} />
         <path d="M8 -32 q6 4 5 12" stroke="#ffb868" strokeWidth="2" fill="none" opacity="0.5" />
       </g>
@@ -240,14 +240,14 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
           qui accueille, éprouve, et fait entrer les nouveaux dans le clan. */}
       <g transform="translate(300,470)">
         <ellipse cx="0" cy="20" rx="30" ry="8" fill="#160f08" opacity="0.7" />
-        <Figure x={0} y={20} s={0.7} pose="ground" facing="right" skin="#c0926a" hair="#5e5646" look="slick" wrinkles
+        <Figure x={0} y={20} s={0.91} pose="ground" facing="right" skin="#c0926a" hair="#5e5646" look="slick" wrinkles
           garment="fur" coat="#5c3a22" pants="#4a2e1a" bareArms arms={[{ a1: 16, a2: -14 }, { a1: 70, a2: 82 }]} />
         <path d="M39 -8 L72 4" stroke="#4a3420" strokeWidth="3" strokeLinecap="round" />
         <circle cx="14" cy="-32" r="7" fill="#ffb347" opacity="0.12" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
       </g>
       {/* le « ? » doré : c'est au tour de Raya dans la quête */}
       {queteQui === "raya" && (
-        <g transform="translate(282,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+        <g transform="translate(282,354)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
           <path d="M0 0 q0 -22 22 -22 q22 0 22 18 q0 15 -18 20 l0 7" fill="none" stroke="#ffd166" strokeWidth="4" />
           <circle cx="22" cy="34" r="2.8" fill="#ffd166" />
         </g>
@@ -305,9 +305,9 @@ export default function SceneCampement({ collect, action, reveal, made = [], que
         <text x="405" y="386" fontSize="13" fill="#c9a877" fontFamily="Georgia,serif" style={{ animation: "drift 3.8s ease-in-out infinite", animationDelay: "0.6s" }}>♫</text>
         <text x="428" y="402" fontSize="14" fill="#c9a877" fontFamily="Georgia,serif" style={{ animation: "drift 3.5s ease-in-out infinite", animationDelay: "1.2s" }}>♪</text>
       </g>
-      <Hotspot cx={410} cy={432} r={48} label="quelqu'un qui fredonne" item="voix" reveal={reveal} onClick={() => collect("voix")} />
+      <Hotspot cx={410} cy={425} r={55} label="quelqu'un qui fredonne" item="voix" reveal={reveal} onClick={() => collect("voix")} />
       <Hotspot cx={660} cy={488} r={58} label="branches" item="branche" reveal={reveal} onClick={() => collect("branche")} />
-      <Hotspot cx={300} cy={446} r={44} label="Raya, le chef" reveal={reveal} onClick={(p) => action("raya", p)} />
+      <Hotspot cx={300} cy={433} r={53} label="Raya, le chef" reveal={reveal} onClick={(p) => action("raya", p)} />
 
       {/* ANACHRONISME : la boîte d'allumettes traîne au sol, loin du feu à droite */}
       {mode !== "jeu2" && (

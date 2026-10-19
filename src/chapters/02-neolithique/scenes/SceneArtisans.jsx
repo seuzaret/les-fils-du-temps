@@ -166,11 +166,11 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
         {/* JALA la potière, penchée sur son ouvrage */}
         <g transform="translate(258,468)">
           <ellipse cx="0" cy="28" rx="22" ry="6" fill="#2a1c10" opacity="0.4" />
-          <Figure x={0} y={28} s={0.53} facing="right" skin="#cf9f72" hair="#4a3020" look="bun" hat="headband" hatColor="#b84828" mood="content"
+          <Figure x={0} y={28} s={0.795} facing="right" skin="#cf9f72" hair="#4a3020" look="bun" hat="headband" hatColor="#b84828" mood="content"
             garment="dress" coat="#3a6a8a" apron="#b09878" pants="#3a2818" arms={[{ a1: 10, a2: 6 }, { a1: 40, a2: 72 }]} />
         </g>
         {queteQui === "jala" && (
-          <g transform="translate(240,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(240,340)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -216,11 +216,11 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
         {/* AHMID le marchand, main tendue vers ses bêtes */}
         <g transform="translate(680,470)">
           <ellipse cx="0" cy="30" rx="23" ry="6" fill="#2a1c10" opacity="0.4" />
-          <Figure x={0} y={30} s={0.57} facing="right" skin="#b8885a" hair="#1a1408" hat="keffieh" hatColor="#e2d6bc" hatColor2="#5a3a20" mood="content"
+          <Figure x={0} y={30} s={0.826} facing="right" skin="#b8885a" hair="#1a1408" hat="keffieh" hatColor="#e2d6bc" hatColor2="#5a3a20" mood="content"
             garment="robe" coat="#9a6432" pants="#5a3a20" arms={[{ a1: 8, a2: 4 }, { a1: 76, a2: 88 }]} />
         </g>
         {queteQui === "ahmid" && (
-          <g transform="translate(662,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(662,342)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -231,8 +231,8 @@ export default function SceneArtisans({ collect, action, reveal, made = [], quet
       <rect width="1000" height="560" fill="#2a1e10" opacity="0.06" style={{ pointerEvents: "none" }} />
 
       {/* zones cliquables — personnages */}
-      <Hotspot cx={258} cy={442} r={40} label="Jala, la potière" reveal={reveal} onClick={(p) => action("jala", p)} />
-      <Hotspot cx={680} cy={444} r={40} label="Ahmid, le marchand" reveal={reveal} onClick={(p) => action("ahmid", p)} />
+      <Hotspot cx={258} cy={415} r={48} label="Jala, la potière" reveal={reveal} onClick={(p) => action("jala", p)} />
+      <Hotspot cx={680} cy={419} r={48} label="Ahmid, le marchand" reveal={reveal} onClick={(p) => action("ahmid", p)} />
       {/* objets et supports */}
       <Hotspot cx={330} cy={454} r={40} label="le tour du potier" item="tour" reveal={reveal} onClick={() => collect("tour")} />
       <Hotspot cx={150} cy={448} r={50} label="le four" item="feu" reveal={reveal} onClick={() => collect("feu")} />

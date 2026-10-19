@@ -145,7 +145,7 @@ export default function SceneLande({ collect, action, reveal, made = [] }) {
               <ellipse cx="0" cy="34" rx="12" ry="4" fill="#20240f" opacity="0.4" />
               {/* penché en avant, la corde tirée par-dessus l'épaule */}
               <g transform="rotate(9 0 34)">
-                <Figure x={0} y={34} s={0.5} stride={7} facing="right" skin="#8a5c3c"
+                <Figure x={0} y={34} s={0.675} stride={7} facing="right" skin="#8a5c3c"
                   look={["short", "braids", "mid", "bun"][i]} hair={["#2a1a10", "#3a2414", "#1e140c", "#4a3020"][i]} beard={i === 0 || i === 2 ? "short" : false}
                   garment="tunic" coat={i % 2 ? "#7a4f34" : "#6a4a30"} pants="#4a3a26" shoes="#3a2a18" mood="colere"
                   arms={[{ a1: 70, a2: 30 }, { a1: -40, a2: -60 }]} />
@@ -219,7 +219,7 @@ export default function SceneLande({ collect, action, reveal, made = [] }) {
 
       <Hotspot cx={520} cy={514} r={40} label="silex" item="silex" reveal={reveal} onClick={() => collect("silex")} />
       {!made.includes("msg_megalithe") && <Hotspot cx={360} cy={500} r={70} label="dalle" item="dalle" reveal={reveal} onClick={() => collect("dalle")} />}
-      {!made.includes("msg_megalithe") && <Hotspot cx={720} cy={452} r={78} label="le clan" item="clan" reveal={reveal} onClick={() => collect("clan")} />}
+      {!made.includes("msg_megalithe") && <Hotspot cx={724} cy={435} r={94} label="le clan" item="clan" reveal={reveal} onClick={() => collect("clan")} />}
     </svg>
   );
 }

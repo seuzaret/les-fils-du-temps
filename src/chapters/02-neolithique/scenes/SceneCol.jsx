@@ -122,7 +122,7 @@ export default function SceneCol({ collect, action, reveal, made = [] }) {
         {/* L'HOMME DES GLACES, emmitouflé, arc à côté, haleine visible */}
         <g transform="translate(300,470)">
           <ellipse cx="0" cy="34" rx="26" ry="7" fill="#2e281e" opacity="0.5" />
-          <Figure x={0} y={34} s={0.68} pose="ground" skin="#bf9068" hair="#3a2a1a" mood="vexe" hood hoodColor="#7a6244" wrinkles
+          <Figure x={0} y={34} s={0.918} pose="ground" skin="#bf9068" hair="#3a2a1a" mood="vexe" hood hoodColor="#7a6244" wrinkles
             garment="fur" coat="#6a5238" pants="#5a4630" arms={[{ a1: 14, a2: -12 }, { a1: 16, a2: -14 }]} />
           <ellipse cx="11" cy="-14" rx="9" ry="4" fill="#f0f4f8" opacity="0.45" style={{ animation: "drift 3.5s ease-in-out infinite" }} filter="url(#cl-blur)" />
           <path d="M24 34 Q40 0 30 -34" stroke="#6e4c2e" strokeWidth="3" fill="none" />
@@ -178,7 +178,7 @@ export default function SceneCol({ collect, action, reveal, made = [] }) {
       {/* le « ? » de l'homme des glaces : une marque qui ne s'efface jamais ? */}
       {!made.includes("msg_tatouage") && (
         <>
-          <g transform="translate(310,368)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(310,348)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -186,7 +186,7 @@ export default function SceneCol({ collect, action, reveal, made = [] }) {
         </>
       )}
 
-      <Hotspot cx={278} cy={462} r={40} label="aiguille" item="aiguille" reveal={reveal} onClick={() => collect("aiguille")} />
+      <Hotspot cx={270} cy={447} r={48} label="aiguille" item="aiguille" reveal={reveal} onClick={() => collect("aiguille")} />
       <Hotspot cx={476} cy={492} r={40} label="suie" item="suie" reveal={reveal} onClick={() => collect("suie")} />
       <Hotspot cx={620} cy={500} r={44} label="pierre" item="pierre" reveal={reveal} onClick={() => collect("pierre")} />
       <Hotspot cx={830} cy={508} r={44} label="minerai" item="minerai" reveal={reveal} onClick={() => collect("minerai")} />

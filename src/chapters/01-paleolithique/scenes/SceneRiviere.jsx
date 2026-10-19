@@ -249,12 +249,12 @@ export default function SceneRiviere({ collect, action, reveal, flags, queteQui 
           Son épreuve pour le nouveau : ramener ce cerf… de LOIN. */}
       <g transform="translate(470,486)">
         <ellipse cx="0" cy="22" rx="28" ry="7" fill="#160f08" opacity="0.65" />
-        <Figure x={0} y={22} s={0.66} pose="kneel" facing="right" skin="#c8986c" hair="#2c2013" look="ponytail" mood="colere" hat="headband" hatColor="#8a5a30" paint
+        <Figure x={0} y={22} s={0.858} pose="kneel" facing="right" skin="#c8986c" hair="#2c2013" look="ponytail" mood="colere" hat="headband" hatColor="#8a5a30" paint
           garment="fur" coat="#5c3a22" pants="#4a2e18" bareArms arms={[{ a1: 18, a2: -16 }, { a1: 155, a2: -105 }]} />
       </g>
       {/* le « ? » doré : c'est au tour de Doru dans la quête */}
       {queteQui === "doru" && (
-        <g transform="translate(452,390)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+        <g transform="translate(452,371)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
           <path d="M0 0 q0 -22 22 -22 q22 0 22 18 q0 15 -18 20 l0 7" fill="none" stroke="#ffd166" strokeWidth="4" />
           <circle cx="22" cy="34" r="2.8" fill="#ffd166" />
         </g>
@@ -274,7 +274,7 @@ export default function SceneRiviere({ collect, action, reveal, flags, queteQui 
       {/* zones cliquables — hors couches (décalage max « rayon) */}
       {!hunted && <Hotspot cx={810} cy={470} r={78} label="cerf" item="cerf" reveal={reveal} onClick={() => collect("cerf")} />}
       <Hotspot cx={240} cy={510} r={70} label="tronc" item="tronc" reveal={reveal} onClick={() => collect("tronc")} />
-      <Hotspot cx={470} cy={464} r={44} label="Doru" reveal={reveal} onClick={(p) => action("doru", p)} />
+      <Hotspot cx={470} cy={451} r={53} label="Doru" reveal={reveal} onClick={(p) => action("doru", p)} />
     </svg>
   );
 }

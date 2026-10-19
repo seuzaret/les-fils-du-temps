@@ -298,7 +298,7 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
       {!bare && (
       <g transform="translate(252,494)">
         <ellipse cx="0" cy="16" rx="20" ry="5" fill="#241a10" opacity="0.6" />
-        <Figure x={0} y={16} s={0.37} skin="#cf9f72" hair="#3a2818" look="long" mood="content" paint earrings="#e8dcc4"
+        <Figure x={0} y={16} s={0.74} skin="#cf9f72" hair="#3a2818" look="long" mood="content" paint earrings="#e8dcc4"
           garment="fur" coat="#8a6a48" pants="#5a3e26" bareArms arms={[{ a1: 150, a2: 166 }, { a1: 150, a2: 166 }]}>
           <circle cx="-33.6" cy="-115.6" r="6" fill="#b5451f" /><circle cx="33.6" cy="-115.6" r="6" fill="#b5451f" />
         </Figure>
@@ -306,7 +306,7 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
       )}
       {/* le « ? » doré : c'est au tour d'Ana dans la quête */}
       {queteQui === "ana" && (
-        <g transform="translate(236,398)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+        <g transform="translate(236,354)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
           <path d="M0 0 q0 -22 22 -22 q22 0 22 18 q0 15 -18 20 l0 7" fill="none" stroke="#ffd166" strokeWidth="4" />
           <circle cx="22" cy="34" r="2.8" fill="#ffd166" />
         </g>
@@ -322,7 +322,7 @@ export default function SceneExterieur({ collect, action, reveal, made = [], que
         <Hotspot cx={297} cy={360} r={48} label="liane" item="liane" reveal={reveal} onClick={() => collect("liane")} />
         <Hotspot cx={168} cy={380} r={60} label="grotte" reveal={reveal} onClick={() => action("cave")} />
         <Hotspot cx={840} cy={486} r={60} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
-        <Hotspot cx={252} cy={476} r={40} label="Ana" reveal={reveal} onClick={(p) => action("ana", p)} />
+        <Hotspot cx={252} cy={442} r={48} label="Ana" reveal={reveal} onClick={(p) => action("ana", p)} />
       </>}
     </svg>
   );

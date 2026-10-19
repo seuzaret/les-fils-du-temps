@@ -144,7 +144,7 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
               <path d="M-20 -4 L92 2" stroke="#8a6a42" strokeWidth="3.5" fill="none" opacity="0.85" />
               {[0, 30, 60].map((dx, i) => (
                 <g key={i} transform={`translate(${dx},${(i % 2) * 6}) rotate(-14)`}>
-                  <Figure x={0} y={26} s={0.34} facing="right" skin={["#8a5c3c", "#a87650", "#9a6a46"][i]} hair="#2a1c10" look={["short", "ring", "short"][i]} beard={i === 1 ? "short" : false}
+                  <Figure x={0} y={26} s={0.476} facing="right" skin={["#8a5c3c", "#a87650", "#9a6a46"][i]} hair="#2a1c10" look={["short", "ring", "short"][i]} beard={i === 1 ? "short" : false}
                     garment="tunic" coat={i % 2 ? "#7a4f34" : "#6a4a30"} pants="#4a3020" bareArms stride={10} arms={[{ a1: 70, a2: 84 }, { a1: 64, a2: 80 }]} />
                 </g>
               ))}
@@ -172,11 +172,11 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
         {/* IMIR le prêtre, bras levés vers le ciel */}
         <g transform="translate(300,472)">
           <ellipse cx="0" cy="28" rx="22" ry="6" fill="#241c12" opacity="0.4" />
-          <Figure x={0} y={28} s={0.53} skin="#c0926a" hair="#2a1a10" look="bald" paint
+          <Figure x={0} y={28} s={0.795} skin="#c0926a" hair="#2a1a10" look="bald" paint
             garment="toga" coat="#ece2d0" coat2="#8a2438" pants="#c8bca0" arms={[{ a1: 150, a2: 166 }, { a1: 150, a2: 166 }]} />
         </g>
         {queteQui === "imir" && (
-          <g transform="translate(282,372)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(282,340)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -185,12 +185,12 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
         {/* DOKA le tailleur, accroupi, maillet en main */}
         <g transform="translate(560,484)">
           <ellipse cx="0" cy="22" rx="20" ry="6" fill="#241c12" opacity="0.4" />
-          <Figure x={0} y={22} s={0.5} pose="kneel" facing="right" skin="#b8885a" hair="#3a2818" hat="headband" hatColor="#6a4628" mood="colere"
+          <Figure x={0} y={22} s={0.8} pose="kneel" facing="right" skin="#b8885a" hair="#3a2818" hat="headband" hatColor="#6a4628" mood="colere"
             garment="tunic" coat="#7a5636" pants="#5a3f24" bareArms arms={[{ a1: 20, a2: -10 }, { a1: 60, a2: 84 }]} />
           <g transform="translate(25,8)"><rect x="-7" y="-7" width="14" height="12" rx="2" fill="#8a5a34" /><rect x="-2" y="5" width="4" height="12" fill="#5a3f24" /><path d="M-7 -3 h14" stroke="#5a3820" strokeWidth="1.2" /></g>
         </g>
         {queteQui === "doka" && (
-          <g transform="translate(542,388)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(542,359)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -201,11 +201,11 @@ export default function ScenePlaine({ collect, action, reveal, made = [], queteQ
       <rect width="1000" height="560" fill="#1a1c12" opacity="0.05" style={{ pointerEvents: "none" }} />
 
       {/* zones cliquables — personnages */}
-      <Hotspot cx={300} cy={448} r={40} label="Imir, le prêtre" reveal={reveal} onClick={(p) => action("imir", p)} />
-      <Hotspot cx={560} cy={462} r={38} label="Doka, le tailleur" reveal={reveal} onClick={(p) => action("doka", p)} />
+      <Hotspot cx={300} cy={422} r={48} label="Imir, le prêtre" reveal={reveal} onClick={(p) => action("imir", p)} />
+      <Hotspot cx={560} cy={436} r={46} label="Doka, le tailleur" reveal={reveal} onClick={(p) => action("doka", p)} />
       {/* objets + supports (le chantier disparaît une fois dressé) */}
       {!dresse && <Hotspot cx={450} cy={500} r={70} label="grande pierre" item="grande_pierre" reveal={reveal} onClick={() => collect("grande_pierre")} />}
-      {!dresse && <Hotspot cx={670} cy={462} r={60} label="les hommes" item="hommes" reveal={reveal} onClick={() => collect("hommes")} />}
+      {!dresse && <Hotspot cx={669} cy={452} r={72} label="les hommes" item="hommes" reveal={reveal} onClick={() => collect("hommes")} />}
       <Hotspot cx={884} cy={500} r={34} label="argile" item="argile" reveal={reveal} onClick={() => collect("argile")} />
       <Hotspot cx={816} cy={516} r={30} label="cailloux noirs" item="cailloux" reveal={reveal} onClick={() => collect("cailloux")} />
           {/* AMBIANCE : petit vol d'oiseaux qui traverse le ciel */}
