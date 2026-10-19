@@ -159,7 +159,7 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
             <ellipse cx="0" cy="46" rx="20" ry="6" fill="#160f08" opacity="0.4" />
             {/* penché vers la cuve, tablier de cuir, le tamis à bout de bras */}
             <g transform="rotate(10 0 42)">
-              <Figure x={0} y={42} s={0.585} skin="#d4a474" hair="#5a3a20" look="short" beard="short" mood="content" hat="cap" hatColor="#e2d8c0"
+              <Figure x={0} y={42} s={0.819} skin="#d4a474" hair="#5a3a20" look="short" beard="short" mood="content" hat="cap" hatColor="#e2d8c0"
                 garment="tunic" coat="#7a6a50" apron="#8a5a34" pants="#5a4630" shoes="#3a2a18"
                 arms={[{ a1: -40, a2: -80 }, { a1: 70, a2: 90 }]} />
             </g>
@@ -190,7 +190,7 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
         <g transform="translate(150,486)">
           <ellipse cx="0" cy="40" rx="34" ry="9" fill="#160f08" opacity="0.4" />
           {/* tourné vers le chemin, une main en porte-voix ; hotte de chiffons, bâton */}
-          <Figure x={0} y={40} s={0.6} facing="left" skin="#cc9c6c" hair="#4a3020" look="short" beard="stubble" mood="surpris"
+          <Figure x={0} y={40} s={0.81} facing="left" skin="#cc9c6c" hair="#4a3020" look="short" beard="stubble" mood="surpris"
             hood hoodColor="#7a3a2a" garment="tunic" coat="#6e5030" pants="#5a4030" shoes="#3a2818"
             arms={[{ a1: 100, a2: -110 }, { a1: 20, a2: 10 }]}
             behind={<g>
@@ -207,7 +207,7 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
           </Figure>
 
           {/* la bulle « Chiffons ! » qui pulse */}
-          <g transform="translate(-58,-52)" style={{ animation: "glow 1.8s ease-in-out infinite" }}>
+          <g transform="translate(-62,-78)" style={{ animation: "glow 1.8s ease-in-out infinite" }}>
             <rect x="-2" y="-16" width="70" height="26" rx="7" fill="#fbf6e8" />
             <path d="M34 10 l-6 12 l16 -6 Z" fill="#fbf6e8" />
             <text x="33" y="2" textAnchor="middle" fontSize="13" fill="#7a3020" fontFamily="Palatino, Georgia, serif" style={{ fontWeight: 700 }}>Chiffons !</text>
@@ -237,18 +237,18 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
       {/* le « ? » du papetier : cache en jeu 2 */}
       {!papier && mode !== "jeu2" && (
         <>
-          <g transform="translate(526,352)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(526,324)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
-          <Hotspot cx={548} cy={460} r={28} label="parler au papetier" reveal={reveal} onClick={() => action("papetier")} />
+          <Hotspot cx={546} cy={442} r={34} label="parler au papetier" reveal={reveal} onClick={() => action("papetier")} />
         </>
       )}
 
       {/* le chiffonnier (crie sa marchandise) et sa hotte de chiffons —
           zones séparées : cliquer l'homme = l'écouter ; la hotte = prendre */}
-      <Hotspot cx={136} cy={480} r={22} label="le chiffonnier" reveal={reveal} onClick={() => action("chiffonnier")} />
-      <Hotspot cx={184} cy={466} r={22} label="vieux chiffons de lin" item="chiffons" reveal={reveal} onClick={() => collect("chiffons")} />
+      <Hotspot cx={131} cy={464} r={26} label="le chiffonnier" reveal={reveal} onClick={() => action("chiffonnier")} />
+      <Hotspot cx={196} cy={445} r={26} label="vieux chiffons de lin" item="chiffons" reveal={reveal} onClick={() => collect("chiffons")} />
       {/* la cuve du papetier (support : on y broie les chiffons) */}
       <Hotspot cx={660} cy={468} r={44} label="la cuve du papetier" item="cuve" reveal={reveal} onClick={() => collect("cuve")} />
           {/* AMBIANCE : petit vol d'oiseaux qui traverse le ciel */}

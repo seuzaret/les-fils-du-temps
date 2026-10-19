@@ -119,7 +119,7 @@ export default function SceneMonastere({ collect, action, reveal, made = [], fla
           <ellipse cx="0" cy="34" rx="30" ry="7" fill="#160f08" opacity="0.6" />
           {/* assis, penché sur la page : coule brune, tonsure, plume à la main */}
           <g transform="rotate(6 0 34)">
-            <Figure x={0} y={34} s={0.64} pose="sit" facing="right" skin="#c8986c" hair="#5a3a20" look="ring" mood="content"
+            <Figure x={0} y={34} s={0.864} pose="sit" facing="right" skin="#c8986c" hair="#5a3a20" look="ring" mood="content"
               garment="robe" coat="#5a4632" trim="#c8b488" pants="#463726" shoes="#2a2014"
               arms={[{ a1: 30, a2: -30 }, { a1: 50, a2: 70 }]}>
               <path d="M-22 -86 Q0 -74 22 -86 L18 -76 Q0 -66 -18 -76 Z" fill="#463726" />
@@ -299,7 +299,7 @@ export default function SceneMonastere({ collect, action, reveal, made = [], fla
           ensuite c'est la note de frais qui appelle l'attention) */}
       {queteQui === "jorge" && !manuscrit && (
         <>
-          <g transform="translate(552,346)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(552,324)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>

@@ -157,7 +157,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
           <rect x="-30" y="24" width="60" height="16" fill="#8a5a2e" stroke="#3a1810" strokeWidth="0.6" />
           <rect x="-26" y="40" width="6" height="8" fill="#3a2010" />
           <rect x="20" y="40" width="6" height="8" fill="#3a2010" />
-          <Figure x={0} y={42} s={0.7} pose="sit" skin="#b88050" hair="#3a2418" look="short" mood="content"
+          <Figure x={0} y={42} s={0.84} pose="sit" skin="#b88050" hair="#3a2418" look="short" mood="content"
             garment="kilt" coat="#f0e8d0" pants="#b88050" shoes="#6a4a2a" belt={false}
             arms={[{ a1: 14, a2: -30 }, { a1: 70, a2: 110 }]} />
         </g>
@@ -165,7 +165,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         <g transform="translate(680,490)">
           <ellipse cx="0" cy="42" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
           {/* serviette nouée à la taille, une autre sur l'épaule */}
-          <Figure x={0} y={42} s={0.68} skin="#c8946a" hair="#3a2418" look="ring" beard="short" beardColor="#5a4030" mood="surpris"
+          <Figure x={0} y={42} s={0.816} skin="#c8946a" hair="#3a2418" look="ring" beard="short" beardColor="#5a4030" mood="surpris"
             garment="kilt" coat="#f0e8d0" pants="#c8946a" shoes="#6a4a2a" belt={false}
             arms={[{ a1: 12, a2: 4 }, { a1: 20, a2: -50 }]}>
             <path d="M-22 -88 Q-6 -70 18 -50 L20 -42 Q-4 -60 -22 -76 Z" fill="#e8e0c8" stroke="#8a7860" strokeWidth="0.7" />
@@ -196,7 +196,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         )}
       </PLayer>
 
-      <Hotspot cx={760} cy={470} r={40} label="deux baigneurs qui discutent" reveal={reveal} onClick={() => action("baigneurs")} />
+      <Hotspot cx={760} cy={458} r={48} label="deux baigneurs qui discutent" reveal={reveal} onClick={() => action("baigneurs")} />
       <Hotspot cx={500} cy={400} r={60} label="le labrum (vasque d'eau chaude)" reveal={reveal} onClick={() => action("labrum")} />
       <Hotspot cx={500} cy={500} r={40} label="mosaïque au dauphin" reveal={reveal} onClick={() => action("mosaique")} />
       <Hotspot cx={280} cy={500} r={30} label="strigile et fiole d'huile" reveal={reveal} onClick={() => action("strigile")} />

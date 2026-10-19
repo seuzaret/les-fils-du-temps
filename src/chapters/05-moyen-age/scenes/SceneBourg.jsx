@@ -258,7 +258,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
           <rect x="-24" y="30" width="48" height="20" fill="#8a5a2e" stroke="#3a1810" strokeWidth="0.6" />
           <ellipse cx="0" cy="50" rx="30" ry="3" fill="#0a0604" opacity="0.55" />
           {/* pourpoint vert, chausses rouges, chaperon ; le parchemin tenu à deux mains */}
-          <Figure x={0} y={30} s={0.58} skin="#c8946a" hair="#3a2418" look="short" mood="surpris" hat="beret" hatColor="#c85028"
+          <Figure x={0} y={30} s={0.812} skin="#c8946a" hair="#3a2418" look="short" mood="surpris" hat="beret" hatColor="#c85028"
             garment="jacket" coat="#3a5828" trim="#3a2010" pants="#c85028" shoes="#3a2010"
             arms={[{ a1: 30, a2: 0 }, { a1: 30, a2: 0 }]}>
             <rect x="-26" y="-62" width="52" height="26" fill="#e8d0a0" stroke="#5a3818" strokeWidth="0.8" />
@@ -300,7 +300,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
         )}
       </PLayer>
 
-      <Hotspot cx={700} cy={460} r={40} label="le crieur public sur son estrade" reveal={reveal} onClick={() => action("crieur")} />
+      <Hotspot cx={700} cy={438} r={48} label="le crieur public sur son estrade" reveal={reveal} onClick={() => action("crieur")} />
       <Hotspot cx={380} cy={480} r={30} label="le moine mendiant" reveal={reveal} onClick={() => action("moine_mendiant")} />
       <Hotspot cx={500} cy={460} r={40} label="le puits de la place" reveal={reveal} onClick={() => action("puits")} />
       <Hotspot cx={240} cy={500} r={40} label="charrette de foin" reveal={reveal} onClick={() => action("charrette")} />

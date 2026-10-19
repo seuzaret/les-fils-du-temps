@@ -162,7 +162,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         {/* LE CHARPENTIER phénicien accroupi près du bateau, maillet levé */}
         <g transform="translate(390,494)">
           <ellipse cx="0" cy="34" rx="24" ry="4" fill="#0a0604" opacity="0.55" />
-          <Figure x={0} y={34} s={0.76} pose="kneel" skin="#a06838" look="curls" hair="#1a1408" beard="short" beardColor="#2a1a10" earrings
+          <Figure x={0} y={34} s={0.874} pose="kneel" skin="#a06838" look="curls" hair="#1a1408" beard="short" beardColor="#2a1a10" earrings
             garment="tunic" coat="#c85028" pants="#6a4028" shoes="#3a2414" bareArms mood="colere"
             arms={[{ a1: 40, a2: 70 }, { a1: 150, a2: 120 }]}>
             {/* rayures du chiton */}
@@ -212,7 +212,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         )}
       </PLayer>
 
-      <Hotspot cx={390} cy={468} r={40} label="le charpentier phénicien" reveal={reveal} onClick={() => action("charpentier")} />
+      <Hotspot cx={390} cy={459} r={46} label="le charpentier phénicien" reveal={reveal} onClick={() => action("charpentier")} />
       <Hotspot cx={280} cy={440} r={80} label="squelette du navire en cèdre" reveal={reveal} onClick={() => action("squelette_navire")} />
       <Hotspot cx={760} cy={510} r={60} label="rondins de cèdre du Liban" reveal={reveal} onClick={() => action("rondins")} />
       <Hotspot cx={580} cy={510} r={30} label="amphores de pourpre" reveal={reveal} onClick={() => action("pourpre")} />

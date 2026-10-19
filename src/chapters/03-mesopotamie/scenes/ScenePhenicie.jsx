@@ -144,7 +144,7 @@ export default function ScenePhenicie({ collect, action, reveal, made = [], mode
 
         {/* un marchand phénicien assis au comptoir */}
         <g transform="translate(560,486)">
-          <Figure x={0} y={26} s={0.58} pose="sit" skin="#a06a44" hair="#2c1c12" look="curls" beard="full" beardColor="#2c1c12" earrings
+          <Figure x={0} y={26} s={0.841} pose="sit" skin="#a06a44" hair="#2c1c12" look="curls" beard="full" beardColor="#2c1c12" earrings
             garment="robe" coat="#7a3f34" trim="#c89a4a" pants="#5a2e26" shoes="#3a2418"
             arms={[{ a1: 62, a2: 84 }, { a1: 14, a2: -20 }]} />
         </g>
@@ -179,7 +179,7 @@ export default function ScenePhenicie({ collect, action, reveal, made = [], mode
       {/* Hotspot pour parler à Assurbanipal — visible tant qu'on n'a pas
           l'alphabet, caché en jeu 2 (l'enquête Al3x1A ne le concerne pas). */}
       {!made.includes("msg_alphabet") && mode !== "jeu2" && (
-        <Hotspot cx={560} cy={478} r={34} label="parler à Assurbanipal" reveal={reveal} onClick={() => action("assurbanipal")} />
+        <Hotspot cx={560} cy={463} r={41} label="parler à Assurbanipal" reveal={reveal} onClick={() => action("assurbanipal")} />
       )}
 
       {/* la tablette : APPRENDRE l'alphabet (mini-jeu) → on gagne les 22 signes */}

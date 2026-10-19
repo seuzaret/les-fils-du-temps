@@ -237,7 +237,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         <g transform="translate(320,500)">
           <ellipse cx="0" cy="30" rx="26" ry="4" fill="#0a0604" opacity="0.55" />
           {/* à genoux, fer à souder vers le panneau */}
-          <Figure x={0} y={30} s={0.71} pose="kneel" facing="right" skin="#c8946a" hair="#3a2010" look="short" beard="short" mood="vexe"
+          <Figure x={0} y={30} s={0.852} pose="kneel" facing="right" skin="#c8946a" hair="#3a2010" look="short" beard="short" mood="vexe"
             hat="beret" hatColor="#1a1408" garment="tunic" coat="#5a6878" pants="#3a5828" shoes="#2a2010" apron="#8a7a60"
             arms={[{ a1: 20, a2: -10 }, { a1: 50, a2: 80 }]}>
             <path d="M50 -50 L70 -38" stroke="#3a2010" strokeWidth="3" strokeLinecap="round" />
@@ -267,7 +267,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         )}
       </PLayer>
 
-      <Hotspot cx={320} cy={478} r={40} label="le maître verrier" reveal={reveal} onClick={() => action("verrier")} />
+      <Hotspot cx={320} cy={468} r={48} label="le maître verrier" reveal={reveal} onClick={() => action("verrier")} />
       <Hotspot cx={500} cy={240} r={90} label="la grande rose" reveal={reveal} onClick={() => action("rose")} />
       <Hotspot cx={200} cy={320} r={60} label="vitrail latéral" reveal={reveal} onClick={() => action("vitrail")} />
       <Hotspot cx={800} cy={320} r={60} label="vitrail latéral" reveal={reveal} onClick={() => action("vitrail")} />

@@ -169,7 +169,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         {/* LE MARCHAND au comptoir, notant sur son volumen */}
         <g transform="translate(560,500)">
           {/* le marchand, debout derrière son comptoir, stylet à la main */}
-          <Figure x={0} y={46} s={0.7} skin="#c8946a" hair="#3a2418" look="short" beard="short" mood="vexe"
+          <Figure x={0} y={46} s={0.826} skin="#c8946a" hair="#3a2418" look="short" beard="short" mood="vexe"
             garment="toga" coat="#f0e8d0" coat2="#7a2044" pants="#5a3a20" shoes="#3a2418"
             arms={[{ a1: 30, a2: -24 }, { a1: 30, a2: -20 }]} />
           {/* comptoir de pierre */}
@@ -188,7 +188,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         <g transform="translate(400,510)">
           <ellipse cx="0" cy="30" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
           {/* torse nu, pagne, l'amphore calée sur l'épaule gauche */}
-          <Figure x={0} y={30} s={0.6} skin="#a06838" hair="#2a1a10" look="short" beard="stubble" mood="colere"
+          <Figure x={0} y={30} s={0.81} skin="#a06838" hair="#2a1a10" look="short" beard="stubble" mood="colere"
             garment="kilt" coat="#c88a52" pants="#a06838" shoes="#5a3818"
             arms={[{ a1: 150, a2: 170 }, { a1: 12, a2: 8 }]}
             behind={<g>
@@ -218,8 +218,8 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         )}
       </PLayer>
 
-      <Hotspot cx={560} cy={480} r={40} label="le marchand qui note ses comptes" reveal={reveal} onClick={() => action("marchand_port")} />
-      <Hotspot cx={400} cy={500} r={30} label="le débardeur avec son amphore" reveal={reveal} onClick={() => action("debardeur")} />
+      <Hotspot cx={560} cy={468} r={47} label="le marchand qui note ses comptes" reveal={reveal} onClick={() => action("marchand_port")} />
+      <Hotspot cx={400} cy={486} r={36} label="le débardeur avec son amphore" reveal={reveal} onClick={() => action("debardeur")} />
       <Hotspot cx={220} cy={510} r={70} label="pile d'amphores étiquetées" reveal={reveal} onClick={() => action("amphores_port")} />
       <Hotspot cx={720} cy={340} r={60} label="navire marchand à quai" reveal={reveal} onClick={() => action("navire_port")} />
       <Hotspot cx={670} cy={200} r={80} label="LE VÉSUVE qui fume drôlement" reveal={reveal} onClick={() => action("vesuve_port")} />

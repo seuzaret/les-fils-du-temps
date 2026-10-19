@@ -164,7 +164,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         {/* CONTREMAÎTRE égyptien (à droite du chantier) avec son rouleau */}
         <g transform="translate(500,480)">
           <ellipse cx="0" cy="42" rx="20" ry="4" fill="#0a0604" opacity="0.55" />
-          <Figure x={0} y={42} s={0.7} skin="#a06838" hair="#1a1408" look="short" kohl hat="nemes" hatColor="#3a80a8" hatColor2="#f0c848"
+          <Figure x={0} y={42} s={0.826} skin="#a06838" hair="#1a1408" look="short" kohl hat="nemes" hatColor="#3a80a8" hatColor2="#f0c848"
             garment="kilt" coat="#f0e8d0" trim="#8a6838" pants="#a06838" shoes="#6a4a2a"
             arms={[{ a1: 10, a2: 6 }, { a1: 50, a2: 80 }]}>
             <path d="M-12 -87 Q0 -76 12 -87" stroke="#f0c848" strokeWidth="5" fill="none" />
@@ -182,7 +182,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
           <ellipse cx="4" cy="14" rx="20" ry="4" fill="#0a0604" opacity="0.5" />
           {/* penché, les deux mains contre le bloc */}
           <g transform="rotate(18 0 14)">
-            <Figure x={0} y={14} s={0.32} stride={10} facing="right" skin="#a06838" hair="#1a1008" look="short" mood="colere"
+            <Figure x={0} y={14} s={0.448} stride={10} facing="right" skin="#a06838" hair="#1a1008" look="short" mood="colere"
               garment="kilt" coat="#e8dcc0" pants="#a06838" shoes="#6a4a2a" arms={[{ a1: -70, a2: -80 }, { a1: 85, a2: 85 }]} />
           </g>
           <rect x="28" y="-14" width="22" height="20" fill="#e0c088" stroke="#5a3820" strokeWidth="0.8" />
@@ -207,8 +207,8 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         )}
       </PLayer>
 
-      <Hotspot cx={500} cy={454} r={40} label="le contremaître du chantier" reveal={reveal} onClick={() => action("contremaitre")} />
-      <Hotspot cx={340} cy={500} r={30} label="ouvrier qui pousse un bloc" reveal={reveal} onClick={() => action("ouvrier")} />
+      <Hotspot cx={500} cy={442} r={47} label="le contremaître du chantier" reveal={reveal} onClick={() => action("contremaitre")} />
+      <Hotspot cx={340} cy={490} r={36} label="ouvrier qui pousse un bloc" reveal={reveal} onClick={() => action("ouvrier")} />
       <Hotspot cx={700} cy={200} r={80} label="la pyramide de Snéfrou" reveal={reveal} onClick={() => action("pyramide")} />
       <Hotspot cx={240} cy={480} r={40} label="tas de blocs de calcaire" reveal={reveal} onClick={() => action("blocs")} />
       <Hotspot cx={700} cy={540} r={14} label="éclat de calcaire" item="eclat_calcaire" reveal={reveal} onClick={() => collect("eclat_calcaire")} />

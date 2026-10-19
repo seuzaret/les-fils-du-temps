@@ -148,7 +148,7 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         {/* LE MAÎTRE UMMIA (assis au centre-droit, sur natte, canne posée) */}
         <g transform="translate(680,470)">
           <ellipse cx="0" cy="26" rx="34" ry="5" fill="#0a0604" opacity="0.5" />
-          <Figure x={0} y={30} s={0.81} pose="ground" skin="#c8946a" look="bald" hair="#2a1a10" beard="full" beardColor="#1a1408" mood="vexe" kohl
+          <Figure x={0} y={30} s={0.931} pose="ground" skin="#c8946a" look="bald" hair="#2a1a10" beard="full" beardColor="#1a1408" mood="vexe" kohl
             garment="robe" coat="#e8dcc0" pants="#5a3818" shoes="#3a2418" trim="#8a6a48"
             arms={[{ a1: 20, a2: -30 }, { a1: 40, a2: 24 }]}>
             {/* la canne posée, tenue de la main droite */}
@@ -161,7 +161,7 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
             <ellipse cx="0" cy="22" rx="24" ry="4" fill="#0a0604" opacity="0.5" />
             {/* courbé sur sa tablette, calame à la main */}
             <g transform="rotate(6 0 26)">
-              <Figure x={0} y={26} s={0.62} pose="ground" facing="right" skin="#c8946a" look={i ? "mid" : "short"} hair="#2a1a10" mood="vexe"
+              <Figure x={0} y={26} s={0.806} pose="ground" facing="right" skin="#c8946a" look={i ? "mid" : "short"} hair="#2a1a10" mood="vexe"
                 garment="tunic" coat={i === 0 ? "#c8a848" : "#a86828"} pants="#6a4028" shoes="#3a2418"
                 arms={[{ a1: 20, a2: -40 }, { a1: 20, a2: -40 }]}>
                 <rect x="-17" y="-24" width="34" height="20" rx="2.4" fill="url(#ec-argile)" stroke="#3a1810" strokeWidth="0.8" />
@@ -204,9 +204,9 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
       </PLayer>
 
       {/* zones cliquables */}
-      <Hotspot cx={680} cy={450} r={40} label="le maître ummia" reveal={reveal} onClick={() => action("ummia")} />
-      <Hotspot cx={260} cy={470} r={30} label="apprenti scribe" reveal={reveal} onClick={() => action("apprenti")} />
-      <Hotspot cx={360} cy={472} r={30} label="apprenti scribe" reveal={reveal} onClick={() => action("apprenti")} />
+      <Hotspot cx={680} cy={442} r={46} label="le maître ummia" reveal={reveal} onClick={() => action("ummia")} />
+      <Hotspot cx={260} cy={459} r={36} label="apprenti scribe" reveal={reveal} onClick={() => action("apprenti")} />
+      <Hotspot cx={360} cy={461} r={36} label="apprenti scribe" reveal={reveal} onClick={() => action("apprenti")} />
       <Hotspot cx={470} cy={220} r={40} label="mur d'exercices" reveal={reveal} onClick={() => action("mur_exercices")} />
       <Hotspot cx={120} cy={500} r={30} label="panier d'argile fraîche" item="argile" reveal={reveal} onClick={() => collect("argile")} />
       <Hotspot cx={420} cy={536} r={12} label="boulette d'argile" item="boulette_argile" reveal={reveal} onClick={() => collect("boulette_argile")} />

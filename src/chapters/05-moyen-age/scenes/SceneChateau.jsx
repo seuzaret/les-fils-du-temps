@@ -223,7 +223,7 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
           <g key={i} transform={`translate(${x},${y})`}>
             <ellipse cx="0" cy="42" rx="20" ry="6" fill="#0a0603" opacity="0.5" />
             {/* casque à nasal, tunique aux couleurs, lance (côté extérieur), écu (côté intérieur) */}
-            <Figure x={0} y={42} s={0.53} skin="#c8a882" hair="#4a3020" look="short" beard={i ? "short" : "stubble"} hat="helm"
+            <Figure x={0} y={42} s={0.716} skin="#c8a882" hair="#4a3020" look="short" beard={i ? "short" : "stubble"} hat="helm"
               garment="tunic" coat="#3a5a7a" trim="#2a4460" pants="#5a5a60" shoes="#2a2a30"
               arms={s > 0 ? [{ a1: 14, a2: 30 }, { a1: 30, a2: 30 }] : [{ a1: 30, a2: 30 }, { a1: 14, a2: 30 }]}
               behind={<g>
@@ -244,7 +244,7 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
           <ellipse cx="0" cy="30" rx="30" ry="8" fill="#0a0603" opacity="0.5" />
           {/* à genoux, penché vers le trône, mains jointes */}
           <g transform="rotate(10 0 30)">
-            <Figure x={0} y={30} s={0.64} pose="kneel" facing="right" skin="#c8a882" hair="#5a4632" look="mid" beard="stubble" mood="vexe"
+            <Figure x={0} y={30} s={0.864} pose="kneel" facing="right" skin="#c8a882" hair="#5a4632" look="mid" beard="stubble" mood="vexe"
               garment="tunic" coat="#8a6a44" pants="#7a5a38" shoes="#3a2a18"
               arms={[{ a1: -10, a2: -145 }, { a1: -10, a2: -145 }]}>
               <path d="M-14 -40 l7 3 M10 -34 l-5 5" stroke="#5a4026" strokeWidth="2" />
@@ -256,7 +256,7 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
         <g transform="translate(676,494)">
           <ellipse cx="0" cy="38" rx="22" ry="7" fill="#0a0603" opacity="0.5" />
           {/* aube sombre, étole pourpre, petit livre à deux mains */}
-          <Figure x={0} y={38} s={0.6} skin="#c8a882" hair="#5a5060" look="ring" mood="vexe"
+          <Figure x={0} y={38} s={0.78} skin="#c8a882" hair="#5a5060" look="ring" mood="vexe"
             garment="robe" coat="#2c2a34" pants="#2c2a34" shoes="#1a1820" belt={false}
             arms={[{ a1: 20, a2: -40 }, { a1: 20, a2: -40 }]}>
             <path d="M-9 -88 L-6 -10 M9 -88 L6 -10" stroke="#7a2a44" strokeWidth="5" />
@@ -306,19 +306,19 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
       {/* le paysan et le prêtre : le contexte de la quête de Galien.
           Un « ? » doré apparaît sur celui dont c'est le tour dans la quête. */}
       {queteQui === "paysan" && (
-        <g transform="translate(334,430)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+        <g transform="translate(334,409)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
           <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
           <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
         </g>
       )}
-      <Hotspot cx={352} cy={484} r={34} label={livraison ? "donner le traité au paysan" : "le paysan suppliant"} {...(livraison ? { item: "paysan" } : {})} reveal={reveal} onClick={() => action("paysan")} />
+      <Hotspot cx={353} cy={468} r={41} label={livraison ? "donner le traité au paysan" : "le paysan suppliant"} {...(livraison ? { item: "paysan" } : {})} reveal={reveal} onClick={() => action("paysan")} />
       {queteQui === "pretre" && (
-        <g transform="translate(658,424)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+        <g transform="translate(658,403)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
           <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
           <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
         </g>
       )}
-      <Hotspot cx={676} cy={476} r={32} label={livraison ? "remettre le traité au prêtre" : "le prêtre"} {...(livraison ? { item: "pretre" } : {})} reveal={reveal} onClick={() => action("pretre")} />
+      <Hotspot cx={676} cy={459} r={38} label={livraison ? "remettre le traité au prêtre" : "le prêtre"} {...(livraison ? { item: "pretre" } : {})} reveal={reveal} onClick={() => action("pretre")} />
 
       {/* la toile de lin (au mur) — seulement tant que la broderie n'est pas faite */}
       {!brode && (

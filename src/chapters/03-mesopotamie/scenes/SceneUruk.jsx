@@ -208,7 +208,7 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
           <path d="M-52 36 h104" stroke="#6e4c28" strokeWidth="1" opacity="0.5" />
           <ellipse cx="0" cy="30" rx="22" ry="6" fill="#241608" opacity="0.4" />
           {/* le roi, robe de laine à touffes (kaunakès), sceptre */}
-          <Figure x={0} y={30} s={0.54} skin="#c6965f" hair="#1a1008" look="short" beard="royal" kohl hat="turban" hatColor="#8a6a3e" hatColor2="#e8c050"
+          <Figure x={0} y={30} s={0.81} skin="#c6965f" hair="#1a1008" look="short" beard="royal" kohl hat="turban" hatColor="#8a6a3e" hatColor2="#e8c050"
             garment="robe" coat="#d8c8a0" pants="#6e4c2e" shoes="#5a3a20" belt={false}
             arms={[{ a1: 12, a2: -8 }, { a1: 25, a2: 40 }]}
             behind={<g>
@@ -221,7 +221,7 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
           </Figure>
         </g>
         {queteQui === "mesannepada" && (
-          <g transform="translate(232,368)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(232,336)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -245,7 +245,7 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
         <g transform="translate(700,486)">
           <ellipse cx="0" cy="26" rx="22" ry="6" fill="#241608" opacity="0.45" />
           {/* crâne rasé de scribe ; tablette dans une main, l'autre à la tête, dépité */}
-          <Figure x={0} y={26} s={0.5} skin="#c0926a" hair="#2a1a10" look="bald" kohl mood="vexe"
+          <Figure x={0} y={26} s={0.8} skin="#c0926a" hair="#2a1a10" look="bald" kohl mood="vexe"
             garment="robe" coat="#e0d4b8" trim="#b8a67e" pants="#6e5a3a" shoes="#4a3a24"
             arms={[{ a1: 30, a2: 60 }, { a1: 150, a2: -120 }]}>
             <g transform="translate(-50,-50) rotate(-10)">
@@ -255,7 +255,7 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
           </Figure>
         </g>
         {queteQui === "naram" && (
-          <g transform="translate(682,388)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(682,353)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -319,8 +319,8 @@ export default function SceneUruk({ collect, action, reveal, made = [], queteQui
 
       {/* ═══ zones cliquables ═══ */}
       {/* personnages de la quête */}
-      <Hotspot cx={250} cy={432} r={40} label="le roi Mesannepada" reveal={reveal} onClick={(p) => action("mesannepada", p)} />
-      <Hotspot cx={700} cy={458} r={40} label="Narâm-Sîn, le collecteur" reveal={reveal} onClick={(p) => action("naram", p)} />
+      <Hotspot cx={250} cy={404} r={48} label="le roi Mesannepada" reveal={reveal} onClick={(p) => action("mesannepada", p)} />
+      <Hotspot cx={700} cy={426} r={48} label="Narâm-Sîn, le collecteur" reveal={reveal} onClick={(p) => action("naram", p)} />
       {/* le mini-jeu du registre : seulement quand la tablette est prête */}
       {aTablette && !grave && (
         <Hotspot cx={470} cy={500} r={40} label="graver le registre sur la tablette" reveal={reveal} onClick={() => action("tablette")} />

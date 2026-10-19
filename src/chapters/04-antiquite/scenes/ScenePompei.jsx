@@ -142,7 +142,7 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
         <g transform="translate(300,494)">
           {[[-40, 0, "#8a5a3a"], [-18, 6, "#9a6a4a"], [4, -2, "#7a4a34"], [26, 8, "#a86a4a"], [46, 2, "#8a5a3a"], [12, 14, "#6a4a34"], [-30, 12, "#9a6a4a"]].map(([x, y, c], i) => (
             <g key={i} transform={`translate(${x},${y})`}>
-              <Figure x={0} y={24} s={0.4} facing="right" skin={["#c89868", "#b07a50", "#d8a878", "#a06a44"][i % 4]} coat={c}
+              <Figure x={0} y={24} s={0.54} facing="right" skin={["#c89868", "#b07a50", "#d8a878", "#a06a44"][i % 4]} coat={c}
                 look={["short", "bun", "curls", "long", "short", "mid", "braids"][i]} hair={["#3a2418", "#1e140c", "#4a3020", "#2a1a10"][i % 4]}
                 beard={i === 2 ? "short" : false} garment={i % 3 === 1 ? "dress" : "tunic"} pants="#6a4a34" shoes="#3a2418" mood={i % 2 ? "surpris" : null} />
             </g>
@@ -152,12 +152,12 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
         {/* CAIUS le marchand, en toge, devant sa villa */}
         <g transform="translate(640,484)">
           <ellipse cx="0" cy="28" rx="24" ry="7" fill="#241608" opacity="0.4" />
-          <Figure x={0} y={28} s={0.55} skin="#cfa070" hair="#3a2818" look="short" mood="content" hat="laurel"
+          <Figure x={0} y={28} s={0.825} skin="#cfa070" hair="#3a2818" look="short" mood="content" hat="laurel"
             garment="toga" coat="#efe7d2" coat2="#8a2a4a" pants="#cfa070" shoes="#5a3a20"
             arms={[{ a1: 10, a2: 4 }, { a1: 60, a2: 40 }]} />
         </g>
         {queteQui === "caius" && (
-          <g transform="translate(622,384)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(622,352)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -167,7 +167,7 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
         <g transform="translate(430,492)">
           <ellipse cx="0" cy="24" rx="20" ry="6" fill="#241608" opacity="0.4" />
           {/* tourné vers la foule, une main en porte-voix */}
-          <Figure x={0} y={24} s={0.45} facing="left" skin="#b0855c" hair="#3a2a1c" look="short" mood="surpris"
+          <Figure x={0} y={24} s={0.698} facing="left" skin="#b0855c" hair="#3a2a1c" look="short" mood="surpris"
             garment="tunic" coat="#b89a6a" pants="#b0855c" shoes="#4a3424"
             arms={[{ a1: 100, a2: -110 }, { a1: 10, a2: 6 }]} />
         </g>
@@ -208,9 +208,9 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
       <rect width="1000" height="560" fill="#231a10" opacity="0.06" style={{ pointerEvents: "none" }} />
 
       {/* zones cliquables */}
-      <Hotspot cx={640} cy={456} r={40} label="Caius, le marchand" reveal={reveal} onClick={(p) => action("caius", p)} />
-      <Hotspot cx={430} cy={470} r={36} label="Argos — prends ta voix" item="voix" reveal={reveal} onClick={() => collect("voix")} />
-      <Hotspot cx={300} cy={480} r={64} label="la foule" item="foule" reveal={reveal} onClick={() => collect("foule")} />
+      <Hotspot cx={640} cy={428} r={48} label="Caius, le marchand" reveal={reveal} onClick={(p) => action("caius", p)} />
+      <Hotspot cx={430} cy={445} r={43} label="Argos — prends ta voix" item="voix" reveal={reveal} onClick={() => collect("voix")} />
+      <Hotspot cx={300} cy={465} r={77} label="la foule" item="foule" reveal={reveal} onClick={() => collect("foule")} />
       <Hotspot cx={786} cy={484} r={54} label="la dalle à graver" item="pierre" reveal={reveal} onClick={() => collect("pierre")} />
       <Hotspot cx={70} cy={502} r={32} label="MARTINE" reveal={reveal} onClick={() => action("wreck")} />
 

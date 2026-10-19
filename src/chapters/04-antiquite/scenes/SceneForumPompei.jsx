@@ -175,7 +175,7 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
           <rect x="10" y="28" width="6" height="18" fill="#3a2010" />
           <ellipse cx="0" cy="48" rx="24" ry="3" fill="#0a0604" opacity="0.5" />
           {/* le crieur, toge à bande pourpre, bras levé, rouleau à la main */}
-          <Figure x={0} y={10} s={0.49} skin="#c8946a" hair="#3a2418" look="short" mood="surpris"
+          <Figure x={0} y={10} s={0.784} skin="#c8946a" hair="#3a2418" look="short" mood="surpris"
             garment="toga" coat="#f0e8d0" coat2="#e0d8c0" trim="#7a2044" pants="#c8946a" shoes="#6a4a2a"
             arms={[{ a1: 30, a2: 50 }, { a1: 150, a2: 160 }]}>
             <path d="M-6 -90 L-6 -18" stroke="#7a2044" strokeWidth="3.4" opacity="0.85" />
@@ -194,7 +194,7 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         <g transform="translate(390,516)">
           <ellipse cx="0" cy="18" rx="18" ry="3" fill="#0a0604" opacity="0.5" />
           {/* à genoux devant la stèle : burin contre la pierre, maillet levé */}
-          <Figure x={0} y={18} s={0.5} pose="kneel" facing="right" skin="#c8946a" hair="#3a2418" look="short" beard="stubble" mood="vexe"
+          <Figure x={0} y={18} s={0.825} pose="kneel" facing="right" skin="#c8946a" hair="#3a2418" look="short" beard="stubble" mood="vexe"
             garment="tunic" coat="#a86828" pants="#7a4820" shoes="#3a2418" apron="#c8b088"
             arms={[{ a1: 120, a2: 150 }, { a1: 70, a2: 90 }]}>
             <path d="M54 -54 L70 -58" stroke="#8a8a90" strokeWidth="3" strokeLinecap="round" />
@@ -221,8 +221,8 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         )}
       </PLayer>
 
-      <Hotspot cx={200} cy={470} r={40} label="le crieur public (praeco)" reveal={reveal} onClick={() => action("praeco")} />
-      <Hotspot cx={390} cy={498} r={30} label="le lapidicida (graveur)" reveal={reveal} onClick={() => action("lapidicida")} />
+      <Hotspot cx={200} cy={440} r={48} label="le crieur public (praeco)" reveal={reveal} onClick={() => action("praeco")} />
+      <Hotspot cx={390} cy={475} r={36} label="le lapidicida (graveur)" reveal={reveal} onClick={() => action("lapidicida")} />
       <Hotspot cx={440} cy={430} r={40} label="stèle d'édile en gravure" reveal={reveal} onClick={() => action("stele_edile")} />
       <Hotspot cx={720} cy={360} r={80} label="mur de graffitis" reveal={reveal} onClick={() => action("graffitis")} />
       <Hotspot cx={180} cy={220} r={70} label="temple de Jupiter" reveal={reveal} onClick={() => action("temple")} />

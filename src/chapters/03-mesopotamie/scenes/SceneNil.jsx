@@ -199,7 +199,7 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
         {/* LE PHARAON SNÉFROU (droite) : némès rayé, pagne blanc, sceptre */}
         <g transform="translate(730,472)">
           <ellipse cx="0" cy="30" rx="24" ry="7" fill="#241608" opacity="0.45" />
-          <Figure x={0} y={30} s={0.57} skin="#c48c52" hair="#1a1008" look="bald" beard="postiche" kohl hat="nemes" hatColor="#e8c040" hatColor2="#2a50a0"
+          <Figure x={0} y={30} s={0.826} skin="#c48c52" hair="#1a1008" look="bald" beard="postiche" kohl hat="nemes" hatColor="#e8c040" hatColor2="#2a50a0"
             garment="kilt" coat="#eee6d2" trim="#c89a2a" pants="#c48c52" shoes="#8a6a3a"
             arms={[{ a1: 12, a2: -10 }, { a1: 75, a2: 60 }]}
             behind={<g>
@@ -213,7 +213,7 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
           </Figure>
         </g>
         {queteQui === "snefrou" && (
-          <g transform="translate(712,378)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <g transform="translate(712,348)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
             <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
           </g>
@@ -253,7 +253,7 @@ export default function SceneNil({ collect, action, reveal, made = [], queteQui 
       <rect width="1000" height="560" fill="#2a1c10" opacity="0.07" style={{ pointerEvents: "none" }} />
 
       {/* ═══ zones cliquables ═══ */}
-      <Hotspot cx={730} cy={444} r={40} label="le pharaon Snéfrou" reveal={reveal} onClick={(p) => action("snefrou", p)} />
+      <Hotspot cx={730} cy={418} r={48} label="le pharaon Snéfrou" reveal={reveal} onClick={(p) => action("snefrou", p)} />
       {/* objets & supports (le cartouche se lance en posant le calame encré sur la feuille) */}
       <Hotspot cx={150} cy={372} r={50} label="tiges de papyrus" item="papyrus_tiges" reveal={reveal} onClick={() => collect("papyrus_tiges")} />
       <Hotspot cx={345} cy={372} r={34} label="roseaux du Nil (à massettes)" item="roseau_nil" reveal={reveal} onClick={() => collect("roseau_nil")} />

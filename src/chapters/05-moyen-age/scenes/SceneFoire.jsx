@@ -217,7 +217,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         <g opacity="0.65">
           {[[80, 430, "#5a3818"], [110, 434, "#8a5828"], [140, 428, "#3a2818"], [560, 428, "#5a3818"], [590, 434, "#3a2818"], [860, 432, "#8a5828"], [890, 428, "#3a2818"], [820, 434, "#5a2818"]].map(([x, y, col], i) => (
             <g key={i}>
-              <Figure x={x} y={y + 40} s={0.4} skin="#c8946a" coat={col} hair={["#3a2418", "#5a3818", "#1e140c"][i % 3]}
+              <Figure x={x} y={y + 40} s={0.5} skin="#c8946a" coat={col} hair={["#3a2418", "#5a3818", "#1e140c"][i % 3]}
                 look={["short", "bun", "mid", "curls", "short", "long", "ring", "braids"][i]} garment={i % 3 === 1 ? "dress" : "tunic"} pants="#4a3420" />
             </g>
           ))}
@@ -251,7 +251,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
           <ellipse cx="0" cy="42" rx="20" ry="4" fill="#0a0604" opacity="0.55" />
           {/* penché vers l'étal, la main tendue vers un livre */}
           <g transform="rotate(-10 0 42)">
-            <Figure x={0} y={42} s={0.62} facing="left" skin="#c8946a" hair="#5a3818" look="short" mood="surpris"
+            <Figure x={0} y={42} s={0.806} facing="left" skin="#c8946a" hair="#5a3818" look="short" mood="surpris"
               hat="beret" hatColor="#3a5878" garment="coat" coat="#8a5a2e" pants="#6a4020" shoes="#3a2010"
               arms={[{ a1: 80, a2: 70 }, { a1: 10, a2: 6 }]} />
           </g>
@@ -261,7 +261,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         <g transform="translate(680,486)">
           <ellipse cx="0" cy="44" rx="24" ry="4" fill="#0a0604" opacity="0.55" />
           {/* hotte d'osier sur le dos, une feuille tendue au bout des doigts */}
-          <Figure x={0} y={44} s={0.7} skin="#c8946a" hair="#3a2418" look="short" beard="stubble" mood="content"
+          <Figure x={0} y={44} s={0.805} skin="#c8946a" hair="#3a2418" look="short" beard="stubble" mood="content"
             garment="jacket" coat="#8a5a2e" pants="#6a6858" shoes="#3a2a18"
             arms={[{ a1: 75, a2: 85 }, { a1: 12, a2: 8 }]}
             behind={<g>
@@ -342,8 +342,8 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
 
         {/* COUPLE de badauds au fond, silhouettes discretes qui parlent */}
         <g transform="translate(760,470)" opacity="0.9">
-          <Figure x={-12} y={26} s={0.46} facing="right" skin="#c8946a" hair="#3a2418" look="short" beard="short" garment="coat" coat="#5a3818" pants="#3a2818" />
-          <Figure x={12} y={24} s={0.46} facing="left" skin="#d8a878" hair="#5a3818" look="long" hat="coif" hatColor="#f0e8d0" garment="dress" coat="#8a2828" />
+          <Figure x={-12} y={26} s={0.598} facing="right" skin="#c8946a" hair="#3a2418" look="short" beard="short" garment="coat" coat="#5a3818" pants="#3a2818" />
+          <Figure x={12} y={24} s={0.598} facing="left" skin="#d8a878" hair="#5a3818" look="long" hat="coif" hatColor="#f0e8d0" garment="dress" coat="#8a2828" />
         </g>
 
         {/* CAISSES EMPILEES au premier plan gauche */}
@@ -383,8 +383,8 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
       </PLayer>
 
       <Hotspot cx={240} cy={370} r={40} label="le libraire de la foire" reveal={reveal} onClick={() => action("libraire")} />
-      <Hotspot cx={400} cy={460} r={30} label="un client curieux" reveal={reveal} onClick={() => action("client_livre")} />
-      <Hotspot cx={680} cy={460} r={40} label="le colporteur avec sa hotte" reveal={reveal} onClick={() => action("colporteur")} />
+      <Hotspot cx={400} cy={440} r={36} label="un client curieux" reveal={reveal} onClick={() => action("client_livre")} />
+      <Hotspot cx={680} cy={450} r={46} label="le colporteur avec sa hotte" reveal={reveal} onClick={() => action("colporteur")} />
       <Hotspot cx={240} cy={410} r={60} label="livres imprimés reliés" reveal={reveal} onClick={() => action("livres_etal")} />
       <Hotspot cx={500} cy={160} r={80} label="banderole « Buchmesse »" reveal={reveal} onClick={() => action("banderole")} />
       <Hotspot cx={820} cy={280} r={60} label="moulin à vent au loin" reveal={reveal} onClick={() => action("moulin_vent")} />
