@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import PnjSprite from "../PnjSprite.jsx";
 import BigDialogue from "../BigDialogue.jsx";
 import { getMissionOrder } from "../missions.js";
+import { ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
 
 /* Portrait du Juge Vez utilisé en plein écran. */
 const VEZ_STYLE = {
@@ -221,7 +222,9 @@ export default function BunkerRumeurs({ onGo, j3 }) {
 
         {/* Mur + sol */}
         <rect width="1200" height="620" fill="url(#br-wall)" />
-        <rect y="440" width="1200" height="180" fill="url(#br-floor)" />
+        <ConcretePanels x0={0} x1={1200} y0={70} y1={400} w={150} seed={33} stain="#3a2a10" joint="#0a0804" bolt="#4a3a20" opacity={0.7} />
+        <rect y="400" width="1200" height="220" fill="url(#br-floor)" />
+        <g transform="translate(100,0)"><PerspFloor y0={400} y1={620} step={90} rows={4} opacity={0.4} /></g>
         <path d="M0 440 L1200 440" stroke="#0a0806" strokeWidth="1.5" />
         {[80, 260, 460, 740, 940, 1120].map((x, i) => (
           <path key={i} d={`M${x} 440 L${x + (x - 600) * 0.14} 620`} stroke="#0a0604" strokeWidth="0.8" opacity="0.55" />
@@ -279,12 +282,32 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           <text x="56" y="298" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#c8a848" letterSpacing="2">DOSSIERS A-Z</text>
         </g>
 
+        {/* Juge Vez, derrière le comptoir, au centre */}
+        <PnjSprite
+          x={600} y={400}
+          color="#3a2818" pants="#1a1408" hair="#c8b090" skin="#c8a888"
+          look="slick" beard="#a89070" beardKind="goatee"
+          facing="front" accessory="robe" activity="write"
+          nom="Juge Vez" role="Juge des Rumeurs"
+          heard={phase !== "briefing"}
+          active={phase === "briefing" || (phase === "enquete" && allAsked) || phase === "verdict"}
+          onClick={() => {
+            if (phase === "briefing") setSelected({ temoinId: "vez_briefing", questionIdx: null });
+            else if (phase === "enquete" && allAsked) setPhase("verdict");
+            else if (phase === "enquete") setSelected({ temoinId: "vez_rappel", questionIdx: null });
+          }} />
+
         {/* Comptoir massif — c'est là que Vez officie */}
-        <g transform="translate(180,400)">
-          <rect x="0" y="0" width="820" height="42" fill="url(#br-counter)" stroke="#1a0e08" strokeWidth="2" />
+        <g transform="translate(180,366)" style={{ pointerEvents: "none" }}>
+          <rect x="0" y="0" width="820" height="54" fill="url(#br-counter)" stroke="#1a0e08" strokeWidth="2" />
+          <rect x="-6" y="-6" width="832" height="10" rx="2" fill="#6a4020" stroke="#1a0e08" strokeWidth="1.5" />
+          {[20, 200, 380, 560, 740].map((x) => <rect key={`pa${x}`} x={x} y="12" width="140" height="34" fill="none" stroke="#2a1608" strokeWidth="1.6" opacity="0.7" />)}
+          {/* plaque gravée au nom du juge, sur le devant du comptoir */}
+          <rect x="370" y="18" width="80" height="18" rx="2" fill="#c8a848" stroke="#5a3a10" strokeWidth="1.2" />
+          <text x="410" y="31" textAnchor="middle" fontFamily="Georgia,serif" fontSize="10" fontWeight="800" fill="#3a2010" letterSpacing="2">JUGE VEZ</text>
           <path d="M0 0 L820 0" stroke="#c8a848" strokeWidth="2" opacity="0.5" />
           {[0, 180, 360, 540, 720, 820].map((x, i) => (
-            <line key={i} x1={x} y1="0" x2={x} y2="42" stroke="#3a2010" strokeWidth="0.8" opacity="0.7" />
+            <line key={i} x1={x} y1="0" x2={x} y2="54" stroke="#3a2010" strokeWidth="0.8" opacity="0.7" />
           ))}
           {/* Registre + encrier + tampon */}
           <g transform="translate(120,-22)">
@@ -308,21 +331,6 @@ export default function BunkerRumeurs({ onGo, j3 }) {
           <rect x="580" y="14" width="130" height="14" fill="#e8dfc8" stroke="#3a2010" strokeWidth="0.5" />
           <text x="645" y="24" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="7" fontWeight="800" fill="#3a2010">COMPTOIR DU JUGE</text>
         </g>
-
-        {/* Juge Vez, derrière le comptoir, au centre */}
-        <PnjSprite
-          x={600} y={400}
-          color="#3a2818" pants="#1a1408" hair="#c8b090" skin="#c8a888"
-          look="slick" beard="#a89070" beardKind="goatee"
-          facing="front" accessory="robe" activity="write"
-          nom="Juge Vez" role="Juge des Rumeurs"
-          heard={phase !== "briefing"}
-          active={phase === "briefing" || (phase === "enquete" && allAsked) || phase === "verdict"}
-          onClick={() => {
-            if (phase === "briefing") setSelected({ temoinId: "vez_briefing", questionIdx: null });
-            else if (phase === "enquete" && allAsked) setPhase("verdict");
-            else if (phase === "enquete") setSelected({ temoinId: "vez_rappel", questionIdx: null });
-          }} />
 
         {/* Témoins convoqués ici (roomId === "rumeurs"). Les autres sont
             dans leur pièce habituelle du Puits. */}
