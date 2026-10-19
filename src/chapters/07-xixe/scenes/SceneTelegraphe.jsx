@@ -25,6 +25,8 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
         <linearGradient id="wt-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a5636" /><stop offset="100%" stopColor="#3e2c1a" /></linearGradient>
         <radialGradient id="wt-lamp" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffcf78" stopOpacity="0.5" /><stop offset="100%" stopColor="#ff9540" stopOpacity="0" /></radialGradient>
         <radialGradient id="wt-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffe9a8" stopOpacity="0.7" /><stop offset="100%" stopColor="#ffe9a8" stopOpacity="0" /></radialGradient>
+        <filter id="wt-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7" /></filter>
+        <linearGradient id="wt-iron" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#1a1816" /><stop offset="50%" stopColor="#3a3632" /><stop offset="100%" stopColor="#141210" /></linearGradient>
         <filter id="wt-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
@@ -40,7 +42,18 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
       <g stroke="#3a2614" strokeWidth="2" opacity="0.5">
         {[70, 140, 210, 280, 350].map((y, i) => <path key={i} d={`M0 ${y} h1000`} />)}
       </g>
+      {/* planches de largeurs inégales, teintes et nœuds */}
+      {[[0, 70, "#7a5232"], [70, 140, "#8e6440"], [140, 210, "#80583a"], [210, 280, "#946a42"], [280, 350, "#7e5636"], [350, 404, "#8a6040"]].map(([y0, y1, c], i) => (
+        <rect key={i} x="0" y={y0 + 1} width="1000" height={y1 - y0 - 2} fill={c} opacity="0.35" />
+      ))}
+      {[70, 140, 210, 280, 350].map((y, i) => Array.from({ length: 5 }).map((_, k) => <path key={`${i}-${k}`} d={`M${(k * 230 + i * 97) % 1000} ${y - 70} v70`} stroke="#3a2614" strokeWidth="1.6" opacity="0.4" />))}
+      {[[180, 100], [610, 170], [890, 310], [330, 320], [70, 240], [760, 40]].map(([x, y], i) => (
+        <g key={i}><ellipse cx={x} cy={y} rx="7" ry="3.4" fill="#4a3018" opacity="0.6" /><ellipse cx={x} cy={y} rx="12" ry="5.4" fill="none" stroke="#4a3018" strokeWidth="1" opacity="0.35" /></g>
+      ))}
       {[[40, 105], [40, 245], [960, 105], [960, 245], [500, 35]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="3" fill="#2a1a0c" />)}
+      {/* poutre du plafond */}
+      <rect x="-40" y="-10" width="1080" height="26" fill="#3a2614" />
+      <path d="M-40 16 h1080" stroke="#5a3f24" strokeWidth="2" />
 
       {/* ═══ couche lointaine : la FENÊTRE sur la ville western + le TRAIN ═══ */}
       <PLayer depth={1}>
@@ -124,6 +137,16 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
           <path d="M-9 -8 q9 -6 18 0 l-2 -4 h-14 Z" fill="#5a4a2a" />
           <text x="0" y="26" textAnchor="middle" fontSize="8" fill="#7a2418" fontFamily="'Cinzel',Georgia,serif" style={{ fontWeight: 700 }}>500 $</text>
         </g>
+        {/* la carte des lignes télégraphiques, punaisée au mur */}
+        <g transform="translate(400,236) rotate(1.5)">
+          <rect x="-62" y="-40" width="124" height="80" fill="#e0d0a8" />
+          <rect x="-62" y="-40" width="124" height="80" fill="#7a5a30" opacity="0.15" filter="url(#wt-grain)" />
+          <path d="M-54 -20 Q-30 -30 0 -24 Q30 -18 54 -26 L56 26 Q20 32 -10 28 Q-40 24 -56 30 Z" fill="none" stroke="#8a6a3a" strokeWidth="1.4" />
+          <path d="M-44 10 L-20 2 L6 -4 L30 -10 L48 -14" stroke="#7a2418" strokeWidth="1.6" strokeDasharray="4 3" fill="none" />
+          {[[-44, 10], [6, -4], [48, -14]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="2.4" fill="#7a2418" />)}
+          <text x="0" y="-30" textAnchor="middle" fontFamily="Georgia,serif" fontSize="7" fill="#3a2c1c">TELEGRAPH LINES</text>
+          {[[-58, -36], [58, -36], [-58, 36], [58, 36]].map(([x, y], i) => <circle key={`p${i}`} cx={x} cy={y} r="2" fill="#a83a2c" />)}
+        </g>
         {/* carabine accrochée + chapeau stetson */}
         <g transform="translate(430,120)">
           <path d="M-40 0 h80" stroke="#3a2614" strokeWidth="3" />
@@ -138,20 +161,63 @@ export default function SceneTelegraphe({ collect, action, reveal, made = [], qu
 
       {/* ═══ couche intermédiaire : le télégraphiste au bureau + le « ? » ═══ */}
       <PLayer depth={2}>
+        {/* le plancher (sous le télégraphiste, pour qu'on voie son siège) */}
+        <rect y="404" width="1000" height="156" fill="url(#wt-floor)" />
+        <rect y="406" width="1000" height="154" fill="#241608" opacity="0.34" filter="url(#wt-grain)" />
+        {Array.from({ length: 20 }).map((_, i) => {
+          const x = -160 + i * 70;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.62).toFixed(0)} 404 L${x} 560`} stroke="#2a1a0c" strokeWidth="1.5" opacity="0.45" />;
+        })}
+        {[440, 486, 536].map((y, i) => <path key={y} d={`M${i * 90} ${y} h${200 + i * 40} M${600 - i * 50} ${y} h${180 + i * 30}`} stroke="#2a1a0c" strokeWidth="1.2" opacity="0.35" />)}
+        <rect y="400" width="1000" height="6" fill="#2a1a0c" />
+        {/* le soleil couchant entre par la fenêtre et s'allonge sur le plancher */}
+        <path d="M640 406 L860 406 L740 560 L420 560 Z" fill="#ffd890" opacity="0.14" filter="url(#wt-blur)" />
+        <ellipse cx="380" cy="472" rx="200" ry="80" fill="url(#wt-lamp)" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
+        {/* le POÊLE de fonte et son tuyau */}
+        <g transform="translate(64,404)">
+          <ellipse cx="0" cy="2" rx="40" ry="8" fill="#140c06" opacity="0.5" />
+          <rect x="-4" y="-404" width="12" height="300" fill="url(#wt-iron)" />
+          <path d="M-26 -60 Q-34 -20 -24 0 L24 0 Q34 -20 26 -60 Z" fill="url(#wt-iron)" />
+          <rect x="-30" y="-70" width="60" height="12" rx="3" fill="#2a2622" />
+          <rect x="-12" y="-46" width="24" height="18" rx="2" fill="#ff8a3c" opacity="0.75" style={{ animation: "glow 2s ease-in-out infinite" }} />
+          <path d="M-12 -37 h24" stroke="#1a1816" strokeWidth="2" />
+          <rect x="-14" y="-110" width="28" height="44" rx="4" fill="url(#wt-iron)" />
+          {[-20, 18].map((x) => <rect key={x} x={x} y="0" width="4" height="6" fill="#1a1816" />)}
+        </g>
         {/* le télégraphiste assis derrière le bureau (à droite), au manipulateur */}
         <g transform="translate(540,372)">
           <Figure x={0} y={87} s={1.08} pose="sit" skin="#d8a884" hair="#4a3a30" look="short" mood="content" hat="visor" hatColor="#2a6a3a"
             garment="jacket" coat="#3a4152" coat2="#e6dfc8" pants="#2c3242" shoes="#141418" arms={[{ a1: 30, a2: -40 }, { a1: 20, a2: -10 }]} />
         </g>
+        {/* son pupitre : le récepteur à bande, les bocaux de la pile, une lampe */}
+        <g transform="translate(546,424)">
+          <ellipse cx="0" cy="40" rx="100" ry="8" fill="#140c06" opacity="0.4" />
+          <rect x="-92" y="0" width="184" height="10" rx="2" fill="url(#wt-desk)" />
+          <rect x="-86" y="10" width="172" height="34" fill="#5a3f24" />
+          <path d="M-86 10 h172" stroke="#3e2a16" strokeWidth="2" />
+          <rect x="-80" y="16" width="76" height="22" fill="none" stroke="#3e2a16" strokeWidth="1.4" />
+          <rect x="4" y="16" width="76" height="22" fill="none" stroke="#3e2a16" strokeWidth="1.4" />
+          {/* récepteur Morse : rouleau de bande de papier */}
+          <g transform="translate(-50,-4)">
+            <rect x="-14" y="-6" width="28" height="10" rx="2" fill="#5a4630" />
+            <circle cx="-8" cy="-10" r="7" fill="#efe6ce" stroke="#8a7a5a" strokeWidth="1" />
+            <path d="M-2 -8 Q14 -6 24 4" stroke="#efe6ce" strokeWidth="2.6" fill="none" /><path d="M2 -7.6 l3 0.4 M10 -6.4 l2 0.6 M16 -3.6 l2 1.4" stroke="#2c2418" strokeWidth="1" />
+          </g>
+          {/* bocaux de verre de la pile (l'électricité du télégraphe) */}
+          {[46, 62, 78].map((x) => (
+            <g key={x}><rect x={x - 6} y="-16" width="12" height="16" rx="2" fill="#9ac0b0" opacity="0.6" /><rect x={x - 6} y="-8" width="12" height="8" fill="#5a8a7a" opacity="0.6" /><path d={`M${x - 2} -16 v-5 M${x + 2} -16 v-5`} stroke="#c98a4a" strokeWidth="1.4" /></g>
+          ))}
+          {/* lampe à pétrole */}
+          <g transform="translate(16,0)">
+            <path d="M-7 0 h14 l-2 -8 h-10 Z" fill="#8a6a3a" />
+            <path d="M-4 -8 q-6 -10 4 -18 q10 8 4 18 Z" fill="#fff0c8" opacity="0.55" />
+            <circle cx="0" cy="-14" r="14" fill="#ffcf78" opacity="0.3" filter="url(#wt-blur)" />
+          </g>
+        </g>
       </PLayer>
 
       {/* ═══ premier plan : bureau, Morse, Jessie, épave ═══ */}
       <PLayer depth={3}>
-        <rect y="404" width="1000" height="156" fill="url(#wt-floor)" />
-        <rect y="406" width="1000" height="154" fill="#241608" opacity="0.34" filter="url(#wt-grain)" />
-        {/* lattes du plancher */}
-        <path d="M0 470 h1000 M0 520 h1000 M180 404 v156 M420 404 v156 M660 404 v156 M860 404 v156" stroke="#2a1a0c" strokeWidth="1.6" opacity="0.4" />
-        <ellipse cx="380" cy="472" rx="200" ry="80" fill="url(#wt-lamp)" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
 
         {/* LE BUREAU du télégraphe */}
         <g transform="translate(430,486)">
