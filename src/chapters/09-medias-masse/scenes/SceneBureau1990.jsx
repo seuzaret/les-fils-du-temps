@@ -61,7 +61,7 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
       </defs>
 
       {/* ═══ MUR beige + moquette gris-bleu (open-space années 90) ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#b90-wall)" />
         {/* patine du mur : grain fin + halo doré près de la fenêtre */}
         <rect width="1000" height="440" fill="#5a4028" opacity="0.14" filter="url(#b90-grain)" />
@@ -150,7 +150,7 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
       </PLayer>
 
       {/* ═══ BUREAU + PC ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <rect y="440" width="1000" height="120" fill="url(#b90-floor)" />
         {/* moquette gris-bleu : mottling + grain */}
         <rect y="440" width="1000" height="120" fill="#0a1420" opacity="0.35" filter="url(#b90-mottle)" />
@@ -307,7 +307,7 @@ export default function SceneBureau1990({ collect, action, reveal, made = [], fl
       </PLayer>
 
       {/* ═══ AVANT-PLAN : CÉLINE assise devant le bureau ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* Halo cathodique bleuté sur le visage de Céline — l'écran l'éclaire */}
         <ellipse cx="560" cy="410" rx="80" ry="60" fill="url(#b90-screenGlow)" style={{ pointerEvents: "none" }} />
         <g transform="translate(560,470)">

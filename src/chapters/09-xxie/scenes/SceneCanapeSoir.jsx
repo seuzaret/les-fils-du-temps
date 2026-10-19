@@ -73,7 +73,7 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
 
 
       {/* BOX WI-FI — posée sur une petite tablette à gauche, avec afficheur 13:37 */}
-      <PLayer depth={2}>
+      <PLayer depth={1}>
         <g transform="translate(240,470)">
           {/* petite tablette qui accueille la box */}
           <rect x="-56" y="42" width="120" height="8" fill="#1a1a24" />
@@ -113,7 +113,7 @@ export default function SceneCanapeSoir({ collect, action, reveal, made = [], in
       </PLayer>
 
       {/* ═══ PREMIER PLAN : LES DEUX MAINS QUI TIENNENT LE TÉLÉPHONE ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* main GAUCHE — tenue depuis le bas, seuls pouce + tranche visibles */}
         <g transform="translate(300,560)">
           {/* paume qui remonte depuis le hors-champ */}

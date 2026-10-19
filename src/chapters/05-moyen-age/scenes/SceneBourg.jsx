@@ -28,7 +28,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
       <rect width="1000" height="440" fill="url(#bg-sky)" />
       <rect y="440" width="1000" height="120" fill="url(#bg-sol)" />
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         {/* nuages */}
         <Clouds id="bg-cl" seed={97} items={[[240, 80, 200], [620, 106, 240], [900, 70, 140]]} color="#fbf4e4" shadow="#d0c8b8" opacity="0.75" drift={16} />
         {/* ═══ REMPART + VILLE MÉDIÉVALE en silhouette au fond ═══ */}
@@ -116,7 +116,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
         <path d="M500 340 Q505 450 520 568" stroke="#3a2c1c" strokeWidth="6" fill="none" opacity="0.35" />
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* MAISON À COLOMBAGES à gauche (tavernier) */}
         <g transform="translate(160,400)">
           {/* toit pentu */}
@@ -179,7 +179,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* PUITS au centre */}
         <g transform="translate(500,470)">
           <ellipse cx="0" cy="34" rx="30" ry="4" fill="#0a0604" opacity="0.55" />
@@ -195,7 +195,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* CHARRETTE de foin */}
         <g transform="translate(240,510)">
           <ellipse cx="0" cy="30" rx="50" ry="4" fill="#0a0604" opacity="0.55" />
@@ -251,7 +251,7 @@ export default function SceneBourg({ collect, action, reveal, inv = [] }) {
         ))}
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* CRIEUR PUBLIC sur son estrade avec parchemin ouvert */}
         <g transform="translate(700,485)">
           {/* estrade */}

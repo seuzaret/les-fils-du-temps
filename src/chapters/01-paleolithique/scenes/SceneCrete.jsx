@@ -36,7 +36,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         <filter id="cr-grain"><feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="2" seed="9" /><feColorMatrix values="0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.3 0" /></filter>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         {/* ciel dégradé matin, plus riche */}
         <rect x="-40" y="-20" width="1080" height="420" fill="url(#cr-sky)" />
         {/* halo solaire */}
@@ -81,7 +81,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         </g>
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* trois plans de montagnes : bleu glacé au loin, plus sombre devant */}
         <Ridge id="cr-r1" seed={31} y={262} amp={120} rough={0.6} fill="#8a9cbc" lit="#c0cce0" light={1} snow="#f4f4f0" snowLine={190} />
         <Haze id="cr-h1" y0={200} y1={290} color="#e8e0d0" opacity={0.5} />
@@ -92,7 +92,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         <Haze id="cr-h3" y0={320} y1={390} color="#f0d8a8" opacity={0.4} />
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* la plaine en contrebas */}
         <path d="M-40 372 Q260 360 520 370 Q760 380 1040 366 L1040 480 L-40 480 Z" fill="url(#cr-plaine)" />
         <Speckle seed={21} x0={-20} x1={1020} y0={376} y1={480} n={420} colors={["#7a6a38", "#c8b880", "#5a6a30", "#8a7840"]} r={[0.5, 1.4]} opacity={0.55} />
@@ -209,7 +209,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         ))}
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* premier plan : la crête rocheuse où on est */}
         <path d="M0 480 L120 470 L220 490 L340 475 L460 495 L580 480 L700 490 L820 478 L1000 490 L1000 560 L0 560 Z" fill="url(#cr-rock)" />
         {/* strates de la roche */}
@@ -242,7 +242,7 @@ export default function SceneCrete({ collect, action, reveal, made = [], inv = [
         ))}
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* petit CAIRN de pierres empilées à gauche (repère de chasseurs) — mieux modelé */}
         <g transform="translate(240,470)">
           <ellipse cx="0" cy="18" rx="30" ry="4" fill="#0a0604" opacity="0.6" />

@@ -77,7 +77,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </defs>
 
       {/* ═══ CIEL brumeux ═══ */}
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect width="1000" height="440" fill="url(#pa-sky)" />
         {/* soleil bas voilé, à droite */}
         <circle cx="820" cy="120" r="220" fill="url(#pa-sun)" />
@@ -101,7 +101,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </PLayer>
 
       {/* ═══ TOUR EIFFEL au fond, brumeuse ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         <g transform="translate(500,300)" opacity="0.85">
           {/* silhouette bleutée, un voile de brume par-dessus */}
           <path d="M-70 0 L-18 -240 L18 -240 L70 0 L42 0 L22 -88 L-22 -88 L-42 0 Z" fill="url(#pa-eiffel)" />
@@ -129,7 +129,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </PLayer>
 
       {/* ═══ FAÇADES haussmanniennes ═══ */}
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* ─── immeuble gauche ─── */}
         <g>
           <rect x="0" y="80" width="360" height="380" fill="url(#pa-facade)" stroke="#5a4838" strokeWidth="2" />
@@ -207,7 +207,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </PLayer>
 
       {/* ═══ AFFICHES ═══ */}
-      <PLayer depth={2.5}>
+      <PLayer depth={2}>
         {/* Affiche VERBOTEN, corner déchiré + tâche d'humidité */}
         <g transform="translate(20,300)">
           <rect x="0" y="0" width="70" height="90" fill="#e8dfc8" stroke="#3a0a0a" strokeWidth="1.5" />
@@ -241,7 +241,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </PLayer>
 
       {/* ═══ SOL (rue pavée + trottoir) ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <rect y="440" width="1000" height="120" fill="url(#pa-street)" />
         {/* mottling humide */}
         <rect y="440" width="1000" height="120" fill="#241608" opacity="0.35" filter="url(#pa-mottle)" />
@@ -267,7 +267,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </PLayer>
 
       {/* ═══ ARCADE + MARCHAND ═══ */}
-      <PLayer depth={1.5}>
+      <PLayer depth={3}>
         <g transform="translate(120,320)">
           {/* ombre projetée à l'intérieur de l'arche */}
           <path d="M-70 130 L-70 30 Q0 -30 70 30 L70 130 Z" fill="#4a4038" stroke="#2a2418" strokeWidth="2" />
@@ -314,7 +314,7 @@ export default function SceneParis({ collect, action, reveal, made = [], mode })
       </PLayer>
 
       {/* ═══ PATROUILLE ALLEMANDE + PANZER + MARTHE + ANACHRO ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* Panzer qui remonte l'avenue */}
         <g opacity="0.92">
           <animateTransform attributeName="transform" type="translate"

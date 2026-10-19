@@ -50,7 +50,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </defs>
 
       {/* ═════ MUR + DÉCO MURALE (soirée, pénombre) ═════ */}
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect width="1000" height="420" fill="url(#jt-wall)" />
         {/* motifs discrets papier peint 80s */}
         {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((row) => (
@@ -144,7 +144,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* Sol : parquet */}
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         <rect y="420" width="1000" height="140" fill="url(#jt-floor)" />
         {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
           <line key={i} x1="0" y1={430 + i * 15} x2="1000" y2={430 + i * 15} stroke="#0a0604" strokeWidth="0.6" opacity="0.5" />
@@ -152,7 +152,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* MEUBLE + TV cathodique — centré au fond du salon */}
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* meuble bas */}
         <rect x="410" y="340" width="180" height="72" fill="#3a2418" stroke="#1a0e04" strokeWidth="1.5" rx="2" />
         <rect x="414" y="344" width="172" height="6" fill="#4a3020" />
@@ -188,7 +188,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* MAMAN debout à gauche, 3/4, combiné à l'oreille */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <g transform="translate(120,440)">
           <rect x="-40" y="-24" width="80" height="30" fill="#3a2418" stroke="#1a0e04" strokeWidth="1.2" rx="2" />
           <rect x="-32" y="-42" width="64" height="24" fill="#c85030" stroke="#7a2010" strokeWidth="1" rx="3" />
@@ -213,7 +213,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* ═════ FAUTEUIL DU GRAND-PÈRE, à droite, VU DE DOS, orienté TV ═════ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <g transform="translate(880,540)">
           {/* dossier haut, arrondi */}
           <path d="M-56 -180 Q0 -196 56 -180 L64 -30 L-64 -30 Z" fill="url(#jt-gp-chair)" />
@@ -241,7 +241,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* Tapis + ADO au sol devant le canapé */}
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         <ellipse cx="500" cy="480" rx="320" ry="26" fill="#7a2a2a" opacity="0.75" />
         <ellipse cx="500" cy="480" rx="300" ry="22" fill="none" stroke="#c9a54a" strokeWidth="1.2" opacity="0.7" />
         {[-3, -2, -1, 0, 1, 2, 3].map((i) => (
@@ -257,7 +257,7 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* ═════ CANAPÉ AU PREMIER PLAN, DE DOS, avec papa + un(e) autre ═════ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <g transform="translate(410,540)">
           {/* dossier canapé, arrondi haut, plus généreux (baissé pour laisser voir les têtes) */}
           <path d="M-260 -128 Q0 -150 260 -128 L272 -50 L-272 -50 Z" fill="url(#jt-couch)" />

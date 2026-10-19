@@ -48,7 +48,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       <rect width="1000" height="560" fill="url(#kq-sky)" />
 
       {/* IMMEUBLES en fond, silhouettes haussmanniennes */}
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect x="0" y="90" width="1000" height="260" fill="url(#kq-facade)" opacity="0.9" />
         {/* fenêtres régulières */}
         {[0, 1, 2, 3, 4].map((row) => (
@@ -65,7 +65,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* TROTTOIR — pavé + bordure */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <rect y="360" width="1000" height="200" fill="url(#kq-street)" />
         <rect y="360" width="1000" height="6" fill="#2a2620" />
         {/* joints entre pavés (motif régulier) */}
@@ -81,7 +81,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* LE KIOSQUE — au centre, imposant */}
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* base en fer forgé */}
         <rect x="330" y="240" width="380" height="180" fill="url(#kq-kiosk)" stroke="#141c14" strokeWidth="2" rx="2" />
         {/* motifs de fer forgé (fines volutes) */}
@@ -149,7 +149,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* PASSANTS — une lycéenne à droite feuilletant un mag ado, un cadre à gauche */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* Cadre pressé, gauche */}
         <g transform="translate(160,360)">
           {/* pressé : manteau beige, mallette, le journal replié sous le bras */}
@@ -210,7 +210,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
          bas du trottoir, avec un petit panache de fumée bleutée au
          pot d'échappement, qui traîne derrière (donc à droite du
          véhicule, puisqu'il roule vers la gauche). */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <g>
           <animateTransform attributeName="transform" attributeType="XML" type="translate"
             values="1140,0; -140,0" dur="14s" begin="2s" repeatCount="indefinite" />
@@ -265,7 +265,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       </PLayer>
 
       {/* Lampadaire en fer forgé à gauche */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <rect x="80" y="240" width="6" height="160" fill="#1a1a20" />
         <path d="M60 240 Q66 232 76 236 M110 240 Q104 232 94 236" stroke="#1a1a20" strokeWidth="4" fill="none" />
         <circle cx="83" cy="232" r="10" fill="#f0e0a0" stroke="#5a4a20" strokeWidth="1.5" />

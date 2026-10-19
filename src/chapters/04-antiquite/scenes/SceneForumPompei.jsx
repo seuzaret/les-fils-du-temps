@@ -29,7 +29,7 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
       <rect width="1000" height="380" fill="url(#fp-sky)" />
       <rect y="380" width="1000" height="180" fill="url(#fp-dalles)" />
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         {/* soleil pâle dans le ciel */}
         <circle cx="180" cy="80" r="80" fill="#f8e8b8" opacity="0.35" />
         <circle cx="180" cy="80" r="24" fill="#f8e0a0" opacity="0.7" />
@@ -44,7 +44,7 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         </g>
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* ═══ LA VILLE DE POMPÉI ═══
             Toits en tuiles rouges qui s'étalent au pied du Vésuve.
             Deux couches : lointaine (petites maisons floues) puis
@@ -113,7 +113,7 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         </g>
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2.5}>
         {/* dallage du forum */}
         <rect y="380" width="1000" height="180" fill="url(#fp-dalles)" />
         {/* grandes dalles de travertin, en perspective, avec leurs nuances */}
@@ -166,7 +166,7 @@ export default function SceneForumPompei({ collect, action, reveal, inv = [] }) 
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={3}>
         {/* PRAECO — le crieur public sur un escabeau, main levée */}
         <g transform="translate(200,510)">
           {/* escabeau de bois */}

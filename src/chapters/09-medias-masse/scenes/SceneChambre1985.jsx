@@ -30,7 +30,7 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       </defs>
 
       {/* ═══ MUR + papier peint années 80 + FENÊTRE sur la ville ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#c85-wall)" />
         {/* motif géométrique 80s */}
         {[...Array(6)].map((_, r) => [...Array(12)].map((_, c) => (
@@ -71,7 +71,7 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       </PLayer>
 
       {/* ═══ POSTER de groupe rock au mur ═══ */}
-      <PLayer depth={3.5}>
+      <PLayer depth={1.5}>
         <g transform="translate(200,90)">
           <rect x="0" y="0" width="180" height="220" fill="#1a1a1a" stroke="#e8d8b0" strokeWidth="4" />
           {/* silhouette guitariste stylisée */}
@@ -109,7 +109,7 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       </PLayer>
 
       {/* ═══ meubles ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* sol parquet */}
         <rect y="440" width="1000" height="120" fill="url(#c85-floor)" />
         <path d="M0 460 h1000 M0 480 h1000 M0 500 h1000 M0 520 h1000" stroke="#5a3818" strokeWidth="0.6" opacity="0.5" />
@@ -285,7 +285,7 @@ export default function SceneChambre1985({ collect, action, reveal, made = [], f
       </PLayer>
 
       {/* ═══ AVANT-PLAN : JULIEN sur sa chaise devant le bureau ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <g transform="translate(620,410)">
           {/* t-shirt ROCK, veste en jean ouverte, casque de walkman autour du cou */}
           <Figure x={0} y={95} s={1.08} pose="sit" skin="#e8bc96" hair="#4a3020" look="mid" mood="content"

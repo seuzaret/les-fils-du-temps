@@ -29,7 +29,7 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       </defs>
 
       {/* ═══ mur + tapisserie années 60 + FENÊTRE sur Paris ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#s69-wall)" />
         {/* motifs géométriques années 60 */}
         {[...Array(6)].map((_, r) => [...Array(12)].map((_, c) => (
@@ -74,7 +74,7 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       {/* ═══ ÉTAGÈRES avec JOUETS & bric-à-brac de Nathalie ═══
            Les antennes sont RANGÉES DANS le bric-à-brac : il faut
            les repérer. Reveal (👁) aide bien. */}
-      <PLayer depth={3.2}>
+      <PLayer depth={1.5}>
         {/* étagère haute à gauche, sous le tableau, dessus : jouets */}
         <g>
           {/* planche */}
@@ -209,7 +209,7 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       </PLayer>
 
       {/* ═══ MEUBLE TV + télévision ═══ */}
-      <PLayer depth={3}>
+      <PLayer depth={1.5}>
         {/* meuble bois clair années 60 */}
         <rect x="380" y="280" width="240" height="180" fill="url(#s69-tv)" stroke="#1a0e04" strokeWidth="3" />
         <rect x="380" y="280" width="240" height="20" fill="#a06848" />
@@ -303,7 +303,7 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       </PLayer>
 
       {/* ═══ meubles + décor du salon ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* moquette orange */}
         <rect y="440" width="1000" height="120" fill="url(#s69-floor)" />
         <rect y="440" width="1000" height="4" fill="#5a2010" opacity="0.6" />
@@ -381,7 +381,7 @@ export default function SceneSalon1969({ collect, action, reveal, made = [], fla
       </PLayer>
 
       {/* ═══ AVANT-PLAN : NATHALIE en chemise de nuit assise en tailleur devant la TV ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <g transform="translate(340,450)">
           {/* chemise de nuit rose, assise en tailleur devant la télé, une barrette */}
           <Figure x={0} y={80} s={1.08} pose="ground" skin="#f0d0b0" hair="#5a3820" look="bob" mood="content"

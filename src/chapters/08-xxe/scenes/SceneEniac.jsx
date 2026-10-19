@@ -30,7 +30,7 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
       </defs>
 
       {/* ═══ mur du fond + halo ambiant quand allumé ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#en-wall)" />
         {allume && <rect width="1000" height="440" fill="url(#en-glow)" opacity="0.9" />}
         {/* fenêtres hautes avec store — atmosphère bureau militaire américain */}
@@ -54,7 +54,7 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
       </PLayer>
 
       {/* ═══ grand banc d'armoires ENIAC alignées ═══ */}
-      <PLayer depth={3}>
+      <PLayer depth={1.5}>
         {BAIES.map((x, i) => (
           <g key={i}>
             <rect x={x} y="140" width="120" height="260" fill="url(#en-baie)" stroke="#0a0806" strokeWidth="2" />
@@ -147,7 +147,7 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
       </PLayer>
 
       {/* ═══ sol + tables + plugboard ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <rect y="440" width="1000" height="120" fill="url(#en-floor)" />
         {/* PLUGBOARD debout à gauche : grand tableau avec des trous et des câbles pendants */}
         <g transform="translate(490,300)">
@@ -199,7 +199,7 @@ export default function SceneEniac({ collect, action, reveal, made = [], flags =
       </PLayer>
 
       {/* ═══ AVANT-PLAN : KAY McNULTY debout devant l'ENIAC ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <g transform="translate(830,340)">
           {/* debout en tailleur, un cahier de notes à la main */}
           <Figure x={0} y={130} s={1.23} skin="#ecc8a4" hair="#5a3820" look="rolls" lips="#c02030" mood="content"

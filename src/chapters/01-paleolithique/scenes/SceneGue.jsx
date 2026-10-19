@@ -25,7 +25,7 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
       {/* ═══ ciel de fin de matinée, nuages, montagnes bleues ═══ */}
       <rect x="-40" y="-20" width="1080" height="300" fill="url(#gu-sky)" />
       <Clouds id="gu-cl" seed={4} items={[[140, 46, 150], [470, 30, 190], [800, 58, 140], [640, 92, 90]]} color="#fbf6ea" shadow="#c8ccd0" opacity="0.8" drift={20} />
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <Ridge id="gu-r1" seed={14} y={204} amp={104} rough={0.62} fill="#7088a8" lit="#a8bcd4" light={-1} snow="#eef2f6" snowLine={132} />
         <Haze id="gu-h1" y0={160} y1={222} color="#dce4e8" opacity={0.45} />
         <Ridge id="gu-r2" seed={23} y={222} amp={40} fill="#6a8466" lit="#87a07a" light={-1} />
@@ -43,7 +43,7 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
         </g>
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={1.5}>
         {/* la rivière large — bande d'eau bleu-gris qui traverse */}
         <rect x="-40" y="248" width="1080" height="200" fill="url(#gu-water)" />
         <Reflect id="gu-ref" axisY={249} opacity={0.5} blur={3}>
@@ -131,7 +131,7 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
         ))}
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* berge proche (au sol) */}
         <path d="M0 440 L1000 440 L1000 560 L0 560 Z" fill="url(#gu-rive)" />
         {/* clapotis sur la berge : ligne mouillée plus claire */}
@@ -184,7 +184,7 @@ export default function SceneGue({ collect, action, reveal, made = [], inv = [] 
         </g>
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* Le PÊCHEUR ancestral sur la berge, canne en bois — mieux fini */}
         <g transform="translate(120,470)">
           <ellipse cx="0" cy="42" rx="30" ry="4" fill="#0a0604" opacity="0.55" />

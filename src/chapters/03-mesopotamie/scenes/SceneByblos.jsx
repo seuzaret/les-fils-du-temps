@@ -23,7 +23,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         <radialGradient id="by-soleil" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff8d8" /><stop offset="70%" stopColor="#f8d878" stopOpacity="0.4" /><stop offset="100%" stopColor="#f8c058" stopOpacity="0" /></radialGradient>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect width="1000" height="320" fill="url(#by-sky)" />
         {/* soleil bas */}
         <circle cx="840" cy="180" r="130" fill="url(#by-soleil)" />
@@ -42,7 +42,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* le mont Liban, neigeux au loin, puis les collines couvertes de cèdres */}
         <Ridge id="by-r0" seed={181} y={240} amp={110} rough={0.6} fill="#9a88a8" lit="#d8b8b8" light={1} snow="#f4ece8" snowLine={156} />
         <Haze id="by-h0" y0={170} y1={260} color="#f8d8b0" opacity={0.45} />
@@ -61,7 +61,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         <rect x="56" y="232" width="18" height="30" fill="#d8c8a0" /><path d="M54 232 h22 l-4 -8 h-14 Z" fill="#b8863a" />
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* la mer Méditerranée */}
         <rect y="320" width="1000" height="80" fill="url(#by-mer)" />
         {/* vagues */}
@@ -94,7 +94,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* plage / sable devant */}
         <path d="M-40 404 Q200 394 460 402 Q720 410 1040 396 L1040 560 L-40 560 Z" fill="url(#by-sable)" />
         {/* sable mouillé, plus sombre et brillant, puis l'écume qui va et vient */}
@@ -158,7 +158,7 @@ export default function SceneByblos({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* LE CHARPENTIER phénicien accroupi près du bateau, maillet levé */}
         <g transform="translate(390,494)">
           <ellipse cx="0" cy="34" rx="24" ry="4" fill="#0a0604" opacity="0.55" />

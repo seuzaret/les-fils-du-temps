@@ -23,7 +23,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         <radialGradient id="py-sun" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff4c8" /><stop offset="60%" stopColor="#f8d878" stopOpacity="0.4" /><stop offset="100%" stopColor="#f8c058" stopOpacity="0" /></radialGradient>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect width="1000" height="380" fill="url(#py-sky)" />
         {/* halo solaire ardent */}
         <circle cx="200" cy="120" r="120" fill="url(#py-sun)" />
@@ -45,7 +45,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* au loin : deux pyramides plus anciennes, puis les dunes */}
         <g opacity="0.55">
           <path d="M80 318 L150 250 L220 318 Z" fill="#d8b888" /><path d="M150 250 L220 318 L180 318 Z" fill="#b8946a" />
@@ -56,7 +56,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         <Dunes id="py-d1" seed={233} y={350} amp={22} n={4} fill="#d8a460" shadow="#b8824a" light={-1} />
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* LA PYRAMIDE — en construction, sommet inachevé */}
         <g transform="translate(700,380)">
           {/* base large */}
@@ -99,7 +99,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* sol : sable clair du premier plan */}
         <path d="M-40 384 Q200 374 460 382 Q720 390 1040 378 L1040 560 L-40 560 Z" fill="url(#py-sand)" />
         <Speckle seed={235} x0={0} x1={1000} y0={384} y1={560} n={360} colors={["#a07038", "#fff0c8", "#c89858", "#8a6838"]} opacity={0.45} />
@@ -160,7 +160,7 @@ export default function ScenePyramide({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* CONTREMAÎTRE égyptien (à droite du chantier) avec son rouleau */}
         <g transform="translate(500,480)">
           <ellipse cx="0" cy="42" rx="20" ry="4" fill="#0a0604" opacity="0.55" />

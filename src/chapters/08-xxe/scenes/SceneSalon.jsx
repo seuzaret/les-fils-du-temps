@@ -30,7 +30,7 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
       </defs>
 
       {/* ═══ mur + tapisserie discrète ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#sd-wall)" />
         {[...Array(6)].map((_, r) => [...Array(10)].map((_, c) => (
           <path key={`t-${r}-${c}`} d={`M${60 + c * 96} ${50 + r * 70} q6 -6 12 0 q-6 6 -12 0 Z`}
@@ -41,7 +41,7 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
       </PLayer>
 
       {/* ═══ FENÊTRE aux rideaux tirés (black-out) ═══ */}
-      <PLayer depth={3}>
+      <PLayer depth={1.5}>
         <rect x="380" y="60" width="220" height="180" fill="#0a0604" stroke="#3a2418" strokeWidth="4" />
         {/* un seul faisceau DCA, discret, qui balaie a travers la fente
             entre les rideaux (clip strict a la vitre pour qu'il ne
@@ -87,7 +87,7 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
       </PLayer>
 
       {/* ═══ meubles ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         <rect y="440" width="1000" height="120" fill="url(#sd-floor)" />
         <rect x="150" y="450" width="600" height="60" rx="6" fill="#6a2820" opacity="0.7" />
         <rect x="170" y="460" width="560" height="40" rx="4" fill="none" stroke="#c88060" strokeWidth="1" opacity="0.6" />
@@ -187,7 +187,7 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
       </PLayer>
 
       {/* ═══ AVANT-PLAN : MARTHE dans son fauteuil ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         <g transform="translate(870,340)">
           <Figure x={0} y={108} s={1.23} pose="sit" skin="#e4c4a4" hair="#a8a49c" look="bun" wrinkles mood="content"
             garment="dress" coat="#1a1a1a" pants="#2a2420" shoes="#0a0a0a" belt={false} arms={[{ a1: 14, a2: -30 }, { a1: 14, a2: -30 }]}>

@@ -27,7 +27,7 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         <filter id="ec-grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" /><feColorMatrix values="0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 0.4 0" /></filter>
       </defs>
 
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         {/* mur du fond en briques crues */}
         <rect width="1000" height="440" fill="url(#ec-mur)" />
         <rect width="1000" height="440" fill="#3a2818" opacity="0.3" filter="url(#ec-grain)" />
@@ -87,7 +87,7 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         </g>
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={1.5}>
         {/* MUR D'EXERCICES : rangée de tablettes accrochées, certaines cassées */}
         <g transform="translate(260,180)">
           {Array.from({ length: 6 }).map((_, i) => {
@@ -119,7 +119,7 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* SOL de terre battue */}
         <rect y="440" width="1000" height="120" fill="url(#ec-sol)" />
         <rect y="440" width="1000" height="120" fill="#2a1810" opacity="0.25" filter="url(#ec-grain)" />
@@ -144,7 +144,7 @@ export default function SceneEcoleScribe({ collect, action, reveal, inv = [] }) 
         <ellipse cx="300" cy="530" rx="30" ry="3" fill="#3a2010" opacity="0.2" />
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* LE MAÎTRE UMMIA (assis au centre-droit, sur natte, canne posée) */}
         <g transform="translate(680,470)">
           <ellipse cx="0" cy="26" rx="34" ry="5" fill="#0a0604" opacity="0.5" />

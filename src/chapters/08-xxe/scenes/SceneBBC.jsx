@@ -38,7 +38,7 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
       </defs>
 
       {/* ═══ FOND — mur du studio, panneaux acoustiques ═══ */}
-      <PLayer depth={4}>
+      <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#bbc-wall)" />
         {[...Array(4)].map((_, r) => [...Array(10)].map((_, c) => (
           <rect key={`p-${r}-${c}`} x={40 + c * 96} y={40 + r * 72} width="76" height="52" rx="4"
@@ -121,7 +121,7 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
 
       {/* ═══ ondes qui partent par la fenêtre — visible seulement quand émission ═══ */}
       {enOnde && (
-        <PLayer depth={3}>
+        <PLayer depth={1.5}>
           {[30, 60, 90, 120, 160].map((r, i) => (
             <path key={i} d={`M650 150 a${r} ${r * 0.7} 0 0 1 ${r * 1.5} 0`} fill="none"
               stroke="#ffd166" strokeWidth="2" opacity={0.85 - i * 0.16}
@@ -131,7 +131,7 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
       )}
 
       {/* ═══ PLAN DU MILIEU : la table technique, le pupitre, le pied du micro ═══ */}
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* sol */}
         <rect y="420" width="1000" height="140" fill="url(#bbc-floor)" />
         {/* pendule murale — 21h00 le 5 juin 1944 */}
@@ -185,7 +185,7 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
       </PLayer>
 
       {/* ═══ AVANT-PLAN : ARTHUR au PUPITRE + micro branché (quand posé) ═══ */}
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* silhouette d'ARTHUR — dessinée AVANT le pupitre pour qu'il passe DERRIÈRE
             (bas du corps caché par le meuble) ; le micro sera dessiné APRÈS le pupitre
             pour rester devant lui, sinon on ne verrait plus le micro. */}

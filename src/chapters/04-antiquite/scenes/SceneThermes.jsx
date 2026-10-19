@@ -25,7 +25,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         <radialGradient id="th-vapeur" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#f0f0e8" stopOpacity="0.7" /><stop offset="100%" stopColor="#f0f0e8" stopOpacity="0" /></radialGradient>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         {/* Voûte en berceau à caissons — arrière-plan */}
         <rect width="1000" height="380" fill="url(#th-voute)" />
         {/* caissons décoratifs (grille) */}
@@ -49,7 +49,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         <path d="M440 8 L560 8 L640 380 L360 380 Z" fill="#fff4d8" opacity="0.16" filter="url(#th-blur)" />
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* soubassement de marbre veiné au pied des murs, avec une frise */}
         <rect x="-40" y="340" width="1080" height="102" fill="url(#th-wain)" />
         <rect x="-40" y="340" width="1080" height="10" fill="#8a3a2a" />
@@ -90,7 +90,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         ))}
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* MOSAÏQUE au sol : damier en perspective, qui fuit vers le mur */}
         <rect x="-40" y="442" width="1080" height="130" fill="#e0d0b8" />
         {Array.from({ length: 6 }).map((_, r) => {
@@ -116,7 +116,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
         <path d="M470 448 q-4 20 -14 40 M530 448 q4 20 14 40" stroke="#78b0c8" strokeWidth="1.5" fill="none" opacity="0.7" />
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* LABRUM au centre : grande vasque de marbre avec eau chaude */}
         <g transform="translate(500,410)">
           {/* pied de la vasque */}
@@ -148,7 +148,7 @@ export default function SceneThermes({ collect, action, reveal, inv = [] }) {
       </PLayer>
 
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* DEUX BAIGNEURS qui discutent, drapés dans une serviette (à droite) */}
         <g transform="translate(760,490)">
           {/* baigneur 1 (assis sur banc) */}

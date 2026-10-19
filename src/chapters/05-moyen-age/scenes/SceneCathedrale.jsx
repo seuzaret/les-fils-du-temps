@@ -24,7 +24,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         <linearGradient id="ca-vit-j" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f8d848" /><stop offset="100%" stopColor="#c89830" /></linearGradient>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         {/* Mur du fond avec grain de pierre */}
         <rect width="1000" height="440" fill="url(#ca-mur)" />
         {/* joints de pierre horizontaux subtils (assises regulieres) */}
@@ -78,7 +78,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         ))}
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* GRANDE ROSE polychrome au centre */}
         <g transform="translate(500,240)">
           {/* cadre externe */}
@@ -135,7 +135,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* ÉCHAFAUDAGE en bois à gauche (le chantier n'est pas fini) */}
         <g transform="translate(120,440)">
           <path d="M0 0 L0 -280 M30 0 L30 -280" stroke="#5a3818" strokeWidth="3" />
@@ -165,7 +165,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* sol dalles noires et blanches — plus riche : damier en
             perspective (tuiles qui retrecissent vers le fond), tache de
             lumiere coloree qui tombe de la rose, tapis central rouge. */}
@@ -232,7 +232,7 @@ export default function SceneCathedrale({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* LE MAÎTRE VERRIER accroupi devant un panneau de vitrail en construction */}
         <g transform="translate(320,500)">
           <ellipse cx="0" cy="30" rx="26" ry="4" fill="#0a0604" opacity="0.55" />

@@ -24,7 +24,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         <radialGradient id="po-soleil" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff4c8" /><stop offset="70%" stopColor="#f8d878" stopOpacity="0.4" /><stop offset="100%" stopColor="#f8c058" stopOpacity="0" /></radialGradient>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect width="1000" height="380" fill="url(#po-sky)" />
         {/* soleil */}
         <circle cx="140" cy="140" r="120" fill="url(#po-soleil)" />
@@ -39,7 +39,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* LE VÉSUVE — au fond, imposant, fumée ANORMALEMENT dense */}
         <g transform="translate(720,340)">
           {/* le volcan : cône raviné, épaulement de la Somma, pentes boisées */}
@@ -70,7 +70,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         ))}
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* mer */}
         <rect x="-40" y="340" width="1080" height="100" fill="url(#po-mer)" />
         <rect x="-40" y="340" width="1080" height="3" fill="#e8f0f0" opacity="0.4" />
@@ -111,7 +111,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* quai en dalles */}
         <rect x="-40" y="440" width="1080" height="130" fill="url(#po-quai)" />
         {/* joints entre dalles, en perspective */}
@@ -165,7 +165,7 @@ export default function ScenePort({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* LE MARCHAND au comptoir, notant sur son volumen */}
         <g transform="translate(560,500)">
           {/* le marchand, debout derrière son comptoir, stylet à la main */}

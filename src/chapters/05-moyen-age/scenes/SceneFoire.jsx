@@ -26,7 +26,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         <linearGradient id="fo-livre3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#5a3818" /><stop offset="100%" stopColor="#2a1408" /></linearGradient>
       </defs>
 
-      <PLayer depth={5}>
+      <PLayer depth={1}>
         <rect width="1000" height="360" fill="url(#fo-sky)" />
         {/* nuages */}
         <Clouds id="fo-cl" seed={91} items={[[200, 70, 200], [560, 90, 240], [840, 60, 160]]} color="#fbf4e4" shadow="#d0c8b8" opacity="0.75" drift={16} />
@@ -153,7 +153,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         ))}
       </PLayer>
 
-      <PLayer depth={4}>
+      <PLayer depth={1.5}>
         {/* BANDEROLE au-dessus de la scène — flottante au vent */}
         <g transform="translate(500,150)" style={{ animation: "float 5s ease-in-out infinite" }}>
           <path d="M-300 -8 q300 40 600 0 L300 24 q-300 30 -600 0 Z" fill="#c85028" stroke="#5a1810" strokeWidth="1" />
@@ -166,7 +166,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={3}>
+      <PLayer depth={2}>
         {/* ÉTAL DU LIBRAIRE : grande table sous auvent */}
         <g transform="translate(240,400)">
           {/* poteaux de bois */}
@@ -208,7 +208,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         </g>
       </PLayer>
 
-      <PLayer depth={2}>
+      <PLayer depth={2.5}>
         {/* petits pavés supplémentaires */}
         {[[500, 490], [700, 500], [900, 510]].map(([x, y], i) => (
           <ellipse key={i} cx={x} cy={y} rx="6" ry="2" fill="#5a4028" opacity="0.6" />
@@ -231,7 +231,7 @@ export default function SceneFoire({ collect, action, reveal, inv = [] }) {
         ))}
       </PLayer>
 
-      <PLayer depth={1}>
+      <PLayer depth={3}>
         {/* LE LIBRAIRE derrière son étal */}
         <g transform="translate(240,412)">
           <clipPath id="fo-libraire"><rect x="-80" y="-120" width="160" height="120" /></clipPath>
