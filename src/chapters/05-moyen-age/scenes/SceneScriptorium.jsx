@@ -30,14 +30,28 @@ export default function SceneMonastere({ collect, action, reveal, made = [], fla
         <filter id="sc-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6" /></filter>
       </defs>
 
-      {/* ═══ mur de pierre (fond) ═══ */}
+      {/* ═══ mur de pierre (fond) : moellons irréguliers ═══ */}
       <rect width="1000" height="560" fill="url(#sc-stone)" />
+      {Array.from({ length: 13 }).map((_, r) => Array.from({ length: 18 }).map((_, c) => {
+        const w = 52 + ((r * 5 + c * 11) % 4) * 6, x = c * 60 + (r % 2) * 30 - 40, y = r * 31;
+        return <rect key={`${r}-${c}`} x={x} y={y} width={w} height="29" rx="3" fill={(r + c) % 3 ? "#4a4038" : "#544a40"} stroke="#241e18" strokeWidth="1.2" opacity="0.6" />;
+      }))}
       <rect width="1000" height="560" fill="#1c1610" opacity="0.3" filter="url(#sc-grain)" />
+      {/* la lumière de la chandelle et de la fenêtre réchauffe le mur au centre */}
+      <ellipse cx="520" cy="260" rx="360" ry="220" fill="#c8a070" opacity="0.08" filter="url(#sc-blur)" />
 
       {/* ═══ couche lointaine : voûtes, fenêtre en ogive ═══ */}
       <PLayer depth={1}>
+        {/* arcs de la voûte en pierres de taille, sur des colonnettes */}
         {[180, 500, 820].map((x, i) => (
-          <path key={i} d={`M${x - 130} 200 Q${x} 40 ${x + 130} 200`} fill="none" stroke="#3a322a" strokeWidth="16" opacity="0.7" />
+          <g key={i}>
+            <path d={`M${x - 130} 220 Q${x - 130} 60 ${x} 50 Q${x + 130} 60 ${x + 130} 220`} fill="none" stroke="#5a5046" strokeWidth="22" opacity="0.85" />
+            <path d={`M${x - 130} 220 Q${x - 130} 60 ${x} 50 Q${x + 130} 60 ${x + 130} 220`} fill="none" stroke="#2a241e" strokeWidth="22" strokeDasharray="2 22" opacity="0.8" />
+            <path d={`M${x - 141} 220 Q${x - 141} 50 ${x} 39 Q${x + 141} 50 ${x + 141} 220`} fill="none" stroke="#6a6054" strokeWidth="2" opacity="0.6" />
+          </g>
+        ))}
+        {[50, 310, 370, 630, 690, 950].map((x) => (
+          <g key={x}><rect x={x - 9} y="220" width="18" height="180" fill="#4e463c" /><rect x={x - 13} y="212" width="26" height="12" fill="#5e564a" /><rect x={x - 3} y="220" width="5" height="180" fill="#6a6054" opacity="0.5" /></g>
         ))}
         <g transform="translate(500,60)">
           <path d="M-58 200 L-58 40 Q0 -30 58 40 L58 200 Z" fill="url(#sc-win)" />
@@ -83,7 +97,19 @@ export default function SceneMonastere({ collect, action, reveal, made = [], fla
       <PLayer depth={3}>
         <rect y="400" width="1000" height="160" fill="url(#sc-floor)" />
         <rect y="402" width="1000" height="158" fill="#1c1208" opacity="0.4" filter="url(#sc-grain)" />
-        <path d="M0 452 h1000 M0 510 h1000 M280 410 v150 M600 410 v150 M820 410 v150" stroke="#241a12" strokeWidth="1.6" opacity="0.5" />
+        {/* dalles de pierre usées, en perspective */}
+        {[[400, 418], [418, 444], [444, 482], [482, 570]].map(([y0, y1], r) => (
+          <g key={r}>
+            <path d={`M-40 ${y1} H1040`} stroke="#241a12" strokeWidth={1.2 + r * 0.4} opacity="0.5" />
+            {Array.from({ length: 10 }).map((_, k) => {
+              const x = -80 + k * 130 + (r % 2) * 65, f0 = 1 + (y0 - 400) / 120, f1 = 1 + (y1 - 400) / 120;
+              return <path key={k} d={`M${(500 + (x - 500) * f0).toFixed(0)} ${y0} L${(500 + (x - 500) * f1).toFixed(0)} ${y1}`} stroke="#241a12" strokeWidth="1.4" opacity="0.45" />;
+            })}
+          </g>
+        ))}
+        <rect y="398" width="1000" height="6" fill="#1c1610" />
+        {/* tache de lumière de la fenêtre sur le sol */}
+        <ellipse cx="500" cy="440" rx="110" ry="18" fill="#cdd4c0" opacity="0.12" filter="url(#sc-blur)" />
 
         {/* halo de la bougie du copiste */}
         <ellipse cx="640" cy="450" rx="200" ry="110" fill="url(#sc-candle)" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
