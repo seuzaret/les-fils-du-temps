@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { PompeiDefs, PompeiFond } from "./fond.jsx";
+import { Canopy, Grass, Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 4 · Tableau 3 — Le jardin clos de la villa
@@ -45,6 +46,10 @@ export default function SceneJardin({ collect, action, reveal, made = [] }) {
         {/* LE MUR DE CLÔTURE du jardin */}
         <rect x="0" y="304" width="1000" height="56" fill="url(#ja-wall)" />
         <rect x="0" y="304" width="1000" height="56" fill="#8a6e46" opacity="0.2" filter="url(#pf-grain)" />
+        {/* lierre et vigne qui grimpent sur le mur */}
+        {[[30, 6], [250, 4], [610, 5], [960, 6]].map(([x, n], i) => (
+          <g key={i}>{Array.from({ length: n }).map((_, k) => <circle key={k} cx={x + (k % 3) * 9 - 9} cy={352 - k * 8} r="6" fill={k % 2 ? "#4a6a2a" : "#5a7a34"} />)}</g>
+        ))}
         <rect x="0" y="298" width="1000" height="10" fill="#c8b488" />
         <path d="M0 322 h1000 M0 340 h1000" stroke="#a08a5e" strokeWidth="1.2" opacity="0.5" />
         {[...Array(28)].map((_, i) => <path key={i} d={`M${i * 36} 308 v52`} stroke="#a08a5e" strokeWidth="1" opacity="0.35" />)}
@@ -54,6 +59,15 @@ export default function SceneJardin({ collect, action, reveal, made = [] }) {
       <PLayer depth={3}>
         <rect y="356" width="1000" height="204" fill="url(#ja-grass)" />
         <rect y="358" width="1000" height="202" fill="#2e3a18" opacity="0.24" filter="url(#pf-mottle)" />
+        <Speckle seed={271} x0={0} x1={1000} y0={360} y1={560} n={360} colors={["#a8b860", "#4a5a28", "#c8c870", "#6a7a38"]} opacity={0.5} />
+        {[[60, 420, 1], [300, 470, 2], [680, 430, 3], [760, 530, 4], [920, 450, 5], [240, 540, 6], [560, 500, 7], [880, 540, 8]].map(([x, y, sd]) => (
+          <Grass key={sd} x={x} y={y} seed={sd} color="#5a6a30" s={1.1} flower={["#e8d040", "#f4f0f0", "#c86a9a"][sd % 3]} />
+        ))}
+        {/* ombre portée du mur sur la pelouse */}
+        <path d="M-40 356 L1040 356 L1040 372 Q500 380 -40 370 Z" fill="#2e3a18" opacity="0.3" />
+        {/* bordures de buis le long de l'allée */}
+        <path d="M398 560 L470 390 L462 390 L386 560 Z" fill="#3e5a26" />
+        <path d="M622 560 L542 390 L550 390 L634 560 Z" fill="#3e5a26" />
         <path d="M400 560 L472 388 L540 388 L620 560 Z" fill="#c2a877" opacity="0.85" />
         <path d="M400 560 L472 388 M620 560 L540 388" stroke="#8a6e46" strokeWidth="1.6" opacity="0.4" />
 
@@ -72,9 +86,7 @@ export default function SceneJardin({ collect, action, reveal, made = [] }) {
         <g transform="translate(140,356)">
           <path d="M0 8 L-6 -74 M0 8 L6 -74" stroke="#5a3f24" strokeWidth="15" strokeLinecap="round" />
           <path d="M0 -44 l-26 -14 M0 -54 l26 -18 M0 -64 l-22 -22" stroke="#5a3f24" strokeWidth="6" strokeLinecap="round" />
-          <ellipse cx="0" cy="-96" rx="70" ry="56" fill="url(#ja-tree)" />
-          <ellipse cx="-32" cy="-74" rx="36" ry="30" fill="#6a8a3a" opacity="0.7" />
-          <ellipse cx="36" cy="-102" rx="36" ry="30" fill="#5a7a32" opacity="0.7" />
+          <Canopy cx={0} cy={-96} rx={78} ry={60} color="#4e6e2e" light={-1} seed={5} n={18} />
           {/* la branche horizontale d'où pend la ruche (puis qu'on ramasse) */}
           <path d="M-8 -40 q-34 -2 -58 6" stroke="#6a4a2c" strokeWidth="5" fill="none" strokeLinecap="round" />
           {!cire ? (

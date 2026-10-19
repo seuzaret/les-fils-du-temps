@@ -32,7 +32,16 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
           <g key={i}>
             <rect x={x} y={y} width={w} height={h} fill="#e4dcc8" />
             <rect x={x} y={y} width={w} height={h} fill="#8a7a58" opacity="0.14" filter="url(#pf-grain)" />
+            {/* soubassement peint (rouge pompéien) et bandeau d'étage */}
+            <rect x={x} y={y + h - 54} width={w} height="10" fill="#9a3a2a" opacity="0.8" />
+            <rect x={x} y={y + 58} width={w} height="5" fill="#c8b898" />
+            {/* ombre portée par le bâtiment voisin, enduit écaillé */}
+            <rect x={x + w - 18} y={y} width="18" height={h} fill="#5a4a30" opacity="0.18" />
+            <path d={`M${x + 12} ${y + h - 70} q8 -4 16 2 q6 6 14 0`} stroke="#b8a888" strokeWidth="2" fill="none" opacity="0.6" />
+            {/* toit de tuiles, avec rangées et débord */}
             <path d={`M${x - 8} ${y} L${x + w / 2} ${y - 22} L${x + w + 8} ${y} Z`} fill={roof} />
+            {[0.3, 0.6].map((k) => <path key={k} d={`M${x - 8 + (w / 2 + 8) * k} ${y - 22 * k} L${x + w + 8 - (w / 2 + 8) * k} ${y - 22 * k}`} stroke="#7a2a18" strokeWidth="1" opacity="0.6" />)}
+            <rect x={x - 8} y={y - 2} width={w + 16} height="4" fill="#7a2a18" opacity="0.7" />
             {/* étage : fenêtres */}
             {[...Array(Math.floor(w / 44))].map((_, k) => (
               <g key={k}>
@@ -95,6 +104,15 @@ export default function SceneEntree({ collect, action, reveal, made = [], queteQ
       <PLayer depth={3}>
         <rect y="410" width="1000" height="150" fill="url(#e4-floor)" />
         <rect y="412" width="1000" height="148" fill="#3c2c18" opacity="0.26" filter="url(#pf-mottle)" />
+        {/* la rue pavée de gros blocs polygonaux de basalte, trottoirs surélevés, pierres de passage */}
+        <path d="M-40 420 L560 420 L560 428 L-40 428 Z" fill="#c8b894" />
+        <path d="M-40 428 L560 428 Q600 470 560 520 Q540 545 548 560 L-40 560 Z" fill="#5a5450" opacity="0.42" />
+        {Array.from({ length: 34 }).map((_, i) => {
+          const r = Math.floor(i / 7), c = i % 7, y = 440 + r * 26, x = -30 + c * 80 + (r % 2) * 40;
+          return <path key={i} d={`M${x} ${y} l34 -6 l30 8 l4 18 l-34 6 l-30 -8 Z`} fill="none" stroke="#2a2420" strokeWidth="1.4" opacity="0.5" />;
+        })}
+        {[150, 200, 250].map((x) => <rect key={x} x={x - 16} y="470" width="32" height="20" rx="6" fill="#a89c88" stroke="#4a4038" strokeWidth="1" />)}
+        <path d="M60 560 Q100 500 140 430 M110 560 Q150 500 190 430" stroke="#2a2420" strokeWidth="3" fill="none" opacity="0.3" />
         <g opacity="0.3" stroke="#6e5836" strokeWidth="1"><path d="M0 456 h1000 M0 504 h1000" />{[...Array(18)].map((_, i) => <path key={i} d={`M${i * 58} 418 v142`} />)}</g>
         <ellipse cx="480" cy="484" rx="470" ry="52" fill="#7a6240" opacity="0.26" />
 

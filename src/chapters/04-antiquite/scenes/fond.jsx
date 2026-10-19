@@ -1,4 +1,5 @@
 import { PLayer } from "../../../engine/Parallax.jsx";
+import { Clouds, Ridge, TreeLine, Volcano } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 4 — Fond commun aux 3 tableaux de Pompéi
@@ -34,23 +35,21 @@ export function PompeiFond() {
   return (
     <>
       <rect width="1000" height="560" fill="url(#pf-sky)" />
+      <circle cx="170" cy="120" r="70" fill="#fff4d0" opacity="0.18" />
       <circle cx="170" cy="120" r="34" fill="#fff4d0" opacity="0.85" />
+      <Clouds id="pf-cl" seed={81} items={[[360, 80, 200], [580, 120, 170], [120, 190, 120]]} color="#fbf4e6" shadow="#c8ccd0" opacity="0.75" drift={16} />
 
       <PLayer depth={1}>
         {/* colline / horizon */}
-        <path d="M0 296 Q250 284 500 292 Q750 300 1000 290 L1000 360 L0 360 Z" fill="#9a9a6e" />
+        <Ridge id="pf-r0" seed={83} x0={-40} x1={640} y={290} amp={50} rough={0.5} fill="#8a9ab0" lit="#a8b4c4" light={-1} />
+        <path d="M-40 296 Q250 284 500 292 Q750 300 1040 290 L1040 360 L-40 360 Z" fill="#9a9a6e" />
+        <TreeLine seed={85} x0={-20} x1={640} y={294} n={18} h={[14, 26]} kinds={["leafy", "conifer"]} colors={["#5a6a3a", "#4a5a30"]} light={-1} jitter={4} />
 
         {/* le VÉSUVE qui fume, au fond à droite */}
+        <Volcano id="pf-vol" x={800} y={300} w={330} h={162} color="#63634a" light={-1} smoke={false} glow green="#55663f" />
         <g transform="translate(800,298)">
-          <path d="M-150 0 L-42 -150 Q0 -172 42 -150 L150 0 Z" fill="#63634a" />
-          <path d="M-150 0 L-42 -150 Q0 -172 42 -150 L150 0 Z" fill="#34342a" opacity="0.45" filter="url(#pf-mottle)" />
-          <path d="M-150 0 L150 0 L122 -20 Q0 -38 -122 -20 Z" fill="#55663f" opacity="0.5" />
-          <path d="M-42 -150 Q0 -172 42 -150 L24 -134 Q0 -148 -24 -134 Z" fill="#454534" />
-          <ellipse cx="0" cy="-150" rx="24" ry="7" fill="#e0762e" opacity="0.6">
-            <animate attributeName="opacity" values="0.4;0.8;0.4" dur="3s" repeatCount="indefinite" />
-          </ellipse>
           {/* colonne de fumee principale, plus large et plus visible qu'avant */}
-          <path d="M0 -162 q-14 -36 11 -62 q-19 8 -8 -36 q12 -22 -3 -48" stroke="#c8bcae" strokeWidth="18" fill="none" opacity="0.55" filter="url(#pf-blur)">
+          <path d="M0 -164 q-14 -36 11 -62 q-19 8 -8 -36 q12 -22 -3 -48" stroke="#c8bcae" strokeWidth="18" fill="none" opacity="0.55" filter="url(#pf-blur)">
             <animate attributeName="opacity" values="0.4;0.7;0.4" dur="5s" repeatCount="indefinite" />
           </path>
           {/* deuxieme volute plus fine qui monte en decale */}
