@@ -24,6 +24,8 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
         <linearGradient id="bbc-desk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a5636" /><stop offset="100%" stopColor="#432c18" /></linearGradient>
         <radialGradient id="bbc-lamp" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffcf78" stopOpacity="0.5" /><stop offset="100%" stopColor="#ff9540" stopOpacity="0" /></radialGradient>
         <radialGradient id="bbc-red" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ff3820" stopOpacity="0.75" /><stop offset="100%" stopColor="#ff3820" stopOpacity="0" /></radialGradient>
+        <filter id="bbc-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" /></filter>
+        <radialGradient id="bbc-quilt" cx="45%" cy="40%" r="65%"><stop offset="0%" stopColor="#5e5548" /><stop offset="100%" stopColor="#2e271f" /></radialGradient>
         {/* ciel de Londres, nuit du 5 juin 44 — bleu-nuit qui vire un peu au violet à l'horizon */}
         <linearGradient id="bbc-sky" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%"   stopColor="#0a1428" />
@@ -40,10 +42,47 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
       {/* ═══ FOND — mur du studio, panneaux acoustiques ═══ */}
       <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#bbc-wall)" />
-        {[...Array(4)].map((_, r) => [...Array(10)].map((_, c) => (
-          <rect key={`p-${r}-${c}`} x={40 + c * 96} y={40 + r * 72} width="76" height="52" rx="4"
-            fill="#3a3228" opacity="0.55" />
+        {/* panneaux acoustiques capitonnés : tissu tendu, boutons, joints */}
+        {[...Array(5)].map((_, r) => [...Array(11)].map((_, c) => (
+          <g key={`p-${r}-${c}`}>
+            <rect x={c * 92 - 6} y={r * 84 - 4} width="88" height="80" rx="14" fill="url(#bbc-quilt)" opacity="0.85" />
+            {/* plis du capiton entre les boutons */}
+            <path d={`M${c * 92 + 16} ${r * 84 + 16} L${c * 92 + 36} ${r * 84 + 36} L${c * 92 + 56} ${r * 84 + 16} M${c * 92 + 16} ${r * 84 + 56} L${c * 92 + 36} ${r * 84 + 36} L${c * 92 + 56} ${r * 84 + 56}`} stroke="#2a241c" strokeWidth="1" fill="none" opacity="0.35" />
+            {[[22, 20], [62, 20], [42, 40], [22, 60], [62, 60]].map(([x, y], k) => (
+              <circle key={k} cx={c * 92 - 6 + x} cy={r * 84 - 4 + y} r="1.8" fill="#221c16" />
+            ))}
+          </g>
         )))}
+        {/* plinthe et sol de liège */}
+        <rect y="404" width="1000" height="20" fill="#2a2018" />
+        {/* l'affiche « Careless talk costs lives » */}
+        <g transform="translate(400,250)">
+          <rect x="-36" y="-50" width="72" height="100" fill="#1a1410" />
+          <rect x="-33" y="-47" width="66" height="94" fill="#e0d4b0" />
+          <rect x="-33" y="-47" width="66" height="26" fill="#a83020" />
+          <text x="0" y="-36" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#f0e8d0" style={{ fontWeight: 700 }}>CARELESS</text>
+          <text x="0" y="-26" textAnchor="middle" fontFamily="Georgia,serif" fontSize="9" fill="#f0e8d0" style={{ fontWeight: 700 }}>TALK</text>
+          <circle cx="-8" cy="0" r="9" fill="#5a4a3a" /><circle cx="10" cy="2" r="8" fill="#3a3028" />
+          <path d="M-20 22 q12 -14 24 0 Z M0 22 q10 -12 20 0 Z" fill="#4a3a2a" />
+          <text x="0" y="36" textAnchor="middle" fontFamily="Georgia,serif" fontSize="7.5" fill="#2a1a10" style={{ fontWeight: 700 }}>COSTS LIVES</text>
+        </g>
+        {/* la VITRE DE LA RÉGIE : l'ingénieur du son, ses vu-mètres */}
+        <g transform="translate(900,214)">
+          <rect x="-10" y="-10" width="140" height="130" fill="#1a1006" />
+          <rect x="0" y="0" width="120" height="110" fill="#14181c" />
+          <rect x="0" y="70" width="120" height="40" fill="#2a2a2e" />
+          {[16, 48, 80].map((x, i) => (
+            <g key={x}>
+              <rect x={x} y="76" width="24" height="16" rx="2" fill="#e8d8a0" opacity="0.7" />
+              <path d={`M${x + 12} 90 l${[-6, 4, 7][i]} -10`} stroke="#2a1a10" strokeWidth="1.2">
+                <animateTransform attributeName="transform" type="rotate" values={`-10 ${x + 12} 90; 14 ${x + 12} 90; -10 ${x + 12} 90`} dur={`${0.7 + i * 0.3}s`} repeatCount="indefinite" />
+              </path>
+            </g>
+          ))}
+          <circle cx="60" cy="40" r="13" fill="#0a0c10" /><path d="M42 70 q18 -26 36 0 Z" fill="#0a0c10" />
+          <path d="M47 36 q13 -16 26 0" stroke="#3a3a3a" strokeWidth="3" fill="none" />
+          <path d="M6 4 L40 4 L10 60 Z" fill="#fff" opacity="0.05" />
+        </g>
         {/* halo de la lampe ON AIR quand active */}
         {enOnde && <circle cx="830" cy="150" r="120" fill="url(#bbc-red)" />}
 
@@ -132,8 +171,19 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
 
       {/* ═══ PLAN DU MILIEU : la table technique, le pupitre, le pied du micro ═══ */}
       <PLayer depth={2.5}>
-        {/* sol */}
+        {/* sol : linoléum en dalles, tapis sous le pupitre, câbles */}
         <rect y="420" width="1000" height="140" fill="url(#bbc-floor)" />
+        {Array.from({ length: 16 }).map((_, i) => {
+          const x = -200 + i * 96;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.6).toFixed(0)} 420 L${x} 560`} stroke="#1a120a" strokeWidth="1.2" opacity="0.4" />;
+        })}
+        {[446, 482, 528].map((y) => <path key={y} d={`M0 ${y} H1000`} stroke="#1a120a" strokeWidth="1.2" opacity="0.35" />)}
+        <path d="M540 436 L860 436 L900 520 L500 520 Z" fill="#4a1e18" opacity="0.85" />
+        <path d="M552 442 L848 442 L884 514 L516 514 Z" fill="none" stroke="#a8803a" strokeWidth="1.6" opacity="0.5" />
+        <path d="M820 460 Q860 500 940 490 Q980 486 1010 500" stroke="#141010" strokeWidth="4" fill="none" />
+        <path d="M600 470 Q520 520 380 510 Q300 504 260 540" stroke="#141010" strokeWidth="3" fill="none" opacity="0.8" />
+        {/* lumière tamisée de la lampe, sur le sol */}
+        <ellipse cx="180" cy="440" rx="160" ry="30" fill="#ffcf78" opacity="0.08" filter="url(#bbc-blur)" />
         {/* pendule murale — 21h00 le 5 juin 1944 */}
         <circle cx="490" cy="90" r="34" fill="#f0e8d0" stroke="#3a2c18" strokeWidth="3" />
         <circle cx="490" cy="90" r="2" fill="#1a1006" />
@@ -212,6 +262,12 @@ export default function SceneBBC({ collect, action, reveal, made = [], flags = [
           {[620, 660, 700, 740, 780].map((x, i) => (
             <g key={i}><circle cx={x} cy="392" r="7" fill="#c8963e" stroke="#5a3818" strokeWidth="1.5" /><path d={`M${x} 388 L${x} 396`} stroke="#5a3818" strokeWidth="1.5" /></g>
           ))}
+          {/* carafe d'eau et verre du speaker */}
+          <g transform="translate(608,358)">
+            <path d="M-8 0 Q-12 -14 -5 -20 L-5 -28 L5 -28 L5 -20 Q12 -14 8 0 Z" fill="#c8d8e0" opacity="0.5" stroke="#8a9aa8" strokeWidth="0.8" />
+            <path d="M-9 -6 Q0 -4 9 -6 L8 0 L-8 0 Z" fill="#9ab8c8" opacity="0.5" />
+            <rect x="12" y="-12" width="9" height="12" fill="#c8d8e0" opacity="0.5" stroke="#8a9aa8" strokeWidth="0.8" />
+          </g>
           {/* jack ouvert (à brancher) */}
           <circle cx="820" cy="392" r="9" fill="#0a0604" stroke={microBranche ? "#5eff9e" : "#c8963e"} strokeWidth="2"
             style={microBranche ? {} : { animation: "pulse 1.6s ease-in-out infinite" }} />
