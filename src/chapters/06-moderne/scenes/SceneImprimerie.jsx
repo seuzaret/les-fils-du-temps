@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 6 — Tableau : l'imprimerie en effervescence (départ)
@@ -14,7 +15,8 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
-        <linearGradient id="im-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a7658" /><stop offset="100%" stopColor="#5e4e38" /></linearGradient>
+        <linearGradient id="im-wall" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#c4ae88" /><stop offset="55%" stopColor="#ae9874" /><stop offset="100%" stopColor="#7e6a4e" /></linearGradient>
+        <linearGradient id="im-ink" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a4a4e" /><stop offset="100%" stopColor="#1a1a1e" /></linearGradient>
         <linearGradient id="im-win" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7ea0c0" /><stop offset="100%" stopColor="#cdd6c8" /></linearGradient>
         <linearGradient id="im-wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#7a5230" /><stop offset="50%" stopColor="#9a6c40" /><stop offset="100%" stopColor="#5a3f24" /></linearGradient>
         <linearGradient id="im-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9a8058" /><stop offset="100%" stopColor="#544330" /></linearGradient>
@@ -28,15 +30,43 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
         <clipPath id="im-winclip"><rect x="-56" y="-86" width="112" height="142" /></clipPath>
       </defs>
 
-      {/* ═══ mur de l'atelier ═══ */}
+      {/* ═══ mur de l'atelier : plâtre clair, boiseries peintes, solives ═══ */}
       <rect width="1000" height="560" fill="url(#im-wall)" />
-      <rect width="1000" height="560" fill="#2c2010" opacity="0.26" filter="url(#im-grain)" />
+      <rect width="1000" height="560" fill="#2c2010" opacity="0.22" filter="url(#im-grain)" />
+      {/* taches et salissures d'encre sur le plâtre */}
+      {[[520, 250, 40, 18], [960, 300, 30, 40], [40, 300, 30, 26], [700, 110, 60, 14]].map(([x, y, rx, ry], i) => (
+        <ellipse key={i} cx={x} cy={y} rx={rx} ry={ry} fill="#4a3a28" opacity="0.12" filter="url(#im-blur)" />
+      ))}
+      {/* plafond : poutre maîtresse et solives */}
+      <rect x="-40" y="-10" width="1080" height="34" fill="#3a2818" />
+      {Array.from({ length: 12 }).map((_, i) => <rect key={i} x={i * 92 - 20} y="18" width="24" height="20" fill="#4a3220" />)}
+      <path d="M-40 24 h1080" stroke="#6a4a30" strokeWidth="1.4" opacity="0.6" />
+      {/* lambris peint à mi-hauteur, panneaux moulurés */}
+      <rect x="-40" y="300" width="1080" height="100" fill="#6e7262" />
+      <rect x="-40" y="296" width="1080" height="8" fill="#8a8e7a" />
+      <rect x="-40" y="303" width="1080" height="2" fill="#3e4236" opacity="0.6" />
+      {Array.from({ length: 10 }).map((_, i) => (
+        <g key={i}>
+          <rect x={i * 104 + 6} y="316" width="88" height="70" fill="none" stroke="#4a4e40" strokeWidth="2" />
+          <rect x={i * 104 + 8} y="318" width="84" height="66" fill="none" stroke="#9a9e88" strokeWidth="1" opacity="0.5" />
+        </g>
+      ))}
+      <rect x="-40" y="300" width="1080" height="100" fill="#2c2010" opacity="0.25" filter="url(#im-grain)" />
+      {/* le coin droit, loin des fenêtres, plus sombre */}
+      <linearGradient id="im-side" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#140c06" stopOpacity="0" /><stop offset="100%" stopColor="#140c06" stopOpacity="0.4" /></linearGradient>
+      <rect x="760" y="0" width="280" height="560" fill="url(#im-side)" />
 
       {/* ═══ couche lointaine : fenêtres, cordes de gazettes ═══ */}
       <PLayer depth={1}>
-        {/* deux fenêtres ouvertes sur la VILLE D'ÉPOQUE */}
+        {/* deux fenêtres à petits bois ouvertes sur la VILLE D'ÉPOQUE */}
         {[150, 420].map((x, i) => (
           <g key={i} transform={`translate(${x},170)`}>
+            {/* halo de jour sur le mur autour de la baie */}
+            <ellipse cx="0" cy="0" rx="120" ry="130" fill="#fff4d8" opacity="0.16" filter="url(#im-blur)" />
+            {/* embrasure : l'épaisseur du mur, côté éclairé / côté ombre */}
+            <path d="M-72 -100 L72 -100 L60 -90 L-60 -90 Z" fill="#8a7656" />
+            <path d="M-72 -100 L-60 -90 L-60 60 L-72 72 Z" fill="#e0d0b0" />
+            <path d="M72 -100 L60 -90 L60 60 L72 72 Z" fill="#7a6648" />
             <rect x="-60" y="-90" width="120" height="150" fill="url(#im-win)" />
             {/* la ville vue par la fenêtre (découpée au cadre) */}
             <g clipPath="url(#im-winclip)">
@@ -72,43 +102,135 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
                   <path d={`M${cx + 2} ${cy} q-4 -8 2 -15`} stroke="#c8c0b6" strokeWidth="2" fill="none" opacity="0.45" style={{ animation: `drift ${4 + k + i}s ease-in-out infinite` }} />
                 </g>
               ))}
+              {/* reflet sur les carreaux */}
+              <path d="M-50 40 L-10 -80 L4 -80 L-36 40 Z" fill="#fff" opacity="0.1" />
             </g>
-            {/* cadre + croisillons par-dessus */}
+            {/* cadre + petits bois par-dessus */}
             <rect x="-60" y="-90" width="120" height="150" fill="none" stroke="#3a2a18" strokeWidth="7" />
             <path d="M0 -90 v150 M-60 -15 h120" stroke="#3a2a18" strokeWidth="4" />
+            <path d="M-30 -90 v150 M30 -90 v150 M-60 -52 h120 M-60 22 h120" stroke="#3a2a18" strokeWidth="1.8" />
+            {/* appui de fenêtre, avec un pot d'encre et un godet qui sèchent au jour */}
+            <rect x="-74" y="60" width="148" height="9" fill="#8a7656" />
+            <rect x="-74" y="60" width="148" height="2.5" fill="#e8d8b8" />
+            <rect x="-74" y="69" width="148" height="5" fill="#2c2010" opacity="0.3" />
+            {i === 0 ? (
+              <g><path d="M-44 60 q-1 -12 7 -13 q8 1 7 13 Z" fill="url(#im-ink)" /><rect x="-40" y="44" width="6" height="4" fill="#5a4630" /></g>
+            ) : (
+              <g><rect x="22" y="48" width="26" height="12" fill="#e6dcc2" stroke="#b8a98a" strokeWidth="0.6" /><path d="M22 54 h26" stroke="#8a7a5a" strokeWidth="0.8" /></g>
+            )}
           </g>
         ))}
         {/* poutre + cordes à sécher, gazettes suspendues */}
         <path d="M0 120 h1000" stroke="#3a2818" strokeWidth="9" />
+        <path d="M0 116 h1000" stroke="#6a4a30" strokeWidth="1.4" opacity="0.6" />
         <path d="M560 138 q180 16 420 0" stroke="#5a4630" strokeWidth="2" fill="none" />
         {[600, 670, 740, 810, 880, 950].map((x, i) => (
           <g key={i} transform={`translate(${x},140)`}>
+            <rect x="-17" y="4" width="40" height="52" fill="#2c2010" opacity="0.18" transform={`rotate(${i % 2 ? 2 : -2})`} />
             <rect x="-20" y="0" width="40" height="52" fill="#efe6ce" transform={`rotate(${i % 2 ? 2 : -2})`} />
-            <path d="M-14 8 h28 M-14 16 h22 M-14 24 h26 M-14 32 h18 M-14 40 h24" stroke="#5a4a3a" strokeWidth="0.9" opacity="0.7" transform={`rotate(${i % 2 ? 2 : -2})`} />
+            <rect x="-14" y="5" width="28" height="5" fill="#5a4a3a" opacity="0.55" transform={`rotate(${i % 2 ? 2 : -2})`} />
+            <path d="M-14 16 h28 M-14 22 h22 M-14 28 h26 M-14 34 h18 M-14 40 h24 M-14 46 h20" stroke="#5a4a3a" strokeWidth="0.9" opacity="0.7" transform={`rotate(${i % 2 ? 2 : -2})`} />
+            <path d="M-6 -2 l2 6 M6 -2 l-2 6" stroke="#8a6a42" strokeWidth="2" />
           </g>
         ))}
+        {/* une AFFICHE placardée au mur : « AVIS » imprimé dans l'atelier */}
+        <g transform="translate(640,236) rotate(-1.5)">
+          <rect x="-30" y="-36" width="60" height="78" fill="#2c2010" opacity="0.2" transform="translate(3,3)" />
+          <rect x="-30" y="-36" width="60" height="78" fill="#ece2c6" />
+          <text x="0" y="-20" textAnchor="middle" fontFamily="Georgia,serif" fontSize="12" fill="#2a2015" style={{ fontWeight: 700 }} letterSpacing="1">AVIS</text>
+          <path d="M-22 -14 h44" stroke="#3a2c1c" strokeWidth="0.8" />
+          {Array.from({ length: 7 }).map((_, k) => <path key={k} d={`M-22 ${-6 + k * 6} h${k % 3 === 2 ? 30 : 44}`} stroke="#6a5a44" strokeWidth="1" opacity="0.6" />)}
+          <circle cx="-26" cy="-32" r="1.6" fill="#5a4630" /><circle cx="26" cy="-32" r="1.6" fill="#5a4630" />
+        </g>
+        {/* étagère murale : rames de papier ficelées, pots d'encre */}
+        <g transform="translate(880,268)">
+          <rect x="-70" y="0" width="140" height="7" fill="#5a3f24" />
+          <path d="M-56 7 l10 16 M56 7 l-10 16" stroke="#4a3220" strokeWidth="4" />
+          {[-56, -30].map((x, k) => (
+            <g key={k}>
+              <rect x={x} y={-16 - k * 2} width="24" height={16 + k * 2} fill="#e0d6bc" stroke="#b8a98a" strokeWidth="0.6" />
+              <path d={`M${x} ${-8 - k} h24 M${x + 12} ${-16 - k * 2} v${16 + k * 2}`} stroke="#8a6a42" strokeWidth="1" />
+            </g>
+          ))}
+          {[6, 24, 42].map((x, k) => (
+            <g key={k}><path d={`M${x - 7} 0 q-1 -14 7 -15 q8 1 7 15 Z`} fill="url(#im-ink)" /><rect x={x - 3} y="-19" width="6" height="4" fill="#7a5a3a" /></g>
+          ))}
+        </g>
       </PLayer>
 
-      {/* ═══ couche intermédiaire : la presse, l'ouvrier ═══ */}
+      {/* ═══ couche intermédiaire : la presse, l'ouvrier, la casse ═══ */}
       <PLayer depth={2}>
-        {/* la presse (silhouette solide) */}
+        {/* LA PRESSE À BRAS (presse « commune » du XVIIIe s.) : jumelles,
+            chapeau, vis, platine, barreau ; le train qui roule sous la
+            platine, tympan relevé ; les balles d'encrage sur leur support */}
         <g transform="translate(300,320)">
-          <rect x="-56" y="-30" width="16" height="130" fill="url(#im-wood)" />
-          <rect x="40" y="-30" width="16" height="130" fill="url(#im-wood)" />
-          <rect x="-64" y="-40" width="128" height="14" fill="#6e4c2e" />
-          <rect x="-6" y="-24" width="12" height="54" fill="#8a8c92" />
-          <path d="M6 -8 L70 20" stroke="#5a3f24" strokeWidth="7" strokeLinecap="round" />
-          <rect x="-34" y="36" width="68" height="14" fill="#7a5636" />
+          <ellipse cx="0" cy="100" rx="150" ry="10" fill="#1a1008" opacity="0.35" />
+          {/* le train (berceau) et ses pieds */}
+          <rect x="-128" y="50" width="256" height="9" fill="#6e4c2e" />
+          <rect x="-128" y="50" width="256" height="2" fill="#a07850" />
+          {[-122, 116].map((x) => <rect key={x} x={x} y="58" width="8" height="42" fill="#4a3220" />)}
+          {/* tympan relevé (cadre tendu de parchemin), à gauche */}
+          <path d="M-128 50 L-150 -6 L-104 -12 L-82 50 Z" fill="#e6dcc0" stroke="#5a3f24" strokeWidth="3" />
+          <path d="M-138 26 L-96 22" stroke="#5a3f24" strokeWidth="1.2" />
+          {/* la forme encrée posée sur le marbre */}
+          <rect x="-26" y="42" width="52" height="8" fill="#2a2a2e" />
+          {/* jumelles, chapeau, sommier */}
+          <rect x="-56" y="-62" width="16" height="162" fill="url(#im-wood)" />
+          <rect x="40" y="-62" width="16" height="162" fill="url(#im-wood)" />
+          <rect x="-66" y="-74" width="132" height="16" rx="2" fill="#6e4c2e" />
+          <path d="M-66 -74 h132" stroke="#a07850" strokeWidth="2" />
+          <rect x="-40" y="-36" width="80" height="18" fill="#5a3f24" />
+          <rect x="-40" y="74" width="80" height="14" fill="#5a3f24" />
+          {/* vis, boîte, platine */}
+          <rect x="-5" y="-18" width="10" height="26" fill="#8a8c92" />
+          {[-14, -8, -2, 4].map((y) => <path key={y} d={`M-5 ${y} l10 3`} stroke="#5a5c62" strokeWidth="1.2" />)}
+          <rect x="-14" y="8" width="28" height="14" fill="#6e4c2e" />
+          <rect x="-30" y="22" width="60" height="7" fill="#8a8c92" />
+          <rect x="-30" y="22" width="60" height="2" fill="#c8ccd2" />
+          {/* le barreau tiré par le pressier */}
+          <path d="M6 -6 L70 20" stroke="#5a3f24" strokeWidth="7" strokeLinecap="round" />
+          <circle cx="6" cy="-6" r="5" fill="#8a8c92" />
+          {/* manivelle du train */}
+          <circle cx="70" cy="56" r="9" fill="none" stroke="#4a3220" strokeWidth="3" />
+          <path d="M70 56 l7 -7" stroke="#4a3220" strokeWidth="3" />
+          {/* balles d'encrage sur leur support, et la pierre à encre */}
+          <g transform="translate(-180,58)">
+            <rect x="-24" y="0" width="48" height="6" fill="#5a3f24" />
+            <rect x="-20" y="6" width="5" height="36" fill="#4a3220" /><rect x="15" y="6" width="5" height="36" fill="#4a3220" />
+            <path d="M-20 0 q0 -14 10 -14 q10 0 10 14 Z" fill="#2a2a2e" />
+            <path d="M0 0 q0 -14 10 -14 q10 0 10 14 Z" fill="#2a2a2e" />
+            <path d="M-10 -14 v-12 M10 -14 v-12" stroke="#7a5a3a" strokeWidth="4" strokeLinecap="round" />
+            <path d="M-16 -6 q4 -6 8 -6" stroke="#6a6a70" strokeWidth="1.2" fill="none" />
+          </g>
           {/* pressier qui tire la barre */}
           <Figure x={78} y={78} s={0.5} facing="left" skin="#c8a882" hair="#3a2818" look="short" mood="colere"
             garment="jacket" coat="#6a5a40" apron="#8a7a5a" pants="#3a3020" shoes="#2a2018"
             arms={[{ a1: 170, a2: 185 }, { a1: 20, a2: 10 }]} />
         </g>
-        {/* étagère de caractères + pots d'encre */}
-        <g transform="translate(560,320)">
-          <rect x="-50" y="-10" width="100" height="10" fill="#5a3f24" />
-          <rect x="-46" y="-40" width="92" height="30" fill="#6e4c2e" />
-          <path d="M-46 -25 h92 M-20 -40 v30 M8 -40 v30" stroke="#3a2814" strokeWidth="1.4" />
+        {/* LA CASSE du compositeur : deux casses inclinées sur leur rang,
+            des centaines de petits cassetins remplis de caractères */}
+        <g transform="translate(570,320)">
+          <ellipse cx="0" cy="100" rx="70" ry="7" fill="#1a1008" opacity="0.3" />
+          <rect x="-56" y="-6" width="7" height="106" fill="#4a3220" />
+          <rect x="49" y="-6" width="7" height="106" fill="#4a3220" />
+          <path d="M-52 60 L52 60" stroke="#4a3220" strokeWidth="5" />
+          {[[0, 0], [-2, -34]].map(([dx, dy], k) => (
+            <g key={k} transform={`translate(${dx},${dy})`}>
+              <path d="M-62 4 L62 4 L58 -28 L-58 -28 Z" fill="#8a6a42" stroke="#4a3220" strokeWidth="2" />
+              {Array.from({ length: 4 }).map((_, r) => Array.from({ length: k ? 14 : 10 }).map((_, c) => {
+                const n = k ? 14 : 10, y = -24 + r * 7, w = (116 - r * 1) / n;
+                return <rect key={`${r}-${c}`} x={-58 + r * 1 + c * w} y={y} width={w - 1.6} height="5.4" fill="#5a4024" />;
+              }))}
+              {Array.from({ length: 22 }).map((_, j) => <circle key={j} cx={-54 + ((j * 37) % 108)} cy={-22 + ((j * 13) % 26)} r="0.9" fill="#a8acb2" opacity="0.8" />)}
+            </g>
+          ))}
+          {/* le composteur posé sur la casse */}
+          <rect x="18" y="-8" width="30" height="5" fill="#8a8c92" transform="rotate(-6)" />
+        </g>
+        {/* un tabouret haut de compositeur */}
+        <g transform="translate(650,384)">
+          <ellipse cx="0" cy="-2" rx="16" ry="4" fill="#7a5636" />
+          <path d="M-12 0 L-16 36 M12 0 L16 36 M0 2 L0 36 M-14 20 h28" stroke="#4a3220" strokeWidth="3.2" />
         </g>
       </PLayer>
 
@@ -116,8 +238,22 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
       <PLayer depth={3}>
         <rect y="400" width="1000" height="160" fill="url(#im-floor)" />
         <rect y="402" width="1000" height="158" fill="#2c1c10" opacity="0.34" filter="url(#im-grain)" />
-        <path d="M0 456 h1000 M0 512 h1000 M340 410 v150 M700 410 v150" stroke="#3a2a18" strokeWidth="1.5" opacity="0.45" />
-        <ellipse cx="500" cy="474" rx="440" ry="52" fill="#6e5836" opacity="0.3" />
+        {/* plancher : larges planches en perspective, joints décalés */}
+        {Array.from({ length: 18 }).map((_, i) => {
+          const x = -120 + i * 74;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.62).toFixed(0)} 400 L${x} 560`} stroke="#3a2a18" strokeWidth="1.6" opacity="0.5" />;
+        })}
+        {[428, 468, 520].map((y, i) => <path key={y} d={`M${-40 + i * 50} ${y} h${170 + i * 40} M${560 - i * 60} ${y} h${160 + i * 30}`} stroke="#3a2a18" strokeWidth="1.2" opacity="0.4" />)}
+        <rect y="398" width="1000" height="6" fill="#3a2818" />
+        {/* les fenêtres posent deux flaques de jour sur le plancher */}
+        {[150, 420].map((x) => (
+          <path key={x} d={`M${x - 20} 404 L${x + 90} 404 L${x + 210} 556 L${x + 40} 556 Z`} fill="#fff0c8" opacity="0.14" filter="url(#im-blur)" />
+        ))}
+        {/* traînées d'encre, feuilles tombées */}
+        <Speckle seed={311} x0={0} x1={1000} y0={404} y1={560} n={150} colors={["#2a1a0c", "#a8885c", "#1a1a1e"]} opacity={0.4} />
+        <g transform="translate(470,540) rotate(-14)"><rect x="-18" y="-12" width="36" height="24" fill="#e6dcc2" opacity="0.9" /><path d="M-12 -4 h24 M-12 2 h18" stroke="#8a7a5a" strokeWidth="0.8" /></g>
+        <g transform="translate(640,436) rotate(22)"><rect x="-12" y="-8" width="24" height="16" fill="#e6dcc2" opacity="0.85" /></g>
+        <ellipse cx="500" cy="474" rx="440" ry="52" fill="#6e5836" opacity="0.25" />
 
         {/* PILES DE FEUILLES IMPRIMÉES */}
         <g transform="translate(280,500)">
