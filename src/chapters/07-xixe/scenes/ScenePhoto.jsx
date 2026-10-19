@@ -27,6 +27,9 @@ export default function ScenePhoto({ collect, action, reveal, made = [], flags =
         <linearGradient id="dg-drape" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a2a18" /><stop offset="100%" stopColor="#2a180c" /></linearGradient>
         <linearGradient id="dg-cam" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6a4826" /><stop offset="100%" stopColor="#3a2612" /></linearGradient>
         <radialGradient id="dg-light" cx="50%" cy="0%" r="70%"><stop offset="0%" stopColor="#ffe8b0" stopOpacity="0.7" /><stop offset="100%" stopColor="#ffe8b0" stopOpacity="0" /></radialGradient>
+        <filter id="dg-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" /></filter>
+        <linearGradient id="dg-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9ac0dc" /><stop offset="100%" stopColor="#dbe8ee" /></linearGradient>
+        <linearGradient id="dg-back" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a9288" /><stop offset="60%" stopColor="#b8b8a4" /><stop offset="100%" stopColor="#6a6a5a" /></linearGradient>
         <filter id="dg-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0" result="a" />
@@ -37,25 +40,90 @@ export default function ScenePhoto({ collect, action, reveal, made = [], flags =
       {/* ═══ mur du studio + verrière (les photographes du XIXᵉ travaillaient à la lumière naturelle) ═══ */}
       <rect width="1000" height="440" fill="url(#dg-wall)" />
       <rect width="1000" height="440" fill="#3a2418" opacity="0.18" filter="url(#dg-grain)" />
+      {/* la VERRIÈRE d'atelier : une pente de petits carreaux sur le ciel,
+          des stores de toile bleue pour régler la lumière */}
       <g transform="translate(140,20)">
-        <rect x="0" y="0" width="360" height="140" fill="#dbe8ee" opacity="0.85" />
-        <path d="M0 0 h360 M0 140 h360 M120 0 v140 M240 0 v140 M0 70 h360" stroke="#3a2814" strokeWidth="3" fill="none" />
+        <rect x="0" y="0" width="360" height="140" fill="url(#dg-sky)" />
+        <ellipse cx="90" cy="40" rx="60" ry="12" fill="#fff" opacity="0.6" filter="url(#dg-blur)" />
+        <ellipse cx="260" cy="90" rx="70" ry="14" fill="#fff" opacity="0.5" filter="url(#dg-blur)" />
+        {/* stores de toile, à moitié tirés */}
+        {[0, 1, 2].map((k) => (
+          <g key={k}>
+            <rect x={k * 120 + 4} y="2" width="112" height={[52, 30, 44][k]} fill="#5a7a9a" opacity="0.55" />
+            <rect x={k * 120 + 4} y={[52, 30, 44][k]} width="112" height="5" rx="2" fill="#3a5068" />
+            <path d={`M${k * 120 + 60} ${[57, 35, 49][k]} v8`} stroke="#3a2814" strokeWidth="1.4" />
+          </g>
+        ))}
+        {Array.from({ length: 11 }).map((_, i) => <path key={i} d={`M${i * 36} 0 v140`} stroke="#3a2814" strokeWidth={i % 3 === 0 ? 3 : 1.4} />)}
+        {[35, 70, 105].map((y) => <path key={y} d={`M0 ${y} h360`} stroke="#3a2814" strokeWidth="1.4" />)}
         <rect x="0" y="0" width="360" height="140" fill="none" stroke="#3a2814" strokeWidth="5" />
-        <path d="M0 0 L360 140 M360 0 L0 140" stroke="#e8f0f4" strokeWidth="8" opacity="0.6" />
+        <path d="M-6 146 h372" stroke="#5a3f24" strokeWidth="6" />
       </g>
-      <path d="M320 20 L500 20 L620 380 L360 380 Z" fill="url(#dg-light)" opacity="0.55" />
+      {/* le jour de la verrière, dirigé vers le modèle */}
+      <path d="M300 30 L500 30 L880 400 L560 400 Z" fill="url(#dg-light)" opacity="0.5" />
+      {/* la vitrine des portraits d'exposition (« Portraits — 2 $ ») */}
+      <g transform="translate(60,230)">
+        <rect x="-40" y="-36" width="80" height="96" fill="#3a2410" />
+        <rect x="-36" y="-32" width="72" height="88" fill="#2a1a10" />
+        {[[-18, -12], [18, -12], [-18, 32], [18, 32]].map(([x, y], i) => (
+          <g key={i} transform={`translate(${x},${y})`}>
+            <rect x="-13" y="-17" width="26" height="34" fill="#c8a040" />
+            <rect x="-10" y="-14" width="20" height="28" fill="#b8c0c4" />
+            <circle cx="0" cy="-5" r="4" fill="#6a6460" /><path d="M-7 12 q7 -12 14 0 Z" fill="#6a6460" />
+          </g>
+        ))}
+        <rect x="-36" y="-32" width="72" height="88" fill="#fff" opacity="0.06" />
+        <rect x="-30" y="66" width="60" height="14" fill="#efe6d2" />
+        <text x="0" y="76" textAnchor="middle" fontFamily="Georgia,serif" fontSize="6.4" fill="#3a2410" style={{ fontWeight: 700 }}>PORTRAITS · 2 $</text>
+      </g>
+      {/* étagère des produits : mercure, brome, hyposulfite */}
+      <g transform="translate(160,262)">
+        <rect x="-44" y="0" width="88" height="6" fill="#4a2c14" />
+        <path d="M-36 6 l8 12 M36 6 l-8 12" stroke="#4a2c14" strokeWidth="3" />
+        {[[-30, "#7a8088"], [-12, "#8a3a1e"], [6, "#d8d0b8"], [24, "#4a5a3a"]].map(([x, c], i) => (
+          <g key={i}><rect x={x - 6} y="-22" width="12" height="22" rx="2" fill={c} opacity="0.85" /><rect x={x - 3} y="-27" width="6" height="5" fill="#3a2410" /><rect x={x - 5} y="-14" width="10" height="6" fill="#efe6d2" opacity="0.8" /></g>
+        ))}
+      </g>
 
-      {/* tenture de fond derrière le sujet */}
-      <path d="M540 60 L920 60 L920 400 L540 400 Z" fill="url(#dg-drape)" />
+      {/* la TOILE DE FOND PEINTE, sur son rouleau : un parc brumeux, une
+          colonne et une draperie — le décor « distingué » des portraits */}
+      <rect x="532" y="52" width="396" height="10" rx="5" fill="#5a3f24" />
+      <path d="M540 60 L920 60 L920 400 L540 400 Z" fill="url(#dg-back)" />
+      <g opacity="0.55">
+        <path d="M540 300 Q640 270 740 290 Q840 310 920 280 L920 400 L540 400 Z" fill="#6a7262" />
+        {[[580, 290, 30], [660, 270, 40], [860, 280, 34]].map(([x, y, r], i) => (
+          <g key={i}><rect x={x - 3} y={y} width="6" height="30" fill="#4a4a3a" /><circle cx={x} cy={y - r * 0.5} r={r} fill="#5a6252" /><circle cx={x - r * 0.4} cy={y - r * 0.2} r={r * 0.7} fill="#6a7262" /></g>
+        ))}
+        <rect x="610" y="140" width="34" height="200" fill="#c8c4b0" />
+        <rect x="602" y="130" width="50" height="14" fill="#d8d4c0" /><rect x="602" y="336" width="50" height="14" fill="#a8a490" />
+        <path d="M618 144 v192 M628 144 v192 M638 144 v192" stroke="#8a8670" strokeWidth="1.4" />
+      </g>
+      <path d="M540 60 L640 60 Q600 160 620 240 Q560 260 540 330 Z" fill="url(#dg-drape)" opacity="0.9" />
       <g stroke="#1a0c04" strokeWidth="1.4" opacity="0.4">
-        {[580, 640, 700, 760, 820, 880].map((x, i) => <path key={i} d={`M${x} 60 q6 100 0 200 q-6 100 0 140`} />)}
+        {[556, 576, 598].map((x, i) => <path key={i} d={`M${x} 60 q-6 100 4 ${200 - i * 30}`} fill="none" />)}
+      </g>
+      {/* le RÉFLECTEUR : un grand écran blanc pour déboucher les ombres */}
+      <g transform="translate(950,250)">
+        <path d="M0 150 v-40 M-20 150 l20 -40 l20 40" stroke="#3a2410" strokeWidth="3" fill="none" />
+        <rect x="-36" y="-110" width="72" height="200" fill="#efe9dc" />
+        <rect x="-36" y="-110" width="72" height="200" fill="none" stroke="#7a5a3a" strokeWidth="3" />
+        <rect x="-36" y="-110" width="20" height="200" fill="#c8c0b0" opacity="0.5" />
       </g>
 
       {/* ═══ le sol ═══ */}
       <PLayer depth={2}>
         <path d="M0 560 L0 400 L1000 400 L1000 560 Z" fill="url(#dg-floor)" />
         <path d="M0 400 h1000" stroke="#1a0c04" strokeWidth="3" />
-        {[440, 480, 520].map((y, i) => <path key={i} d={`M0 ${y} h1000`} stroke="#2c1e14" strokeWidth="1" opacity="0.5" />)}
+        {Array.from({ length: 22 }).map((_, i) => {
+          const x = -160 + i * 64;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.6).toFixed(0)} 400 L${x} 560`} stroke="#1a0c04" strokeWidth="1.2" opacity="0.45" />;
+        })}
+        {[430, 470, 520].map((y, i) => <path key={y} d={`M${i * 80} ${y} h${220 + i * 30} M${560 - i * 40} ${y} h${200 + i * 20}`} stroke="#1a0c04" strokeWidth="1" opacity="0.35" />)}
+        {/* le jour qui tombe sur le plancher, devant le modèle */}
+        <path d="M540 404 L860 404 L940 470 L600 470 Z" fill="#ffe8b0" opacity="0.12" filter="url(#dg-blur)" />
+        {/* petit tapis sous la chaise de pose */}
+        <path d="M630 430 L820 430 L860 488 L590 488 Z" fill="#5a2a1a" />
+        <path d="M640 436 L810 436 L846 482 L604 482 Z" fill="none" stroke="#c8a040" strokeWidth="2" opacity="0.6" />
       </PLayer>
 
       {/* ═══ premier plan : James assis + appui-tête + photographe ═══ */}
