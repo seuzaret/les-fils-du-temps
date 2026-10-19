@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Glitter } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau-ÉNIGME : « Relier deux continents ? »
@@ -23,6 +24,8 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
         <linearGradient id="cb-deck" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9a7a52" /><stop offset="100%" stopColor="#5e4630" /></linearGradient>
         <linearGradient id="cb-hull" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a4038" /><stop offset="100%" stopColor="#2a241e" /></linearGradient>
         <radialGradient id="cb-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffe9a8" stopOpacity="0.75" /><stop offset="100%" stopColor="#ffe9a8" stopOpacity="0" /></radialGradient>
+        <filter id="cb-blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="6" /></filter>
+        <linearGradient id="cb-rail" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#8a6a46" /><stop offset="100%" stopColor="#4a3420" /></linearGradient>
         <filter id="cb-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
@@ -32,8 +35,10 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
 
       {/* ═══ ciel marin ═══ */}
       <rect width="1000" height="560" fill="url(#cb-sky)" />
-      <circle cx="820" cy="120" r="34" fill="#fff2d0" opacity="0.7" />
-      <path d="M160 110 q8 -8 16 0 q8 -8 16 0 M240 140 q6 -6 12 0 q6 -6 12 0" stroke="#4a5460" strokeWidth="2.2" fill="none" opacity="0.5" />
+      <circle cx="820" cy="120" r="90" fill="#fff2d0" opacity="0.18" filter="url(#cb-blur)" />
+      <circle cx="820" cy="120" r="34" fill="#fff2d0" opacity="0.75" />
+      <Clouds id="cb-cl" seed={701} items={[[150, 92, 210], [470, 60, 170], [660, 196, 150], [320, 206, 130], [960, 70, 150]]} color="#eef0ec" shadow="#8a9aa8" opacity={0.75} drift={22} />
+      <path d="M160 110 q8 -8 16 0 q8 -8 16 0 M240 140 q6 -6 12 0 q6 -6 12 0 M600 120 q5 -5 10 0 q5 -5 10 0" stroke="#4a5460" strokeWidth="2.2" fill="none" opacity="0.5" />
 
       {/* ═══ couche lointaine : l'océan + (une fois relié) l'AUTRE RIVE ═══ */}
       <PLayer depth={1}>
@@ -41,7 +46,21 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
         {[276, 300, 326, 352].map((y, i) => (
           <path key={i} d={`M0 ${y} q110 ${i % 2 ? 5 : -5} 220 0 t220 0 t220 0 t220 0`} stroke="#bfe0dc" strokeWidth="1.5" fill="none" opacity="0.35" style={{ animation: `ripple ${3 + (i % 3)}s ease-in-out infinite` }} />
         ))}
-        <path d="M780 266 L860 266 L890 380 L740 380 Z" fill="#f0e6c8" opacity="0.16" />
+        <rect y="258" width="1000" height="10" fill="#d8e0d8" opacity="0.35" filter="url(#cb-blur)" />
+        <Glitter x={820} y0={266} y1={378} w0={14} w1={120} blurId="cb-blur" />
+        {/* écume des crêtes, au hasard */}
+        {Array.from({ length: 26 }).map((_, i) => {
+          const x = (i * 157) % 1000, y = 272 + ((i * 53) % 100), w = 6 + (y - 262) * 0.12;
+          return <path key={i} d={`M${x} ${y} q${w / 2} -2 ${w} 0`} stroke="#e8f4f0" strokeWidth="1.4" fill="none" opacity="0.5" />;
+        })}
+        {/* le navire d'escorte, au loin : coque, trois mâts, cheminée qui fume */}
+        <g transform="translate(560,266)" opacity="0.8">
+          <path d="M-34 -2 L34 -2 L28 4 L-30 4 Z" fill="#2a3038" />
+          <path d="M-20 -2 v-30 M0 -2 v-36 M20 -2 v-28" stroke="#2a3038" strokeWidth="1.4" />
+          <path d="M-26 -22 h12 M-7 -28 h14 M14 -20 h12" stroke="#2a3038" strokeWidth="1" />
+          <rect x="6" y="-12" width="5" height="10" fill="#2a3038" />
+          <path d="M8 -12 q-14 -10 -36 -12 q-14 -2 -24 -8" stroke="#8a929a" strokeWidth="4" fill="none" opacity="0.4" filter="url(#cb-blur)" />
+        </g>
 
         {/* BALEINE au LOIN (dans la mer lointaine), plus petite et plus discrete */}
         <g opacity="0.7">
@@ -122,12 +141,63 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
 
       {/* ═══ premier plan : le pont du navire câblier ═══ */}
       <PLayer depth={3}>
-        <path d="M0 560 L0 430 Q250 414 520 434 Q760 452 1000 428 L1000 560 Z" fill="url(#cb-hull)" />
-        <rect y="424" width="1000" height="40" fill="url(#cb-deck)" />
-        <rect y="424" width="1000" height="40" fill="#2c1c10" opacity="0.3" filter="url(#cb-grain)" />
-        <path d="M0 448 h1000 M120 424 v136 M340 424 v136 M560 424 v136 M780 424 v136" stroke="#3a2a18" strokeWidth="1.6" opacity="0.4" />
-        <rect y="460" width="1000" height="100" fill="url(#cb-deck)" />
-        <rect y="462" width="1000" height="98" fill="#2c1c10" opacity="0.28" filter="url(#cb-grain)" />
+        {/* à droite, au-delà de la poupe, la mer où plonge le câble */}
+        <rect x="800" y="420" width="240" height="160" fill="#204a5e" />
+        {[450, 480, 516, 548].map((y, i) => <path key={y} d={`M820 ${y} q40 ${i % 2 ? 4 : -4} 80 0 t80 0 t80 0`} stroke="#7ab0b8" strokeWidth="2" fill="none" opacity="0.4" style={{ animation: `ripple ${3 + i}s ease-in-out infinite` }} />)}
+        {/* le pont : bordages en long, joints décalés, poupe arrondie à droite */}
+        <path d="M-40 420 L880 420 Q936 440 958 560 L-40 560 Z" fill="url(#cb-hull)" />
+        <path d="M-40 428 L874 428 Q924 446 944 560 L-40 560 Z" fill="url(#cb-deck)" />
+        <g clipPath="url(#cb-deckclip)">
+          <rect x="-40" y="428" width="1000" height="132" fill="#2c1c10" opacity="0.28" filter="url(#cb-grain)" />
+          {Array.from({ length: 11 }).map((_, k) => {
+            const y = 428 + Math.pow(k, 1.45) * 4.2;
+            return (
+              <g key={k}>
+                <path d={`M-40 ${y.toFixed(1)} H1000`} stroke="#3a2a18" strokeWidth={0.8 + k * 0.08} opacity="0.45" />
+                {Array.from({ length: 7 }).map((_, j) => <path key={j} d={`M${(j * 160 + (k % 3) * 53).toFixed(0)} ${y.toFixed(1)} v${(3 + k * 1.1).toFixed(1)}`} stroke="#3a2a18" strokeWidth="0.8" opacity="0.4" />)}
+              </g>
+            );
+          })}
+        </g>
+        <defs><clipPath id="cb-deckclip"><path d="M-40 428 L874 428 Q924 446 944 560 L-40 560 Z" /></clipPath></defs>
+        {/* le bastingage : lisse, montants et pavois */}
+        <rect x="-40" y="404" width="912" height="18" fill="url(#cb-rail)" />
+        <rect x="-40" y="402" width="912" height="5" fill="#a88a5e" />
+        {Array.from({ length: 23 }).map((_, i) => <rect key={i} x={i * 40 - 4} y="406" width="4" height="16" fill="#3a2814" opacity="0.6" />)}
+        <path d="M868 404 Q912 414 938 450" stroke="#a88a5e" strokeWidth="5" fill="none" />
+        {/* le grand mât, ses haubans et ses enfléchures, à gauche */}
+        <rect x="102" y="-20" width="14" height="440" fill="#6e5032" />
+        <rect x="112" y="-20" width="4" height="440" fill="#3a2814" opacity="0.5" />
+        <rect x="40" y="40" width="140" height="7" rx="3" fill="#5a3f24" />
+        {[[20, 404], [52, 404], [166, 404], [198, 404]].map(([x, y], i) => <path key={i} d={`M109 30 L${x} ${y}`} stroke="#2c2018" strokeWidth="1.6" opacity="0.8" />)}
+        {Array.from({ length: 14 }).map((_, k) => {
+          const t = 0.12 + k * 0.06, y = 30 + (404 - 30) * t;
+          return <path key={k} d={`M${109 + (20 - 109) * t} ${y} L${109 + (52 - 109) * t} ${y} M${109 + (166 - 109) * t} ${y} L${109 + (198 - 109) * t} ${y}`} stroke="#2c2018" strokeWidth="1" opacity="0.6" />;
+        })}
+        {/* ligne de pavillons de signaux */}
+        <path d="M109 50 Q300 120 520 -10" stroke="#2c2018" strokeWidth="1" fill="none" opacity="0.7" />
+        {[0.15, 0.28, 0.41, 0.54, 0.67, 0.8].map((t, i) => {
+          const x = (1 - t) * (1 - t) * 109 + 2 * (1 - t) * t * 300 + t * t * 520, y = (1 - t) * (1 - t) * 50 + 2 * (1 - t) * t * 120 + t * t * -10;
+          return <path key={i} d={`M${x.toFixed(1)} ${y.toFixed(1)} l8 2 l-3 12 Z`} fill={["#c83a2a", "#f0d040", "#2a4a9a", "#f0f0e8", "#c83a2a", "#2a6a3a"][i]} />;
+        })}
+        {/* bitte d'amarrage et glène de cordage */}
+        <g transform="translate(880,474)">
+          <ellipse cx="0" cy="14" rx="20" ry="5" fill="#160f08" opacity="0.4" />
+          <rect x="-14" y="-8" width="10" height="22" rx="3" fill="#3a3c42" /><rect x="4" y="-8" width="10" height="22" rx="3" fill="#3a3c42" />
+          <rect x="-14" y="-10" width="10" height="4" rx="2" fill="#6a6c72" /><rect x="4" y="-10" width="10" height="4" rx="2" fill="#6a6c72" />
+        </g>
+        <g transform="translate(620,528)">
+          <ellipse cx="0" cy="6" rx="40" ry="10" fill="#160f08" opacity="0.4" />
+          {[34, 27, 20, 13].map((r, i) => <ellipse key={i} cx="0" cy="0" rx={r} ry={r * 0.3} fill="none" stroke={i % 2 ? "#a88a5a" : "#c8a874"} strokeWidth="4" />)}
+          <path d="M34 0 q16 4 26 16" stroke="#c8a874" strokeWidth="4" fill="none" />
+        </g>
+        {/* panneau de cale à caillebotis */}
+        <g transform="translate(150,524)">
+          <path d="M-60 -16 L60 -16 L70 22 L-70 22 Z" fill="#4a3420" />
+          <path d="M-54 -12 L54 -12 L62 18 L-62 18 Z" fill="#7a5a36" />
+          {Array.from({ length: 9 }).map((_, i) => <path key={i} d={`M${-50 + i * 12.5} -12 L${-58 + i * 14.5} 18`} stroke="#3a2814" strokeWidth="1.4" />)}
+          {[-4, 6].map((y) => <path key={y} d={`M-58 ${y} H58`} stroke="#3a2814" strokeWidth="1.4" />)}
+        </g>
 
         {/* LE GRAND TOURET — plein tant que le câble n'est pas posé, presque vide après */}
         <g transform="translate(300,470)">
@@ -185,7 +255,6 @@ export default function SceneCable({ collect, action, reveal, made = [], queteQu
             garment="jacket" coat="#3a4a6a" pants="#2a3448" shoes="#141418" arms={[{ a1: 10, a2: 6 }, { a1: 60, a2: 100 }]} />
         </g>
 
-        <path d="M0 500 h1000" stroke="#3a2a18" strokeWidth="4" opacity="0.5" />
       </PLayer>
 
       <rect width="1000" height="560" fill="#141810" opacity="0.05" style={{ pointerEvents: "none" }} />
