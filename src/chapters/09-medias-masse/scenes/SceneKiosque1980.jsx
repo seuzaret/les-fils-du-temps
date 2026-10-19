@@ -42,6 +42,8 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
           <stop offset="0%" stopColor="#e8e0c8" />
           <stop offset="100%" stopColor="#a89478" />
         </linearGradient>
+        <filter id="kq-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="6" /></filter>
+        <linearGradient id="kq-zinc" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7a7c80" /><stop offset="100%" stopColor="#4a4c52" /></linearGradient>
       </defs>
 
       {/* CIEL matinal légèrement brumeux */}
@@ -49,32 +51,79 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
 
       {/* IMMEUBLES en fond, silhouettes haussmanniennes */}
       <PLayer depth={1}>
-        <rect x="0" y="90" width="1000" height="260" fill="url(#kq-facade)" opacity="0.9" />
-        {/* fenêtres régulières */}
-        {[0, 1, 2, 3, 4].map((row) => (
-          [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((col) => (
-            <rect key={`w-${row}-${col}`} x={20 + col * 100} y={110 + row * 45} width="42" height="28" fill="#5a4c3a" opacity="0.55" />
-          ))
+        {/* trois immeubles haussmanniens mitoyens : toits de zinc à lucarnes,
+            balcons filants, boutiques au rez-de-chaussée */}
+        {[[-20, 330, "#e8dcc0", 0], [310, 380, "#e0d2b4", 1], [690, 330, "#ebe0c6", 2]].map(([x0, w, c, k]) => (
+          <g key={k}>
+            <rect x={x0} y="96" width={w} height="260" fill={c} />
+            <rect x={x0} y="96" width={w} height="260" fill="#a89478" opacity="0.18" />
+            <path d={`M${x0 - 4} 98 L${x0 + w + 4} 98 L${x0 + w - 14} 58 L${x0 + 14} 58 Z`} fill="url(#kq-zinc)" />
+            {Array.from({ length: Math.floor(w / 70) }).map((_, i) => (
+              <g key={i} transform={`translate(${x0 + 40 + i * 70},62)`}>
+                <path d="M-10 32 L-10 10 Q0 0 10 10 L10 32 Z" fill="#8a8c90" stroke="#3a3c42" strokeWidth="1" />
+                <rect x="-6" y="12" width="12" height="16" fill="#4a4e58" />
+              </g>
+            ))}
+            {[x0 + 30, x0 + w - 50].map((cx) => <g key={cx}><rect x={cx} y="40" width="20" height="20" fill="#a8603a" /><rect x={cx - 2} y="38" width="24" height="4" fill="#6a3a20" />{[3, 9, 15].map((d) => <rect key={d} x={cx + d} y="34" width="3" height="5" fill="#8a4a2a" />)}</g>)}
+            {[0, 1, 2, 3].map((row) => Array.from({ length: Math.floor(w / 66) }).map((_, col) => {
+              const wx = x0 + 22 + col * 66, wy = 108 + row * 46;
+              return (
+                <g key={`${row}-${col}`}>
+                  <rect x={wx} y={wy} width="34" height="34" fill="#4a4a50" opacity="0.75" />
+                  <path d={`M${wx + 17} ${wy} v34 M${wx} ${wy + 14} h34`} stroke="#e8dcc0" strokeWidth="1.4" opacity="0.8" />
+                  <rect x={wx + 2} y={wy + 2} width="8" height="10" fill="#c8d4dc" opacity="0.35" />
+                  <path d={`M${wx - 3} ${wy + 34} h40`} stroke="#8a7458" strokeWidth="2" />
+                </g>
+              );
+            }))}
+            {/* balcons filants en fer forgé (2e et 4e étages) */}
+            {[150, 242].map((y) => (
+              <g key={y}>
+                <rect x={x0 + 8} y={y - 3} width={w - 16} height="3" fill="#2a2a2e" />
+                <path d={`M${x0 + 8} ${y - 12} H${x0 + w - 8}`} stroke="#2a2a2e" strokeWidth="1.6" />
+                {Array.from({ length: Math.floor((w - 16) / 8) }).map((_, j) => <path key={j} d={`M${x0 + 12 + j * 8} ${y - 12} v9`} stroke="#2a2a2e" strokeWidth="0.9" />)}
+              </g>
+            ))}
+            {[104, 196, 288].map((y) => <rect key={y} x={x0} y={y - 6} width={w} height="4" fill="#8a7458" opacity="0.6" />)}
+          </g>
         ))}
-        {/* corniches */}
-        {[130, 220, 310].map((y, i) => (
-          <rect key={i} x="0" y={y} width="1000" height="4" fill="#8a7458" opacity="0.6" />
-        ))}
-        {/* toitures en zinc */}
-        <path d="M0 90 L1000 90 L1000 70 L0 76 Z" fill="#5a5648" opacity="0.85" />
+        {/* boutiques du rez-de-chaussée : café à store rouge, boulangerie, pharmacie */}
+        <g>
+          <rect x="-20" y="292" width="1040" height="64" fill="#3a3028" opacity="0.85" />
+          <g transform="translate(40,292)">
+            <rect x="0" y="12" width="230" height="52" fill="#5a2a20" />
+            <path d="M-6 0 L236 0 L246 22 L-16 22 Z" fill="#b8302a" />
+            {Array.from({ length: 11 }).map((_, i) => <path key={i} d={`M${-12 + i * 23.5} 22 q11.75 8 23.5 0`} fill={i % 2 ? "#b8302a" : "#e8e0d0"} />)}
+            <text x="115" y="15" textAnchor="middle" fontFamily="Georgia,serif" fontSize="11" fill="#f0e8d0" letterSpacing="3">CAFÉ · BAR</text>
+            {[24, 84, 144].map((x) => <rect key={x} x={x} y="30" width="48" height="30" fill="#e8c88a" opacity="0.4" />)}
+          </g>
+          <g transform="translate(760,292)">
+            <rect x="0" y="6" width="200" height="58" fill="#2a3a5a" />
+            <text x="100" y="22" textAnchor="middle" fontFamily="Georgia,serif" fontSize="11" fill="#e8d8a8" letterSpacing="2">BOULANGERIE</text>
+            <rect x="14" y="30" width="80" height="30" fill="#e8c88a" opacity="0.45" />
+            <rect x="106" y="30" width="80" height="30" fill="#e8c88a" opacity="0.45" />
+            {[24, 44, 64].map((x) => <ellipse key={x} cx={x} cy="52" rx="9" ry="3" fill="#c88a40" />)}
+          </g>
+          <g transform="translate(300,300)"><rect x="-10" y="-10" width="20" height="20" fill="#2a8a3a" /><path d="M-3 -7 h6 v4 h4 v6 h-4 v4 h-6 v-4 h-4 v-6 h4 Z" fill="#9aff8a" /></g>
+        </g>
+        {/* brume du matin dans le lointain */}
+        <rect x="-20" y="80" width="1040" height="280" fill="#e6e2d8" opacity="0.18" />
       </PLayer>
 
       {/* TROTTOIR — pavé + bordure */}
       <PLayer depth={2.5}>
         <rect y="360" width="1000" height="200" fill="url(#kq-street)" />
         <rect y="360" width="1000" height="6" fill="#2a2620" />
-        {/* joints entre pavés (motif régulier) */}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((i) => (
-          <line key={`p-${i}`} x1={i * 80} y1="360" x2={i * 80 - 40} y2="560" stroke="#2a2620" strokeWidth="1.5" opacity="0.5" />
-        ))}
-        {[380, 420, 460, 500, 540].map((y, i) => (
-          <line key={`ph-${i}`} x1="0" y1={y} x2="1000" y2={y} stroke="#2a2620" strokeWidth="1" opacity="0.35" />
-        ))}
+        {/* grandes dalles de trottoir en perspective, bordure de granit */}
+        {Array.from({ length: 16 }).map((_, i) => {
+          const x = -300 + i * 110;
+          return <line key={`p-${i}`} x1={(500 + (x - 500) * 0.6).toFixed(0)} y1="360" x2={x} y2="540" stroke="#2a2620" strokeWidth="1.4" opacity="0.45" />;
+        })}
+        {[374, 394, 422, 458, 502].map((y) => <line key={y} x1="0" y1={y} x2="1000" y2={y} stroke="#2a2620" strokeWidth="1" opacity="0.35" />)}
+        <rect y="540" width="1000" height="8" fill="#9a948a" />
+        <rect y="548" width="1000" height="12" fill="#3a3630" />
+        <path d="M0 544 h1000" stroke="#c8c2b8" strokeWidth="1" opacity="0.6" />
+        <ellipse cx="520" cy="430" rx="230" ry="14" fill="#1a1810" opacity="0.3" />
         {/* petite feuille morte ici et là */}
         <path d="M240 468 q4 -6 10 -4 q6 4 2 10 q-6 4 -12 -6 Z" fill="#a06a3a" opacity="0.7" />
         <path d="M780 502 q4 -6 10 -4 q6 4 2 10 q-6 4 -12 -6 Z" fill="#8a5a2a" opacity="0.6" />
@@ -89,14 +138,18 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
           <line key={`bar-${x}`} x1={x} y1="260" x2={x} y2="410" stroke="#0e1a10" strokeWidth="1" opacity="0.5" />
         ))}
         {/* toit pentu en zinc */}
-        <path d="M320 240 L520 168 L720 240 Z" fill="url(#kq-roof)" stroke="#141c14" strokeWidth="2" />
+        <path d="M316 242 C330 196 450 176 520 166 C590 176 710 196 724 242 Z" fill="url(#kq-roof)" stroke="#141c14" strokeWidth="2" />
+        {[360, 420, 480, 560, 620, 680].map((x) => <path key={x} d={`M${x} ${242 - Math.max(0, 70 - Math.abs(x - 520) * 0.35) * 0.9} Q${x + (520 - x) * 0.1} 210 ${x} 242`} stroke="#1a2a1c" strokeWidth="1.2" fill="none" opacity="0.6" />)}
+        {/* lambrequin festonné sous le dôme */}
+        {Array.from({ length: 19 }).map((_, i) => <path key={i} d={`M${326 + i * 20.4} 240 q10.2 12 20.4 0`} fill="#2a4a30" stroke="#141c14" strokeWidth="1" />)}
         <path d="M330 240 L710 240" stroke="#141c14" strokeWidth="2" />
         {/* bandeau « KIOSQUE » */}
         <rect x="360" y="210" width="320" height="26" fill="#c9a54a" stroke="#7a5a2a" strokeWidth="1.5" rx="2" />
         <text x="520" y="228" textAnchor="middle" fontFamily="Georgia, serif" fontSize="16" fontWeight="700" fill="#3a2210">PRESSE · TABAC · LOTO</text>
         {/* pointe du toit */}
-        <path d="M518 168 L522 168 L522 156 L518 156 Z" fill="#5a4a30" />
-        <circle cx="520" cy="152" r="4" fill="#c9a54a" />
+        <path d="M516 168 L524 168 L522 150 L518 150 Z" fill="#2a4a30" stroke="#141c14" strokeWidth="1" />
+        <circle cx="520" cy="146" r="5" fill="#c9a54a" />
+        <path d="M520 141 v-8" stroke="#c9a54a" strokeWidth="2" />
 
         {/* PRÉSENTOIR de journaux (façade avant) */}
         <rect x="352" y="260" width="336" height="140" fill="#1a2a1e" stroke="#0e1a10" strokeWidth="1.5" rx="2" />
