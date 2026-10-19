@@ -47,6 +47,8 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
           <stop offset="0%" stopColor="#0a1024" />
           <stop offset="100%" stopColor="#1a1a2a" />
         </linearGradient>
+        <filter id="jt-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10" /></filter>
+        <radialGradient id="jt-tvglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#b8d0e8" stopOpacity="0.32" /><stop offset="100%" stopColor="#b8d0e8" stopOpacity="0" /></radialGradient>
       </defs>
 
       {/* ═════ MUR + DÉCO MURALE (soirée, pénombre) ═════ */}
@@ -143,16 +145,53 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
         </g>
       </PLayer>
 
+      {/* ═════ le MEUBLE MURAL (bibliothèque, chaîne hi-fi, cassettes VHS)
+            et le LAMPADAIRE HALOGÈNE en veilleuse ═════ */}
+      <PLayer depth={1}>
+        <g transform="translate(296,420)">
+          <rect x="-80" y="-250" width="160" height="250" fill="#2e2016" stroke="#140a04" strokeWidth="2" />
+          {[-200, -140, -80].map((y) => <rect key={y} x="-74" y={y} width="148" height="5" fill="#4a3220" />)}
+          {/* livres */}
+          {Array.from({ length: 14 }).map((_, k) => <rect key={k} x={-72 + k * 10.4} y={-242 + ((k * 5) % 9)} width="9" height={40 - ((k * 5) % 9)} fill={["#6a2a1e", "#2a4a5a", "#7a6a3a", "#3a3a5a", "#5a2a3a"][k % 5]} opacity="0.8" />)}
+          {/* chaîne hi-fi : platine, ampli à vu-mètres, double cassette */}
+          <rect x="-66" y="-180" width="132" height="12" fill="#1a1a1c" />
+          <rect x="-66" y="-166" width="132" height="22" fill="#222226" />
+          <rect x="-56" y="-162" width="28" height="12" fill="#3a2a10" /><rect x="-22" y="-162" width="28" height="12" fill="#3a2a10" />
+          <path d="M-50 -152 l6 -7 M-16 -152 l8 -6" stroke="#ffb040" strokeWidth="1" />
+          {[18, 30, 42, 54].map((x) => <circle key={x} cx={x} cy="-156" r="3" fill="#5a5a60" />)}
+          {/* cassettes VHS rangées */}
+          {Array.from({ length: 9 }).map((_, k) => <rect key={k} x={-70 + k * 15.6} y="-130" width="13" height="46" fill="#141414" stroke="#2a2a2a" strokeWidth="0.6" />)}
+          {Array.from({ length: 9 }).map((_, k) => <rect key={`l${k}`} x={-68 + k * 15.6} y="-112" width="9" height="16" fill="#e8e0d0" opacity="0.7" />)}
+          {/* portes basses */}
+          <rect x="-74" y="-72" width="72" height="68" fill="#3a2818" stroke="#140a04" strokeWidth="1" /><rect x="2" y="-72" width="72" height="68" fill="#3a2818" stroke="#140a04" strokeWidth="1" />
+          <circle cx="-8" cy="-38" r="2" fill="#c9a54a" /><circle cx="8" cy="-38" r="2" fill="#c9a54a" />
+        </g>
+        <g transform="translate(700,420)">
+          <ellipse cx="0" cy="0" rx="20" ry="4" fill="#0a0604" opacity="0.6" />
+          <path d="M0 0 v-300" stroke="#1a1a1c" strokeWidth="3" />
+          <path d="M-30 -300 Q0 -286 30 -300 L24 -310 L-24 -310 Z" fill="#2a2a2e" />
+          <ellipse cx="0" cy="-330" rx="70" ry="24" fill="#ffd890" opacity="0.18" filter="url(#jt-blur)" />
+          <rect x="-6" y="-120" width="12" height="4" rx="2" fill="#4a4a4e" />
+        </g>
+      </PLayer>
+
       {/* Sol : parquet */}
       <PLayer depth={1.5}>
         <rect y="420" width="1000" height="140" fill="url(#jt-floor)" />
-        {[0, 1, 2, 3, 4, 5, 6, 7].map((i) => (
-          <line key={i} x1="0" y1={430 + i * 15} x2="1000" y2={430 + i * 15} stroke="#0a0604" strokeWidth="0.6" opacity="0.5" />
-        ))}
+        {Array.from({ length: 26 }).map((_, i) => {
+          const x = -240 + i * 60;
+          return <line key={i} x1={(500 + (x - 500) * 0.6).toFixed(0)} y1="420" x2={x} y2="560" stroke="#0a0604" strokeWidth="0.9" opacity="0.5" />;
+        })}
+        {[436, 458, 488, 528].map((y, i) => <line key={`h${y}`} x1={i * 60} y1={y} x2={i * 60 + 300} y2={y} stroke="#0a0604" strokeWidth="0.7" opacity="0.4" />)}
+        {/* la lumière bleutée de la télé sur le parquet et le mur */}
+        <ellipse cx="500" cy="440" rx="300" ry="40" fill="url(#jt-tvglow)" />
       </PLayer>
 
       {/* MEUBLE + TV cathodique — centré au fond du salon */}
       <PLayer depth={1.5}>
+        <ellipse cx="500" cy="270" rx="230" ry="170" fill="url(#jt-tvglow)">
+          <animate attributeName="opacity" values="1;0.8;1;0.9;1" dur="2.4s" repeatCount="indefinite" />
+        </ellipse>
         {/* meuble bas */}
         <rect x="410" y="340" width="180" height="72" fill="#3a2418" stroke="#1a0e04" strokeWidth="1.5" rx="2" />
         <rect x="414" y="344" width="172" height="6" fill="#4a3020" />
