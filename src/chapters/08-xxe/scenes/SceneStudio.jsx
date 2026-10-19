@@ -32,14 +32,25 @@ export default function SceneStudio({ collect, action, reveal, made = [] }) {
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
           <feComposite in="a" in2="SourceGraphic" operator="in" />
         </filter>
+        <filter id="st-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7" /></filter>
+        <radialGradient id="st-pad" cx="45%" cy="40%" r="65%"><stop offset="0%" stopColor="#4e4a54" /><stop offset="100%" stopColor="#24222a" /></radialGradient>
+        <linearGradient id="st-drape" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#2a1a24" /><stop offset="50%" stopColor="#4a2a38" /><stop offset="100%" stopColor="#2a1a24" /></linearGradient>
         <clipPath id="st-winclip"><rect x="-88" y="-62" width="176" height="124" /></clipPath>
       </defs>
 
       {/* ═══ mur du studio (panneaux acoustiques) ═══ */}
       <rect width="1000" height="560" fill="url(#st-wall)" />
-      {[...Array(6)].map((_, r) => [...Array(12)].map((_, c) => (
-        <rect key={`${r}-${c}`} x={20 + c * 82} y={30 + r * 70} width="62" height="50" rx="3" fill="#3a3840" opacity="0.5" />
+      {/* panneaux acoustiques capitonnés */}
+      {[...Array(6)].map((_, r) => [...Array(13)].map((_, c) => (
+        <g key={`${r}-${c}`}>
+          <rect x={c * 80 - 10} y={r * 72 - 6} width="76" height="68" rx="12" fill="url(#st-pad)" opacity="0.85" />
+          {[[19, 17], [57, 17], [38, 34], [19, 51], [57, 51]].map(([x, y], k) => <circle key={k} cx={c * 80 - 10 + x} cy={r * 72 - 6 + y} r="1.6" fill="#16141a" />)}
+        </g>
       )))}
+      {/* lourde tenture acoustique à gauche */}
+      <path d="M-20 0 L70 0 Q58 140 76 280 Q60 360 72 430 L-20 430 Z" fill="url(#st-drape)" />
+      {[10, 30, 50].map((x) => <path key={x} d={`M${x} 0 q-6 140 6 280 q-8 80 2 150`} stroke="#1a1018" strokeWidth="1.4" fill="none" opacity="0.6" />)}
+      <rect x="-20" y="-4" width="100" height="10" fill="#1a181e" />
       <rect width="1000" height="560" fill="#16141a" opacity="0.24" filter="url(#st-grain)" />
 
       {/* ═══ couche lointaine : la fenêtre sur l'antenne + l'horloge ═══ */}
@@ -132,6 +143,18 @@ export default function SceneStudio({ collect, action, reveal, made = [] }) {
 
       {/* ═══ couche intermédiaire : LE SPEAKER + le « ? » ═══ */}
       <PLayer depth={2}>
+        {/* moquette du studio (sous le speaker) */}
+        <rect y="420" width="1000" height="140" fill="url(#st-floor)" />
+        <rect y="422" width="1000" height="138" fill="#161218" opacity="0.34" filter="url(#st-grain)" />
+        <rect y="416" width="1000" height="6" fill="#16141a" />
+        {Array.from({ length: 14 }).map((_, i) => {
+          const x = -200 + i * 110;
+          return <path key={i} d={`M${(500 + (x - 500) * 0.66).toFixed(0)} 420 L${x} 560`} stroke="#1a161c" strokeWidth="1" opacity="0.35" />;
+        })}
+        <ellipse cx="480" cy="484" rx="440" ry="46" fill="#141018" opacity="0.3" />
+        <ellipse cx="420" cy="440" rx="200" ry="70" fill="url(#st-lamp)" style={{ animation: "glow 3s ease-in-out infinite" }} />
+        {/* sa chaise */}
+        <path d="M300 300 Q340 290 380 300 L376 400 L304 400 Z" fill="#3a2418" />
         {!radio && (
           <g transform="translate(300,246)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
             <path d="M0 0 q0 -26 26 -26 q26 0 26 22 q0 18 -22 24 l0 8" fill="none" stroke="#ffd166" strokeWidth="4" />
@@ -156,27 +179,37 @@ export default function SceneStudio({ collect, action, reveal, made = [] }) {
 
       {/* ═══ premier plan : la table, le micro, la bande, l'aimant, l'épave ═══ */}
       <PLayer depth={3}>
-        <rect y="420" width="1000" height="140" fill="url(#st-floor)" />
-        <rect y="422" width="1000" height="138" fill="#161218" opacity="0.34" filter="url(#st-grain)" />
-        <ellipse cx="480" cy="484" rx="440" ry="46" fill="#141018" opacity="0.3" />
-        <ellipse cx="420" cy="450" rx="200" ry="90" fill="url(#st-lamp)" style={{ animation: "glow 3s ease-in-out infinite" }} />
 
         {/* la table du studio : plateau + facade opaque qui cache le
             bas du presentateur */}
-        <g transform="translate(400,492)">
+        <g transform="translate(400,430)">
+          <ellipse cx="50" cy="92" rx="270" ry="10" fill="#0a080c" opacity="0.4" />
           {/* plateau */}
-          <rect x="-190" y="0" width="380" height="14" rx="3" fill="url(#st-desk)" />
+          <rect x="-190" y="0" width="500" height="14" rx="3" fill="url(#st-desk)" />
+          <rect x="-190" y="0" width="500" height="3" rx="1.5" fill="#a07850" opacity="0.6" />
           {/* facade avant du pupitre (grande, cache les jambes du speaker) */}
-          <rect x="-190" y="14" width="380" height="54" fill="url(#st-desk)" stroke="#1a1006" strokeWidth="1.5" />
-          <rect x="-190" y="14" width="380" height="54" fill="#1a1006" opacity="0.25" filter="url(#st-grain)" />
-          {/* deux moulures horizontales */}
-          <path d="M-186 26 h372 M-186 56 h372" stroke="#1a1006" strokeWidth="1" opacity="0.5" />
+          <rect x="-190" y="14" width="500" height="64" fill="url(#st-desk)" stroke="#1a1006" strokeWidth="1.5" />
+          <rect x="-190" y="14" width="500" height="64" fill="#1a1006" opacity="0.25" filter="url(#st-grain)" />
+          {/* panneaux moulurés */}
+          {[-180, -60, 60, 180].map((x) => <rect key={x} x={x} y="22" width="110" height="48" fill="none" stroke="#1a1006" strokeWidth="1.2" opacity="0.55" />)}
+          {/* plaque de la station */}
+          <rect x="-26" y="36" width="52" height="16" rx="2" fill="#1a1410" stroke="#c8a050" strokeWidth="1" />
+          <text x="0" y="48" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fontWeight="800" fill="#e8d8b0" letterSpacing="2">BBC</text>
           {/* pieds */}
-          <rect x="-178" y="68" width="14" height="20" fill="#33210f" /><rect x="164" y="68" width="14" height="20" fill="#33210f" />
+          <rect x="-178" y="78" width="14" height="14" fill="#33210f" /><rect x="290" y="78" width="14" height="14" fill="#33210f" />
+          {/* lampe col-de-cygne, verre d'eau, feuillets */}
+          <g transform="translate(-150,0)">
+            <path d="M0 0 v-8 M-8 0 h16" stroke="#2a2c34" strokeWidth="3" />
+            <path d="M0 -8 Q0 -40 24 -44" stroke="#2a2c34" strokeWidth="3" fill="none" />
+            <path d="M18 -50 L34 -42 L26 -32 Z" fill="#5a6a4a" />
+            <ellipse cx="28" cy="-34" rx="16" ry="6" fill="#ffd890" opacity="0.4" filter="url(#st-blur)" />
+          </g>
+          <g transform="translate(-80,0)"><rect x="-5" y="-14" width="10" height="14" fill="#c8d8e0" opacity="0.45" stroke="#8a9aa8" strokeWidth="0.6" /><rect x="-5" y="-7" width="10" height="7" fill="#9ab8c8" opacity="0.45" /></g>
+          <g transform="translate(110,-2) rotate(-4)"><rect x="-18" y="-4" width="36" height="5" fill="#e8e4da" /><rect x="-16" y="-7" width="34" height="4" fill="#f0ece2" /></g>
         </g>
 
         {/* LE MICRO sur pied (mobilier du studio : il reste dessiné) */}
-        <g transform="translate(430,464)">
+        <g transform="translate(430,402)">
           <rect x="-3" y="0" width="6" height="28" fill="#3a3c46" />
           <ellipse cx="0" cy="30" rx="18" ry="4" fill="#2a2c34" />
           {/* la tête du micro, style 1940 */}
@@ -187,7 +220,7 @@ export default function SceneStudio({ collect, action, reveal, made = [] }) {
 
         {/* LE MAGNÉTOPHONE à bobines + LA BANDE MAGNÉTIQUE */}
         {!tapeGone && (
-          <g transform="translate(640,478)">
+          <g transform="translate(640,416)">
             <rect x="-52" y="-16" width="104" height="30" rx="4" fill="#4a4650" />
             <rect x="-52" y="-16" width="104" height="30" rx="4" fill="#16141a" opacity="0.3" filter="url(#st-grain)" />
             {/* les deux bobines */}
@@ -238,12 +271,12 @@ export default function SceneStudio({ collect, action, reveal, made = [] }) {
       <Hotspot cx={348} cy={380} r={54} label="le speaker" reveal={reveal} onClick={() => action("speaker")} />
       {!radio && (
         <>
-          <Hotspot cx={430} cy={444} r={34} label="micro" item="micro" reveal={reveal} onClick={() => collect("micro")} />
+          <Hotspot cx={430} cy={382} r={34} label="micro" item="micro" reveal={reveal} onClick={() => collect("micro")} />
           <Hotspot cx={730} cy={126} r={54} label="ondes" item="ondes" reveal={reveal} onClick={() => collect("ondes")} />
         </>
       )}
       {!tapeGone && (
-        <Hotspot cx={640} cy={456} r={46} label="bande magnétique" item="bande_magnetique" reveal={reveal} onClick={() => collect("bande_magnetique")} />
+        <Hotspot cx={640} cy={394} r={46} label="bande magnétique" item="bande_magnetique" reveal={reveal} onClick={() => collect("bande_magnetique")} />
       )}
       {!made.includes("msg_bande") && (
         <Hotspot cx={180} cy={500} r={30} label="gros aimant" item="aimant" reveal={reveal} onClick={() => collect("aimant")} />
