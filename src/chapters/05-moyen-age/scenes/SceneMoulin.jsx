@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Grass, Haze, Leafy, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau : le moulin à papier (extérieur)
@@ -38,21 +39,22 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
 
       {/* ═══ ciel ═══ */}
       <rect width="1000" height="560" fill="url(#mo-sky)" />
-      {[[200, 90, 130], [560, 66, 160], [760, 116, 100]].map(([x, y, w], i) => (
-        <ellipse key={i} cx={x} cy={y} rx={w} ry={13} fill="#f2f2e8" opacity="0.55" />
-      ))}
+      <Clouds id="mo-cl" seed={101} items={[[220, 90, 220], [560, 66, 260], [800, 116, 170]]} color="#fbf8ee" shadow="#c8d0d4" opacity="0.8" drift={18} />
       <circle cx="130" cy="100" r="30" fill="#fff4d0" opacity="0.85" />
 
       {/* ═══ couche lointaine : collines, arbres, LE MOULIN ═══ */}
       <PLayer depth={1}>
-        <path d="M0 300 Q250 280 500 292 Q750 304 1000 286 L1000 360 L0 360 Z" fill="#8a9a6a" />
-        <path d="M0 330 Q300 314 620 326 Q820 334 1000 322 L1000 380 L0 380 Z" fill="#79895c" />
-        {[[70, 322], [250, 314], [980, 316]].map(([x, y], i) => (
-          <g key={i} transform={`translate(${x},${y})`}>
-            <rect x="-4" y="-4" width="8" height="26" fill="#6a4c2e" />
-            <circle cx="0" cy="-18" r="22" fill="#5a7a44" /><circle cx="-14" cy="-8" r="16" fill="#658149" /><circle cx="14" cy="-8" r="16" fill="#557040" />
-          </g>
-        ))}
+        {/* collines bleutées au loin, puis le bocage et la forêt */}
+        <Ridge id="mo-r0" seed={103} y={290} amp={60} rough={0.5} fill="#8a9ab0" lit="#a8b8c8" light={-1} />
+        <Haze id="mo-h0" y0={240} y1={300} color="#e6e2c8" opacity={0.45} />
+        <path d="M-40 300 Q250 280 500 292 Q750 304 1040 286 L1040 360 L-40 360 Z" fill="#8a9a6a" />
+        <TreeLine seed={105} x0={-20} x1={1020} y={300} n={36} h={[14, 26]} kinds={["leafy", "leafy", "conifer"]} colors={["#5a7a44", "#4e6a3a", "#658149"]} light={-1} jitter={10} />
+        <path d="M-40 330 Q300 314 620 326 Q820 334 1040 322 L1040 380 L-40 380 Z" fill="#79895c" />
+        {/* champs en bandes sur les pentes */}
+        {[[60, 316, "#a8a860"], [180, 312, "#9aa058"], [880, 314, "#b0a868"]].map(([x, y, c], i) => <path key={i} d={`M${x - 70} ${y + 10} Q${x} ${y - 4} ${x + 70} ${y + 8} L${x + 74} ${y + 18} Q${x} ${y + 8} ${x - 74} ${y + 20} Z`} fill={c} opacity="0.6" />)}
+        <Leafy x={70} y={340} s={0.9} color="#5a7a44" light={-1} seed={3} />
+        <Leafy x={250} y={334} s={0.8} color="#4e6a3a" light={-1} seed={4} />
+        <Leafy x={980} y={336} s={0.9} color="#5a7a44" light={-1} seed={5} />
 
         {/* ═══ LE MOULIN À PAPIER : bâtiment de pierre + étage à colombages,
             avec une GRANDE ARCHE ouverte (l'atelier) où travaille le papetier ═══ */}
@@ -60,6 +62,13 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
           {/* corps de pierre */}
           <rect x="-120" y="-10" width="240" height="172" fill="url(#mo-stone)" />
           <rect x="-120" y="-10" width="240" height="172" fill="#2c2418" opacity="0.2" filter="url(#mo-grain)" />
+          <clipPath id="mo-wall"><rect x="-120" y="-10" width="240" height="172" /></clipPath>
+          <g clipPath="url(#mo-wall)">
+            {Array.from({ length: 9 }).map((_, r) => Array.from({ length: 10 }).map((_, c) => (
+              <rect key={`${r}-${c}`} x={-120 + c * 28 + (r % 2) * 14 - 14} y={-10 + r * 19} width="28" height="19" fill="none" stroke="#5a5040" strokeWidth="0.8" opacity="0.45" />
+            )))}
+          </g>
+          <rect x="90" y="-10" width="30" height="172" fill="#3a3024" opacity="0.25" />
           {/* étage à colombages */}
           <rect x="-120" y="-72" width="240" height="62" fill="url(#mo-wood)" />
           <path d="M-120 -42 h240 M-60 -72 v62 M0 -72 v62 M60 -72 v62 M-120 -72 l60 62 M60 -72 l60 62 M-60 -72 l60 62 M0 -72 l60 62" stroke="#4a3218" strokeWidth="3" opacity="0.5" />
@@ -88,7 +97,9 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
       {/* ═══ couche intermédiaire : la rivière, LA ROUE, séchoir extérieur ═══ */}
       <PLayer depth={2}>
         {/* LA RIVIÈRE en travers */}
-        <rect y="392" width="1000" height="72" fill="url(#mo-water)" />
+        <rect x="-40" y="392" width="1080" height="72" fill="url(#mo-water)" />
+        <rect x="530" y="394" width="240" height="40" fill="#5a5448" opacity="0.25" />
+        <rect x="-40" y="392" width="1080" height="3" fill="#d8e4e0" opacity="0.5" />
         <rect y="394" width="1000" height="70" fill="#2a3e46" opacity="0.22" filter="url(#mo-mottle)" />
         {[406, 424, 444].map((y, i) => <path key={i} d={`M0 ${y} q120 -6 240 0 q120 6 240 0 q120 -6 240 0 q120 6 240 0`} stroke="#bcd2d4" strokeWidth="1.6" fill="none" opacity="0.4" />)}
 
@@ -134,7 +145,10 @@ export default function SceneMoulin({ collect, action, reveal, made = [], mode =
 
       {/* ═══ premier plan : berge, la cuve + le papetier (dans l'arche), chiffonnier ═══ */}
       <PLayer depth={3}>
-        <rect y="452" width="1000" height="108" fill="url(#mo-ground)" />
+        <path d="M-40 456 Q200 446 460 454 Q720 462 1040 448 L1040 560 L-40 560 Z" fill="url(#mo-ground)" />
+        <path d="M-40 456 Q200 446 460 454 Q720 462 1040 448" stroke="#6a7a4a" strokeWidth="6" fill="none" opacity="0.7" />
+        <Speckle seed={321} x0={0} x1={1000} y0={458} y1={560} n={220} colors={["#3a2c18", "#c8b888", "#5a4a2a"]} opacity={0.45} />
+        {[[40, 470, 1], [260, 466, 2], [470, 470, 3], [880, 462, 4], [960, 500, 5]].map(([x, y, sd]) => <Grass key={sd} x={x} y={y} seed={sd} color="#5a6a30" s={1.1} flower={sd % 2 ? "#e8d040" : null} />)}
         <rect y="454" width="1000" height="106" fill="#2c2214" opacity="0.3" filter="url(#mo-mottle)" />
         <ellipse cx="500" cy="500" rx="460" ry="44" fill="#7a6844" opacity="0.25" />
 
