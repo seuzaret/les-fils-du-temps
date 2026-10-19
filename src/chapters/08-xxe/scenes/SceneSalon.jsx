@@ -26,17 +26,32 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
         <linearGradient id="sd-curtain" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#3a2418" /><stop offset="100%" stopColor="#1a0e08" /></linearGradient>
         <linearGradient id="sd-buffet" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6a4020" /><stop offset="100%" stopColor="#2a1608" /></linearGradient>
         <radialGradient id="sd-lampe" cx="50%" cy="30%" r="60%"><stop offset="0%" stopColor="#ffdca8" stopOpacity="0.55" /><stop offset="100%" stopColor="#ff9540" stopOpacity="0" /></radialGradient>
+        <filter id="sd-blur" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="14" /></filter>
+        <linearGradient id="sd-marble" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#d8d0c4" /><stop offset="100%" stopColor="#8a8274" /></linearGradient>
+        <linearGradient id="sd-mirror" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#3a3a40" /><stop offset="50%" stopColor="#5a5a62" /><stop offset="100%" stopColor="#2a2a30" /></linearGradient>
+        <linearGradient id="sd-velvet" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#6a3428" /><stop offset="100%" stopColor="#3a1a14" /></linearGradient>
         <radialGradient id="sd-cadran" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffe08a" stopOpacity="0.85" /><stop offset="100%" stopColor="#ffcf50" stopOpacity="0" /></radialGradient>
       </defs>
 
       {/* ═══ mur + tapisserie discrète ═══ */}
       <PLayer depth={1}>
         <rect width="1000" height="560" fill="url(#sd-wall)" />
-        {[...Array(6)].map((_, r) => [...Array(10)].map((_, c) => (
-          <path key={`t-${r}-${c}`} d={`M${60 + c * 96} ${50 + r * 70} q6 -6 12 0 q-6 6 -12 0 Z`}
-            fill="#8a6540" opacity="0.35" />
-        )))}
-        <circle cx="150" cy="200" r="180" fill="url(#sd-lampe)" />
+        {/* papier peint à bouquets, en quinconce */}
+        {[...Array(6)].map((_, r) => [...Array(11)].map((_, c) => {
+          const x = 30 + c * 96 + (r % 2) * 48, y = 50 + r * 70;
+          return (
+            <g key={`t-${r}-${c}`} opacity="0.35">
+              <path d={`M${x} ${y} q6 -6 12 0 q-6 6 -12 0 Z M${x + 6} ${y - 4} q-8 -10 0 -16 q8 6 0 16 Z`} fill="#8a6540" />
+              <circle cx={x + 6} cy={y - 14} r="3" fill="#9a5a3a" />
+            </g>
+          );
+        }))}
+        {/* cimaise et plinthe */}
+        <rect y="300" width="1000" height="5" fill="#4a3018" />
+        <rect y="300" width="1000" height="1.5" fill="#9a7048" opacity="0.6" />
+        <rect y="426" width="1000" height="16" fill="#2a1a0c" />
+        {/* la lampe sur le buffet éclaire le coin gauche */}
+        <ellipse cx="128" cy="250" rx="190" ry="150" fill="#ffcf8a" opacity="0.2" filter="url(#sd-blur)" />
         {reliee && <circle cx="500" cy="300" r="60" fill="url(#sd-cadran)" opacity={capte ? 1 : 0.5} />}
       </PLayer>
 
@@ -86,11 +101,58 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
         )}
       </PLayer>
 
+      {/* ═══ la CHEMINÉE de marbre et son trumeau (miroir) ═══ */}
+      <PLayer depth={1.5}>
+        <g transform="translate(726,440)">
+          {/* trumeau : grand miroir dans un cadre doré */}
+          <rect x="-66" y="-330" width="132" height="190" fill="#8a6a34" />
+          <rect x="-58" y="-322" width="116" height="174" fill="url(#sd-mirror)" />
+          <path d="M-50 -310 L-10 -310 L-50 -230 Z" fill="#fff" opacity="0.06" />
+          <path d="M-58 -322 q58 -24 116 0" stroke="#c8a050" strokeWidth="3" fill="none" />
+          {/* le manteau, la pendule, deux bougeoirs éteints (couvre-feu) */}
+          <rect x="-82" y="-142" width="164" height="12" fill="url(#sd-marble)" />
+          <rect x="-74" y="-130" width="20" height="130" fill="url(#sd-marble)" />
+          <rect x="54" y="-130" width="20" height="130" fill="url(#sd-marble)" />
+          <rect x="-54" y="-130" width="108" height="16" fill="url(#sd-marble)" />
+          <path d="M-54 0 L-54 -100 Q0 -120 54 -100 L54 0 Z" fill="#120a06" />
+          <path d="M-30 0 q6 -10 14 -8 q-2 -6 8 -6 q10 2 10 10 q8 -4 14 4 Z" fill="#4a1a0a" />
+          <circle cx="-4" cy="-6" r="3" fill="#c84a1a" opacity="0.8" style={{ animation: "glow 3s ease-in-out infinite" }} />
+          <g transform="translate(0,-142)">
+            <path d="M-16 0 L-16 -22 Q0 -34 16 -22 L16 0 Z" fill="#c8a040" />
+            <circle cx="0" cy="-15" r="7" fill="#f0e6d0" stroke="#7a5a20" strokeWidth="1.2" />
+            <path d="M0 -15 v-4 M0 -15 l3 2" stroke="#2a1a10" strokeWidth="0.9" />
+          </g>
+          {[-56, 56].map((x) => <g key={x} transform={`translate(${x},-142)`}><path d="M-5 0 h10 l-2 -5 h-6 Z M-1.2 -5 v-12" stroke="#c8a040" strokeWidth="1.8" fill="#c8a040" /><rect x="-2" y="-26" width="4" height="9" fill="#efe6d2" /></g>)}
+        </g>
+      </PLayer>
+
       {/* ═══ meubles ═══ */}
       <PLayer depth={2.5}>
         <rect y="440" width="1000" height="120" fill="url(#sd-floor)" />
-        <rect x="150" y="450" width="600" height="60" rx="6" fill="#6a2820" opacity="0.7" />
-        <rect x="170" y="460" width="560" height="40" rx="4" fill="none" stroke="#c88060" strokeWidth="1" opacity="0.6" />
+        {/* parquet en point de Hongrie, en perspective */}
+        <g opacity="0.55">
+          {Array.from({ length: 5 }).map((_, r) => {
+            const y0 = 442 + r * r * 2.6 + r * 14, y1 = 442 + (r + 1) * (r + 1) * 2.6 + (r + 1) * 14, h = y1 - y0;
+            return Array.from({ length: 22 }).map((_, c) => {
+              const k = 0.7 + (y0 - 440) / 260, w = 54 * k, x = 500 + (c - 11) * w;
+              return <path key={`${r}-${c}`} d={`M${x} ${y0} L${x + w / 2} ${y0 + h / 2} L${x} ${y1} M${x + w / 2} ${y0 + h / 2} L${x + w} ${y0}`} stroke="#1a0e06" strokeWidth="1" fill="none" />;
+            });
+          })}
+        </g>
+        <rect y="438" width="1000" height="5" fill="#1a0e06" />
+        {/* le tapis, en perspective */}
+        <path d="M230 452 L770 452 L830 520 L170 520 Z" fill="#6a2820" opacity="0.85" />
+        <path d="M244 458 L756 458 L810 514 L190 514 Z" fill="none" stroke="#c88060" strokeWidth="1.4" opacity="0.6" />
+        <path d="M270 466 L730 466 L776 506 L224 506 Z" fill="#7a3426" opacity="0.6" />
+        {Array.from({ length: 6 }).map((_, i) => <path key={i} d={`M${420 + i * 32} 486 l12 -9 l12 9 l-12 9 Z`} fill="#c88060" opacity="0.35" />)}
+        {/* la lampe de chevet sur le buffet, abat-jour à franges */}
+        <g transform="translate(128,320)">
+          <path d="M-8 0 h16 l-3 -8 h-10 Z" fill="#8a6a34" />
+          <path d="M0 -8 v-36" stroke="#8a6a34" strokeWidth="3" />
+          <path d="M-26 -42 L26 -42 L16 -72 L-16 -72 Z" fill="#e8c890" opacity="0.92" />
+          {Array.from({ length: 13 }).map((_, k) => <path key={k} d={`M${-25 + k * 4.2} -42 v5`} stroke="#c8a060" strokeWidth="1.2" />)}
+          <ellipse cx="0" cy="-42" rx="26" ry="5" fill="#fff0c8" opacity="0.6" />
+        </g>
 
         {/* PETITE SOURIS grise qui trotte : sort de derriere le buffet,
             traverse en un eclair, disparait derriere le fauteuil. Dessinee
@@ -147,10 +209,14 @@ export default function SceneSalon({ collect, action, reveal, made = [], flags =
 
         {/* FAUTEUIL avec couverture drapée */}
         <g>
-          <rect x="820" y="330" width="150" height="130" fill="#4a2820" stroke="#1a0e04" strokeWidth="2" />
-          <rect x="820" y="330" width="150" height="30" fill="#5a3628" />
-          <rect x="810" y="360" width="30" height="80" fill="#3a1e18" />
-          <rect x="950" y="360" width="30" height="80" fill="#3a1e18" />
+          {/* fauteuil Voltaire de velours : dossier galbé, accoudoirs, pieds tournés */}
+          <path d="M826 446 L826 330 Q826 296 856 290 Q895 282 934 290 Q964 296 964 330 L964 446 Z" fill="url(#sd-velvet)" stroke="#1a0e04" strokeWidth="2" />
+          <path d="M842 330 Q895 312 948 330" stroke="#8a4a38" strokeWidth="2" fill="none" opacity="0.6" />
+          {[[850, 318], [895, 308], [940, 318], [870, 352], [920, 352]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="2" fill="#2a1008" />)}
+          <path d="M806 446 L806 382 Q806 366 822 366 L842 366 L842 446 Z" fill="#4a2018" stroke="#1a0e04" strokeWidth="1.6" />
+          <path d="M984 446 L984 382 Q984 366 968 366 L948 366 L948 446 Z" fill="#4a2018" stroke="#1a0e04" strokeWidth="1.6" />
+          <ellipse cx="824" cy="370" rx="18" ry="6" fill="#6a3428" /><ellipse cx="966" cy="370" rx="18" ry="6" fill="#6a3428" />
+          <path d="M812 446 v12 M836 446 v12 M954 446 v12 M978 446 v12" stroke="#2a1608" strokeWidth="5" strokeLinecap="round" />
           {/* pas de couverture sur le fauteuil : elle est apportée depuis Paris (marché noir) */}
         </g>
 
