@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Speckle } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 5 — Tableau 1 : la salle du trône de Charles Bannister
@@ -36,12 +37,25 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
       {/* ═══ mur de pierre du grand hall ═══ */}
       <rect width="1000" height="560" fill="url(#cs-wall)" />
       <rect width="1000" height="560" fill="#2a2015" opacity="0.28" filter="url(#cs-grain)" />
-      {/* joints de pierre */}
-      <g stroke="#3a3022" strokeWidth="1.4" opacity="0.4">
-        <path d="M0 90 h1000 M0 170 h1000 M0 250 h1000" />
-        <path d="M80 10 v80 M240 10 v80 M400 10 v80 M560 10 v80 M720 10 v80 M880 10 v80" />
-        <path d="M160 90 v80 M320 90 v80 M480 90 v80 M640 90 v80 M800 90 v80" />
-      </g>
+      {/* appareil de pierres de taille, chaque bloc légèrement nuancé */}
+      {Array.from({ length: 12 }).map((_, r) => Array.from({ length: 14 }).map((_, c) => {
+        const x = c * 80 + (r % 2) * 40 - 40, y = r * 38;
+        const t = ((r * 7 + c * 13) % 5) / 5;
+        return (
+          <g key={`${r}-${c}`}>
+            <rect x={x} y={y} width="80" height="38" fill={t > 0.6 ? "#9a8c74" : t > 0.3 ? "#7e705a" : "#8a7c66"} opacity="0.55" />
+            <rect x={x} y={y} width="80" height="38" fill="none" stroke="#3a3022" strokeWidth="1.2" opacity="0.45" />
+            <path d={`M${x + 2} ${y + 2} h76`} stroke="#b0a288" strokeWidth="1" opacity="0.35" />
+          </g>
+        );
+      }))}
+      {/* voûte de bois sombre en haut, et le pied des murs dans l'ombre */}
+      <rect x="-40" y="-10" width="1080" height="18" fill="#2a2016" />
+      <linearGradient id="cs-foot" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1a140c" stopOpacity="0" /><stop offset="100%" stopColor="#1a140c" stopOpacity="0.5" /></linearGradient>
+      <rect y="330" width="1000" height="120" fill="url(#cs-foot)" />
+      {/* rais de lumière des deux fenêtres */}
+      <path d="M100 240 L160 240 L300 450 L200 450 Z" fill="#f4ecd0" opacity="0.08" />
+      <path d="M840 240 L900 240 L800 450 L700 450 Z" fill="#f4ecd0" opacity="0.08" />
 
       {/* ═══ couche lointaine : fenêtres, bannières, tableaux, tapisserie ═══ */}
       <PLayer depth={1}>
@@ -164,6 +178,29 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
           </Figure>
         </g>
 
+
+      </PLayer>
+
+      {/* ═══ premier plan : sol, paysan suppliant, prêtre, laine, épave ═══ */}
+      <PLayer depth={3}>
+        <rect y="450" width="1000" height="110" fill="url(#cs-floor)" />
+        <rect y="452" width="1000" height="108" fill="#2a1c10" opacity="0.32" filter="url(#cs-grain)" />
+        {/* dalles de pierre en perspective */}
+        {[[450, 466], [466, 490], [490, 524], [524, 570]].map(([y0, y1], r) => (
+          <g key={r}>
+            <path d={`M-40 ${y1} H1040`} stroke="#2a1c10" strokeWidth={1.2 + r * 0.4} opacity="0.45" />
+            {Array.from({ length: 10 }).map((_, k) => {
+              const x = -80 + k * 130 + (r % 2) * 65, f0 = 1 + (y0 - 450) / 120, f1 = 1 + (y1 - 450) / 120;
+              return <path key={k} d={`M${(500 + (x - 500) * f0).toFixed(0)} ${y0} L${(500 + (x - 500) * f1).toFixed(0)} ${y1}`} stroke="#2a1c10" strokeWidth="1.4" opacity="0.4" />;
+            })}
+          </g>
+        ))}
+        {/* le long tapis rouge qui mène au trône */}
+        <path d="M440 450 L560 450 L640 570 L360 570 Z" fill="#7a1a24" />
+        <path d="M448 450 L552 450 L628 570 L372 570 Z" fill="none" stroke="#e6c25a" strokeWidth="2" opacity="0.7" />
+        {/* jonchée de paille et d'herbes sur les dalles (on en semait dans les salles) */}
+        <Speckle seed={311} x0={0} x1={1000} y0={452} y1={560} n={200} colors={["#c8b060", "#8a7038", "#3a2a18"]} opacity={0.45} />
+
         {/* deux ARMURES décoratives sur socle, contre les murs */}
         {[110, 890].map((x, i) => (
           <g key={i} transform={`translate(${x},430)`}>
@@ -181,7 +218,6 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
             <path d="M22 -46 l-5 12 l5 -2 l5 2 Z" fill="#c2cad6" />
           </g>
         ))}
-
         {/* deux GARDES en armes, encadrant l'estrade */}
         {[[398, 452, 1], [602, 452, -1]].map(([x, y, s], i) => (
           <g key={i} transform={`translate(${x},${y})`}>
@@ -202,13 +238,6 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
             </Figure>
           </g>
         ))}
-      </PLayer>
-
-      {/* ═══ premier plan : sol, paysan suppliant, prêtre, laine, épave ═══ */}
-      <PLayer depth={3}>
-        <rect y="450" width="1000" height="110" fill="url(#cs-floor)" />
-        <rect y="452" width="1000" height="108" fill="#2a1c10" opacity="0.32" filter="url(#cs-grain)" />
-        <path d="M0 500 h1000 M240 450 v110 M500 450 v110 M760 450 v110" stroke="#2a1c10" strokeWidth="1.6" opacity="0.4" />
 
         {/* LE PAYSAN agenouillé, mains jointes, suppliant (devant, à gauche) */}
         <g transform="translate(348,500)">
