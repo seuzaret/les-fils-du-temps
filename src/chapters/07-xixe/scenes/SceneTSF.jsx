@@ -1,6 +1,7 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
 import { Figure } from "../../../engine/chars.jsx";
+import { Clouds, Glitter, Grass, Hill, Rock, rng } from "../../../engine/scenery.jsx";
 
 /* ============================================================
    CHAPITRE 7 — Tableau : la STATION MARCONI (côte, nuit du 15 avril 1912)
@@ -23,6 +24,8 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
         <linearGradient id="ts-sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#26445e" /><stop offset="100%" stopColor="#0e2438" /></linearGradient>
         <linearGradient id="ts-cliff" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#2e3540" /><stop offset="100%" stopColor="#161c26" /></linearGradient>
         <radialGradient id="ts-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#7fd8ff" stopOpacity="0.5" /><stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" /></radialGradient>
+        <filter id="ts-blur" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7" /></filter>
+        <linearGradient id="ts-beam" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stopColor="#fff4c8" stopOpacity="0.5" /><stop offset="100%" stopColor="#fff4c8" stopOpacity="0" /></linearGradient>
         <filter id="ts-grain" x="0%" y="0%" width="100%" height="100%">
           <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n" />
           <feColorMatrix in="n" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0" result="a" />
@@ -32,9 +35,15 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
 
       {/* ═══ ciel de nuit ═══ */}
       <rect width="1000" height="560" fill="url(#ts-sky)" />
+      {/* la Voie lactée, et un semis d'étoiles */}
+      <ellipse cx="640" cy="120" rx="460" ry="46" fill="#8a9ac8" opacity="0.12" filter="url(#ts-blur)" transform="rotate(-16 640 120)" />
+      {(() => { const r = rng(731); return Array.from({ length: 90 }, (_, i) => (
+        <circle key={`s${i}`} cx={(r() * 1000).toFixed(0)} cy={(r() * 300).toFixed(0)} r={r() < 0.12 ? 1.3 : 0.7} fill="#fff" opacity={(0.3 + r() * 0.5).toFixed(2)} />
+      )); })()}
       {[[120, 60], [260, 40], [420, 80], [600, 50], [720, 90], [880, 44], [950, 110], [340, 110], [520, 30]].map(([x, y], i) => (
         <circle key={i} cx={x} cy={y} r="1.4" fill="#fff" opacity="0.85" style={{ animation: `twinkle ${2 + (i % 3)}s infinite` }} />
       ))}
+      <Clouds id="ts-cl" seed={733} items={[[460, 170, 220], [800, 96, 170], [640, 250, 130], [80, 250, 140]]} color="#2e3c5c" shadow="#16203a" opacity={0.75} drift={18} />
       <circle cx="180" cy="130" r="90" fill="url(#ts-moon)" />
       <circle cx="180" cy="130" r="34" fill="#eef2f6" />
       <circle cx="168" cy="122" r="6" fill="#d0d8e0" opacity="0.6" />
@@ -42,7 +51,21 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
       {/* ═══ couche lointaine : la mer + le navire (en détresse, puis secouru) ═══ */}
       <PLayer depth={1}>
         <rect y="330" width="1000" height="120" fill="url(#ts-sea)" />
-        <path d="M150 336 L214 336 L240 450 L110 450 Z" fill="#cdd8e0" opacity="0.12" />
+        <rect y="326" width="1000" height="10" fill="#5a7088" opacity="0.4" filter="url(#ts-blur)" />
+        <Glitter x={180} y0={340} y1={448} w0={10} w1={110} color="#eef4fa" color2="#b8c8d8" blurId="ts-blur" />
+        {/* le cap lointain et son PHARE, dont le pinceau balaie la nuit */}
+        <Hill id="ts-cap" points={[[-40, 334], [10, 312], [70, 300], [130, 314], [210, 334]]} fill="#0e1622" lit="#22304a" light={-1} rim={3} bottom={340} />
+        <g transform="translate(70,300)">
+          <rect x="-4" y="-26" width="8" height="26" fill="#c8ccd4" />
+          <rect x="-4" y="-18" width="8" height="4" fill="#8a3028" /><rect x="-4" y="-8" width="8" height="4" fill="#8a3028" />
+          <rect x="-6" y="-32" width="12" height="6" fill="#2a3038" />
+          <circle cx="0" cy="-29" r="3" fill="#fff4c8" />
+          <circle cx="0" cy="-29" r="12" fill="#fff4c8" opacity="0.35" filter="url(#ts-blur)" />
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0 0 -29; 360 0 -29" dur="8s" repeatCount="indefinite" />
+            <path d="M0 -29 L260 -50 L260 -8 Z" fill="url(#ts-beam)" opacity="0.6" />
+          </g>
+        </g>
         {[348, 372, 398].map((y, i) => (
           <path key={i} d={`M0 ${y} q120 ${i % 2 ? 4 : -4} 240 0 t240 0 t240 0 t240 0`} stroke="#5a7a8a" strokeWidth="1.4" fill="none" opacity="0.4" style={{ animation: `ripple ${3 + (i % 3)}s ease-in-out infinite` }} />
         ))}
@@ -143,15 +166,44 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
         <path d="M0 560 L0 440 Q250 424 520 442 Q760 458 1000 436 L1000 560 Z" fill="url(#ts-cliff)" />
         <path d="M0 560 L0 440 Q250 424 520 442 Q760 458 1000 436 L1000 560 Z" fill="#0a0e14" opacity="0.4" filter="url(#ts-grain)" />
 
+        {/* le bord de la falaise : herbes rases en silhouette, rochers */}
+        {Array.from({ length: 40 }).map((_, i) => {
+          const x = i * 26 + ((i * 7) % 11), y = 440 - 8 * Math.sin((x / 1000) * Math.PI) + (x > 520 ? (x - 520) * 0.02 : 0);
+          return <path key={i} d={`M${x} ${y + 4} l2 -${6 + (i % 4) * 2} l2 ${6 + (i % 4) * 2} l3 -${4 + (i % 3) * 2} l2 ${4 + (i % 3) * 2}`} fill="#1a2028" />;
+        })}
+        <Rock x={620} y={470} w={64} h={26} color="#252c36" light={-1} seed={741} />
+        <Rock x={900} y={500} w={90} h={36} color="#222932" light={-1} seed={742} moss="#24301e" />
+        <Rock x={60} y={520} w={70} h={28} color="#222932" light={-1} seed={743} />
+        <Grass x={700} y={500} s={1.1} color="#1c2418" seed={744} n={7} />
+        <Grass x={330} y={540} s={1.3} color="#1c2418" seed={745} n={8} />
+        {/* le poteau de la ligne télégraphique terrestre, relié à la cabine */}
+        <g transform="translate(120,452)">
+          <rect x="-4" y="-150" width="8" height="150" fill="#2a2018" />
+          <rect x="-26" y="-140" width="52" height="5" fill="#2a2018" />
+          {[-22, -8, 8, 22].map((x) => <rect key={x} x={x - 2} y="-147" width="4" height="7" rx="1.5" fill="#8a9aa8" />)}
+          <path d="M-22 -147 Q150 -110 296 -48 M22 -147 Q170 -104 300 -44" stroke="#0a0e14" strokeWidth="1" fill="none" />
+        </g>
+        {/* la lueur de la fenêtre sur le sol */}
+        <ellipse cx="420" cy="500" rx="80" ry="14" fill="#ffcf78" opacity="0.18" filter="url(#ts-blur)" />
+
         {/* la cabine de TSF */}
         <g transform="translate(430,470)">
+          {/* cheminée qui fume */}
+          <rect x="24" y="-66" width="10" height="20" fill="#1c222a" />
+          <path d="M29 -66 q-8 -12 2 -22 q8 -10 -2 -20" stroke="#5a6878" strokeWidth="5" fill="none" opacity="0.35" filter="url(#ts-blur)" style={{ animation: "drift 6s ease-in-out infinite" }} />
           <rect x="-46" y="-40" width="92" height="60" rx="3" fill="#2a3038" />
+          {[-30, -18, -6, 6].map((y, r) => <path key={y} d={`M-46 ${y} h92`} stroke="#1c222a" strokeWidth="1" opacity="0.7" />)}
+          {[-30, -18, -6].map((y, r) => [-34, -10, 14, 38].map((x) => <path key={`${y}-${x}`} d={`M${x + (r % 2) * 12} ${y} v12`} stroke="#1c222a" strokeWidth="1" opacity="0.6" />))}
           <path d="M-52 -40 L0 -66 L52 -40 Z" fill="#1c222a" />
           <rect x="-26" y="-28" width="30" height="24" fill="#ffcf78" opacity="0.85" />
           <path d="M-26 -16 h30 M-11 -28 v24" stroke="#3a2c1c" strokeWidth="2" />
           <circle cx="-11" cy="-14" r="5" fill="#3a2c1c" />
           <path d="M-16 -16 a5 5 0 0 1 10 0" stroke="#2a2018" strokeWidth="2" fill="none" />
           <rect x="18" y="-18" width="16" height="38" fill="#12161c" />
+          {/* lanterne à la porte */}
+          <path d="M40 -26 h6 v4" stroke="#1a1410" strokeWidth="1.6" fill="none" />
+          <rect x="42" y="-22" width="8" height="10" rx="2" fill="#ffd88a" opacity="0.9" style={{ animation: "glow 2.6s ease-in-out infinite" }} />
+          <circle cx="46" cy="-17" r="12" fill="#ffd88a" opacity="0.25" filter="url(#ts-blur)" />
         </g>
         {sos && <path d="M424 440 l6 -40 l6 40 Z" fill="#2a3038" />}
 
@@ -167,7 +219,6 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
           </Figure>
         </g>
 
-        {[80, 660, 940].map((x, i) => <path key={i} d={`M${x} 470 q-4 -14 -9 -18 M${x} 470 q0 -16 5 -20`} stroke="#2e3a24" strokeWidth="2.2" fill="none" opacity="0.7" />)}
       </PLayer>
 
       <rect width="1000" height="560" fill="#0a1020" opacity="0.08" style={{ pointerEvents: "none" }} />
