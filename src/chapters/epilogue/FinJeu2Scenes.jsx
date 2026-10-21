@@ -3,6 +3,7 @@ import TimeMachine from "../../engine/TimeMachine.jsx";
 import { PortraitElias, PortraitAl3x1A, AL3X1A_LOOK } from "./StationChronautes.jsx";
 import { Figure } from "./cineChars.jsx";
 import ChambreN27Decor from "../jeu3/ChambreN27Decor.jsx";
+import { LEVELS } from "../jeu3/levels.js";
 import { playMaterialize, playPhonePing } from "../../engine/sfx.js";
 
 /* ============================================================
@@ -528,13 +529,12 @@ export function SceneLevels() {
     }, 80);
     return () => clearInterval(id);
   }, []);
-  const levels = [
-    { y: 100, x0: 150, label: "+2 · SERRE" },
-    { y: 160, x0: 270, label: "+1 · MÉNAGES" },
-    { y: 220, x0: 390, label: "0 · ATELIERS" },
-    { y: 280, x0: 510, label: "−1 · ADMIN" },
-    { y: 340, x0: 630, label: "−2 · SERVEURS" },
-  ];
+  /* Les niveaux du Jeu 3 (levels.js), sans l'étage K caché : de la
+     sortie C-3 (+2) à la salle des serveurs (−3). */
+  const levels = LEVELS.filter((l) => !l.hidden).map((l, i) => ({
+    y: 96 + i * 60, x0: 150 + i * 110, color: l.color,
+    label: `${l.id.replace("-", "−")} · ${l.name.toUpperCase()}`,
+  }));
   return (
     <Stage defs={
       <>
@@ -548,10 +548,10 @@ export function SceneLevels() {
       <path d="M0 70 L1000 70" stroke="#5a3a24" strokeWidth="3" />
       {/* niveaux qui s'ajoutent un à un */}
       {levels.map((l, i) => (
-        <g key={i} style={an("fjFade", 700, 700 + i * 1500)}>
+        <g key={i} style={an("fjFade", 700, 700 + i * 1300)}>
           <path d={i === 0 ? `M${l.x0} 70 V${l.y}` : `M${levels[i - 1].x0} ${l.y - 30} V${l.y} H${l.x0}`} stroke="#8a94a8" strokeWidth="2.4" fill="none" opacity="0.7" />
           <rect x={l.x0} y={l.y} width={1000 - l.x0} height="60" fill="#28303a" stroke="#5a6270" strokeWidth="1.2" opacity="0.92" />
-          <text x={l.x0 + 12} y={l.y + 20} fontFamily={MONO} fontSize="13" fontWeight="800" fill="#c8a848" letterSpacing="2">{l.label}</text>
+          <text x={l.x0 + 12} y={l.y + 20} fontFamily={MONO} fontSize="13" fontWeight="800" fill={l.color} letterSpacing="2">{l.label}</text>
           {Array.from({ length: 9 }).map((_, k) => <rect key={k} x={l.x0 + 40 + k * 70} y={l.y + 28} width="14" height="24" fill="#141c26" stroke="#5a6270" strokeWidth="0.6" />)}
           {[l.x0 + 120, l.x0 + 250].filter((x) => x < 940).map((x, k) => (
             <g key={k} transform={`translate(${x},${l.y + 50})`}><circle cy="-14" r="5" fill="#c8a888" /><path d="M-6 -8 L6 -8 L7 6 L-7 6 Z" fill={k ? "#3a4058" : "#5a4028"} /></g>
