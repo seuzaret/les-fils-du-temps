@@ -115,7 +115,7 @@ export default function BunkerPrison({ onGo, j3 }) {
       "Jorge te regarde longuement, sans parler d'abord.",
       "« Trois sur trois. Les trois noms, les trois dates, les trois lieux. Tu as entendu de leur bouche. »",
       "« Alors tu sais ce que je faisais, maintenant. Je signalais, dans le silence des archives, ce qu'ils réécrivaient. Pour qu'un œil comme le tien le voie. »",
-      "« Remonte au bureau du Juge Vez. Dépose-lui le dossier. Qu'elle fasse rouvrir les sources. »",
+      "« Remonte au bureau du Juge Vez. Dépose-lui le dossier. Qu'il fasse rouvrir les sources. »",
       "« Et merci. »",
     ];
   })();
