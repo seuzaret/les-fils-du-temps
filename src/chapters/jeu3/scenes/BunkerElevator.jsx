@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { LEVELS, ROOM_TO_LEVEL, isLevelUnlocked, isLevelVisible } from "../levels.js";
+import { MISSIONS_RUMEURS, getMissionOrder } from "../missions.js";
 
 /* ============================================================
    JEU 3 — Ascenseur du bunker (v5 : cabine + panneau de bord)
@@ -11,7 +12,54 @@ import { LEVELS, ROOM_TO_LEVEL, isLevelUnlocked, isLevelVisible } from "../level
    grille de ventilation gauche haut, extincteur au sol.
    Le tableau de sélection des étages est monté sur le mur
    droit — vraie disposition d'ascenseur.
+   Graffitis des Fils du Temps : un nouveau tag apparaît sur les
+   parois à chaque étape de l'enquête (voir GRAFFITIS) ; la légende
+   sous la cabine décrit celui qu'on n'a pas encore vu
+   (flag graffiti_vus = liste des ids déjà vus).
    ============================================================ */
+
+/* Ordre du récit : Kova, une 2e rumeur, Tchatine, l'arrestation de
+   Jorge, les trois voyages K. Chaque tag dépend de sa propre étape,
+   l'ordre dans lequel le joueur les fait n'a pas d'importance. */
+const GRAFFITIS = [
+  { id: "qui", when: (f) => !!f.mission_kova_done,
+    caption: "Sur le miroir, quelqu'un a écrit au feutre : « QUI L'A ÉCRIT ? ». À côté, un petit dessin : un sablier traversé d'un fil." },
+  { id: "fils", when: (f) => getMissionOrder(f).filter((id) => f[MISSIONS_RUMEURS[id]?.flag]).length >= 2,
+    caption: "Au-dessus du tableau, sur la peinture grise toute fraîche, un tag à la bombe : « LES FILS DU TEMPS SE SOUVIENNENT », signé du même sablier." },
+  { id: "verifie", when: (f) => !!f.mission_tchatine_done,
+    caption: "Sur la porte de gauche, deux mots peints à la bombe : « VÉRIFIE. RECOUPE. »" },
+  { id: "jorge", when: (f) => !!f.jorge_arrete,
+    caption: "Sur la porte de droite, la peinture coule encore : « LIBÉREZ JORGE ». Jorge est en cellule : quelqu'un d'autre écrit ces messages." },
+  { id: "lea", when: (f) => (f.k_voyage_order || ["gutenberg", "chappe", "marconi"]).every((id) => f[`voyageK_${id}_done`]),
+    caption: "Au-dessus du miroir, une nouvelle inscription : « LÉA AVAIT RAISON »." },
+];
+
+/* Signature des Fils du Temps : un sablier traversé d'un fil. */
+function Sigil({ x, y, s = 1, color }) {
+  return (
+    <g transform={`translate(${x},${y}) scale(${s})`}>
+      <path d="M-8 -12 H8 L0 0 Z M-8 12 H8 L0 0 Z" fill="none" stroke={color} strokeWidth="2.4" strokeLinejoin="round" />
+      <path d="M-15 -3 C-7 -10 5 4 15 -4" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" />
+    </g>
+  );
+}
+
+/* Coulures sous un tag à la bombe (positions fixes). */
+function Drips({ x, y, w, color, seed = 1 }) {
+  return (
+    <g>
+      {Array.from({ length: 6 }).map((_, i) => {
+        const dx = ((i * 37 + seed * 53) % 100) / 100;
+        const h = 6 + ((i * 29 + seed * 17) % 14);
+        return <rect key={i} x={x + dx * w} y={y} width="2" height={h} rx="1" fill={color} opacity="0.75" />;
+      })}
+    </g>
+  );
+}
+
+const SPRAY = "'Arial Black', Impact, 'Helvetica Neue', sans-serif";
+const MARKER = "'Segoe Print', 'Comic Sans MS', 'Bradley Hand', cursive";
+
 export default function BunkerElevator({ onGo, j3 }) {
   const currentLvl = ROOM_TO_LEVEL[j3?.previousRoom] || "0";
   const [phase, setPhase] = useState("idle");
@@ -20,6 +68,19 @@ export default function BunkerElevator({ onGo, j3 }) {
   const rafRef = useRef(null);
   const audioRef = useRef(null);
   const K_TAPS_NEEDED = 5;
+  /* Graffitis visibles, et ceux qu'on découvre à cette visite
+     (calculés une fois à l'entrée dans la cabine). */
+  const tags = new Set(GRAFFITIS.filter((g) => g.when(j3?.flags || {})).map((g) => g.id));
+  const [newTags] = useState(() => {
+    const seen = j3?.flags?.graffiti_vus || [];
+    return GRAFFITIS.filter((g) => tags.has(g.id) && !seen.includes(g.id)).map((g) => g.id);
+  });
+  useEffect(() => {
+    if (newTags.length) j3?.setFlag?.("graffiti_vus", [...tags]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const tagStyle = (id) => (newTags.includes(id) ? { animation: "evTagIn 1.4s ease-out 0.5s both" } : undefined);
+  const lastNew = GRAFFITIS.filter((g) => newTags.includes(g.id)).pop();
 
   const beep = (freq = 440, dur = 0.08) => {
     try {
@@ -104,6 +165,11 @@ export default function BunkerElevator({ onGo, j3 }) {
             <stop offset="60%" stopColor="#3a4a58" />
             <stop offset="100%" stopColor="#1a2028" />
           </linearGradient>
+          <filter id="ev-spray" x="-5%" y="-20%" width="110%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="n" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" />
+            <feGaussianBlur stdDeviation="0.35" />
+          </filter>
           <radialGradient id="ev-glow" cx="50%" cy="50%" r="55%">
             <stop offset="0%" stopColor={displayLvl?.color || "#5eff9e"} stopOpacity="0.28" />
             <stop offset="100%" stopColor={displayLvl?.color || "#5eff9e"} stopOpacity="0" />
@@ -187,12 +253,26 @@ export default function BunkerElevator({ onGo, j3 }) {
               <rect x="384" y="208" width="116" height="320" fill="url(#ev-door)" stroke="#0a0e14" strokeWidth="1.5" />
               <rect x="410" y="220" width="6" height="290" fill="#c8d4e2" opacity="0.25" />
               <rect x="486" y="350" width="8" height="40" fill="#c8a848" stroke="#3a2010" strokeWidth="0.8" />
+              {tags.has("verifie") && (
+                <g style={tagStyle("verifie")} filter="url(#ev-spray)" transform="rotate(-4 442 280)">
+                  <text x="442" y="272" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="21" fill="#e8d048" stroke="#1a1408" strokeWidth="0.8">VÉRIFIE.</text>
+                  <text x="444" y="298" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="21" fill="#e8d048" stroke="#1a1408" strokeWidth="0.8">RECOUPE.</text>
+                  <Drips x={398} y={301} w={90} color="#e8d048" seed={3} />
+                </g>
+              )}
             </g>
             {/* Panneau droit — glisse vers la droite à l'arrivée */}
             <g style={phase === "arrived" ? { animation: "evDoorR 0.7s ease-out forwards" } : {}}>
               <rect x="500" y="208" width="116" height="320" fill="url(#ev-door)" stroke="#0a0e14" strokeWidth="1.5" />
               <rect x="580" y="220" width="6" height="290" fill="#c8d4e2" opacity="0.25" />
               <rect x="506" y="350" width="8" height="40" fill="#c8a848" stroke="#3a2010" strokeWidth="0.8" />
+              {tags.has("jorge") && (
+                <g style={tagStyle("jorge")} filter="url(#ev-spray)" transform="rotate(3 558 456)">
+                  <text x="558" y="448" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="22" fill="#ff6a4a" stroke="#1a0806" strokeWidth="0.8">LIBÉREZ</text>
+                  <text x="558" y="476" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="24" fill="#ff6a4a" stroke="#1a0806" strokeWidth="0.8">JORGE</text>
+                  <Drips x={524} y={479} w={70} color="#ff6a4a" seed={5} />
+                </g>
+              )}
             </g>
             {/* Seam central (visible seulement quand fermées) */}
             {phase !== "arrived" && (
@@ -269,6 +349,35 @@ export default function BunkerElevator({ onGo, j3 }) {
             <rect x="0" y="0" width="34" height="66" fill="#8a1010" stroke="#0a0806" strokeWidth="1.5" rx="4" />
             <rect x="10" y="-5" width="14" height="8" fill="#3a4048" stroke="#0a0806" strokeWidth="0.6" />
             <text x="17" y="40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fontWeight="800" fill="#fff">FEU</text>
+          </g>
+
+          {/* GRAFFITIS — mur au-dessus du tableau : un ancien tag
+              recouvert de peinture grise (MARTINE efface), sur lequel
+              les Fils du Temps finissent par repeindre leur nom. */}
+          <g style={{ pointerEvents: "none" }}>
+            <text x="930" y="148" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="40" fill="#e8e0d0" opacity={tags.has("fils") ? 0.12 : 0.32} transform="rotate(-3 930 140)">SOUVENEZ-VOUS</text>
+            <rect x="712" y="92" width="436" height="80" fill="#4a5058" opacity="0.86" />
+            {[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={716 + i * 72} y="94" width="64" height="76" fill="#5a6068" opacity={0.18 + (i % 3) * 0.06} />)}
+            {tags.has("fils") && (
+              <g style={tagStyle("fils")} filter="url(#ev-spray)" transform="rotate(-2 930 132)">
+                <Sigil x={752} y={130} s={1.5} color="#ff8a3a" />
+                <text x="950" y="124" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="30" fill="#ff8a3a" stroke="#1a0c04" strokeWidth="1" letterSpacing="1">LES FILS DU TEMPS</text>
+                <text x="950" y="158" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="24" fill="#ff8a3a" stroke="#1a0c04" strokeWidth="1" letterSpacing="2">SE SOUVIENNENT</text>
+                <Drips x={830} y={162} w={240} color="#ff8a3a" seed={2} />
+              </g>
+            )}
+            {tags.has("qui") && (
+              <g style={tagStyle("qui")} transform="rotate(-7 196 300)">
+                <text x="196" y="300" textAnchor="middle" fontFamily={MARKER} fontWeight="700" fontSize="28" fill="#f0ece0" opacity="0.88">QUI L'A ÉCRIT ?</text>
+                <Sigil x={196} y={334} s={0.9} color="#f0ece0" />
+              </g>
+            )}
+            {tags.has("lea") && (
+              <g style={tagStyle("lea")} filter="url(#ev-spray)" transform="rotate(-1.5 196 196)">
+                <text x="196" y="206" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="27" fill="#7fe8c8" stroke="#06140e" strokeWidth="0.9" letterSpacing="1">LÉA AVAIT RAISON</text>
+                <Sigil x={350} y={194} s={0.8} color="#7fe8c8" />
+              </g>
+            )}
           </g>
 
           {/* PANNEAU DE COMMANDE monté sur mur droit */}
@@ -400,6 +509,7 @@ export default function BunkerElevator({ onGo, j3 }) {
           @keyframes evJolt { 0% { transform: translate(0,0); } 15% { transform: translate(0,-6px) rotate(-0.3deg); } 30% { transform: translate(0,4px) rotate(0.4deg); } 50% { transform: translate(2px,-2px); } 70% { transform: translate(-2px,3px) rotate(-0.2deg); } 100% { transform: translate(0,0); } }
           @keyframes evDoorL { from { transform: translate(0,0); } to { transform: translate(-116px,0); } }
           @keyframes evDoorR { from { transform: translate(0,0); } to { transform: translate(116px,0); } }
+          @keyframes evTagIn { from { opacity: 0; } to { opacity: 1; } }
         `}</style>
       </svg>
 
@@ -407,6 +517,11 @@ export default function BunkerElevator({ onGo, j3 }) {
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e" }}>
           ✓ ARRIVÉE À L'ÉTAGE {target.id} — {target.name.toUpperCase()}
         </div>
+      )}
+      {phase === "idle" && lastNew && (
+        <p style={{ margin: 0, maxWidth: 760, fontSize: 13, color: "#e8dfc8", textAlign: "center", fontStyle: "italic", fontFamily: "Palatino, Georgia, serif" }}>
+          {lastNew.caption}
+        </p>
       )}
       {phase === "idle" && (
         <p style={{ margin: 0, fontSize: 11, color: "#7a879e", textAlign: "center", fontStyle: "italic" }}>

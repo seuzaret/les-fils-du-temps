@@ -3,7 +3,7 @@
 > Document de référence interne. **Contient tous les spoilers du jeu.**
 > Statuts : **[ACQUIS]** validé en discussion · **[PROPOSÉ]** idée sur la table, non validée ·
 > **[À TRANCHER]** décision ouverte · **[CODE]** déjà dans le code (fichier cité).
-> Dernière mise à jour : 2026-10-18.
+> Dernière mise à jour : 2026-10-21.
 
 ## 0. Principes d'écriture
 - Public : élèves de 6e. Le joueur est neutre en genre (formes en « ·e ») et **n'a aucun âge chiffré** (le code n'en donne jamais).
@@ -37,6 +37,7 @@
 - **Elias** : chef des chronautes. **Ne sait rien**, a seulement un mauvais pressentiment (« on lui a donné trop de place », `FinJeu2.jsx:842`) [ACQUIS]. [PROPOSÉ] Il n'est pas « perdu dehors » : il est endormi pour avoir douté à voix haute.
 - **Mira** : ingénieure, reprogramme MARTINE en mémoire commune, croit bien faire (`FinJeu2.jsx:830`).
 - **Les Fils du Temps** : nom que prennent les chronautes après le Puits [ACQUIS]. Résistance interne de 2087, ou peuple qui émerge ensuite (~200 AP) ? [À TRANCHER]
+  - Jusqu'au 2026-10-21, le nom n'apparaissait que dans le titre du jeu (`App.jsx`). Il apparaît maintenant sur les **graffitis de l'ascenseur** du Jeu 3 (`BunkerElevator.jsx`, `GRAFFITIS`), un nouveau tag à chaque étape : « QUI L'A ÉCRIT ? » (Kova), « LES FILS DU TEMPS SE SOUVIENNENT » (2e rumeur, peint sur un « SOUVENEZ-VOUS » recouvert de gris), « VÉRIFIE. RECOUPE. » (Tchatine), « LIBÉREZ JORGE » (arrestation), « LÉA AVAIT RAISON » (3 voyages K). Signature : un sablier traversé d'un fil. Qui les peint : [À TRANCHER]. [CODE]
 
 ## 3. Le Puits
 - Capacité **limitée**. Une nouvelle arrivée n'est possible que si une place se libère (mort ou départ). [ACQUIS]
@@ -129,3 +130,5 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 - Jeu 3 : kit de décor du bunker `src/chapters/jeu3/bunkerKit.jsx` (`ConcretePanels` béton coffré à boulons et coulures, `CeilingPipes`, `PerspFloor`, `WallVent`, `Caution`, `Vignette`), utilisé par les chambres (via `ChambreVoisinDecor.jsx`), les couloirs, la cantine, l'atelier, les serres, la chapelle, les archives, la prison, l'infirmerie (faïence à la place du béton), le bureau des rumeurs, la sortie C-3, la salle des serveurs et l'acte I de l'épilogue.
 - Taille des PNJ dans les tableaux : un PNJ principal debout au premier plan (pieds vers y ≈ 500) fait environ 95–100 px de haut (`s` ≈ 0,8–0,85 avec le kit), assis ≈ 85, à genoux ≈ 80, au sol ≈ 78 ; les foules et les arrière-plans restent plus petits. Pour agrandir un PNJ, multiplier son `s` : les pieds restent en place, il faut remonter sa zone cliquable et son « ? ».
 - Pas de fiche ni de PNJ pour la salle des dormants (à créer si elle est visitable).
+- **Fin du Jeu 3 inaccessible sans triche** (constaté le 2026-10-21) : le niveau −3 et la trappe du couloir demandent `phase5_done` et `mission_carnet_done` (`levels.js:64`, `BunkerHub.jsx:182`), que rien ne pose ; la confrontation demande `mission_tchatine_done` (`missions.js:1086`). En jeu normal, après les 3 voyages K, « Remonter rapporter » (`BunkerSalleK.jsx:359`) mène directement à l'épilogue (rapport à Vez, ouverture de C-3) sans jamais passer par MARTINE ni par les trois fins. Jorge, lui, dit de « déposer le dossier » à Vez (`BunkerPrison.jsx`), ce qui n'est pas codé non plus. À régler avec le pont Jorge et la salle des dormants.
+- La voix féminine « sur les vieilles fréquences » annoncée à la fin du Jeu 2 (`FinJeu2.jsx:124`) n'a pas de suite dans le Jeu 3 : Al3x1a n'y est nommée qu'à la confrontation.
