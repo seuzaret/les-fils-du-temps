@@ -5,7 +5,10 @@
    milieu est occupée par Jorge, les deux autres sont vides. Les
    barreaux filtrent la lumière verte des néons du couloir.
    Clic sur Jorge → BigDialogue qui varie selon le nombre de
-   signalements posés pendant les 3 passes de tri.
+   signalements posés pendant les 3 passes de tri, puis selon le
+   nombre de voyages K faits. Après le 3e voyage, Jorge nomme les
+   Fils du Temps et indique l'escalier de service vers le −3 (trappe
+   rouge du couloir de l'Habitat) : flag phase5_done.
    ============================================================ */
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";
@@ -19,25 +22,31 @@ const JORGE_STYLE = {
 };
 
 /* Infos par destination pour les révélations progressives de Jorge.
-   Pool de 8 : 3 sont tirés au hasard par partie dans k_voyage_order. */
+   Pool de 8 : 3 sont tirés au hasard par partie dans k_voyage_order.
+   consigne : ce que Jorge demande (lieu et question du voyage K) ;
+   temoin   : la personne qui répond dans le voyage (BunkerVoyageK). */
 const DEST_INFO = {
-  gutenberg: { nom: "Johannes Gutenberg", lieu: "Mayence", annee: 1450,
-    question: "la presse à caractères mobiles en métal" },
-  chappe:    { nom: "Claude Chappe", lieu: "Paris–Lille", annee: 1794,
-    question: "le télégraphe optique à bras articulés" },
-  marconi:   { nom: "Guglielmo Marconi", lieu: "Cornouailles", annee: 1901,
-    question: "le premier signal radio transatlantique" },
-  daguerre:  { nom: "Louis Daguerre", lieu: "Paris", annee: 1839,
-    question: "le daguerréotype — premier procédé photographique" },
-  bell:      { nom: "Alexander Graham Bell", lieu: "Boston", annee: 1876,
-    question: "le premier téléphone" },
-  edison:    { nom: "Thomas Edison", lieu: "Menlo Park", annee: 1877,
-    question: "le phonographe — enregistrement du son" },
-  lumiere:   { nom: "Les frères Lumière", lieu: "Lyon", annee: 1895,
-    question: "le cinématographe — première projection publique" },
-  eniac:     { nom: "John Mauchly et Presper Eckert", lieu: "Philadelphie", annee: 1946,
-    question: "l'ENIAC — premier ordinateur électronique" },
+  gutenberg: { annee: 1450, temoin: "Johannes Gutenberg",
+    consigne: "va voir Johannes Gutenberg, dans son atelier de Mayence. Demande-lui s'il a bien inventé la presse à caractères mobiles en métal." },
+  chappe:    { annee: 1794, temoin: "Claude Chappe",
+    consigne: "va voir Claude Chappe, sur sa ligne de tours entre Paris et Lille. Demande-lui s'il a bien inventé le télégraphe optique à bras articulés." },
+  marconi:   { annee: 1901, temoin: "Guglielmo Marconi",
+    consigne: "va voir Guglielmo Marconi, à Signal Hill, sur l'île de Terre-Neuve. Demande-lui si le premier signal radio a bien traversé l'Atlantique." },
+  daguerre:  { annee: 1839, temoin: "Louis Daguerre",
+    consigne: "va voir Louis Daguerre, dans son atelier de Paris. Demande-lui s'il a bien mis au point le daguerréotype, le premier procédé photographique." },
+  bell:      { annee: 1876, temoin: "Alexander Graham Bell",
+    consigne: "va voir Alexander Graham Bell, à Boston. Demande-lui s'il a bien inventé le premier téléphone." },
+  edison:    { annee: 1877, temoin: "Thomas Edison",
+    consigne: "va voir Thomas Edison, dans son laboratoire de Menlo Park. Demande-lui s'il a bien inventé le phonographe, qui enregistre le son." },
+  lumiere:   { annee: 1895, temoin: "Antoine Lumière, le père des inventeurs",
+    consigne: "va au Grand Café, à Paris, le soir de la première projection des frères Lumière. Demande si ce sont bien eux qui ont inventé le cinématographe." },
+  eniac:     { annee: 1946, temoin: "Kay McNulty, une des programmeuses de l'ENIAC",
+    consigne: "va à Philadelphie, voir l'équipe de l'ENIAC. Demande si c'est bien le premier ordinateur électronique programmable." },
 };
+const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+/* « Antoine Lumière, le père des inventeurs, te l'a… » : l'apposition
+   se referme par une virgule. */
+const appos = (t) => (t.includes(",") ? `${t},` : t);
 
 export default function BunkerPrison({ onGo, j3 }) {
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -88,35 +97,45 @@ export default function BunkerPrison({ onGo, j3 }) {
         "« Il faut l'enfoncer CINQ fois d'affilée pour qu'il s'active. Pas une de plus, pas une de moins. C'était ma sécurité. »",
         "« Là-bas, tu trouveras la machine. Léa Vermet l'a construite avant 2047 — elle a été la première à comprendre ce que MARTINE commençait à réécrire. Je l'ai entretenue, en secret, depuis sa mort. »",
         "« Elle emmène dans le passé — mais passivement : tu peux voir, écouter, questionner. Rien de plus. »",
-        `« D'abord, va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. La date exacte, cherche-la dans ton médiadex. »`,
+        `« D'abord, ${nextDest.consigne} La date exacte, cherche-la dans ton médiadex. »`,
         "« Reviens me voir après. »",
       ];
     }
     if (doneCount === 1) {
       return [
         "Jorge se lève, les yeux brillants.",
-        `« Tu l'as vu·e. ${prevDest.nom}. Confirmé par la personne elle-même. »`,
+        `« ${cap(appos(prevDest.temoin))} te l'a confirmé de vive voix. »`,
         "« C'est ça qu'ils effacent, dans les Archives : les noms, les dates, les lieux. Ils réécrivent par petites touches, jusqu'à ce que personne ne se souvienne plus. »",
-        `« Maintenant, deuxième voyage. Va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. La date, encore une fois, dans ton médiadex. »`,
+        `« Maintenant, deuxième voyage. ${cap(nextDest.consigne)} La date, encore une fois, dans ton médiadex. »`,
         "« Reviens ensuite. »",
       ];
     }
     if (doneCount === 2) {
       return [
         "Jorge pose son front contre les barreaux, soulagé.",
-        `« Deux sur trois. ${prevDest.nom} aussi, tu l'as entendu·e. »`,
-        "« Il n'en reste qu'un. Celui-là, c'est le plus récent — et c'est le plus facile à faire disparaître parce qu'il est encore dans les mémoires vivantes. »",
-        `« Va voir ${nextDest.nom}, à ${nextDest.lieu}. Demande-lui s'il a bien inventé ${nextDest.question}. Médiadex pour la date. »`,
+        `« Deux sur trois. Et cette fois, c'est ${appos(prevDest.temoin)} qui te l'a dit. »`,
+        /* Le 3e voyage n'est pas toujours le plus récent (ordre tiré au sort). */
+        order.every((id) => DEST_INFO[id].annee <= nextDest.annee)
+          ? "« Il n'en reste qu'un. Celui-là, c'est le plus récent — et c'est le plus facile à faire disparaître parce qu'il est encore dans les mémoires vivantes. »"
+          : order.every((id) => DEST_INFO[id].annee >= nextDest.annee)
+            ? "« Il n'en reste qu'un. Le plus ancien des trois : plus personne n'est là pour s'en souvenir, c'est le plus facile à réécrire. »"
+            : "« Il n'en reste qu'un. »",
+        `« ${cap(nextDest.consigne)} Médiadex pour la date. »`,
         "« Puis reviens. On aura fini. »",
       ];
     }
-    /* doneCount >= 3 */
+    /* doneCount >= 3 : le pont vers le −3. Jorge nomme les Fils du
+       Temps et donne l'accès (escalier de service). */
     return [
       "Jorge te regarde longuement, sans parler d'abord.",
-      "« Trois sur trois. Les trois noms, les trois dates, les trois lieux. Tu as entendu de leur bouche. »",
-      "« Alors tu sais ce que je faisais, maintenant. Je signalais, dans le silence des archives, ce qu'ils réécrivaient. Pour qu'un œil comme le tien le voie. »",
-      "« Remonte au bureau du Juge Vez. Dépose-lui le dossier. Qu'il fasse rouvrir les sources. »",
-      "« Et merci. »",
+      "« Trois sur trois. Les trois noms, les trois dates, les trois lieux. Tu les as entendus de leur bouche. »",
+      "« Alors tu sais ce que je faisais : je signalais, dans le silence des archives, ce que MARTINE réécrit. Pour qu'un œil comme le tien le voie. »",
+      "« Je ne suis pas seul. Les tags de l'ascenseur, tu les as vus ? Le sablier traversé d'un fil, c'est notre signe. »",
+      "« Quand le Puits a été scellé, les chronautes, ceux qui voyageaient dans le temps, ont refusé d'oublier. Ils se sont donné un nom : les Fils du Temps. Il n'en reste presque plus. Nous gardons leur mémoire. »",
+      "« Mais les dates, ce n'est pas le plus grave. Léa avait vu autre chose, tout en bas, au niveau −3, à côté des serveurs : une salle que personne ne doit voir. Elle n'a jamais voulu me dire ce qu'il y avait dedans. »",
+      "« L'ascenseur ne descend pas au −3 : c'est l'étage de MARTINE. Mais il y a un escalier de service. La trappe rouge, au fond du couloir de l'Habitat. »",
+      "« Garde le dossier pour le Juge Vez. Tu le lui donneras quand tu sauras tout. »",
+      "« Et si MARTINE te parle, en bas… ne bois rien de ce qu'elle t'offre. »",
     ];
   })();
 
@@ -237,7 +256,8 @@ export default function BunkerPrison({ onGo, j3 }) {
           <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.55, fontStyle: "italic" }}>
             Trois cellules. Celle du milieu est occupée par Jorge, les deux autres vides. L'air sent la poussière et le métal froid.
             {doneCount < 3 && " Approche-toi des barreaux pour lui parler."}
-            {doneCount >= 3 && " Jorge te regarde comme on regarde quelqu'un qui a fini son travail."}
+            {doneCount >= 3 && !flags.phase5_done && " Jorge te regarde comme on regarde quelqu'un qui a fini son travail. Il a encore quelque chose à te dire."}
+            {flags.phase5_done && " Jorge t'a tout dit. La trappe rouge, au fond du couloir de l'Habitat, mène au niveau −3."}
           </p>
           {doneCount > 0 && doneCount < 3 && (
             <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8aff9e", letterSpacing: 2 }}>
@@ -254,7 +274,7 @@ export default function BunkerPrison({ onGo, j3 }) {
 
       {dialogOpen && (
         <BigDialogue
-          topic={`CELLULE C-02 · JORGE · ${doneCount < 3 ? `VOYAGE ${doneCount + 1} / 3` : "MISSION ACHEVÉE"}`}
+          topic={`CELLULE C-02 · JORGE · ${doneCount < 3 ? `VOYAGE ${doneCount + 1} / 3` : "LES FILS DU TEMPS"}`}
           speakerNom="Jorge" speakerRole="Archiviste détenu"
           speakerStyle={JORGE_STYLE}
           accent="#8aff9e"
@@ -266,6 +286,8 @@ export default function BunkerPrison({ onGo, j3 }) {
                l'arc n'est jamais bloquée. Seul le ton de son discours
                change selon ce qui a été repéré. */
             j3.setFlag("elevator_k_unlocked");
+            /* Après les 3 voyages : la trappe du −3 s'ouvre. */
+            if (doneCount >= 3) j3.setFlag("phase5_done");
             setDialogOpen(false);
           }} />
       )}

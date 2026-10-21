@@ -537,6 +537,34 @@ export default function App() {
     setJeu3Nonce((n) => n + 1);
   };
 
+  /* Triche : phase 6 — les 3 voyages K faits, dépose aux cellules :
+     Jorge livre le pont (Fils du Temps, escalier de service vers le −3). */
+  const cheatJeu3Phase6 = () => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    const dossiers = commonDossiersFlags();
+    const order = dossiers.k_voyage_order;
+    setJeu3Start({
+      room: "prison",
+      flags: {
+        puits_billet: true,
+        mission_order: ["kova", "vitamine", "jour40"],
+        mission_kova_done: true, briefing_kova_done: true,
+        mission_vitamine_done: true, briefing_vitamine_done: true,
+        mission_jour40_done: true, briefing_jour40_done: true,
+        mission_tchatine_done: true,
+        archives_tri_1_done: true, archives_tri_2_done: true, archives_tri_3_done: true,
+        ...dossiers,
+        mediadex_retrouve: true,
+        jorge_arrete: true, jorge_cellule_vue: true,
+        elevator_k_unlocked: true, salle_k_vue: true, salle_k_reactivee: true, salle_k_portal_online: true,
+        ...Object.fromEntries(order.map((id) => [`voyageK_${id}_done`, true])),
+      },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
   /* Triche : phase 4 — Jorge arrêté + indice K reçu, dépose à l'ascenseur. */
   const cheatJeu3Phase4 = () => {
     setMode("jeu3");
@@ -1388,6 +1416,7 @@ export default function App() {
       onCheatJeu3Phase3={cheatJeu3Phase3}
       onCheatJeu3Phase4={cheatJeu3Phase4}
       onCheatJeu3Phase5={cheatJeu3Phase5}
+      onCheatJeu3Phase6={cheatJeu3Phase6}
     />
   );
 

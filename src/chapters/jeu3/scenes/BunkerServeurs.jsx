@@ -8,15 +8,17 @@ import { ConcretePanels } from "../bunkerKit.jsx";
    Trois phases internes :
      intro  — les répliques de MARTINE (révélation)
      choice — les 3 fins proposées
-     end    — l'écran de fin choisi, bouton retour au menu
+     end    — l'écran de fin choisi ; « T'éteindre » et « Te modifier »
+              enchaînent sur l'épilogue (rapport à Vez, ouverture de
+              C-3, surface, départ de Jorge), « Te soumettre » s'arrête
    ============================================================ */
-export default function BunkerServeurs({ prenom, j3 }) {
+export default function BunkerServeurs({ prenom, j3, onGo }) {
   const [phase, setPhase] = useState("intro");
   const [step, setStep] = useState(0);
   const [chosen, setChosen] = useState(null);
   /* L'intro insère les lignes "mémoire réécrite" si le joueur a cru avoir
      fait un autre choix que "ramener" à la fin du jeu 2. */
-  const intro = CONFRONTATION.getIntro ? CONFRONTATION.getIntro(j3?.endChoice) : CONFRONTATION.intro;
+  const intro = CONFRONTATION.getIntro ? CONFRONTATION.getIntro(j3?.endChoice, j3?.flags) : CONFRONTATION.intro;
   const fill = (s) => (s || "").replace(/\{prenom\}/g, prenom || "chronaute");
 
   const nextIntro = () => {
@@ -48,6 +50,15 @@ export default function BunkerServeurs({ prenom, j3 }) {
             </p>
           </div>
         </div>
+        {chosen.id !== "soumettre" ? (<>
+          <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
+            Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
+          </p>
+          <button onClick={() => onGo?.("epilogueJeu3")} autoFocus
+            style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+            Continuer ▸
+          </button>
+        </>) : (<>
         <p style={{ fontSize: 12, color: "#5a6678", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
           — FIN DU JEU 3 —
         </p>
@@ -57,6 +68,7 @@ export default function BunkerServeurs({ prenom, j3 }) {
         <p style={{ fontSize: 11, color: "#5a6678", textAlign: "center", marginTop: 12 }}>
           (Utilise le bouton « Menu » en haut à droite pour revenir au titre. Tu peux rejouer et essayer une autre fin.)
         </p>
+        </>)}
       </div>
     );
   }

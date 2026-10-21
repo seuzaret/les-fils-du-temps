@@ -1,11 +1,13 @@
 import { Caution, ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
+import { CONFRONTATION } from "../missions.js";
 /* ============================================================
    JEU 3 — Couloir du niveau 0 (Habitat) — v2 : 4 chambres
    ------------------------------------------------------------
    Long couloir : ascenseur à gauche, puis 4 portes de chambres
    côte à côte (N-24 Lior, N-27 le joueur, N-30 Yona, N-32 Estev).
-   Ambiance bleutée neutre. Trappe rouge « Niveau -3 » au fond
-   quand débloquée.
+   Ambiance bleutée neutre. Trappe rouge « Niveau -3 » au fond, une
+   fois que Jorge l'a indiquée (escalier de service → salle de repos
+   des dormants → serveurs).
    ============================================================ */
 export default function BunkerHub({ onGo, j3 }) {
   const finaleDone = !!j3?.flags?.mission_finale_done;
@@ -179,8 +181,8 @@ export default function BunkerHub({ onGo, j3 }) {
       })}
 
       {/* Trappe rouge « Niveau -3 » quand débloquée (raccourci d'urgence) */}
-      {j3?.flags?.mission_kova_done && j3?.flags?.phase5_done && j3?.flags?.mission_carnet_done && (
-        <g transform="translate(1110,280)" onClick={() => onGo("serveurs")} style={{ cursor: "pointer" }}>
+      {CONFRONTATION.prerequisites.every((f) => j3?.flags?.[f]) && (
+        <g transform="translate(1110,280)" onClick={() => onGo("dormants")} style={{ cursor: "pointer" }}>
           <circle r="52" fill="none" stroke="#ff5030" strokeWidth="2" strokeDasharray="6 4">
             <animate attributeName="r" values="46;56;46" dur="1.6s" repeatCount="indefinite" />
           </circle>
@@ -189,7 +191,8 @@ export default function BunkerHub({ onGo, j3 }) {
           <text x="0" y="-6" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fontWeight="800" fill="#ff5030">⚠</text>
           <text x="0" y="10" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#ff5030">NIVEAU</text>
           <text x="0" y="22" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fontWeight="800" fill="#ff5030">-3</text>
-          <text x="0" y="42" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#ff8080">SERVEURS</text>
+          <text x="0" y="42" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#ff8080">ESCALIER</text>
+          <text x="0" y="51" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#ff8080">DE SERVICE</text>
           {finaleDone && <text x="0" y="72" textAnchor="middle" fontSize="12" fill="#5eff9e">✓</text>}
         </g>
       )}

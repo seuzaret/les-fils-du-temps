@@ -24,6 +24,7 @@ export default function CheatPanel({
   onCheatJeu3Phase3,
   onCheatJeu3Phase4,
   onCheatJeu3Phase5,
+  onCheatJeu3Phase6,
 }) {
   if (!cheat) return null;
   return (
@@ -84,6 +85,7 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase3}>🔒 Phase 3 (Jorge arrêté)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase4}>⟡ Phase 4 (étage K)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase5}>⟲ Phase 5 (voyages)</button>
+        <button style={CHEAT_BTN} onClick={onCheatJeu3Phase6}>⧗ Phase 6 (pont Jorge → −3)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>

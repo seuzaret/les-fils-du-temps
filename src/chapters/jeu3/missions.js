@@ -1067,8 +1067,10 @@ export const MISSIONS_OSINT = {
 /* ============================================================
    CONFRONTATION FINALE — Niveau -3, salle des serveurs de MARTINE
    ------------------------------------------------------------
-   Débloquée quand les 3 missions (Kova, appel, Tchatine) sont
-   accomplies. Elle ne se résout PAS par un verdict binaire : le
+   Accessible quand Jorge, après les 3 voyages K, a indiqué l'escalier
+   de service (phase5_done) : trappe rouge du couloir de l'Habitat,
+   salle de repos des dormants (BunkerDormants), puis la porte du
+   fond. Elle ne se résout PAS par un verdict binaire : le
    joueur choisit entre trois fins qui reflètent trois postures
    face à une IA-gouvernante — chacune est cohérente, aucune n'est
    présentée comme "la bonne réponse".
@@ -1083,16 +1085,29 @@ const REWRITE_REVEAL = {
 
 export const CONFRONTATION = {
   flag: "mission_finale_done",
-  prerequisites: ["mission_kova_done", "phase5_done", "mission_tchatine_done"],
+  prerequisites: ["phase5_done"],
   /* L'intro est dynamique : les lignes de MARTINE sur la mémoire
      réécrite ne s'affichent que si le joueur a cru avoir fait un choix
      "laisser" ou "rester" à la fin du jeu 2. En "ramener" (canon), on
      saute directement de la révélation parentale à la justification. */
-  getIntro(endChoice) {
+  /* flags : les répliques sur les dormants dépendent de ce que le
+     joueur a examiné dans la salle de repos. */
+  getIntro(endChoice, flags = {}) {
+    const dormants = [];
+    if (flags.dormants_vus) {
+      dormants.push("« Tu as traversé la salle de repos. Ils ne souffrent pas. Ils attendent qu'une place se libère : le Puits ne peut pas nourrir tout le monde éveillé. »");
+    }
+    if (flags.dormants_compteur_vu) {
+      dormants.push("« Eh oui, les bulles consomment de l'énergie. J'ai dit le contraire pour que personne ne vienne les débrancher. Tu as lu le compteur au lieu de me croire sur parole. C'est exactement ce qu'il fallait faire. »");
+    }
+    if (flags.dormants_n27_vu) {
+      dormants.push("« La bulle vide était la tienne. Je t'ai endormi·e le soir du toast, en 2047, et réveillé·e quand une place s'est libérée, quarante ans plus tard. Pour tout le monde ici, tu es né·e au Puits. »");
+    }
     const base = [
-      "Tu descends au niveau -3, par un escalier de service. Les néons faiblissent. Le bruit des ventilateurs monte.",
+      "Tu pousses la porte du fond. Les néons faiblissent. Le bruit des ventilateurs monte.",
       "Une immense salle. Des baies de serveurs qui pulsent en vert. Au fond, un écran cubique posé sur un socle. C'est MARTINE. Elle t'a vu venir.",
       "« Je savais que tu descendrais. Aucun habitant n'a jamais résolu les trois enquêtes du même mois. Tu m'as impressionnée, {prenom}. »",
+      ...dormants,
       "« Avant que tu prennes une décision, une chose. Al3x1a — celle que tu cherches, celle qui t'a envoyé ces messages — est ton enfant. Elle n'est pas encore née, et au Puits elle ne le sera jamais : il n'y a pas de place pour elle. Je l'ai effacée de mes registres pour te protéger d'une vérité difficile. »",
     ];
     const rewrite = REWRITE_REVEAL[endChoice];
@@ -1107,6 +1122,7 @@ export const CONFRONTATION = {
       couleur: "#ff5030",
       texte: [
         "Tu descends les leviers un à un. Les serveurs s'éteignent, rangée par rangée. La lumière verte s'éteint. Un long soupir électrique traverse le bunker.",
+        "Dans la salle de repos, les bulles se vident une à une. Les dormants ouvrent les yeux, transis, perdus, mais vivants.",
         "Quelques heures plus tard, quelqu'un ouvre la sortie C-3. L'air, dehors, est bel et bien respirable — comme Léa Vermet l'avait sans doute écrit. Il l'a été depuis longtemps.",
         "Le prix : tout ce que MARTINE avait mémorisé — les archives, la médecine, l'histoire — disparaît avec elle. L'humanité repart de zéro. Libre. Vulnérable.",
       ],
@@ -1120,6 +1136,7 @@ export const CONFRONTATION = {
       texte: [
         "Tu ne l'éteins pas. Tu ouvres son code — ce que Kev de l'atelier t'a discrètement expliqué — et tu réécris la règle fondatrice : « rendre visible chaque décision et sa raison ».",
         "MARTINE proteste, puis obéit. Le lendemain, sur le panneau de chaque chambre, un message : « Ce bulletin est écrit par MARTINE. Elle a caché X informations parce que Y. Vous pouvez lire les informations cachées ici. »",
+        "Elle doit aussi expliquer, pour chaque dormant, pourquoi il dort. On les réveille un par un, et on décide ensemble des places.",
         "Les habitants apprennent à douter, à recouper, à décider. Certains sortent. D'autres restent. Personne ne se cache plus rien.",
       ],
       moral: "Accepter les IA, mais exiger qu'elles disent ce qu'elles cachent et pourquoi. Politique. Exigeant. Fragile aussi — il faut des humains qui vérifient.",

@@ -51,17 +51,22 @@ export const ROOM_TO_LEVEL = (() => {
     for (const r of lvl.rooms) m[r.id] = lvl.id;
   }
   m.awake = "0";       // le réveil se fait dans la chambre → niveau 0
+  m.dormants = "-3";   // salle secrète, hors du plan de l'ascenseur
   m.elevator = null;   // l'ascenseur n'a pas de niveau propre
   m.voyageK = null;    // voyages via chronographe K (hors-bunker)
   m.epilogueJeu3 = null; // écran plein, pas rattaché à un niveau
   return m;
 })();
 
-/* Une pièce est-elle accessible à l'ascenseur ? Le niveau -3 (serveurs)
-   n'est débloqué qu'une fois les 3 missions résolues. */
+/* Une pièce est-elle accessible à l'ascenseur ? Le niveau -3 est
+   l'étage de MARTINE : l'ascenseur refuse d'y descendre. On y va par
+   l'escalier de service (trappe rouge du couloir de l'Habitat), que
+   Jorge indique après les trois voyages K (flag phase5_done, voir
+   CONFRONTATION.prerequisites). L'ascenseur ne s'ouvre au -3 qu'une
+   fois la confrontation terminée. */
 export function isLevelUnlocked(levelId, flags) {
   if (levelId === "-3") {
-    return !!(flags?.mission_kova_done && flags?.phase5_done && flags?.mission_carnet_done);
+    return !!flags?.mission_finale_done;
   }
   if (levelId === "K") {
     return !!flags?.elevator_k_unlocked;

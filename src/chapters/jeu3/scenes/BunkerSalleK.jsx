@@ -355,12 +355,9 @@ export default function BunkerSalleK({ onGo, j3 }) {
               {voyagesDone} / 3 VOYAGES
             </div>
             {voyagesDone === 3 && (
-              <div style={{ marginTop: 10 }}>
-                <button onClick={() => onGo("epilogueJeu3")}
-                  style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
-                  ⟡ Remonter rapporter ▸
-                </button>
-              </div>
+              <p style={{ margin: "8px 0 0", fontSize: 13, color: "#c8e4ff", fontStyle: "italic", lineHeight: 1.5 }}>
+                Les trois voyages sont faits. Remonte voir Jorge, aux cellules du niveau −1 : il a encore quelque chose à te dire.
+              </p>
             )}
           </div>
         )}
