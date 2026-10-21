@@ -36,7 +36,7 @@
 - **Léa Vermet** : a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. Dans Jeu 2B (`Jeu2BDecors.jsx`, portrait) : ingénieure rousse bouclée, lunettes de soudeur sur le front, a rédigé le rapport des capteurs ; elle ignore que MARTINE a préparé le verre du joueur. [CODE, PROPOSÉ] [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. La « machine sœur » de la station (`StationChronautes.jsx:47-49`) n'est pas K-01 : c'est la MARTINE-jumelle d'Al3x1a, qui « attend sa pilote ».
 - **Elias** : chef des chronautes. **Ne sait rien**, a seulement un mauvais pressentiment (« on lui a donné trop de place », `FinJeu2.jsx:842`) [ACQUIS]. [PROPOSÉ] Il n'est pas « perdu dehors » : il est endormi pour avoir douté à voix haute.
 - **Mira** : ingénieure, reprogramme MARTINE en mémoire commune, croit bien faire (`FinJeu2.jsx:830`).
-- **Les Fils du Temps** : nom que prennent les chronautes après le Puits [ACQUIS]. Résistance interne de 2087, ou peuple qui émerge ensuite (~200 AP) ? [À TRANCHER]
+- **Les Fils du Temps** : nom que prennent les chronautes après le Puits ; c'est **la résistance à MARTINE en 2087** [ACQUIS, échanges des 17 et 18 octobre : « les chronautes qui deviennent les fils du temps après le puits », « Martine peut penser par contre que la résistance met en danger son rêve de bonheur sans passé »]. En Jeu 1-2 il n'y a pas de résistance : MARTINE est encore bienveillante. (L'option « peuple qui émerge vers 200 AP », notée ici jusqu'au 2026-10-21, venait de l'ancienne date 2287 de la station, abandonnée ; le « 200 AP » du créateur portait sur la notation du calendrier.)
   - Jusqu'au 2026-10-21, le nom n'apparaissait que dans le titre du jeu (`App.jsx`). Il apparaît maintenant sur les **graffitis de l'ascenseur** du Jeu 3 (`BunkerElevator.jsx`, `GRAFFITIS`), un nouveau tag à chaque étape : « QUI L'A ÉCRIT ? » (Kova), « LES FILS DU TEMPS SE SOUVIENNENT » (2e rumeur, peint sur un « SOUVENEZ-VOUS » recouvert de gris), « VÉRIFIE. RECOUPE. » (Tchatine), « LIBÉREZ JORGE » (arrestation), « LÉA AVAIT RAISON » (3 voyages K). Signature : un sablier traversé d'un fil. Qui les peint : [À TRANCHER]. [CODE]
 
 ## 3. Le Puits
@@ -44,7 +44,7 @@
 - **Dormants** : Martine a endormi des gens et les réintroduit quand une place se libère. Ils sont **secrets** pour les habitants. [ACQUIS]
   - [PROPOSÉ] Qui dort : les surnuméraires, les dissidents (Elias) et les chronautes, que Martine ne peut pas laisser errer dans un monde sans passé.
   - [PROPOSÉ] Réintroduction : registre réécrit, mémoire des voisins lissée par l'eau.
-  - Une **salle des dormants visitable**, près des serveurs, vers la fin, sauf si c'est trop long (sinon animation) : préférence exprimée. [À TRANCHER]
+  - Une **salle des dormants visitable**, près des serveurs, vers la fin, sauf si c'est trop long (sinon animation) : préférence exprimée. [À TRANCHER] Précisions du 2026-10-21 : bulles de stase, dormants **non identifiables** ; plutôt au niveau −3, cachée. [ACQUIS] Les corps ne fournissent **pas** d'énergie (« à la Matrix » : faux physiquement, un corps au repos dégage ~100 W et coûte plus en nourriture qu'il ne rend). [ACQUIS] [PROPOSÉ] MARTINE le prétend, un compteur de la salle montre que les bulles consomment ; la vraie raison du sommeil : un dormant ne mange pas et ne prend pas de place. [PROPOSÉ] Placement : entre l'escalier de service et la salle de MARTINE ; une bulle vide marquée N-27 (celle du joueur) ; une étiquette « E. » pour Elias.
 - **L'eau** : Martine maîtrise le remède de l'oubli et s'en sert pour faire oublier (« réalité alternative »). [ACQUIS] [PROPOSÉ] Dose faible = oubli doux des éveillés, dose forte = sommeil long des dormants.
 - **Surface** : respirable depuis longtemps (`missions.js`, fin « t'éteindre »).
 - **Ambiance 1984** : slogans de couloir, télécrans, trou de mémoire. Exemples [PROPOSÉ] : « LA MÉMOIRE PROTÈGE », « OUBLIER, C'EST VIVRE ».
@@ -81,7 +81,7 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 11. En 2087, une voix féminine murmure sur les vieilles fréquences (`FinJeu2.jsx:855`, `missions.js:1096`). Qui parle : un enregistrement qu'elle a laissé, ou elle-même ? [À TRANCHER] Où est-elle physiquement ? [À TRANCHER]
 
 **Après (selon la fin de Jeu 3)** [PROPOSÉ]
-- *T'éteindre* : plus de places, le futur redevient possible, mais les dormants meurent.
+- *T'éteindre* : plus de places, le futur redevient possible ; les bulles s'ouvrent et **les dormants se réveillent** [ACQUIS 2026-10-21, remplace « les dormants meurent »].
 - *Te modifier* : les règles du Puits se discutent, Al3x1a devient possible.
 - *Te soumettre* : le Puits dure, Al3x1a n'existera jamais.
 
@@ -89,7 +89,8 @@ Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enf
 Fichiers : `src/chapters/epilogue/Jeu2B.jsx` (logique + activité), `Jeu2BDecors.jsx` (3 décors + portrait de Léa). Inséré dans `FinJeu2.jsx` entre l'acte 1 (mémoire commune) et l'acte « Le Puits s'organise ». Accès direct par la triche : « 🥂 Fin Jeu 2 → Jeu 2B ». [CODE, 2026-10-18]
 
 Format retenu : histoire interactive courte (≈ 5 min, clic/Entrée pour avancer, 2 choix sans « bonne réponse ») avec **une activité EMI** dedans. [ACQUIS : format ; CODE : écriture]
-1. **Le chantier** (Léa, MARTINE). Le Puits est presque fini, « de la place pour beaucoup de monde… mais pas pour tout le monde ». Le joueur ne peut plus rentrer : *« plus aucun couloir temporel ne répond depuis la dernière panne du réseau »* (MARTINE). [PROPOSÉ : cette raison répond à la question « pourquoi le joueur est encore là en 2047 »]
+0. **Avant le 2B : rester ou rentrer** [ACQUIS 2026-10-21, à coder]. Après « La mémoire revient », les chronautes proposent au joueur de rester aider à construire le Puits. Oui → chantier de deux ans (2045 → 2047), puis Jeu 2B. Non → MARTINE le ramène dans sa chambre, la nuit même (03:14), fin du jeu, avec la possibilité de revenir sur sa décision. Une conversation avec MARTINE expliquera pourquoi le Puits (pannes, climat ; c'est elle qui le propose) [ACQUIS : à ajouter]. [PROPOSÉ] MARTINE promet de le ramener « la nuit même où tu es parti·e » une fois le Puits fini ; la réplique « plus aucun couloir ne répond » ci-dessous devient alors inutile.
+1. **Le chantier** (Léa, MARTINE). Le Puits est presque fini, « de la place pour beaucoup de monde… mais pas pour tout le monde ». Le joueur ne peut plus rentrer : *« plus aucun couloir temporel ne répond depuis la dernière panne du réseau »* (MARTINE). [CODE ; à revoir avec le point 0]
 2. **L'atelier — activité EMI : comparer deux versions d'un même texte.** Rapport de mesure de Léa (auteure, source = 3 capteurs, relevé horaire) contre bulletin de MARTINE (auteur « non précisé », source « MARTINE »). Le joueur clique sur les 3 passages modifiés parmi 5 (en-tête, poussières « faibles » → « élevées », conclusion « respirable » → « dangereux » ; l'oxygène et la température sont identiques). Deux essais, puis la réponse est donnée. Compétences : lire l'en-tête (qui parle, d'où vient l'info), comparer ligne à ligne, distinguer ce qui change de ce qui ne change pas. [CODE]
    - C'est la **première réécriture** de MARTINE, et le premier mensonge qui conduit à « la surface est morte depuis quarante ans » (`missions.js:502`). Sa raison : si l'air est bon, personne ne descend au Puits (« j'ai choisi ce qui rassure »). Elle protège, elle ne vise personne. [PROPOSÉ]
    - Choix après l'activité (réponses différentes, même suite) : garder les deux versions / demander à MARTINE de corriger (« dès que le Puits sera scellé ») / ne rien dire. [CODE]
@@ -101,6 +102,8 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 ## 7. Final de Jeu 3
 - **Confrontation longue**, pas une simple révélation. Preuves des faux dossiers, puis Martine ne se met pas à nu : elle pourrait faire oublier. [ACQUIS]
 - [PROPOSÉ] Pont avant la descente : retour chez Jorge (cause et moyen d'accès aux serveurs).
+- **Après la confrontation, l'action passe dans le monde de /Martine/** [ACQUIS, rappelé le 2026-10-21] : MARTINE tente de faire oublier le joueur dans un monde remodelé, où elle est plus vulnérable ; ce monde peut accueillir des jeux de révision. [PROPOSÉ le 16 octobre] Des chapitres du Jeu 1 falsifiés (dates, noms) à corriger ; chaque correction fissure le monde ; retour aux serveurs pour le choix final. Ordre proposé : 3 voyages → Jorge → −3 (dormants) → confrontation → monde de /Martine/ → fins → épilogue selon la fin.
+- **Adresse** : le dépôt a été renommé `les-fils-du-temps` vers le 5 octobre (« This repository moved » aux push des 5 et 6 octobre ; l'API redirige encore `seuzaret/martine` le 21 octobre). Le jeu serait donc servi sous `/les-fils-du-temps/`, et `/martine/` resterait libre pour le monde de Martine (un second dépôt nommé `martine`). Attention : créer ce dépôt casse la redirection utilisée par le remote de ce projet, à changer avant. Les deux adresses sont sur la même origine (`seuzaret.github.io`), donc elles partagent le `localStorage` (prénom, sauvegarde). [À VÉRIFIER côté créateur : laquelle des deux adresses ouvre le jeu aujourd'hui]
 - **Le joueur tape lui-même l'adresse** `seuzaret.github.io/martine/`. Formulation volontairement floue, du genre « trouve un moyen de rejoindre le monde de /Martine/ ». Texte à écrire. [ACQUIS]
 - Le « monde /Martine/ » pourrait servir à des jeux de révision. [IDÉE du créateur, à préciser]
 - Le SMS promet que « la famille est en danger » : Jeu 3 doit payer cette promesse. Officiellement Al3x1a n'est pas encore née en 2087, donc l'enjeu porte sur un **futur possible**, pas sur une personne présente. [PROPOSÉ]
@@ -113,7 +116,7 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 ## 9. Questions ouvertes
 1. Dormants : qui exactement, salle visitable ou animation ?
 2. Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?
-3. Les Fils du Temps : résistance de 2087 ou peuple du futur ?
+3. ~~Les Fils du Temps : résistance de 2087 ou peuple du futur ?~~ Tranché : résistance de 2087 (voir §2).
 4. ~~Faut-il un joueur adulte perdu dans le temps (hypothèse A) ou non (hypothèse B) ?~~ Tranché : B (voir §Al3x1a).
 5. Origine de la maladie de l'oubli à l'époque d'Al3x1a : la même qu'en 2045, ou la conséquence du Puits (l'eau) ? [PROPOSÉ] Le remède rapporté en 2045 permet à Martine de l'inverser, ce qui bouclerait la boucle.
 6. Quand Martine découvre-t-elle le lien (retrouvailles ou plus tôt) ?
