@@ -320,8 +320,9 @@ export function SceneBroadcast() {
   );
 }
 
-/* Grande salle sous la coupole, commune aux tableaux 1b/1c/1d. */
-function DomeHall({ id, dim = 0 }) {
+/* Grande salle sous la coupole, commune aux tableaux 1b/1c/1d
+   (et au décor « La proposition » du Jeu 2B). */
+export function DomeHall({ id, dim = 0 }) {
   return (
     <>
       <defs>

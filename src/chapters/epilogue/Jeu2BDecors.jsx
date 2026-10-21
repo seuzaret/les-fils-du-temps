@@ -1,10 +1,19 @@
 import { Bust, Figure } from "./cineChars.jsx";
 import { rng, Speckle } from "../../engine/scenery.jsx";
+import { DomeHall } from "./FinJeu2Scenes.jsx";
+import { LEVELS } from "../jeu3/levels.js";
+import NightStreetDecor from "../../engine/NightStreetDecor.jsx";
+import TimeMachine from "../../engine/TimeMachine.jsx";
 
 /* ============================================================
    JEU 2B — décors et portrait de Léa
    ------------------------------------------------------------
-   Trois décors plein cadre (viewBox 1000×560, `slice`) :
+   Décors plein cadre (viewBox 1000×560, `slice`) :
+     StageStation  : 2045, la grande salle de la station pendant une
+                     panne ; sur l'écran de MARTINE, le plan du Puits
+                     (les étages du Jeu 3, lus dans jeu3/levels.js)
+     StageMaison   : la rue du joueur à 03 h 14 (décor de l'intro),
+                     MARTINE posée sur la chaussée — fin « je rentre »
      StageChantier : galerie au-dessus du Puits, la veille du scellement
      StageAtelier  : l'atelier de Léa (fond discret, les deux documents
                      de l'activité s'affichent par-dessus)
@@ -30,6 +39,77 @@ const wedge = (a0, a1, r0, r1) => {
   const [x2, y2] = polar(r0, a1), [x3, y3] = polar(r0, a0);
   return `M${x0} ${y0} A${r1} ${r1} 0 0 1 ${x1} ${y1} L${x2} ${y2} A${r0} ${r0} 0 0 0 ${x3} ${y3} Z`;
 };
+
+/* ───────────────────────── 2045 · La proposition ───────────────────────── */
+export function StageStation() {
+  const levels = LEVELS.filter((l) => !l.hidden);
+  return (
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
+      <style>{`@keyframes j2sFlick { 0%, 100% { opacity: 0; } 46% { opacity: 0; } 48% { opacity: 0.55; } 50% { opacity: 0.1; } 53% { opacity: 0.7; } 56% { opacity: 0; } }`}</style>
+      <DomeHall id="j2s" dim={0.45} />
+      {/* petits écrans éteints par la panne */}
+      {[[96, 150], [834, 150]].map(([x, y], i) => (
+        <g key={i}>
+          <rect x={x} y={y} width="70" height="50" rx="3" fill="#05080e" stroke="#2a3446" strokeWidth="2" />
+          <text x={x + 35} y={y + 29} textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#5a6678" letterSpacing="1">RÉSEAU ✕</text>
+        </g>
+      ))}
+      {/* l'écran de MARTINE : le plan du Puits */}
+      <g transform="translate(500,40)">
+        <rect x="-30" y="300" width="60" height="22" fill="#28303a" stroke="#5a6270" />
+        <rect x="-240" y="0" width="480" height="304" rx="8" fill="#05080e" stroke="#7fd8ff" strokeWidth="4" />
+        <rect x="-228" y="12" width="456" height="280" fill="#08182a" />
+        <text x="0" y="40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="20" fontWeight="800" fill="#7fd8ff" letterSpacing="5">PROJET · LE PUITS</text>
+        <text x="0" y="58" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#5eff9e" letterSpacing="2">proposé par MARTINE · coupe sous la station</text>
+        {/* sol, coupole de la station, puits */}
+        <path d="M-210 92 H210" stroke="#a89078" strokeWidth="2" />
+        <path d="M-60 92 Q0 50 60 92" fill="#1a2a3a" stroke="#7fd8ff" strokeWidth="1.6" />
+        <path d="M-150 92 V270 M-138 92 V270" stroke="#7fd8ff" strokeWidth="1" opacity="0.7" />
+        {levels.map((l, i) => (
+          <g key={l.id}>
+            <rect x={-132 + i * 14} y={102 + i * 26} width={300 - i * 14} height="20" fill="#0e2236" stroke={l.color} strokeWidth="1.2" opacity="0.95" />
+            <text x={-124 + i * 14} y={116 + i * 26} fontFamily="ui-monospace,monospace" fontSize="9.5" fontWeight="800" fill={l.color} letterSpacing="1">{l.id.replace("-", "−")} · {l.name.toUpperCase()}</text>
+          </g>
+        ))}
+        {/* la nappe d'eau, tout en bas */}
+        <path d="M-210 276 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="#4aa8e8" strokeWidth="2" fill="none" opacity="0.8" />
+        <text x="-206" y="268" fontFamily="ui-monospace,monospace" fontSize="8" fill="#4aa8e8">nappe d'eau</text>
+        <circle r="3" fill="#7fd8ff" cx="-144" cy="110">
+          <animate attributeName="cy" values="100;262;100" dur="5s" repeatCount="indefinite" />
+        </circle>
+      </g>
+      {/* les chronautes, de dos, regardent le plan */}
+      {[[250, "#3a80c8", "#5a3818", "short"], [330, "#c88060", "#2a1a10", "long"], [690, "#5eff9e", "#8a5828", "bun"], [770, "#a04ce8", "#3a2818", "curls"]].map(([x, coat, hair, look], i) => (
+        <Figure key={i} x={x} y={404} s={0.95} back coat={coat} hair={hair} look={look} garment={i % 2 ? "coat" : "jacket"} arms={[{ a1: 8, a2: 5 }, { a1: 8, a2: 5 }]} />
+      ))}
+      {/* la panne : la lumière vacille */}
+      <rect width="1000" height="560" fill="#000" style={{ animation: "j2sFlick 7s linear infinite", pointerEvents: "none" }} />
+    </svg>
+  );
+}
+
+/* ───────────────────────── 03 h 14 · Ta rue ───────────────────────── */
+/* Décor de l'intro (viewBox 1200×680), cadré un peu plus haut pour que
+   MARTINE reste visible au-dessus du bandeau de dialogue. */
+export function StageMaison() {
+  return (
+    <svg viewBox="0 70 1200 680" preserveAspectRatio={PAR()} style={FILL}>
+      <defs>
+        <radialGradient id="j2m-halo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#b0ffdc" stopOpacity="0.8" />
+          <stop offset="45%" stopColor="#5eff9e" stopOpacity="0.4" />
+          <stop offset="100%" stopColor="#5eff9e" stopOpacity="0" />
+        </radialGradient>
+      </defs>
+      <rect x="0" y="600" width="1200" height="160" fill="#14141c" />
+      <NightStreetDecor />
+      <circle cx="600" cy="560" r="240" fill="url(#j2m-halo)">
+        <animate attributeName="opacity" values="0.55;0.8;0.55" dur="3s" repeatCount="indefinite" />
+      </circle>
+      <g transform="translate(600,540) scale(0.95)"><TimeMachine landed={true} /></g>
+    </svg>
+  );
+}
 
 /* ───────────────────────── Léa Vermet ───────────────────────── */
 export function PortraitLea({ mood = "neutre" }) {

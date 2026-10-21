@@ -20,7 +20,9 @@ import {
                                 du remède sur l'écran de Mira, le merci
      1. LA MÉMOIRE REVIENT    — la diffusion, des retrouvailles, MARTINE
                                 devient « mémoire commune », Elias doute
-     2. LA VEILLE DU PUITS    — JEU 2B (Jeu2B.jsx) : histoire interactive
+     2. LA PROPOSITION / LA VEILLE DU PUITS — JEU 2B (Jeu2B.jsx) :
+                                histoire interactive ; on peut y refuser de
+                                rester (fin « je rentre chez moi »)
      3. LE PUITS S'ORGANISE   — de 2047 à 2087 : le scellement, MARTINE
                                 règle tout, Elias disparaît
      4. LE DISCERNEMENT       — réveil en 2087, cellule N-27 : la chambre,
@@ -134,7 +136,7 @@ export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJ
 
   if (phase === 0) return <Cine key="p0" steps={sequenceRemede(endChoice)} accent="#7fd8ff" label="LE REMÈDE MARCHE" ctx={ctx} onDone={next} />;
   if (phase === 1) return <Cine key="p1" steps={sequenceMemoire()} accent="#5eff9e" label="LA MÉMOIRE REVIENT" ctx={ctx} onDone={next} />;
-  if (phase === 2) return <Jeu2B key="p2" prenom={prenom} onDone={next} />;
+  if (phase === 2) return <Jeu2B key="p2" prenom={prenom} onDone={next} onRetour={onRetour} />;
   if (phase === 3) return <Cine key="p3" steps={sequencePuits()} accent="#c8a848" label="LE PUITS S'ORGANISE" ctx={ctx} onDone={next} />;
   return (
     <Cine key="p4" steps={sequenceDiscernement()} accent="#a04ce8" label="LE DISCERNEMENT" ctx={ctx}

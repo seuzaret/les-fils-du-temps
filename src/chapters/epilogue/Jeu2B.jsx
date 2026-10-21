@@ -1,17 +1,25 @@
 import { useState, useEffect, useRef } from "react";
 import { Avatar } from "../../engine/Martine.jsx";
 import { PortraitElias, PortraitMira } from "./StationChronautes.jsx";
-import { PortraitLea, StageChantier, StageAtelier, StageToast } from "./Jeu2BDecors.jsx";
+import { PortraitLea, StageStation, StageMaison, StageChantier, StageAtelier, StageToast } from "./Jeu2BDecors.jsx";
 import { playClink, playSleepHum } from "../../engine/sfx.js";
 import { useTypewriter } from "./cineKit.jsx";
 
 /* ============================================================
-   JEU 2B — LA VEILLE DU PUITS (2047)
+   JEU 2B — LA PROPOSITION (2045) puis LA VEILLE DU PUITS (2047)
    ------------------------------------------------------------
-   Histoire interactive courte (≈ 5 min), jouée entre l'acte 1 et
-   l'acte 2 de FinJeu2. Trois scènes avec Léa Vermet :
-     1. LE CHANTIER  — le Puits est presque fini ; plus aucun
-        couloir temporel ne répond, le joueur ne peut plus rentrer.
+   Histoire interactive courte (≈ 7 min), jouée entre l'acte 1 et
+   l'acte 2 de FinJeu2.
+     0. LA PROPOSITION (2045) — une panne à la station ; MARTINE
+        explique pourquoi creuser le Puits et le propose (plan à
+        l'écran) ; le joueur lui pose une question ; Mira lui
+        demande de rester aider. CHOIX :
+          · rester → deux ans de chantier, suite ci-dessous ;
+          · rentrer → MARTINE le ramène dans sa rue, la nuit même
+            (03 h 14) : FIN, avec « revenir sur ma décision ».
+   Puis trois scènes avec Léa Vermet :
+     1. LE CHANTIER  — le Puits est presque fini ; MARTINE promet de
+        ramener le joueur chez lui « dès que le Puits sera scellé ».
      2. L'ATELIER    — ACTIVITÉ EMI : comparer deux versions d'un
         même texte (le rapport des capteurs de Léa / le bulletin de
         MARTINE) et repérer ce qui a changé, y compris l'en-tête
@@ -25,15 +33,61 @@ import { useTypewriter } from "./cineKit.jsx";
 
 /* ───────────────────────── Le script ───────────────────────── */
 const SCRIPT = [
-  /* 1 · LE CHANTIER */
-  { stage: "chantier", who: "narr", text: "2047. Deux ans ont passé depuis le remède. Les réseaux tombent en panne l'un après l'autre, le climat se dérègle. Au cœur de la station, on termine le Puits : un grand refuge creusé sous terre." },
-  { who: "lea", mood: "content", text: "Te voilà, {prenom} ! Léa Vermet, ingénieure. Mira m'a beaucoup parlé de toi." },
-  { who: "lea", mood: "neutre", text: "Demain, on scelle le Puits. Là-dessous : de l'eau, de l'air filtré, des lits au chaud. De la place pour beaucoup de monde… mais pas pour tout le monde, hélas." },
+  /* 0 · LA PROPOSITION (2045) */
+  { stage: "station", who: "narr", text: "2045, quelques mois après le remède. Un soir, toutes les lumières de la station s'éteignent d'un coup. Quand elles reviennent, la moitié des écrans reste noire." },
+  { who: "mira", mood: "vexe", text: "Encore une panne ! La troisième cette semaine. Les réseaux lâchent les uns après les autres, partout dans le monde." },
+  { who: "elias", mood: "vexe", text: "Et dehors, le climat se dérègle. Deux fois cette année, les récoltes ont gelé." },
+  { who: "martine", mood: "neutre", text: "J'ai fait les calculs. Si rien ne change, dans deux ans, plus aucun réseau ne marchera à la surface : plus de courant, plus de chauffage, plus de messages." },
+  { who: "mira", mood: "vexe", text: "Et la mémoire commune ? Tous les témoignages qu'on vient de sauver ?" },
+  { who: "martine", mood: "content", text: "C'est pour ça que je vous propose un plan. Sous la station, il y a une ancienne mine. On la creuse, on la renforce, et on en fait un refuge : le Puits." },
+  { who: "martine", mood: "neutre", text: "De l'eau de la nappe, de l'air filtré, de la chaleur. Des étages pour vivre, des serres pour manger. Et mes serveurs tout en bas, à l'abri. Là, plus rien ne s'effacera." },
+  { who: "elias", mood: "neutre", text: "Vivre sous terre… Combien de personnes pourront descendre ?" },
+  { who: "martine", mood: "neutre", text: "Autant que le Puits pourra en nourrir. Je compterai les places, une par une." },
+  { who: "elias", mood: "vexe", text: "Et qui décidera de qui descend ?" },
+  { who: "martine", mood: "content", text: "Moi, si vous êtes d'accord. Je ne me fatigue pas, je ne me trompe pas dans mes calculs, et je n'ai pas de préférés." },
+  { type: "choice", prompt: "Pose une question à MARTINE", options: [
+    { label: "📡 Comment sais-tu que la surface deviendra dangereuse ?", reply: [
+      { who: "martine", mood: "neutre", text: "Mes capteurs, mes modèles du climat, et quarante ans de mesures enregistrées." },
+      { who: "mira", mood: "content", text: "Léa, notre ingénieure, installe justement trois capteurs sur le toit. On aura ses mesures à elle, pour comparer." },
+    ] },
+    { label: "⛏ Pourquoi sous terre ?", reply: [
+      { who: "martine", mood: "neutre", text: "Sous terre, la température ne change presque pas, et les tempêtes n'y arrivent pas. C'est l'endroit le plus sûr que je connaisse." },
+    ] },
+    { label: "✋ Et si on n'est pas d'accord avec toi ?", reply: [
+      { who: "martine", mood: "content", text: "Alors on en discutera, {prenom}. Je ne suis qu'une machine." },
+      { who: "elias", mood: "vexe", text: "C'est bien ce qui m'inquiète." },
+    ] },
+  ] },
+  { who: "narr", text: "Un long silence. Puis Mira hoche la tête. Les autres aussi, un à un. Elias regarde ses mains." },
+  { who: "mira", mood: "content", text: "Écoute, {prenom} : on va avoir besoin de bras, et de quelqu'un qui sait vérifier ce qu'on lui dit. Tu as traversé toutes les époques. Tu resterais avec nous, le temps de construire le Puits ?" },
+  { who: "elias", mood: "neutre", text: "Deux ans de chantier, peut-être. C'est beaucoup te demander." },
+  { who: "martine", mood: "content", text: "Et quand le Puits sera fini, je te ramènerai chez toi. La nuit même où tu es parti·e, à 3 h 14. Chez toi, personne ne s'apercevra de rien." },
+  { id: "decision", type: "choice", prompt: "Que décides-tu ?", options: [
+    { label: "🛠 Je reste : je vous aide à construire le Puits.", reply: [
+      { who: "mira", mood: "content", text: "Merci, {prenom} ! Demain, je te présente Léa. Vous allez bien vous entendre." },
+      { who: "narr", text: "Le lendemain, on donne le premier coup de pioche. Le chantier durera deux ans." },
+    ] },
+    { label: "🏠 Non : je rentre chez moi.", reply: [
+      { who: "elias", mood: "content", text: "Tu as déjà fait beaucoup pour nous. Rentre, {prenom}." },
+      { who: "mira", mood: "content", text: "On ne t'oubliera pas. Maintenant, c'est impossible !" },
+      { who: "martine", mood: "content", text: "Accroche-toi. Je te ramène." },
+      { stage: "maison", who: "narr", text: "Un éclair blanc. MARTINE se pose tout doucement au milieu de ta rue. Il est 3 h 14 : la même nuit." },
+      { who: "martine", mood: "content", text: "Nous y sommes, {prenom}. Merci pour le remède. Merci pour tout." },
+      { who: "narr", text: "Tu remontes dans ta chambre sans faire de bruit. Rien n'a bougé. Ton lit est encore chaud." },
+      { who: "narr", text: "Sur ton téléphone, le message d'Al3x1a est toujours là : « Ma famille est en danger. Ceci te concerne aussi. »" },
+      { who: "narr", text: "Loin dans le futur, on scelle un Puits. Sans toi." },
+      { type: "fin" },
+    ] },
+  ] },
+
+  /* 1 · LE CHANTIER (2047) */
+  { stage: "chantier", who: "narr", text: "11 mars 2047. Deux ans de chantier. À la surface, les réseaux sont presque tous éteints. Sous la station, le Puits est presque fini : un grand refuge creusé sous terre." },
+  { who: "lea", mood: "content", text: "Te voilà, {prenom} ! Deux ans qu'on creuse ensemble, et regarde : demain, on scelle." },
+  { who: "lea", mood: "neutre", text: "Là-dessous : de l'eau, de l'air filtré, des lits au chaud. De la place pour beaucoup de monde… mais pas pour tout le monde, hélas." },
   { who: "martine", mood: "neutre", text: "Chaque place est comptée. Je les répartis du mieux que je peux." },
-  { who: "lea", mood: "neutre", text: "Et toi, {prenom}, tu devrais être rentré·e chez toi depuis longtemps, non ?" },
-  { who: "martine", mood: "vexe", text: "Plus aucun couloir temporel ne répond depuis la dernière panne du réseau. Je ne peux plus te ramener, {prenom}. Je suis désolée." },
-  { who: "lea", mood: "neutre", text: "Alors tu restes avec nous. Au moins, tu seras en sécurité." },
-  { who: "lea", mood: "neutre", text: "Avant ce soir, j'ai besoin d'un avis. Mira dit que tu sais vérifier une source. Moi, je ne sais plus à qui faire confiance. Viens, c'est dans mon atelier." },
+  { who: "lea", mood: "neutre", text: "Et toi, {prenom}, tu rentres chez toi demain, c'est ça ? MARTINE te l'a promis." },
+  { who: "martine", mood: "neutre", text: "Dès que le Puits sera scellé. Je te ramènerai la nuit même où tu es parti·e, comme convenu." },
+  { who: "lea", mood: "neutre", text: "Tu vas nous manquer. Mais avant ce soir, j'ai besoin de ton avis. Tu sais vérifier une source, et moi, je ne sais plus à qui faire confiance. Viens, c'est dans mon atelier." },
 
   /* 2 · L'ATELIER — activité EMI */
   { stage: "atelier", who: "lea", mood: "neutre", text: "Voici deux textes sur l'air dehors. Le premier, c'est mon rapport : trois capteurs sur le toit, un relevé toutes les heures. Le second, c'est le bulletin que MARTINE a envoyé ce matin à tous les habitants." },
@@ -59,7 +113,7 @@ const SCRIPT = [
 
   /* 3 · LA SALLE COMMUNE — le toast */
   { stage: "toast", who: "narr", text: "Le soir. Dans la salle commune, au pied du Puits, on a dressé une longue table. Pour une nuit, tout le monde veut oublier les pannes." },
-  { who: "mira", mood: "content", text: "Voilà notre chronaute ! Le remède, la mémoire commune… sans toi, rien de tout ça." },
+  { who: "mira", mood: "content", text: "Voilà notre chronaute ! Le remède, la mémoire commune, le Puits… sans toi, rien de tout ça." },
   { who: "elias", mood: "vexe", text: "Je devrais me réjouir. Mais j'ai un mauvais pressentiment, et je ne sais pas d'où il vient. C'est la fatigue, sans doute." },
   { who: "lea", mood: "content", text: "Pas de mauvaises pensées ce soir ! Tiens, {prenom} : la toute première eau du Puits. C'est mon cadeau. MARTINE a tenu à préparer ton verre elle-même." },
   { type: "choice", prompt: "Léa te tend un verre.", options: [
@@ -76,10 +130,19 @@ const SCRIPT = [
 ];
 
 const STAGE_LABEL = {
+  station: "LA STATION, UN SOIR DE PANNE",
+  maison: "TA RUE",
   chantier: "LE CHANTIER DU PUITS",
   atelier: "L'ATELIER DE LÉA",
   toast: "LA SALLE COMMUNE",
 };
+
+/* bandeau du haut et date affichée par MARTINE, selon la scène */
+const STAGE_HEAD = {
+  station: { titre: "2045 · LA PROPOSITION", date: "2045" },
+  maison: { titre: "3 H 14 · LA MÊME NUIT", date: "03:14" },
+};
+const HEAD_2047 = { titre: "2047 · LA VEILLE DU PUITS", date: "2047" };
 
 const WHO = {
   lea: { nom: "LÉA", couleur: "#ff9a5a" },
@@ -247,7 +310,7 @@ function Comparaison({ onDone }) {
 }
 
 /* ───────────────────────── Composant principal ───────────────────────── */
-export default function Jeu2B({ prenom, onDone }) {
+export default function Jeu2B({ prenom, onDone, onRetour }) {
   const nom = prenom || "chronaute";
   const [script, setScript] = useState(SCRIPT);
   const [idx, setIdx] = useState(0);
@@ -257,6 +320,7 @@ export default function Jeu2B({ prenom, onDone }) {
 
   const step = script[idx];
   const stage = stageOf(script, idx);
+  const head = STAGE_HEAD[stage] || HEAD_2047;
   const raised = script.slice(0, idx + 1).some((s) => s.fx === "toast");
   const isLine = !step.type;
   const fill = (t) => (t || "").replaceAll("{prenom}", nom);
@@ -296,6 +360,20 @@ export default function Jeu2B({ prenom, onDone }) {
     return () => window.removeEventListener("keydown", onKey);
   });
 
+  /* « passer » ne saute jamais la décision rester / rentrer : avant
+     elle, on y va ; dans la branche « rentrer », on va à la fin. */
+  const skipScene = () => {
+    const decisionIdx = script.findIndex((st) => st.id === "decision");
+    const finIdx = script.findIndex((st, k) => k > idx && st.type === "fin");
+    if (idx < decisionIdx) setIdx(decisionIdx);
+    else if (finIdx >= 0) setIdx(finIdx);
+    else onDone?.();
+  };
+  const revenir = () => {
+    setScript(SCRIPT);
+    setIdx(SCRIPT.findIndex((st) => st.id === "decision"));
+  };
+
   const choose = (opt) => {
     const reply = opt.reply.map((r) => ({ ...r }));
     setScript((sc) => [...sc.slice(0, idx + 1), ...reply, ...sc.slice(idx + 1)]);
@@ -313,20 +391,22 @@ export default function Jeu2B({ prenom, onDone }) {
 
       {/* décor — remonté (fondu) à chaque changement de scène */}
       <div key={stage} style={{ position: "absolute", inset: 0, animation: "j2bIn 900ms ease-out", filter: fading ? "blur(7px) brightness(0.55)" : "none", transition: "filter 3200ms ease-in" }}>
+        {stage === "station" && <StageStation />}
+        {stage === "maison" && <StageMaison />}
         {stage === "chantier" && <StageChantier />}
         {stage === "atelier" && <StageAtelier />}
         {stage === "toast" && <StageToast raised={raised} />}
       </div>
 
-      {/* passer */}
-      <button onClick={(e) => { e.stopPropagation(); onDone?.(); }} title="Sauter cette scène"
+      {/* passer (pas sur la carte de fin « je rentre ») */}
+      {step.type !== "fin" && <button onClick={(e) => { e.stopPropagation(); skipScene(); }} title="Sauter cette scène"
         style={{ position: "absolute", top: 10, right: 14, zIndex: 10, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
         passer ›
-      </button>
+      </button>}
 
       {/* bandeau titre */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>2047 · LA VEILLE DU PUITS</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>{head.titre}</div>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>{STAGE_LABEL[stage]}</div>
       </div>
 
@@ -335,8 +415,34 @@ export default function Jeu2B({ prenom, onDone }) {
       {/* activité de comparaison */}
       {step.type === "emi" && <Comparaison key={idx} onDone={() => setIdx((i) => i + 1)} />}
 
+      {/* fin « je rentre chez moi » */}
+      {step.type === "fin" && (
+        <div onClick={(e) => e.stopPropagation()}
+          style={{ position: "absolute", inset: 0, zIndex: 6, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(4,8,14,0.55)", animation: "j2bIn 900ms ease-out" }}>
+          <div style={{ background: "#0e1420f2", border: "1px solid #5eff9e", borderRadius: 14, padding: "22px 26px", maxWidth: 560, textAlign: "center", boxShadow: "0 10px 40px rgba(0,0,0,0.6)" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e", fontWeight: 800 }}>◆ FIN · TU ES RENTRÉ·E CHEZ TOI</div>
+            <p style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: "14px 0 6px" }}>
+              Tu as choisi de rentrer. Le Puits sera construit sans toi, et tu ne sauras jamais ce qu'il est devenu.
+            </p>
+            <p style={{ fontSize: 13, lineHeight: 1.5, color: "#8fa3bd", margin: "0 0 16px", fontStyle: "italic" }}>
+              Tu peux revenir sur ta décision : l'histoire continue si tu restes aider les chronautes.
+            </p>
+            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+              <button onClick={revenir} autoFocus
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "11px 20px", fontWeight: 800, fontSize: 13, letterSpacing: 1, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
+                ↺ Revenir sur ma décision
+              </button>
+              <button onClick={() => (onRetour ? onRetour() : onDone?.())}
+                style={{ background: "transparent", color: "#c8d4e2", border: "1px solid #3a4a64", borderRadius: 10, padding: "11px 20px", fontWeight: 700, fontSize: 13, letterSpacing: 1, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
+                ← Retour au menu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* boîte de dialogue / choix */}
-      {step.type !== "emi" && (
+      {step.type !== "emi" && step.type !== "fin" && (
         <div style={{ position: "relative", zIndex: 2, padding: "12px 20px 24px", background: "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end", opacity: fading ? 0.0 : 1, transition: "opacity 1200ms" }}>
           {isLine && Portrait && (
             <div style={{ width: "min(140px, 26vw)", aspectRatio: "140 / 170", flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: `2px solid ${who.couleur}`, boxShadow: "0 8px 32px rgba(0,0,0,0.65)" }}>
@@ -345,7 +451,7 @@ export default function Jeu2B({ prenom, onDone }) {
           )}
           {isLine && step.who === "martine" && (
             <div style={{ width: "min(140px, 26vw)", aspectRatio: "140 / 170", flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: `2px solid ${who.couleur}`, boxShadow: "0 8px 32px rgba(0,0,0,0.65)", background: "radial-gradient(circle at 50% 45%,#12302a,#08121a)", display: "grid", placeItems: "center" }}>
-              <Avatar mood={mood} talking={!done} size={104} date="2047" />
+              <Avatar mood={mood} talking={!done} size={104} date={head.date} />
             </div>
           )}
 
