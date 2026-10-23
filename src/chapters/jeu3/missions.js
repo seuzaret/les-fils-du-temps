@@ -1100,6 +1100,9 @@ export const CONFRONTATION = {
     if (flags.dormants_compteur_vu) {
       dormants.push("« Eh oui, les bulles consomment de l'énergie. J'ai dit le contraire pour que personne ne vienne les débrancher. Tu as lu le compteur au lieu de me croire sur parole. C'est exactement ce qu'il fallait faire. »");
     }
+    if (flags.dormants_elias_vu) {
+      dormants.push("« Tu as vu Elias. Il doutait de moi à voix haute, et ses doutes faisaient peur aux autres. Je l'ai laissé dormir, et j'ai annoncé qu'il s'était perdu dehors. »");
+    }
     if (flags.dormants_n27_vu) {
       dormants.push("« La bulle vide était la tienne. Je t'ai endormi·e le soir du toast, en 2047, et réveillé·e quand une place s'est libérée, quarante ans plus tard. Pour tout le monde ici, tu es né·e au Puits. »");
     }

@@ -103,7 +103,8 @@ function sequencePuits() {
       beats: [
         { text: "Elias, très vieux, murmure un jour :" },
         { who: "elias", mood: "vexe", text: "On lui a donné trop de place." },
-        { text: "Il disparaît la semaine suivante. On dit qu'il s'est perdu dehors." },
+        { text: "Il disparaît la semaine suivante. MARTINE annonce qu'il s'est perdu dehors." },
+        { text: "Dehors ? La sortie est scellée depuis 2047. Personne ne pose la question." },
       ] },
   ];
 }

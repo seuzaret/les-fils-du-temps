@@ -33,6 +33,8 @@ const KF = `
 @keyframes fjMeetL { from { transform: translateX(-170px); } to { transform: translateX(0); } }
 @keyframes fjMeetR { from { transform: translateX(170px); } to { transform: translateX(0); } }
 @keyframes fjWalk { 0% { transform: translate(0,0) scale(1); opacity: 1; } 78% { opacity: 1; } 100% { transform: translate(150px,-34px) scale(0.55); opacity: 0; } }
+@keyframes fjWalkSide { 0% { transform: translate(0,0) scale(1); opacity: 1; } 88% { opacity: 1; } 100% { transform: translate(246px,-58px) scale(0.55); opacity: 0; } }
+@keyframes fjSideDoor { 0% { opacity: 0; } 12% { opacity: 0.5; } 88% { opacity: 0.5; } 100% { opacity: 0; } }
 @keyframes fjDoorL { from { transform: translateX(-92px); } to { transform: translateX(0); } }
 @keyframes fjDoorR { from { transform: translateX(92px); } to { transform: translateX(0); } }
 @keyframes fjBolt { from { transform: scale(0.2); } to { transform: scale(1); } }
@@ -589,7 +591,6 @@ export function SceneElderElias() {
     <Stage defs={
       <>
         <linearGradient id="ee-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0c1018" /><stop offset="100%" stopColor="#1a1e28" /></linearGradient>
-        <radialGradient id="ee-out" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffe8b0" stopOpacity="1" /><stop offset="100%" stopColor="#ffe8b0" stopOpacity="0" /></radialGradient>
       </>}>
       <rect width="1000" height="560" fill="url(#ee-wall)" />
       {/* couloir en perspective */}
@@ -600,10 +601,18 @@ export function SceneElderElias() {
       {[0.2, 0.45, 0.7].map((k, i) => <path key={i} d={`M${380 - 380 * (1 - k)} ${130 - 130 * (1 - k)} V${330 + 140 * (1 - k)}`} stroke="#1c2230" strokeWidth="2" />)}
       {/* néon qui clignote */}
       <rect x="430" y="64" width="140" height="8" fill="#c8d4e2" opacity="0.8"><animate attributeName="opacity" values="0.9;0.3;0.95;0.5;0.9" dur="2.6s" repeatCount="indefinite" /></rect>
-      {/* la porte du fond, vers la surface */}
-      <rect x="440" y="170" width="120" height="160" fill="#05060a" stroke="#6a7486" strokeWidth="4" />
-      <circle cx="500" cy="250" r="180" fill="url(#ee-out)" opacity="0.5" style={an("fjFade", 3000, 3500)} />
-      <rect x="448" y="178" width="104" height="144" fill="#ffe8b0" opacity="0" style={an("fjFade", 3000, 3500)} />
+      {/* au fond, la sortie C-3 : scellée, elle ne s'ouvre pas */}
+      <rect x="440" y="170" width="120" height="160" fill="#1a1e26" stroke="#6a7486" strokeWidth="4" />
+      <circle cx="500" cy="246" r="44" fill="#2a303a" stroke="#4a5260" strokeWidth="5" />
+      <circle cx="500" cy="246" r="16" fill="none" stroke="#8a6a40" strokeWidth="4" />
+      {[0, 60, 120].map((a) => <path key={a} d="M-26 0 H26" stroke="#8a6a40" strokeWidth="4" transform={`translate(500,246) rotate(${a})`} />)}
+      {[-1, 1].map((k) => <path key={k} d={`M${500 + k * 52} 176 V324`} stroke="#c87a3a" strokeWidth="3" strokeDasharray="5 4" opacity="0.8" />)}
+      <rect x="452" y="300" width="96" height="22" fill="#2a0806" stroke="#e83820" strokeWidth="1.5" />
+      <text x="500" y="315" textAnchor="middle" fontFamily={MONO} fontSize="10" fontWeight="800" fill="#ff8070" letterSpacing="1.5">C-3 · SCELLÉE</text>
+      {/* sur le mur de droite, une porte de service : c'est par là qu'il s'en va */}
+      <path d="M690 181 L750 175 L750 375 L690 352 Z" fill="#0a0d12" stroke="#3a4250" strokeWidth="2" />
+      <path d="M690 181 L750 175 L750 375 L690 352 Z" fill="#5eff9e" opacity="0" style={an("fjSideDoor", 9000, 1200, "linear")} />
+      <ellipse cx="716" cy="368" rx="60" ry="8" fill="#5eff9e" opacity="0" style={an("fjSideDoor", 9000, 1200, "linear")} />
       {/* l'œil de MARTINE sur le mur de gauche */}
       <g transform="translate(150,170)">
         <ellipse cx="0" cy="0" rx="52" ry="22" fill="#0a0e14" stroke="#7fd8ff" strokeWidth="2" />
@@ -611,7 +620,7 @@ export function SceneElderElias() {
         <circle cx="0" cy="0" r="5" fill="#0a0e14" />
       </g>
       {/* Elias, très vieux, de dos, s'éloigne avec sa canne */}
-      <g style={{ ...an("fjWalk", 9000, 1800, "ease-in") }}>
+      <g style={{ ...an("fjWalkSide", 8400, 1800, "ease-in-out"), transformBox: "fill-box", transformOrigin: "50% 100%" }}>
         <g transform="translate(470,420)">
           <Figure x={0} y={0} s={1.8} hair="#e8e8e0" coat="#3a2818" pants="#2a2018" garment="coat" back cane arms={[{ a1: 5, a2: 3 }, { a1: 6, a2: 4 }]} />
         </g>

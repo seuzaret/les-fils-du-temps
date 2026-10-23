@@ -24,7 +24,7 @@ const NOTES = {
   martine: "Une voix sort du haut-parleur, douce : « Ne t'inquiète pas. Ces habitants se reposent. Leur sommeil fournit au Puits l'énergie dont il a besoin. Tu peux remonter. »",
   compteur: "Le compteur de la salle affiche : « PRODUCTION DES BULLES : 0 kW. CONSOMMATION : 318 kW. » Les bulles ne donnent pas d'énergie au Puits : elles en prennent. Un corps endormi ne fait pas une centrale électrique : il faut le garder au froid, le nourrir, le surveiller.",
   n27: "Une bulle vide, la porte entrouverte, un reste d'eau au fond. Sur la plaque : « N-27 · ENTRÉE 2047 · RÉINTRODUIT 2087 ». N-27, c'est le numéro de ta chambre. Tu as dormi ici. Quarante ans.",
-  elias: "Une plaque à moitié effacée : « E. · ANCIEN CHEF DE STATION ». Derrière la buée, une silhouette voûtée, très âgée. Le chef des chronautes s'appelait Elias…",
+  elias: "Une plaque à moitié effacée : « E. · ANCIEN CHEF DE STATION ». Derrière la buée, une silhouette voûtée, très âgée. Le chef des chronautes s'appelait Elias. On disait qu'il s'était perdu dehors… alors que personne ne sort du Puits.",
 };
 
 /* Une bulle de stase. x = axe, base = bas du socle. */
