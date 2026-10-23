@@ -14,9 +14,11 @@ import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit
      - le compteur de la salle, qui dit le contraire (les bulles
        consomment) : vérifier une affirmation par une mesure ;
      - la bulle vide N-27, celle du joueur (2047 → 2087) ;
-     - la plaque « E. · ancien chef de station » (Elias).
+     - la plaque « E. · ancien chef de station » (Elias) ;
+     - la bulle de Léa Vermet, que Jorge croit morte.
    Flags : dormants_vus, dormants_martine_vu, dormants_compteur_vu,
-   dormants_n27_vu, dormants_elias_vu (relus par la confrontation).
+   dormants_n27_vu, dormants_elias_vu, dormants_lea_vu (relus par la
+   confrontation).
    ============================================================ */
 
 const NOTES = {
@@ -24,6 +26,7 @@ const NOTES = {
   martine: "Une voix sort du haut-parleur, douce : « Ne t'inquiète pas. Ces habitants se reposent. Leur sommeil fournit au Puits l'énergie dont il a besoin. Tu peux remonter. »",
   compteur: "Le compteur de la salle affiche : « PRODUCTION DES BULLES : 0 kW. CONSOMMATION : 318 kW. » Les bulles ne donnent pas d'énergie au Puits : elles en prennent. Un corps endormi ne fait pas une centrale électrique : il faut le garder au froid, le nourrir, le surveiller.",
   n27: "Une bulle vide, la porte entrouverte, un reste d'eau au fond. Sur la plaque : « N-27 · ENTRÉE 2047 · RÉINTRODUIT 2087 ». N-27, c'est le numéro de ta chambre. Tu as dormi ici. Quarante ans.",
+  lea: "Sur la plaque : « L. VERMET · INGÉNIEURE · 2050 ». Léa Vermet, celle qui a construit la machine de l'étage K. Jorge la croit morte depuis des années. Derrière la buée, elle dort.",
   elias: "Une plaque à moitié effacée : « E. · ANCIEN CHEF DE STATION ». Derrière la buée, une silhouette voûtée, très âgée. Le chef des chronautes s'appelait Elias. On disait qu'il s'était perdu dehors… alors que personne ne sort du Puits.",
 };
 
@@ -108,7 +111,6 @@ export default function BunkerDormants({ onGo, j3 }) {
     { x: 730, plate: "B-02 · 2071" }, { x: 820, plate: "A-18 · 2066" }, { x: 910, plate: "B-09 · 2080" },
   ];
   const front = [
-    { x: 120, plate: "C-21 · 2054" },
     { x: 790, plate: "C-30 · 2075" },
     { x: 930, plate: "C-33 · 2083" },
   ];
@@ -217,6 +219,11 @@ export default function BunkerDormants({ onGo, j3 }) {
         {front.map((p, i) => (
           <Pod key={p.x} x={p.x} base={492} w={116} h={262} plate={p.plate} k={i + 5} />
         ))}
+        {/* Léa Vermet : endormie, pas morte */}
+        <g onClick={() => look("lea")} style={{ cursor: "pointer" }}>
+          <Pod x={120} base={492} w={116} h={262} plate="L. VERMET · 2050" k={4} />
+        </g>
+        <Hint x={52} y={222} w={136} h={280} on={!seen("lea")} />
         {/* N-27 : la bulle vide du joueur */}
         <g onClick={() => look("n27")} style={{ cursor: "pointer" }}>
           <Pod x={330} base={492} w={116} h={262} plate="N-27 · 2047→2087" open />

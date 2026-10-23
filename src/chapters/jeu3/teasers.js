@@ -29,7 +29,7 @@ export const TEMOIN_TEASERS = {
   via:      "On en parle à la cantine. Mais personne n'a vu, moi comprise.",
   iris:     "Il doutait, il est sorti, il est mort. C'est le signe, non ?",
   // yol est réutilisé dans Enfant avec la MÊME clé — même teaser que Kova.
-  anselme:  "J'ai vu un enfant sur une civière, qu'on emmenait au niveau du haut.",
+  anselme:  "J'ai vu un enfant sur une civière, qu'on emmenait vers le bas.",
 
   // Enquête Champ de blé
   ela:      "J'ai vu un dessin de champ de blé dans un livre. Le livre a disparu.",

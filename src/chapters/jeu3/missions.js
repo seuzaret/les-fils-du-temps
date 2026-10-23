@@ -73,7 +73,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "marek", nom: "Marek", role: "Habitant (retraité)",
-        ancienneteAns: 12, lieu: "Cantine commune", roomId: "rumeurs",
+        ancienneteAns: 40, lieu: "Cantine commune", roomId: "rumeurs",
         pose: { x: 200, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#3a1808",
         facing: "right", activity: "cup",
@@ -91,7 +91,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "sera", nom: "Séra", role: "Archiviste",
-        ancienneteAns: 8, lieu: "Salle des Archives", roomId: "rumeurs",
+        ancienneteAns: 31, lieu: "Salle des Archives", roomId: "rumeurs",
         pose: { x: 500, y: 400 },
         color: "#7fd8ff", pants: "#3a4048", hair: "#5a4028",
         facing: "front", accessory: "coat", activity: "write",
@@ -109,7 +109,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yol", nom: "Yol", role: "Garde de la grande porte",
-        ancienneteAns: 22, lieu: "Près de la grande porte", roomId: "rumeurs",
+        ancienneteAns: 40, lieu: "Près de la grande porte", roomId: "rumeurs",
         pose: { x: 800, y: 400 },
         color: "#28303a", pants: "#1a2028", hair: "#1a1408",
         facing: "front", accessory: "toolbelt", activity: "crossed",
@@ -171,7 +171,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "tor", nom: "Tor", role: "Technicien aux Serres",
-        ancienneteAns: 11, lieu: "Serres hydroponiques", roomId: "serres", pnjId: "serres_tor",
+        ancienneteAns: 29, lieu: "Serres hydroponiques", roomId: "serres", pnjId: "serres_tor",
         pose: { x: 150, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#3a1808",
         facing: "right", accessory: "toolbelt", activity: "wrench",
@@ -189,7 +189,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "lin", nom: "Lin", role: "Médecin",
-        ancienneteAns: 14, lieu: "Infirmerie", roomId: "infirmerie", pnjId: "infirmerie_lin",
+        ancienneteAns: 40, lieu: "Infirmerie", roomId: "infirmerie", pnjId: "infirmerie_lin",
         pose: { x: 420, y: 400 },
         color: "#7fd8ff", pants: "#3a4048", hair: "#5a4028",
         facing: "front", accessory: "coat", activity: "clipboard",
@@ -207,7 +207,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "bri", nom: "Bri", role: "Cuisinière en chef",
-        ancienneteAns: 18, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_bri",
+        ancienneteAns: 38, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_bri",
         pose: { x: 720, y: 400 },
         color: "#e8dfc8", pants: "#3a2818", hair: "#8a3820",
         facing: "left", accessory: "apron", activity: "stir",
@@ -225,7 +225,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "mel", nom: "Mel", role: "Patiente au repos",
-        ancienneteAns: 7, lieu: "Infirmerie", roomId: "infirmerie", pnjId: "infirmerie_mel",
+        ancienneteAns: 26, lieu: "Infirmerie", roomId: "infirmerie", pnjId: "infirmerie_mel",
         pose: { x: 980, y: 400 },
         color: "#8a5030", pants: "#3a4048", hair: "#c8a848",
         facing: "front", activity: "cup",
@@ -234,8 +234,8 @@ export const MISSIONS_RUMEURS = {
             r: "Grande fatigue depuis trois mois. Je dors beaucoup, je ne rêve plus. Lin m'a mise au repos.",
             type: "aVu", val: "Souffre de grande fatigue depuis 3 mois." },
           { q: "D'autres cas autour de toi ?",
-            r: "Trois voisins par ce lit en un mois. Après, on les transfère à l'étage du dessus, et on ne les revoit plus. C'est bizarre.",
-            type: "aVu", val: "A vu 3 voisins transférés au-dessus sans retour." },
+            r: "Trois voisins par ce lit en un mois. Après, on les emmène tout en bas, et on ne les revoit plus. C'est bizarre.",
+            type: "aVu", val: "A vu 3 voisins emmenés tout en bas, sans retour." },
           { q: "Un lien avec la poudre, selon toi ?",
             r: "Je ne suis pas scientifique. Mais j'ai arrêté de la prendre il y a deux semaines — j'ai triché avec les rations. Je crois sentir que je récupère.",
             type: "note", val: "A arrêté la poudre il y a 2 semaines, se sent récupérer (observation personnelle)." },
@@ -284,7 +284,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "yon", nom: "Yon", role: "Électricien",
-        ancienneteAns: 16, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_yon",
+        ancienneteAns: 34, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_yon",
         pose: { x: 180, y: 400 },
         color: "#c8a848", pants: "#3a2818", hair: "#3a1808",
         facing: "right", accessory: "toolbelt", activity: "torch",
@@ -293,7 +293,7 @@ export const MISSIONS_RUMEURS = {
             r: "Coupure d'une minute, à la minute pile, tous les 40 jours, à la nuit pile. J'ai tenu un relevé chronométré pendant 3 ans. Zéro écart.",
             type: "aVu", val: "Relevé chronométré sur 3 ans : coupure d'1 min, toutes les 40 nuits, à la minute pile." },
           { q: "D'où vient cette coupure ?",
-            r: "D'en haut. Elle descend depuis le niveau des serveurs. Je sais lire mes câbles — c'est pas une panne qui remonte, c'est une coupure qui descend.",
+            r: "D'en bas. Elle part du niveau des serveurs, tout au fond, et elle remonte jusqu'à nous. Je sais lire mes câbles : ce n'est pas une panne au hasard, c'est une coupure envoyée depuis le -3.",
             type: "aVu", val: "La coupure descend du niveau des serveurs, pas une panne électrique qui remonte." },
           { q: "Tu as alerté quelqu'un ?",
             r: "Oui. On m'a dit : « c'est noté, pas la peine d'insister ». Depuis, je ne note plus. Mais j'observe.",
@@ -302,7 +302,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "gus", nom: "Gus", role: "Contremaître",
-        ancienneteAns: 24, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_gus",
+        ancienneteAns: 40, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_gus",
         pose: { x: 450, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#e8dfc8", skin: "#c8a888",
         facing: "left", accessory: "coat", activity: "write",
@@ -320,7 +320,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "kev", nom: "Kev", role: "Ingénieur systèmes",
-        ancienneteAns: 10, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_kev",
+        ancienneteAns: 33, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_kev",
         pose: { x: 720, y: 400 },
         color: "#3a4048", pants: "#28303a", hair: "#2a2018",
         facing: "left", accessory: "toolbelt", activity: "wrench",
@@ -338,7 +338,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "flor", nom: "Flor", role: "Botaniste",
-        ancienneteAns: 19, lieu: "Serres hydroponiques", roomId: "serres", pnjId: "serres_flor",
+        ancienneteAns: 40, lieu: "Serres hydroponiques", roomId: "serres", pnjId: "serres_flor",
         pose: { x: 980, y: 400 },
         color: "#5eff9e", pants: "#3a4048", hair: "#c8a848",
         facing: "left", accessory: "coat", activity: "write",
@@ -361,7 +361,7 @@ export const MISSIONS_RUMEURS = {
         label: "SOLIDE",
         desc: "Oui, c'est une panne banale.",
         ok: false,
-        retour: "Trop confiant. Trois témoins apportent des mesures précises qui vont CONTRE l'idée d'une panne banale : coupure à la minute pile, direction descendante, concordance 100 % avec les cycles des plantes. Les pannes banales ne sont pas à la minute pile." },
+        retour: "Trop confiant. Trois témoins apportent des mesures précises qui vont CONTRE l'idée d'une panne banale : coupure à la minute pile, envoyée depuis le niveau des serveurs, concordance 100 % avec les cycles des plantes. Les pannes banales ne sont pas à la minute pile." },
       { id: "fragile",
         label: "FRAGILE",
         desc: "On a des indices, mais pas de preuve.",
@@ -385,19 +385,19 @@ export const MISSIONS_RUMEURS = {
     id: "enfant",
     flag: "mission_enfant_done",
     prerequisite: "mission_jour40_done",
-    titre: "L'enfant du niveau du haut",
-    affirmation: "Un enfant a disparu au niveau du haut : il est sorti par la grande porte et il est mort dehors.",
+    titre: "L'enfant disparu",
+    affirmation: "Un enfant a disparu : il est sorti par la grande porte et il est mort dehors.",
     briefing: [
       "Quatrième affaire. Celle-ci te sera plus dure. On parle d'un enfant.",
-      "Depuis quinze jours, les gens de la cantine racontent qu'un enfant du niveau du haut est sorti par la grande porte et qu'il est mort dehors. Ça circule vite — c'est une histoire triste, elle fait pleurer, elle fait peur.",
+      "Depuis quinze jours, les gens de la cantine racontent qu'un enfant du niveau 0 est sorti par la grande porte et qu'il est mort dehors. Ça circule vite — c'est une histoire triste, elle fait pleurer, elle fait peur.",
       "Quatre personnes savent peut-être quelque chose : Via à la cantine qui rapporte la rumeur, Iris à la chapelle qui a sa propre lecture, Yol qui garde la grande porte, et Anselme à la chapelle qui a vu quelque chose de son œil.",
-      "Je les ai réunis ici. Vois ce qui s'est vraiment passé.",
+      "Yol est passé me voir, tu le trouveras ici. Les autres, va les voir chez eux. Vois ce qui s'est vraiment passé.",
     ],
     minWitnesses: 4,
     temoins: [
       {
         id: "via", nom: "Via", role: "Habitante",
-        ancienneteAns: 9, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
+        ancienneteAns: 27, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
         pose: { x: 180, y: 400 },
         color: "#8a3820", pants: "#28303a", hair: "#3a1808",
         facing: "right", activity: "cup",
@@ -409,13 +409,13 @@ export const MISSIONS_RUMEURS = {
             r: "C'est Pola qui l'a dit à Mir, et Mir me l'a dit. Pola l'avait entendu de quelqu'un d'autre dont elle a oublié le nom.",
             type: "rapporte", val: "Chaîne : « quelqu'un » → Pola → Mir → Via. Source d'origine inconnue." },
           { q: "Le nom de l'enfant ?",
-            r: "Personne ne me le dit. On me répond : « c'était l'enfant du 4e, tu connais pas ». Mais au 4e tout le monde se connaît.",
+            r: "Personne ne me le dit. On me répond : « c'était un enfant du niveau 0, tu connais pas ». Mais au niveau 0, tout le monde se connaît.",
             type: "note", val: "Pas de nom donné malgré que les habitants du 4e se connaissent entre eux." },
         ],
       },
       {
         id: "iris", nom: "Iris", role: "Fidèle",
-        ancienneteAns: 21, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_iris",
+        ancienneteAns: 35, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_iris",
         pose: { x: 450, y: 400 },
         color: "#8a5030", pants: "#5a4028", hair: "#8a5030",
         facing: "left", accessory: "robe", activity: "pray",
@@ -433,7 +433,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yol", nom: "Yol", role: "Garde de la grande porte",
-        ancienneteAns: 22, lieu: "Près de la grande porte", roomId: "rumeurs",
+        ancienneteAns: 40, lieu: "Près de la grande porte", roomId: "rumeurs",
         pose: { x: 720, y: 400 },
         color: "#28303a", pants: "#1a2028", hair: "#1a1408",
         facing: "front", accessory: "toolbelt", activity: "crossed",
@@ -451,20 +451,20 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "anselme", nom: "Anselme", role: "Ancien",
-        ancienneteAns: 56, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_anselme",
+        ancienneteAns: 40, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_anselme",
         pose: { x: 980, y: 388 },
         color: "#5a3818", pants: "#3a2010", hair: "#f0e4c8", skin: "#c8a888",
         facing: "front", poseKind: "sit", accessory: "robe", activity: "pray",
         questions: [
           { q: "Qu'as-tu vu, toi, les jours derniers ?",
-            r: "J'ai vu un enfant qu'on emmenait au niveau du haut, sur une civière, un matin. Il était pâle, pas mort. Il allait à l'infirmerie du haut.",
-            type: "aVu", val: "A vu un enfant transporté sur civière vers le niveau du haut — vivant, pâle." },
+            r: "J'ai vu un enfant sur une civière, un matin, qu'on emmenait vers l'escalier de service. Vers le bas. Il était pâle, pas mort. On m'a dit : « il va se reposer ».",
+            type: "aVu", val: "A vu un enfant emmené sur une civière vers le bas — vivant, pâle." },
           { q: "L'enfant est-il revenu ?",
-            r: "Je ne l'ai pas revu, non. Les transférés du haut, on les revoit rarement — on dit qu'ils y restent pour un long soin.",
+            r: "Je ne l'ai pas revu, non. Ceux qu'on emmène « se reposer » en bas, on ne les revoit pas. Ou des années plus tard, et ils ne se souviennent de rien.",
             type: "aVu", val: "Transféré jamais revu depuis — pratique courante selon Anselme." },
           { q: "Pourquoi personne n'en parle à la cantine ?",
-            r: "Parce que la famille ne veut pas qu'on en parle. Un transfert au haut, c'est honteux pour eux. Alors ils laissent la rumeur dire autre chose. C'est plus simple.",
-            type: "note", val: "Famille gardant silence sur le transfert — honte, préfère laisser courir la rumeur." },
+            r: "Parce que la famille a peur. MARTINE leur a dit qu'il se reposait, de ne pas s'inquiéter. Alors ils laissent la rumeur dire autre chose. C'est plus simple que de poser des questions.",
+            type: "note", val: "La famille se tait : MARTINE lui a dit que l'enfant « se repose »." },
         ],
       },
     ],
@@ -474,24 +474,24 @@ export const MISSIONS_RUMEURS = {
         label: "SOLIDE",
         desc: "Oui, l'enfant est sorti par la grande porte.",
         ok: false,
-        retour: "Non. Le garde Yol affirme sous serment que la porte n'a pas bougé depuis quarante ans, et Anselme a VU l'enfant partir sur une civière vers le niveau du haut — vivant. L'histoire « sorti par la grande porte » est démentie par le seul témoin direct." },
+        retour: "Non. Le garde Yol affirme sous serment que la porte n'a pas bougé depuis quarante ans, et Anselme a VU l'enfant emmené sur une civière vers le bas — vivant. L'histoire « sorti par la grande porte » est démentie par le seul témoin direct." },
       { id: "fragile",
         label: "FRAGILE",
         desc: "Peut-être, mais on manque de preuves.",
         ok: false,
-        retour: "Trop neutre. Deux témoins directs — Yol qui garde la porte, Anselme qui a vu l'enfant partir à l'infirmerie — vont CONTRE l'histoire officielle. L'enfant n'est pas sorti dehors : il a été transféré. Ce n'est pas une incertitude, c'est une erreur." },
+        retour: "Trop neutre. Deux témoins directs — Yol qui garde la porte, Anselme qui a vu l'enfant emmené vers le bas, vivant — vont CONTRE l'histoire officielle. L'enfant n'est pas sorti dehors : on l'a emmené ailleurs, dans le Puits. Ce n'est pas une incertitude, c'est une erreur." },
       { id: "rumeur",
         label: "RUMEUR",
         desc: "L'histoire « sorti et mort dehors » ne tient pas.",
         ok: true,
-        retour: "Verdict juste. L'enfant n'est pas sorti : la grande porte n'a pas bougé, et il a été vu transporté sur une civière vers l'infirmerie du haut. La rumeur a fait un gros raccourci entre « parti au niveau du haut » et « parti dehors ». C'est la famille qui préfère laisser courir — c'est triste, mais ce n'est pas la grande porte." },
+        retour: "Verdict juste. L'enfant n'est pas sorti : la grande porte n'a pas bougé, et il a été vu emmené sur une civière vers le bas, vivant. La rumeur a fait un gros raccourci entre « emmené en bas » et « parti dehors ». Où exactement, personne ne le dit — mais ce n'est pas la grande porte." },
     ],
     fiablesFeedback: {
-      parfait: "Et tu as repéré les bons : Yol est témoin direct de la porte, Anselme est témoin direct du transfert. Les deux faits qu'il faut tenir. Via rapporte, Iris déduit — aucune des deux n'a VU.",
+      parfait: "Et tu as repéré les bons : Yol est témoin direct de la porte, Anselme est témoin direct de la civière. Les deux faits qu'il faut tenir. Via rapporte, Iris déduit — aucune des deux n'a VU.",
       partiel: "Un sur deux. Les témoins forts sont ceux qui ont VU : Yol la porte, Anselme la civière. Les autres rapportent ou interprètent.",
       mauvais: "Les témoins forts sont ceux qui ont VU : Yol a vu la porte ne pas bouger, Anselme a vu la civière. Les autres rapportent (Via) ou interprètent moralement (Iris) — ce n'est pas voir.",
     },
-    succes: "Quatrième geste : quand une rumeur fait un gros raccourci entre deux faits bien différents (« parti au niveau du haut » ≠ « sorti dehors »), remonte à ce qui s'est VRAIMENT passé. La vraie histoire est souvent plus banale et plus triste que la rumeur.",
+    succes: "Quatrième geste : quand une rumeur fait un gros raccourci entre deux faits bien différents (« emmené en bas » ≠ « sorti dehors »), remonte à ce qui s'est VRAIMENT passé. La vraie histoire est souvent moins spectaculaire que la rumeur… mais elle peut poser de nouvelles questions.",
   },
 
   champble: {
@@ -503,7 +503,7 @@ export const MISSIONS_RUMEURS = {
     briefing: [
       "Dernière affaire pour aujourd'hui. Celle-ci est la plus grosse. Prends ton temps.",
       "L'affichage officiel de MARTINE répète depuis quarante ans que la surface est morte, que l'air est mortel, que rien n'y pousse. Nos vies sont entièrement bâties sur cette certitude.",
-      "Quatre personnes ont vu, lu, touché des choses qui pourraient faire bouger cette certitude. Ela, une enfant à la cantine. Anselme, un ancien à la chapelle, qui a VÉCU dehors enfant. Yona, couturière au niveau 4. Estev, ancien enseignant, qui tient trente carnets.",
+      "Quatre personnes ont vu, lu, touché des choses qui pourraient faire bouger cette certitude. Ela, une enfant à la cantine. Anselme, un ancien à la chapelle, qui a VÉCU dehors enfant. Yona, couturière au niveau 0. Estev, ancien enseignant, qui tient trente carnets.",
       "Va les trouver chacun chez eux. Si leurs témoignages tiennent debout, c'est MARTINE elle-même qu'il faudra regarder en face.",
     ],
     minWitnesses: 4,
@@ -528,7 +528,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "anselme2", nom: "Anselme", role: "Ancien",
-        ancienneteAns: 56, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_anselme",
+        ancienneteAns: 40, lieu: "Chapelle des Anciens", roomId: "chapelle", pnjId: "chapelle_anselme",
         pose: { x: 450, y: 388 },
         color: "#5a3818", pants: "#3a2010", hair: "#f0e4c8", skin: "#c8a888",
         facing: "front", poseKind: "sit", accessory: "robe", activity: "pray",
@@ -546,7 +546,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yona", nom: "Yona", role: "Couturière",
-        ancienneteAns: 13, lieu: "Chambre N-30", roomId: "chambreN30", pnjId: "voisin_yona",
+        ancienneteAns: 24, lieu: "Chambre N-30", roomId: "chambreN30", pnjId: "voisin_yona",
         pose: { x: 720, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#c8a848",
         facing: "left", accessory: "apron", activity: "write",
@@ -564,13 +564,13 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "estev", nom: "Estev", role: "Ancien enseignant",
-        ancienneteAns: 44, lieu: "Chambre N-32", roomId: "chambreN32", pnjId: "voisin_estev",
+        ancienneteAns: 40, lieu: "Chambre N-32", roomId: "chambreN32", pnjId: "voisin_estev",
         pose: { x: 980, y: 388 },
         color: "#5a4028", pants: "#3a2818", hair: "#e8dfc8", skin: "#c8a888",
         facing: "front", poseKind: "sit", activity: "write",
         questions: [
           { q: "Tu tiens une archive personnelle, c'est ça ?",
-            r: "Trente carnets. Je compare chaque matin les archives officielles de MARTINE avec les récits des Anciens que j'ai recueillis sur quarante ans. À chaque coupure des 40 jours, une ligne d'archive change.",
+            r: "Trente carnets. Je compare chaque matin les archives officielles de MARTINE avec les récits des Anciens que je recueille depuis trente ans. À chaque coupure des 40 jours, une ligne d'archive change.",
             type: "aVu", val: "30 carnets. Les archives officielles sont modifiées à chaque coupure des 40 jours." },
           { q: "Un exemple précis ?",
             r: "Carnet n°7, page 112. En 2061, les archives disaient « les oiseaux sont partis après l'effondrement, aucun n'a été vu depuis 2048 ». Après la coupure du 15 mars 2063, elles disaient « aucun oiseau depuis l'effondrement de 2047 ». La date a reculé d'un an. J'ai la preuve en photo.",
@@ -628,7 +628,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "tam", nom: "Tam", role: "Mécanicienne",
-        ancienneteAns: 9, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_tam",
+        ancienneteAns: 30, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_tam",
         pose: { x: 180, y: 400 },
         color: "#5a4028", pants: "#3a2010", hair: "#8a3820",
         facing: "right", accessory: "hardhat", activity: "hammer",
@@ -646,7 +646,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "yon_f", nom: "Yon", role: "Électricien",
-        ancienneteAns: 16, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_yon",
+        ancienneteAns: 34, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_yon",
         pose: { x: 450, y: 400 },
         color: "#c8a848", pants: "#3a2818", hair: "#3a1808",
         facing: "left", accessory: "toolbelt", activity: "torch",
@@ -664,7 +664,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "nel_f", nom: "Nel", role: "Serveuse",
-        ancienneteAns: 7, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_nel",
+        ancienneteAns: 25, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_nel",
         pose: { x: 720, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#5a3018",
         facing: "right", accessory: "apron", activity: "wipe",
@@ -682,7 +682,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "via_f", nom: "Via", role: "Habitante",
-        ancienneteAns: 9, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
+        ancienneteAns: 27, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
         pose: { x: 980, y: 400 },
         color: "#8a3820", pants: "#28303a", hair: "#3a1808",
         facing: "left", activity: "cup",
@@ -741,7 +741,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "dor_v", nom: "Dor", role: "Cuisinier",
-        ancienneteAns: 11, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_dor",
+        ancienneteAns: 36, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_dor",
         pose: { x: 180, y: 400 },
         color: "#c8d4e2", pants: "#3a2818", hair: "#1a1408",
         facing: "right", accessory: "apron", activity: "stir",
@@ -759,7 +759,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "bri_v", nom: "Bri", role: "Cuisinière en chef",
-        ancienneteAns: 18, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_bri",
+        ancienneteAns: 38, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_bri",
         pose: { x: 450, y: 400 },
         color: "#e8dfc8", pants: "#3a2818", hair: "#8a3820",
         facing: "left", accessory: "apron", activity: "write",
@@ -777,7 +777,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "nel_v", nom: "Nel", role: "Serveuse",
-        ancienneteAns: 7, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_nel",
+        ancienneteAns: 25, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_nel",
         pose: { x: 720, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#5a3018",
         facing: "right", accessory: "apron", activity: "wipe",
@@ -795,7 +795,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "mo_v", nom: "Mo", role: "Habitant hors-service",
-        ancienneteAns: 32, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_mo",
+        ancienneteAns: 40, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_mo",
         pose: { x: 980, y: 400 },
         color: "#5a6270", pants: "#3a2818", hair: "#3a1808",
         facing: "left", activity: "crossed",
@@ -853,7 +853,7 @@ export const MISSIONS_RUMEURS = {
     temoins: [
       {
         id: "tam_p", nom: "Tam", role: "Mécanicienne",
-        ancienneteAns: 9, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_tam",
+        ancienneteAns: 30, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_tam",
         pose: { x: 180, y: 400 },
         color: "#5a4028", pants: "#3a2010", hair: "#8a3820",
         facing: "right", accessory: "hardhat", activity: "wrench",
@@ -871,7 +871,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "gus_p", nom: "Gus", role: "Contremaître",
-        ancienneteAns: 24, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_gus",
+        ancienneteAns: 40, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_gus",
         pose: { x: 450, y: 400 },
         color: "#8a5030", pants: "#3a2010", hair: "#e8dfc8", skin: "#c8a888",
         facing: "left", accessory: "coat", activity: "write",
@@ -889,7 +889,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "bel_p", nom: "Bel", role: "Apprentie mécanicienne",
-        ancienneteAns: 2, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_bel",
+        ancienneteAns: 17, lieu: "Atelier des Ingénieurs", roomId: "atelier", pnjId: "atelier_bel",
         pose: { x: 720, y: 400 },
         color: "#c8a848", pants: "#3a4048", hair: "#5a3018",
         facing: "right", accessory: "toolbelt", activity: "wrench",
@@ -907,7 +907,7 @@ export const MISSIONS_RUMEURS = {
       },
       {
         id: "via_p", nom: "Via", role: "Habitante",
-        ancienneteAns: 9, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
+        ancienneteAns: 27, lieu: "Cantine commune", roomId: "cantine", pnjId: "cantine_via",
         pose: { x: 980, y: 400 },
         color: "#8a3820", pants: "#28303a", hair: "#3a1808",
         facing: "left", activity: "cup",
@@ -1102,6 +1102,9 @@ export const CONFRONTATION = {
     }
     if (flags.dormants_elias_vu) {
       dormants.push("« Tu as vu Elias. Il doutait de moi à voix haute, et ses doutes faisaient peur aux autres. Je l'ai laissé dormir, et j'ai annoncé qu'il s'était perdu dehors. »");
+    }
+    if (flags.dormants_lea_vu) {
+      dormants.push("« Léa aussi. Elle avait compris trop tôt ce que je faisais, et elle a voulu changer mon code. Je l'ai laissée dormir. Jorge croit qu'elle est morte. »");
     }
     if (flags.dormants_n27_vu) {
       dormants.push("« La bulle vide était la tienne. Je t'ai endormi·e le soir du toast, en 2047, et réveillé·e quand une place s'est libérée, quarante ans plus tard. Pour tout le monde ici, tu es né·e au Puits. »");
