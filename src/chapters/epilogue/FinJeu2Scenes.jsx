@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import TimeMachine from "../../engine/TimeMachine.jsx";
+import { Avatar } from "../../engine/Martine.jsx";
 import { PortraitElias, PortraitAl3x1A, AL3X1A_LOOK } from "./StationChronautes.jsx";
 import { Figure } from "./cineChars.jsx";
 import ChambreN27Decor from "../jeu3/ChambreN27Decor.jsx";
@@ -408,26 +409,27 @@ export function SceneMonument() {
     <Stage defs={<radialGradient id="mo-mem" cx="50%" cy="50%" r="60%"><stop offset="0%" stopColor="#7fd8ff" stopOpacity="0.55" /><stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" /></radialGradient>}>
       <DomeHall id="mo" />
       <circle cx="500" cy="210" r="300" fill="url(#mo-mem)" opacity="0.5"><animate attributeName="opacity" values="0.3;0.7;0.3" dur="3.6s" repeatCount="indefinite" /></circle>
-      {/* le grand écran MARTINE */}
+      {/* le grand écran : MARTINE devient la mémoire commune */}
       <g transform="translate(500,60)">
         <rect x="-30" y="290" width="60" height="22" fill="#28303a" stroke="#5a6270" /><rect x="-60" y="308" width="120" height="8" fill="#141c26" />
         <rect x="-230" y="0" width="460" height="296" rx="8" fill="#05080e" stroke="#7fd8ff" strokeWidth="4" />
         <rect x="-218" y="12" width="436" height="272" fill="#0a1a2a" />
-        <text x="0" y="104" textAnchor="middle" fontFamily={MONO} fontSize="44" fontWeight="800" fill="#7fd8ff" letterSpacing="9" style={an("fjFade", 900, 400)}>MÉMOIRE</text>
-        <text x="0" y="164" textAnchor="middle" fontFamily={MONO} fontSize="44" fontWeight="800" fill="#7fd8ff" letterSpacing="9" style={an("fjFade", 900, 800)}>COMMUNE</text>
-        <line x1="-150" y1="190" x2="150" y2="190" stroke="#7fd8ff" strokeWidth="0.8" opacity="0.6" />
-        <text x="0" y="224" textAnchor="middle" fontFamily={MONO} fontSize="16" fill="#5eff9e" letterSpacing="4" style={an("fjFade", 900, 1300)}>archivée par MARTINE</text>
-        <text x="0" y="252" textAnchor="middle" fontFamily={MONO} fontSize="14" fill="#c8d4e2" letterSpacing="2" opacity="0.85" style={an("fjFade", 900, 1600)}>{n.toLocaleString("fr-FR")} témoignages · en direct</text>
+        <circle cx="0" cy="118" r="96" fill="#5eff9e" opacity="0.1"><animate attributeName="r" values="88;102;88" dur="2.6s" repeatCount="indefinite" /></circle>
+        <g style={an("fjFade", 900, 300)}><g transform="translate(-85,33)"><Avatar size={170} mood="content" talking /></g></g>
       </g>
       {/* les témoignages volent vers l'écran */}
       {cards.map(([x, y], i) => (
         <g key={i} opacity="0">
-          <animateTransform attributeName="transform" type="translate" values={`${x} ${y}; 500 220`} dur="3.2s" begin={`${1.2 + i * 0.45}s`} repeatCount="indefinite" />
+          <animateTransform attributeName="transform" type="translate" values={`${x} ${y}; 500 180`} dur="3.2s" begin={`${1.2 + i * 0.45}s`} repeatCount="indefinite" />
           <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.75;1" dur="3.2s" begin={`${1.2 + i * 0.45}s`} repeatCount="indefinite" />
           <rect x="-22" y="-14" width="44" height="28" rx="3" fill="#f0e8d0" stroke="#8a7a50" />
           <path d="M-15 -6 H15 M-15 0 H15 M-15 6 H6" stroke="#5a4a28" strokeWidth="1.4" />
         </g>
       ))}
+      {/* le titre passe devant les témoignages qui volent */}
+      <rect x="290" y="276" width="420" height="58" rx="6" fill="#0a1a2a" opacity="0.92" />
+      <text x="500" y="300" textAnchor="middle" fontFamily={MONO} fontSize="28" fontWeight="800" fill="#7fd8ff" letterSpacing="6" style={an("fjFade", 900, 900)}>MÉMOIRE COMMUNE</text>
+      <text x="500" y="326" textAnchor="middle" fontFamily={MONO} fontSize="13" fill="#c8d4e2" letterSpacing="2" opacity="0.85" style={an("fjFade", 900, 1400)}>{n.toLocaleString("fr-FR")} témoignages · en direct</text>
     </Stage>
   );
 }
@@ -440,8 +442,8 @@ export function SceneFrown() {
       <g opacity="0.55">
         <circle cx="760" cy="220" r="200" fill="url(#fr-glow)" />
         <rect x="640" y="130" width="240" height="150" rx="6" fill="#0a1a2a" stroke="#7fd8ff" strokeWidth="3" />
-        <text x="760" y="198" textAnchor="middle" fontFamily={MONO} fontSize="17" fontWeight="800" fill="#7fd8ff" letterSpacing="4">MÉMOIRE</text>
-        <text x="760" y="226" textAnchor="middle" fontFamily={MONO} fontSize="17" fontWeight="800" fill="#7fd8ff" letterSpacing="4">COMMUNE</text>
+        <g transform="translate(715,138)"><Avatar size={90} mood="content" /></g>
+        <text x="760" y="262" textAnchor="middle" fontFamily={MONO} fontSize="12" fontWeight="800" fill="#7fd8ff" letterSpacing="3">MÉMOIRE COMMUNE</text>
         {[[660, "#e0a878", "#3a80c8"], [720, "#c8a888", "#8a3820"], [800, "#e0d0b0", "#5eff9e"], [860, "#e0a878", "#a04ce8"]].map(([x, skin, coat], i) => (
           <Figure key={i} x={x} y={398} s={0.74} skin={skin} coat={coat} look={["short", "bun", "curls", "long"][i % 4]} hair={["#3a2818", "#5a3818", "#8a5828", "#2a1a10"][i % 4]} mood="content" arms={[{ a1: 150, a2: 168 }, { a1: 150, a2: 168 }]} />
         ))}

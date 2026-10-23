@@ -33,48 +33,47 @@ import { useTypewriter } from "./cineKit.jsx";
 
 /* ───────────────────────── Le script ───────────────────────── */
 const SCRIPT = [
-  /* 0 · LA PROPOSITION (2045) */
-  { stage: "station", who: "narr", text: "2045, quelques mois après le remède. Un soir, toutes les lumières de la station s'éteignent d'un coup. Quand elles reviennent, la moitié des écrans reste noire." },
-  { who: "mira", mood: "vexe", text: "Encore une panne ! La troisième cette semaine. Les réseaux lâchent les uns après les autres, partout dans le monde." },
-  { who: "elias", mood: "vexe", text: "Et dehors, le climat se dérègle. Deux fois cette année, les récoltes ont gelé." },
-  { who: "martine", mood: "neutre", text: "J'ai fait les calculs. Si rien ne change, dans deux ans, plus aucun réseau ne marchera à la surface : plus de courant, plus de chauffage, plus de messages." },
-  { who: "mira", mood: "vexe", text: "Et la mémoire commune ? Tous les témoignages qu'on vient de sauver ?" },
-  { who: "martine", mood: "content", text: "C'est pour ça que je vous propose un plan. Sous la station, il y a une ancienne mine. On la creuse, on la renforce, et on en fait un refuge : le Puits." },
-  { who: "martine", mood: "neutre", text: "De l'eau de la nappe, de l'air filtré, de la chaleur. Des étages pour vivre, des serres pour manger. Et mes serveurs tout en bas, à l'abri. Là, plus rien ne s'effacera." },
-  { who: "elias", mood: "neutre", text: "Vivre sous terre… Combien de personnes pourront descendre ?" },
-  { who: "martine", mood: "neutre", text: "Autant que le Puits pourra en nourrir. Je compterai les places, une par une." },
-  { who: "elias", mood: "vexe", text: "Et qui décidera de qui descend ?" },
-  { who: "martine", mood: "content", text: "Moi, si vous êtes d'accord. Je ne me fatigue pas, je ne me trompe pas dans mes calculs, et je n'ai pas de préférés." },
+  /* 0 · LA PROPOSITION (2045) — `viz` : l'image montrée sur l'écran
+     de la station (StageStation), elle reste jusqu'au `viz` suivant. */
+  { stage: "station", viz: "panne", who: "narr", text: "2045, quelques mois après le remède. Un soir, toutes les lumières de la station s'éteignent." },
+  { viz: "reseaux", who: "mira", mood: "vexe", text: "Encore une panne ! Partout dans le monde, les réseaux lâchent." },
+  { viz: "gel", who: "elias", mood: "vexe", text: "Et dehors, le climat se dérègle. Les champs ont gelé en plein été." },
+  { viz: "calcul", who: "martine", mood: "neutre", text: "J'ai fait le calcul. Dans deux ans, plus rien ne marchera à la surface." },
+  { viz: "memoire", who: "mira", mood: "vexe", text: "Et la mémoire commune ? Tout ce qu'on vient de sauver ?" },
+  { viz: "mine", who: "martine", mood: "content", text: "J'ai un plan. Sous la station, il y a une vieille mine. On peut en faire un refuge : le Puits." },
+  { viz: "plan", who: "martine", mood: "neutre", text: "De l'eau, de l'air, des serres pour manger. Et mes serveurs tout en bas, à l'abri." },
+  { viz: "places", who: "elias", mood: "neutre", text: "Combien de personnes pourront descendre ?" },
+  { who: "martine", mood: "neutre", text: "Autant que le Puits pourra en nourrir. Je compterai les places." },
+  { viz: "decider", who: "elias", mood: "vexe", text: "Et qui choisira ceux qui descendent ?" },
+  { who: "martine", mood: "content", text: "Moi. Je ne me fatigue pas, je ne me trompe pas, et je n'ai pas de préférés." },
   { type: "choice", prompt: "Pose une question à MARTINE", options: [
-    { label: "📡 Comment sais-tu que la surface deviendra dangereuse ?", reply: [
-      { who: "martine", mood: "neutre", text: "Mes capteurs, mes modèles du climat, et quarante ans de mesures enregistrées." },
-      { who: "mira", mood: "content", text: "Léa, notre ingénieure, installe justement trois capteurs sur le toit. On aura ses mesures à elle, pour comparer." },
+    { label: "📡 Comment sais-tu qu'il fera dangereux dehors ?", reply: [
+      { viz: "calcul", who: "martine", mood: "neutre", text: "Mes capteurs et mes calculs." },
+      { viz: "capteurs", who: "mira", mood: "content", text: "Léa, notre ingénieure, pose aussi ses capteurs sur le toit. On pourra comparer." },
     ] },
     { label: "⛏ Pourquoi sous terre ?", reply: [
-      { who: "martine", mood: "neutre", text: "Sous terre, la température ne change presque pas, et les tempêtes n'y arrivent pas. C'est l'endroit le plus sûr que je connaisse." },
+      { viz: "sousterre", who: "martine", mood: "neutre", text: "Sous terre, il fait toujours la même température. Et les tempêtes n'y arrivent pas." },
     ] },
     { label: "✋ Et si on n'est pas d'accord avec toi ?", reply: [
-      { who: "martine", mood: "content", text: "Alors on en discutera, {prenom}. Je ne suis qu'une machine." },
+      { viz: "machine", who: "martine", mood: "content", text: "On en discutera. Je ne suis qu'une machine." },
       { who: "elias", mood: "vexe", text: "C'est bien ce qui m'inquiète." },
     ] },
   ] },
-  { who: "narr", text: "Un long silence. Puis Mira hoche la tête. Les autres aussi, un à un. Elias regarde ses mains." },
-  { who: "mira", mood: "content", text: "Écoute, {prenom} : on va avoir besoin de bras, et de quelqu'un qui sait vérifier ce qu'on lui dit. Tu as traversé toutes les époques. Tu resterais avec nous, le temps de construire le Puits ?" },
-  { who: "elias", mood: "neutre", text: "Deux ans de chantier, peut-être. C'est beaucoup te demander." },
-  { who: "martine", mood: "content", text: "Et quand le Puits sera fini, je te ramènerai chez toi. La nuit même où tu es parti·e, à 3 h 14. Chez toi, personne ne s'apercevra de rien." },
+  { viz: "plan", who: "narr", text: "Un silence. Mira hoche la tête, les autres aussi. Elias regarde ses mains." },
+  { viz: "demande", who: "mira", mood: "content", text: "Écoute, {prenom} : il nous faut des bras. Tu resterais nous aider à construire le Puits ?" },
+  { who: "elias", mood: "neutre", text: "Deux ans de chantier. C'est beaucoup te demander." },
+  { viz: "promesse", who: "martine", mood: "content", text: "Ensuite, je te ramènerai chez toi, la nuit même où tu es parti·e. Personne ne verra rien." },
   { id: "decision", type: "choice", prompt: "Que décides-tu ?", options: [
     { label: "🛠 Je reste : je vous aide à construire le Puits.", reply: [
-      { who: "mira", mood: "content", text: "Merci, {prenom} ! Demain, je te présente Léa. Vous allez bien vous entendre." },
-      { who: "narr", text: "Le lendemain, on donne le premier coup de pioche. Le chantier durera deux ans." },
+      { viz: "demande", who: "mira", mood: "content", text: "Merci, {prenom} ! Demain, je te présente Léa." },
+      { viz: "chantier", who: "narr", text: "Le lendemain, premier coup de pioche. Le chantier durera deux ans." },
     ] },
     { label: "🏠 Non : je rentre chez moi.", reply: [
-      { who: "elias", mood: "content", text: "Tu as déjà fait beaucoup pour nous. Rentre, {prenom}." },
+      { viz: "promesse", who: "elias", mood: "content", text: "Tu as déjà beaucoup fait pour nous. Rentre, {prenom}." },
       { who: "mira", mood: "content", text: "On ne t'oubliera pas. Maintenant, c'est impossible !" },
-      { who: "martine", mood: "content", text: "Accroche-toi. Je te ramène." },
-      { stage: "maison", who: "narr", text: "Un éclair blanc. MARTINE se pose tout doucement au milieu de ta rue. Il est 3 h 14 : la même nuit." },
-      { who: "martine", mood: "content", text: "Nous y sommes, {prenom}. Merci pour le remède. Merci pour tout." },
-      { who: "narr", text: "Tu remontes dans ta chambre sans faire de bruit. Rien n'a bougé. Ton lit est encore chaud." },
-      { who: "narr", text: "Sur ton téléphone, le message d'Al3x1a est toujours là : « Ma famille est en danger. Ceci te concerne aussi. »" },
+      { stage: "maison", who: "narr", text: "Un éclair blanc. MARTINE se pose dans ta rue. Il est 3 h 14 : la même nuit." },
+      { who: "martine", mood: "content", text: "Nous y sommes. Merci pour tout, {prenom}." },
+      { viz: "telephone", who: "narr", text: "Dans ta chambre, ton téléphone. Le message d'Al3x1a est toujours là." },
       { who: "narr", text: "Loin dans le futur, on scelle un Puits. Sans toi." },
       { type: "fin" },
     ] },
@@ -156,6 +155,14 @@ const WHO = {
 function stageOf(script, idx) {
   for (let k = idx; k >= 0; k--) if (script[k].stage) return script[k].stage;
   return "chantier";
+}
+/* l'image de la réplique = le dernier `viz` déclaré depuis le début de la scène */
+function vizOf(script, idx) {
+  for (let k = idx; k >= 0; k--) {
+    if (script[k].viz) return script[k].viz;
+    if (script[k].stage) return null;
+  }
+  return null;
 }
 
 /* ───────────────────────── Activité EMI ───────────────────────── */
@@ -391,8 +398,8 @@ export default function Jeu2B({ prenom, onDone, onRetour }) {
 
       {/* décor — remonté (fondu) à chaque changement de scène */}
       <div key={stage} style={{ position: "absolute", inset: 0, animation: "j2bIn 900ms ease-out", filter: fading ? "blur(7px) brightness(0.55)" : "none", transition: "filter 3200ms ease-in" }}>
-        {stage === "station" && <StageStation />}
-        {stage === "maison" && <StageMaison />}
+        {stage === "station" && <StageStation viz={vizOf(script, idx) || "panne"} who={isLine ? step.who : null} prenom={nom} />}
+        {stage === "maison" && <StageMaison viz={vizOf(script, idx)} />}
         {stage === "chantier" && <StageChantier />}
         {stage === "atelier" && <StageAtelier />}
         {stage === "toast" && <StageToast raised={raised} />}

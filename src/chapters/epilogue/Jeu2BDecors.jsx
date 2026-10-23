@@ -4,6 +4,7 @@ import { DomeHall } from "./FinJeu2Scenes.jsx";
 import { LEVELS } from "../jeu3/levels.js";
 import NightStreetDecor from "../../engine/NightStreetDecor.jsx";
 import TimeMachine from "../../engine/TimeMachine.jsx";
+import { Avatar } from "../../engine/Martine.jsx";
 
 /* ============================================================
    JEU 2B — décors et portrait de Léa
@@ -40,50 +41,402 @@ const wedge = (a0, a1, r0, r1) => {
   return `M${x0} ${y0} A${r1} ${r1} 0 0 1 ${x1} ${y1} L${x2} ${y2} A${r0} ${r0} 0 0 0 ${x3} ${y3} Z`;
 };
 
-/* ───────────────────────── 2045 · La proposition ───────────────────────── */
-export function StageStation() {
-  const levels = LEVELS.filter((l) => !l.hidden);
+/* ───────────────────────── 2045 · La proposition ─────────────────────────
+   Chaque réplique a son image (`viz`, posé dans le script de Jeu2B.jsx) :
+   l'écran de la station montre ce dont on parle, Mira (à gauche) et
+   Elias (à droite) sont dans la salle, celui qui parle est éclairé.
+   Quand MARTINE parle, son visage apparaît sur l'écran. */
+const MONO_F = "ui-monospace,monospace";
+
+function MartineFace({ x, y, size, mood = "neutre", talking = false }) {
+  return <g transform={`translate(${x - size / 2},${y - size / 2})`}><Avatar size={size} mood={mood} talking={talking} /></g>;
+}
+function Cross({ x, y, r = 16, delay = 0 }) {
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
-      <style>{`@keyframes j2sFlick { 0%, 100% { opacity: 0; } 46% { opacity: 0; } 48% { opacity: 0.55; } 50% { opacity: 0.1; } 53% { opacity: 0.7; } 56% { opacity: 0; } }`}</style>
-      <DomeHall id="j2s" dim={0.45} />
-      {/* petits écrans éteints par la panne */}
-      {[[96, 150], [834, 150]].map(([x, y], i) => (
-        <g key={i}>
-          <rect x={x} y={y} width="70" height="50" rx="3" fill="#05080e" stroke="#2a3446" strokeWidth="2" />
-          <text x={x + 35} y={y + 29} textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="8" fill="#5a6678" letterSpacing="1">RÉSEAU ✕</text>
+    <path d={`M${x - r} ${y - r} L${x + r} ${y + r} M${x + r} ${y - r} L${x - r} ${y + r}`} stroke="#ff5a4a" strokeWidth="4" strokeLinecap="round" opacity="0">
+      <animate attributeName="opacity" values="0;1" dur="0.3s" begin={`${delay}s`} fill="freeze" />
+    </path>
+  );
+}
+const Title = ({ children, color = "#7fd8ff", y = 38 }) => (
+  <text x="0" y={y} textAnchor="middle" fontFamily={MONO_F} fontSize="15" fontWeight="800" fill={color} letterSpacing="3">{children}</text>
+);
+
+/* le plan du Puits (étages du Jeu 3), réutilisé par plusieurs images */
+function PlanPuits({ animate = true }) {
+  const levels = LEVELS.filter((l) => !l.hidden);
+  const appear = (i) => (animate ? { animation: `j2sIn 500ms ease-out ${0.3 + i * 0.35}s both` } : undefined);
+  return (
+    <g>
+      <path d="M-210 92 H210" stroke="#a89078" strokeWidth="2" />
+      <path d="M-60 92 Q0 50 60 92" fill="#1a2a3a" stroke="#7fd8ff" strokeWidth="1.6" />
+      <path d="M-150 92 V270 M-138 92 V270" stroke="#7fd8ff" strokeWidth="1" opacity="0.7" />
+      {/* l'air : ventilateur en haut du puits */}
+      <g transform="translate(-144,82)">
+        <circle r="9" fill="#08182a" stroke="#7fd8ff" strokeWidth="1.2" />
+        <g><animateTransform attributeName="transform" type="rotate" values="0;360" dur="2s" repeatCount="indefinite" />
+          {[0, 120, 240].map((a) => <path key={a} d="M0 0 L7 -2 L7 2 Z" fill="#7fd8ff" transform={`rotate(${a})`} />)}
+        </g>
+      </g>
+      {levels.map((l, i) => (
+        <g key={l.id} style={appear(i)}>
+          <rect x={-132 + i * 14} y={102 + i * 26} width={300 - i * 14} height="20" fill="#0e2236" stroke={l.color} strokeWidth="1.2" />
+          <text x={-124 + i * 14} y={117 + i * 26} fontFamily={MONO_F} fontSize="11.5" fontWeight="800" fill={l.color} letterSpacing="1">{l.id.replace("-", "−")} · {l.name.toUpperCase()}</text>
+          {l.id === "-2" && [0, 1, 2, 3].map((k) => (
+            <path key={k} d={`M${70 + k * 18} ${120 + i * 26} q-4 -8 0 -14 q4 6 0 14`} fill="#8aff70" opacity="0.9" />
+          ))}
+          {l.id === "-3" && [0, 1, 2].map((k) => (
+            <g key={k}><rect x={86 + k * 16} y={105 + i * 26} width="11" height="14" fill="#1a0a08" stroke="#ff5030" strokeWidth="0.8" />
+              <circle cx={91 + k * 16} cy={109 + i * 26} r="1.4" fill="#5eff9e"><animate attributeName="opacity" values="0.3;1;0.3" dur={`${0.8 + k * 0.3}s`} repeatCount="indefinite" /></circle></g>
+          ))}
         </g>
       ))}
-      {/* l'écran de MARTINE : le plan du Puits */}
-      <g transform="translate(500,40)">
-        <rect x="-30" y="300" width="60" height="22" fill="#28303a" stroke="#5a6270" />
-        <rect x="-240" y="0" width="480" height="304" rx="8" fill="#05080e" stroke="#7fd8ff" strokeWidth="4" />
-        <rect x="-228" y="12" width="456" height="280" fill="#08182a" />
-        <text x="0" y="40" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="20" fontWeight="800" fill="#7fd8ff" letterSpacing="5">PROJET · LE PUITS</text>
-        <text x="0" y="58" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#5eff9e" letterSpacing="2">proposé par MARTINE · coupe sous la station</text>
-        {/* sol, coupole de la station, puits */}
-        <path d="M-210 92 H210" stroke="#a89078" strokeWidth="2" />
-        <path d="M-60 92 Q0 50 60 92" fill="#1a2a3a" stroke="#7fd8ff" strokeWidth="1.6" />
-        <path d="M-150 92 V270 M-138 92 V270" stroke="#7fd8ff" strokeWidth="1" opacity="0.7" />
-        {levels.map((l, i) => (
-          <g key={l.id}>
-            <rect x={-132 + i * 14} y={102 + i * 26} width={300 - i * 14} height="20" fill="#0e2236" stroke={l.color} strokeWidth="1.2" opacity="0.95" />
-            <text x={-124 + i * 14} y={116 + i * 26} fontFamily="ui-monospace,monospace" fontSize="9.5" fontWeight="800" fill={l.color} letterSpacing="1">{l.id.replace("-", "−")} · {l.name.toUpperCase()}</text>
+      <path d="M-210 276 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="#4aa8e8" strokeWidth="2.4" fill="none" opacity="0.85" />
+      <text x="-206" y="266" fontFamily={MONO_F} fontSize="11" fontWeight="700" fill="#4aa8e8">nappe d'eau</text>
+      <circle r="3" fill="#7fd8ff" cx="-144" cy="110"><animate attributeName="cy" values="100;262;100" dur="5s" repeatCount="indefinite" /></circle>
+    </g>
+  );
+}
+
+function ScreenViz({ viz, prenom }) {
+  switch (viz) {
+    case "panne":
+      return (
+        <g>
+          <rect x="-228" y="12" width="456" height="280" fill="#020406" />
+          {Array.from({ length: 14 }).map((_, i) => (
+            <rect key={i} x="-228" y={20 + i * 19} width="456" height="2" fill="#c8d4e2" opacity="0.06">
+              <animate attributeName="opacity" values="0.02;0.12;0.02" dur={`${0.3 + (i % 4) * 0.1}s`} repeatCount="indefinite" />
+            </rect>
+          ))}
+          <text x="0" y="160" textAnchor="middle" fontFamily={MONO_F} fontSize="40" fontWeight="900" fill="#ff5a4a" letterSpacing="6">
+            ⚠ PANNE<animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" />
+          </text>
+          <text x="0" y="196" textAnchor="middle" fontFamily={MONO_F} fontSize="12" fill="#8fa3bd" letterSpacing="3">RÉSEAU HORS SERVICE</text>
+        </g>
+      );
+    case "reseaux": {
+      const nodes = [[-160, 90], [-120, 120], [-110, 200], [-10, 80], [0, 150], [10, 200], [80, 80], [130, 100], [170, 120], [150, 205], [-60, 100], [60, 130]];
+      return (
+        <g>
+          <Title>LES RÉSEAUX DU MONDE</Title>
+          {["M-200 70 Q-150 50 -100 70 Q-80 100 -110 130 Q-130 150 -150 140 Q-190 120 -200 70 Z",
+            "M-120 160 Q-95 160 -90 190 Q-95 240 -115 260 Q-130 230 -130 190 Z",
+            "M-30 70 Q10 60 30 75 Q20 95 -10 95 Q-30 90 -30 70 Z",
+            "M-20 105 Q20 100 35 130 Q30 190 0 220 Q-20 190 -30 140 Z",
+            "M40 65 Q120 50 190 80 Q200 120 150 140 Q100 150 60 120 Q40 100 40 65 Z",
+            "M130 190 Q170 180 190 200 Q180 225 150 225 Q125 215 130 190 Z"].map((d, i) => (
+            <path key={i} d={d} fill="#14324a" stroke="#2a5a7a" strokeWidth="1" />
+          ))}
+          {nodes.slice(1).map(([x, y], i) => {
+            const [px, py] = nodes[i];
+            return (
+              <line key={`l${i}`} x1={px} y1={py} x2={x} y2={y} stroke="#5eff9e" strokeWidth="1.4" opacity="0.7">
+                <animate attributeName="stroke" values="#5eff9e;#3a2020" dur="0.3s" begin={`${0.5 + i * 0.35}s`} fill="freeze" />
+              </line>
+            );
+          })}
+          {nodes.map(([x, y], i) => (
+            <circle key={i} cx={x} cy={y} r="5" fill="#5eff9e" stroke="#06110b" strokeWidth="1">
+              <animate attributeName="fill" values="#5eff9e;#ff5a4a" dur="0.3s" begin={`${0.4 + i * 0.35}s`} fill="freeze" />
+            </circle>
+          ))}
+          <text x="0" y="282" textAnchor="middle" fontFamily={MONO_F} fontSize="12" fill="#ff8a7a" letterSpacing="2">3 PANNES CETTE SEMAINE</text>
+        </g>
+      );
+    }
+    case "gel":
+      return (
+        <g>
+          <defs>
+            <linearGradient id="j2s-gsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#9aa8b8" /><stop offset="100%" stopColor="#d8e0e8" /></linearGradient>
+          </defs>
+          <rect x="-228" y="12" width="456" height="130" fill="url(#j2s-gsky)" />
+          <rect x="-228" y="142" width="456" height="150" fill="#e4ecf2" />
+          {[-200, -120, -40, 40, 120, 200].map((x, i) => <path key={i} d={`M${x * 0.3} 142 L${x} 292`} stroke="#b8c8d4" strokeWidth="1.4" />)}
+          {/* le blé gelé, couché et blanc */}
+          {Array.from({ length: 34 }).map((_, i) => {
+            const x = -210 + (i % 17) * 26 + (i > 16 ? 13 : 0), y = i > 16 ? 270 : 210;
+            return (
+              <g key={i}>
+                <path d={`M${x} ${y} q4 -22 16 -28`} stroke="#a89878" strokeWidth="2" fill="none" />
+                <ellipse cx={x + 17} cy={y - 29} rx="5" ry="2.6" fill="#f4f8fc" stroke="#c8d4dc" strokeWidth="0.6" transform={`rotate(-30 ${x + 17} ${y - 29})`} />
+              </g>
+            );
+          })}
+          {/* neige */}
+          {Array.from({ length: 22 }).map((_, i) => (
+            <circle key={i} cx={-220 + ((i * 47) % 440)} r="2" fill="#ffffff">
+              <animate attributeName="cy" values={`${12 + (i % 5) * 10};292`} dur={`${3 + (i % 4)}s`} repeatCount="indefinite" />
+            </circle>
+          ))}
+          {/* thermomètre */}
+          <g transform="translate(-188,40)">
+            <rect x="-9" y="0" width="18" height="120" rx="9" fill="#ffffff" stroke="#5a6678" strokeWidth="1.5" />
+            <circle cx="0" cy="128" r="14" fill="#3a80e8" stroke="#5a6678" strokeWidth="1.5" />
+            <rect x="-4" y="94" width="8" height="34" fill="#3a80e8" />
+            <text x="22" y="112" fontFamily={MONO_F} fontSize="15" fontWeight="900" fill="#1a3a6a">−6 °C</text>
           </g>
-        ))}
-        {/* la nappe d'eau, tout en bas */}
-        <path d="M-210 276 q15 -6 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0" stroke="#4aa8e8" strokeWidth="2" fill="none" opacity="0.8" />
-        <text x="-206" y="268" fontFamily="ui-monospace,monospace" fontSize="8" fill="#4aa8e8">nappe d'eau</text>
-        <circle r="3" fill="#7fd8ff" cx="-144" cy="110">
-          <animate attributeName="cy" values="100;262;100" dur="5s" repeatCount="indefinite" />
-        </circle>
-      </g>
-      {/* les chronautes, de dos, regardent le plan */}
-      {[[250, "#3a80c8", "#5a3818", "short"], [330, "#c88060", "#2a1a10", "long"], [690, "#5eff9e", "#8a5828", "bun"], [770, "#a04ce8", "#3a2818", "curls"]].map(([x, coat, hair, look], i) => (
-        <Figure key={i} x={x} y={404} s={0.95} back coat={coat} hair={hair} look={look} garment={i % 2 ? "coat" : "jacket"} arms={[{ a1: 8, a2: 5 }, { a1: 8, a2: 5 }]} />
+          {/* calendrier : on est en été */}
+          <g transform="translate(150,24)">
+            <rect width="64" height="58" rx="4" fill="#ffffff" stroke="#5a6678" />
+            <rect width="64" height="17" rx="4" fill="#d23a3a" />
+            <text x="32" y="13" textAnchor="middle" fontFamily={MONO_F} fontSize="10" fontWeight="800" fill="#fff">JUILLET</text>
+            <text x="32" y="48" textAnchor="middle" fontFamily="Georgia,serif" fontSize="24" fontWeight="800" fill="#2a2418">14</text>
+          </g>
+          <g transform="translate(-214,26)"><circle r="4" fill="#d23a3a"><animate attributeName="opacity" values="1;0.2;1" dur="1s" repeatCount="indefinite" /></circle>
+            <text x="9" y="4" fontFamily={MONO_F} fontSize="9" fontWeight="800" fill="#2a2418">CAMÉRA · CHAMPS</text></g>
+        </g>
+      );
+    case "calcul":
+      return (
+        <g>
+          <Title>LE CALCUL DE MARTINE</Title>
+          <path d="M-110 70 V200 H200" stroke="#5a6678" strokeWidth="1.5" fill="none" />
+          <text x="-116" y="78" textAnchor="end" fontFamily={MONO_F} fontSize="10" fill="#8fa3bd">tout marche</text>
+          <text x="-110" y="216" textAnchor="middle" fontFamily={MONO_F} fontSize="11" fontWeight="800" fill="#c8d4e2">2045</text>
+          <text x="196" y="216" textAnchor="middle" fontFamily={MONO_F} fontSize="11" fontWeight="800" fill="#ff8a7a">2047</text>
+          <path d="M-110 78 C-20 84 60 140 196 198" stroke="#ff5a4a" strokeWidth="4" fill="none" strokeDasharray="420" strokeDashoffset="420">
+            <animate attributeName="stroke-dashoffset" values="420;0" dur="1.8s" begin="0.3s" fill="freeze" />
+          </path>
+          {/* courant, chauffage, messages */}
+          <g transform="translate(-100,254)">
+            <path d="M0 -18 a12 12 0 1 1 0.1 0 Z" fill="#ffd166" transform="translate(0,4)" />
+            <rect x="-6" y="0" width="12" height="9" fill="#8a94a8" />
+            <Cross x={0} y={-4} delay={1.8} />
+          </g>
+          <g transform="translate(0,254)">
+            <path d="M0 10 C-14 4 -10 -10 -2 -20 C-2 -10 6 -8 6 -16 C14 -6 12 6 0 10 Z" fill="#ff8a3a" />
+            <Cross x={0} y={-4} delay={2.2} />
+          </g>
+          <g transform="translate(100,254)">
+            <rect x="-16" y="-14" width="32" height="22" fill="#e8eef5" stroke="#5a6678" />
+            <path d="M-16 -14 L0 -2 L16 -14" stroke="#5a6678" fill="none" />
+            <Cross x={0} y={-4} delay={2.6} />
+          </g>
+          {[["courant", -100], ["chauffage", 0], ["messages", 100]].map(([t, x]) => (
+            <text key={t} x={x} y={287} textAnchor="middle" fontFamily={MONO_F} fontSize="12.5" fontWeight="700" fill="#c8d4e2">{t}</text>
+          ))}
+        </g>
+      );
+    case "memoire":
+      return (
+        <g>
+          <Title>LA MÉMOIRE COMMUNE</Title>
+          {[-150, -75, 0, 75, 150].map((x, s) => (
+            <g key={x}>
+              {Array.from({ length: 6 }).map((_, k) => (
+                <g key={k} transform={`translate(${x},${200 - k * 18})`}>
+                  <rect x="-28" y="-12" width="56" height="16" rx="2" fill="#f0e8d0" stroke="#8a7a50" />
+                  <path d="M-20 -6 H20 M-20 -1 H10" stroke="#5a4a28" strokeWidth="1.2" />
+                  {(s + k) % 4 === 0 && <animate attributeName="opacity" values="1;0.15;1" dur="2.4s" begin={`${(s + k) * 0.3}s`} repeatCount="indefinite" />}
+                </g>
+              ))}
+            </g>
+          ))}
+          <text x="0" y="246" textAnchor="middle" fontFamily={MONO_F} fontSize="13" fill="#c8d4e2" letterSpacing="1">124 512 témoignages</text>
+          <text x="0" y="278" textAnchor="middle" fontFamily={MONO_F} fontSize="14" fontWeight="800" fill="#ff8a7a" letterSpacing="2">⚠ SANS COURANT, TOUT S'EFFACE</text>
+        </g>
+      );
+    case "mine":
+      return (
+        <g>
+          <Title>UNE VIEILLE MINE, SOUS LA STATION</Title>
+          <rect x="-228" y="92" width="456" height="200" fill="#2a1e14" />
+          {Array.from({ length: 40 }).map((_, i) => <circle key={i} cx={-220 + ((i * 53) % 440)} cy={100 + ((i * 37) % 185)} r={1 + (i % 3)} fill="#4a3a2a" />)}
+          <path d="M-210 92 H210" stroke="#a89078" strokeWidth="2" />
+          <path d="M-60 92 Q0 50 60 92" fill="#1a2a3a" stroke="#7fd8ff" strokeWidth="1.6" />
+          <text x="0" y="84" textAnchor="middle" fontFamily={MONO_F} fontSize="8" fill="#7fd8ff">station</text>
+          <path d="M-40 92 V260 M-40 140 H120 M-40 190 H160 M-40 240 H90 M60 140 V190" stroke="#d8b878" strokeWidth="9" strokeLinecap="round" fill="none" strokeDasharray="600" strokeDashoffset="600" opacity="0.85">
+            <animate attributeName="stroke-dashoffset" values="600;0" dur="2.4s" begin="0.2s" fill="freeze" />
+          </path>
+          <text x="170" y="276" textAnchor="middle" fontFamily={MONO_F} fontSize="14" fontWeight="900" fill="#ffd166" opacity="0">
+            → LE PUITS<animate attributeName="opacity" values="0;1" dur="0.4s" begin="2.6s" fill="freeze" />
+          </text>
+        </g>
+      );
+    case "plan":
+      return <g><Title>LE PUITS</Title><PlanPuits /></g>;
+    case "places":
+      return (
+        <g>
+          <Title>LES PLACES, COMPTÉES PAR MARTINE</Title>
+          {Array.from({ length: 40 }).map((_, i) => {
+            const c = i % 10, r = Math.floor(i / 10);
+            const x = -180 + c * 40, y = 92 + r * 46;
+            const inside = c < 8;
+            return (
+              <g key={i} opacity={inside ? 1 : 0.35}>
+                <circle cx={x} cy={y} r="7" fill="#3a4658">
+                  {inside && <animate attributeName="fill" values="#3a4658;#5eff9e" dur="0.2s" begin={`${0.2 + (r * 8 + c) * 0.06}s`} fill="freeze" />}
+                </circle>
+                <path d={`M${x - 10} ${y + 24} Q${x} ${y + 6} ${x + 10} ${y + 24} Z`} fill="#3a4658">
+                  {inside && <animate attributeName="fill" values="#3a4658;#5eff9e" dur="0.2s" begin={`${0.2 + (r * 8 + c) * 0.06}s`} fill="freeze" />}
+                </path>
+              </g>
+            );
+          })}
+          <path d="M120 78 V268" stroke="#ff5a4a" strokeWidth="3" strokeDasharray="8 5" />
+          <text x="120" y="284" textAnchor="middle" fontFamily={MONO_F} fontSize="12" fontWeight="800" fill="#ff8a7a" letterSpacing="2">LIMITE</text>
+        </g>
+      );
+    case "decider":
+    case "machine":
+      return (
+        <g>
+          <circle cx="0" cy="146" r="110" fill="#5eff9e" opacity="0.08" />
+          <MartineFace x={0} y={146} size={200} mood={viz === "decider" ? "content" : "neutre"} />
+        </g>
+      );
+    case "capteurs":
+      return (
+        <g>
+          <Title>LE TOIT DE LA STATION</Title>
+          <path d="M-210 262 Q0 70 210 262 Z" fill="#1a2a3a" stroke="#7fd8ff" strokeWidth="1.5" />
+          {[[-110, 176], [0, 132], [110, 176]].map(([x, y], i) => (
+            <g key={i}>
+              <path d={`M${x} ${y} V${y - 44}`} stroke="#c8d4e2" strokeWidth="2.4" />
+              <path d={`M${x - 12} ${y - 44} Q${x} ${y - 58} ${x + 12} ${y - 44} Z`} fill="#e8eef5" />
+              <circle cx={x} cy={y - 50} r="3" fill="#ff9a5a"><animate attributeName="opacity" values="0.2;1;0.2" dur={`${1 + i * 0.3}s`} repeatCount="indefinite" /></circle>
+              <text x={x} y={y + 18} textAnchor="middle" fontFamily={MONO_F} fontSize="11.5" fontWeight="700" fill="#c8d4e2">capteur {i + 1}</text>
+            </g>
+          ))}
+          <Figure x={46} y={150} s={0.42} skin="#e8c0a0" hair="#c85a28" look="curls" coat="#7a5a3a" garment="coat" mood="content" arms={[{ a1: 150, a2: 160 }, { a1: 20, a2: 10 }]} />
+          <text x="0" y="284" textAnchor="middle" fontFamily={MONO_F} fontSize="12" fontWeight="800" fill="#ff9a5a" letterSpacing="2">LES MESURES DE LÉA</text>
+        </g>
+      );
+    case "sousterre":
+      return (
+        <g>
+          <rect x="-228" y="12" width="456" height="108" fill="#2a3446" />
+          {[[-160, 40], [-40, 30], [90, 44]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx="60" ry="16" fill="#4a5466" />)}
+          <path d="M20 50 L8 76 L22 76 L10 104" stroke="#ffd166" strokeWidth="3" fill="none"><animate attributeName="opacity" values="0;1;0;0;0" dur="2s" repeatCount="indefinite" /></path>
+          {Array.from({ length: 14 }).map((_, i) => (
+            <circle key={i} cx={-220 + ((i * 61) % 440)} r="1.8" fill="#fff"><animate attributeName="cy" values="20;118" dur={`${1.5 + (i % 3) * 0.5}s`} repeatCount="indefinite" /></circle>
+          ))}
+          <rect x="-228" y="120" width="456" height="172" fill="#2a1e14" />
+          <path d="M-228 120 H228" stroke="#a89078" strokeWidth="2" />
+          <path d="M-60 120 V280 M-46 120 V280" stroke="#7fd8ff" strokeWidth="1.2" opacity="0.7" />
+          <text x="-186" y="36" fontFamily={MONO_F} fontSize="14" fontWeight="800" fill="#e8eef5">DEHORS</text>
+          <text x="-210" y="146" fontFamily={MONO_F} fontSize="14" fontWeight="800" fill="#d8b878">SOUS TERRE</text>
+          {/* thermomètre de surface : il monte et descend sans arrêt */}
+          <g transform="translate(150,22)">
+            <rect x="-7" y="0" width="14" height="78" rx="7" fill="#fff" stroke="#5a6678" />
+            <rect x="-3" y="30" width="6" height="48" fill="#ff5a4a"><animate attributeName="y" values="62;8;62" dur="2.2s" repeatCount="indefinite" /><animate attributeName="height" values="16;70;16" dur="2.2s" repeatCount="indefinite" /></rect>
+            <text x="-14" y="44" textAnchor="end" fontFamily={MONO_F} fontSize="13" fontWeight="800" fill="#ffd0c8">−20 à +40 °C</text>
+          </g>
+          {/* thermomètre sous terre : immobile */}
+          <g transform="translate(150,150)">
+            <rect x="-7" y="0" width="14" height="78" rx="7" fill="#fff" stroke="#5a6678" />
+            <rect x="-3" y="44" width="6" height="34" fill="#ff9a5a" />
+            <text x="-14" y="50" textAnchor="end" fontFamily={MONO_F} fontSize="15" fontWeight="900" fill="#ffd166">12 °C</text>
+            <text x="-14" y="68" textAnchor="end" fontFamily={MONO_F} fontSize="11" fill="#d8b878">toute l'année</text>
+          </g>
+        </g>
+      );
+    case "demande":
+      return (
+        <g>
+          <Title>L'ÉQUIPE DU CHANTIER</Title>
+          {[-170, -100, -30, 40].map((x, i) => (
+            <g key={x}>
+              <circle cx={x} cy="140" r="20" fill={["#c8946a", "#e0b898", "#d8a880", "#e8c0a0"][i]} />
+              <path d={`M${x - 24} 132 Q${x} 104 ${x + 24} 132 Z`} fill="#ffd166" stroke="#a88a20" />
+              <path d={`M${x - 30} 210 Q${x} 160 ${x + 30} 210 Z`} fill={["#3a5878", "#c8a878", "#5a3818", "#7a5a3a"][i]} />
+            </g>
+          ))}
+          <g>
+            <circle cx="120" cy="140" r="20" fill="none" stroke="#5eff9e" strokeWidth="2.4" strokeDasharray="6 4" />
+            <path d="M90 210 Q120 160 150 210 Z" fill="none" stroke="#5eff9e" strokeWidth="2.4" strokeDasharray="6 4" />
+            <text x="120" y="150" textAnchor="middle" fontFamily="Georgia,serif" fontSize="26" fontWeight="800" fill="#5eff9e">?<animate attributeName="opacity" values="0.4;1;0.4" dur="1.4s" repeatCount="indefinite" /></text>
+            <text x="120" y="232" textAnchor="middle" fontFamily={MONO_F} fontSize="12" fontWeight="800" fill="#5eff9e">{prenom}</text>
+          </g>
+          <g transform="translate(-60,262) rotate(-30)"><rect x="-2" y="-26" width="4" height="40" fill="#8a6a40" /><path d="M-16 -26 Q0 -34 16 -26 L14 -22 Q0 -28 -14 -22 Z" fill="#8a94a8" /></g>
+          <g transform="translate(-30,262) rotate(30)"><rect x="-2" y="-26" width="4" height="34" fill="#8a6a40" /><path d="M-8 8 h16 l-2 14 h-12 Z" fill="#8a94a8" /></g>
+        </g>
+      );
+    case "promesse":
+      return (
+        <g>
+          <text x="0" y="132" textAnchor="middle" fontFamily={MONO_F} fontSize="76" fontWeight="900" fill="#5eff9e" letterSpacing="6">03:14</text>
+          <circle cx="150" cy="190" r="16" fill="#f0e4c8" opacity="0.9" />
+          <path d="M-70 270 V214 L-30 184 L10 214 V270 Z" fill="#1a2030" stroke="#3a4658" />
+          <rect x="-44" y="224" width="18" height="18" fill="#ffc060" />
+          <path d="M-228 270 H228" stroke="#3a4658" strokeWidth="2" />
+          <text x="110" y="250" textAnchor="middle" fontFamily={MONO_F} fontSize="13" fontWeight="800" fill="#c8d4e2" letterSpacing="2">LA NUIT MÊME</text>
+        </g>
+      );
+    case "chantier":
+      return (
+        <g>
+          <Title>LE CHANTIER</Title>
+          <rect x="-228" y="92" width="456" height="200" fill="#2a1e14" />
+          <path d="M-210 92 H210" stroke="#a89078" strokeWidth="2" />
+          <path d="M-60 92 Q0 50 60 92" fill="#1a2a3a" stroke="#7fd8ff" strokeWidth="1.6" />
+          <rect x="-20" y="92" width="40" height="10" fill="#0a0806"><animate attributeName="height" values="10;150" dur="3s" fill="freeze" /></rect>
+          <g transform="translate(40,120)"><g><animateTransform attributeName="transform" type="rotate" values="-30;20;-30" dur="0.8s" repeatCount="indefinite" />
+            <rect x="-2" y="-30" width="4" height="40" fill="#8a6a40" /><path d="M-16 -30 Q0 -38 16 -30 L14 -26 Q0 -32 -14 -26 Z" fill="#8a94a8" /></g></g>
+          <rect x="-160" y="262" width="320" height="12" rx="6" fill="#0a0806" stroke="#5a6678" />
+          <rect x="-158" y="264" width="10" height="8" rx="4" fill="#ffd166"><animate attributeName="width" values="10;316" dur="3s" fill="freeze" /></rect>
+          <text x="-160" y="256" fontFamily={MONO_F} fontSize="12" fontWeight="800" fill="#c8d4e2">2045</text>
+          <text x="160" y="256" textAnchor="end" fontFamily={MONO_F} fontSize="12" fontWeight="800" fill="#ffd166">2047</text>
+        </g>
+      );
+    default:
+      return <g><Title>LE PUITS</Title><PlanPuits animate={false} /></g>;
+  }
+}
+
+const MIRA_MOOD = { reseaux: "vexe", memoire: "vexe", capteurs: "content", accord: "content", demande: "content", chantier: "content" };
+const ELIAS_MOOD = { gel: "vexe", decider: "vexe", machine: "vexe", reseaux: "vexe", panne: "surpris" };
+
+export function StageStation({ viz = "panne", who = null, prenom = "chronaute" }) {
+  const dark = viz === "panne";
+  const lit = (w) => who === w;
+  return (
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
+      <style>{`@keyframes j2sFlick { 0%, 100% { opacity: 0; } 46% { opacity: 0; } 48% { opacity: 0.55; } 50% { opacity: 0.1; } 53% { opacity: 0.7; } 56% { opacity: 0; } }
+@keyframes j2sIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
+      <DomeHall id="j2s" dim={dark ? 0.6 : 0.2} />
+      {/* petits écrans éteints par la panne */}
+      {[[70, 110], [860, 110]].map(([x, y], i) => (
+        <g key={i}>
+          <rect x={x} y={y} width="70" height="50" rx="3" fill="#05080e" stroke="#2a3446" strokeWidth="2" />
+          <text x={x + 35} y={y + 29} textAnchor="middle" fontFamily={MONO_F} fontSize="8" fill="#5a6678" letterSpacing="1">RÉSEAU ✕</text>
+        </g>
       ))}
+      {/* l'écran de la station : ce dont on parle */}
+      <g transform="translate(500,42) scale(1.08)">
+        <rect x="-240" y="0" width="480" height="304" rx="8" fill="#05080e" stroke={lit("martine") ? "#5eff9e" : "#7fd8ff"} strokeWidth={lit("martine") ? 6 : 4} />
+        <rect x="-228" y="12" width="456" height="280" fill="#08182a" />
+        <g key={viz} style={{ animation: "j2sIn 500ms ease-out both" }}>
+          <ScreenViz viz={viz} prenom={prenom} />
+        </g>
+        {/* MARTINE qui parle : son visage, à cheval sur le bord de l'écran */}
+        {lit("martine") && !["decider", "machine"].includes(viz) && (
+          <g style={{ animation: "j2sIn 400ms ease-out both" }}>
+            <circle cx="-246" cy="44" r="40" fill="#06110b" stroke="#5eff9e" strokeWidth="2" />
+            <MartineFace x={-246} y={46} size={70} talking />
+          </g>
+        )}
+      </g>
+      {/* Mira (à gauche) et Elias (à droite) ; celui qui parle est éclairé */}
+      <ellipse cx="180" cy="404" rx="70" ry="11" fill="#7fd8ff" opacity="0.12" />
+      <ellipse cx="820" cy="404" rx="70" ry="11" fill="#ffd166" opacity="0.12" />
+      {lit("mira") && <ellipse cx="180" cy="300" rx="80" ry="160" fill="#7fd8ff" opacity="0.18" />}
+      {lit("elias") && <ellipse cx="820" cy="300" rx="80" ry="160" fill="#ffd166" opacity="0.18" />}
+      <g opacity={who && !lit("mira") ? 0.78 : 1}>
+        <Figure x={180} y={406} s={1.5} skin="#c8946a" hair="#1a1408" look="braids" earrings="#c8a848" lips="#c85028"
+          coat="#3a5878" pants="#1a2838" garment="jacket" mood={MIRA_MOOD[viz] || "neutre"}
+          arms={lit("mira") ? [{ a1: 9, a2: 6 }, { a1: 60, a2: 80 }] : [{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }]} />
+      </g>
+      <g opacity={who && !lit("elias") ? 0.78 : 1}>
+        <Figure x={820} y={406} s={1.5} skin="#e0b898" hair="#e8e8e0" look="short" beard
+          coat="#c8a878" pants="#4a3a28" garment="tunic" mood={ELIAS_MOOD[viz] || "neutre"}
+          arms={lit("elias") ? [{ a1: 60, a2: 80 }, { a1: 9, a2: 6 }] : [{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }]} />
+      </g>
       {/* la panne : la lumière vacille */}
-      <rect width="1000" height="560" fill="#000" style={{ animation: "j2sFlick 7s linear infinite", pointerEvents: "none" }} />
+      <rect width="1000" height="560" fill="#000" style={{ animation: `j2sFlick ${dark ? 2.5 : 7}s linear infinite`, pointerEvents: "none" }} />
     </svg>
   );
 }
@@ -91,7 +444,8 @@ export function StageStation() {
 /* ───────────────────────── 03 h 14 · Ta rue ───────────────────────── */
 /* Décor de l'intro (viewBox 1200×680), cadré un peu plus haut pour que
    MARTINE reste visible au-dessus du bandeau de dialogue. */
-export function StageMaison() {
+/* viz « telephone » : le message d'Al3x1a, toujours là. */
+export function StageMaison({ viz = null }) {
   return (
     <svg viewBox="0 70 1200 680" preserveAspectRatio={PAR()} style={FILL}>
       <defs>
@@ -107,6 +461,21 @@ export function StageMaison() {
         <animate attributeName="opacity" values="0.55;0.8;0.55" dur="3s" repeatCount="indefinite" />
       </circle>
       <g transform="translate(600,540) scale(0.95)"><TimeMachine landed={true} /></g>
+      {viz === "telephone" && (
+        <g transform="translate(860,170)" style={{ animation: "j2bIn 600ms ease-out both" }}>
+          <rect x="0" y="0" width="230" height="400" rx="26" fill="#0a0c12" stroke="#3a4050" strokeWidth="4" />
+          <rect x="12" y="34" width="206" height="340" rx="6" fill="#e8ddd0" />
+          <rect x="12" y="34" width="206" height="46" fill="#1f3a34" />
+          <circle cx="38" cy="57" r="13" fill="#8a6a50" />
+          <text x="60" y="54" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="15" fontWeight="700" fill="#fff">Al3x1a</text>
+          <text x="60" y="71" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10" fill="#9fd8c0">03:14</text>
+          <rect x="24" y="100" width="182" height="86" rx="10" fill="#ffffff" />
+          {["Ma famille", "est en danger.", "Ceci te concerne aussi."].map((t, i) => (
+            <text key={i} x="36" y={128 + i * 22} fontFamily="Segoe UI, system-ui, sans-serif" fontSize={i === 2 ? 13 : 15} fontStyle={i === 2 ? "italic" : "normal"} fontWeight="600" fill="#111b21">{t}</text>
+          ))}
+          <rect x="95" y="14" width="40" height="8" rx="4" fill="#1a1c24" />
+        </g>
+      )}
     </svg>
   );
 }
