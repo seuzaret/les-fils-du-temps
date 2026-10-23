@@ -111,6 +111,8 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
           pnj={chatPnj}
           temoin={findMissionTemoinForPnj(activeMission, chatPnj.id)}
           kovaDone={!!j3.flags?.mission_kova_done}
+          billet={!!j3.flags?.puits_billet}
+          idx={pnjList.indexOf(chatPnj)}
           onInterview={(temoinId) => {
             setSmalltalk(null);
             j3.openInterview(temoinId);
@@ -127,11 +129,24 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
    - Avant Kova → mode orientation (3 questions : où / pourquoi moi / toi).
    - Après Kova, PNJ témoin de l'enquête active → mode teaser (1 phrase
      d'amorce + bouton pour lancer l'interrogatoire officiel). */
-function SmalltalkModal({ pnj, temoin, kovaDone, onInterview, onClose }) {
+/* Avant le billet de Vez, « Qu'est-ce que je fais ici ? » ne parle pas
+   encore de lui : réplique propre au PNJ (pourquoiMoiAvant) ou l'une
+   de ces réponses, choisie d'après la place du PNJ dans la pièce (deux
+   voisins ne disent pas la même chose). */
+const AVANT_BILLET = [
+  "Ce que tu fais ici ? Tu vis ici, comme nous tous. Tu as une drôle de tête : tu as mal dormi ?",
+  "Tu habites au niveau 0, non ? Ici, tout le monde finit par avoir un travail. Le tien viendra.",
+  "On ne pose pas trop cette question, au Puits. On vit, on travaille, on écoute MARTINE.",
+  "Tu as l'air perdu·e. Ça arrive, au réveil. MARTINE dit que ça passe.",
+  "Ici ? Tu vis ici, comme tout le monde. Tu cherches quelque chose en particulier ?",
+  "Pourquoi tu me demandes ça ? Tu poses de drôles de questions, ce matin.",
+];
+function SmalltalkModal({ pnj, temoin, kovaDone, billet = true, idx = 0, onInterview, onClose }) {
   const [picked, setPicked] = useState(null);
   const teaserMode = kovaDone && !!temoin;
   const teaser = teaserMode ? teaserFor(temoin.id) : null;
-  const answerFor = (qid) => qid === "toi" ? pnj.replique : pnj[qid];
+  const avant = pnj.pourquoiMoiAvant || AVANT_BILLET[Math.max(0, idx) % AVANT_BILLET.length];
+  const answerFor = (qid) => qid === "toi" ? pnj.replique : qid === "pourquoiMoi" && !billet ? avant : pnj[qid];
   return (
     <div onClick={onClose}
       style={{

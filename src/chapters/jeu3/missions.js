@@ -61,7 +61,7 @@ export const MISSIONS_RUMEURS = {
     affirmation: "Le Dr Kova aurait dit que l'air, dehors, est respirable — et que sa nièce serait sortie sans dommage.",
     /* Briefing du Juge Vez, lu au comptoir. Chaque ligne = une réplique. */
     briefing: [
-      "Alors c'est toi qui a reçu le billet. Tu es le troisième cette année. Les deux autres ont abandonné.",
+      "Alors c'est toi qui as reçu le billet. Tu es la troisième personne à le recevoir cette année. Les deux autres ont abandonné.",
       "Je ne te demande pas qui tu es. On est trop d'habitants au Puits pour que je retienne les noms. Je te demande juste si tu es prêt·e à faire ce boulot.",
       "Pour commencer, un cas d'école. Un habitant, Marek, dit avoir entendu à la cantine un certain Dr Kova affirmer que sa nièce est sortie du Puits et qu'elle allait bien. Rumeur ? Vraie info ?",
       "Interroge Marek. Puis vérifie auprès de deux personnes qui pourraient savoir : l'archiviste Séra, et Yol, le garde qui veille sur la grande porte scellée. Reviens me voir avec ton verdict.",
