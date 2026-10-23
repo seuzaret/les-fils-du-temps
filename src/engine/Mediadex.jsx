@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { assetUrl } from './assetUrl.js';
 import { allCards } from './mediadex.js';
 import MediaCard from './MediaCard.jsx';
 import TrophyCard, { TrophyTile } from './TrophyCard.jsx';
@@ -127,7 +128,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
                       background: '#0a0604', border: '1px solid #3a2818', borderRadius: 6,
                       height: 100, overflow: 'hidden', position: 'relative',
                     }}>
-                      <img src={`assets/inventions/${c.filename}`} alt=""
+                      <img src={assetUrl(`assets/inventions/${c.filename}`)} alt=""
                         style={{
                           width: '100%', height: '100%', objectFit: 'cover',
                           filter: found ? 'none' : 'grayscale(1) brightness(0.15) contrast(2)',

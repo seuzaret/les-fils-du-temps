@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { assetUrl } from './assetUrl.js';
 
 /* ============================================================
    MEDIACARD — carte façon Pokémon d'une invention/média découvert
@@ -93,7 +94,7 @@ export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }
           background: '#0a0604', border: `2px solid ${t.accent}`, borderRadius: 10,
           overflow: 'hidden', height: 200, position: 'relative',
         }}>
-          <img src={`assets/inventions/${card.filename}`}
+          <img src={assetUrl(`assets/inventions/${card.filename}`)}
             alt={card.title}
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
           {/* étiquette type en bas de l'image */}

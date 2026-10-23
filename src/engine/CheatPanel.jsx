@@ -86,6 +86,7 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase4}>⟡ Phase 4 (étage K)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase5}>⟲ Phase 5 (voyages)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase6}>⧗ Phase 6 (pont Jorge → −3)</button>
+        <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/"; }}>🙃 Monde de MARTINE (prototype XIXe)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
