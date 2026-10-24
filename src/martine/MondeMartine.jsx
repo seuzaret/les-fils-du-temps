@@ -614,12 +614,13 @@ function Monde({ page, phase, setPhase }) {
       const k = `${e.id}/${sc.id}`;
       if (avancement(e, sc.id, etat) === 1 && !vus.current.tableaux.has(k)) { vus.current.tableaux.add(k); tableauNeuf = true; }
     }
-    const neuve = EPOQUES.find((e) => epoqueFinie(e, etat) && !vus.current.epoques.has(e.id));
+    const neuves = EPOQUES.filter((e) => epoqueFinie(e, etat) && !vus.current.epoques.has(e.id));
+    const neuve = neuves[neuves.length - 1];
     if (neuve) {
-      vus.current.epoques.add(neuve.id);
+      neuves.forEach((e) => vus.current.epoques.add(e.id));
       if (!isMuted()) playClink();
       setVoix({ texte: MARTINE_EPOQUE[(vus.current.epoques.size - 1) % MARTINE_EPOQUE.length], mood: "vexe" });
-      setToast({ texte: `✦ ${neuve.chapitre.epoque} : remis en ordre !`, ok: true });
+      setToast({ texte: neuves.length > 1 ? `✦ ${neuves.length} époques remises en ordre !` : `✦ ${neuve.chapitre.epoque} : remis en ordre !`, ok: true });
     } else if (tableauNeuf) {
       if (!isMuted()) playClink();
       setVoix({ texte: MARTINE_REPARE[(vus.current.tableaux.size - 1) % MARTINE_REPARE.length], mood: "vexe" });
@@ -678,6 +679,37 @@ function Monde({ page, phase, setPhase }) {
     setToast({ texte: `${SUPPORTS[choisi].nom} : ce n'est pas un objet du futur ! Rends-le à son propriétaire.`, ok: false });
   };
   const changerEpoque = (id) => { if (id !== epoqueId) { setEpoqueId(id); setTab(0); } };
+  /* TRICHE (pour l'enseignant) : taper « triche » ouvre un petit panneau */
+  const [triche, setTriche] = useState(false);
+  useEffect(() => {
+    let buf = "";
+    const onKey = (e) => {
+      if (!e.key || e.key.length !== 1) return;
+      buf = (buf + e.key.toLowerCase()).slice(-6);
+      if (buf === "triche") setTriche((t) => !t);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+  /* range des époques : chaque personnage reçoit son support (et rentre
+     chez lui), chaque objet du futur est jeté ; `garder` : un objet du
+     futur laissé dans son tableau, pour finir soi-même */
+  const ranger = (ids, garder = null) => setEtat((e) => {
+    const tient = { ...e.tient }, chez = { ...e.chez }, futurs = { ...e.futurs };
+    Object.values(PERSOS).filter((p) => ids.includes(p.epoque)).forEach((p) => { tient[p.id] = p.support; if (p.visite) chez[p.id] = true; });
+    Object.values(FUTURS).filter((f) => ids.includes(f.epoque) && f.id !== garder).forEach((f) => { futurs[f.id] = "jete"; });
+    const rangeIci = (id) => ids.includes((SUPPORTS[id] || FUTURS[id])?.epoque) && id !== garder;
+    return { ...e, tient, chez, futurs, sac: e.sac.filter((id) => !rangeIci(id)), choisi: rangeIci(e.choisi) ? null : e.choisi };
+  });
+  const toutSaufUn = () => {
+    const dernier = Object.values(FUTURS).find((f) => f.epoque === ep.id && f.scene === ep.tableaux[tab].id) || Object.values(FUTURS).find((f) => f.epoque === ep.id);
+    ranger(EPOQUES.map((x) => x.id), dernier.id);
+    setEtat((e) => ({ ...e, futurs: { ...e.futurs, [dernier.id]: "tableau" }, sac: e.sac.filter((x) => x !== dernier.id), choisi: e.choisi === dernier.id ? null : e.choisi }));
+    setTab(ep.tableaux.findIndex((sc) => sc.id === dernier.scene));
+    setTriche(false);
+    setToast({ texte: `Triche : il reste ${dernier.emoji} ${dernier.nom} à jeter, ici.`, ok: true });
+  };
+
   const recommencer = () => {
     minuteurs.current.forEach(clearTimeout); minuteurs.current = [];
     vus.current = { tableaux: new Set(), epoques: new Set() };
@@ -757,6 +789,27 @@ function Monde({ page, phase, setPhase }) {
         <Sac sac={sac} choisi={choisi} secoue={refus} onPoubelle={onPoubelle} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />
       </div>
       {mediadex && <MediadexPanel onClose={() => setMediadex(false)} />}
+      {triche && (
+        <div style={{ position: "fixed", left: 8, bottom: 8, zIndex: 300, width: 230, maxHeight: "calc(100dvh - 16px)", overflowY: "auto",
+          background: "rgba(18,8,28,0.97)", border: "1px solid #a04ce8", borderRadius: 10, padding: 10, boxShadow: "0 6px 24px rgba(0,0,0,0.6)",
+          display: "flex", flexDirection: "column", gap: 5, fontFamily: "ui-monospace,monospace" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3 }}>
+            <span style={{ fontSize: 11, letterSpacing: 1, color: "#c88aff", fontWeight: 700 }}>🎛️ TRICHE · MONDE 2</span>
+            <button onClick={() => setTriche(false)} style={{ background: "none", border: "none", color: "#8a7a9a", cursor: "pointer", fontSize: 14 }}>✕</button>
+          </div>
+          {[
+            [`✅ Ranger cette époque (${ep.chapitre.epoque})`, () => { ranger([ep.id]); }],
+            ["⏭ Tout ranger sauf un objet (pour finir soi-même)", toutSaufUn],
+            ["✨ Lancer la finale", () => { setTriche(false); preparerVignettes(); setPhase("retablissement"); }],
+            ["↺ Recommencer le monde 2", () => { setTriche(false); recommencer(); }],
+            ["← Rentrer au jeu", () => { window.location.href = RACINE(); }],
+          ].map(([t, f]) => (
+            <button key={t} onClick={f} style={{ background: "#2a1638", border: "1px solid #7a3ca8", color: "#e8d4ff", borderRadius: 7, padding: "6px 8px",
+              cursor: "pointer", fontSize: 11, textAlign: "left", fontFamily: "inherit" }}>{t}</button>
+          ))}
+          <div style={{ fontSize: 9.5, color: "#6a5a7a", marginTop: 3 }}>tape « triche » pour fermer</div>
+        </div>
+      )}
     </div>
   );
 }

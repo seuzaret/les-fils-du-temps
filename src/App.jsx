@@ -1856,7 +1856,12 @@ export default function App() {
 
   /* ---------- écran d'INTRODUCTION narrative (6 tableaux) ---------- */
   if (screen === "intro") {
-    return <IntroStory onDone={() => setScreen("play")} />;
+    return (
+      <>
+        {cheatPanel}
+        <IntroStory onDone={() => setScreen("play")} />
+      </>
+    );
   }
 
   /* ---------- écran de transition entre deux époques ---------- */

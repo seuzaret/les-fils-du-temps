@@ -28,12 +28,16 @@ export default function CheatPanel({
 }) {
   if (!cheat) return null;
   return (
+    /* le panneau ne dépasse jamais de l'écran : il défile à l'intérieur,
+       l'en-tête (et la croix) reste collé en haut */
     <div style={{
       position: "fixed", left: 8, bottom: 8, zIndex: 300, width: 208,
+      maxHeight: "calc(100dvh - 16px)", overflowY: "auto", overscrollBehavior: "contain",
       background: "rgba(18,8,28,0.96)", border: "1px solid #a04ce8",
-      borderRadius: 10, padding: 10, boxShadow: "0 6px 24px rgba(0,0,0,0.6)",
+      borderRadius: 10, padding: "0 10px 10px", boxShadow: "0 6px 24px rgba(0,0,0,0.6)",
     }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, zIndex: 1,
+        background: "rgba(18,8,28,1)", padding: "10px 0 8px", marginBottom: 2 }}>
         <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1, color: "#c88aff", fontWeight: 700 }}>🎛️ TRICHE</span>
         <button onClick={onClose} style={{ background: "none", border: "none", color: "#8a7a9a", cursor: "pointer", fontSize: 14 }}>✕</button>
       </div>
@@ -86,8 +90,13 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase4}>⟡ Phase 4 (étage K)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase5}>⟲ Phase 5 (voyages)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase6}>⧗ Phase 6 (pont Jorge → −3)</button>
-        <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/"; }}>🙃 Le monde 2 (prototype)</button>
-        <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/?fin=1"; }}>✨ Le temps est rétabli (finale du monde 2)</button>
+      </div>
+
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Monde 2 (chez MARTINE) :</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+        <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/"; }}>🙃 Entrer dans le monde 2</button>
+        <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/?fin=1"; }}>✨ La finale (« Le temps est rétabli »)</button>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a" }}>dans le monde 2, tape « triche » : ranger une époque, tout ranger…</div>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
