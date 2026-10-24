@@ -8,7 +8,7 @@ import { loadSave } from "../engine/save.js";
 import { playClink, playMaterialize } from "../engine/sfx.js";
 import { rng } from "../engine/scenery.jsx";
 import chapter from "../chapters/07-xixe/data.js";
-import { INVENTIONS, INVENTEURS, TIENT_AU_DEPART, MARTINE_REPARE } from "./inventeursXIXe.js";
+import { INVENTIONS, INVENTEURS, PLACES, VISITE_AU_DEPART, TIENT_AU_DEPART, ANACHRONISMES, ANACHRONISME_DE, MARTINE_REPARE } from "./inventeursXIXe.js";
 
 /* ============================================================
    LE MONDE 2 — prototype (XIXe siècle)
@@ -17,10 +17,14 @@ import { INVENTIONS, INVENTEURS, TIENT_AU_DEPART, MARTINE_REPARE } from "./inven
    Jeu 3, MARTINE garde le joueur chez elle, dans un monde à la
    Stranger Things. On s'y promène comme au Jeu 2 (flèches ‹ › et
    points, moteur Scene) dans les sept tableaux du chapitre 7 du
-   Jeu 1, en noir et blanc. Dans chacun, un inventeur tient
-   l'invention d'un autre : on la prend (elle va dans le sac), on
-   la rend au bon inventeur, et le tableau reprend ses couleurs.
-   Sept inventions rendues : le monde se fissure (fin du prototype).
+   Jeu 1, en noir et blanc. MARTINE a tout mélangé : chaque
+   inventeur est dans le tableau d'un autre et tient l'invention
+   d'un troisième, et un objet du futur est caché dans chaque
+   tableau. On prend les objets (ils vont dans le sac), on rend à
+   chacun son invention (il rentre alors chez lui) et on jette les
+   objets du futur dans la poubelle temporelle (règle 3 du Jeu 1).
+   Un tableau reprend ses couleurs par tiers. Tout rangé : le monde
+   se fissure (fin du prototype). Données : inventeursXIXe.js.
    ============================================================ */
 
 const noop = () => {};
@@ -179,92 +183,196 @@ function CarteTenue({ id, x, y, juste, onClick }) {
   );
 }
 
-/* où se trouvent les mains de l'inventeur (et donc la carte) */
+/* où se tient un inventeur : chez lui s'il est revenu, sinon chez un autre */
+const placeDe = (inv, chez) => (chez[inv.id] ? PLACES[inv.scene].chez : PLACES[VISITE_AU_DEPART[inv.id]].visite);
+const tableauDe = (inv, chez) => (chez[inv.id] ? inv.scene : VISITE_AU_DEPART[inv.id]);
+
+/* où sont ses mains (et donc la carte) */
 const BRAS_TENDU = { a1: 50, a2: 15 };
 const BRAS_DUO = { a1: 40, a2: -10 };
-function placeCarte(inv) {
-  if (inv.existant) return { x: inv.main.x - 10, y: inv.main.y - 50 };
+const BAS = { a1: 9, a2: 6 };
+function placeCarte(inv, p) {
   if (inv.duo) {
     /* tenue à deux mains, devant les vestes : les visages restent visibles */
     const h = handPos({ side: 1, ...BRAS_DUO });
-    return { x: inv.x - 33, y: inv.y + inv.s * h.y - 30 };
+    return { x: p.x - 33, y: p.y + p.s * h.y - 30 };
   }
   /* handPos donne déjà x < 0 pour le bras de gauche */
-  const h = handPos({ side: inv.bras, ...BRAS_TENDU });
-  const hx = inv.x + inv.s * h.x, hy = inv.y + inv.s * h.y;
-  return { x: inv.bras > 0 ? hx - 10 : hx - 56, y: hy - 50 };
+  const h = handPos({ side: p.bras, ...BRAS_TENDU });
+  const hx = p.x + p.s * h.x, hy = p.y + p.s * h.y;
+  return { x: p.bras > 0 ? hx - 10 : hx - 56, y: hy - 50 };
 }
 
 /* l'inventeur (ou les deux frères), dessiné avec le kit du jeu */
-function Inventeur({ inv, mood }) {
-  if (inv.existant) return null;
-  const bas = { a1: 9, a2: 6 };
+function Inventeur({ inv, p, mood }) {
   if (inv.duo) {
-    const d = 30 * inv.s;
+    const d = 28 * p.s;
     return (
       <g>
-        <Figure x={inv.x - d} y={inv.y} s={inv.s} {...inv.fig} mood={mood} arms={[bas, BRAS_DUO]} />
-        <Figure x={inv.x + d} y={inv.y} s={inv.s} {...inv.fig} beard="royal" hair="#4a3424" mood={mood} arms={[BRAS_DUO, bas]} />
+        <Figure x={p.x - d} y={p.y} s={p.s} {...inv.fig} mood={mood} arms={[BAS, BRAS_DUO]} />
+        <Figure x={p.x + d} y={p.y} s={p.s} {...inv.fig} beard="royal" hair="#4a3424" mood={mood} arms={[BRAS_DUO, BAS]} />
       </g>
     );
   }
-  const arms = inv.bras > 0 ? [bas, BRAS_TENDU] : [BRAS_TENDU, bas];
-  return <Figure x={inv.x} y={inv.y} s={inv.s} {...inv.fig} mood={mood} arms={arms} />;
+  const arms = p.bras > 0 ? [BAS, BRAS_TENDU] : [BRAS_TENDU, BAS];
+  return <Figure x={p.x} y={p.y} s={p.s} {...inv.fig} mood={mood} arms={arms} />;
 }
 
-function Plaque({ inv, juste }) {
+function Plaque({ inv, p, juste }) {
   const w = inv.nom.length * 7.4 + 18;
   return (
-    <g transform={`translate(${inv.x},${inv.y + 16})`} style={{ pointerEvents: "none" }}>
+    <g transform={`translate(${p.x},${p.y + 16})`} style={{ pointerEvents: "none" }}>
       <rect x={-w / 2} y={-10} width={w} height={20} rx="4" fill="#0a0408" opacity="0.88" stroke={juste ? GOLD : RED} strokeWidth="1.2" />
       <text x="0" y="4.5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12.5" fontWeight="700" letterSpacing="0.5" fill={juste ? GOLD : "#ffb8be"}>{inv.nom}</text>
     </g>
   );
 }
 
+/* les objets du futur, dessinés dans le décor (donc en noir et blanc
+   avec lui) : à repérer, comme les déchets temporels du Jeu 1 */
+function ObjetDuFutur({ id }) {
+  const a = ANACHRONISMES[id];
+  const dessins = {
+    portable: (
+      <g>
+        <path d="M-22 0 L-19 -30 L21 -30 L22 0 Z" fill="#2a2e36" stroke="#0c0e12" strokeWidth="1" />
+        <rect x="-16" y="-27" width="33" height="22" fill="#9ec8e8" />
+        <path d="M-12 -21 h14 M-12 -16 h20 M-12 -11 h10" stroke="#3a5a7a" strokeWidth="1.6" />
+        <path d="M-27 0 L27 0 L31 6 L-31 6 Z" fill="#9aa0a8" stroke="#2a2e36" strokeWidth="1" />
+      </g>
+    ),
+    numerique: (
+      <g>
+        <rect x="-15" y="-12" width="30" height="20" rx="3" fill="#2a2a30" stroke="#0c0c10" strokeWidth="1" />
+        <circle cx="3" cy="-2" r="7.5" fill="#4a4e58" stroke="#c8ccd4" strokeWidth="1.6" />
+        <circle cx="3" cy="-2" r="3.4" fill="#1a2a4a" />
+        <rect x="-12" y="-10" width="7" height="4" fill="#e8e8f0" />
+        <rect x="9" y="-15" width="5" height="3" fill="#c03030" />
+      </g>
+    ),
+    parabole: (
+      <g>
+        <path d="M0 6 L0 26" stroke="#4a4e58" strokeWidth="3" />
+        <ellipse cx="0" cy="0" rx="13" ry="19" transform="rotate(-35)" fill="#e8eaee" stroke="#6a6e78" strokeWidth="1.4" />
+        <path d="M-2 2 L14 -12" stroke="#4a4e58" strokeWidth="2" />
+        <circle cx="14" cy="-12" r="2.6" fill="#2a2e36" />
+      </g>
+    ),
+    cd: (
+      <g>
+        <defs>
+          <linearGradient id="m2cd" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stopColor="#e8eef8" /><stop offset=".35" stopColor="#b8d8ff" /><stop offset=".55" stopColor="#ffd0f0" /><stop offset=".75" stopColor="#d8ffd0" /><stop offset="1" stopColor="#c8ccd4" />
+          </linearGradient>
+        </defs>
+        <circle r="13" fill="url(#m2cd)" stroke="#8a8e98" strokeWidth="1" />
+        <circle r="4.6" fill="none" stroke="#8a8e98" strokeWidth="1" />
+        <circle r="2.2" fill="#3a2a20" />
+      </g>
+    ),
+    satellite: (
+      <g>
+        <rect x="-26" y="-5" width="17" height="10" fill="#3a5a8a" stroke="#c8d4e8" strokeWidth="0.8" />
+        <rect x="9" y="-5" width="17" height="10" fill="#3a5a8a" stroke="#c8d4e8" strokeWidth="0.8" />
+        <path d="M-20 -5 v10 M-14 -5 v10 M15 -5 v10 M21 -5 v10" stroke="#c8d4e8" strokeWidth="0.6" />
+        <rect x="-8" y="-7" width="16" height="14" rx="2" fill="#d8dce4" />
+        <path d="M0 7 L0 15" stroke="#d8dce4" strokeWidth="1.4" />
+        <circle cx="0" cy="16" r="1.8" fill="#ff5050"><animate attributeName="opacity" values="1;0.1;1" dur="1.4s" repeatCount="indefinite" /></circle>
+      </g>
+    ),
+    lunettes3d: (
+      <g>
+        <path d="M-22 -3 L-30 -8 M22 -3 L30 -8" stroke="#f0f0f0" strokeWidth="1.6" />
+        <rect x="-22" y="-7" width="19" height="13" rx="3" fill="#e02838" stroke="#f4f4f4" strokeWidth="2" />
+        <rect x="3" y="-7" width="19" height="13" rx="3" fill="#20b8e0" stroke="#f4f4f4" strokeWidth="2" />
+        <path d="M-3 -2 Q0 -5 3 -2" stroke="#f4f4f4" strokeWidth="2" fill="none" />
+      </g>
+    ),
+    smartphone: (
+      <g transform="rotate(-12)">
+        <rect x="-8" y="-15" width="16" height="30" rx="3" fill="#16181e" stroke="#0a0a0e" strokeWidth="1" />
+        <rect x="-6.5" y="-12" width="13" height="23" rx="1" fill="#7ab8f0" />
+        <path d="M-4 -8 h4 M-4 -4 h8 M-4 0 h6" stroke="#ffffff" strokeWidth="1.4" opacity="0.8" />
+      </g>
+    ),
+  };
+  return <g transform={`translate(${a.x},${a.y})`}>{dessins[id]}</g>;
+}
+
 function Tableau({ sid, Orig, monde }) {
-  const { tient, onCarte, onInventeur, bulle } = monde;
-  const inv = INVENTEURS.find((i) => i.scene === sid);
-  const objet = tient[sid];
-  const juste = objet === inv.invention;
-  const mood = juste ? "content" : objet ? "neutre" : "surpris";
-  const carte = placeCarte(inv);
-  const haut = inv.y - inv.s * 132;
-  const zone = inv.duo
-    ? { x: inv.x - 62 * inv.s, w: 124 * inv.s }
-    : { x: inv.x - 34 * inv.s, w: 68 * inv.s };
-  const maBulle = bulle?.scene === sid ? bulle : null;
+  const { tient, chez, sortant, ana, onCarte, onInventeur, onAna, bulle } = monde;
+  const presents = INVENTEURS.filter((i) => tableauDe(i, chez) === sid);
+  const anaId = ANACHRONISME_DE[sid];
+  const anaLa = ana[anaId] === "tableau";
+  const gris = 1 - niveauDe(sid, monde) / 3;
+  const a = ANACHRONISMES[anaId];
   return (
     <div style={{ position: "absolute", inset: 0 }}>
-      {/* le décor du Jeu 1 et l'inventeur : en noir et blanc tant que ce n'est pas réparé */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", filter: juste ? "none" : NB, transition: "filter 2.2s ease" }}>
-        <Orig collect={noop} action={noop} reveal={false} made={[]} flags={{}} queteQui={null} mode="jeu2" />
+      {/* le décor du Jeu 1, les inventeurs et l'objet du futur : en noir et
+          blanc, puis un tiers de couleur par chose remise en ordre */}
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", transition: "filter 2.2s ease",
+        filter: `grayscale(${gris}) contrast(${1 + 0.18 * gris}) brightness(${1 - 0.26 * gris})` }}>
+        <Orig collect={noop} action={noop} reveal={false} made={[]} flags={{}} queteQui={null} mode="jeu2" sansMarconi />
         <svg viewBox="0 0 1000 560" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-          <Inventeur inv={inv} mood={mood} />
+          {anaLa && <ObjetDuFutur id={anaId} />}
+          {presents.map((i) => {
+            const objet = tient[i.id];
+            const mood = objet === i.invention ? "content" : objet ? "neutre" : "surpris";
+            return (
+              <g key={i.id} style={{ opacity: sortant === i.id ? 0 : 1, transition: "opacity .6s" }}>
+                <Inventeur inv={i} p={placeDe(i, chez)} mood={mood} />
+              </g>
+            );
+          })}
         </svg>
       </div>
       {/* le voile du monde 2 : bleu nuit en haut, rouge sang en bas */}
-      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: juste ? 0 : 1, transition: "opacity 2.2s ease",
+      <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: gris, transition: "opacity 2.2s ease",
         background: "linear-gradient(180deg, rgba(20,40,80,0.28), rgba(10,6,20,0.18) 55%, rgba(120,10,30,0.32))", mixBlendMode: "multiply" }} />
       <svg viewBox="0 0 1000 560" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-        {/* zone cliquable : l'inventeur */}
-        <rect x={zone.x} y={haut} width={zone.w} height={inv.y - haut + 4} fill="rgba(0,0,0,0.001)"
-          style={{ cursor: "pointer" }}
-          onClick={() => onInventeur(sid)}><title>{inv.nom}</title></rect>
-        <Plaque inv={inv} juste={juste} />
-        {objet && <CarteTenue id={objet} x={carte.x} y={carte.y} juste={juste} onClick={juste ? undefined : () => onCarte(sid)} />}
+        {anaLa && <circle data-futur={anaId} cx={a.x} cy={a.y - 6} r="26" fill="rgba(0,0,0,0.001)" style={{ cursor: "pointer" }} onClick={() => onAna(anaId)} />}
+        {presents.map((i) => {
+          const p = placeDe(i, chez);
+          const objet = tient[i.id];
+          const juste = objet === i.invention;
+          const carte = placeCarte(i, p);
+          const large = (i.duo ? 62 : 34) * p.s;
+          const haut = p.y - p.s * 132;
+          return (
+            <g key={i.id} style={{ opacity: sortant === i.id ? 0 : 1, transition: "opacity .6s" }}>
+              <rect x={p.x - large} y={haut} width={large * 2} height={p.y - haut + 4} fill="rgba(0,0,0,0.001)"
+                style={{ cursor: "pointer" }} onClick={() => onInventeur(i.id)}><title>{i.nom}</title></rect>
+              <Plaque inv={i} p={p} juste={juste} />
+              {objet && <CarteTenue id={objet} x={carte.x} y={carte.y} juste={juste} onClick={juste ? undefined : () => onCarte(i.id)} />}
+            </g>
+          );
+        })}
       </svg>
       {/* ce que dit l'inventeur */}
-      {maBulle && (
-        <div key={maBulle.n} style={{ position: "absolute", left: `${Math.min(84, Math.max(16, inv.x / 10))}%`, top: `${Math.max(2, (haut - 10) / 5.6)}%`,
-          transform: "translate(-50%,-100%)", background: "#f8f2e4", color: "#1a1410", borderRadius: 12, padding: "6px 12px",
-          fontFamily: "Georgia, serif", fontSize: "clamp(12px, 1.5vw, 16px)", fontWeight: 600, maxWidth: "46%", textAlign: "center",
-          boxShadow: `0 0 0 2px ${maBulle.ok ? GOLD : RED}, 0 6px 18px rgba(0,0,0,0.5)`, animation: "m2Pop .25s ease-out both", pointerEvents: "none" }}>
-          {maBulle.texte}
-        </div>
-      )}
+      {presents.filter((i) => bulle?.qui === i.id).map((i) => {
+        const p = placeDe(i, chez);
+        return (
+          <div key={bulle.n} style={{ position: "absolute", left: `${Math.min(84, Math.max(16, p.x / 10))}%`, top: `${Math.max(2, (p.y - p.s * 132 - 10) / 5.6)}%`,
+            transform: "translate(-50%,-100%)", maxWidth: "46%", width: "max-content", pointerEvents: "none" }}>
+            {/* l'animation sur un div intérieur : son `transform` écraserait le centrage */}
+            <div style={{ background: "#f8f2e4", color: "#1a1410", borderRadius: 12, padding: "6px 12px",
+              fontFamily: "Georgia, serif", fontSize: "clamp(12px, 1.5vw, 16px)", fontWeight: 600, textAlign: "center",
+              boxShadow: `0 0 0 2px ${bulle.ok ? GOLD : RED}, 0 6px 18px rgba(0,0,0,0.5)`, animation: "m2Pop .25s ease-out both" }}>
+              {bulle.texte}
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
+}
+
+/* remise en ordre d'un tableau, de 0 à 3 : l'objet du futur est parti,
+   le visiteur est rentré chez lui, le propriétaire est revenu */
+function niveauDe(sid, { chez, ana }) {
+  const proprio = INVENTEURS.find((i) => i.scene === sid);
+  const visiteur = INVENTEURS.find((i) => VISITE_AU_DEPART[i.id] === sid);
+  return (ana[ANACHRONISME_DE[sid]] === "tableau" ? 0 : 1) + (chez[visiteur.id] ? 1 : 0) + (chez[proprio.id] ? 1 : 0);
 }
 
 /* les tableaux du chapitre 7, passés au moteur Scene comme au Jeu 2 */
@@ -292,32 +400,50 @@ function useCadre(ref) {
   return box;
 }
 
-/* ───────────── le sac ───────────── */
-function Sac({ sac, choisi, onChoisir, secoue }) {
+/* ───────────── le sac et la poubelle temporelle ───────────── */
+const objetDuSac = (id) => INVENTIONS[id] || ANACHRONISMES[id];
+function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 12, minHeight: 64,
-      background: "linear-gradient(180deg, #1a0a10, #0c0408)", border: "1px solid #4a1a24", boxShadow: `0 0 16px ${RED}22`, overflowX: "auto" }}>
+      background: "linear-gradient(180deg, #1a0a10, #0c0408)", border: "1px solid #4a1a24", boxShadow: `0 0 16px ${RED}22` }}>
+      <button onClick={onPoubelle} title="Poubelle temporelle : rien du futur dans le passé"
+        style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, padding: "4px 8px", borderRadius: 10, cursor: "pointer",
+          background: choisi ? "#2a1018" : "#12060a", border: `2px solid ${choisi ? RED : "#4a1a24"}`, color: "#ffb8be",
+          boxShadow: choisi ? `0 0 12px ${RED}88` : "none", transition: "all .15s" }}>
+        <span style={{ fontSize: 24, lineHeight: 1 }}>🗑️</span>
+        <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 8.5, letterSpacing: 0.5, fontWeight: 800, whiteSpace: "nowrap" }}>POUBELLE TEMPORELLE</span>
+      </button>
       <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, letterSpacing: 1, color: "#ffb8be", whiteSpace: "nowrap" }}>🎒 SAC</span>
+      <div style={{ flex: 1, minWidth: 0, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, maxHeight: 96, overflowY: "auto", padding: "3px 0" }}>
       {sac.length === 0 && <span style={{ fontSize: 13, color: "#7a5a64", fontStyle: "italic" }}>vide</span>}
       {sac.map((id) => {
         const on = choisi === id;
+        const o = objetDuSac(id);
         return (
-          <button key={id} onClick={() => onChoisir(on ? null : id)} title={INVENTIONS[id].nom}
-            style={{ display: "flex", alignItems: "center", gap: 8, padding: "4px 10px 4px 4px", borderRadius: 10, cursor: "pointer", flex: "0 0 auto",
+          <button key={id} onClick={() => onChoisir(on ? null : id)} title={o.nom}
+            style={{ display: "flex", alignItems: "center", gap: 6, padding: "3px 9px 3px 3px", borderRadius: 9, cursor: "pointer", flex: "0 0 auto",
               background: on ? "#3a2808" : "#140810", color: on ? GOLD : "#f2e0e4", border: `2px solid ${on ? GOLD : "#5a2a34"}`,
               boxShadow: on ? `0 0 14px ${GOLD}88` : "none", transform: on ? "translateY(-3px)" : "none", transition: "all .15s",
               animation: on && secoue ? "m2Shake .45s ease-in-out" : "m2Pop .3s ease-out both" }}>
-            <img src={assetUrl(`assets/inventions/${INVENTIONS[id].image}`)} alt="" style={{ width: 52, height: 40, objectFit: "cover", borderRadius: 4 }} />
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 14, fontWeight: 700, whiteSpace: "nowrap" }}>{INVENTIONS[id].nom}</span>
+            {o.image
+              ? <img src={assetUrl(`assets/inventions/${o.image}`)} alt="" style={{ width: 42, height: 32, objectFit: "cover", borderRadius: 4 }} />
+              : <span style={{ width: 42, height: 32, display: "grid", placeItems: "center", fontSize: 22, background: "#0a0408", borderRadius: 4 }}>{o.emoji}</span>}
+            <span style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, whiteSpace: "nowrap" }}>{o.nom}</span>
           </button>
         );
       })}
+      </div>
     </div>
   );
 }
 
 /* ───────────── la page ───────────── */
-const depart = () => ({ tient: { ...TIENT_AU_DEPART }, sac: [], choisi: null });
+const depart = () => ({
+  tient: { ...TIENT_AU_DEPART },
+  chez: Object.fromEntries(INVENTEURS.map((i) => [i.id, false])),
+  ana: Object.fromEntries(Object.keys(ANACHRONISMES).map((id) => [id, "tableau"])), // tableau | sac | jete
+  sac: [], choisi: null,
+});
 
 export default function MondeMartine() {
   const prenom = useMemo(readPrenom, []);
@@ -358,53 +484,101 @@ export default function MondeMartine() {
 function Monde({ page, phase, setPhase }) {
   const [tab, setTab] = useState(0);
   const [etat, setEtat] = useState(depart);
+  const [sortant, setSortant] = useState(null);
   const [bulle, setBulle] = useState(null);
-  const [refus, setRefus] = useState(null);
+  const [refus, setRefus] = useState(false);
+  const [toast, setToast] = useState(null);
   const [voix, setVoix] = useState({ texte: "", mood: "content" });
   const [mediadex, setMediadex] = useState(false);
   const cellule = useRef(null);
   const cadre = useCadre(cellule);
   const n = useRef(0);
+  const minuteurs = useRef([]);
+  const reparesVus = useRef(new Set());
 
-  const { tient, sac, choisi } = etat;
-  const nbJustes = INVENTEURS.filter((i) => tient[i.scene] === i.invention).length;
-  const fini = nbJustes === INVENTEURS.length;
+  const { tient, chez, ana, sac, choisi } = etat;
+  const niveaux = INVENTEURS.map((i) => niveauDe(i.scene, etat));
+  const nbChez = INVENTEURS.filter((i) => chez[i.id]).length;
+  const nbJetes = Object.values(ana).filter((v) => v === "jete").length;
+  const nbAna = Object.keys(ANACHRONISMES).length;
+  const fini = nbChez === INVENTEURS.length && nbJetes === nbAna;
 
-  /* les bulles et la voix de MARTINE s'effacent seules */
+  /* bulles, voix, toasts et secousses s'effacent seuls */
   useEffect(() => { if (!bulle) return undefined; const t = setTimeout(() => setBulle(null), 4200); return () => clearTimeout(t); }, [bulle]);
   useEffect(() => { if (!voix.texte) return undefined; const t = setTimeout(() => setVoix((v) => ({ ...v, texte: "" })), 4500); return () => clearTimeout(t); }, [voix]);
-  useEffect(() => { if (!refus) return undefined; const t = setTimeout(() => setRefus(null), 500); return () => clearTimeout(t); }, [refus]);
+  useEffect(() => { if (!toast) return undefined; const t = setTimeout(() => setToast(null), 3800); return () => clearTimeout(t); }, [toast]);
+  useEffect(() => { if (!refus) return undefined; const t = setTimeout(() => setRefus(false), 500); return () => clearTimeout(t); }, [refus]);
+  useEffect(() => () => minuteurs.current.forEach(clearTimeout), []);
   useEffect(() => { if (!fini || phase !== "monde") return undefined; const t = setTimeout(() => setPhase("fin"), 3200); return () => clearTimeout(t); }, [fini, phase, setPhase]);
   useEffect(() => { setBulle(null); }, [tab]);
 
-  const dire = (scene, texte, ok = false) => { n.current += 1; setBulle({ scene, texte, ok, n: n.current }); };
+  /* MARTINE réagit à chaque tableau entièrement remis en ordre */
+  const cleNiveaux = niveaux.join("");
+  useEffect(() => {
+    INVENTEURS.forEach((i, k) => {
+      if (niveaux[k] === 3 && !reparesVus.current.has(i.scene)) {
+        reparesVus.current.add(i.scene);
+        playClink();
+        setVoix({ texte: MARTINE_REPARE[Math.min(reparesVus.current.size - 1, MARTINE_REPARE.length - 1)], mood: "vexe" });
+      }
+    });
+    /* tout est rangé dans les tableaux, mais il reste des objets du futur dans le sac */
+    if (niveaux.every((v) => v === 3) && sac.some((id) => ANACHRONISMES[id])) {
+      setToast({ texte: "Il reste des objets du futur dans ton sac.", ok: false });
+    }
+  }, [cleNiveaux]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  /* prendre l'objet que tient l'inventeur : il va dans le sac, et on l'a en main */
-  const onCarte = (scene) => {
-    const objet = tient[scene];
+  const dire = (qui, texte, ok = false) => { n.current += 1; setBulle({ qui, texte, ok, n: n.current }); };
+  const plusTard = (ms, f) => { minuteurs.current.push(setTimeout(f, ms)); };
+
+  /* prendre l'objet que tient un inventeur : il va dans le sac, et on l'a en main */
+  const onCarte = (id) => {
+    const objet = tient[id];
     if (!objet) return;
-    setEtat((e) => ({ tient: { ...e.tient, [scene]: null }, sac: [...e.sac, objet], choisi: objet }));
+    setEtat((e) => ({ ...e, tient: { ...e.tient, [id]: null }, sac: [...e.sac, objet], choisi: objet }));
   };
-  const onInventeur = (scene) => {
-    const inv = INVENTEURS.find((i) => i.scene === scene);
-    const objet = tient[scene];
-    if (objet === inv.invention) { dire(scene, inv.dit, true); return; }
+  /* ramasser un objet du futur */
+  const onAna = (id) => {
+    setEtat((e) => ({ ...e, ana: { ...e.ana, [id]: "sac" }, sac: [...e.sac, id], choisi: id }));
+  };
+  const onInventeur = (id) => {
+    const inv = INVENTEURS.find((i) => i.id === id);
+    const objet = tient[id];
+    if (objet === inv.invention) { dire(id, inv.dit, true); return; }
     if (!choisi) {
-      if (objet) onCarte(scene);
-      else dire(scene, "Où est mon invention ?");
+      if (objet) onCarte(id);
+      else dire(id, inv.cherche);
       return;
     }
-    if (choisi !== inv.invention) { setRefus(scene); dire(scene, "Ce n'est pas à moi !"); return; }
-    /* la bonne : il la reprend (et rend ce qu'il tenait encore) */
+    if (ANACHRONISMES[choisi]) { setRefus(true); dire(id, "Qu'est-ce que c'est que ça ?!"); return; }
+    if (choisi !== inv.invention) { setRefus(true); dire(id, "Ce n'est pas à moi !"); return; }
+    /* la bonne : il la reprend (et rend ce qu'il tenait encore), puis rentre chez lui */
     setEtat((e) => {
-      const reste = e.sac.filter((id) => id !== choisi);
-      return { tient: { ...e.tient, [scene]: choisi }, sac: objet ? [...reste, objet] : reste, choisi: null };
+      const reste = e.sac.filter((x) => x !== choisi);
+      return { ...e, tient: { ...e.tient, [id]: choisi }, sac: objet ? [...reste, objet] : reste, choisi: null };
     });
-    playClink();
-    dire(scene, inv.dit, true);
-    setVoix({ texte: MARTINE_REPARE[Math.min(nbJustes, MARTINE_REPARE.length - 1)], mood: "vexe" });
+    dire(id, inv.dit, true);
+    if (!chez[id]) {
+      plusTard(2000, () => setSortant(id));
+      plusTard(2600, () => { setEtat((e) => ({ ...e, chez: { ...e.chez, [id]: true } })); setSortant(null); });
+    }
   };
-  const recommencer = () => { setEtat(depart()); setTab(0); setBulle(null); setVoix({ texte: "", mood: "content" }); setPhase("monde"); };
+  const onPoubelle = () => {
+    if (!choisi) { setToast({ texte: "La poubelle temporelle : pour les objets du futur.", ok: true }); return; }
+    const a = ANACHRONISMES[choisi];
+    if (a) {
+      setEtat((e) => ({ ...e, ana: { ...e.ana, [choisi]: "jete" }, sac: e.sac.filter((x) => x !== choisi), choisi: null }));
+      setToast({ texte: `${a.emoji} ${a.nom} : ${a.quand} ! Rien du futur dans le passé.`, ok: true });
+      return;
+    }
+    setRefus(true);
+    setToast({ texte: `${INVENTIONS[choisi].nom} : une vraie invention de cette époque ! Rends-la à son inventeur.`, ok: false });
+  };
+  const recommencer = () => {
+    minuteurs.current.forEach(clearTimeout); minuteurs.current = [];
+    reparesVus.current = new Set();
+    setEtat(depart()); setSortant(null); setTab(0); setBulle(null); setToast(null); setVoix({ texte: "", mood: "content" }); setPhase("monde");
+  };
 
   if (phase === "fin") {
     return (
@@ -426,7 +600,8 @@ function Monde({ page, phase, setPhase }) {
     );
   }
 
-  const monde = { tient, onCarte, onInventeur, bulle };
+  const monde = { tient, chez, sortant, ana, onCarte, onInventeur, onAna, bulle };
+  const compteur = { fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 800, color: "#ffe8a0", whiteSpace: "nowrap" };
   return (
     <div style={{ ...page, height: "100dvh", display: "flex", flexDirection: "column" }}>
       <style>{CSS}</style>
@@ -434,17 +609,18 @@ function Monde({ page, phase, setPhase }) {
       <Vines />
       <Spores />
 
-      {/* en-tête : MARTINE · le titre · la fissure et le médiadex */}
+      {/* en-tête : MARTINE · le titre · les compteurs et le médiadex */}
       <div style={{ position: "relative", zIndex: 4, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 8, padding: "8px 12px 2px" }}>
         <div style={{ minWidth: 0 }}><MartineVoix texte={voix.texte} mood={voix.mood} /></div>
         <TitreMonde2 taille={30} />
-        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 8 }}>
-          <span title="Inventions rendues" style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 800, color: "#ffe8a0" }}>✦ {nbJustes}/{INVENTEURS.length}</span>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+          <span title="Inventeurs rentrés chez eux, avec leur invention" style={compteur}>🧑‍🔬 {nbChez}/{INVENTEURS.length}</span>
+          <span title="Objets du futur jetés" style={compteur}>🗑️ {nbJetes}/{nbAna}</span>
           <button onClick={() => setMediadex(true)} title="Médiadex" style={{ background: "#2a1808", color: GOLD, border: "2px solid #c8a848", borderRadius: 10, padding: "6px 10px", fontSize: 16, cursor: "pointer" }}>🃏</button>
         </div>
       </div>
       <div style={{ position: "relative", zIndex: 4, padding: "0 12px" }}>
-        <Crack progress={nbJustes / INVENTEURS.length} h={14} />
+        <Crack progress={niveaux.reduce((s, v) => s + v, 0) / (3 * INVENTEURS.length)} h={14} />
         <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1, color: "#c8a8b0", margin: "2px 0 6px",
           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {chapter.scenes[tab].name}
@@ -459,7 +635,15 @@ function Monde({ page, phase, setPhase }) {
       </div>
 
       <div style={{ position: "relative", zIndex: 4, padding: "8px 12px 10px" }}>
-        <Sac sac={sac} choisi={choisi} secoue={!!refus} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />
+        {toast && (
+          <div key={toast.texte} style={{ position: "absolute", left: "50%", bottom: "100%", transform: "translateX(-50%)", marginBottom: 2, maxWidth: "92%", width: "max-content", zIndex: 5 }}>
+            <div style={{ background: toast.ok ? "#0e1a12" : "#1a0408", color: toast.ok ? "#c8ffd8" : "#ffd8dc", border: `1px solid ${toast.ok ? "#5eff9e" : RED}`,
+              borderRadius: 10, padding: "6px 14px", fontFamily: "Georgia, serif", fontSize: 14.5, textAlign: "center", animation: "m2Pop .25s ease-out both" }}>
+              {toast.texte}
+            </div>
+          </div>
+        )}
+        <Sac sac={sac} choisi={choisi} secoue={refus} onPoubelle={onPoubelle} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />
       </div>
       {mediadex && <MediadexPanel onClose={() => setMediadex(false)} />}
     </div>

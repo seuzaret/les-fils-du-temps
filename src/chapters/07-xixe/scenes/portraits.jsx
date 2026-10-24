@@ -117,7 +117,7 @@ export function PortraitSean() {
 
 /* JAMES ÂGÉ — même homme, 30 ans plus tard (~1878, 66 ans). Cheveux et
    moustache blancs, petites lunettes rondes de la Belle Époque, redingote
-   noire. Un cylindre de cire dans la main, symbole du chapitre. */
+   noire. */
 export function PortraitJamesVieux() {
   return (
     <svg viewBox="0 0 300 340" style={{ display: "block", width: "100%", height: "auto" }}>

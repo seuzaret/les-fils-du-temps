@@ -23,7 +23,7 @@ function targetAt(elapsedMs) {
   return TARGET_BASE + Math.sin((elapsedMs / 1000) * (2 * Math.PI / TARGET_PERIOD)) * TARGET_SWING;
 }
 
-/* Un vrai bruit de VOIX NASILLARDE sur cire : un cornet grave qui grince
+/* Un vrai bruit de VOIX NASILLARDE sur étain : un cornet grave qui grince
    (triangle grave + formant nasal) + un CRRR de vinyle en fond (bruit
    blanc filtré passe-bande). Chaque clic joue un demi-mot enregistré. */
 let AC = null;
@@ -154,7 +154,7 @@ export function PhonoGame({ onClose, onWin }) {
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 20, maxWidth: 560, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
         <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>🎙️ PHONOGRAPHE EDISON · NY 1878</div>
-        <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>La voix de James, sur cire</h2>
+        <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>La voix de James, sur étain</h2>
 
         {!won ? (
           <>
@@ -213,11 +213,11 @@ export function PhonoGame({ onClose, onWin }) {
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
               <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
-                « Une voix HUMAINE, gravée dans la cire — c'est prodigieux ! Le 21 novembre 1877, Thomas Edison annonce son phonographe à cylindre. Pour la première fois de l'Histoire, un SON survit à celui qui l'a émis. En 1887, Emile Berliner invente le disque plat (le gramophone) — plus facile à copier. Après l'image (photo), voici le son : nos morts pourront désormais nous parler. Attention : la cire est FRAGILE, elle fond à 50 °C, elle s'use à chaque écoute… combien de voix du XIXᵉ nous sont-elles arrivées ? Très peu. » — MARTINE
+                « Une voix HUMAINE, gravée dans une feuille d'étain — c'est prodigieux ! Le 21 novembre 1877, Thomas Edison annonce son phonographe : un cylindre entouré d'étain, qu'on tourne à la manivelle. Pour la première fois de l'Histoire, un SON survit à celui qui l'a émis. Après l'image (photo), voici le son : nos morts pourront désormais nous parler. Attention : l'étain est FRAGILE, il se froisse et s'use au bout de quelques écoutes. Viendront le disque plat d'Emile Berliner (le gramophone, 1887), facile à copier, puis les cylindres de cire (vers 1888), plus solides. Combien de voix du XIXᵉ nous sont-elles arrivées ? Très peu. » — MARTINE
               </p>
             </div>
             <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-              ✓ Cylindre de cire enregistré — la voix de James est gravée !
+              ✓ Feuille d'étain gravée — la voix de James est enregistrée !
             </p>
             <button onClick={onClose}
               style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>

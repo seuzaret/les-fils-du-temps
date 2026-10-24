@@ -6,7 +6,8 @@ import { Figure } from "../../../engine/chars.jsx";
    CHAPITRE 7 — Tableau 4 : le SALON du PHONOGRAPHE (New York, 1878)
    ------------------------------------------------------------
    James, désormais âgé (~66 ans), a fait venir à la maison la
-   dernière merveille d'Edison : un phonographe à cylindre de cire.
+   dernière merveille d'Edison : un phonographe à feuille d'étain
+   (la cire ne remplace l'étain que vers 1888).
    Il veut y enregistrer sa voix pour ses petits-enfants — pour
    qu'après sa mort, on l'entende encore. Son fils tourne la
    manivelle. Cliquer sur le phonographe ouvre le mini-jeu.
@@ -143,7 +144,7 @@ export default function ScenePhonographe({ action, reveal, made = [], queteQui }
           <path d="M130 6 Q124 60 134 130 L126 130 Q116 60 122 6 Z" fill="#4a2c14" />
         </g>
 
-        {/* LE PHONOGRAPHE EDISON — cylindre à cire + grand cornet de cuivre */}
+        {/* LE PHONOGRAPHE EDISON — cylindre entouré d'une feuille d'étain + grand cornet de cuivre */}
         <g transform="translate(500,320)">
           <rect x="-70" y="60" width="140" height="30" rx="4" fill="#5a3820" />
           <rect x="-70" y="60" width="140" height="30" rx="4" fill="none" stroke="#2a1608" strokeWidth="2" />
@@ -157,12 +158,13 @@ export default function ScenePhonographe({ action, reveal, made = [], queteQui }
             <rect x="-58" y="43" width="26" height="4" fill="#a89878" />
             <circle cx="-32" cy="45" r="3.4" fill="#5a4a3a" />
           </g>
-          {/* le cylindre de cire (le SUPPORT — l'objet héritage) */}
+          {/* le cylindre et sa feuille d'étain gravée (le SUPPORT — l'objet héritage) */}
           <g transform="translate(0,20)">
-            <ellipse cx="0" cy="0" rx="52" ry="12" fill="#e0d0a0" />
-            <rect x="-52" y="0" width="104" height="20" fill="#e0d0a0" />
-            <ellipse cx="0" cy="20" rx="52" ry="12" fill="#c8b088" />
-            {[4, 8, 12, 16].map((y, i) => <ellipse key={i} cx="0" cy={y} rx="52" ry="12" fill="none" stroke="#8a7050" strokeWidth="0.6" opacity="0.7" />)}
+            <ellipse cx="0" cy="0" rx="52" ry="12" fill="#d4d8dc" />
+            <rect x="-52" y="0" width="104" height="20" fill="#c4c9ce" />
+            <ellipse cx="0" cy="20" rx="52" ry="12" fill="#a8aeb4" />
+            {[4, 8, 12, 16].map((y, i) => <ellipse key={i} cx="0" cy={y} rx="52" ry="12" fill="none" stroke="#6a7078" strokeWidth="0.6" opacity="0.7" />)}
+            <path d="M-46 2 Q-20 -6 10 -4" stroke="#ffffff" strokeWidth="2" fill="none" opacity="0.5" />
             {/* l'aiguille sur son bras */}
             <path d="M0 -10 L-20 -30" stroke="#7a6a5a" strokeWidth="3" />
             <circle cx="-20" cy="-30" r="6" fill="#a89878" />

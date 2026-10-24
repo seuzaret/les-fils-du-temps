@@ -13,7 +13,9 @@ import { Clouds, Glitter, Grass, Hill, Rock, rng } from "../../../engine/scenery
    l'établi ouvre le mini-jeu (choisir l'antenne).
    ============================================================ */
 
-export default function SceneTSF({ collect, action, reveal, made = [], queteQui }) {
+/* `sansMarconi` : le monde 2 (src/martine) déplace Marconi d'un tableau à
+   l'autre et le dessine lui-même ; le Jeu 1 ne passe jamais ce drapeau. */
+export default function SceneTSF({ collect, action, reveal, made = [], queteQui, sansMarconi = false }) {
   const sos = made.includes("msg_sos");    // l'appel est parti → secours en route
 
   return (
@@ -210,14 +212,14 @@ export default function SceneTSF({ collect, action, reveal, made = [], queteQui 
         {/* « ? » de Marconi (tant qu'il guide) */}
 
         {/* MARCONI : il scrute la nuit vers le navire */}
-        <g transform="translate(238,494)">
+        {!sansMarconi && <g transform="translate(238,494)">
           <Figure x={0} y={32} s={0.819} facing="right" skin="#d0a67e" hair="#1a1008" look="slick" mustache mood="vexe"
             garment="coat" coat="#26303e" pants="#1a2028" shoes="#0a0e14" arms={[{ a1: 10, a2: 6 }, { a1: 110, a2: 100 }]}>
             {/* casque d'écoute sur les oreilles */}
             <path d="M-14 -108 A14 14 0 0 1 14 -108" stroke="#4a5460" strokeWidth="3" fill="none" />
             <circle cx="-13.6" cy="-104" r="4.2" fill="#4a5460" /><circle cx="13.6" cy="-104" r="4.2" fill="#4a5460" />
           </Figure>
-        </g>
+        </g>}
 
       </PLayer>
 

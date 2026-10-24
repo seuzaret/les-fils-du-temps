@@ -7,7 +7,8 @@
       à sa mère restée en Irlande.
    3. CÂBLE TRANSATLANTIQUE (1866) — James dit « Venez me rejoindre ! ».
    4. PHONOGRAPHE EDISON (New York, 1878) — James âgé grave sa voix
-      sur un cylindre de cire pour ses petits-enfants.
+      sur la feuille d'étain du phonographe, pour ses petits-enfants
+      (la cire ne remplace l'étain que vers 1888).
    5. STATION MARCONI (nuit du 15 avril 1912) — la génération suivante
       embarque à Cobh sur le Titanic. Le paquebot coule. Un mini-jeu :
       quel outil peut porter secours sans fil ? → l'ANTENNE (TSF).
@@ -127,9 +128,9 @@ const MESSAGES = {
   msg_cable: { title: "Câble transatlantique", emoji: "🌊",
     jauges: { vitesse: 5, portee: 4, capacite: 2, durabilite: 2 },
     fact: "27 juillet 1866 : un câble télégraphique relie l'Amérique à l'Irlande au fond de l'Atlantique. Avant, une lettre mettait deux semaines en bateau. Maintenant, le message passe en quelques minutes. Encore aujourd'hui, nos messages voyagent par des câbles cachés sous la mer." },
-  msg_phonographe: { title: "Faire un disque de cire", emoji: "🎙️",
+  msg_phonographe: { title: "Graver une voix sur l'étain", emoji: "🎙️",
     jauges: { vitesse: 3, portee: 2, capacite: 3, durabilite: 1 },
-    fact: "1877 : Thomas Edison invente le phonographe. Une aiguille grave la voix sur un cylindre de cire, une autre la restitue. Pour la première fois, un son survit à celui qui l'a émis. Mais la cire est fragile — elle fond à 50 °C, s'use à chaque écoute. Pouvoir enregistrer ne suffit pas à garder le message." },
+    fact: "1877 : Thomas Edison invente le phonographe. La voix fait vibrer une aiguille, qui grave un sillon dans une feuille d'étain enroulée sur un cylindre ; une autre aiguille la fait réentendre. Pour la première fois, un son survit à celui qui l'a émis. Mais l'étain est fragile : il se froisse et s'use au bout de quelques écoutes. Les cylindres de cire, plus solides, n'arrivent que vers 1888. Pouvoir enregistrer ne suffit pas à garder le message." },
   msg_sos: { title: "Envoyer un message par onde (TSF)", emoji: "🆘",
     jauges: { vitesse: 5, portee: 4, capacite: 2, durabilite: 1 },
     fact: "Grâce à Marconi, la TSF (télégraphie sans fil) envoie le message dans l'air, sans aucun câble. Nuit du 15 avril 1912 : le Titanic coule. L'opérateur radio lance un signal d'alerte ; le Carpathia l'entend à 60 milles et fait route vers l'épave. Environ 700 personnes sont sauvées. Un simple message peut sauver des vies." },
@@ -268,7 +269,7 @@ const QUETE = [
     bubble: "J'ai 66 ans, et je n'en ai plus pour longtemps. Il vient de sortir une machine incroyable, qui capte le SON. Je voudrais y laisser un mot pour mes petits-enfants — pour qu'après ma mort, ils entendent encore la voix de leur grand-pere.",
     say: "James veut confier sa voix a l'appareil au fond du salon. A toi de le faire marcher.",
     attend: "msg_phonographe",
-    suite: "Le cylindre est grave. « Voila, dit-il, un peu de moi qui restera. » 34 ans passent. Nous sommes dans la nuit du 15 avril 1912…" },
+    suite: "La feuille d'étain est gravée. « Voilà, dit-il, un peu de moi qui restera. » 34 ans passent. Nous sommes dans la nuit du 15 avril 1912…" },
 
   { perso: "marconi", portrait: "marconi", auto: true,
     bubble: "Une génération après James, sa famille a enfin décidé d'émigrer : ils ont embarqué sur le paquebot le plus grand du monde. Cette nuit, ma station capte ses bips de detresse — il coule dans l'Atlantique. Il faut agir MAINTENANT.",

@@ -215,7 +215,7 @@ Tableaux : bureau du télégraphe · salon du phonographe · atelier des frères
 | électricité + code Morse | ⭐ télégraphe électrique (1837) | l'info plus vite que l'homme ; naissance des agences (Havas 1835 → AFP) |
 | câble + océan | ⭐ câble transatlantique (1858/1866) | le monde « rétrécit » |
 | membrane + électricité | ⭐ téléphone (Bell, 1876) | la voix à distance, en direct |
-| aiguille + cylindre de cire, puis disque plat | ⭐ phonographe (1877) → gramophone/vinyle | LE SON ENREGISTRÉ : une voix survit à son locuteur |
+| aiguille + feuille d'étain (la cire vers 1888), puis disque plat | ⭐ phonographe (1877) → gramophone/vinyle | LE SON ENREGISTRÉ : une voix survit à son locuteur |
 | plaque sensible + lumière | ⭐ photographie (Niépce 1826, Daguerre 1839) | la « preuve » par l'image… truquée dès le début |
 | photos + manivelle | ⭐ cinématographe (Lumière, 1895) | l'image animée, le spectacle de masse |
 | antenne + ondes | TSF (Marconi) → | |
