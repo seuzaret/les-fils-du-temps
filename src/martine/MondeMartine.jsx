@@ -6,8 +6,10 @@ import MediadexPanel from "../chapters/jeu3/MediadexPanel.jsx";
 import { assetUrl } from "../engine/assetUrl.js";
 import { loadSave } from "../engine/save.js";
 import { playClink, playMaterialize } from "../engine/sfx.js";
+import { isMuted, setMuted } from "../engine/audio.js";
 import { rng } from "../engine/scenery.jsx";
 import { EPOQUES, SUPPORTS, PERSOS, FUTURS, etatDeDepart, MARTINE_REPARE, MARTINE_EPOQUE } from "./epoquesMonde2.js";
+import { demarrerMusique, arreterMusique } from "./musiqueMonde2.js";
 
 /* ============================================================
    LE MONDE 2 — prototype
@@ -495,7 +497,9 @@ function epoqueDeLAdresse() {
 export default function MondeMartine() {
   const prenom = useMemo(readPrenom, []);
   const [phase, setPhase] = useState("accueil"); // accueil → titre → monde → fin
-  useEffect(() => { playMaterialize(); }, []);
+  useEffect(() => { if (!isMuted()) playMaterialize(); return arreterMusique; }, []);
+  /* la musique : du vent et une boîte à musique, dès le premier clic ; elle se tait à la fin */
+  useEffect(() => { if (phase === "fin") arreterMusique(); }, [phase]);
   useEffect(() => {
     if (phase !== "titre") return undefined;
     const t = setTimeout(() => setPhase("monde"), 4200);
@@ -506,7 +510,7 @@ export default function MondeMartine() {
 
   if (phase === "accueil") {
     return (
-      <div style={{ ...page, display: "grid", placeItems: "center", cursor: "pointer", padding: 16 }} onClick={() => setPhase("titre")}>
+      <div style={{ ...page, display: "grid", placeItems: "center", cursor: "pointer", padding: 16 }} onClick={() => { demarrerMusique(); setPhase("titre"); }}>
         <style>{CSS}</style>
         <Spores n={30} />
         <div style={{ animation: "mmIn 900ms ease-out both" }}>
@@ -538,6 +542,13 @@ function Monde({ page, phase, setPhase }) {
   const [toast, setToast] = useState(null);
   const [voix, setVoix] = useState({ texte: "", mood: "content" });
   const [mediadex, setMediadex] = useState(false);
+  const [son, setSon] = useState(() => !isMuted());
+  const basculerSon = () => {
+    const muet = son;
+    setMuted(muet);
+    setSon(!muet);
+    if (muet) arreterMusique(); else demarrerMusique();
+  };
   const cellule = useRef(null);
   const cadre = useCadre(cellule);
   const n = useRef(0);
@@ -576,11 +587,11 @@ function Monde({ page, phase, setPhase }) {
     const neuve = EPOQUES.find((e) => epoqueFinie(e, etat) && !vus.current.epoques.has(e.id));
     if (neuve) {
       vus.current.epoques.add(neuve.id);
-      playClink();
+      if (!isMuted()) playClink();
       setVoix({ texte: MARTINE_EPOQUE[(vus.current.epoques.size - 1) % MARTINE_EPOQUE.length], mood: "vexe" });
       setToast({ texte: `✦ ${neuve.chapitre.epoque} : remis en ordre !`, ok: true });
     } else if (tableauNeuf) {
-      playClink();
+      if (!isMuted()) playClink();
       setVoix({ texte: MARTINE_REPARE[(vus.current.tableaux.size - 1) % MARTINE_REPARE.length], mood: "vexe" });
     }
     /* une époque rangée, mais des objets du futur encore dans le sac */
@@ -641,6 +652,7 @@ function Monde({ page, phase, setPhase }) {
     minuteurs.current.forEach(clearTimeout); minuteurs.current = [];
     vus.current = { tableaux: new Set(), epoques: new Set() };
     setEtat(etatDeDepart()); setSortant(null); setTab(0); setBulle(null); setToast(null); setVoix({ texte: "", mood: "content" }); setPhase("monde");
+    demarrerMusique();
   };
 
   if (phase === "fin") {
@@ -681,6 +693,7 @@ function Monde({ page, phase, setPhase }) {
           <span data-compteur="persos" title="Personnages de cette époque qui ont retrouvé leur support" style={compteur}>🧑 {nbServis}/{persosIci.length}</span>
           <span data-compteur="futurs" title="Objets du futur de cette époque jetés" style={compteur}>🗑️ {nbJetes}/{futursIci.length}</span>
           <span title="Époques remises en ordre" style={{ ...compteur, color: GOLD }}>✦ {finies.length}/{EPOQUES.length}</span>
+          <button onClick={basculerSon} title={son ? "Couper le son" : "Remettre le son"} style={{ background: "#12060a", color: son ? "#ffb8be" : "#7a5a64", border: `2px solid ${son ? "#5a2a34" : "#3a1a24"}`, borderRadius: 10, padding: "5px 9px", fontSize: 16, cursor: "pointer" }}>{son ? "🔊" : "🔇"}</button>
           <button onClick={() => setMediadex(true)} title="Médiadex" style={{ background: "#2a1808", color: GOLD, border: "2px solid #c8a848", borderRadius: 10, padding: "5px 9px", fontSize: 16, cursor: "pointer" }}>🃏</button>
         </div>
       </div>
