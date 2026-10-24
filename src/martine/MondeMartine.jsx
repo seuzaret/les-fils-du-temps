@@ -7,31 +7,29 @@ import { assetUrl } from "../engine/assetUrl.js";
 import { loadSave } from "../engine/save.js";
 import { playClink, playMaterialize } from "../engine/sfx.js";
 import { rng } from "../engine/scenery.jsx";
-import chapter from "../chapters/07-xixe/data.js";
-import { INVENTIONS, INVENTEURS, PLACES, VISITE_AU_DEPART, TIENT_AU_DEPART, ANACHRONISMES, ANACHRONISME_DE, MARTINE_REPARE } from "./inventeursXIXe.js";
+import { EPOQUES, SUPPORTS, PERSOS, FUTURS, etatDeDepart, MARTINE_REPARE, MARTINE_EPOQUE } from "./epoquesMonde2.js";
 
 /* ============================================================
-   LE MONDE 2 — prototype (XIXe siècle)
+   LE MONDE 2 — prototype
    ------------------------------------------------------------
    Page à part (martine/index.html). Après la confrontation du
    Jeu 3, MARTINE garde le joueur chez elle, dans un monde à la
-   Stranger Things. On s'y promène comme au Jeu 2 (flèches ‹ › et
-   points, moteur Scene) dans les sept tableaux du chapitre 7 du
-   Jeu 1, en noir et blanc. MARTINE a tout mélangé : chaque
-   inventeur est dans le tableau d'un autre et tient l'invention
-   d'un troisième, et un objet du futur est caché dans chaque
-   tableau. On prend les objets (ils vont dans le sac), on rend à
-   chacun son invention (il rentre alors chez lui) et on jette les
-   objets du futur dans la poubelle temporelle (règle 3 du Jeu 1).
-   Un tableau reprend ses couleurs par tiers. Tout rangé : le monde
-   se fissure (fin du prototype). Données : inventeursXIXe.js.
+   Stranger Things. On s'y promène comme au Jeu 2 : une frise des
+   dix époques, et dans chacune les tableaux de son chapitre du
+   Jeu 1 (flèches ‹ › et points, moteur Scene), en noir et blanc.
+   MARTINE a tout mélangé : chaque personnage tient le support d'un
+   autre, et un objet du futur est caché dans chaque tableau. On
+   prend (tout va dans le sac), on rend à chacun le sien, on jette
+   les objets du futur dans la poubelle temporelle (règle 3 du
+   Jeu 1). Un tableau reprend ses couleurs tâche après tâche ; une
+   époque rangée devient dorée sur la frise. Dix époques : le monde
+   se fissure (fin du prototype). Données : epoquesMonde2.js et
+   inventeursXIXe.js.
    ============================================================ */
 
 const noop = () => {};
 const RED = "#ff3b45";
 const GOLD = "#ffd166";
-/* le tableau tant qu'il n'est pas réparé : noir et blanc, contrasté */
-const NB = "grayscale(1) contrast(1.18) brightness(0.74)";
 /* la racine du site principal (posée par main.jsx ou par l'amorce de …/martine/) */
 const RACINE = () => globalThis.__ASSET_ROOT || "../";
 
@@ -56,6 +54,8 @@ const CSS = `
 @keyframes m2Jitter { 0%, 88%, 100% { transform: translate(0,0); } 90% { transform: translate(-2px,1px); } 93% { transform: translate(2px,-1px); } 96% { transform: translate(-1px,-1px); } }
 @keyframes m2Shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-6px); } 40% { transform: translateX(6px); } 60% { transform: translateX(-4px); } 80% { transform: translateX(4px); } }
 @keyframes m2Pop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+/* frise sur petit écran : seule la date de l'époque où l'on est */
+@media (max-width: 640px) { .m2-date:not(.m2-ici) { display: none; } }
 `;
 
 /* ───────────── l'atmosphère du monde 2 ───────────── */
@@ -164,163 +164,190 @@ function MartineVoix({ texte, mood = "content", grand = false }) {
 }
 
 /* ───────────── un tableau du monde 2 ───────────── */
-/* l'objet tenu : une carte avec la photo de l'invention (médiadex) ;
-   cadre rouge qui grésille si ce n'est pas la bonne, doré sinon */
+/* l'objet tenu : une carte avec la photo du médiadex (ou un emoji) ;
+   cadre rouge qui grésille si ce n'est pas le bon, doré sinon */
 function CarteTenue({ id, x, y, juste, onClick }) {
-  const inv = INVENTIONS[id];
+  const s = SUPPORTS[id];
   const W = 66, H = 52;
-  const clip = `m2clip-${id}`;
+  const clip = `m2clip-${id.replace(/[^a-z0-9]/gi, "")}`;
   return (
-    <g transform={`translate(${x},${y})`} onClick={onClick} style={{ cursor: onClick ? "pointer" : "default" }}>
+    <g data-carte={id} transform={`translate(${x},${y})`} onClick={onClick} style={{ cursor: "pointer", pointerEvents: onClick ? "auto" : "none" }}>
       <g style={{ animation: juste ? "none" : "m2Float 2.6s ease-in-out infinite, m2Jitter 3.2s linear infinite" }}>
-        <title>{inv.nom}</title>
+        <title>{s.nom}</title>
         <rect x={-4} y={-4} width={W + 8} height={H + 8} rx="5" fill={juste ? "#2a1e08" : "#1a0408"}
           stroke={juste ? GOLD : RED} strokeWidth="2.5" style={{ filter: `drop-shadow(0 0 8px ${juste ? GOLD : RED})` }} />
-        <clipPath id={clip}><rect width={W} height={H} rx="2" /></clipPath>
-        <image href={assetUrl(`assets/inventions/${inv.image}`)} width={W} height={H} preserveAspectRatio="xMidYMid slice" clipPath={`url(#${clip})`} />
+        {s.image ? (
+          <>
+            <clipPath id={clip}><rect width={W} height={H} rx="2" /></clipPath>
+            <image href={assetUrl(`assets/inventions/${s.image}`)} width={W} height={H} preserveAspectRatio="xMidYMid slice" clipPath={`url(#${clip})`} />
+          </>
+        ) : (
+          <>
+            <rect width={W} height={H} rx="2" fill="#e8dcc0" />
+            <text x={W / 2} y={H / 2 + 2} textAnchor="middle" dominantBaseline="central" fontSize="34">{s.emoji}</text>
+          </>
+        )}
       </g>
     </g>
   );
 }
 
-/* où se tient un inventeur : chez lui s'il est revenu, sinon chez un autre */
-const placeDe = (inv, chez) => (chez[inv.id] ? PLACES[inv.scene].chez : PLACES[VISITE_AU_DEPART[inv.id]].visite);
-const tableauDe = (inv, chez) => (chez[inv.id] ? inv.scene : VISITE_AU_DEPART[inv.id]);
-
-/* où sont ses mains (et donc la carte) */
+/* où se tient un personnage dessiné : chez lui s'il est revenu, sinon en visite */
+const placeDessinee = (p, chez) => (!p.visite || chez[p.id] ? p.chez : p.visite);
+const tableauDe = (p, chez) => (p.visite && !chez[p.id] ? p.visite.scene : p.scene);
+/* sa silhouette : pieds (x, y), hauteur, largeur, coin de la carte */
 const BRAS_TENDU = { a1: 50, a2: 15 };
 const BRAS_DUO = { a1: 40, a2: -10 };
 const BAS = { a1: 9, a2: 6 };
-function placeCarte(inv, p) {
-  if (inv.duo) {
+function silhouette(p, chez) {
+  if (!p.fig) return { x: p.x, y: p.y, h: p.h, w: p.w || 64, carte: p.carte };
+  const q = placeDessinee(p, chez);
+  let carte;
+  if (p.duo) {
     /* tenue à deux mains, devant les vestes : les visages restent visibles */
-    const h = handPos({ side: 1, ...BRAS_DUO });
-    return { x: p.x - 33, y: p.y + p.s * h.y - 30 };
+    const m = handPos({ side: 1, ...BRAS_DUO });
+    carte = { x: q.x - 33, y: q.y + q.s * m.y - 30 };
+  } else {
+    /* handPos donne déjà x < 0 pour le bras de gauche */
+    const m = handPos({ side: q.bras, ...BRAS_TENDU });
+    const hx = q.x + q.s * m.x, hy = q.y + q.s * m.y;
+    carte = { x: q.bras > 0 ? hx - 10 : hx - 56, y: hy - 50 };
   }
-  /* handPos donne déjà x < 0 pour le bras de gauche */
-  const h = handPos({ side: p.bras, ...BRAS_TENDU });
-  const hx = p.x + p.s * h.x, hy = p.y + p.s * h.y;
-  return { x: p.bras > 0 ? hx - 10 : hx - 56, y: hy - 50 };
+  return { x: q.x, y: q.y, h: 132 * q.s, w: (p.duo ? 124 : 68) * q.s, carte, q };
 }
 
-/* l'inventeur (ou les deux frères), dessiné avec le kit du jeu */
-function Inventeur({ inv, p, mood }) {
-  if (inv.duo) {
-    const d = 28 * p.s;
+/* un personnage dessiné (ou les deux frères) avec le kit du jeu */
+function Dessine({ p, q, mood }) {
+  if (p.duo) {
+    const d = 28 * q.s;
     return (
       <g>
-        <Figure x={p.x - d} y={p.y} s={p.s} {...inv.fig} mood={mood} arms={[BAS, BRAS_DUO]} />
-        <Figure x={p.x + d} y={p.y} s={p.s} {...inv.fig} beard="royal" hair="#4a3424" mood={mood} arms={[BRAS_DUO, BAS]} />
+        <Figure x={q.x - d} y={q.y} s={q.s} {...p.fig} mood={mood} arms={[BAS, BRAS_DUO]} />
+        <Figure x={q.x + d} y={q.y} s={q.s} {...p.fig} beard="royal" hair="#4a3424" mood={mood} arms={[BRAS_DUO, BAS]} />
       </g>
     );
   }
-  const arms = p.bras > 0 ? [BAS, BRAS_TENDU] : [BRAS_TENDU, BAS];
-  return <Figure x={p.x} y={p.y} s={p.s} {...inv.fig} mood={mood} arms={arms} />;
+  const arms = q.bras > 0 ? [BAS, BRAS_TENDU] : [BRAS_TENDU, BAS];
+  return <Figure x={q.x} y={q.y} s={q.s} {...p.fig} mood={mood} arms={arms} />;
 }
 
-function Plaque({ inv, p, juste }) {
-  const w = inv.nom.length * 7.4 + 18;
+function Plaque({ nom, x, y, juste }) {
+  const w = nom.length * 7.4 + 18;
   return (
-    <g transform={`translate(${p.x},${p.y + 16})`} style={{ pointerEvents: "none" }}>
+    <g transform={`translate(${Math.min(1000 - w / 2, Math.max(w / 2, x))},${Math.min(548, y + 16)})`} style={{ pointerEvents: "none" }}>
       <rect x={-w / 2} y={-10} width={w} height={20} rx="4" fill="#0a0408" opacity="0.88" stroke={juste ? GOLD : RED} strokeWidth="1.2" />
-      <text x="0" y="4.5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12.5" fontWeight="700" letterSpacing="0.5" fill={juste ? GOLD : "#ffb8be"}>{inv.nom}</text>
+      <text x="0" y="4.5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12.5" fontWeight="700" letterSpacing="0.5" fill={juste ? GOLD : "#ffb8be"}>{nom}</text>
     </g>
   );
 }
 
-/* les objets du futur, dessinés dans le décor (donc en noir et blanc
-   avec lui) : à repérer, comme les déchets temporels du Jeu 1 */
-function ObjetDuFutur({ id }) {
-  const a = ANACHRONISMES[id];
-  const dessins = {
-    portable: (
-      <g>
-        <path d="M-22 0 L-19 -30 L21 -30 L22 0 Z" fill="#2a2e36" stroke="#0c0e12" strokeWidth="1" />
-        <rect x="-16" y="-27" width="33" height="22" fill="#9ec8e8" />
-        <path d="M-12 -21 h14 M-12 -16 h20 M-12 -11 h10" stroke="#3a5a7a" strokeWidth="1.6" />
-        <path d="M-27 0 L27 0 L31 6 L-31 6 Z" fill="#9aa0a8" stroke="#2a2e36" strokeWidth="1" />
-      </g>
-    ),
-    numerique: (
-      <g>
-        <rect x="-15" y="-12" width="30" height="20" rx="3" fill="#2a2a30" stroke="#0c0c10" strokeWidth="1" />
-        <circle cx="3" cy="-2" r="7.5" fill="#4a4e58" stroke="#c8ccd4" strokeWidth="1.6" />
-        <circle cx="3" cy="-2" r="3.4" fill="#1a2a4a" />
-        <rect x="-12" y="-10" width="7" height="4" fill="#e8e8f0" />
-        <rect x="9" y="-15" width="5" height="3" fill="#c03030" />
-      </g>
-    ),
-    parabole: (
-      <g>
-        <path d="M0 6 L0 26" stroke="#4a4e58" strokeWidth="3" />
-        <ellipse cx="0" cy="0" rx="13" ry="19" transform="rotate(-35)" fill="#e8eaee" stroke="#6a6e78" strokeWidth="1.4" />
-        <path d="M-2 2 L14 -12" stroke="#4a4e58" strokeWidth="2" />
-        <circle cx="14" cy="-12" r="2.6" fill="#2a2e36" />
-      </g>
-    ),
-    cd: (
-      <g>
-        <defs>
-          <linearGradient id="m2cd" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0" stopColor="#e8eef8" /><stop offset=".35" stopColor="#b8d8ff" /><stop offset=".55" stopColor="#ffd0f0" /><stop offset=".75" stopColor="#d8ffd0" /><stop offset="1" stopColor="#c8ccd4" />
-          </linearGradient>
-        </defs>
-        <circle r="13" fill="url(#m2cd)" stroke="#8a8e98" strokeWidth="1" />
-        <circle r="4.6" fill="none" stroke="#8a8e98" strokeWidth="1" />
-        <circle r="2.2" fill="#3a2a20" />
-      </g>
-    ),
-    satellite: (
-      <g>
-        <rect x="-26" y="-5" width="17" height="10" fill="#3a5a8a" stroke="#c8d4e8" strokeWidth="0.8" />
-        <rect x="9" y="-5" width="17" height="10" fill="#3a5a8a" stroke="#c8d4e8" strokeWidth="0.8" />
-        <path d="M-20 -5 v10 M-14 -5 v10 M15 -5 v10 M21 -5 v10" stroke="#c8d4e8" strokeWidth="0.6" />
-        <rect x="-8" y="-7" width="16" height="14" rx="2" fill="#d8dce4" />
-        <path d="M0 7 L0 15" stroke="#d8dce4" strokeWidth="1.4" />
-        <circle cx="0" cy="16" r="1.8" fill="#ff5050"><animate attributeName="opacity" values="1;0.1;1" dur="1.4s" repeatCount="indefinite" /></circle>
-      </g>
-    ),
-    lunettes3d: (
-      <g>
-        <path d="M-22 -3 L-30 -8 M22 -3 L30 -8" stroke="#f0f0f0" strokeWidth="1.6" />
-        <rect x="-22" y="-7" width="19" height="13" rx="3" fill="#e02838" stroke="#f4f4f4" strokeWidth="2" />
-        <rect x="3" y="-7" width="19" height="13" rx="3" fill="#20b8e0" stroke="#f4f4f4" strokeWidth="2" />
-        <path d="M-3 -2 Q0 -5 3 -2" stroke="#f4f4f4" strokeWidth="2" fill="none" />
-      </g>
-    ),
-    smartphone: (
-      <g transform="rotate(-12)">
-        <rect x="-8" y="-15" width="16" height="30" rx="3" fill="#16181e" stroke="#0a0a0e" strokeWidth="1" />
-        <rect x="-6.5" y="-12" width="13" height="23" rx="1" fill="#7ab8f0" />
-        <path d="M-4 -8 h4 M-4 -4 h8 M-4 0 h6" stroke="#ffffff" strokeWidth="1.4" opacity="0.8" />
-      </g>
-    ),
-  };
-  return <g transform={`translate(${a.x},${a.y})`}>{dessins[id]}</g>;
+/* les objets du futur du XIXe ont un dessin à eux ; les autres, un emoji */
+const DESSINS = {
+  portable: (
+    <g>
+      <path d="M-22 0 L-19 -30 L21 -30 L22 0 Z" fill="#2a2e36" stroke="#0c0e12" strokeWidth="1" />
+      <rect x="-16" y="-27" width="33" height="22" fill="#9ec8e8" />
+      <path d="M-12 -21 h14 M-12 -16 h20 M-12 -11 h10" stroke="#3a5a7a" strokeWidth="1.6" />
+      <path d="M-27 0 L27 0 L31 6 L-31 6 Z" fill="#9aa0a8" stroke="#2a2e36" strokeWidth="1" />
+    </g>
+  ),
+  numerique: (
+    <g>
+      <rect x="-15" y="-12" width="30" height="20" rx="3" fill="#2a2a30" stroke="#0c0c10" strokeWidth="1" />
+      <circle cx="3" cy="-2" r="7.5" fill="#4a4e58" stroke="#c8ccd4" strokeWidth="1.6" />
+      <circle cx="3" cy="-2" r="3.4" fill="#1a2a4a" />
+      <rect x="-12" y="-10" width="7" height="4" fill="#e8e8f0" />
+      <rect x="9" y="-15" width="5" height="3" fill="#c03030" />
+    </g>
+  ),
+  parabole: (
+    <g>
+      <path d="M0 6 L0 26" stroke="#4a4e58" strokeWidth="3" />
+      <ellipse cx="0" cy="0" rx="13" ry="19" transform="rotate(-35)" fill="#e8eaee" stroke="#6a6e78" strokeWidth="1.4" />
+      <path d="M-2 2 L14 -12" stroke="#4a4e58" strokeWidth="2" />
+      <circle cx="14" cy="-12" r="2.6" fill="#2a2e36" />
+    </g>
+  ),
+  cd: (
+    <g>
+      <defs>
+        <linearGradient id="m2cd" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#e8eef8" /><stop offset=".35" stopColor="#b8d8ff" /><stop offset=".55" stopColor="#ffd0f0" /><stop offset=".75" stopColor="#d8ffd0" /><stop offset="1" stopColor="#c8ccd4" />
+        </linearGradient>
+      </defs>
+      <circle r="13" fill="url(#m2cd)" stroke="#8a8e98" strokeWidth="1" />
+      <circle r="4.6" fill="none" stroke="#8a8e98" strokeWidth="1" />
+      <circle r="2.2" fill="#3a2a20" />
+    </g>
+  ),
+  satellite: (
+    <g>
+      <rect x="-26" y="-5" width="17" height="10" fill="#3a5a8a" stroke="#c8d4e8" strokeWidth="0.8" />
+      <rect x="9" y="-5" width="17" height="10" fill="#3a5a8a" stroke="#c8d4e8" strokeWidth="0.8" />
+      <path d="M-20 -5 v10 M-14 -5 v10 M15 -5 v10 M21 -5 v10" stroke="#c8d4e8" strokeWidth="0.6" />
+      <rect x="-8" y="-7" width="16" height="14" rx="2" fill="#d8dce4" />
+      <path d="M0 7 L0 15" stroke="#d8dce4" strokeWidth="1.4" />
+      <circle cx="0" cy="16" r="1.8" fill="#ff5050"><animate attributeName="opacity" values="1;0.1;1" dur="1.4s" repeatCount="indefinite" /></circle>
+    </g>
+  ),
+  lunettes3d: (
+    <g>
+      <path d="M-22 -3 L-30 -8 M22 -3 L30 -8" stroke="#f0f0f0" strokeWidth="1.6" />
+      <rect x="-22" y="-7" width="19" height="13" rx="3" fill="#e02838" stroke="#f4f4f4" strokeWidth="2" />
+      <rect x="3" y="-7" width="19" height="13" rx="3" fill="#20b8e0" stroke="#f4f4f4" strokeWidth="2" />
+      <path d="M-3 -2 Q0 -5 3 -2" stroke="#f4f4f4" strokeWidth="2" fill="none" />
+    </g>
+  ),
+  smartphone: (
+    <g transform="rotate(-12)">
+      <rect x="-8" y="-15" width="16" height="30" rx="3" fill="#16181e" stroke="#0a0a0e" strokeWidth="1" />
+      <rect x="-6.5" y="-12" width="13" height="23" rx="1" fill="#7ab8f0" />
+      <path d="M-4 -8 h4 M-4 -4 h8 M-4 0 h6" stroke="#ffffff" strokeWidth="1.4" opacity="0.8" />
+    </g>
+  ),
+};
+function ObjetDuFutur({ f }) {
+  return (
+    <g transform={`translate(${f.x},${f.y})`}>
+      {f.dessin ? DESSINS[f.dessin] : <text textAnchor="middle" dominantBaseline="central" fontSize="34">{f.emoji}</text>}
+    </g>
+  );
 }
 
-function Tableau({ sid, Orig, monde }) {
-  const { tient, chez, sortant, ana, onCarte, onInventeur, onAna, bulle } = monde;
-  const presents = INVENTEURS.filter((i) => tableauDe(i, chez) === sid);
-  const anaId = ANACHRONISME_DE[sid];
-  const anaLa = ana[anaId] === "tableau";
-  const gris = 1 - niveauDe(sid, monde) / 3;
-  const a = ANACHRONISMES[anaId];
+/* les tâches d'un tableau : ses objets du futur, et ses propriétaires
+   (servis = leur support en main, et revenus chez eux s'ils voyagent) */
+const servi = (p, { tient, chez }) => tient[p.id] === p.support && (!p.visite || chez[p.id]);
+function avancement(ep, sid, etat) {
+  const futurs = Object.values(FUTURS).filter((f) => f.epoque === ep.id && f.scene === sid);
+  const proprios = Object.values(PERSOS).filter((p) => p.epoque === ep.id && p.scene === sid);
+  const total = futurs.length + proprios.length;
+  const fait = futurs.filter((f) => etat.futurs[f.id] !== "tableau").length + proprios.filter((p) => servi(p, etat)).length;
+  return total ? fait / total : 1;
+}
+const epoqueFinie = (ep, etat) =>
+  ep.persos.every((p) => servi(PERSOS[p.id], etat)) && Object.values(FUTURS).every((f) => f.epoque !== ep.id || etat.futurs[f.id] === "jete");
+
+function Tableau({ ep, sid, Orig, monde }) {
+  const { etat, sortant, onCarte, onPerso, onFutur, bulle } = monde;
+  const { tient, chez } = etat;
+  const presents = Object.values(PERSOS).filter((p) => p.epoque === ep.id && tableauDe(p, chez) === sid);
+  const futurs = Object.values(FUTURS).filter((f) => f.epoque === ep.id && f.scene === sid && etat.futurs[f.id] === "tableau");
+  const gris = 1 - avancement(ep, sid, etat);
   return (
     <div style={{ position: "absolute", inset: 0 }}>
-      {/* le décor du Jeu 1, les inventeurs et l'objet du futur : en noir et
-          blanc, puis un tiers de couleur par chose remise en ordre */}
+      {/* le décor du Jeu 1, les personnages dessinés et les objets du futur :
+          en noir et blanc, puis la couleur revient tâche après tâche */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", transition: "filter 2.2s ease",
         filter: `grayscale(${gris}) contrast(${1 + 0.18 * gris}) brightness(${1 - 0.26 * gris})` }}>
         <Orig collect={noop} action={noop} reveal={false} made={[]} flags={{}} queteQui={null} mode="jeu2" sansMarconi />
         <svg viewBox="0 0 1000 560" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-          {anaLa && <ObjetDuFutur id={anaId} />}
-          {presents.map((i) => {
-            const objet = tient[i.id];
-            const mood = objet === i.invention ? "content" : objet ? "neutre" : "surpris";
+          {futurs.map((f) => <ObjetDuFutur key={f.id} f={f} />)}
+          {presents.filter((p) => p.fig).map((p) => {
+            const objet = tient[p.id];
+            const mood = objet === p.support ? "content" : objet ? "neutre" : "surpris";
             return (
-              <g key={i.id} style={{ opacity: sortant === i.id ? 0 : 1, transition: "opacity .6s" }}>
-                <Inventeur inv={i} p={placeDe(i, chez)} mood={mood} />
+              <g key={p.id} style={{ opacity: sortant === p.id ? 0 : 1, transition: "opacity .6s" }}>
+                <Dessine p={p} q={placeDessinee(p, chez)} mood={mood} />
               </g>
             );
           })}
@@ -330,29 +357,28 @@ function Tableau({ sid, Orig, monde }) {
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", opacity: gris, transition: "opacity 2.2s ease",
         background: "linear-gradient(180deg, rgba(20,40,80,0.28), rgba(10,6,20,0.18) 55%, rgba(120,10,30,0.32))", mixBlendMode: "multiply" }} />
       <svg viewBox="0 0 1000 560" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-        {anaLa && <circle data-futur={anaId} cx={a.x} cy={a.y - 6} r="26" fill="rgba(0,0,0,0.001)" style={{ cursor: "pointer" }} onClick={() => onAna(anaId)} />}
-        {presents.map((i) => {
-          const p = placeDe(i, chez);
-          const objet = tient[i.id];
-          const juste = objet === i.invention;
-          const carte = placeCarte(i, p);
-          const large = (i.duo ? 62 : 34) * p.s;
-          const haut = p.y - p.s * 132;
+        {futurs.map((f) => (
+          <circle key={f.id} data-futur={f.id} cx={f.x} cy={f.dessin ? f.y - 6 : f.y} r="26" fill="rgba(0,0,0,0.001)" style={{ cursor: "pointer" }} onClick={() => onFutur(f.id)} />
+        ))}
+        {presents.map((p) => {
+          const sil = silhouette(p, chez);
+          const objet = tient[p.id];
+          const juste = objet === p.support;
           return (
-            <g key={i.id} style={{ opacity: sortant === i.id ? 0 : 1, transition: "opacity .6s" }}>
-              <rect x={p.x - large} y={haut} width={large * 2} height={p.y - haut + 4} fill="rgba(0,0,0,0.001)"
-                style={{ cursor: "pointer" }} onClick={() => onInventeur(i.id)}><title>{i.nom}</title></rect>
-              <Plaque inv={i} p={p} juste={juste} />
-              {objet && <CarteTenue id={objet} x={carte.x} y={carte.y} juste={juste} onClick={juste ? undefined : () => onCarte(i.id)} />}
+            <g key={p.id} style={{ opacity: sortant === p.id ? 0 : 1, transition: "opacity .6s" }}>
+              <rect data-perso={p.id} x={sil.x - sil.w / 2} y={sil.y - sil.h} width={sil.w} height={sil.h + 4} fill="rgba(0,0,0,0.001)"
+                style={{ cursor: "pointer" }} onClick={() => onPerso(p.id)}><title>{p.nom}</title></rect>
+              <Plaque nom={p.nom} x={sil.x} y={sil.y} juste={juste} />
+              {objet && <CarteTenue key={objet} id={objet} x={sil.carte.x} y={sil.carte.y} juste={juste} onClick={juste ? undefined : () => onCarte(p.id)} />}
             </g>
           );
         })}
       </svg>
-      {/* ce que dit l'inventeur */}
-      {presents.filter((i) => bulle?.qui === i.id).map((i) => {
-        const p = placeDe(i, chez);
+      {/* ce que dit le personnage */}
+      {presents.filter((p) => bulle?.qui === p.id).map((p) => {
+        const sil = silhouette(p, chez);
         return (
-          <div key={bulle.n} style={{ position: "absolute", left: `${Math.min(84, Math.max(16, p.x / 10))}%`, top: `${Math.max(2, (p.y - p.s * 132 - 10) / 5.6)}%`,
+          <div key={bulle.n} style={{ position: "absolute", left: `${Math.min(84, Math.max(16, sil.x / 10))}%`, top: `${Math.max(2, (sil.y - sil.h - 10) / 5.6)}%`,
             transform: "translate(-50%,-100%)", maxWidth: "46%", width: "max-content", pointerEvents: "none" }}>
             {/* l'animation sur un div intérieur : son `transform` écraserait le centrage */}
             <div style={{ background: "#f8f2e4", color: "#1a1410", borderRadius: 12, padding: "6px 12px",
@@ -367,19 +393,11 @@ function Tableau({ sid, Orig, monde }) {
   );
 }
 
-/* remise en ordre d'un tableau, de 0 à 3 : l'objet du futur est parti,
-   le visiteur est rentré chez lui, le propriétaire est revenu */
-function niveauDe(sid, { chez, ana }) {
-  const proprio = INVENTEURS.find((i) => i.scene === sid);
-  const visiteur = INVENTEURS.find((i) => VISITE_AU_DEPART[i.id] === sid);
-  return (ana[ANACHRONISME_DE[sid]] === "tableau" ? 0 : 1) + (chez[visiteur.id] ? 1 : 0) + (chez[proprio.id] ? 1 : 0);
-}
-
-/* les tableaux du chapitre 7, passés au moteur Scene comme au Jeu 2 */
-const TABLEAUX = chapter.scenes.map((s) => ({
+/* les tableaux de chaque époque, passés au moteur Scene comme au Jeu 2 */
+const TABLEAUX = Object.fromEntries(EPOQUES.map((ep) => [ep.id, ep.tableaux.map((s) => ({
   id: s.id, name: s.name,
-  Component: ({ monde }) => <Tableau sid={s.id} Orig={s.Component} monde={monde} />,
-}));
+  Component: ({ monde }) => <Tableau ep={ep} sid={s.id} Orig={s.Component} monde={monde} />,
+}))]));
 
 /* le plus grand cadre 1000 × 560 qui tient dans la cellule */
 function useCadre(ref) {
@@ -400,8 +418,36 @@ function useCadre(ref) {
   return box;
 }
 
+/* ───────────── la frise des époques ───────────── */
+function Frise({ ici, etat, onEpoque }) {
+  return (
+    <div style={{ position: "relative", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2, maxWidth: 1080, margin: "0 auto", padding: "0 6px" }}>
+      <div style={{ position: "absolute", left: 24, right: 24, top: 19, height: 2, background: `linear-gradient(90deg, #3a1420, ${RED}, #3a1420)`, opacity: 0.55 }} />
+      {EPOQUES.map((ep) => {
+        const fini = epoqueFinie(ep, etat);
+        const la = ep.id === ici;
+        return (
+          <button key={ep.id} onClick={() => onEpoque(ep.id)} title={`${ep.chapitre.epoque} · ${ep.chapitre.date}${fini ? " — remise en ordre ✓" : ""}`}
+            style={{ position: "relative", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, background: "transparent", border: "none",
+              padding: "0 2px", cursor: la ? "default" : "pointer", color: "#e8eef5", flex: "0 1 auto", minWidth: 0 }}>
+            <span style={{ display: "grid", placeItems: "center", width: la ? 38 : 32, height: la ? 38 : 32, borderRadius: "50%", fontSize: la ? 20 : 16,
+              background: fini ? "radial-gradient(circle at 50% 40%, #ffe08a, #b8862a)" : la ? "radial-gradient(circle at 50% 40%, #5a1420, #1a0408)" : "#0c0608",
+              border: `2px solid ${fini ? GOLD : la ? RED : "#4a1a24"}`, boxShadow: la ? `0 0 14px ${RED}aa` : fini ? `0 0 10px ${GOLD}88` : "none",
+              filter: fini || la ? "none" : "grayscale(1) brightness(0.8)", transition: "all .2s" }}>
+              {ep.chapitre.emoji}
+            </span>
+            <span className={la ? "m2-date m2-ici" : "m2-date"} style={{ fontFamily: "ui-monospace,monospace", fontSize: 8.5, letterSpacing: 0.3, whiteSpace: "nowrap", color: fini ? GOLD : la ? "#ffb8be" : "#7a5a64" }}>
+              {ep.chapitre.date}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 /* ───────────── le sac et la poubelle temporelle ───────────── */
-const objetDuSac = (id) => INVENTIONS[id] || ANACHRONISMES[id];
+const objetDuSac = (id) => SUPPORTS[id] || FUTURS[id];
 function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 12, minHeight: 64,
@@ -420,7 +466,7 @@ function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
         const on = choisi === id;
         const o = objetDuSac(id);
         return (
-          <button key={id} onClick={() => onChoisir(on ? null : id)} title={o.nom}
+          <button key={id} data-sac={id} data-on={on ? 1 : 0} onClick={() => onChoisir(on ? null : id)} title={o.nom}
             style={{ display: "flex", alignItems: "center", gap: 6, padding: "3px 9px 3px 3px", borderRadius: 9, cursor: "pointer", flex: "0 0 auto",
               background: on ? "#3a2808" : "#140810", color: on ? GOLD : "#f2e0e4", border: `2px solid ${on ? GOLD : "#5a2a34"}`,
               boxShadow: on ? `0 0 14px ${GOLD}88` : "none", transform: on ? "translateY(-3px)" : "none", transition: "all .15s",
@@ -438,12 +484,13 @@ function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
 }
 
 /* ───────────── la page ───────────── */
-const depart = () => ({
-  tient: { ...TIENT_AU_DEPART },
-  chez: Object.fromEntries(INVENTEURS.map((i) => [i.id, false])),
-  ana: Object.fromEntries(Object.keys(ANACHRONISMES).map((id) => [id, "tableau"])), // tableau | sac | jete
-  sac: [], choisi: null,
-});
+/* ?epoque=07-xixe : ouvrir directement une époque (tests, ou pour un cours) */
+function epoqueDeLAdresse() {
+  try {
+    const id = new URLSearchParams(window.location.search).get("epoque");
+    return EPOQUES.some((ep) => ep.id === id) ? id : EPOQUES[0].id;
+  } catch { return EPOQUES[0].id; }
+}
 
 export default function MondeMartine() {
   const prenom = useMemo(readPrenom, []);
@@ -463,7 +510,7 @@ export default function MondeMartine() {
         <style>{CSS}</style>
         <Spores n={30} />
         <div style={{ animation: "mmIn 900ms ease-out both" }}>
-          <MartineVoix grand texte={prenom ? `Bienvenue chez moi, ${prenom}.` : "Bienvenue chez moi."} />
+          <MartineVoix grand mood="vexe" texte={prenom ? `Tu n'as rien à faire ici, ${prenom}.` : "Tu n'as rien à faire ici."} />
         </div>
       </div>
     );
@@ -482,8 +529,9 @@ export default function MondeMartine() {
 }
 
 function Monde({ page, phase, setPhase }) {
+  const [epoqueId, setEpoqueId] = useState(epoqueDeLAdresse);
   const [tab, setTab] = useState(0);
-  const [etat, setEtat] = useState(depart);
+  const [etat, setEtat] = useState(etatDeDepart);
   const [sortant, setSortant] = useState(null);
   const [bulle, setBulle] = useState(null);
   const [refus, setRefus] = useState(false);
@@ -494,14 +542,19 @@ function Monde({ page, phase, setPhase }) {
   const cadre = useCadre(cellule);
   const n = useRef(0);
   const minuteurs = useRef([]);
-  const reparesVus = useRef(new Set());
+  const vus = useRef({ tableaux: new Set(), epoques: new Set() });
 
-  const { tient, chez, ana, sac, choisi } = etat;
-  const niveaux = INVENTEURS.map((i) => niveauDe(i.scene, etat));
-  const nbChez = INVENTEURS.filter((i) => chez[i.id]).length;
-  const nbJetes = Object.values(ana).filter((v) => v === "jete").length;
-  const nbAna = Object.keys(ANACHRONISMES).length;
-  const fini = nbChez === INVENTEURS.length && nbJetes === nbAna;
+  const ep = EPOQUES.find((e) => e.id === epoqueId);
+  const { tient, sac, choisi } = etat;
+  const persosIci = ep.persos.map((p) => PERSOS[p.id]);
+  const futursIci = Object.values(FUTURS).filter((f) => f.epoque === ep.id);
+  const nbServis = persosIci.filter((p) => servi(p, etat)).length;
+  const nbJetes = futursIci.filter((f) => etat.futurs[f.id] === "jete").length;
+  const finies = EPOQUES.filter((e) => epoqueFinie(e, etat));
+  const toutFini = finies.length === EPOQUES.length;
+  /* la fissure : la part de tâches faites dans tout le monde 2 */
+  const progres = EPOQUES.reduce((s, e) => s + e.tableaux.reduce((t, sc) => t + avancement(e, sc.id, etat), 0), 0)
+    / EPOQUES.reduce((s, e) => s + e.tableaux.length, 0);
 
   /* bulles, voix, toasts et secousses s'effacent seuls */
   useEffect(() => { if (!bulle) return undefined; const t = setTimeout(() => setBulle(null), 4200); return () => clearTimeout(t); }, [bulle]);
@@ -509,75 +562,85 @@ function Monde({ page, phase, setPhase }) {
   useEffect(() => { if (!toast) return undefined; const t = setTimeout(() => setToast(null), 3800); return () => clearTimeout(t); }, [toast]);
   useEffect(() => { if (!refus) return undefined; const t = setTimeout(() => setRefus(false), 500); return () => clearTimeout(t); }, [refus]);
   useEffect(() => () => minuteurs.current.forEach(clearTimeout), []);
-  useEffect(() => { if (!fini || phase !== "monde") return undefined; const t = setTimeout(() => setPhase("fin"), 3200); return () => clearTimeout(t); }, [fini, phase, setPhase]);
-  useEffect(() => { setBulle(null); }, [tab]);
+  useEffect(() => { if (!toutFini || phase !== "monde") return undefined; const t = setTimeout(() => setPhase("fin"), 3200); return () => clearTimeout(t); }, [toutFini, phase, setPhase]);
+  useEffect(() => { setBulle(null); }, [tab, epoqueId]);
 
-  /* MARTINE réagit à chaque tableau entièrement remis en ordre */
-  const cleNiveaux = niveaux.join("");
+  /* MARTINE réagit à chaque tableau, puis à chaque époque, remis en ordre */
+  const cle = EPOQUES.map((e) => e.tableaux.map((sc) => (avancement(e, sc.id, etat) === 1 ? 1 : 0)).join("")).join("|");
   useEffect(() => {
-    INVENTEURS.forEach((i, k) => {
-      if (niveaux[k] === 3 && !reparesVus.current.has(i.scene)) {
-        reparesVus.current.add(i.scene);
-        playClink();
-        setVoix({ texte: MARTINE_REPARE[Math.min(reparesVus.current.size - 1, MARTINE_REPARE.length - 1)], mood: "vexe" });
-      }
-    });
-    /* tout est rangé dans les tableaux, mais il reste des objets du futur dans le sac */
-    if (niveaux.every((v) => v === 3) && sac.some((id) => ANACHRONISMES[id])) {
+    let tableauNeuf = false;
+    for (const e of EPOQUES) for (const sc of e.tableaux) {
+      const k = `${e.id}/${sc.id}`;
+      if (avancement(e, sc.id, etat) === 1 && !vus.current.tableaux.has(k)) { vus.current.tableaux.add(k); tableauNeuf = true; }
+    }
+    const neuve = EPOQUES.find((e) => epoqueFinie(e, etat) && !vus.current.epoques.has(e.id));
+    if (neuve) {
+      vus.current.epoques.add(neuve.id);
+      playClink();
+      setVoix({ texte: MARTINE_EPOQUE[(vus.current.epoques.size - 1) % MARTINE_EPOQUE.length], mood: "vexe" });
+      setToast({ texte: `✦ ${neuve.chapitre.epoque} : remis en ordre !`, ok: true });
+    } else if (tableauNeuf) {
+      playClink();
+      setVoix({ texte: MARTINE_REPARE[(vus.current.tableaux.size - 1) % MARTINE_REPARE.length], mood: "vexe" });
+    }
+    /* une époque rangée, mais des objets du futur encore dans le sac */
+    if (ep.tableaux.every((sc) => avancement(ep, sc.id, etat) === 1) && sac.some((id) => FUTURS[id]?.epoque === ep.id)) {
       setToast({ texte: "Il reste des objets du futur dans ton sac.", ok: false });
     }
-  }, [cleNiveaux]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [cle]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const dire = (qui, texte, ok = false) => { n.current += 1; setBulle({ qui, texte, ok, n: n.current }); };
   const plusTard = (ms, f) => { minuteurs.current.push(setTimeout(f, ms)); };
 
-  /* prendre l'objet que tient un inventeur : il va dans le sac, et on l'a en main */
+  /* prendre ce que tient un personnage : ça va dans le sac, et on l'a en main */
   const onCarte = (id) => {
     const objet = tient[id];
     if (!objet) return;
     setEtat((e) => ({ ...e, tient: { ...e.tient, [id]: null }, sac: [...e.sac, objet], choisi: objet }));
   };
   /* ramasser un objet du futur */
-  const onAna = (id) => {
-    setEtat((e) => ({ ...e, ana: { ...e.ana, [id]: "sac" }, sac: [...e.sac, id], choisi: id }));
+  const onFutur = (id) => {
+    setEtat((e) => ({ ...e, futurs: { ...e.futurs, [id]: "sac" }, sac: [...e.sac, id], choisi: id }));
   };
-  const onInventeur = (id) => {
-    const inv = INVENTEURS.find((i) => i.id === id);
+  const onPerso = (id) => {
+    const p = PERSOS[id];
     const objet = tient[id];
-    if (objet === inv.invention) { dire(id, inv.dit, true); return; }
+    if (objet === p.support) { dire(id, p.dit, true); return; }
     if (!choisi) {
       if (objet) onCarte(id);
-      else dire(id, inv.cherche);
+      else dire(id, p.cherche);
       return;
     }
-    if (ANACHRONISMES[choisi]) { setRefus(true); dire(id, "Qu'est-ce que c'est que ça ?!"); return; }
-    if (choisi !== inv.invention) { setRefus(true); dire(id, "Ce n'est pas à moi !"); return; }
-    /* la bonne : il la reprend (et rend ce qu'il tenait encore), puis rentre chez lui */
+    if (FUTURS[choisi]) { setRefus(true); dire(id, "Qu'est-ce que c'est que ça ?!"); return; }
+    if (SUPPORTS[choisi].epoque !== p.epoque) { setRefus(true); dire(id, "Ce n'est pas de mon époque !"); return; }
+    if (choisi !== p.support) { setRefus(true); dire(id, "Ce n'est pas à moi !"); return; }
+    /* le bon : il le reprend (et rend ce qu'il tenait encore), puis rentre chez lui */
     setEtat((e) => {
       const reste = e.sac.filter((x) => x !== choisi);
       return { ...e, tient: { ...e.tient, [id]: choisi }, sac: objet ? [...reste, objet] : reste, choisi: null };
     });
-    dire(id, inv.dit, true);
-    if (!chez[id]) {
+    dire(id, p.dit, true);
+    if (p.visite && !etat.chez[id]) {
       plusTard(2000, () => setSortant(id));
       plusTard(2600, () => { setEtat((e) => ({ ...e, chez: { ...e.chez, [id]: true } })); setSortant(null); });
     }
   };
   const onPoubelle = () => {
     if (!choisi) { setToast({ texte: "La poubelle temporelle : pour les objets du futur.", ok: true }); return; }
-    const a = ANACHRONISMES[choisi];
-    if (a) {
-      setEtat((e) => ({ ...e, ana: { ...e.ana, [choisi]: "jete" }, sac: e.sac.filter((x) => x !== choisi), choisi: null }));
-      setToast({ texte: `${a.emoji} ${a.nom} : ${a.quand} ! Rien du futur dans le passé.`, ok: true });
+    const f = FUTURS[choisi];
+    if (f) {
+      setEtat((e) => ({ ...e, futurs: { ...e.futurs, [choisi]: "jete" }, sac: e.sac.filter((x) => x !== choisi), choisi: null }));
+      setToast({ texte: `${f.emoji} ${f.nom} : ${f.quand} ! Rien du futur dans le passé.`, ok: true });
       return;
     }
     setRefus(true);
-    setToast({ texte: `${INVENTIONS[choisi].nom} : une vraie invention de cette époque ! Rends-la à son inventeur.`, ok: false });
+    setToast({ texte: `${SUPPORTS[choisi].nom} : ce n'est pas un objet du futur ! Rends-le à son propriétaire.`, ok: false });
   };
+  const changerEpoque = (id) => { if (id !== epoqueId) { setEpoqueId(id); setTab(0); } };
   const recommencer = () => {
     minuteurs.current.forEach(clearTimeout); minuteurs.current = [];
-    reparesVus.current = new Set();
-    setEtat(depart()); setSortant(null); setTab(0); setBulle(null); setToast(null); setVoix({ texte: "", mood: "content" }); setPhase("monde");
+    vus.current = { tableaux: new Set(), epoques: new Set() };
+    setEtat(etatDeDepart()); setSortant(null); setTab(0); setBulle(null); setToast(null); setVoix({ texte: "", mood: "content" }); setPhase("monde");
   };
 
   if (phase === "fin") {
@@ -589,7 +652,7 @@ function Monde({ page, phase, setPhase }) {
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 22 }}><MartineVoix grand texte="Non… Tu te souviens. Tout." mood="vexe" /></div>
           <div style={{ display: "inline-block", border: `1px solid ${GOLD}`, borderRadius: 12, padding: "12px 22px", background: "#0a0806cc",
             fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 4, color: GOLD, fontWeight: 800 }}>
-            FIN DU PROTOTYPE · XIXᵉ SIÈCLE
+            FIN DU PROTOTYPE · LES DIX ÉPOQUES
           </div>
           <div style={{ marginTop: 22, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             <button onClick={recommencer} style={btn(GOLD, "#1a0e08")}>↺ Recommencer</button>
@@ -600,8 +663,9 @@ function Monde({ page, phase, setPhase }) {
     );
   }
 
-  const monde = { tient, chez, sortant, ana, onCarte, onInventeur, onAna, bulle };
+  const monde = { etat, sortant, onCarte, onPerso, onFutur, bulle };
   const compteur = { fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 800, color: "#ffe8a0", whiteSpace: "nowrap" };
+  const tableaux = TABLEAUX[ep.id];
   return (
     <div style={{ ...page, height: "100dvh", display: "flex", flexDirection: "column" }}>
       <style>{CSS}</style>
@@ -610,27 +674,29 @@ function Monde({ page, phase, setPhase }) {
       <Spores />
 
       {/* en-tête : MARTINE · le titre · les compteurs et le médiadex */}
-      <div style={{ position: "relative", zIndex: 4, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 8, padding: "8px 12px 2px" }}>
+      <div style={{ position: "relative", zIndex: 4, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 8, padding: "6px 12px 0" }}>
         <div style={{ minWidth: 0 }}><MartineVoix texte={voix.texte} mood={voix.mood} /></div>
-        <TitreMonde2 taille={30} />
+        <TitreMonde2 taille={28} />
         <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-          <span title="Inventeurs rentrés chez eux, avec leur invention" style={compteur}>🧑‍🔬 {nbChez}/{INVENTEURS.length}</span>
-          <span title="Objets du futur jetés" style={compteur}>🗑️ {nbJetes}/{nbAna}</span>
-          <button onClick={() => setMediadex(true)} title="Médiadex" style={{ background: "#2a1808", color: GOLD, border: "2px solid #c8a848", borderRadius: 10, padding: "6px 10px", fontSize: 16, cursor: "pointer" }}>🃏</button>
+          <span data-compteur="persos" title="Personnages de cette époque qui ont retrouvé leur support" style={compteur}>🧑 {nbServis}/{persosIci.length}</span>
+          <span data-compteur="futurs" title="Objets du futur de cette époque jetés" style={compteur}>🗑️ {nbJetes}/{futursIci.length}</span>
+          <span title="Époques remises en ordre" style={{ ...compteur, color: GOLD }}>✦ {finies.length}/{EPOQUES.length}</span>
+          <button onClick={() => setMediadex(true)} title="Médiadex" style={{ background: "#2a1808", color: GOLD, border: "2px solid #c8a848", borderRadius: 10, padding: "5px 9px", fontSize: 16, cursor: "pointer" }}>🃏</button>
         </div>
       </div>
       <div style={{ position: "relative", zIndex: 4, padding: "0 12px" }}>
-        <Crack progress={niveaux.reduce((s, v) => s + v, 0) / (3 * INVENTEURS.length)} h={14} />
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1, color: "#c8a8b0", margin: "2px 0 6px",
+        <Crack progress={progres} h={12} />
+        <Frise ici={ep.id} etat={etat} onEpoque={changerEpoque} />
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1, color: "#c8a8b0", margin: "2px 0 5px",
           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-          {chapter.scenes[tab].name}
+          {ep.chapitre.epoque.toUpperCase()} · {tableaux[tab].name}
         </div>
       </div>
 
       {/* le tableau, avec la navigation du Jeu 2 */}
       <div ref={cellule} style={{ position: "relative", zIndex: 4, flex: 1, minHeight: 0, padding: "0 12px", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div style={{ width: cadre ? cadre.w : "100%", height: cadre ? cadre.h : "100%", position: "relative" }}>
-          <Scene scenes={TABLEAUX} tab={tab} onTab={setTab} sceneProps={{ monde }} linear={false} />
+          <Scene key={ep.id} scenes={tableaux} tab={tab} onTab={setTab} sceneProps={{ monde }} linear={false} />
         </div>
       </div>
 
