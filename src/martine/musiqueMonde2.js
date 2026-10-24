@@ -40,16 +40,16 @@ function lire(partition) {
 /* un air par époque : mode, mesure et tempo changent, le timbre reste */
 const air = (croche, mesure, partition) => ({ croche, mesure, pas: lire(partition) });
 export const AIRS = {
-  /* pentatonique de la, très lent, beaucoup de silences */
-  "01-paleolithique": air(0.7, 3, "A5/A3 - - | C6 - - | D6 - E6 | - - - | G5/E3 - - | A5 - G5 | E5 - - | - - -"),
-  /* pentatonique de ré, la même note grave qui revient */
-  "02-neolithique": air(0.6, 3, "D6/D4 - A5 | F5 - G5 | A5/D4 - C6 | A5 - - | G5/D4 - F5 | D5 - F5 | G5/A3 - A5 | D5/D4 - -"),
+  /* pentatonique de la : une berceuse, accords égrenés */
+  "01-paleolithique": air(0.48, 3, "A5/A3 C6 E6 | D6 C6 A5 | G5/G3 A5 C6 | E6 - D6 | C6/F3 D6 E6 | G6 E6 D6 | E6/E3 D6 C6 | A5/A3 - E5"),
+  /* pentatonique de ré, sur la même note grave qui revient */
+  "02-neolithique": air(0.46, 3, "D6/D4 F6 A6 | G6 F6 D6 | C6/D4 D6 F6 | A5 - C6 | D6/D4 A6 G6 | F6 G6 A6 | G6/A3 F6 C6 | D6/D4 - A5"),
   /* mode « hijaz » sur la (seconde augmentée si bémol – do dièse) */
-  "03-mesopotamie": air(0.56, 3, "A5/A3 - Bb5 | C#6 - Bb5 | A5/D4 - G5 | F5 E5 - | D5/D4 - E5 | F5 - E5 | Bb5/A3 C#6 Bb5 | A5/A3 - -"),
-  /* ré dorien, à quatre temps */
-  "04-antiquite": air(0.46, 4, "A5/D4 - F5 - | G5 - A5 - | B5/G3 - A5 G5 | F5 - E5 - | D5/D4 - F5 - | A5 - C6 - | B5/G3 A5 G5 E5 | D5/D4 - - -"),
-  /* mi phrygien, lent, comme un chant d'église */
-  "05-moyen-age": air(0.55, 4, "E5/E4 - G5 - | A5 - B5 - | C6/A3 - B5 A5 | B5 - - - | G5/E4 - A5 - | B5 - A5 G5 | F5/D4 - G5 - | E5/E4 - - -"),
+  "03-mesopotamie": air(0.46, 3, "A5/A3 C#6 E6 | F6 E6 C#6 | D6/D4 F6 E6 | C#6 Bb5 A5 | Bb5/G3 D6 F6 | E6 D6 C#6 | D6/A3 C#6 Bb5 | A5/A3 E5 A5"),
+  /* ré dorien, à quatre temps, en arpèges */
+  "04-antiquite": air(0.36, 4, "D6/D4 F6 A6 F6 | E6 G6 C7 G6 | D6/G3 B5 G5 B5 | C6 E6 G6 E6 | F6/F3 A6 C7 A6 | G6 E6 C6 E6 | D6/A3 E6 F6 E6 | D6/D4 A5 F5 A5"),
+  /* mi phrygien, cadence fa → mi du Moyen Âge */
+  "05-moyen-age": air(0.44, 3, "E6/E4 B5 G5 | F6 E6 D6 | C6/A3 E6 A6 | G6 F6 E6 | D6/D4 F6 A6 | G6 F6 E6 | F6/F3 E6 D6 | E6/E4 B5 E6"),
   /* sol mineur harmonique, un menuet */
   "06-moderne": air(0.45, 3, "G5/G3 Bb5 D6 | Eb6 - D6 | C6/C4 Bb5 A5 | Bb5 - G5 | F#5/D4 - A5 | C6 Bb5 A5 | A5/D4 F#5 A5 | G5/G3 - -"),
   /* la mineur, une valse (l'air du premier prototype) */
