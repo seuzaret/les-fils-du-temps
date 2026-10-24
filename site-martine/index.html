@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MARTINE</title>
+    <meta name="theme-color" content="#05070c" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>🙃</text></svg>" />
+  </head>
+  <body style="margin:0;background:#05070c">
+    <div id="root"></div>
+    <!--
+      AMORCE DU SITE seuzaret.github.io/martine/
+      Le monde 2 est construit et publié avec le jeu, dans le site
+      principal (seuzaret.github.io/les-fils-du-temps/martine/). Cette
+      page, seule dans le dépôt « martine », le charge tel quel : on la
+      pose une fois, elle n'a jamais besoin d'être mise à jour.
+      Même domaine (seuzaret.github.io) : le monde 2 lit la sauvegarde
+      du jeu (le prénom).
+    -->
+    <script>
+      (function () {
+        var BASE = "/les-fils-du-temps/martine/";
+        globalThis.__ASSET_ROOT = "/les-fils-du-temps/";
+        fetch(BASE + "index.html", { cache: "no-cache" })
+          .then(function (r) { return r.text(); })
+          .then(function (html) {
+            var doc = new DOMParser().parseFromString(html, "text/html");
+            doc.querySelectorAll('link[rel="stylesheet"], link[rel="modulepreload"], script[src]').forEach(function (el) {
+              var attr = el.tagName === "SCRIPT" ? "src" : "href";
+              var copie = document.createElement(el.tagName);
+              for (var i = 0; i < el.attributes.length; i++) copie.setAttribute(el.attributes[i].name, el.attributes[i].value);
+              copie.setAttribute(attr, new URL(el.getAttribute(attr), location.origin + BASE).href);
+              document.head.appendChild(copie);
+            });
+          })
+          .catch(function () {
+            document.getElementById("root").innerHTML = '<p style="color:#ff3b45;font-family:monospace;text-align:center;margin-top:40vh">MARTINE ne répond pas.</p>';
+          });
+      })();
+    </script>
+  </body>
+</html>
