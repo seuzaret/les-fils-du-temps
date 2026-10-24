@@ -143,16 +143,20 @@ export const EPOQUES = [
       volumen:     { nom: "Volumen (rouleau)", image: "volumen.jpg" },
     },
     persos: [
-      { id: "marchand_port", nom: "LE MARCHAND", scene: "port", support: "cire", x: 560, y: 548, h: 110, carte: { x: 600, y: 440 },
-        dit: "J'écris mes comptes dans la cire… et j'efface pour recommencer.", cherche: "Où est ma tablette où j'écris et j'efface ?" },
+      /* Jeu 1 : « Sans mon volumen où tout est noté, je perdrais la moitié ! » */
+      { id: "marchand_port", nom: "LE MARCHAND", scene: "port", support: "volumen", x: 560, y: 548, h: 110, carte: { x: 600, y: 440 },
+        dit: "Mon volumen : toutes mes cargaisons, notées au même endroit.", cherche: "Sans mes comptes notés, je perds la moitié de mes amphores !" },
       { id: "lapidicida", nom: "LE GRAVEUR", scene: "forum", support: "inscription", x: 390, y: 536, h: 96, carte: { x: 296, y: 430 },
         dit: "Graver dans le marbre : pour que tout le monde le lise, pendant des siècles.", cherche: "Rends-moi ma pierre gravée…" },
       { id: "caius", nom: "CAIUS", scene: "entree", support: "fresque", x: 640, y: 514, h: 110, carte: { x: 680, y: 408 },
         dit: "Une fresque sur le mur frais : mes invités verront mon goût !", cherche: "Il me faut des couleurs pour le mur de ma villa…" },
-      { id: "bibliothecaire", nom: "LE BIBLIOTHÉCAIRE", scene: "bibliotheque", support: "volumen",
-        fig: { garment: "toga", skin: "#d8a884", hair: "#4a3424", look: "short", beard: "short", coat: "#ece4d0", coat2: "#8a3a2a", pants: "#d8ccb4", shoes: "#5a3a20" },
-        chez: { x: 690, y: 522, s: 1.1, bras: -1 },
-        dit: "Un rouleau de plus pour la bibliothèque !", cherche: "Il manque un rouleau sur mes étagères…" },
+      /* Jeu 1 : la tablette de cire se fabrique au jardin (cire des ruches,
+         planche de l'atelier) pour noter les travaux de Caius ; l'intendant
+         n'est pas dans le décor, il est dessiné ici */
+      { id: "intendant", nom: "L'INTENDANT", scene: "jardin", support: "cire",
+        fig: { garment: "tunic", skin: "#d8a884", hair: "#4a3424", look: "short", beard: "short", coat: "#c8b48a", trim: "#8a3a2a", pants: "#c8b48a", shoes: "#5a3a20" },
+        chez: { x: 345, y: 522, s: 1.1, bras: 1 },
+        dit: "Ma tablette de cire : je note les travaux… puis j'efface et je recommence.", cherche: "Il me faut de quoi noter les travaux de Caius, et effacer après…" },
     ],
     futurs: {
       f_numerique:   futur("port", "Appareil photo numérique", "📸", "années 1990", 720, 470),
@@ -160,7 +164,7 @@ export const EPOQUES = [
       f_trottinette: futur("forum", "Trottinette électrique", "🛴", "années 2010", 590, 470),
       f_lunettes:    futur("entree", "Lunettes de soleil", "🕶️", "années 1930", 520, 474),
       f_portable:    futur("bibliotheque", "Ordinateur portable", "💻", "1981", 470, 452),
-      f_velo:        futur("jardin", "Vélo", "🚲", "XIXᵉ siècle", 330, 470),
+      f_velo:        futur("jardin", "Vélo", "🚲", "XIXᵉ siècle", 720, 440),
     },
   },
   {
