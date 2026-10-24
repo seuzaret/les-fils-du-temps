@@ -9,7 +9,7 @@ import { playClink, playMaterialize } from "../engine/sfx.js";
 import { isMuted, setMuted } from "../engine/audio.js";
 import { rng } from "../engine/scenery.jsx";
 import { EPOQUES, SUPPORTS, PERSOS, FUTURS, etatDeDepart, MARTINE_REPARE, MARTINE_EPOQUE } from "./epoquesMonde2.js";
-import { demarrerMusique, arreterMusique } from "./musiqueMonde2.js";
+import { demarrerMusique, arreterMusique, changerAir, grincer } from "./musiqueMonde2.js";
 
 /* ============================================================
    LE MONDE 2 — prototype
@@ -498,8 +498,14 @@ export default function MondeMartine() {
   const prenom = useMemo(readPrenom, []);
   const [phase, setPhase] = useState("accueil"); // accueil → titre → monde → fin
   useEffect(() => { if (!isMuted()) playMaterialize(); return arreterMusique; }, []);
-  /* la musique : du vent et une boîte à musique, dès le premier clic ; elle se tait à la fin */
-  useEffect(() => { if (phase === "fin") arreterMusique(); }, [phase]);
+  /* la musique : du vent et une boîte à musique, dès le premier clic ; à la fin,
+     la boîte grince une dernière fois et se tait */
+  useEffect(() => {
+    if (phase !== "fin") return undefined;
+    grincer();
+    const t = setTimeout(arreterMusique, 1600);
+    return () => clearTimeout(t);
+  }, [phase]);
   useEffect(() => {
     if (phase !== "titre") return undefined;
     const t = setTimeout(() => setPhase("monde"), 4200);
@@ -510,7 +516,7 @@ export default function MondeMartine() {
 
   if (phase === "accueil") {
     return (
-      <div style={{ ...page, display: "grid", placeItems: "center", cursor: "pointer", padding: 16 }} onClick={() => { demarrerMusique(); setPhase("titre"); }}>
+      <div style={{ ...page, display: "grid", placeItems: "center", cursor: "pointer", padding: 16 }} onClick={() => { demarrerMusique(epoqueDeLAdresse()); setPhase("titre"); }}>
         <style>{CSS}</style>
         <Spores n={30} />
         <div style={{ animation: "mmIn 900ms ease-out both" }}>
@@ -547,7 +553,7 @@ function Monde({ page, phase, setPhase }) {
     const muet = son;
     setMuted(muet);
     setSon(!muet);
-    if (muet) arreterMusique(); else demarrerMusique();
+    if (muet) arreterMusique(); else demarrerMusique(epoqueId);
   };
   const cellule = useRef(null);
   const cadre = useCadre(cellule);
@@ -575,6 +581,9 @@ function Monde({ page, phase, setPhase }) {
   useEffect(() => () => minuteurs.current.forEach(clearTimeout), []);
   useEffect(() => { if (!toutFini || phase !== "monde") return undefined; const t = setTimeout(() => setPhase("fin"), 3200); return () => clearTimeout(t); }, [toutFini, phase, setPhase]);
   useEffect(() => { setBulle(null); }, [tab, epoqueId]);
+  /* la boîte à musique change d'air avec l'époque, et grince quand MARTINE parle */
+  useEffect(() => { changerAir(epoqueId); }, [epoqueId]);
+  useEffect(() => { if (voix.texte) grincer(); }, [voix]);
 
   /* MARTINE réagit à chaque tableau, puis à chaque époque, remis en ordre */
   const cle = EPOQUES.map((e) => e.tableaux.map((sc) => (avancement(e, sc.id, etat) === 1 ? 1 : 0)).join("")).join("|");
@@ -652,7 +661,7 @@ function Monde({ page, phase, setPhase }) {
     minuteurs.current.forEach(clearTimeout); minuteurs.current = [];
     vus.current = { tableaux: new Set(), epoques: new Set() };
     setEtat(etatDeDepart()); setSortant(null); setTab(0); setBulle(null); setToast(null); setVoix({ texte: "", mood: "content" }); setPhase("monde");
-    demarrerMusique();
+    demarrerMusique(epoqueId);
   };
 
   if (phase === "fin") {
