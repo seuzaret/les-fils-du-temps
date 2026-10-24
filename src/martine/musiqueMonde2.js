@@ -190,7 +190,7 @@ export function jouerGrincement(ctx, sortie, t) {
 }
 
 /* ───────────── lecture ───────────── */
-let m = null; // { ctx, general, vent, minuteur, peine }
+let m = null; // { ctx, general, ventBus, bus, vent, minuteur, peine, finale }
 let airVoulu = AIR_PAR_DEFAUT;
 
 function auPremierPlan() {
@@ -225,7 +225,9 @@ export function demarrerMusique(epoque) {
   general.gain.setValueAtTime(0, ctx.currentTime);
   general.gain.linearRampToValueAtTime(VOLUME, ctx.currentTime + 5);
   general.connect(ctx.destination);
-  const vent = construireVent(ctx, general);
+  const ventBus = ctx.createGain();
+  ventBus.connect(general);
+  const vent = construireVent(ctx, ventBus);
   const bus = construireBoite(ctx, general);
 
   let courant = airVoulu, prochain = ctx.currentTime + 3, pas = 0, tour = 0;
@@ -249,7 +251,7 @@ export function demarrerMusique(epoque) {
       if (pas >= a.pas.length) { pas = 0; tour = (tour + 1) % 4; prochain += 5 + Math.random() * 5; }
     }
   }, 120);
-  m = { ctx, general, vent, minuteur, peine: 0 };
+  m = { ctx, general, ventBus, bus, vent, minuteur, peine: 0, finale: null };
   document.addEventListener("visibilitychange", auPremierPlan);
   ctx.resume?.();
 }
@@ -257,7 +259,7 @@ export function demarrerMusique(epoque) {
 /** Arrête la musique en fondu. */
 export function arreterMusique() {
   if (!m) return;
-  const { ctx, general, vent, minuteur } = m;
+  const { ctx, general, vent, minuteur, finale } = m;
   m = null;
   document.removeEventListener("visibilitychange", auPremierPlan);
   clearInterval(minuteur);
@@ -265,6 +267,173 @@ export function arreterMusique() {
     general.gain.cancelScheduledValues(ctx.currentTime);
     general.gain.setValueAtTime(general.gain.value, ctx.currentTime);
     general.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.2);
+    if (finale) {
+      finale.gain.cancelScheduledValues(ctx.currentTime);
+      finale.gain.setValueAtTime(finale.gain.value, ctx.currentTime);
+      finale.gain.linearRampToValueAtTime(0, ctx.currentTime + 1.2);
+    }
   } catch { /* rien */ }
   setTimeout(() => { vent.forEach((s) => { try { s.stop(); } catch { /* déjà arrêté */ } }); ctx.close?.(); }, 1400);
+}
+
+/* ───────────── la finale : « Le temps est rétabli… » ─────────────
+   Minutage partagé avec l'animation (Retablissement.jsx), en secondes
+   depuis le début. */
+export const FINALE = {
+  apparition: 1.2,      // le disque apparaît, les vignettes surgissent une à une
+  pasApparition: 0.045, // entre deux vignettes
+  glitchs: [2.4, 3.7, 4.6, 5.3],
+  claque: 6.0,          // le disque explose en lumière
+  film: 6.15,           // la pellicule défile, les vignettes s'y recollent dans l'ordre
+  dureeFilm: 3.6,
+  recul: 10.0,          // la pellicule recule : toute la frise du temps
+  dureeRecul: 1.2,
+  lumiere: 11.3,        // une lumière balaie la frise
+  eclat: 11.8,          // éclat blanc, cloche
+  texte: 12.1,          // « Le temps est rétabli… »
+  fin: 18.0,
+};
+const VOLUME_FINALE = 0.25;
+
+/** Joue la bande-son de la finale sur `sortie`, à partir de t0 ; n = nombre de vignettes. */
+export function jouerFinale(ctx, sortie, t0, n = 46) {
+  const F = FINALE;
+  const T = (x) => t0 + x;
+  const blanc = bruit(ctx, 3, false);
+  const brun = bruit(ctx, 4, true);
+  const source = (buf, a, b) => { const s = ctx.createBufferSource(); s.buffer = buf; s.loop = true; s.start(T(a)); s.stop(T(b)); return s; };
+  const filtre = (type, f, q = 1) => { const x = ctx.createBiquadFilter(); x.type = type; x.frequency.value = f; x.Q.value = q; return x; };
+  const gain = (v = 0) => { const g = ctx.createGain(); g.gain.value = v; return g; };
+  const chaine = (...noeuds) => { noeuds.reduce((a, b) => { a.connect(b); return b; }); return noeuds[noeuds.length - 1]; };
+  const osc = (type, f, a, b) => { const o = ctx.createOscillator(); o.type = type; o.frequency.value = f; o.start(T(a)); o.stop(T(b)); return o; };
+  const boite = construireBoite(ctx, sortie);
+
+  /* 1. l'aspiration : un souffle qui monte, une infra-basse qui gonfle */
+  { const g = gain(); g.gain.setValueAtTime(0.0001, T(0)); g.gain.exponentialRampToValueAtTime(0.18, T(1.15)); g.gain.linearRampToValueAtTime(0, T(1.22));
+    chaine(source(blanc, 0, 1.3), filtre("highpass", 2500), g, sortie);
+    const g2 = gain(); g2.gain.setValueAtTime(0, T(0)); g2.gain.linearRampToValueAtTime(0.25, T(1.15)); g2.gain.linearRampToValueAtTime(0, T(1.3));
+    chaine(osc("sine", 48, 0, 1.35), g2, sortie); }
+
+  /* 2. le coup sourd : le disque apparaît */
+  { const o = osc("sine", 72, F.apparition, F.apparition + 1.2); o.frequency.setValueAtTime(72, T(F.apparition)); o.frequency.exponentialRampToValueAtTime(34, T(F.apparition + 0.9));
+    const g = gain(); g.gain.setValueAtTime(0.32, T(F.apparition)); g.gain.exponentialRampToValueAtTime(0.0001, T(F.apparition + 1.1));
+    chaine(o, g, sortie);
+    const g2 = gain(); g2.gain.setValueAtTime(0.25, T(F.apparition)); g2.gain.exponentialRampToValueAtTime(0.0001, T(F.apparition + 0.4));
+    chaine(source(brun, F.apparition, F.apparition + 0.5), filtre("lowpass", 200), g2, sortie); }
+
+  /* 3. les vignettes surgissent : une pluie de notes de boîte à musique */
+  const penta = ["A5", "C6", "D6", "E6", "G6", "A6", "C7"].map(freq);
+  for (let i = 0; i < n; i++) jouerNote(ctx, boite, T(F.apparition + i * F.pasApparition), penta[(i * 5 + (i >> 2)) % penta.length], 0.035);
+
+  /* 4. le disque tourne de plus en plus vite : un ronflement et un souffle qui battent avec la rotation */
+  { const a = F.apparition, b = F.claque;
+    const lfo = osc("sine", 0.15, a, b + 0.1); lfo.frequency.setValueAtTime(0.15, T(a)); lfo.frequency.exponentialRampToValueAtTime(6, T(b));
+    const trem = gain(1); const prof = gain(0.45); lfo.connect(prof); prof.connect(trem.gain);
+    const env = gain(); env.gain.setValueAtTime(0, T(a)); env.gain.linearRampToValueAtTime(0.05, T(a + 1.8)); env.gain.linearRampToValueAtTime(0.11, T(b - 0.1)); env.gain.linearRampToValueAtTime(0, T(b + 0.02));
+    const lp = filtre("lowpass", 700);
+    [1, 1.008].forEach((k) => { const o = osc("triangle", 70 * k, a, b + 0.1); o.frequency.setValueAtTime(70 * k, T(a)); o.frequency.exponentialRampToValueAtTime(210 * k, T(b)); o.connect(lp); });
+    chaine(lp, trem, env, sortie);
+    const bp = filtre("bandpass", 400, 1.2); bp.frequency.setValueAtTime(400, T(a)); bp.frequency.exponentialRampToValueAtTime(2400, T(b));
+    const trem2 = gain(1); const prof2 = gain(0.5); lfo.connect(prof2); prof2.connect(trem2.gain);
+    const env2 = gain(); env2.gain.setValueAtTime(0, T(a)); env2.gain.linearRampToValueAtTime(0.05, T(a + 1.8)); env2.gain.linearRampToValueAtTime(0.12, T(b - 0.1)); env2.gain.linearRampToValueAtTime(0, T(b + 0.02));
+    chaine(source(brun, a, b + 0.1), bp, trem2, env2, sortie); }
+
+  /* 5. les accrocs du temps : un piaulement qui tombe, un grésillement */
+  F.glitchs.forEach((x) => {
+    const o = osc("sine", 2200, x, x + 0.15); o.frequency.setValueAtTime(2200, T(x)); o.frequency.exponentialRampToValueAtTime(260, T(x + 0.13));
+    const g = gain(); g.gain.setValueAtTime(0.05, T(x)); g.gain.linearRampToValueAtTime(0, T(x + 0.14));
+    chaine(o, g, sortie);
+    const g2 = gain(); g2.gain.setValueAtTime(0.06, T(x)); g2.gain.linearRampToValueAtTime(0, T(x + 0.06));
+    chaine(source(blanc, x, x + 0.07), filtre("bandpass", 4000, 2), g2, sortie);
+  });
+
+  /* 6. la montée avant l'explosion */
+  { const hp = filtre("highpass", 1500); hp.frequency.setValueAtTime(1500, T(F.claque - 1)); hp.frequency.exponentialRampToValueAtTime(6000, T(F.claque));
+    const g = gain(); g.gain.setValueAtTime(0.0001, T(F.claque - 1)); g.gain.exponentialRampToValueAtTime(0.12, T(F.claque - 0.02)); g.gain.linearRampToValueAtTime(0, T(F.claque + 0.02));
+    chaine(source(blanc, F.claque - 1, F.claque + 0.05), hp, g, sortie); }
+
+  /* 7. la claque : un éclat bref et un choc grave */
+  { const g = gain(); g.gain.setValueAtTime(0.3, T(F.claque)); g.gain.exponentialRampToValueAtTime(0.001, T(F.claque + 0.06));
+    chaine(source(blanc, F.claque, F.claque + 0.08), filtre("bandpass", 1800, 0.8), g, sortie);
+    const o = osc("sine", 140, F.claque, F.claque + 0.35); o.frequency.setValueAtTime(140, T(F.claque)); o.frequency.exponentialRampToValueAtTime(45, T(F.claque + 0.25));
+    const g2 = gain(); g2.gain.setValueAtTime(0.3, T(F.claque)); g2.gain.exponentialRampToValueAtTime(0.0001, T(F.claque + 0.3));
+    chaine(o, g2, sortie); }
+
+  /* 8. la pellicule : un tic par vignette qui se recolle, et une note sur deux qui monte et descend en la majeur */
+  const arpege = ["A4", "C#5", "E5", "A5", "C#6", "E6", "A6", "E6", "C#6", "A5", "E5", "C#5"].map(freq);
+  const clic = ctx.createBuffer(1, Math.floor(ctx.sampleRate * 0.012), ctx.sampleRate);
+  { const d = clic.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length); }
+  for (let i = 0; i < n; i++) {
+    const t = F.film + ((i + 0.5) / n) * F.dureeFilm;
+    const s = ctx.createBufferSource(); s.buffer = clic; s.start(T(t));
+    chaine(s, filtre("bandpass", 3200, 3), gain(0.25), sortie);
+    if (i % 2 === 0) jouerNote(ctx, boite, T(t), arpege[(i / 2) % arpege.length], 0.04);
+  }
+
+  /* 9. le cliquetis du projecteur pendant le défilement */
+  { const a = F.film, b = F.film + F.dureeFilm + 0.3;
+    const pulse = gain(0.03); const sq = osc("square", 18, a, b); const prof = gain(0.03); sq.connect(prof); prof.connect(pulse.gain);
+    const env = gain(); env.gain.setValueAtTime(0, T(a)); env.gain.linearRampToValueAtTime(1, T(a + 0.1)); env.gain.setValueAtTime(1, T(b - 0.3)); env.gain.linearRampToValueAtTime(0, T(b));
+    chaine(source(blanc, a, b), filtre("bandpass", 2500, 2), pulse, env, sortie); }
+
+  /* 10. un accord de la majeur qui s'installe : le temps se remet en place */
+  { const lp = filtre("lowpass", 1400); const env = gain();
+    env.gain.setValueAtTime(0, T(6.4)); env.gain.linearRampToValueAtTime(0.035, T(9.5)); env.gain.linearRampToValueAtTime(0.05, T(F.eclat)); env.gain.linearRampToValueAtTime(0.045, T(15)); env.gain.linearRampToValueAtTime(0, T(17.8));
+    ["A3", "E4", "A4", "C#5"].map(freq).forEach((f) => [0.998, 1.002].forEach((k) => osc("triangle", f * k, 6.4, 18).connect(lp)));
+    chaine(lp, env, sortie); }
+
+  /* 11. le recul : un souffle qui s'ouvre */
+  { const bp = filtre("bandpass", 300, 2); bp.frequency.setValueAtTime(300, T(F.recul)); bp.frequency.exponentialRampToValueAtTime(4000, T(F.recul + F.dureeRecul));
+    const g = gain(); g.gain.setValueAtTime(0, T(F.recul)); g.gain.linearRampToValueAtTime(0.06, T(F.recul + 0.9)); g.gain.linearRampToValueAtTime(0, T(F.recul + 1.3));
+    chaine(source(blanc, F.recul, F.recul + 1.4), bp, g, sortie); }
+
+  /* 12. la lumière : des étincelles aiguës, une cymbale qui gonfle */
+  { const notes = [2637, 3136, 3520, 4186, 4699];
+    for (let k = 0; k < 14; k++) {
+      const t = F.lumiere + k * 0.085;
+      const o = osc("sine", notes[(k * 3) % notes.length], t, t + 0.55);
+      const g = gain(); g.gain.setValueAtTime(0.03, T(t)); g.gain.exponentialRampToValueAtTime(0.0001, T(t + 0.5));
+      chaine(o, g, sortie);
+    }
+    const g = gain(); g.gain.setValueAtTime(0.0001, T(F.lumiere)); g.gain.exponentialRampToValueAtTime(0.06, T(F.eclat)); g.gain.exponentialRampToValueAtTime(0.0001, T(F.eclat + 2.7));
+    chaine(source(blanc, F.lumiere, F.eclat + 2.8), filtre("highpass", 7000), g, sortie); }
+
+  /* 13. l'éclat : une cloche, et une basse qui gonfle */
+  [[1, 0.12, 4.5], [2, 0.05, 3], [2.76, 0.04, 2.2], [5.4, 0.015, 1]].forEach(([k, v, d]) => {
+    const o = osc("sine", 880 * k, F.eclat, F.eclat + d + 0.1);
+    const g = gain(); g.gain.setValueAtTime(0, T(F.eclat)); g.gain.linearRampToValueAtTime(v, T(F.eclat + 0.005)); g.gain.exponentialRampToValueAtTime(0.0001, T(F.eclat + d));
+    chaine(o, g, sortie);
+  });
+  { const g = gain(); g.gain.setValueAtTime(0, T(F.eclat)); g.gain.linearRampToValueAtTime(0.12, T(F.eclat + 0.4)); g.gain.linearRampToValueAtTime(0, T(16));
+    chaine(osc("sine", 110, F.eclat, 16.1), g, sortie); }
+
+  /* 14. la boîte à musique rejoue son air, en majeur : le temps est rétabli */
+  { const resolution = lire("E6/A4 - C#6 | A5 B5 C#6 | B5/E4 - G#5 | A5/A3 - -");
+    let t = F.texte + 0.2;
+    resolution.forEach(([h, b], i) => {
+      if (h) jouerNote(ctx, boite, T(t), h, 0.09);
+      if (b) jouerNote(ctx, boite, T(t), b, 0.05);
+      t += 0.55 * (i >= resolution.length - 3 ? 1.4 : 1);
+    });
+  }
+}
+
+/** La finale : la musique d'ambiance s'efface, la bande-son de la finale démarre. */
+export function retablir(n) {
+  if (!m || isMuted()) return false;
+  const { ctx } = m;
+  const t = ctx.currentTime;
+  clearInterval(m.minuteur);
+  [m.ventBus, m.bus].forEach((g) => {
+    g.gain.cancelScheduledValues(t);
+    g.gain.setValueAtTime(g.gain.value, t);
+    g.gain.linearRampToValueAtTime(0, t + 1.2);
+  });
+  const finale = ctx.createGain();
+  finale.gain.value = VOLUME_FINALE;
+  finale.connect(ctx.destination);
+  m.finale = finale;
+  m.peine = 0;
+  try { jouerFinale(ctx, finale, t, n); } catch { /* sans son */ }
+  return true;
 }

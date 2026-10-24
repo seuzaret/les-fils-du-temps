@@ -3,6 +3,8 @@ import { Avatar } from "../engine/Martine.jsx";
 import Scene from "../engine/Scene.jsx";
 import { Figure, handPos } from "../engine/chars.jsx";
 import MediadexPanel from "../chapters/jeu3/MediadexPanel.jsx";
+import Retablissement from "./Retablissement.jsx";
+import { preparerVignettes } from "./vignettes.js";
 import { assetUrl } from "../engine/assetUrl.js";
 import { loadSave } from "../engine/save.js";
 import { playClink, playMaterialize } from "../engine/sfx.js";
@@ -486,6 +488,11 @@ function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
 }
 
 /* ───────────── la page ───────────── */
+/* ?fin=1 : aller directement à la finale */
+function finDirecte() {
+  try { return new URLSearchParams(window.location.search).has("fin"); } catch { return false; }
+}
+
 /* ?epoque=07-xixe : ouvrir directement une époque (tests, ou pour un cours) */
 function epoqueDeLAdresse() {
   try {
@@ -497,7 +504,11 @@ function epoqueDeLAdresse() {
 export default function MondeMartine() {
   const prenom = useMemo(readPrenom, []);
   const [phase, setPhase] = useState("accueil"); // accueil → titre → monde → fin
-  useEffect(() => { if (!isMuted()) playMaterialize(); return arreterMusique; }, []);
+  useEffect(() => {
+    if (!isMuted()) playMaterialize();
+    if (finDirecte()) preparerVignettes(); // ?fin=1 : les vignettes se préparent pendant l'accueil
+    return arreterMusique;
+  }, []);
   /* la musique : du vent et une boîte à musique, dès le premier clic ; à la fin,
      la boîte grince une dernière fois et se tait */
   useEffect(() => {
@@ -516,7 +527,11 @@ export default function MondeMartine() {
 
   if (phase === "accueil") {
     return (
-      <div style={{ ...page, display: "grid", placeItems: "center", cursor: "pointer", padding: 16 }} onClick={() => { demarrerMusique(epoqueDeLAdresse()); setPhase("titre"); }}>
+      <div style={{ ...page, display: "grid", placeItems: "center", cursor: "pointer", padding: 16 }} onClick={() => {
+        demarrerMusique(epoqueDeLAdresse());
+        /* ?fin=1 : directement la finale (pour la tester, ou la montrer en classe) */
+        if (finDirecte()) { preparerVignettes(); setPhase("retablissement"); } else setPhase("titre");
+      }}>
         <style>{CSS}</style>
         <Spores n={30} />
         <div style={{ animation: "mmIn 900ms ease-out both" }}>
@@ -579,7 +594,13 @@ function Monde({ page, phase, setPhase }) {
   useEffect(() => { if (!toast) return undefined; const t = setTimeout(() => setToast(null), 3800); return () => clearTimeout(t); }, [toast]);
   useEffect(() => { if (!refus) return undefined; const t = setTimeout(() => setRefus(false), 500); return () => clearTimeout(t); }, [refus]);
   useEffect(() => () => minuteurs.current.forEach(clearTimeout), []);
-  useEffect(() => { if (!toutFini || phase !== "monde") return undefined; const t = setTimeout(() => setPhase("fin"), 3200); return () => clearTimeout(t); }, [toutFini, phase, setPhase]);
+  /* tout est rangé : on prépare les vignettes de la finale pendant que MARTINE parle, puis la finale */
+  useEffect(() => {
+    if (!toutFini || phase !== "monde") return undefined;
+    preparerVignettes();
+    const t = setTimeout(() => setPhase("retablissement"), 3200);
+    return () => clearTimeout(t);
+  }, [toutFini, phase, setPhase]);
   useEffect(() => { setBulle(null); }, [tab, epoqueId]);
   /* la boîte à musique change d'air avec l'époque, et grince quand MARTINE parle */
   useEffect(() => { changerAir(epoqueId); }, [epoqueId]);
@@ -664,6 +685,8 @@ function Monde({ page, phase, setPhase }) {
     demarrerMusique(epoqueId);
   };
 
+  if (phase === "retablissement") return <Retablissement onFin={() => setPhase("fin")} />;
+
   if (phase === "fin") {
     return (
       <div style={{ ...page, display: "grid", placeItems: "center", padding: 16 }}>
@@ -673,7 +696,7 @@ function Monde({ page, phase, setPhase }) {
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 22 }}><MartineVoix grand texte="Non… Tu te souviens. Tout." mood="vexe" /></div>
           <div style={{ display: "inline-block", border: `1px solid ${GOLD}`, borderRadius: 12, padding: "12px 22px", background: "#0a0806cc",
             fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 4, color: GOLD, fontWeight: 800 }}>
-            FIN DU PROTOTYPE · LES DIX ÉPOQUES
+            À SUIVRE · LA CONFRONTATION AVEC MARTINE
           </div>
           <div style={{ marginTop: 22, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
             <button onClick={recommencer} style={btn(GOLD, "#1a0e08")}>↺ Recommencer</button>
