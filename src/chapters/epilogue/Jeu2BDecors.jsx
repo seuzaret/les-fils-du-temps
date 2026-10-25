@@ -2,8 +2,6 @@ import { Bust, Figure } from "./cineChars.jsx";
 import { rng, Speckle } from "../../engine/scenery.jsx";
 import { DomeHall } from "./FinJeu2Scenes.jsx";
 import { LEVELS } from "../jeu3/levels.js";
-import NightStreetDecor from "../../engine/NightStreetDecor.jsx";
-import TimeMachine from "../../engine/TimeMachine.jsx";
 import { Avatar } from "../../engine/Martine.jsx";
 
 /* ============================================================
@@ -13,8 +11,6 @@ import { Avatar } from "../../engine/Martine.jsx";
      StageStation  : 2045, la grande salle de la station pendant une
                      panne ; sur l'écran de MARTINE, le plan du Puits
                      (les étages du Jeu 3, lus dans jeu3/levels.js)
-     StageMaison   : la rue du joueur à 03 h 14 (décor de l'intro),
-                     MARTINE posée sur la chaussée — fin « je rentre »
      StageChantier : galerie au-dessus du Puits, la veille du scellement
      StageAtelier  : l'atelier de Léa (fond discret, les deux documents
                      de l'activité s'affichent par-dessus)
@@ -437,45 +433,6 @@ export function StageStation({ viz = "panne", who = null, prenom = "chronaute" }
       </g>
       {/* la panne : la lumière vacille */}
       <rect width="1000" height="560" fill="#000" style={{ animation: `j2sFlick ${dark ? 2.5 : 7}s linear infinite`, pointerEvents: "none" }} />
-    </svg>
-  );
-}
-
-/* ───────────────────────── 03 h 14 · Ta rue ───────────────────────── */
-/* Décor de l'intro (viewBox 1200×680), cadré un peu plus haut pour que
-   MARTINE reste visible au-dessus du bandeau de dialogue. */
-/* viz « telephone » : le message d'Al3x1a, toujours là. */
-export function StageMaison({ viz = null }) {
-  return (
-    <svg viewBox="0 70 1200 680" preserveAspectRatio={PAR()} style={FILL}>
-      <defs>
-        <radialGradient id="j2m-halo" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#b0ffdc" stopOpacity="0.8" />
-          <stop offset="45%" stopColor="#5eff9e" stopOpacity="0.4" />
-          <stop offset="100%" stopColor="#5eff9e" stopOpacity="0" />
-        </radialGradient>
-      </defs>
-      <rect x="0" y="600" width="1200" height="160" fill="#14141c" />
-      <NightStreetDecor />
-      <circle cx="600" cy="560" r="240" fill="url(#j2m-halo)">
-        <animate attributeName="opacity" values="0.55;0.8;0.55" dur="3s" repeatCount="indefinite" />
-      </circle>
-      <g transform="translate(600,540) scale(0.95)"><TimeMachine landed={true} /></g>
-      {viz === "telephone" && (
-        <g transform="translate(860,170)" style={{ animation: "j2bIn 600ms ease-out both" }}>
-          <rect x="0" y="0" width="230" height="400" rx="26" fill="#0a0c12" stroke="#3a4050" strokeWidth="4" />
-          <rect x="12" y="34" width="206" height="340" rx="6" fill="#e8ddd0" />
-          <rect x="12" y="34" width="206" height="46" fill="#1f3a34" />
-          <circle cx="38" cy="57" r="13" fill="#8a6a50" />
-          <text x="60" y="54" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="15" fontWeight="700" fill="#fff">Al3x1a</text>
-          <text x="60" y="71" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10" fill="#9fd8c0">03:14</text>
-          <rect x="24" y="100" width="182" height="86" rx="10" fill="#ffffff" />
-          {["Ma famille", "est en danger.", "Ceci te concerne aussi."].map((t, i) => (
-            <text key={i} x="36" y={128 + i * 22} fontFamily="Segoe UI, system-ui, sans-serif" fontSize={i === 2 ? 13 : 15} fontStyle={i === 2 ? "italic" : "normal"} fontWeight="600" fill="#111b21">{t}</text>
-          ))}
-          <rect x="95" y="14" width="40" height="8" rx="4" fill="#1a1c24" />
-        </g>
-      )}
     </svg>
   );
 }

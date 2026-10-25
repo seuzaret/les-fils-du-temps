@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Avatar } from "../../engine/Martine.jsx";
 import { PortraitElias, PortraitMira } from "./StationChronautes.jsx";
-import { PortraitLea, StageStation, StageMaison, StageChantier, StageAtelier, StageToast } from "./Jeu2BDecors.jsx";
+import { PortraitLea, StageStation, StageChantier, StageAtelier, StageToast } from "./Jeu2BDecors.jsx";
 import { playClink, playSleepHum } from "../../engine/sfx.js";
 import { useTypewriter } from "./cineKit.jsx";
 
@@ -13,10 +13,9 @@ import { useTypewriter } from "./cineKit.jsx";
      0. LA PROPOSITION (2045) — une panne à la station ; MARTINE
         explique pourquoi creuser le Puits et le propose (plan à
         l'écran) ; le joueur lui pose une question ; Mira lui
-        demande de rester aider. CHOIX :
-          · rester → deux ans de chantier, suite ci-dessous ;
-          · rentrer → MARTINE le ramène dans sa rue, la nuit même
-            (03 h 14) : FIN, avec « revenir sur ma décision ».
+        demande de rester aider. Le joueur reste (deux réponses,
+        même suite : deux ans de chantier). Il n'y a plus de choix
+        « rentrer » : le joueur doit être au Puits en 2047.
    Puis trois scènes avec Léa Vermet :
      1. LE CHANTIER  — le Puits est presque fini ; MARTINE promet de
         ramener le joueur chez lui « dès que le Puits sera scellé ».
@@ -63,19 +62,16 @@ const SCRIPT = [
   { viz: "demande", who: "mira", mood: "content", text: "Écoute, {prenom} : il nous faut des bras. Tu resterais nous aider à construire le Puits ?" },
   { who: "elias", mood: "neutre", text: "Deux ans de chantier. C'est beaucoup te demander." },
   { viz: "promesse", who: "martine", mood: "content", text: "Ensuite, je te ramènerai chez toi, la nuit même où tu es parti·e. Personne ne verra rien." },
-  { id: "decision", type: "choice", prompt: "Que décides-tu ?", options: [
-    { label: "🛠 Je reste : je vous aide à construire le Puits.", reply: [
+  { id: "decision", type: "choice", prompt: "Que réponds-tu ?", options: [
+    { label: "🛠 Oui, je reste vous aider à construire le Puits.", reply: [
       { viz: "demande", who: "mira", mood: "content", text: "Merci, {prenom} ! Demain, je te présente Léa." },
       { viz: "chantier", who: "narr", text: "Le lendemain, premier coup de pioche. Le chantier durera deux ans." },
     ] },
-    { label: "🏠 Non : je rentre chez moi.", reply: [
-      { viz: "promesse", who: "elias", mood: "content", text: "Tu as déjà beaucoup fait pour nous. Rentre, {prenom}." },
-      { who: "mira", mood: "content", text: "On ne t'oubliera pas. Maintenant, c'est impossible !" },
-      { stage: "maison", who: "narr", text: "Un éclair blanc. MARTINE se pose dans ta rue. Il est 3 h 14 : la même nuit." },
-      { who: "martine", mood: "content", text: "Nous y sommes. Merci pour tout, {prenom}." },
-      { viz: "telephone", who: "narr", text: "Dans ta chambre, ton téléphone. Le message d'Al3x1a est toujours là." },
-      { who: "narr", text: "Loin dans le futur, on scelle un Puits. Sans toi." },
-      { type: "fin" },
+    { label: "🔎 Oui… mais je veux pouvoir vérifier tes calculs, MARTINE.", reply: [
+      { viz: "machine", who: "martine", mood: "content", text: "Bien sûr, {prenom}. Tout ce que je calcule sera vérifiable." },
+      { who: "elias", mood: "neutre", text: "Je retiens ta promesse, MARTINE." },
+      { viz: "demande", who: "mira", mood: "content", text: "Merci, {prenom} ! Demain, je te présente Léa." },
+      { viz: "chantier", who: "narr", text: "Le lendemain, premier coup de pioche. Le chantier durera deux ans." },
     ] },
   ] },
 
@@ -130,7 +126,6 @@ const SCRIPT = [
 
 const STAGE_LABEL = {
   station: "LA STATION, UN SOIR DE PANNE",
-  maison: "TA RUE",
   chantier: "LE CHANTIER DU PUITS",
   atelier: "L'ATELIER DE LÉA",
   toast: "LA SALLE COMMUNE",
@@ -139,7 +134,6 @@ const STAGE_LABEL = {
 /* bandeau du haut et date affichée par MARTINE, selon la scène */
 const STAGE_HEAD = {
   station: { titre: "2045 · LA PROPOSITION", date: "2045" },
-  maison: { titre: "3 H 14 · LA MÊME NUIT", date: "03:14" },
 };
 const HEAD_2047 = { titre: "2047 · LA VEILLE DU PUITS", date: "2047" };
 
@@ -317,7 +311,7 @@ function Comparaison({ onDone }) {
 }
 
 /* ───────────────────────── Composant principal ───────────────────────── */
-export default function Jeu2B({ prenom, onDone, onRetour }) {
+export default function Jeu2B({ prenom, onDone }) {
   const nom = prenom || "chronaute";
   const [script, setScript] = useState(SCRIPT);
   const [idx, setIdx] = useState(0);
@@ -367,18 +361,11 @@ export default function Jeu2B({ prenom, onDone, onRetour }) {
     return () => window.removeEventListener("keydown", onKey);
   });
 
-  /* « passer » ne saute jamais la décision rester / rentrer : avant
-     elle, on y va ; dans la branche « rentrer », on va à la fin. */
+  /* « passer » ne saute jamais la décision : avant elle, on y va. */
   const skipScene = () => {
     const decisionIdx = script.findIndex((st) => st.id === "decision");
-    const finIdx = script.findIndex((st, k) => k > idx && st.type === "fin");
     if (idx < decisionIdx) setIdx(decisionIdx);
-    else if (finIdx >= 0) setIdx(finIdx);
     else onDone?.();
-  };
-  const revenir = () => {
-    setScript(SCRIPT);
-    setIdx(SCRIPT.findIndex((st) => st.id === "decision"));
   };
 
   const choose = (opt) => {
@@ -399,17 +386,16 @@ export default function Jeu2B({ prenom, onDone, onRetour }) {
       {/* décor — remonté (fondu) à chaque changement de scène */}
       <div key={stage} style={{ position: "absolute", inset: 0, animation: "j2bIn 900ms ease-out", filter: fading ? "blur(7px) brightness(0.55)" : "none", transition: "filter 3200ms ease-in" }}>
         {stage === "station" && <StageStation viz={vizOf(script, idx) || "panne"} who={isLine ? step.who : null} prenom={nom} />}
-        {stage === "maison" && <StageMaison viz={vizOf(script, idx)} />}
         {stage === "chantier" && <StageChantier />}
         {stage === "atelier" && <StageAtelier />}
         {stage === "toast" && <StageToast raised={raised} />}
       </div>
 
-      {/* passer (pas sur la carte de fin « je rentre ») */}
-      {step.type !== "fin" && <button onClick={(e) => { e.stopPropagation(); skipScene(); }} title="Sauter cette scène"
+      {/* passer */}
+      <button onClick={(e) => { e.stopPropagation(); skipScene(); }} title="Sauter cette scène"
         style={{ position: "absolute", top: 10, right: 14, zIndex: 10, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
         passer ›
-      </button>}
+      </button>
 
       {/* bandeau titre */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
@@ -422,34 +408,8 @@ export default function Jeu2B({ prenom, onDone, onRetour }) {
       {/* activité de comparaison */}
       {step.type === "emi" && <Comparaison key={idx} onDone={() => setIdx((i) => i + 1)} />}
 
-      {/* fin « je rentre chez moi » */}
-      {step.type === "fin" && (
-        <div onClick={(e) => e.stopPropagation()}
-          style={{ position: "absolute", inset: 0, zIndex: 6, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, background: "rgba(4,8,14,0.55)", animation: "j2bIn 900ms ease-out" }}>
-          <div style={{ background: "#0e1420f2", border: "1px solid #5eff9e", borderRadius: 14, padding: "22px 26px", maxWidth: 560, textAlign: "center", boxShadow: "0 10px 40px rgba(0,0,0,0.6)" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e", fontWeight: 800 }}>◆ FIN · TU ES RENTRÉ·E CHEZ TOI</div>
-            <p style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: "14px 0 6px" }}>
-              Tu as choisi de rentrer. Le Puits sera construit sans toi, et tu ne sauras jamais ce qu'il est devenu.
-            </p>
-            <p style={{ fontSize: 13, lineHeight: 1.5, color: "#8fa3bd", margin: "0 0 16px", fontStyle: "italic" }}>
-              Tu peux revenir sur ta décision : l'histoire continue si tu restes aider les chronautes.
-            </p>
-            <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-              <button onClick={revenir} autoFocus
-                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "11px 20px", fontWeight: 800, fontSize: 13, letterSpacing: 1, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
-                ↺ Revenir sur ma décision
-              </button>
-              <button onClick={() => (onRetour ? onRetour() : onDone?.())}
-                style={{ background: "transparent", color: "#c8d4e2", border: "1px solid #3a4a64", borderRadius: 10, padding: "11px 20px", fontWeight: 700, fontSize: 13, letterSpacing: 1, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
-                ← Retour au menu
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* boîte de dialogue / choix */}
-      {step.type !== "emi" && step.type !== "fin" && (
+      {step.type !== "emi" && (
         <div style={{ position: "relative", zIndex: 2, padding: "12px 20px 24px", background: "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end", opacity: fading ? 0.0 : 1, transition: "opacity 1200ms" }}>
           {isLine && Portrait && (
             <div style={{ width: "min(140px, 26vw)", aspectRatio: "140 / 170", flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: `2px solid ${who.couleur}`, boxShadow: "0 8px 32px rgba(0,0,0,0.65)" }}>
