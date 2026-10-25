@@ -2,13 +2,15 @@ import { ConcretePanels, PerspFloor } from "../bunkerKit.jsx";
 /* ============================================================
    JEU 3 — Couloir du niveau +1 (Communal) — v2 cyberpunk
    ------------------------------------------------------------
-   Deux portes (Cantine, Chapelle) qui descendent jusqu'au sol.
+   Trois portes (Cantine, Chapelle, Bibliothèque) qui descendent
+   jusqu'au sol.
    Ambiance beige-doré chaude + tuyauteries dorées, câbles au
    plafond, conduits verticaux, ventilation, autocollants d'usage.
    ============================================================ */
 const DOORS = [
   { id: "cantine",  code: "C-01", label: "Cantine commune",       color: "#3a3a2a" },
   { id: "chapelle", code: "X-01", label: "Chapelle des Anciens",  color: "#3a2018" },
+  { id: "bibliotheque", code: "B-01", label: "Bibliothèque",       color: "#2a2414" },
 ];
 
 export default function BunkerHubHaut({ onGo }) {
@@ -123,9 +125,9 @@ export default function BunkerHubHaut({ onGo }) {
         <text x="50" y="230" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="9" fill="#c8d4e2" letterSpacing="2">ASCENSEUR</text>
       </g>
 
-      {/* Les 2 portes de ce niveau — étendues jusqu'au sol (y=150, h=210 → bottom=360 = sol) */}
+      {/* Les 3 portes de ce niveau — étendues jusqu'au sol (y=150, h=210 → bottom=360 = sol) */}
       {DOORS.map((door, i) => {
-        const x = 250 + i * 300;
+        const x = 200 + i * 220;
         return (
           <g key={door.id} transform={`translate(${x},150)`}
             onClick={() => onGo(door.id)} style={{ cursor: "pointer" }}

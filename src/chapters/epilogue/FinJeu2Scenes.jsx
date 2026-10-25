@@ -5,7 +5,7 @@ import { PortraitElias, PortraitAl3x1A, AL3X1A_LOOK } from "./StationChronautes.
 import { Figure } from "./cineChars.jsx";
 import ChambreN27Decor from "../jeu3/ChambreN27Decor.jsx";
 import { LEVELS } from "../jeu3/levels.js";
-import { playMaterialize, playPhonePing } from "../../engine/sfx.js";
+import { playMaterialize } from "../../engine/sfx.js";
 
 /* ============================================================
    FIN DU JEU 2 — les décors des tableaux (un tableau = un élément)
@@ -28,7 +28,7 @@ const KF = `
 @keyframes fjSway { 0%, 100% { transform: rotate(-2.5deg); } 50% { transform: rotate(2.5deg); } }
 @keyframes fjFloat { 0% { transform: translateY(0); opacity: 0; } 18% { opacity: 1; } 100% { transform: translateY(-110px); opacity: 0; } }
 @keyframes fjBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@keyframes fjFeed { from { transform: translateY(0); } to { transform: translateY(-240px); } }
+@keyframes fjPapier { from { transform: translateY(150px); opacity: 0.2; } to { transform: none; opacity: 1; } }
 @keyframes fjPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
 @keyframes fjMeetL { from { transform: translateX(-170px); } to { transform: translateX(0); } }
 @keyframes fjMeetR { from { transform: translateX(170px); } to { transform: translateX(0); } }
@@ -639,7 +639,7 @@ function CellRoom({ beat = 0 }) {
       <rect width="1000" height="560" fill="#050810" />
       <rect y="500" width="1000" height="60" fill="#050810" />
       <g transform="translate(0,20)">
-        <ChambreN27Decor shelfTablet="on"
+        <ChambreN27Decor veste="on"
           bedExtras={
             /* toi, assis·e sur le lit, encore groggy */
             <Figure x={130} y={78} s={0.86} pose="sit" skin="#e0a878" hair="#3a2818" look="short" mood="vexe"
@@ -673,87 +673,80 @@ export function SceneWake({ beat }) {
   );
 }
 
-export function SceneTablet() {
-  useEffect(() => { const t = setTimeout(playPhonePing, 700); return () => clearTimeout(t); }, []);
-  const posts = [
-    ["LA SURFACE EST MORTE", "depuis 40 ans, partagé 12 000 fois", false],
-    ["VIDÉO · L'AIR EST TOXIQUE", "« selon des experts anonymes »", true],
-    ["AUCUN OISEAU DEPUIS 40 ANS", "source : un ami d'un ami", true],
-    ["BULLETIN OFFICIEL N-27", "Restez chez vous.", false],
-    ["ILS NOUS CACHENT LA VÉRITÉ !!!", "partagez avant la suppression", true],
-    ["LA SURFACE EST MORTE", "depuis 40 ans, partagé 12 000 fois", false],
-  ];
+/* Le carton « N-27 · EFFETS » : tes affaires de 2047, rendues par
+   MARTINE ; une vieille veste de chronaute en dépasse. */
+export function SceneCarton() {
   return (
-    <Stage defs={
-      <>
-        <radialGradient id="tb-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#f08ad0" stopOpacity="0.45" /><stop offset="100%" stopColor="#f08ad0" stopOpacity="0" /></radialGradient>
-        <clipPath id="tb-scr"><rect x="378" y="82" width="244" height="296" rx="4" /></clipPath>
-      </>}>
+    <Stage defs={<radialGradient id="ct-glow" cx="50%" cy="40%" r="55%"><stop offset="0%" stopColor="#ffd890" stopOpacity="0.32" /><stop offset="100%" stopColor="#ffd890" stopOpacity="0" /></radialGradient>}>
       <rect width="1000" height="560" fill="#0a0e14" />
-      <rect y="360" width="1000" height="200" fill="#1a1208" />
-      <rect y="356" width="1000" height="8" fill="#3a2818" />
-      <ellipse cx="500" cy="230" rx="380" ry="260" fill="url(#tb-glow)"><animate attributeName="opacity" values="0.6;1;0.6" dur="2.4s" repeatCount="indefinite" /></ellipse>
-      {/* tasse et livres, flous, de chaque côté */}
-      <g opacity="0.5"><rect x="120" y="296" width="50" height="62" fill="#5a6270" /><path d="M170 310 q22 0 22 20 q0 18 -22 18" stroke="#5a6270" strokeWidth="6" fill="none" /><rect x="800" y="270" width="26" height="88" fill="#8a3820" /><rect x="826" y="270" width="26" height="88" fill="#3a5878" /><rect x="852" y="280" width="26" height="78" fill="#5a4028" /></g>
-      {/* la tablette */}
-      <rect x="360" y="60" width="280" height="340" rx="20" fill="#05060a" stroke="#f08ad0" strokeWidth="5" />
-      <rect x="378" y="82" width="244" height="296" rx="4" fill="#0e1218" />
-      <g clipPath="url(#tb-scr)">
-        <g style={{ animation: "fjFeed 6s linear infinite" }}>
-          {posts.map(([titre, sous, faux], i) => (
-            <g key={i} transform={`translate(386,${92 + i * 80})`}>
-              <rect width="228" height="68" rx="6" fill="#161c26" stroke={faux ? "#e8742a" : "#2a3648"} strokeWidth={faux ? 1.8 : 1} />
-              <circle cx="20" cy="20" r="9" fill={faux ? "#e8742a" : "#3a5878"} />
-              <text x="38" y="24" fontFamily="Georgia,serif" fontSize="11.5" fontWeight="700" fill="#e8eef5">{titre.length > 26 ? titre.slice(0, 25) + "…" : titre}</text>
-              <text x="14" y="50" fontFamily="Georgia,serif" fontSize="10" fontStyle="italic" fill="#8fa3bd">{sous}</text>
-              {faux && <text x="214" y="58" textAnchor="end" fontSize="13" fill="#e8742a">⚠ à vérifier ?</text>}
-            </g>
-          ))}
-        </g>
+      <rect y="410" width="1000" height="150" fill="#14161c" />
+      <path d="M0 410 L1000 410" stroke="#2a3040" strokeWidth="2" />
+      <ellipse cx="500" cy="300" rx="420" ry="250" fill="url(#ct-glow)" />
+      {/* le pied du lit, flou, à droite */}
+      <g opacity="0.55"><rect x="800" y="250" width="200" height="90" fill="#3a4048" /><rect x="800" y="250" width="200" height="10" fill="#5a6270" /><rect x="812" y="340" width="16" height="70" fill="#1a1e26" /></g>
+      <g style={an("fjRise", 900, 200)}>
+        {/* ombre */}
+        <ellipse cx="500" cy="482" rx="230" ry="20" fill="#000" opacity="0.5" />
+        {/* face avant et côté */}
+        <path d="M300 300 L640 300 L640 480 L300 480 Z" fill="#a8845a" stroke="#5a4028" strokeWidth="3" />
+        <path d="M640 300 L700 266 L700 446 L640 480 Z" fill="#8a6a44" stroke="#5a4028" strokeWidth="3" />
+        {/* rabats ouverts */}
+        <path d="M300 300 L250 250 L420 248 L460 300 Z" fill="#c8a070" stroke="#5a4028" strokeWidth="2.5" />
+        <path d="M640 300 L700 266 L760 236 L690 296 Z" fill="#b89060" stroke="#5a4028" strokeWidth="2.5" />
+        {/* la veste pliée, bleu nuit, col et fermeture dorés */}
+        <path d="M318 300 Q360 222 470 232 Q590 222 632 300 Z" fill="#26344e" stroke="#101824" strokeWidth="2.5" />
+        <path d="M440 236 L470 292 L500 236" fill="none" stroke="#3a4c6e" strokeWidth="6" strokeLinejoin="round" />
+        <path d="M470 292 L470 300" stroke="#c8a848" strokeWidth="3" />
+        <path d="M455 238 L470 270 L485 238" fill="none" stroke="#c8a848" strokeWidth="2" />
+        {/* écusson : un sablier */}
+        <circle cx="560" cy="262" r="17" fill="#1a2438" stroke="#c8a848" strokeWidth="2" />
+        <path d="M552 252 H568 L560 262 Z M552 272 H568 L560 262 Z" fill="none" stroke="#c8a848" strokeWidth="1.8" strokeLinejoin="round" />
+        {/* une manche qui pend par-dessus le bord */}
+        <path d="M600 292 Q648 300 654 352 L660 410 L630 412 L622 356 Q616 318 590 304 Z" fill="#2c3c58" stroke="#101824" strokeWidth="2.5" />
+        <rect x="628" y="404" width="34" height="12" fill="#c8a848" stroke="#5a4020" strokeWidth="1.5" />
+        {/* l'étiquette */}
+        <rect x="352" y="356" width="200" height="64" fill="#efe9dc" stroke="#5a4028" strokeWidth="2" />
+        <text x="452" y="386" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="24" fontWeight="800" fill="#3a2818">N-27 · EFFETS</text>
+        <text x="452" y="408" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#5a4028" letterSpacing="2">RESTITUÉ · MARTINE</text>
       </g>
-      <circle cx="500" cy="388" r="5" fill="#2a3040" />
     </Stage>
   );
 }
 
-export function SceneVoice() {
+/* La doublure décousue : un papier plié, à moitié sorti. On n'en lit
+   que le bord (« 52… ») et la signature : la suite se joue au Jeu 3. */
+export function ScenePapier() {
   return (
-    <Stage defs={<radialGradient id="vo-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#ffd890" stopOpacity="0.4" /><stop offset="100%" stopColor="#ffd890" stopOpacity="0" /></radialGradient>}>
-      <rect width="1000" height="560" fill="#080a10" />
-      <rect y="350" width="1000" height="210" fill="#161008" /><rect y="346" width="1000" height="8" fill="#3a2818" />
-      <ellipse cx="500" cy="250" rx="340" ry="200" fill="url(#vo-glow)" />
-      {/* ondes qui sortent de la radio */}
-      {[0, 1, 2, 3].map((i) => (
-        <path key={i} d="M640 230 q40 -34 0 -68" stroke="#ffd890" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0">
-          <animateTransform attributeName="transform" type="translate" values="0 0; 150 0" dur="3.2s" begin={`${i * 0.8}s`} repeatCount="indefinite" />
-          <animate attributeName="opacity" values="0;0.8;0" dur="3.2s" begin={`${i * 0.8}s`} repeatCount="indefinite" />
-        </path>
-      ))}
-      {/* la vieille radio */}
-      <g transform="translate(500,236)">
-        <rect x="-170" y="-110" width="340" height="226" rx="24" fill="#6a4a2a" stroke="#2a1a0a" strokeWidth="4" />
-        <rect x="-150" y="-92" width="200" height="190" rx="12" fill="#2a1a0a" />
-        {Array.from({ length: 9 }).map((_, i) => <line key={i} x1="-140" y1={-76 + i * 20} x2="40" y2={-76 + i * 20} stroke="#0a0602" strokeWidth="5" />)}
-        <rect x="68" y="-84" width="86" height="38" rx="5" fill="#e8d8a8" stroke="#2a1a0a" strokeWidth="2" />
-        <line x1="76" y1="-50" x2="146" y2="-50" stroke="#2a1a0a" strokeWidth="1" />
-        {[84, 100, 116, 132].map((x) => <line key={x} x1={x} y1="-50" x2={x} y2="-56" stroke="#2a1a0a" />)}
-        <line x1="86" y1="-84" x2="86" y2="-46" stroke="#c83020" strokeWidth="2.4">
-          <animate attributeName="x1" values="86;112;98;136;92;122" dur="5s" repeatCount="indefinite" />
-          <animate attributeName="x2" values="86;112;98;136;92;122" dur="5s" repeatCount="indefinite" />
-        </line>
-        <circle cx="90" cy="38" r="22" fill="#2a1a0a" stroke="#c8a848" strokeWidth="2" /><line x1="90" y1="38" x2="90" y2="20" stroke="#c8a848" strokeWidth="3" />
-        <circle cx="140" cy="38" r="16" fill="#2a1a0a" stroke="#c8a848" strokeWidth="2" /><line x1="140" y1="38" x2="152" y2="30" stroke="#c8a848" strokeWidth="3" />
-        <path d="M-170 -110 L-210 -200" stroke="#8a94a8" strokeWidth="4" />
+    <Stage defs={
+      <>
+        <radialGradient id="pp-glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff0c8" stopOpacity="0.4" /><stop offset="100%" stopColor="#fff0c8" stopOpacity="0" /></radialGradient>
+        <pattern id="pp-tissu" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="10" height="10" fill="#22304a" /><line x1="0" y1="0" x2="0" y2="10" stroke="#1a2438" strokeWidth="4" /></pattern>
+      </>}>
+      <rect width="1000" height="560" fill="url(#pp-tissu)" />
+      <rect width="1000" height="560" fill="#000" opacity="0.25" />
+      {/* la couture ouverte */}
+      <path d="M120 300 Q500 230 880 290" fill="none" stroke="#0e1624" strokeWidth="46" strokeLinecap="round" />
+      {[...Array(18)].map((_, i) => {
+        const x = 150 + i * 40;
+        const y = 300 - Math.sin((i / 17) * Math.PI) * 52;
+        return <path key={i} d={`M${x} ${y - 30} l6 10 M${x} ${y + 26} l6 -10`} stroke="#c8a848" strokeWidth="2" opacity="0.7" />;
+      })}
+      <ellipse cx="520" cy="280" rx="330" ry="170" fill="url(#pp-glow)" />
+      {/* le papier, qui glisse hors de la doublure */}
+      <g style={an("fjPapier", 2200, 500, "cubic-bezier(.2,.8,.3,1)")}>
+        <g transform="translate(520,270) rotate(-7)">
+          <rect x="-190" y="-96" width="380" height="200" fill="#efe6cf" stroke="#b8a888" strokeWidth="2" />
+          <line x1="-190" y1="4" x2="190" y2="4" stroke="#d8ccb0" strokeWidth="2" />
+          <line x1="-2" y1="-96" x2="-2" y2="104" stroke="#d8ccb0" strokeWidth="1.5" />
+          <text x="-150" y="-30" fontFamily="Georgia,serif" fontStyle="italic" fontWeight="700" fontSize="60" fill="#23366e" letterSpacing="6">52</text>
+          <text x="-40" y="-30" fontFamily="Georgia,serif" fontStyle="italic" fontSize="60" fill="#23366e" opacity="0.25">…</text>
+          <rect x="-150" y="30" width="230" height="10" rx="5" fill="#23366e" opacity="0.18" />
+          <text x="150" y="84" textAnchor="end" fontFamily="Georgia,serif" fontStyle="italic" fontSize="34" fill="#23366e">— A.</text>
+        </g>
       </g>
-      {/* fragments de voix qui se perdent dans le grésillement */}
-      {[["…Al…", 330, 210], ["…m'entends ?…", 650, 190], ["…tu…", 230, 270], ["…là…", 760, 250]].map(([t, x, y], i) => (
-        <text key={i} x={x} y={y} textAnchor="middle" fontFamily="Georgia,serif" fontStyle="italic" fontSize="22" fill="#ffe8b0" opacity="0" style={an("fjFloat", 4200, 900 + i * 1100, "ease-in-out")}>{t}</text>
-      ))}
-      <g opacity="0.5">{Array.from({ length: 14 }).map((_, i) => (
-        <rect key={i} x={40 + i * 70} y="60" width="30" height="2" fill="#c8d4e2">
-          <animate attributeName="opacity" values="0;0.8;0" dur={`${0.4 + (i % 4) * 0.3}s`} begin={`${i * 0.17}s`} repeatCount="indefinite" />
-          <animate attributeName="y" values={`${40 + (i * 29) % 120};${50 + (i * 53) % 120}`} dur="1.1s" repeatCount="indefinite" />
-        </rect>))}</g>
+      {/* le bord de la doublure, par-dessus le bas du papier */}
+      <path d="M0 440 Q500 380 1000 430 L1000 560 L0 560 Z" fill="url(#pp-tissu)" />
+      <path d="M0 440 Q500 380 1000 430" fill="none" stroke="#0e1624" strokeWidth="6" />
     </Stage>
   );
 }

@@ -5,7 +5,7 @@ import {
   SceneLanding, SceneDescent, SceneTest, SceneThanks,
   SceneBroadcast, SceneReunion, SceneMonument, SceneFrown,
   SceneSealed, SceneLevels, SceneElderElias,
-  SceneWake, SceneTablet, SceneVoice,
+  SceneWake, SceneCarton, ScenePapier,
 } from "./FinJeu2Scenes.jsx";
 
 /* ============================================================
@@ -21,13 +21,15 @@ import {
      1. LA MÉMOIRE REVIENT    — la diffusion, des retrouvailles, MARTINE
                                 devient « mémoire commune », Elias doute
      2. LA PROPOSITION / LA VEILLE DU PUITS — JEU 2B (Jeu2B.jsx) :
-                                histoire interactive ; on peut y refuser de
-                                rester (fin « je rentre chez moi »)
+                                histoire interactive ; le joueur reste
+                                construire le Puits
      3. LE PUITS S'ORGANISE   — de 2047 à 2087 : le scellement, MARTINE
                                 règle tout, Elias disparaît
      4. LE DISCERNEMENT       — réveil en 2087, cellule N-27 : la chambre,
-                                la tablette, la voix. Boutons de lancement
-                                du Jeu 3 sur le dernier tableau.
+                                le carton et la veste, le papier dans la
+                                doublure (le premier caillou d'Al3x1a).
+                                Boutons de lancement du Jeu 3 sur le
+                                dernier tableau.
    La révélation « Al3x1a est ton enfant » reste réservée au bunker Jeu 3.
    ============================================================ */
 
@@ -117,15 +119,15 @@ function sequenceDiscernement() {
         { text: "Tu te réveilles dans une chambre que tu ne reconnais pas. HABITANT N-27." },
         { text: "Sur ton mur, MARTINE annonce que la surface est encore inhabitable." },
       ] },
-    { type: "tableau", Scene: SceneTablet, lieu: "SUR TON ÉTAGÈRE",
+    { type: "tableau", Scene: SceneCarton, lieu: "AU PIED DE TON LIT",
       beats: [
-        { text: "Sur ton étagère, une tablette. Des publications y défilent, certaines sonnent faux." },
-        { text: "Aucun moyen simple de vérifier — ou peut-être si." },
+        { text: "Au pied du lit, un carton à ton numéro : « N-27 · EFFETS ». Dedans, une vieille veste de chronaute." },
+        { text: "Elle est à ta taille. Tu ne te souviens pas de l'avoir portée." },
       ] },
-    { type: "tableau", Scene: SceneVoice, lieu: "VIEILLES FRÉQUENCES RADIO",
+    { type: "tableau", Scene: ScenePapier, lieu: "DANS LA DOUBLURE",
       beats: [
-        { text: "Une voix féminine chuchote parfois sur les vieilles fréquences radio." },
-        { text: "Un prénom que tu as l'impression d'avoir déjà connu, sans savoir où. À toi de le retrouver." },
+        { text: "Dans la doublure, quelque chose crisse : un papier, cousu là exprès. Des chiffres, une lettre." },
+        { text: "Une écriture que tu as l'impression d'avoir déjà vue, sans savoir où. Qui l'a écrite ? À toi de le découvrir." },
       ] },
   ];
 }

@@ -7,13 +7,15 @@ import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "./bunkerKit.
    (BunkerChambre) : c'est la MÊME pièce, on doit la reconnaître
    en y revenant. Emplacements pour les objets propres à chaque
    scène :
-     bedExtras  — posé sur le lit (la tablette Tchatine)
+     bedExtras  — posé sur le lit
      deskExtras — posé sur le bureau (le médiadex, le téléphone mort)
      onDoor     — clic sur la porte (absent : porte inerte)
-     shelfTablet — "off" | "on" : la tablette rangée sur l'étagère
-                  (fin du Jeu 2 : « sur ton étagère, une tablette »)
+     veste      — null | "on" | "off" : la vieille veste de chronaute
+                  qui dépasse du carton « N-27 · EFFETS » ; "on" = elle
+                  attend qu'on la fouille (halo), avec onVeste au clic
+                  (fin du Jeu 2 et Jeu 3 : le premier caillou d'Al3x1a)
    ============================================================ */
-export default function ChambreN27Decor({ bedExtras = null, deskExtras = null, onDoor, dim = 0, shelfTablet = null }) {
+export default function ChambreN27Decor({ bedExtras = null, deskExtras = null, onDoor, dim = 0, veste = null, onVeste }) {
   return (
     <>
       <defs>
@@ -44,11 +46,31 @@ export default function ChambreN27Decor({ bedExtras = null, deskExtras = null, o
       <ellipse cx="420" cy="470" rx="230" ry="30" fill="#3a3448" opacity="0.8" />
       <ellipse cx="420" cy="470" rx="200" ry="24" fill="none" stroke="#5a5470" strokeWidth="3" opacity="0.7" />
       <ellipse cx="420" cy="470" rx="160" ry="18" fill="none" stroke="#4a4460" strokeWidth="3" opacity="0.7" />
-      <g transform="translate(110,486)">
+      <g transform="translate(110,486)" onClick={onVeste} style={{ cursor: onVeste ? "pointer" : "default" }} data-veste={veste || undefined}>
+        {veste === "on" && (
+          <ellipse cx="6" cy="-34" rx="66" ry="40" fill="none" stroke="#c8a848" strokeWidth="1.6" strokeDasharray="4 4">
+            <animate attributeName="opacity" values="0.35;1;0.35" dur="2.2s" repeatCount="indefinite" />
+          </ellipse>
+        )}
         <path d="M-40 0 L40 0 L40 -40 L-40 -40 Z" fill="#a8845a" stroke="#5a4028" strokeWidth="1.5" />
-        <path d="M-40 -40 L-30 -52 L50 -52 L40 -40 Z" fill="#c8a070" stroke="#5a4028" strokeWidth="1.2" />
+        {veste ? (
+          /* rabats ouverts, la veste bleu nuit qui dépasse, une manche pendante */
+          <g>
+            <path d="M-40 -40 L-52 -54 L-22 -50 L-14 -40 Z" fill="#c8a070" stroke="#5a4028" strokeWidth="1" />
+            <path d="M40 -40 L58 -52 L50 -40 Z" fill="#b89060" stroke="#5a4028" strokeWidth="1" />
+            <path d="M-34 -40 Q-20 -58 6 -54 Q30 -58 38 -40 Z" fill="#26344e" stroke="#101824" strokeWidth="1" />
+            <path d="M-4 -54 L2 -42 L8 -54" fill="none" stroke="#c8a848" strokeWidth="1.2" />
+            <path d="M30 -44 Q46 -40 48 -22 L52 -6 L44 -6 L40 -22 Q36 -34 26 -40 Z" fill="#2c3c58" stroke="#101824" strokeWidth="1" />
+            <rect x="43" y="-8" width="10" height="4" fill="#c8a848" />
+          </g>
+        ) : (
+          <path d="M-40 -40 L-30 -52 L50 -52 L40 -40 Z" fill="#c8a070" stroke="#5a4028" strokeWidth="1.2" />
+        )}
         <path d="M40 0 L50 -12 L50 -52 L40 -40 Z" fill="#8a6a44" />
         <rect x="-26" y="-30" width="40" height="12" fill="#efe9dc" /><text x="-6" y="-21" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fill="#3a2818">N-27 · EFFETS</text>
+        {veste === "on" && (
+          <text x="6" y="-80" textAnchor="middle" fontFamily="Palatino, Georgia, serif" fontSize="9" fill="#c8a848" fontStyle="italic">une vieille veste</text>
+        )}
       </g>
       <g transform="translate(640,500)">
         <path d="M-20 0 q0 -10 10 -12 l14 4 q8 2 10 8 Z" fill="#e8e8f0" stroke="#5a6270" strokeWidth="1" />
@@ -88,20 +110,6 @@ export default function ChambreN27Decor({ bedExtras = null, deskExtras = null, o
         {[[10, "#5a4028", 26], [22, "#8a5030", 24], [34, "#3a2818", 28], [46, "#5a3818", 30], [58, "#8a5030", 28], [70, "#5a2818", 26]].map(([x, c, h], i) => (
           <rect key={`b${i}`} x={x} y={60 - h} width="10" height={h} fill={c} stroke="#0a0806" strokeWidth="0.3" />
         ))}
-        {/* la tablette, posée debout sur la planche du bas (éteinte, ou qui
-            clignote quand elle reçoit des publications) */}
-        {shelfTablet && (
-          <g transform="translate(104,30)">
-            {shelfTablet === "on" && (
-              <circle cx="11" cy="15" r="24" fill="none" stroke="#f08ad0" strokeWidth="1.4" strokeDasharray="4 4" opacity="0.85">
-                <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite" />
-              </circle>
-            )}
-            <rect x="0" y="0" width="22" height="30" rx="2.5" fill="#0a0e14" stroke={shelfTablet === "on" ? "#f08ad0" : "#3a4048"} strokeWidth="1.2" />
-            <rect x="2.5" y="3" width="17" height="24" fill={shelfTablet === "on" ? "#2a1a2a" : "#131922"} />
-            {shelfTablet === "on" && [8, 14, 20].map((y) => <rect key={y} x="4.5" y={y} width="13" height="3" fill="#f08ad0" opacity="0.5" />)}
-          </g>
-        )}
       </g>
 
       {/* POSTER MURAL (Réseau M) — à la place de l'ancien panneau */}

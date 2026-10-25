@@ -552,7 +552,6 @@ export default function App() {
         mission_kova_done: true, briefing_kova_done: true,
         mission_vitamine_done: true, briefing_vitamine_done: true,
         mission_jour40_done: true, briefing_jour40_done: true,
-        mission_tchatine_done: true,
         archives_tri_1_done: true, archives_tri_2_done: true, archives_tri_3_done: true,
         ...dossiers,
         mediadex_retrouve: true,
@@ -560,6 +559,41 @@ export default function App() {
         elevator_k_unlocked: true, salle_k_vue: true, salle_k_reactivee: true, salle_k_portal_online: true,
         ...Object.fromEntries(order.map((id) => [`voyageK_${id}_done`, true])),
       },
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
+  /* Triches : la quête des cailloux d'Al3x1a (bibliothèque).
+     · début : le 1er papier (veste) trouvé, dépose à la bibliothèque ;
+     · réserve : les 4 premiers papiers trouvés et la clé de Jorge
+       (après les 3 voyages K), dépose à la bibliothèque. */
+  const cheatJeu3Cailloux = (reserve) => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    const dossiers = commonDossiersFlags();
+    const order = dossiers.k_voyage_order;
+    const base = {
+      puits_billet: true,
+      mission_order: ["kova", "vitamine", "jour40"],
+      mission_kova_done: true, briefing_kova_done: true,
+      caillou_veste: true,
+    };
+    setJeu3Start({
+      room: "bibliotheque",
+      flags: reserve ? {
+        ...base,
+        mission_vitamine_done: true, briefing_vitamine_done: true,
+        mission_jour40_done: true, briefing_jour40_done: true,
+        archives_tri_1_done: true, archives_tri_2_done: true, archives_tri_3_done: true,
+        ...dossiers,
+        mediadex_retrouve: true,
+        jorge_arrete: true, jorge_cellule_vue: true,
+        elevator_k_unlocked: true, salle_k_vue: true, salle_k_reactivee: true, salle_k_portal_online: true,
+        ...Object.fromEntries(order.map((id) => [`voyageK_${id}_done`, true])),
+        phase5_done: true, cle_reserve: true,
+        caillou_temps: true, caillou_contes: true, caillou_serres: true,
+      } : base,
       heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
     });
     setJeu3Nonce((n) => n + 1);
@@ -1417,6 +1451,7 @@ export default function App() {
       onCheatJeu3Phase4={cheatJeu3Phase4}
       onCheatJeu3Phase5={cheatJeu3Phase5}
       onCheatJeu3Phase6={cheatJeu3Phase6}
+      onCheatJeu3Cailloux={cheatJeu3Cailloux}
     />
   );
 

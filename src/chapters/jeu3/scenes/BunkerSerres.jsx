@@ -1,6 +1,9 @@
+import { useState } from "react";
 import PnjRoom from "../PnjRoom.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
 import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
+import { CaillouTrouve } from "../CaillouPapier.jsx";
+import { caillouDispo, CAILLOU } from "../cailloux.js";
 
 /* ============================================================
    Serres hydroponiques (niveau -2) — production alimentaire.
@@ -8,8 +11,13 @@ import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit
    avec plants verts, tubes à LEDs magenta (grow lights), cuves
    d'eau nutritive, tuyaux de circulation, monte-charge à
    cageots. Rangée du fond en perspective.
+   Au pied du panneau de contrôle, derrière les sacs d'engrais :
+   une vieille boîte en fer « GRAINES · 2046 », où dort le 4e
+   caillou d'Al3x1a (cailloux.js), une fois le 3e trouvé.
    ============================================================ */
 export default function BunkerSerres({ onGo, j3 }) {
+  const caillou = caillouDispo("serres", j3.flags);
+  const [boite, setBoite] = useState(false);
   const bg = (
     <>
       <defs>
@@ -190,9 +198,37 @@ export default function BunkerSerres({ onGo, j3 }) {
         <path d="M-14 -18 Q-14 -30 0 -30 Q14 -30 14 -18" fill="none" stroke="#5a6270" strokeWidth="1.5" />
       </g>
 
+      {/* SACS D'ENGRAIS et la vieille BOÎTE DE GRAINES */}
+      <g transform="translate(36,318)">
+        <path d="M0 62 Q-4 20 8 8 Q26 0 44 8 Q56 20 52 62 Z" fill="#8a7a5a" stroke="#3a3020" strokeWidth="1" />
+        <rect x="6" y="28" width="40" height="12" fill="#e8dfc8" />
+        <text x="26" y="37" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="6" fontWeight="800" fill="#3a3020">ENGRAIS</text>
+        <g transform="translate(58,30)" onClick={(e) => { e.stopPropagation(); if (caillou) setBoite(true); }}
+          style={{ cursor: caillou ? "pointer" : "default" }} data-graines={caillou ? "1" : undefined}>
+          {caillou && (
+            <ellipse cx="22" cy="16" rx="36" ry="28" fill="none" stroke="#c8a848" strokeWidth="1.5" strokeDasharray="4 4">
+              <animate attributeName="opacity" values="0.35;1;0.35" dur="2.2s" repeatCount="indefinite" />
+            </ellipse>
+          )}
+          <rect x="0" y="4" width="44" height="28" rx="2" fill="#5a6a6a" stroke="#1a2020" strokeWidth="1" />
+          <rect x="-1" y="0" width="46" height="7" rx="2" fill="#6a7a7a" stroke="#1a2020" strokeWidth="1" />
+          <circle cx="8" cy="20" r="2" fill="#a86a3a" opacity="0.7" /><circle cx="36" cy="26" r="2.6" fill="#a86a3a" opacity="0.6" />
+          <rect x="6" y="12" width="32" height="12" fill="#e8dfc8" />
+          <text x="22" y="20.5" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="5" fontWeight="800" fill="#1a2020">GRAINES·2046</text>
+        </g>
+      </g>
+
       <style>{`@keyframes srHoist { 0% { transform: translate(0,80px); } 100% { transform: translate(0,-40px); } }`}</style>
       <Vignette id="serres-vig" strength={0.45} />
     </>
   );
-  return <PnjRoom titre="🌱 SERRES HYDROPONIQUES — NIVEAU -2" bg={bg} pnjList={PNJ_ROOMS.serres} j3={j3} onGo={onGo} />;
+  return (
+    <>
+      <PnjRoom titre="🌱 SERRES HYDROPONIQUES — NIVEAU -2" bg={bg} pnjList={PNJ_ROOMS.serres} j3={j3} onGo={onGo} />
+      {boite && (
+        <CaillouTrouve caillou={CAILLOU.serres}
+          onGarder={() => { j3.setFlag(CAILLOU.serres.flag); setBoite(false); }} />
+      )}
+    </>
+  );
 }

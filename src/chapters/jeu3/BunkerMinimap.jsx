@@ -46,6 +46,7 @@ export default function BunkerMinimap({ room, flags, onGo, cheat = false }) {
       case "surface":    return "☢";
       case "cantine":    return "🍲";
       case "chapelle":   return "✧";
+      case "bibliotheque": return "📖";
       case "chambre":
       case "chambreN24":
       case "chambreN30":

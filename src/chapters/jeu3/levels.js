@@ -15,6 +15,7 @@ export const LEVELS = [
     rooms: [
       { id: "cantine",  label: "Cantine commune" },
       { id: "chapelle", label: "Chapelle des Anciens" },
+      { id: "bibliotheque", label: "Bibliothèque" },
     ] },
   { id: "0",  name: "Habitat",  hubRoom: "hub",      color: "#7fd8ff",
     rooms: [

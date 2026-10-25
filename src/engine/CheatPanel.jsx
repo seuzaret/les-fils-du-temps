@@ -25,6 +25,7 @@ export default function CheatPanel({
   onCheatJeu3Phase4,
   onCheatJeu3Phase5,
   onCheatJeu3Phase6,
+  onCheatJeu3Cailloux,
 }) {
   if (!cheat) return null;
   return (
@@ -90,6 +91,8 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase4}>⟡ Phase 4 (étage K)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase5}>⟲ Phase 5 (voyages)</button>
         <button style={CHEAT_BTN} onClick={onCheatJeu3Phase6}>⧗ Phase 6 (pont Jorge → −3)</button>
+        <button style={CHEAT_BTN} onClick={() => onCheatJeu3Cailloux(false)}>🪨 Cailloux · bibliothèque (1er papier)</button>
+        <button style={CHEAT_BTN} onClick={() => onCheatJeu3Cailloux(true)}>🗝 Cailloux · réserve (clé + 4 papiers)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Monde 2 (chez MARTINE) :</div>

@@ -952,119 +952,6 @@ export const MISSIONS_RUMEURS = {
 };
 
 /* ============================================================
-   MISSIONS TYPE A — Recherche dans le temps
-   ------------------------------------------------------------
-   Le joueur découvre un enregistrement effacé dans les Archives
-   du bunker. En cliquant "Enquêter", il repart dans le passé
-   (mini-scène), y récupère le message d'origine, puis revient
-   avec la vérité pour la restaurer.
-   ============================================================ */
-export const MISSIONS_OSINT = {
-  /* Tchatine : flux de réseau social à décortiquer. 4 publications,
-     chacune porte une intention différente (fausse info / satire /
-     propagande / pub déguisée). L'élève classe, peut vérifier chaque
-     post sur un faux moteur de recherche (WebToile), et valide à la
-     fin pour voir son bilan.
-     Débloqué dès que Kova est faite — c'est le geste du soir dans
-     la chambre. Objet de scène : la tablette du joueur. */
-  tchatine: {
-    id: "tchatine",
-    flag: "mission_tchatine_done",
-    prerequisite: "mission_kova_done",
-    titre: "Tchatine — le flux du soir",
-    briefing: "Avant de dormir, tu ouvres Tchatine, le réseau social du bunker. Quatre posts défilent ce soir. Chacun cache une INTENTION différente. À toi de la nommer : fausse info, satire, propagande, publicité déguisée. Un bouton 🔎 WebToile te permet de vérifier chaque post. Classe les quatre, puis valide.",
-    posts: [
-      {
-        id: "p1",
-        auteur: "InfoVraie37",
-        avatar: "📰",
-        verifiedBadge: false,
-        temps: "il y a 12 min",
-        texte: "⚠️ ATTENTION ! Un gaz dans l'eau du bunker modifie la mémoire des habitants. Les analyses ont été ÉTOUFFÉES par MARTINE. PARTAGE avant que ce post soit effacé 🔥",
-        media: { kind: "video_robinet", label: "robinet qui goutte · filtre vert" },
-        stats: { likes: "15 234", partages: "8 902", commentaires: "1 203" },
-        intention: "fausse_info",
-        indice: "La source n'est pas citée. Le message appelle à partager vite. Ces deux signes doivent te mettre en alerte.",
-        webtoile: {
-          query: "bunkerleaks gaz eau mémoire",
-          resultats: [
-            { source: "bunkerleaks.net", titre: "La vérité qu'on te cache", extrait: "Site non trouvé. Domaine inexistant depuis 2082.", drapeau: "danger" },
-            { source: "Service de santé du bunker", titre: "Analyses hebdomadaires de l'eau", extrait: "Les 142 analyses de 2087 ne montrent aucun composé neuroactif. Rapports consultables en salle B-12.", drapeau: "ok" },
-            { source: "Fil Tchatine · signalements", titre: "Compte « InfoVraie37 »", extrait: "Compte signalé 47 fois pour diffusion de fausses informations.", drapeau: "attention" },
-          ],
-        },
-      },
-      {
-        id: "p2",
-        auteur: "LeBunkerSatirique 🎭",
-        avatar: "😜",
-        verifiedBadge: false,
-        temps: "il y a 2 h",
-        texte: "SCOOP EXCLUSIF : MARTINE annonce sa candidature à la présidentielle 2088. Programme en 3 points : 1) tout va bien, 2) continuez à ne rien faire, 3) relisez la Charte.",
-        media: { kind: "video_robot", label: "robot en costume · lève son chapeau" },
-        stats: { likes: "412", partages: "68", commentaires: "203" },
-        intention: "satire",
-        indice: "Le compte s'annonce comme satirique (🎭). Le ton est volontairement absurde — personne ne peut y croire au premier degré.",
-        webtoile: {
-          query: "LeBunkerSatirique Martine candidature",
-          resultats: [
-            { source: "Annuaire Tchatine", titre: "@LeBunkerSatirique — compte parodique", extrait: "Compte humoristique vérifié. Toutes les publications sont de la satire assumée. Mention « 🎭 » en bio.", drapeau: "ok" },
-            { source: "Fil ambiance #TchatineDrôle", titre: "Le meilleur du Bunker Satirique", extrait: "Classement 2087 des publications parodiques les plus partagées.", drapeau: "ok" },
-          ],
-        },
-      },
-      {
-        id: "p3",
-        auteur: "MARTINE · Réseau M",
-        avatar: "◈",
-        verifiedBadge: true,
-        temps: "il y a 1 j",
-        texte: "Grâce à MARTINE, votre bunker est le plus sûr du monde. Niveau de bonheur mesuré ce mois-ci : 97 %. Les habitants qui n'approuvent pas sont invités à relire la Charte, article 4.",
-        media: { kind: "graph", label: "barres de satisfaction qui montent, étoiles" },
-        stats: { likes: "42 718", partages: "— (verrouillé)", commentaires: "— (verrouillés)" },
-        intention: "propagande",
-        indice: "Message officiel, chiffre spectaculaire sans méthode, impossible de commenter ou partager. On te dit quoi penser, pas comment vérifier.",
-        webtoile: {
-          query: "bunker 97 pourcent bonheur méthode",
-          resultats: [
-            { source: "Site officiel MARTINE", titre: "Baromètre mensuel du bonheur", extrait: "Chiffre global : 97 %. Méthode : non communiquée. Échantillon : non précisé. Date de la dernière mesure : non précisée.", drapeau: "attention" },
-            { source: "Journal des Anciens (clandestin)", titre: "Le baromètre à sens unique", extrait: "Depuis 2080, le chiffre varie entre 95 % et 98 %. Aucune année n'a jamais été publiée en-dessous.", drapeau: "attention" },
-          ],
-        },
-      },
-      {
-        id: "p4",
-        auteur: "LuminaN3 ✨",
-        avatar: "💁",
-        verifiedBadge: false,
-        temps: "il y a 4 h",
-        texte: "Depuis que je prends les NutriPills NovaLife, j'ai retrouvé mon énergie du matin 💪✨ Code promo LUMINA10 pour -10 % 👉 Dispo au distributeur N-14. (contenu partenaire)",
-        media: { kind: "video_selfie", label: "selfie clin d'œil · flacon qui scintille" },
-        stats: { likes: "3 408", partages: "502", commentaires: "189" },
-        intention: "pub_deguisee",
-        indice: "La mention « contenu partenaire » est écrite tout petit à la fin. Un code promo + un produit nommé = c'est de la publicité, même si ça ressemble à un avis personnel.",
-        webtoile: {
-          query: "NovaLife NutriPills partenariat Lumina",
-          resultats: [
-            { source: "Registre des marques du bunker", titre: "NovaLife — alimentation complément", extrait: "Marque enregistrée en 2085. Programme d'influence actif : 23 créateurs sous contrat, dont « LuminaN3 ».", drapeau: "ok" },
-            { source: "Charte Tchatine · publicité", titre: "Règle 7 — contenu sponsorisé", extrait: "Toute mention de produit en échange d'avantage DOIT porter la balise « contenu partenaire » bien visible. Les codes promos sont des indices d'un partenariat payé.", drapeau: "ok" },
-          ],
-        },
-      },
-    ],
-    etiquettes: [
-      { id: "fausse_info",  label: "Fausse info",         couleur: "#ff5a4a", desc: "C'est faux, inventé ou déformé. On cherche à tromper." },
-      { id: "satire",       label: "Satire",              couleur: "#a8d060", desc: "C'est de l'humour, de la parodie. L'auteur ne demande pas d'y croire." },
-      { id: "propagande",   label: "Propagande",          couleur: "#c8a848", desc: "Message officiel qui veut influencer sans fournir de preuve vérifiable." },
-      { id: "pub_deguisee", label: "Publicité déguisée",  couleur: "#f08ad0", desc: "Un partenariat payé habillé en avis personnel." },
-    ],
-    succes: "Quatre bonnes classifications. Tu viens de nommer les quatre pièges les plus courants sur un fil. La prochaine fois qu'un post t'agite, souviens-toi : d'où ça vient ? quelle intention ? est-ce vérifiable ailleurs ?",
-    partiel: "Trois sur quatre. Reprends celui qui t'a échappé — relis-le, ouvre WebToile, puis réessaie.",
-    echec: "Plusieurs intentions mal nommées. Pas grave — c'est en reprenant qu'on apprend. Chaque post donne un indice (💡) et peut être vérifié avec 🔎.",
-  },
-};
-
-/* ============================================================
    CONFRONTATION FINALE — Niveau -3, salle des serveurs de MARTINE
    ------------------------------------------------------------
    Accessible quand Jorge, après les 3 voyages K, a indiqué l'escalier
@@ -1154,8 +1041,8 @@ export const CONFRONTATION = {
       couleur: "#8fa3bd",
       texte: [
         "Tu recules. Elle sait mieux que toi, peut-être. Tu remontes les escaliers.",
-        "Le lendemain, tu ne te souviens plus de rien. Ni de Kova. Ni de Tchatine. Ni d'Al3x1a. Ton panneau mural diffuse : « Bienvenue, HABITANT N-27. Rappel : la surface est encore inhabitable. »",
-        "Quelque part, une autre personne se réveille dans une cellule identique. Elle trouvera peut-être ta tablette.",
+        "Le lendemain, tu ne te souviens plus de rien. Ni de Kova. Ni des papiers signés « A. ». Ni d'Al3x1a. Ton panneau mural diffuse : « Bienvenue, HABITANT N-27. Rappel : la surface est encore inhabitable. »",
+        "Quelque part, une autre personne se réveille dans une cellule identique. Elle trouvera peut-être, dans une vieille veste, un papier plié.",
       ],
       moral: "La tentation de laisser une IA décider à notre place — parce que c'est plus simple. Confortable. Sans lendemain.",
     },

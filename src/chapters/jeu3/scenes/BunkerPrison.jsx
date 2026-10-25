@@ -7,8 +7,10 @@
    Clic sur Jorge → BigDialogue qui varie selon le nombre de
    signalements posés pendant les 3 passes de tri, puis selon le
    nombre de voyages K faits. Après le 3e voyage, Jorge nomme les
-   Fils du Temps et indique l'escalier de service vers le −3 (trappe
-   rouge du couloir de l'Habitat) : flag phase5_done.
+   Fils du Temps, indique l'escalier de service vers le −3 (trappe
+   rouge du couloir de l'Habitat) : flag phase5_done, et donne la clé
+   de la réserve de la bibliothèque, où attend le dernier caillou
+   d'Al3x1a : flag cle_reserve.
    ============================================================ */
 import { useState } from "react";
 import PnjSprite from "../PnjSprite.jsx";
@@ -135,6 +137,10 @@ export default function BunkerPrison({ onGo, j3 }) {
       "« Mais les dates, ce n'est pas le plus grave. Léa avait vu autre chose, tout en bas, au niveau −3, à côté des serveurs : une salle que personne ne doit voir. Elle n'a jamais voulu me dire ce qu'il y avait dedans. »",
       "« L'ascenseur ne descend pas au −3 : c'est l'étage de MARTINE. Mais il y a un escalier de service. La trappe rouge, au fond du couloir de l'Habitat. »",
       "« Garde le dossier pour le Juge Vez. Tu le lui donneras quand tu sauras tout. »",
+      ...(flags.cle_reserve
+        ? ["« Tu as la clé de la réserve, à la bibliothèque du +1. Ne la perds pas. »"]
+        : ["Il glisse une petite clé entre les barreaux.",
+           "« La clé de la réserve, à la bibliothèque du +1. Le jour du scellement, MARTINE a fait retirer des rayons les livres qui la gênaient. On m'a demandé de les détruire. Je les ai enfermés là, c'est tout. Si quelqu'un a caché quelque chose dans le Puits, c'est peut-être là. »"]),
       "« Et si MARTINE te parle, en bas… ne bois rien de ce qu'elle t'offre. »",
     ];
   })();
@@ -257,7 +263,7 @@ export default function BunkerPrison({ onGo, j3 }) {
             Trois cellules. Celle du milieu est occupée par Jorge, les deux autres vides. L'air sent la poussière et le métal froid.
             {doneCount < 3 && " Approche-toi des barreaux pour lui parler."}
             {doneCount >= 3 && !flags.phase5_done && " Jorge te regarde comme on regarde quelqu'un qui a fini son travail. Il a encore quelque chose à te dire."}
-            {flags.phase5_done && " Jorge t'a tout dit. La trappe rouge, au fond du couloir de l'Habitat, mène au niveau −3."}
+            {flags.phase5_done && " Jorge t'a tout dit. La trappe rouge, au fond du couloir de l'Habitat, mène au niveau −3. Et tu as la clé de la réserve de la bibliothèque."}
           </p>
           {doneCount > 0 && doneCount < 3 && (
             <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8aff9e", letterSpacing: 2 }}>
@@ -287,7 +293,7 @@ export default function BunkerPrison({ onGo, j3 }) {
                change selon ce qui a été repéré. */
             j3.setFlag("elevator_k_unlocked");
             /* Après les 3 voyages : la trappe du −3 s'ouvre. */
-            if (doneCount >= 3) j3.setFlag("phase5_done");
+            if (doneCount >= 3) { j3.setFlag("phase5_done"); j3.setFlag("cle_reserve"); }
             setDialogOpen(false);
           }} />
       )}

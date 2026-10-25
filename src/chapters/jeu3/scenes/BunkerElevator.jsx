@@ -18,15 +18,16 @@ import { MISSIONS_RUMEURS, getMissionOrder } from "../missions.js";
    (flag graffiti_vus = liste des ids déjà vus).
    ============================================================ */
 
-/* Ordre du récit : Kova, une 2e rumeur, Tchatine, l'arrestation de
-   Jorge, les trois voyages K. Chaque tag dépend de sa propre étape,
+/* Ordre du récit : Kova, une 2e rumeur, le 2e caillou d'Al3x1a
+   (le livre 529 de la bibliothèque), l'arrestation de Jorge, les
+   trois voyages K. Chaque tag dépend de sa propre étape,
    l'ordre dans lequel le joueur les fait n'a pas d'importance. */
 const GRAFFITIS = [
   { id: "qui", when: (f) => !!f.mission_kova_done,
     caption: "Sur le miroir, quelqu'un a écrit au feutre : « QUI L'A ÉCRIT ? ». À côté, un petit dessin : un sablier traversé d'un fil." },
   { id: "fils", when: (f) => getMissionOrder(f).filter((id) => f[MISSIONS_RUMEURS[id]?.flag]).length >= 2,
     caption: "Au-dessus du tableau, sur la peinture grise toute fraîche, un tag à la bombe : « LES FILS DU TEMPS SE SOUVIENNENT », signé du même sablier." },
-  { id: "verifie", when: (f) => !!f.mission_tchatine_done,
+  { id: "verifie", when: (f) => !!f.caillou_temps,
     caption: "Sur la porte de gauche, deux mots peints à la bombe : « VÉRIFIE. RECOUPE. »" },
   { id: "jorge", when: (f) => !!f.jorge_arrete,
     caption: "Sur la porte de droite, la peinture coule encore : « LIBÉREZ JORGE ». Jorge est en cellule : quelqu'un d'autre écrit ces messages." },

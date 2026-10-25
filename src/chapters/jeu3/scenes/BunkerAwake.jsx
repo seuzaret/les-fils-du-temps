@@ -13,7 +13,7 @@ import ChambreN27Decor from "../ChambreN27Decor.jsx";
      STEPS        — Jeu 3 lancé depuis le menu : tout le réveil.
      STEPS_SUITE  — Jeu 3 lancé juste après la fin du Jeu 2, qui a
                     déjà montré le réveil en N-27, l'annonce de
-                    MARTINE au mur, la tablette et la voix radio :
+                    MARTINE au mur, le carton et la veste :
                     on enchaîne sans le répéter (flag from_finjeu2,
                     posé par App.jsx).
    ============================================================ */
@@ -28,6 +28,7 @@ const STEPS = [
   { mode: "black", text: "Est-ce que tu as rêvé tout ça ?", big: true },
   { mode: "room",  text: "Ton téléphone sur le bureau est noir, muet. Tu essaies de l'allumer. Rien." },
   { mode: "room",  text: "Sur le mur, un écran : « RÉSEAU M · Bienvenue, HABITANT N-27 ». Tu ne connais pas ce logo." },
+  { mode: "room",  text: "Au pied du lit, un carton à ton numéro : « N-27 · EFFETS ». Une vieille veste en dépasse. Tu ne te souviens pas de l'avoir portée." },
   { mode: "room",  text: "Sur la porte : « N-27 · Habitant · Niveau 0 ». Il faut sortir voir." },
 ];
 const STEPS_SUITE = [
@@ -99,7 +100,7 @@ export default function BunkerAwake({ onGo, j3 }) {
 function RoomSvg({ dim }) {
   return (
     <svg viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" style={{ display: "block", width: "100%", flex: 1, minHeight: 0 }}>
-      <ChambreN27Decor dim={dim} shelfTablet="off"
+      <ChambreN27Decor dim={dim} veste="off"
         deskExtras={
           /* ton téléphone, noir, muet, posé sur le bureau */
           <g transform="translate(96,-6)">

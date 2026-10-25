@@ -3,9 +3,11 @@ import ChambreVoisinDecor from "../ChambreVoisinDecor.jsx";
 import { PNJ_ROOMS } from "../pnj.js";
 
 /* ============================================================
-   N-24 · Lior — chambre d'un insomniaque scotché à la radio.
+   N-24 · Lior — chambre d'un insomniaque. Sa vieille radio ne
+   diffuse plus que MARTINE : la nuit, il lit à la bibliothèque.
    Extras : matelas au sol supplémentaire, câbles au mur, poste
-   radio à lampes, cendrier plein, tapisserie décollée.
+   radio à lampes, cendrier plein, tapisserie décollée, une pile
+   de livres empruntés (étiquettes de cote).
    ============================================================ */
 export default function BunkerChambre24({ onGo, j3 }) {
   const extras = (
@@ -15,6 +17,15 @@ export default function BunkerChambre24({ onGo, j3 }) {
       {/* Câbles au mur en désordre */}
       <path d="M240 60 Q280 100 320 80 Q360 120 400 90 Q440 130 480 100" stroke="#c8a848" strokeWidth="1.2" fill="none" opacity="0.8" />
       <path d="M240 60 Q280 100 320 80 Q360 120 400 90 Q440 130 480 100" stroke="#8a1010" strokeWidth="0.8" fill="none" opacity="0.7" />
+      {/* Livres empruntés à la bibliothèque, empilés au sol */}
+      <g transform="translate(470,402)">
+        {[["#b03a3a", 0, 64], ["#3a8ac8", 4, 56], ["#4aa86a", -2, 60]].map(([c, dx, w], i) => (
+          <g key={i} transform={`translate(${dx},${-12 * (i + 1)})`}>
+            <rect x="0" y="0" width={w} height="11" fill={c} stroke="#0a0806" strokeWidth="0.6" />
+            <rect x={w - 14} y="2" width="10" height="7" fill="#f4f0e4" />
+          </g>
+        ))}
+      </g>
       {/* Poste radio à lampes sur le bureau */}
       <g transform="translate(660,320)">
         <rect x="-40" y="0" width="80" height="34" fill="#5a3818" stroke="#1a0e08" strokeWidth="1.5" />

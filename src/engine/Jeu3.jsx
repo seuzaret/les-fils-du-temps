@@ -23,12 +23,14 @@ import BunkerChapelle from "../chapters/jeu3/scenes/BunkerChapelle.jsx";
 import BunkerServeurs from "../chapters/jeu3/scenes/BunkerServeurs.jsx";
 import BunkerDormants from "../chapters/jeu3/scenes/BunkerDormants.jsx";
 import BunkerSerres from "../chapters/jeu3/scenes/BunkerSerres.jsx";
+import BunkerBibliotheque from "../chapters/jeu3/scenes/BunkerBibliotheque.jsx";
 import BunkerMinimap from "../chapters/jeu3/BunkerMinimap.jsx";
 import MediadexPanel from "../chapters/jeu3/MediadexPanel.jsx";
 import BilletOverlay from "../chapters/jeu3/BilletOverlay.jsx";
 import InterviewPanel from "../chapters/jeu3/InterviewPanel.jsx";
 import EnqueteCarnet from "../chapters/jeu3/EnqueteCarnet.jsx";
-import { MISSIONS_RUMEURS, MISSIONS_OSINT, getActiveMission, pickMissionOrder } from "../chapters/jeu3/missions.js";
+import CaillouxPanel from "../chapters/jeu3/CaillouxPanel.jsx";
+import { MISSIONS_RUMEURS, getActiveMission, pickMissionOrder } from "../chapters/jeu3/missions.js";
 import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
 
 /* ============================================================
@@ -68,6 +70,7 @@ const ROOMS = {
   infirmerie: { Comp: BunkerInfirmerie, label: "Infirmerie" },
   atelier:    { Comp: BunkerAtelier,    label: "Atelier des Ingénieurs" },
   chapelle:   { Comp: BunkerChapelle,   label: "Chapelle des Anciens" },
+  bibliotheque: { Comp: BunkerBibliotheque, label: "Bibliothèque" },
   serres:     { Comp: BunkerSerres,     label: "Serres hydroponiques · Niveau -2" },
   dormants:   { Comp: BunkerDormants,   label: "⚠ Niveau -3 · « Salle de repos »" },
   serveurs:   { Comp: BunkerServeurs,   label: "⚠ Niveau -3 · Serveurs" },
@@ -116,6 +119,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null);
   const [carnetOpen, setCarnetOpen] = useState(false);
   const [mediadexOpen, setMediadexOpen] = useState(false);
+  const [caillouxOpen, setCaillouxOpen] = useState(false);
   /* Mode triche : Ctrl+Shift+C toggle. Quand actif, la mini-carte redevient
      cliquable pour se téléporter d'un étage à l'autre sans passer par
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
@@ -147,7 +151,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
      vaut la salle elle-même — auquel cas "Retour au couloir" doit renvoyer à
      l'ascenseur plutôt que sur la salle courante. */
   const hubRoom = lvlHubRoom && lvlHubRoom !== room ? lvlHubRoom : "elevator";
-  const missions = { ...MISSIONS_RUMEURS, ...MISSIONS_OSINT };
+  const missions = MISSIONS_RUMEURS;
   const activeMission = getActiveMission(missions, flags);
 
   /* Reset de l'état d'enquête quand la mission active change
@@ -231,6 +235,12 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
               📘 Médiadex
             </button>
           )}
+          {flags.caillou_veste && (
+            <button onClick={() => setCaillouxOpen(true)} data-cailloux="1"
+              style={{ background: "#1a1408", color: "#e8dfc8", border: "2px solid #8a7a5a", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+              🪨 Cailloux
+            </button>
+          )}
           {activeMission && flags.puits_billet && (
             <button onClick={() => setCarnetOpen(true)}
               style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
@@ -292,6 +302,10 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
 
       {mediadexOpen && (
         <MediadexPanel onClose={() => setMediadexOpen(false)} />
+      )}
+
+      {caillouxOpen && (
+        <CaillouxPanel flags={flags} setFlag={setFlag} onClose={() => setCaillouxOpen(false)} />
       )}
     </div>
   );
