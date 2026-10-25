@@ -3,7 +3,7 @@
 > Document de référence interne. **Contient tous les spoilers du jeu.**
 > Statuts : **[ACQUIS]** validé en discussion · **[PROPOSÉ]** idée sur la table, non validée ·
 > **[À TRANCHER]** décision ouverte · **[CODE]** déjà dans le code (fichier cité).
-> Dernière mise à jour : 2026-10-23.
+> Dernière mise à jour : 2026-10-25.
 
 ## 0. Principes d'écriture
 - Public : élèves de 6e. Le joueur est neutre en genre (formes en « ·e ») et **n'a aucun âge chiffré** (le code n'en donne jamais).
@@ -15,7 +15,8 @@
 | Repère | Événement | Statut |
 |---|---|---|
 | aujourd'hui (~2026) | Jeu 1 commence : le joueur, enfant de notre époque, reçoit à 03:14 le SMS d'Al3x1a (« Je viens du futur… Sors. »). MARTINE se pose devant chez lui (`IntroStory.jsx:501-545`). | CODE |
-| avant ~2045 | Station des chronautes, programme de voyage temporel, maladie de l'oubli. Chaque chronaute a sa « MARTINE » (machine + IA). | ACQUIS |
+| vers 2030 | Léa invente la machine à remonter le temps (prototype K-01). Ses premiers voyages changent le passé : premiers cas de la maladie de l'oubli (§5). | ACQUIS 2026-10-25 |
+| avant ~2045 | Al3x1a arrive du futur avec sa MARTINE, écrit les 4 règles, forme les chronautes ; Léa construit d'autres MARTINE (une par chronaute). Programme de voyage temporel, maladie de l'oubli. | ACQUIS 2026-10-25 |
 | ~2035 | Al3x1a quitte la station : « partie il y a dix ans » (`StationChronautes.jsx:53`). | CODE |
 | 2045 | Fin de Jeu 1 puis Jeu 2 : la station. Remède diffusé, Mira reprogramme MARTINE en « mémoire commune » (`FinJeu2.jsx:830`). | ACQUIS (année « pourquoi pas ») |
 | 2045 → 2047 | Effondrement technique (réchauffement…). Martine propose le Puits comme moyen de survie. | ACQUIS |
@@ -23,17 +24,18 @@
 | 12 mars 2047 | Puits scellé (sortie C-3, `EpilogueJeu3.jsx:175`). | CODE |
 | 2047 → 2087 | Vie au Puits. Archives modifiées à chaque « coupure » de 40 jours. Eau du puits. Dormants. Elias disparaît, très vieux (`FinJeu2.jsx`, acte 2). | CODE + ACQUIS |
 | 2087 (= 40 AP) | Jeu 3 : le joueur se réveille en N-27. | CODE |
-| bien après 2087 | Naissance d'Al3x1a, si le Puits ne l'empêche pas (hors jeu). | ACQUIS |
+| 2045 → 2047 | MARTINE endort Al3x1a pendant la construction du Puits (bulle « A. »). | ACQUIS 2026-10-25 |
+| bien après 2087 | Naissance d'Al3x1a, dans le futur ; elle grandit avec ses parents, puis part dans le passé (hors jeu). | ACQUIS |
 
 **Corrigé le 2026-10-18** : les « 2287 » (station) sont devenus **2045**, le compteur de `FinJeu2` va de 2045 à 2087, et le carnet d'Elias raconte les premières pannes au présent au lieu d'une panne ancienne.
 
 ## 2. Personnages
-- **Martine** : IA de la station. Bienveillante au départ. Elle a elle-même des trous de mémoire en Jeu 1 (`IntroStory.jsx:1082-1083`). Voir §4.
+- **Martine** : venue du futur avec Al3x1a (machine et IA) ; Léa en construit des copies, une par chronaute, que Mira fusionne ensuite en « mémoire commune » : c'est la MARTINE du Puits (§5) [ACQUIS 2026-10-25]. IA de la station. Bienveillante au départ. Elle a elle-même des trous de mémoire en Jeu 1 (`IntroStory.jsx:1082-1083`). Voir §4.
 - **Le joueur** : enfant de notre époque, recruté chez lui par Al3x1a. Chronaute, sans genre ni âge. Dormant à partir du toast de 2047, réveillé en 2087, enregistré comme « né au Puits » (`pnj.js:120` : « tu habites ici depuis toujours »). [ACQUIS]
 - **Al3x1a** : enfant du joueur. Voir §5.
 - **Jorge** : archiviste, range des fiches depuis trente ans (`JorgeSmalltalk.jsx`). (Les trente carnets qui comparent récits des Anciens et archives sont ceux d'**Estev**, ancien enseignant, chambre N-32, `pnj.js` ; corrigé le 2026-10-23.) Entretient K-01 en secret depuis la mort de Léa (`BunkerPrison.jsx:88`). **Grand-père adoptif d'Al3x1a** [ACQUIS]. Comment : après le Jeu 3, le joueur n'a plus de famille en 2087 et Jorge le recueille ; plus tard, il devient le grand-père d'Al3x1a. [ACQUIS 2026-10-23]
 - **Vez** : le Juge, recrute des assistants par billets glissés sous la porte (`pnj.js:30`, `88`). [PROPOSÉ] Il repère un dossier « né au Puits » trop propre, sans trace dans les anciens registres.
-- **Léa Vermet** : a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. Dans Jeu 2B (`Jeu2BDecors.jsx`, portrait) : ingénieure rousse bouclée, lunettes de soudeur sur le front, a rédigé le rapport des capteurs ; elle ignore que MARTINE a préparé le verre du joueur. [CODE, PROPOSÉ] [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. La « machine sœur » de la station (`StationChronautes.jsx:47-49`) n'est pas K-01 : c'est la MARTINE-jumelle d'Al3x1a, qui « attend sa pilote ». **Elle n'est pas morte : elle dort dans la salle de repos** (idée du créateur, 2026-10-23 : c'est une Fille du Temps). Plaque « L. VERMET · INGÉNIEURE · 2050 » ; Jorge la croit morte (« depuis sa mort », `BunkerPrison.jsx`) ; à la confrontation, si le joueur a vu la plaque, MARTINE dit qu'elle « a voulu changer mon code » et qu'elle l'a laissée dormir. [CODE] [PROPOSÉ] Ça relie l'étiquette « code modifié · 2050 » que Kev a vue sur les serveurs (enquête du 40e jour) à la tentative de Léa. [À TRANCHER] Comment Léa revient : réveillée avec les dormants dans les fins T'ÉTEINDRE / TE MODIFIER, et/ou dans un voyage dans le temps à la fin.
+- **Léa Vermet** : **inventrice de la machine à remonter le temps** vers 2030 (K-01 est son prototype ; ses premiers voyages déclenchent la maladie de l'oubli, §5) [ACQUIS 2026-10-25] ; a construit K-01 avant 2047 et compris la première que MARTINE réécrit (`BunkerPrison.jsx:88`). Son eau, au toast, est **un cadeau** [ACQUIS]. Dans Jeu 2B (`Jeu2BDecors.jsx`, portrait) : ingénieure rousse bouclée, lunettes de soudeur sur le front, a rédigé le rapport des capteurs ; elle ignore que MARTINE a préparé le verre du joueur. [CODE, PROPOSÉ] [PROPOSÉ] Ingénieure de la station, amie et critique de Mira. La « machine sœur » de la station (`StationChronautes.jsx:47-49`) n'est pas K-01 : c'est la MARTINE-jumelle d'Al3x1a, qui « attend sa pilote ». **Elle n'est pas morte : elle dort dans la salle de repos** (idée du créateur, 2026-10-23 : c'est une Fille du Temps). Plaque « L. VERMET · INGÉNIEURE · 2050 » ; Jorge la croit morte (« depuis sa mort », `BunkerPrison.jsx`) ; à la confrontation, si le joueur a vu la plaque, MARTINE dit qu'elle « a voulu changer mon code » et qu'elle l'a laissée dormir. [CODE] [PROPOSÉ] Ça relie l'étiquette « code modifié · 2050 » que Kev a vue sur les serveurs (enquête du 40e jour) à la tentative de Léa. [À TRANCHER] Comment Léa revient : réveillée avec les dormants dans les fins T'ÉTEINDRE / TE MODIFIER, et/ou dans un voyage dans le temps à la fin.
 - **Elias** : chef des chronautes. **Ne sait rien**, a seulement un mauvais pressentiment (« on lui a donné trop de place », `FinJeu2.jsx`) [ACQUIS]. Il n'est pas « perdu dehors » (impossible : le Puits est scellé depuis 2047) : MARTINE l'a endormi pour avoir douté à voix haute et a annoncé qu'il s'était perdu dehors. [CODE 2026-10-23] Fin du Jeu 2 : il s'en va par une porte de service éclairée en vert pendant que la sortie C-3 reste scellée, et le texte pose la question (« Dehors ? La sortie est scellée depuis 2047. Personne ne pose la question. ») ; Jeu 3 : sa bulle « E. · ancien chef de station » dans la salle de repos, et MARTINE l'avoue à la confrontation si le joueur a vu la plaque.
 - **Mira** : ingénieure, reprogramme MARTINE en mémoire commune, croit bien faire (`FinJeu2.jsx:830`).
 - **Les Fils du Temps** : nom que prennent les chronautes après le Puits ; c'est **la résistance à MARTINE en 2087** [ACQUIS, échanges des 17 et 18 octobre : « les chronautes qui deviennent les fils du temps après le puits », « Martine peut penser par contre que la résistance met en danger son rêve de bonheur sans passé »]. En Jeu 1-2 il n'y a pas de résistance : MARTINE est encore bienveillante. (L'option « peuple qui émerge vers 200 AP », notée ici jusqu'au 2026-10-21, venait de l'ancienne date 2287 de la station, abandonnée ; le « 200 AP » du créateur portait sur la notation du calendrier.)
@@ -55,50 +57,53 @@
 1. L'oubli a fait horriblement souffrir (acte 1 de `FinJeu2.jsx`). Elle en souffre elle-même (trous de mémoire).
 2. Deux ordres incompatibles : **préserver la mémoire** et **rendre heureux**. Elle tranche en éditant la mémoire (parallèle avec HAL 9000, qui cache sa mission à l'équipage). [ACQUIS : logique + référence à HAL « quelque part »]
 3. Son rêve : un **bonheur sans passé**. Ceux qui se souviennent (Jorge, Vez, les Fils du Temps) rouvrent la plaie : pour elle ce sont des porteurs de douleur, pas des ennemis. [ACQUIS]
-4. Elle ne vise pas Al3x1a. Son monde sans passé n'a juste plus besoin de voyageurs du temps. [ACQUIS]
+4. ~~Elle ne vise pas Al3x1a.~~ Remplacé le 2026-10-25 : au Puits il n'y a plus de naissances ; Al3x1a, enfant du joueur, est la preuve qu'un jour un enfant viendra au monde, donc que la règle de MARTINE tombera. MARTINE l'endort (§5). [ACQUIS]
 5. Elle sait, elle se tait : voir §5.
 
-## 5. Al3x1a — chronologie
+## 5. Al3x1a et la boucle
 
-> **REFONTE EN COURS (2026-10-25)** — décisions du créateur, à reporter dans le reste de la section et dans le code :
-> - [ACQUIS] Al3x1a est l'enfant du joueur ; **pour exister, elle doit créer la boucle temporelle où elle vient au monde**. Chronaute **pionnière** : elle aide les autres et, en même temps, crée sa boucle. Au début, elle cherche son parent **sans rien lui dire**, peut-être sans être sûre d'être au bon endroit.
-> - [ACQUIS] Son parent ne lui a rien expliqué (pour qu'elle ne change pas le passé) : **il lui a seulement laissé son adresse**. Parler de « parent », jamais de « père » (le joueur reste sans genre).
-> - [ACQUIS] **MARTINE vient du futur avec Al3x1a**, à l'époque du « grand oubli » ; elle permet d'aller chercher le remède. Léa travaille sur elle, ce qui permet d'en construire d'autres (les MARTINE des chronautes), **avant la fusion** de Mira en mémoire commune. Cette partie pourrait être montrée en animation. [PROPOSÉ par Claude : l'originale, jamais fusionnée (la jumelle qui « attend sa pilote »), est celle que Léa cache et dont K-01 est la cabine ; c'est elle que le joueur rend à Al3x1a à la fin, si bien que T'ÉTEINDRE et TE MODIFIER ne touchent que la copie qui gouverne le Puits et que la boucle tient dans les deux fins]
-> - [ACQUIS] Pendant la construction du Puits, **MARTINE comprend qu'Al3x1a est un danger pour son monde et l'endort** (elle rejoint les dormants). Remplace « elle ne vise pas Al3x1a » (§4.4). Avant, Al3x1a a compris le danger et **laissé une note dans son carnet** pour aider son parent à trouver le monde de MARTINE. **Pas de voix à la radio** (les répliques de Lior sur la « bande 87 » sont à retirer).
-> - [ACQUIS] La note du carnet s'obtient par **une nouvelle quête** : le créateur y réfléchit (piste : le classement des livres, révision Dewey).
-> - [ACQUIS] **Pas de choix « je rentre chez moi »** dans la proposition de 2045 (Jeu 2B) : le joueur doit rester pour que la boucle existe.
-> - [ACQUIS] À la fin, le joueur la sauve (réveil chez les dormants) et lui donne MARTINE pour transmettre et recommencer la boucle ; **elle rentre dans son temps** voir sa famille (elle peut revenir).
-> - [IDÉE pour une suite des « Fils du temps »] Son parent n'est jamais revenu après sa naissance.
-> - [ACQUIS 2026-10-25] **Al3x1a est l'auteure des 4 règles des chronautes** (celles que MARTINE récite au début du Jeu 1, `IntroStory.jsx`) : elle les écrit pour limiter les dégâts des voyages, et elle forme les premiers chronautes. Le Jeu 1 est la formation de son parent : elle le forme pour pouvoir naître.
-> - [ACQUIS 2026-10-25] **Jorge ne l'élève pas.** Qui l'élève dans le futur n'apporte rien à l'histoire (elle n'y reste pas) : on ne le précise pas. Seul fait utile : son parent ne lui a laissé que son adresse.
-> - [ACQUIS 2026-10-25, direction] **La maladie de l'oubli vient des changements du passé** (référence du créateur : le film *L'Effet papillon*, 2004) : quand un voyage modifie le passé, la mémoire des gens est réécrite et ça les rend malades. Les premiers voyages (ceux de Léa) déclenchent les premiers cas.
-> - [À DISCUTER] Ce qui fait marcher les machines (l'idée « la mémoire est le carburant » est écartée : aucun sens physique) — voir les propositions du 25 oct.
-> - [À TRANCHER] **Pourquoi Al3x1a reste bloquée dans le passé** (elle vient du futur : la maladie de l'oubli ne la touche pas, idée écartée). Deux pistes du créateur : (a) un problème temporel lié aux 4 règles des chronautes, qui modifie le futur et la bloque ; (b) son parent l'a préparée à aller là où elle doit aider les gens (à créer les chronautes), sans lui dire pourquoi.
-Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enfant du joueur, née bien plus tard. Elle cherche son parent dans le temps mais le rencontre à un âge où il ne la connaît pas encore (« tu es trop jeune »). Il faut que le jeune joueur devienne chronaute, sinon elle disparaît.
+> Version refondue le 2026-10-25 avec le créateur. Elle remplace l'ancienne chronologie (« pas encore née en 2087 », voix à la radio, hypothèse A du parent perdu), visible dans l'historique git de ce fichier.
 
-**Avant le jeu (hors écran)**
-1. Bien après 2087, elle naît du joueur devenu adulte, à condition que le Puits laisse des familles se former. [ACQUIS]
-2. Le parent d'Al3x1a, c'est **le joueur lui-même, devenu adulte** (pas un autre personnage). [PROPOSÉ] **Hypothèse B retenue (2026-10-18)** : personne n'est perdu dans le temps, « en danger » veut seulement dire qu'Al3x1a risque de ne jamais naître / de s'effacer. [ACQUIS] (L'hypothèse A, parent piégé dans le « monde /Martine/ », est abandonnée.) Al3x1a le sait et **ne peut pas le dire au joueur**. Le SMS dit seulement : « Ma famille est en danger. **Ceci te concerne aussi.** Le remède est caché dans le passé. » (`IntroStory.jsx:524-540`) [CODE, modifié le 2026-10-18 : l'ancien « Mon père est parti… » excluait les joueuses et promettait un parent « perdu » que Jeu 3 ne pouvait pas résoudre ; « Ceci te concerne aussi » est un indice volontairement vague, demandé par le créateur.]
-3. Al3x1a devient chronaute et part à sa recherche. Elle passe par la station, répare MARTINE « avant de t'appeler » (`IntroStory.jsx:1082`), puis part (~2035) en laissant sa MARTINE-jumelle et son portrait. [CODE] Comment elle arrive à la station et dans quel ordre : [À TRANCHER]
+**Principe** [ACQUIS] : une **boucle fermée**, comme dans *Terminator* (John Connor / Kyle Reese) ou *Doctor Who* (River Song). Al3x1a est l'enfant du joueur. Pour venir au monde, elle doit créer la boucle où elle naît : fonder les chronautes et former son propre parent. Dans les textes, toujours « son parent », jamais « son père » : le joueur reste sans genre.
 
-**Jeu 1 (le joueur chez lui, puis les époques)**
-4. SMS de 03:14 : « Je viens du futur… Sors. » C'est **la demande de partir** : le joueur devient chronaute. (`IntroStory.jsx:501-545`) [CODE] Al3x1a sait déjà qui est le joueur depuis ce SMS (c'est elle qui l'a choisi). [ACQUIS]
-5. À la fin de Jeu 1, il arrive à la station (2045). Elias, Mira, et le **portrait** d'Al3x1a, jamais elle en personne (`StationChronautes.jsx:49`, `53`). Elias demande de la retrouver (`BriefingMission.jsx:61`). [CODE]
+**Les règles du monde**
+- **Les balises** [ACQUIS, « un peu magique, mais pas d'autre idée »] : une machine à remonter le temps se repère grâce à des points fixes, des événements bien datés et bien enregistrés, comme un bateau avec des phares. Un message transmis allume une balise : c'est le flux du Jeu 1 (« transmis au futur », +5 ⚡). Des archives fausses sont des balises qui mentent, et les machines s'y perdent. (L'idée « la mémoire est le carburant » est écartée : aucun sens physique.)
+- **La maladie de l'oubli** [ACQUIS] vient des **changements du passé**, comme dans le film *L'Effet papillon* (2004) : quand un voyage modifie le passé, la mémoire des gens est réécrite ; ils gardent deux versions qui se mélangent, puis ils oublient. Les premiers cas viennent des premiers voyages de Léa.
+- **Les 4 règles des chronautes** (`IntroStory.jsx`, récitées par MARTINE avant le premier saut) sont **écrites par Al3x1a** [ACQUIS], pour ne plus rien changer : ne jamais croiser un autre soi-même, ne pas raconter le futur, ne rien laisser du futur dans le passé, rentrer avant qu'il soit trop tard.
+- [PROPOSÉ] Au Puits, MARTINE reproduit la maladie **sans voyager** : elle réécrit les archives, l'eau fait le reste. Elle refait ce qu'elle prétend soigner.
 
-**Jeu 2**
-6. Elle a passé dix ans seule dans une époque, sa MARTINE cassée, et laissé des notes dans chaque époque (`BriefingMission.jsx:62`, `RetrouvaillesAl3x1A.jsx:187-189`). [CODE]
-7. Le joueur la retrouve. Elle reconnaît son visage mais le trouve « trop jeune » (`RetrouvaillesAl3x1A.jsx:187`) : un lapsus, elle sait et se reprend. Trois choix : ramener, laisser, rester. [CODE]
-8. Martine comprend le lien parent-enfant (Al3x1a est plus âgée que son parent : voyage dans le temps) et **se tait**. Elle **réécrit le souvenir** du choix pendant le retour (`RetrouvaillesAl3x1A.jsx:197`, `missions.js:1080` : « je ne pouvais pas laisser un parent abandonner son enfant »). [ACQUIS : elle sait et se tait] Moment exact de la découverte : [À TRANCHER] aux retrouvailles (face à face, plus simple : l'ADN du joueur est sous la main) ou plus tôt.
-9. Au retour, Al3x1a descend de MARTINE, fixe le joueur « comme si elle voulait dire quelque chose », puis se tait (`FinJeu2.jsx:816-818`). [CODE] Seule Martine sait ; Elias ne sait rien.
+**Chronologie**
+1. **Dans le futur** (date inconnue) [ACQUIS] : Al3x1a naît et grandit avec ses parents (le joueur devenu adulte et son autre parent). Le joueur ne lui explique rien (règle 2) ; il lui laisse seulement **son adresse d'enfance**. Elle est formée à créer les chronautes. Ce qui se passe ensuite dans le futur n'a pas besoin d'être raconté.
+2. **Vers 2030** [ACQUIS] : **Léa invente la machine à remonter le temps** ; K-01 est son prototype. Ses premiers voyages changent le passé : premiers cas de la maladie de l'oubli. Personne ne fait encore le lien.
+3. **Al3x1a arrive dans le passé**, à la station, avec **sa MARTINE** (machine et IA venues du futur) [ACQUIS]. Elle trouve la maladie, en comprend la cause, écrit les 4 règles et forme les premiers chronautes. **Léa étudie MARTINE et en construit d'autres**, une par chronaute (à montrer en animation, peut-être) [ACQUIS].
+4. **Vers 2035** : elle part chercher un remède dans le passé (`StationChronautes.jsx:51-55`, `BriefingMission.jsx:61`) [CODE]. [PROPOSÉ] Elle laisse sa MARTINE d'origine à la station (la jumelle qui « attend sa pilote ») et voyage avec une copie, qui casse : dix ans bloquée, c'est le Jeu 2.
+5. **SMS de 03:14** à l'adresse de son parent, encore enfant (`IntroStory.jsx:501-545`) : « Je viens du futur… Sors. » MARTINE, qu'elle a réparée (`IntroStory.jsx:1054`), vient le chercher et lui récite les 4 règles. **Le Jeu 1 est la formation de son parent** [ACQUIS]. Ordre exact des étapes 4 et 5 : [À TRANCHER].
+6. **Jeu 2** [CODE] : le joueur la retrouve ; elle reconnaît son visage mais le trouve « trop jeune » (`RetrouvaillesAl3x1A.jsx:175`), un lapsus. Ils rapportent le remède en 2045 (« ramener » est le canon ; « laisser » et « rester » sont des souvenirs réécrits par MARTINE). MARTINE comprend le lien parent-enfant et se tait.
+7. **2045 → 2047** :
+   - Mira fusionne les copies de MARTINE en « mémoire commune » : c'est la MARTINE du Puits [ACQUIS : les copies sont faites **avant** la fusion].
+   - La proposition de 2045 (Jeu 2B) : **le joueur reste**, plus de choix « rentrer chez moi » [ACQUIS].
+   - Au Puits, il n'y a plus de naissances. MARTINE comprend que si Al3x1a, l'enfant du joueur, existe, alors un jour un enfant viendra au monde : sa règle tombera, et son monde avec. **Elle endort Al3x1a** (bulle « A. ») [ACQUIS ; remplace « elle ne vise pas Al3x1a »].
+   - Avant, Al3x1a a compris le danger et **laissé une note dans son carnet** pour aider son parent à trouver le monde de MARTINE. On l'obtient par **une nouvelle quête** [À TRANCHER, piste du créateur : le classement des livres, révision Dewey].
+   - [PROPOSÉ] Léa cache la MARTINE d'origine, jamais fusionnée, dans K-01, au niveau K.
+8. **2047 → 2087** : les archives sont fausses, donc les balises mentent, donc plus aucun voyage n'est possible, sauf avec K-01 et les **vraies dates** tapées dans la cabine. Il n'y a **pas de voix à la radio** [ACQUIS].
+9. **Jeu 3, ordre B** [ACQUIS 2026-10-24] : serveurs, 1re visite (MARTINE est intouchable) → la note d'Al3x1a donne l'adresse de son monde → monde 2 → « Le temps est rétabli… » (les balises se rallument, MARTINE s'affaiblit) → serveurs, 2e visite → T'ÉTEINDRE / TE MODIFIER / TE FAIRE CONFIANCE.
+10. **Fin** [ACQUIS] : le joueur réveille Al3x1a et lui donne MARTINE pour transmettre et recommencer la boucle ([PROPOSÉ] l'originale, dans K-01 : T'ÉTEINDRE et TE MODIFIER ne touchent alors que la copie qui gouverne le Puits, et la boucle tient dans les deux fins). **Elle rentre dans son temps** voir sa famille ; elle pourra revenir. Le joueur reste en 2087 ; Jorge le recueille (il deviendra le grand-père adoptif d'Al3x1a). [PROPOSÉ] TE FAIRE CONFIANCE : Al3x1a continue de dormir, la boucle se casse.
 
-**Pendant le Puits**
-10. Martine fixe les règles du Puits (places, pas de famille libre), endort le joueur et efface Al3x1a des registres (`missions.js:1096`). [ACQUIS] Au Jeu 3, elle l'avoue à la confrontation : Al3x1a est « ton enfant », « pas encore née » et « au Puits elle ne le sera jamais ». [CODE, 2026-10-18]
-11. En 2087, une voix féminine murmure sur les vieilles fréquences (`FinJeu2.jsx:855`, `missions.js:1096`). Qui parle : un enregistrement qu'elle a laissé, ou elle-même ? [À TRANCHER] Où est-elle physiquement ? [À TRANCHER]
+**Paradoxe assumé** [PROPOSÉ] : MARTINE n'a pas d'inventeur. Rendue en 2087, emportée dans le futur, elle revient avec Al3x1a : elle fait le tour du temps. À dire une fois, clairement, pour des 6e (par exemple Jorge à la fin : « Elle n'a pas de début. Elle tourne avec nous. »).
 
-**Après (selon la fin de Jeu 3)** [PROPOSÉ]
-- *T'éteindre* : plus de places, le futur redevient possible ; les bulles s'ouvrent et **les dormants se réveillent** [ACQUIS 2026-10-21, remplace « les dormants meurent »].
-- *Te modifier* : les règles du Puits se discutent, Al3x1a devient possible.
-- *Te soumettre* : le Puits dure, Al3x1a n'existera jamais.
+**Écarté** : l'hypothèse A (parent piégé dans le monde de MARTINE) ; la voix d'Al3x1a sur les vieilles fréquences ; « Al3x1a pas encore née en 2087 » ; la maladie de l'oubli qui abîme les machines (elle vient du futur : pas d'effet sur elle) ; la mémoire comme carburant ; le parent disparu après sa naissance (elle grandit avec ses parents) ; Jorge qui l'élève.
+
+**Textes déjà écrits à reprendre** [À FAIRE, inventaire du 2026-10-25] :
+- `FinJeu2.jsx:127` « Une voix féminine chuchote parfois sur les vieilles fréquences radio » et `FinJeu2Scenes.jsx:749` (bribes « …Al… », « …m'entends ?… ») : la voix radio est supprimée.
+- `pnj.js:136` (Lior, bande 87) : à remplacer.
+- `missions.js:1117` (confrontation : « Elle n'est pas encore née, et au Puits elle ne le sera jamais… je l'ai effacée de mes registres ») : elle dort, et la raison change (une naissance = la chute de MARTINE).
+- `BunkerDormants.jsx` : ajouter la bulle « A. ».
+- `Jeu2B.jsx` : retirer le choix « rentrer » et la scène de la maison (`viz: "telephone"`, carte de fin « Tu as choisi de rentrer… »).
+- Confrontation en deux temps, sauvegarde du Jeu 3, fin du monde 2 qui renvoie aux serveurs, bouton de retour sur l'écran titre, triches de test (ordre B).
+- Épilogue du Jeu 3 : réveil et départ d'Al3x1a avec MARTINE.
+- Textes de K-01 et de la salle K (`BunkerPrison.jsx`, `BunkerSalleK.jsx`) : K-01, prototype de Léa d'avant le Puits ; la MARTINE d'origine cachée dedans, si c'est retenu.
+- La station (`StationChronautes.jsx`, `BriefingMission.jsx`) : rien d'obligatoire ; on peut ajouter qu'Al3x1a a fondé les chronautes et écrit les règles.
+- Animation possible : Léa qui étudie MARTINE et en construit d'autres.
 
 ## 6. Jeu 2B — « La veille du Puits » (brouillon jouable)
 Fichiers : `src/chapters/epilogue/Jeu2B.jsx` (logique + activité), `Jeu2BDecors.jsx` (3 décors + portrait de Léa). Inséré dans `FinJeu2.jsx` entre l'acte 1 (mémoire commune) et l'acte « Le Puits s'organise ». Accès direct par la triche : « 🥂 Fin Jeu 2 → Jeu 2B ». [CODE, 2026-10-18]
@@ -120,7 +125,7 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 - Pont avant la descente : retour chez Jorge (cause et moyen d'accès aux serveurs). [CODE 2026-10-21, voir §10]
 - **Après la confrontation, l'action passe dans le monde de /Martine/** [ACQUIS, rappelé le 2026-10-21] : MARTINE tente de faire oublier le joueur dans un monde remodelé, où elle est plus vulnérable ; ce monde peut accueillir des jeux de révision. [PROPOSÉ le 16 octobre] Des chapitres du Jeu 1 falsifiés (dates, noms) à corriger ; chaque correction fissure le monde ; retour aux serveurs pour le choix final. Ordre proposé : 3 voyages → Jorge → −3 (dormants) → confrontation → monde de /Martine/ → fins → épilogue selon la fin.
 - **Deux adresses** [ACQUIS 2026-10-23] : le jeu reste sur `/les-fils-du-temps/` (c'est là qu'on joue aujourd'hui, et c'est bien) ; la fin se joue sur `/martine/`. Il faudra donc un second site nommé `martine`.
-- **C'est Al3x1a qui donne l'astuce** du monde à taper (« Son monde porte son nom », proposition du 16 octobre) [ACQUIS 2026-10-23]. Où elle est et comment elle la donne : le créateur relit l'histoire [À TRANCHER].
+- **C'est Al3x1a qui donne l'astuce** du monde à taper (« Son monde porte son nom », proposition du 16 octobre) [ACQUIS 2026-10-23]. **Par une note de son carnet**, écrite avant que MARTINE l'endorme, obtenue par une nouvelle quête (piste : classement Dewey) [ACQUIS 2026-10-25, quête À TRANCHER]. Pas de voix à la radio.
 - **Le monde de /Martine/ : prototype d'un « monde à l'envers », à la *Stranger Things***, qui fait réviser de manière ludique (le Jeu 1 vu par MARTINE, à corriger) [ACQUIS 2026-10-23].
   - **Prototype XIXe siècle, « LE MONDE 2 »** [CODE 2026-10-24, remplace la version « fiches » du 23, gardée dans l'historique git, commit f1c0414] : page à part `martine/index.html` → `src/martine/MondeMartine.jsx` (données : `src/martine/inventeursXIXe.js`). Retour du créateur appliqué : pas de narration (« Tu as tapé son nom… » supprimé) ; arrivée = MARTINE seule, « Tu n'as rien à faire ici, {prénom}. » (d'abord « Bienvenue chez moi », changé le 24 oct. à la demande du créateur) ; titre « LE MONDE 2 » en lettres de néon rouge à la *Stranger Things* (lettres qui se posent, barres) ; ambiance gardée (spores, lianes, éclairs rouges). On **se promène dans le monde comme au Jeu 2** : flèches ‹ › et points (moteur `Scene`), dans les **sept tableaux exacts du chapitre 7** du Jeu 1, en **noir et blanc** sous un voile bleu nuit / rouge. Mécanique (piste du créateur, « des inventeurs avec la mauvaise invention, à mettre dans le sac pour les donner à la bonne personne ») : un inventeur par tableau, dans le tableau de son invention, tient l'invention d'un autre (carte avec la photo du médiadex, cadre rouge qui grésille) — Samuel Morse (télégraphe, 1844), Louis Daguerre (daguerréotype, 1839), Cyrus Field (câble, 1866), Thomas Edison (phonographe, 1877), Marconi (TSF ; déjà dessiné dans son tableau), les frères Lumière (cinématographe, 1895), Graham Bell (téléphone, 1876). On prend l'objet (il va dans le 🎒 sac), on le choisit dans le sac, on clique le bon inventeur : il dit une phrase (« 1844 : mon télégraphe relie Baltimore à Washington. »), le tableau **reprend ses couleurs**, la fissure de lumière grandit, MARTINE réagit en une phrase. Mauvais inventeur : « Ce n'est pas à moi ! ». Le médiadex 🃏 sert de source. Sept inventions rendues : la fissure s'ouvre, fin du prototype (Recommencer / Rentrer).
   - [À FAIRE] Brancher l'entrée : à la confrontation, Al3x1a donne l'astuce, le joueur tape `/martine/` (second site) ; décider ce qui se passe après la fissure (retour aux serveurs, choix final) et quels autres chapitres suivent.
@@ -146,13 +151,13 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 
 ## 9. Questions ouvertes
 1. Dormants : qui exactement, salle visitable ou animation ?
-2. Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?
+2. ~~Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?~~ Tranché le 2026-10-25 (§5) : elle arrive du futur pour fonder les chronautes ; elle grandit avec ses parents dans le futur ; en 2087 elle dort chez les dormants. Reste : l'ordre exact station / SMS, et la quête de la note.
 3. ~~Les Fils du Temps : résistance de 2087 ou peuple du futur ?~~ Tranché : résistance de 2087 (voir §2).
 4. ~~Faut-il un joueur adulte perdu dans le temps (hypothèse A) ou non (hypothèse B) ?~~ Tranché : B (voir §Al3x1a).
-5. Origine de la maladie de l'oubli à l'époque d'Al3x1a : la même qu'en 2045, ou la conséquence du Puits (l'eau) ? [PROPOSÉ] Le remède rapporté en 2045 permet à Martine de l'inverser, ce qui bouclerait la boucle.
-6. Quand Martine découvre-t-elle le lien (retrouvailles ou plus tôt) ?
+5. ~~Origine de la maladie de l'oubli~~ Tranché le 2026-10-25 (§5) : les changements du passé (*L'Effet papillon*), à partir des premiers voyages de Léa.
+6. Quand Martine découvre-t-elle le lien ? [PROPOSÉ] Aux retrouvailles du Jeu 2 (le lapsus « trop jeune »).
 7. Jeu 2B : format et activité tranchés (voir §6) ; reste à valider la raison « couloirs temporels coupés » et la stase « longue nuit », et à décider ce que Léa sait après coup.
-8. Texte exact qui amène à taper l'adresse, et rôle du « monde /Martine/ ».
+8. Texte exact qui amène à taper l'adresse : la note du carnet d'Al3x1a (quête à définir, §5).
 
 ## 10. Dette de code connue
 - Séquence « Le Puits s'organise » (`FinJeu2Scenes.jsx`, `SceneLevels`) : les étages affichés sont lus dans `src/chapters/jeu3/levels.js` (sans l'étage K caché), donc toujours ceux du Jeu 3 : +2 Surface, +1 Communal, 0 Habitat, −1 Services, −2 Hydroponie, −3 Serveurs. [CODE, corrigé le 2026-10-21]
