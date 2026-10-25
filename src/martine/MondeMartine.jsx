@@ -6,6 +6,7 @@ import MediadexPanel from "../chapters/jeu3/MediadexPanel.jsx";
 import Retablissement from "./Retablissement.jsx";
 import { preparerVignettes } from "./vignettes.js";
 import { assetUrl } from "../engine/assetUrl.js";
+import useEcran from "../engine/useEcran.js";
 import { loadSave } from "../engine/save.js";
 import { playClink, playMaterialize } from "../engine/sfx.js";
 import { isMuted, setMuted } from "../engine/audio.js";
@@ -452,19 +453,21 @@ function Frise({ ici, etat, onEpoque }) {
 
 /* ───────────── le sac et la poubelle temporelle ───────────── */
 const objetDuSac = (id) => SUPPORTS[id] || FUTURS[id];
-function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
+/* vertical : colonne à droite du tableau (téléphone en paysage) */
+function Sac({ sac, choisi, onChoisir, onPoubelle, secoue, vertical = false }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 12, minHeight: 64,
+    <div style={{ display: "flex", flexDirection: vertical ? "column" : "row", alignItems: vertical ? "stretch" : "center", gap: vertical ? 6 : 10, padding: vertical ? 8 : "8px 12px", borderRadius: 12, minHeight: vertical ? 0 : 64,
+      height: vertical ? "100%" : undefined, boxSizing: "border-box",
       background: "linear-gradient(180deg, #1a0a10, #0c0408)", border: "1px solid #4a1a24", boxShadow: `0 0 16px ${RED}22` }}>
       <button onClick={onPoubelle} title="Poubelle temporelle : rien du futur dans le passé"
-        style={{ flex: "0 0 auto", display: "flex", flexDirection: "column", alignItems: "center", gap: 1, padding: "4px 8px", borderRadius: 10, cursor: "pointer",
+        style={{ flex: "0 0 auto", alignSelf: vertical ? "center" : undefined, display: "flex", flexDirection: "column", alignItems: "center", gap: 1, padding: "4px 8px", borderRadius: 10, cursor: "pointer",
           background: choisi ? "#2a1018" : "#12060a", border: `2px solid ${choisi ? RED : "#4a1a24"}`, color: "#ffb8be",
           boxShadow: choisi ? `0 0 12px ${RED}88` : "none", transition: "all .15s" }}>
         <span style={{ fontSize: 24, lineHeight: 1 }}>🗑️</span>
         <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 8.5, letterSpacing: 0.5, fontWeight: 800, whiteSpace: "nowrap" }}>POUBELLE TEMPORELLE</span>
       </button>
-      <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, letterSpacing: 1, color: "#ffb8be", whiteSpace: "nowrap" }}>🎒 SAC</span>
-      <div style={{ flex: 1, minWidth: 0, display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6, maxHeight: 96, overflowY: "auto", padding: "3px 0" }}>
+      <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, letterSpacing: 1, color: "#ffb8be", whiteSpace: "nowrap", textAlign: vertical ? "center" : undefined }}>🎒 SAC</span>
+      <div style={{ flex: 1, minWidth: 0, minHeight: 0, display: "flex", flexDirection: vertical ? "column" : "row", flexWrap: vertical ? "nowrap" : "wrap", alignItems: vertical ? "stretch" : "center", gap: 6, maxHeight: vertical ? "none" : 96, overflowY: "auto", padding: "3px 0" }}>
       {sac.length === 0 && <span style={{ fontSize: 13, color: "#7a5a64", fontStyle: "italic" }}>vide</span>}
       {sac.map((id) => {
         const on = choisi === id;
@@ -478,7 +481,7 @@ function Sac({ sac, choisi, onChoisir, onPoubelle, secoue }) {
             {o.image
               ? <img src={assetUrl(`assets/inventions/${o.image}`)} alt="" style={{ width: 42, height: 32, objectFit: "cover", borderRadius: 4 }} />
               : <span style={{ width: 42, height: 32, display: "grid", placeItems: "center", fontSize: 22, background: "#0a0408", borderRadius: 4 }}>{o.emoji}</span>}
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, whiteSpace: "nowrap" }}>{o.nom}</span>
+            <span style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{o.nom}</span>
           </button>
         );
       })}
@@ -572,6 +575,7 @@ function Monde({ page, phase, setPhase }) {
   };
   const cellule = useRef(null);
   const cadre = useCadre(cellule);
+  const ecran = useEcran();
   const n = useRef(0);
   const minuteurs = useRef([]);
   const vus = useRef({ tableaux: new Set(), epoques: new Set() });
@@ -740,6 +744,7 @@ function Monde({ page, phase, setPhase }) {
   }
 
   const monde = { etat, sortant, onCarte, onPerso, onFutur, bulle };
+  const paysageBas = ecran.bas && !ecran.portrait;
   const compteur = { fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 800, color: "#ffe8a0", whiteSpace: "nowrap" };
   const tableaux = TABLEAUX[ep.id];
   return (
@@ -750,9 +755,9 @@ function Monde({ page, phase, setPhase }) {
       <Spores />
 
       {/* en-tête : MARTINE · le titre · les compteurs et le médiadex */}
-      <div style={{ position: "relative", zIndex: 4, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 8, padding: "6px 12px 0" }}>
+      <div style={{ position: "relative", zIndex: 4, display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center", gap: 8, padding: paysageBas ? "3px 12px 0" : "6px 12px 0" }}>
         <div style={{ minWidth: 0 }}><MartineVoix texte={voix.texte} mood={voix.mood} /></div>
-        <TitreMonde2 taille={28} />
+        <TitreMonde2 taille={paysageBas ? 22 : 28} />
         <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
           <span data-compteur="persos" title="Personnages de cette époque qui ont retrouvé leur support" style={compteur}>🧑 {nbServis}/{persosIci.length}</span>
           <span data-compteur="futurs" title="Objets du futur de cette époque jetés" style={compteur}>🗑️ {nbJetes}/{futursIci.length}</span>
@@ -762,22 +767,30 @@ function Monde({ page, phase, setPhase }) {
         </div>
       </div>
       <div style={{ position: "relative", zIndex: 4, padding: "0 12px" }}>
-        <Crack progress={progres} h={12} />
+        <Crack progress={progres} h={paysageBas ? 6 : 12} />
         <Frise ici={ep.id} etat={etat} onEpoque={changerEpoque} />
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1, color: "#c8a8b0", margin: "2px 0 5px",
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: paysageBas ? 11 : 13, letterSpacing: 1, color: "#c8a8b0", margin: paysageBas ? "0 0 3px" : "2px 0 5px",
           whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {ep.chapitre.epoque.toUpperCase()} · {tableaux[tab].name}
         </div>
       </div>
 
-      {/* le tableau, avec la navigation du Jeu 2 */}
-      <div ref={cellule} style={{ position: "relative", zIndex: 4, flex: 1, minHeight: 0, padding: "0 12px", display: "flex", justifyContent: "center", alignItems: "center" }}>
+      {/* le tableau, avec la navigation du Jeu 2 ; téléphone en paysage :
+          le sac passe en colonne à droite, le tableau garde la hauteur */}
+      <div style={{ position: "relative", zIndex: 4, flex: 1, minHeight: 0, display: "flex" }}>
+      <div ref={cellule} style={{ position: "relative", flex: 1, minWidth: 0, minHeight: 0, padding: "0 12px", display: "flex", justifyContent: "center", alignItems: "center" }}>
         <div style={{ width: cadre ? cadre.w : "100%", height: cadre ? cadre.h : "100%", position: "relative" }}>
           <Scene key={ep.id} scenes={tableaux} tab={tab} onTab={setTab} sceneProps={{ monde }} linear={false} />
         </div>
       </div>
+      {paysageBas && (
+        <div style={{ flex: "0 0 168px", padding: "0 10px 8px 0", minHeight: 0 }}>
+          <Sac vertical sac={sac} choisi={choisi} secoue={refus} onPoubelle={onPoubelle} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />
+        </div>
+      )}
+      </div>
 
-      <div style={{ position: "relative", zIndex: 4, padding: "8px 12px 10px" }}>
+      <div style={{ position: "relative", zIndex: 4, padding: paysageBas ? 0 : "8px 12px 10px" }}>
         {toast && (
           <div key={toast.texte} style={{ position: "absolute", left: "50%", bottom: "100%", transform: "translateX(-50%)", marginBottom: 2, maxWidth: "92%", width: "max-content", zIndex: 5 }}>
             <div style={{ background: toast.ok ? "#0e1a12" : "#1a0408", color: toast.ok ? "#c8ffd8" : "#ffd8dc", border: `1px solid ${toast.ok ? "#5eff9e" : RED}`,
@@ -786,7 +799,7 @@ function Monde({ page, phase, setPhase }) {
             </div>
           </div>
         )}
-        <Sac sac={sac} choisi={choisi} secoue={refus} onPoubelle={onPoubelle} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />
+        {!paysageBas && <Sac sac={sac} choisi={choisi} secoue={refus} onPoubelle={onPoubelle} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />}
       </div>
       {mediadex && <MediadexPanel onClose={() => setMediadex(false)} />}
       {triche && (

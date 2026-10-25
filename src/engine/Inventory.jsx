@@ -108,7 +108,9 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
   /* ---------- BARRE en bas (tablette / écran étroit) ---------- */
   return (
     <div style={{ ...CUIR, borderLeft: "none", borderRight: "none", borderBottom: "none", WebkitUserSelect: "none", userSelect: "none", animation: shake ? "shake .5s" : "none" }}>
-      <div style={{ maxWidth: 980, margin: "0 auto", padding: "6px 12px 8px" }}>
+      {/* jeu 1 : la poubelle temporelle est fixée en bas à gauche (App) → on
+          lui laisse 76 px pour qu'elle ne cache ni le texte ni les objets */}
+      <div style={{ maxWidth: 980, margin: "0 auto", padding: mode === "jeu2" ? "6px 12px 8px" : "6px 12px 8px 76px" }}>
         <div style={{ fontSize: 10, letterSpacing: 1.5, color: "#c9a877", fontFamily: "ui-monospace,monospace", marginBottom: 5 }}>
           🎒 SAC ({inv.length}){mode === "jeu2" ? " — cherche les notes d'Al3x1A dans le décor" : " — glisse un élément sur un autre ou sur le décor pour combiner"}
           {selected && <span style={{ color: "#ffd166" }}> · {items[selected].name} en main : touche une cible…</span>}

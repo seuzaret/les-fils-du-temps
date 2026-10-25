@@ -18,10 +18,13 @@ import { useEffect, useRef, useState } from "react";
      </SceneFrame>
 
    Props :
-     ratio  — ratio du cadre (largeur / hauteur). Défaut 1000/560.
-     style  — style additionnel du wrapper externe.
+     ratio   — ratio du cadre (largeur / hauteur). Défaut 1000/560.
+     style   — style additionnel du wrapper externe.
+     remplir — le cadre prend toute la cellule, sans ratio (téléphone
+               en portrait : la scène en haut, ses textes et boutons
+               dessous, au lieu d'une bande de 130 px qui défile).
    ============================================================ */
-export default function SceneFrame({ ratio = 1000 / 560, style, children }) {
+export default function SceneFrame({ ratio = 1000 / 560, style, remplir = false, children }) {
   const ref = useRef(null);
   const [box, setBox] = useState(null);
 
@@ -31,16 +34,17 @@ export default function SceneFrame({ ratio = 1000 / 560, style, children }) {
     const measure = () => {
       const w = el.clientWidth, h = el.clientHeight;
       if (!w || !h) return;
-      const b = w / h > ratio
-        ? { w: Math.round(h * ratio), h }
-        : { w, h: Math.round(w / ratio) };
+      const b = remplir ? { w, h }
+        : w / h > ratio
+          ? { w: Math.round(h * ratio), h }
+          : { w, h: Math.round(w / ratio) };
       setBox(b);
     };
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [ratio]);
+  }, [ratio, remplir]);
 
   return (
     <div ref={ref}

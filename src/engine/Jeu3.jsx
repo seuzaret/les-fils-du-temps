@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import SceneFrame from "./SceneFrame.jsx";
+import useEcran from "./useEcran.js";
 import BunkerAwake from "../chapters/jeu3/scenes/BunkerAwake.jsx";
 import BunkerHub from "../chapters/jeu3/scenes/BunkerHub.jsx";
 import BunkerHubHaut from "../chapters/jeu3/scenes/BunkerHubHaut.jsx";
@@ -120,6 +121,13 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const [carnetOpen, setCarnetOpen] = useState(false);
   const [mediadexOpen, setMediadexOpen] = useState(false);
   const [caillouxOpen, setCaillouxOpen] = useState(false);
+  /* Téléphone : la mini-carte se replie dans un tiroir (bouton 🗺),
+     les boutons de la barre perdent leur texte, la flèche de retour
+     monte dans la barre, et en portrait la salle prend toute la
+     hauteur (SceneFrame « remplir »). */
+  const ecran = useEcran();
+  const compact = ecran.etroit || ecran.bas;
+  const [planOpen, setPlanOpen] = useState(false);
   /* Mode triche : Ctrl+Shift+C toggle. Quand actif, la mini-carte redevient
      cliquable pour se téléporter d'un étage à l'autre sans passer par
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
@@ -137,7 +145,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   /* previousRoom permet à l'ascenseur de savoir depuis quel étage
      on l'a appelé (pour surligner "ici" dans le sélecteur). */
   const prevRef = useRef("awake");
-  const goTo = (r) => { prevRef.current = room; setRoom(r); };
+  const goTo = (r) => { prevRef.current = room; setRoom(r); setPlanOpen(false); };
 
   const setFlag = (k, v = true) => setFlags((f) => ({ ...f, [k]: v }));
   const hear = (pnjId) => setHeardPnj((h) => ({ ...h, [pnjId]: true }));
@@ -220,49 +228,66 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const billetReady = heardPnj.voisin_lior && heardPnj.chapelle_anselme && heardPnj.cantine_via;
   const showBillet = billetReady && !flags.puits_billet;
 
+  const btnBarre = (fond, texte, bord) => ({ background: fond, color: texte, border: `2px solid ${bord}`, borderRadius: 6, padding: compact ? "5px 8px" : "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: compact ? 13 : 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1, flex: "0 0 auto", lineHeight: 1.2 });
+
   return (
     <div style={{ position: "fixed", inset: 0, background: "#050810", zIndex: 60, fontFamily: "Palatino, Georgia, serif", color: "#e8eef5", display: "flex", flexDirection: "column" }}>
       {/* Barre du haut : lieu courant + bouton menu */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 16px", background: "#0a1020", borderBottom: "1px solid #1a2536" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#7fd8ff" }}>
-          🌑 LE PUITS · 2087 · <span style={{ color: "#e8eef5" }}>{current.label}</span>
-          {cheat && <span style={{ marginLeft: 12, color: "#ff5030", fontWeight: 800 }}>🐛 TRICHE</span>}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 6, padding: compact ? "6px 8px" : "10px 16px", background: "#0a1020", borderBottom: "1px solid #1a2536" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, minWidth: 0, flex: "1 1 auto" }}>
+          {compact && showBack && (
+            <button onClick={() => goTo(backTarget)} title={backTarget === "elevator" ? "Ascenseur" : "Couloir"} data-retour="1"
+              style={{ ...btnBarre("rgba(255,209,102,0.25)", "#ffe8a8", "rgba(255,209,102,0.75)"), fontSize: 18, padding: "1px 10px", fontWeight: 800 }}>‹</button>
+          )}
+          {compact && showMinimap && (
+            <button onClick={() => setPlanOpen((o) => !o)} title="Plan du Puits" data-plan="1"
+              style={btnBarre(planOpen ? "#1a2a40" : "#0e1626", "#7fd8ff", "#2a4a6a")}>🗺</button>
+          )}
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: compact ? 11 : 12, letterSpacing: compact ? 1 : 3, color: "#7fd8ff", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            {compact ? "🌑 " : "🌑 LE PUITS · 2087 · "}<span style={{ color: "#e8eef5" }}>{current.label}</span>
+            {cheat && <span style={{ marginLeft: 12, color: "#ff5030", fontWeight: 800 }}>🐛 TRICHE</span>}
+          </div>
         </div>
-        <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+        <div style={{ display: "flex", gap: 6, alignItems: "center", flex: "0 0 auto" }}>
           {flags.mediadex_retrouve && (
-            <button onClick={() => setMediadexOpen(true)}
-              style={{ background: "#2a1808", color: "#ffd166", border: "2px solid #c8a848", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-              📘 Médiadex
+            <button onClick={() => setMediadexOpen(true)} title="Médiadex" style={btnBarre("#2a1808", "#ffd166", "#c8a848")}>
+              {compact ? "📘" : "📘 Médiadex"}
             </button>
           )}
           {flags.caillou_veste && (
-            <button onClick={() => setCaillouxOpen(true)} data-cailloux="1"
-              style={{ background: "#1a1408", color: "#e8dfc8", border: "2px solid #8a7a5a", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-              🪨 Cailloux
+            <button onClick={() => setCaillouxOpen(true)} data-cailloux="1" title="Les cailloux d'A." style={btnBarre("#1a1408", "#e8dfc8", "#8a7a5a")}>
+              {compact ? "🪨" : "🪨 Cailloux"}
             </button>
           )}
           {activeMission && flags.puits_billet && (
-            <button onClick={() => setCarnetOpen(true)}
-              style={{ background: "#f2e6cc", color: "#3a2010", border: "2px solid #5a3818", borderRadius: 6, padding: "5px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
-              📓 Carnet
+            <button onClick={() => setCarnetOpen(true)} title="Carnet d'enquête" style={btnBarre("#f2e6cc", "#3a2010", "#5a3818")}>
+              {compact ? "📓" : "📓 Carnet"}
             </button>
           )}
-          <button onClick={onExit}
-            style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
-            ← Menu
+          <button onClick={onExit} title="Menu"
+            style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: compact ? "6px 8px" : "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            {compact ? "☰" : "← Menu"}
           </button>
         </div>
       </div>
 
       {/* Zone principale : mini-carte à gauche + scène à droite */}
       <div style={{ flex: 1, display: "flex", minHeight: 0, position: "relative" }}>
-        {showMinimap && <BunkerMinimap room={room} flags={flags} onGo={goTo} cheat={cheat} />}
-        <SceneFrame style={{ padding: 6 }}>
+        {showMinimap && !compact && <BunkerMinimap room={room} flags={flags} onGo={goTo} cheat={cheat} />}
+        {/* téléphone : la mini-carte dans un tiroir, par-dessus la scène */}
+        {showMinimap && compact && planOpen && (
+          <div onClick={() => setPlanOpen(false)} style={{ position: "absolute", inset: 0, zIndex: 70, background: "rgba(2,4,10,0.6)", display: "flex" }}>
+            <div onClick={(e) => e.stopPropagation()} style={{ display: "flex", maxHeight: "100%", boxShadow: "6px 0 24px rgba(0,0,0,0.6)" }}>
+              <BunkerMinimap room={room} flags={flags} onGo={goTo} cheat={cheat} />
+            </div>
+          </div>
+        )}
+        <SceneFrame style={{ padding: compact ? 2 : 6 }} remplir={compact && ecran.portrait && !["voyageK", "epilogueJeu3"].includes(room)}>
           {room === "epilogueJeu3"
             ? <EpilogueJeu3 prenom={prenom} onDone={onExit} />
             : <Comp prenom={prenom} onGo={goTo} j3={j3} />}
         </SceneFrame>
-        {showBack && (
+        {showBack && !compact && (
           <button onClick={() => goTo(backTarget)}
             title={backTarget === "elevator" ? "Ascenseur" : "Couloir"}
             style={{ position: "absolute",

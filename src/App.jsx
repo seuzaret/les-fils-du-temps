@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component } from "react";
+import { useState, useEffect, useRef, Component, Fragment } from "react";
 import Martine, { Avatar } from "./engine/Martine.jsx";
 import Scene from "./engine/Scene.jsx";
 import { InventoryBar } from "./engine/Inventory.jsx";
@@ -10,6 +10,7 @@ import { playSfx, isMuted, setMuted, startAmbience, stopAmbience } from "./engin
 import { loadSave, writeSave, clearSave, hasSave, exportSaveString, importSaveString } from "./engine/save.js";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
+import useEcran from "./engine/useEcran.js";
 import CheatPanel from "./engine/CheatPanel.jsx";
 import TransitionScreen from "./engine/TransitionScreen.jsx";
 import EndScreen from "./engine/EndScreen.jsx";
@@ -234,6 +235,14 @@ export default function App() {
     window.addEventListener("resize", sync);
     return () => { mq.removeEventListener("change", sync); window.removeEventListener("resize", sync); };
   }, []);
+  /* Téléphone en PAYSAGE : peu de hauteur. L'en-tête tient sur une ligne
+     (le grand titre disparaît) et la besace et la jauge passent en
+     colonnes, comme sur un écran large : le décor gagne la hauteur
+     qu'occupait la barre du bas. En portrait étroit, le chapitre et le
+     prénom passent sur leur propre ligne, au-dessus du titre. */
+  const ecran = useEcran();
+  const paysageBas = ecran.bas && !ecran.portrait;
+  const colonnes = large || paysageBas;
 
   const toggleMute = () => {
     const next = !muted;
@@ -1744,19 +1753,33 @@ export default function App() {
           {/* Contenu superpose (titre en haut, boutons en bas), plein ecran */}
           <div style={{ position: "relative", zIndex: 2, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "32px 20px 40px", textAlign: "center" }}>
           <h1 style={{ fontFamily: TITRE_FONT, fontSize: "clamp(38px,9.5vw,72px)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", margin: "4px 0 0", lineHeight: 1.08, display: "inline-block", alignSelf: "flex-start", marginLeft: "20vw" }}>
-            {"Les fils du temps".split("").map((ch, i) => (
-              <span key={i}
-                ref={(el) => { titleLetterRefs.current[i] = el; }}
-                style={{
-                  display: "inline-block",
-                  whiteSpace: "pre",
-                  color: i % 2 === 0 ? "#ffd166" : "#e8a24a",
-                  transition: "none",
-                  willChange: "transform, text-shadow",
-                }}>
-                {ch === " " ? " " : ch}
-              </span>
-            ))}
+            {/* une lettre = un span animé ; les lettres d'un même mot sont
+                groupées (nowrap) pour que le titre ne se coupe jamais au
+                milieu d'un mot (« DU T / EMPS » sur un téléphone en paysage) */}
+            {"Les fils du temps".split(" ").map((mot, w, mots) => {
+              const debut = mots.slice(0, w).reduce((n, m) => n + m.length + 1, 0);
+              const lettre = (ch, i) => (
+                <span key={i}
+                  ref={(el) => { titleLetterRefs.current[i] = el; }}
+                  style={{
+                    display: "inline-block",
+                    whiteSpace: "pre",
+                    color: i % 2 === 0 ? "#ffd166" : "#e8a24a",
+                    transition: "none",
+                    willChange: "transform, text-shadow",
+                  }}>
+                  {ch === " " ? " " : ch}
+                </span>
+              );
+              return (
+                <Fragment key={w}>
+                  <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
+                    {mot.split("").map((ch, k) => lettre(ch, debut + k))}
+                  </span>
+                  {w < mots.length - 1 && lettre(" ", debut + mot.length)}
+                </Fragment>
+              );
+            })}
           </h1>
           <div style={{ marginTop: 26, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
             {saveExists ? (
@@ -2067,6 +2090,33 @@ export default function App() {
     );
   };
 
+  /* POUBELLE TEMPORELLE — toujours visible en jeu 1, dès l'arrivée
+     dans un chapitre. On ne la fait plus apparaître au ramassage
+     du premier déchet : trop d'indice (l'élève comprenait que
+     l'objet qu'il venait de ramasser était anachronique rien qu'en
+     voyant la poubelle sortir). Elle fait partie de l'équipement
+     du chronaute, visible dès le départ. Écran étroit : fixée en bas
+     à gauche (la barre de la besace lui laisse la place) ; écran large
+     ou téléphone en paysage : rangée sous la besace, en colonne. */
+  const poubelle = (fixe) => (
+    <div data-drop="hot:poubelle_temporelle"
+      title="Poubelle temporelle — glisse-y les objets qui n'ont rien à faire à cette époque (+3 flux)"
+      style={{
+        ...(fixe ? { position: "fixed", bottom: 18, left: 18, zIndex: 55 } : { position: "relative", alignSelf: "center", flex: "0 0 auto", marginTop: 8 }),
+        width: 48, height: 56, display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        background: "linear-gradient(180deg, #4a3020 0%, #1a0e08 100%)",
+        border: "2px solid #8a5828", borderRadius: 8,
+        boxShadow: "0 3px 14px rgba(0,0,0,0.55), inset 0 -2px 0 rgba(255,255,255,0.06)",
+        fontSize: 24, cursor: "help", userSelect: "none",
+        animation: "poubelleAppear 0.6s ease-out",
+      }}>
+      🗑️
+      <span style={{ fontSize: 7, color: "#c8963e", fontFamily: "ui-monospace,monospace", letterSpacing: 1, marginTop: -3 }}>TEMPS</span>
+      <style>{`@keyframes poubelleAppear { 0% { transform: scale(0.2) rotate(-30deg); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }`}</style>
+    </div>
+  );
+
   return (
     <DragProvider items={chapter.items} onDrop={handleDrop}>
     <div style={{ height: "100dvh", display: "flex", flexDirection: "column", overflow: "hidden", background: "#080d16", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
@@ -2074,13 +2124,21 @@ export default function App() {
 
       {/* la signature du jeu, CENTRÉE — avec le chapitre · date sur la même
           ligne (à gauche). Présente sur chaque tableau. */}
+      {!paysageBas && (
       <div style={{ position: "relative", textAlign: "center", padding: "6px 12px 0", minHeight: 20 }}>
+        {ecran.etroit ? (
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontFamily: "ui-monospace,monospace", fontSize: 9.5, letterSpacing: 1.5, marginBottom: 2 }}>
+            <span style={{ color: "#e8934a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{chapter.bandeau}</span>
+            {prenom && <span style={{ color: "#5eff9e", whiteSpace: "nowrap", opacity: 0.85 }} title="C'est toi qui joues cette partie">👤 {prenom}</span>}
+          </div>
+        ) : (<>
         <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#e8934a", whiteSpace: "nowrap" }}>{chapter.bandeau}</span>
         {prenom && (
           <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#5eff9e", whiteSpace: "nowrap", opacity: 0.85 }} title="C'est toi qui joues cette partie">
             👤 {prenom}
           </span>
         )}
+        </>)}
         <span style={{ fontFamily: TITRE_FONT, fontSize: 19, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.14em", background: "linear-gradient(100deg, #e8a24a, #ffd166 45%, #e86a4a)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>
           Les fils du temps
         </span>
@@ -2089,10 +2147,14 @@ export default function App() {
           {chapter.date}
         </div>
       </div>
+      )}
 
       {/* le lieu · compteur · boutons · saut temporel */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: "2px 12px 6px", flexWrap: "wrap" }}>
-        <span style={{ fontSize: 17, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{chapter.emoji} {chapter.scenes[tab].name}</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: paysageBas ? "4px 12px 4px" : "2px 12px 6px", flexWrap: paysageBas ? "nowrap" : "wrap" }}>
+        <span style={{ fontSize: paysageBas ? 14 : 17, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+          {paysageBas && <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, fontWeight: 400, letterSpacing: 1.5, color: "#e8934a", marginRight: 8 }}>{chapter.bandeau}</span>}
+          {chapter.emoji} {chapter.scenes[tab].name}
+        </span>
         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
           {/* JEU 2 : compteur de notes trouvées à la place de la jauge flux */}
           {mode === "jeu2" ? (
@@ -2119,7 +2181,7 @@ export default function App() {
           <button onClick={() => setModal({ type: "settings" })} title="Réglages, son, indice, carnet…" style={headBtn}>⚙</button>
           {/* Sur écran étroit uniquement, le bouton compact de SAUT reste
               dans le bandeau (sinon on l'a dans la jauge temporelle à droite). */}
-          {!large && mode !== "jeu2" && (
+          {!colonnes && mode !== "jeu2" && (
             <button onClick={jump} disabled={!canJump}
               title={canJump ? `Saut vers ${chapter.destination}` : (jumpBloque || `Encore ${Math.max(0, Math.ceil(fluxRequis - flux))} flux pour partir`)}
               style={{ background: canJump ? "#e8934a" : "#1a2230", color: canJump ? "#111" : "#4a5568", border: "none", borderRadius: 10, padding: "7px 12px", fontSize: 13, fontWeight: 800, cursor: canJump ? "pointer" : "not-allowed", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
@@ -2216,14 +2278,24 @@ export default function App() {
       <div style={{ flex: 1, minHeight: 0, padding: "0 12px", display: "flex", justifyContent: "center", gap: 8 }}>
         {/* écran large : la besace en colonne à gauche du décor — cachee
             en jeu 2 (elle ne sert a rien pour l'enquete Al3x1A). */}
-        {large && mode !== "jeu2" && (
+        {colonnes && mode !== "jeu2" && (
           <div style={{ width: 104, flex: "0 0 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <InventoryBar items={chapter.items} inv={inv} shake={shake} vertical mode={mode} />
-            {/* mini-carte dockée sous la besace (si le chapitre a une carte) */}
-            {chapter.carte && <MiniMap Carte={chapter.carte} tab={tab} label={chapter.scenes[tab].name} onOpen={() => setModal({ type: "carte" })} />}
+            {/* mini-carte dockée sous la besace (si le chapitre a une carte ;
+                pas sur un téléphone en paysage : la place manque) */}
+            {chapter.carte && !paysageBas && <MiniMap Carte={chapter.carte} tab={tab} label={chapter.scenes[tab].name} onOpen={() => setModal({ type: "carte" })} />}
+            {/* la poubelle temporelle, rangée sous la besace */}
+            {screen === "play" && poubelle(false)}
           </div>
         )}
-        <div ref={decorCellRef} style={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden" }}>
+        <div ref={decorCellRef} style={{ flex: 1, minWidth: 0, display: "flex", justifyContent: "center", alignItems: "center", overflow: "hidden", position: "relative" }}>
+          {/* téléphone en portrait : le décor 16/9 n'a que la largeur ;
+              une discrète invitation à tourner l'écran, sous le décor */}
+          {ecran.portrait && ecran.etroit && decorBox && decorBox.h < (decorCellRef.current?.clientHeight || 0) - 40 && (
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 6, textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1, color: "#5a6a80", pointerEvents: "none" }}>
+              ↻ Tourne ton téléphone : le décor sera plus grand.
+            </div>
+          )}
           {/* taille exacte calculée (le plus grand cadre 1000/560 qui tient
               dans la cellule) → jamais rogné, jamais de débordement. */}
           <div style={{ width: decorBox ? decorBox.w : "100%", height: decorBox ? decorBox.h : "100%", position: "relative" }}>
@@ -2315,7 +2387,7 @@ export default function App() {
           </div>
         </div>
         {/* écran large : la jauge temporelle à droite */}
-        {large && mode !== "jeu2" && (
+        {colonnes && mode !== "jeu2" && (
           <JaugeTemporelle transmis={flux} requis={fluxRequis} total={ALL_MSGS.length}
             destination={chapter.destination} canJump={canJump} onJump={jump} isLast={isLastChapter} bloque={jumpBloque} />
         )}
@@ -2326,7 +2398,7 @@ export default function App() {
       {/* console MARTINE + le SIGNAL D'AVANCÉE (mode linéaire) : en l'absence
           de flèches, un repère lumineux clignote près de MARTINE dès que le
           tableau courant est bouclé, et emmène au lieu suivant. */}
-      <div style={{ padding: "8px 12px 6px", display: "flex", justifyContent: "center" }}>
+      <div style={{ padding: paysageBas ? "6px 12px 4px" : "8px 12px 6px", display: "flex", justifyContent: "center" }}>
         <div style={{ width: "100%", maxWidth: 980, position: "relative" }}>
           {(() => {
             const next = chapter.scenes[tab + 1];
@@ -2352,7 +2424,7 @@ export default function App() {
       </div>
 
       {/* besace : en bas, seulement sur écran étroit / tablette */}
-      {!large && mode !== "jeu2" && <InventoryBar items={chapter.items} inv={inv} shake={shake} mode={mode} />}
+      {!colonnes && mode !== "jeu2" && <InventoryBar items={chapter.items} inv={inv} shake={shake} mode={mode} />}
 
       {/* particules de réussite (au point de la combinaison) */}
       {fx && <Particles key={fx.key} x={fx.x} y={fx.y} big={fx.big} />}
@@ -2712,24 +2784,7 @@ export default function App() {
           l'objet qu'il venait de ramasser était anachronique rien qu'en
           voyant la poubelle sortir). Elle fait partie de l'équipement
           du chronaute, visible dès le départ. */}
-      {screen === "play" && mode !== "jeu2" && (
-        <div data-drop="hot:poubelle_temporelle"
-          title="Poubelle temporelle — glisse-y les objets qui n'ont rien à faire à cette époque (+3 flux)"
-          style={{
-            position: "fixed", bottom: 18, left: 18, zIndex: 55,
-            width: 48, height: 56, display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            background: "linear-gradient(180deg, #4a3020 0%, #1a0e08 100%)",
-            border: "2px solid #8a5828", borderRadius: 8,
-            boxShadow: "0 3px 14px rgba(0,0,0,0.55), inset 0 -2px 0 rgba(255,255,255,0.06)",
-            fontSize: 24, cursor: "help", userSelect: "none",
-            animation: "poubelleAppear 0.6s ease-out",
-          }}>
-          🗑️
-          <span style={{ fontSize: 7, color: "#c8963e", fontFamily: "ui-monospace,monospace", letterSpacing: 1, marginTop: -3 }}>TEMPS</span>
-          <style>{`@keyframes poubelleAppear { 0% { transform: scale(0.2) rotate(-30deg); opacity: 0; } 60% { transform: scale(1.15); } 100% { transform: scale(1); opacity: 1; } }`}</style>
-        </div>
-      )}
+      {screen === "play" && mode !== "jeu2" && !colonnes && poubelle(true)}
 
       {/* JEU 2 : anim TARDIS quand on change d'epoque via la frise.
           UN SEUL overlay pour tout le trajet (Firefox rendait des ecrans

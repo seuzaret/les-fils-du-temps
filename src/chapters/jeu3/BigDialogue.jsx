@@ -1,5 +1,6 @@
 import { useState } from "react";
 import PnjSprite from "./PnjSprite.jsx";
+import useEcran from "../../engine/useEcran.js";
 
 /* ============================================================
    JEU 3 — Dialogue plein écran (type scènes du jeu 1)
@@ -16,6 +17,9 @@ import PnjSprite from "./PnjSprite.jsx";
              ou quand on clique le bouton d'action
      actionLabel — texte du bouton final optionnel
      accent — couleur d'accent (défaut doré Vez)
+   Téléphone : en portrait, le personnage passe au-dessus du texte
+   (bandeau de 130 px) ; en paysage, panneaux resserrés et texte
+   plus petit, pour que tout tienne dans la hauteur.
    ============================================================ */
 export default function BigDialogue({
   speakerNom = "?", speakerRole = "",
@@ -26,6 +30,8 @@ export default function BigDialogue({
 }) {
   const [i, setI] = useState(0);
   const isLast = i === lignes.length - 1;
+  const { etroit, bas } = useEcran();
+  const compact = etroit || bas;
   const advance = (e) => {
     if (e) e.stopPropagation();
     if (!isLast) setI(i + 1);
@@ -33,19 +39,19 @@ export default function BigDialogue({
   };
   return (
     <div onClick={advance}
-      style={{ position: "fixed", inset: 0, zIndex: 180, background: "rgba(4,8,14,0.92)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 20, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
+      style={{ position: "fixed", inset: 0, zIndex: 180, background: "rgba(4,8,14,0.92)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: compact ? "flex-start" : "center", padding: compact ? 8 : 20, overflowY: "auto", cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
       {topic && (
-        <div style={{ maxWidth: 960, width: "100%", marginBottom: 12, textAlign: "center" }}>
-          <div style={{ display: "inline-block", background: "#141020", border: `1px solid ${accent}`, borderRadius: 6, padding: "6px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: accent, fontWeight: 700 }}>
+        <div style={{ maxWidth: 960, width: "100%", marginBottom: compact ? 6 : 12, textAlign: "center", flex: "0 0 auto" }}>
+          <div style={{ display: "inline-block", background: "#141020", border: `1px solid ${accent}`, borderRadius: 6, padding: compact ? "4px 10px" : "6px 18px", fontFamily: "ui-monospace,monospace", fontSize: compact ? 10 : 12, letterSpacing: compact ? 1.5 : 3, color: accent, fontWeight: 700 }}>
             {topic}
           </div>
         </div>
       )}
       <div onClick={advance}
-        style={{ maxWidth: 960, width: "100%", display: "flex", gap: 20, alignItems: "stretch" }}>
+        style={{ maxWidth: 960, width: "100%", display: "flex", flexDirection: etroit ? "column" : "row", gap: compact ? 8 : 20, alignItems: "stretch", flex: "0 0 auto", margin: compact ? "auto 0" : 0 }}>
         {/* Portrait resserré — panneau plus petit, mais viewBox cadrée sur Vez pour qu'il remplisse */}
-        <div style={{ flex: "0 0 220px", background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 6, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44`, overflow: "hidden" }}>
-          <svg viewBox="58 180 84 230" style={{ width: "100%", height: "auto" }}>
+        <div style={{ flex: etroit ? "0 0 130px" : `0 0 ${bas ? 120 : 220}px`, height: etroit ? 130 : undefined, background: "#0e1420", border: `2px solid ${accent}`, borderRadius: 12, padding: 6, display: "flex", alignItems: "flex-end", justifyContent: "center", boxShadow: `0 0 24px ${accent}44`, overflow: "hidden" }}>
+          <svg viewBox="58 180 84 230" style={etroit ? { height: "100%", width: "auto" } : { width: "100%", height: "auto" }}>
             <PnjSprite x={100} y={400}
               {...speakerStyle}
               color={speakerStyle.color || "#3a2818"}
@@ -62,8 +68,8 @@ export default function BigDialogue({
         </div>
 
         {/* Panneau texte */}
-        <div style={{ flex: 1, background: "#141020", border: `2px solid ${accent}`, borderRadius: 12, padding: "22px 28px", color: "#e8eef5", boxShadow: `0 0 24px ${accent}44`, display: "flex", flexDirection: "column", minHeight: 360 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14, paddingBottom: 10, borderBottom: `1px solid ${accent}44` }}>
+        <div style={{ flex: 1, minWidth: 0, background: "#141020", border: `2px solid ${accent}`, borderRadius: 12, padding: compact ? "12px 14px" : "22px 28px", color: "#e8eef5", boxShadow: `0 0 24px ${accent}44`, display: "flex", flexDirection: "column", minHeight: compact ? 0 : 360 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8, flexWrap: "wrap", marginBottom: compact ? 8 : 14, paddingBottom: compact ? 6 : 10, borderBottom: `1px solid ${accent}44` }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, letterSpacing: 2, color: accent, fontWeight: 800 }}>
               {speakerNom.toUpperCase()}
             </div>
@@ -74,13 +80,13 @@ export default function BigDialogue({
             )}
           </div>
 
-          <p style={{ margin: 0, fontSize: 20, lineHeight: 1.6, color: "#e8eef5" }}>
+          <p style={{ margin: 0, fontSize: compact ? 16 : 20, lineHeight: compact ? 1.5 : 1.6, color: "#e8eef5" }}>
             {lignes[i]}
           </p>
 
           <div style={{ flex: 1 }} />
 
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 20, paddingTop: 10, borderTop: `1px solid ${accent}22` }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 8, flexWrap: "wrap", marginTop: compact ? 12 : 20, paddingTop: compact ? 6 : 10, borderTop: `1px solid ${accent}22` }}>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>
               {i + 1} / {lignes.length}
             </div>
