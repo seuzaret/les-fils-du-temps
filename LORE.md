@@ -69,6 +69,10 @@
 > - [ACQUIS] **Pas de choix « je rentre chez moi »** dans la proposition de 2045 (Jeu 2B) : le joueur doit rester pour que la boucle existe.
 > - [ACQUIS] À la fin, le joueur la sauve (réveil chez les dormants) et lui donne MARTINE pour transmettre et recommencer la boucle ; **elle rentre dans son temps** voir sa famille (elle peut revenir).
 > - [IDÉE pour une suite des « Fils du temps »] Son parent n'est jamais revenu après sa naissance.
+> - [ACQUIS 2026-10-25] **Al3x1a est l'auteure des 4 règles des chronautes** (celles que MARTINE récite au début du Jeu 1, `IntroStory.jsx`) : elle les écrit pour limiter les dégâts des voyages, et elle forme les premiers chronautes. Le Jeu 1 est la formation de son parent : elle le forme pour pouvoir naître.
+> - [ACQUIS 2026-10-25] **Jorge ne l'élève pas.** Qui l'élève dans le futur n'apporte rien à l'histoire (elle n'y reste pas) : on ne le précise pas. Seul fait utile : son parent ne lui a laissé que son adresse.
+> - [ACQUIS 2026-10-25, direction] **La maladie de l'oubli vient des changements du passé** (référence du créateur : le film *L'Effet papillon*, 2004) : quand un voyage modifie le passé, la mémoire des gens est réécrite et ça les rend malades. Les premiers voyages (ceux de Léa) déclenchent les premiers cas.
+> - [À DISCUTER] Ce qui fait marcher les machines (l'idée « la mémoire est le carburant » est écartée : aucun sens physique) — voir les propositions du 25 oct.
 > - [À TRANCHER] **Pourquoi Al3x1a reste bloquée dans le passé** (elle vient du futur : la maladie de l'oubli ne la touche pas, idée écartée). Deux pistes du créateur : (a) un problème temporel lié aux 4 règles des chronautes, qui modifie le futur et la bloque ; (b) son parent l'a préparée à aller là où elle doit aider les gens (à créer les chronautes), sans lui dire pourquoi.
 Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enfant du joueur, née bien plus tard. Elle cherche son parent dans le temps mais le rencontre à un âge où il ne la connaît pas encore (« tu es trop jeune »). Il faut que le jeune joueur devienne chronaute, sinon elle disparaît.
 
