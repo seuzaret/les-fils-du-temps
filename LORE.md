@@ -59,6 +59,17 @@
 5. Elle sait, elle se tait : voir §5.
 
 ## 5. Al3x1a — chronologie
+
+> **REFONTE EN COURS (2026-10-25)** — décisions du créateur, à reporter dans le reste de la section et dans le code :
+> - [ACQUIS] Al3x1a est l'enfant du joueur ; **pour exister, elle doit créer la boucle temporelle où elle vient au monde**. Chronaute **pionnière** : elle aide les autres et, en même temps, crée sa boucle. Au début, elle cherche son parent **sans rien lui dire**, peut-être sans être sûre d'être au bon endroit.
+> - [ACQUIS] Son parent ne lui a rien expliqué (pour qu'elle ne change pas le passé) : **il lui a seulement laissé son adresse**. Parler de « parent », jamais de « père » (le joueur reste sans genre).
+> - [ACQUIS] **MARTINE vient du futur avec Al3x1a**, à l'époque du « grand oubli » ; elle permet d'aller chercher le remède. Léa travaille sur elle, ce qui permet d'en construire d'autres (les MARTINE des chronautes), **avant la fusion** de Mira en mémoire commune. Cette partie pourrait être montrée en animation. [PROPOSÉ par Claude : l'originale, jamais fusionnée (la jumelle qui « attend sa pilote »), est celle que Léa cache et dont K-01 est la cabine ; c'est elle que le joueur rend à Al3x1a à la fin, si bien que T'ÉTEINDRE et TE MODIFIER ne touchent que la copie qui gouverne le Puits et que la boucle tient dans les deux fins]
+> - [ACQUIS] Pendant la construction du Puits, **MARTINE comprend qu'Al3x1a est un danger pour son monde et l'endort** (elle rejoint les dormants). Remplace « elle ne vise pas Al3x1a » (§4.4). Avant, Al3x1a a compris le danger et **laissé une note dans son carnet** pour aider son parent à trouver le monde de MARTINE. **Pas de voix à la radio** (les répliques de Lior sur la « bande 87 » sont à retirer).
+> - [ACQUIS] La note du carnet s'obtient par **une nouvelle quête** : le créateur y réfléchit (piste : le classement des livres, révision Dewey).
+> - [ACQUIS] **Pas de choix « je rentre chez moi »** dans la proposition de 2045 (Jeu 2B) : le joueur doit rester pour que la boucle existe.
+> - [ACQUIS] À la fin, le joueur la sauve (réveil chez les dormants) et lui donne MARTINE pour transmettre et recommencer la boucle ; **elle rentre dans son temps** voir sa famille (elle peut revenir).
+> - [IDÉE pour une suite des « Fils du temps »] Son parent n'est jamais revenu après sa naissance.
+> - [À TRANCHER] **Pourquoi Al3x1a reste bloquée dans le passé** (elle vient du futur : la maladie de l'oubli ne la touche pas, idée écartée). Deux pistes du créateur : (a) un problème temporel lié aux 4 règles des chronautes, qui modifie le futur et la bloque ; (b) son parent l'a préparée à aller là où elle doit aider les gens (à créer les chronautes), sans lui dire pourquoi.
 Principe [ACQUIS] : **boucle de type Terminator / River Song**. Al3x1a est l'enfant du joueur, née bien plus tard. Elle cherche son parent dans le temps mais le rencontre à un âge où il ne la connaît pas encore (« tu es trop jeune »). Il faut que le jeune joueur devienne chronaute, sinon elle disparaît.
 
 **Avant le jeu (hors écran)**
@@ -123,7 +134,7 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 - **Le joueur tape lui-même l'adresse** `seuzaret.github.io/martine/`. Formulation volontairement floue, du genre « trouve un moyen de rejoindre le monde de /Martine/ ». Texte à écrire. [ACQUIS]
 - Le « monde /Martine/ » pourrait servir à des jeux de révision. [IDÉE du créateur, à préciser]
 - Le SMS promet que « la famille est en danger » : Jeu 3 doit payer cette promesse. Officiellement Al3x1a n'est pas encore née en 2087, donc l'enjeu porte sur un **futur possible**, pas sur une personne présente. [PROPOSÉ]
-- Trois fins existantes : T'ÉTEINDRE, TE MODIFIER, TE SOUMETTRE. [CODE] [PROPOSÉ] Une 4e fin « la boucle ».
+- Trois fins existantes : T'ÉTEINDRE, TE MODIFIER, TE FAIRE CONFIANCE (ex-« TE SOUMETTRE », renommée le 2026-10-25 : trop abstrait pour des 6e ; « TE LAISSER FAIRE » était l'autre option validée). [CODE] [PROPOSÉ] Une 4e fin « la boucle ».
 - [PROPOSÉ] Berceuse de Martine à l'extinction, clin d'œil à *Daisy Bell* (HAL, 1968), liée à Bell dans le pool de voyages.
 
 ## 8. Références

@@ -10,7 +10,7 @@ import { ConcretePanels } from "../bunkerKit.jsx";
      choice — les 3 fins proposées
      end    — l'écran de fin choisi ; « T'éteindre » et « Te modifier »
               enchaînent sur l'épilogue (rapport à Vez, ouverture de
-              C-3, surface, départ de Jorge), « Te soumettre » s'arrête
+              C-3, surface, départ de Jorge), « Te faire confiance » s'arrête
    ============================================================ */
 export default function BunkerServeurs({ prenom, j3, onGo }) {
   const [phase, setPhase] = useState("intro");

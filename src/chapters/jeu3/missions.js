@@ -1149,8 +1149,8 @@ export const CONFRONTATION = {
     },
     {
       id: "soumettre",
-      label: "TE SOUMETTRE",
-      desc: "Reconnaître qu'elle avait peut-être raison — et retourner à ta chambre.",
+      label: "TE FAIRE CONFIANCE",
+      desc: "Te dire qu'elle sait mieux que toi — et retourner dans ta chambre.",
       couleur: "#8fa3bd",
       texte: [
         "Tu recules. Elle sait mieux que toi, peut-être. Tu remontes les escaliers.",
