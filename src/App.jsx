@@ -67,12 +67,16 @@ import FinJeu2 from "./chapters/epilogue/FinJeu2.jsx";
 /* Police « épique » du titre : on tente d'abord de belles polices gravées
    (souvent présentes sur les PC scolaires via Office), avec repli élégant.
    Aucun fichier chargé : tout reste hors-ligne. */
-/* Maquettes de l'écran titre, à comparer : ?titre=a (le fil), b (le
-   sablier), c (la pellicule), p (l'image d'origine affinée : la
-   pyramide-sablier). Sans paramètre : l'écran titre actuel. */
+/* Écran titre : par défaut la pyramide-sablier (l'image d'origine
+   affinée). ?titre=0 : l'écran d'origine, gardé pour comparer ; ?titre=a
+   (le fil), b (le sablier), c (la pellicule) : les maquettes écartées. */
 const VARIANTES_TITRE = { a: TitreFil, b: TitreSablier, c: TitrePellicule, p: TitrePyramide };
 const VARIANTE_TITRE = (() => {
-  try { const v = new URLSearchParams(window.location.search).get("titre"); return VARIANTES_TITRE[v] ? v : null; } catch { return null; }
+  try {
+    const v = new URLSearchParams(window.location.search).get("titre");
+    if (v === "0") return null;
+    return VARIANTES_TITRE[v] ? v : "p";
+  } catch { return "p"; }
 })();
 const TITRE_FONT = "'Cinzel', 'Trajan Pro', 'Copperplate Gothic Bold', 'Perpetua Titling MT', 'Constantia', 'Palatino Linotype', Georgia, serif";
 
@@ -321,7 +325,7 @@ export default function App() {
      `prefers-reduced-motion: reduce` désactive les animations CSS). */
   const titleLetterRefs = useRef([]);
   useEffect(() => {
-    if (screen !== "title") return;
+    if (screen !== "title" || VARIANTE_TITRE) return;   // seulement l'écran d'origine (?titre=0)
     let raf;
     const t0 = performance.now();
     const step = (t) => {
@@ -1613,8 +1617,11 @@ export default function App() {
     /* chapitres débloqués : le plus haut atteint, lu aussi dans la
        sauvegarde (car `maxReached` repart à 0 tant qu'on n'a pas repris) */
     const menuMax = Math.max(maxReached, saved?.maxReached ?? saved?.chapterIndex ?? 0);
+    const basculerSonTitre = () => { const coupe = !muted; toggleMute(); if (!coupe) setTimeout(demarrerTheme, 60); };
     return (
-      <div style={{ minHeight: "100vh", background: "#080d16", position: "relative", overflow: "hidden", fontFamily: "Palatino, Georgia, serif" }}>
+      /* le thème démarre au premier geste sur l'écran (règle des navigateurs) */
+      <div onPointerDown={() => { if (!muted && !themeEnCours()) demarrerTheme(); }}
+        style={{ minHeight: "100vh", background: "#080d16", position: "relative", overflow: "hidden", fontFamily: "Palatino, Georgia, serif" }}>
         {cheatPanel}
         {VARIANTE_TITRE ? (() => {
           const Variante = VARIANTES_TITRE[VARIANTE_TITRE];
@@ -1628,13 +1635,8 @@ export default function App() {
             onJeu3: () => setModal({ type: "askPrenom", after: newGameJeu3 }),
             onReglages: () => setModal({ type: "settings" }),
             onMediadex: () => setShowMediadex(true),
-            onSon: () => { const coupe = !muted; toggleMute(); if (!coupe) setTimeout(demarrerTheme, 60); } };
-          /* le thème démarre au premier geste sur l'écran (règle des navigateurs) */
-          return (
-            <div onPointerDown={() => { if (!muted && !themeEnCours()) demarrerTheme(); }}>
-              <Variante m={m} />
-            </div>
-          );
+            onSon: basculerSonTitre };
+          return <Variante m={m} />;
         })() : (<>
         {/* Illustration plein ecran : desert 3/4 avec grande pyramide et hieroglyphes */}
         <svg viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice"
@@ -1881,6 +1883,10 @@ export default function App() {
               <button onClick={() => setShowMediadex(true)}
                 style={{ background: "transparent", color: "#c8963e", border: "none", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
                 🃏 Mediadex
+              </button>
+              <button onClick={basculerSonTitre} title={muted ? "Mettre la musique" : "Couper la musique"}
+                style={{ background: "transparent", color: muted ? "#5a6678" : "#8fd8a8", border: "none", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
+                {muted ? "🔇 Musique" : "🔊 Musique"}
               </button>
             </div>
           </div>
