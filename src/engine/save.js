@@ -6,9 +6,9 @@
    une clé du navigateur. App.jsx décide de CE QU'on y met.
 
    Plusieurs SLOTS coexistent : un pour chaque « jeu » (jeu 1 =
-   voyage principal, jeu 2 = enquête Al3x1A…). Chaque slot a sa
-   propre progression indépendante — on peut avoir un jeu 1 en
-   cours ET un jeu 2 en cours en parallèle sur le même poste.
+   voyage principal, jeu 2 = enquête Al3x1A, jeu 3 = le Puits).
+   Chaque slot a sa propre progression indépendante — on peut avoir
+   les trois en cours en parallèle sur le même poste.
 
    Robustesse au format : chaque sauvegarde porte un numéro de
    VERSION. Si une future version du jeu change la structure,
@@ -17,7 +17,8 @@
 
    Rien de sensible n'est stocké : juste la progression de jeu.
    Pas de compte, pas de serveur — tout reste sur l'appareil,
-   et exportable en fichier JSON pour changer de poste au CDI.
+   et exportable en fichier JSON pour changer de poste au CDI
+   (un seul fichier pour les trois jeux).
    ============================================================ */
 
 const VERSION = 1;
@@ -79,4 +80,39 @@ export function importSaveString(text, slot = DEFAULT_SLOT) {
   } catch {
     return false;
   }
+}
+
+/* ---------- un fichier pour les trois jeux (export / import) ---------- */
+const SLOTS = ["jeu1", "jeu2", "jeu3"];
+const FORMAT = "martine-parties";
+
+/** Exporte toutes les parties en cours dans un seul texte JSON, ou null
+    s'il n'y en a aucune. */
+export function exportAllString() {
+  const parties = {};
+  SLOTS.forEach((slot) => {
+    try { const raw = localStorage.getItem(keyFor(slot)); if (raw) parties[slot] = JSON.parse(raw); } catch { /* slot illisible : ignoré */ }
+  });
+  return Object.keys(parties).length ? JSON.stringify({ format: FORMAT, parties }) : null;
+}
+
+/** Importe un fichier exporté : celui des trois jeux, ou l'ancien
+    fichier d'une seule partie (le jeu 1). Renvoie la liste des slots
+    importés ([] si le fichier n'est pas valide). */
+export function importAllString(text) {
+  try {
+    const data = JSON.parse(text);
+    if (data?.format === FORMAT && data.parties) {
+      const ok = SLOTS.filter((slot) => {
+        const p = data.parties[slot];
+        if (!p || p.version !== VERSION || !p.state) return false;
+        localStorage.setItem(keyFor(slot), JSON.stringify(p));
+        return true;
+      });
+      return ok;
+    }
+  } catch {
+    return [];
+  }
+  return importSaveString(text) ? ["jeu1"] : [];
 }

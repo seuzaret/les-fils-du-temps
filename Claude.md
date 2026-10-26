@@ -74,7 +74,7 @@ survit ET reste lisible**. C'est un ressort de jeu ET une leçon d'archivistique
 - Sons : bibliothèque de petits SFX libres (freesound.org, CC0) + possibilité d'ambiances lofi par époque. Un bouton 🔇 global.
 
 ### 3.4 Sauvegarde & classe
-- `localStorage` : progression, messages découverts, chapitre courant.
+- `localStorage` : progression, messages découverts, chapitre courant. Un emplacement par jeu (`jeu1`, `jeu2`, `jeu3`, `src/engine/save.js`) ; le Jeu 3 écrit le sien lui-même (`Jeu3.jsx`). Export / import (Réglages) : un seul fichier pour les trois jeux ; l'ancien fichier d'une seule partie s'importe encore.
 - Écran "Carnet de bord" imprimable (CSS print) : toutes les fiches découvertes → trace écrite pour l'élève.
 - Mode "classe entière" : police plus grande, plein écran (API Fullscreen).
 

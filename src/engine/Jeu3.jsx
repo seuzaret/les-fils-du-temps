@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import SceneFrame from "./SceneFrame.jsx";
 import useEcran from "./useEcran.js";
+import { writeSave } from "./save.js";
 import BunkerAwake from "../chapters/jeu3/scenes/BunkerAwake.jsx";
 import BunkerHub from "../chapters/jeu3/scenes/BunkerHub.jsx";
 import BunkerHubHaut from "../chapters/jeu3/scenes/BunkerHubHaut.jsx";
@@ -49,6 +50,13 @@ import { LEVELS, ROOM_TO_LEVEL } from "../chapters/jeu3/levels.js";
      previousRoom — pièce d'où l'on vient (utilisé par l'ascenseur
                     pour connaître le niveau courant)
      missions     — catalogue de toutes les missions
+
+   Sauvegarde (slot « jeu3 », écrite à chaque changement) : salle,
+   flags, PNJ entendus, pièce précédente, questions posées dans
+   l'enquête en cours, prénom et choix de fin du Jeu 2. « Reprendre »
+   repasse cet état dans startAt. Une salle reprend à son début : ses
+   étapes internes ne sont pas gardées, ce qui compte est dans les
+   flags (un voyage K reprend au départ, sa cible est dans un flag).
    ============================================================ */
 const ROOMS = {
   awake:      { Comp: BunkerAwake,      label: "Réveil" },
@@ -78,6 +86,8 @@ const ROOMS = {
 };
 
 export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
+  /* le choix de fin du Jeu 2 : celui de la sauvegarde, sinon celui de la partie en cours */
+  const choixJeu2 = startAt && "endChoice" in startAt ? startAt.endChoice : endChoice;
   const [room, setRoom] = useState(startAt?.room || "awake");
   const [flags, setFlags] = useState(() => {
     const initial = { ...(startAt?.flags || {}) };
@@ -115,7 +125,8 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   /* État partagé de l'enquête active, remonté au niveau Jeu3 pour que
      les interviews puissent se faire dans n'importe quelle pièce et
      que le carnet persiste entre les changements de pièce. */
-  const [enqAnswered, setEnqAnswered] = useState({}); // { temoinId: Set<qidx> }
+  const [enqAnswered, setEnqAnswered] = useState(() => // { temoinId: Set<qidx> }
+    Object.fromEntries(Object.entries(startAt?.enqAnswered || {}).map(([id, q]) => [id, new Set(q)])));
   const [interviewTemoinId, setInterviewTemoinId] = useState(null);
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(null);
   const [carnetOpen, setCarnetOpen] = useState(false);
@@ -144,7 +155,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   }, []);
   /* previousRoom permet à l'ascenseur de savoir depuis quel étage
      on l'a appelé (pour surligner "ici" dans le sélecteur). */
-  const prevRef = useRef("awake");
+  const prevRef = useRef(startAt?.previousRoom || "awake");
   const goTo = (r) => { prevRef.current = room; setRoom(r); setPlanOpen(false); };
 
   const setFlag = (k, v = true) => setFlags((f) => ({ ...f, [k]: v }));
@@ -163,12 +174,22 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const activeMission = getActiveMission(missions, flags);
 
   /* Reset de l'état d'enquête quand la mission active change
-     (mission résolue → suivante prend sa place). */
+     (mission résolue → suivante prend sa place). Pas au premier
+     affichage : une partie reprise garde les questions déjà posées. */
+  const missionVue = useRef(activeMission?.id);
   useEffect(() => {
+    if (missionVue.current === activeMission?.id) return;
+    missionVue.current = activeMission?.id;
     setEnqAnswered({});
     setInterviewTemoinId(null);
     setCurrentQuestionIdx(null);
   }, [activeMission?.id]);
+
+  /* SAUVEGARDE AUTOMATIQUE (voir l'en-tête) */
+  useEffect(() => {
+    writeSave({ room, flags, heardPnj, previousRoom: prevRef.current, prenom, endChoice: choixJeu2 ?? null,
+      enqAnswered: Object.fromEntries(Object.entries(enqAnswered).map(([id, q]) => [id, [...q]])) }, "jeu3");
+  }, [room, flags, heardPnj, enqAnswered, prenom, choixJeu2]);
 
   const openInterview = (temoinId) => {
     setInterviewTemoinId(temoinId);
@@ -198,7 +219,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
     activeMission,
     enqAnswered,
     openInterview, closeInterview, askQuestion,
-    endChoice };
+    endChoice: choixJeu2 };
 
   /* Témoin actuellement en interview (modal top-level). */
   const interviewTemoin = interviewTemoinId && activeMission

@@ -7,7 +7,7 @@ import Particles from "./engine/Particles.jsx";
 import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
 import { playSfx, isMuted, setMuted, startAmbience, stopAmbience } from "./engine/audio.js";
-import { loadSave, writeSave, clearSave, hasSave, exportSaveString, importSaveString } from "./engine/save.js";
+import { loadSave, writeSave, clearSave, hasSave, exportAllString, importAllString } from "./engine/save.js";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
 import useEcran from "./engine/useEcran.js";
@@ -428,7 +428,20 @@ export default function App() {
   const newGameJeu3 = () => {
     setMode("jeu3");
     setScreen("jeu3");
-    setJeu3Start(null);
+    /* le choix de fin du Jeu 2 : celui de la partie en cours, sinon celui
+       de la sauvegarde du Jeu 2 (Jeu 2 fini un autre jour) */
+    setJeu3Start({ endChoice: jeu2EndChoice ?? loadSave("jeu2")?.jeu2EndChoice ?? null });
+    setJeu3Nonce((n) => n + 1);
+  };
+  /* Reprend la partie du Puits sauvegardée (le Jeu 3 l'écrit lui-même,
+     slot « jeu3 ») : l'état sauvé devient le point de départ. */
+  const resumeJeu3 = () => {
+    const s = loadSave("jeu3");
+    if (!s) { newGameJeu3(); return; }
+    if (s.prenom) setPrenom(s.prenom);
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start(s);
     setJeu3Nonce((n) => n + 1);
   };
 
@@ -1354,10 +1367,11 @@ export default function App() {
     setTab(CHAPTERS[0].startScene); setScreen("title");
   };
 
-  /* Exporter : télécharge la progression dans un petit fichier .json
-     (pour la reprendre sur un autre poste du CDI). */
+  /* Exporter : télécharge les parties en cours (voyage, Al3x1a, le Puits)
+     dans un seul petit fichier .json (pour les reprendre sur un autre
+     poste du CDI). */
   const doExport = () => {
-    const text = exportSaveString();
+    const text = exportAllString();
     if (!text) { say("Rien à exporter pour l'instant — commence une partie d'abord."); return; }
     const blob = new Blob([text], { type: "application/json" });
     const url = URL.createObjectURL(blob);
@@ -1368,15 +1382,20 @@ export default function App() {
     URL.revokeObjectURL(url);
   };
 
-  /* Importer : lit le fichier .json choisi par l'élève et reprend
-     la partie qu'il contient. */
+  /* Importer : lit le fichier .json choisi par l'élève. Depuis l'écran
+     titre, on reste dans le menu (l'élève choisit ensuite « Reprendre ») ;
+     en jeu, on reprend la partie du jeu en cours si le fichier la contient. */
+  const NOMS_JEUX = { jeu1: "le voyage", jeu2: "l'enquête Al3x1a", jeu3: "le Puits" };
   const doImport = (file) => {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = () => {
-      if (importSaveString(String(reader.result))) {
+      const slots = importAllString(String(reader.result));
+      if (slots.length && screen !== "title" && slots.includes(mode)) {
         setModal(null);
-        resume();
+        resume(mode);
+      } else if (slots.length) {
+        setModal({ type: "settings", ok: `Partie importée : ${slots.map((k) => NOMS_JEUX[k]).join(", ")}. Ferme ce menu et choisis « Reprendre ».` });
       } else {
         /* message affiché DANS le menu réglages (visible par-dessus) */
         setModal({ type: "settings", error: "Ce fichier n'est pas une sauvegarde MARTINE valide. Vérifie que c'est bien le bon fichier .json." });
@@ -1551,13 +1570,13 @@ export default function App() {
 
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>💾 SAUVEGARDE</div>
         <p style={{ fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.6, marginTop: 4 }}>
-          Ta partie est enregistrée sur cet ordinateur. Pour la continuer sur un
-          autre poste (au CDI, à la maison), <strong>exporte</strong> ton fichier ici,
-          puis <strong>importe</strong>-le là-bas.
+          Tes parties (le voyage, l'enquête Al3x1a, le Puits) sont enregistrées sur
+          cet ordinateur. Pour les continuer sur un autre poste (au CDI, à la maison),
+          <strong> exporte</strong> ton fichier ici, puis <strong>importe</strong>-le là-bas.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
           <button onClick={doExport} style={{ background: "#1a2536", color: "#5eff9e", border: "1px solid #2a4a38", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
-            ⬇ Exporter ma partie (fichier .json)
+            ⬇ Exporter mes parties (fichier .json)
           </button>
           <label style={{ background: "#1a2536", color: "#ffd166", border: "1px solid #4a4228", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "center" }}>
             ⬆ Importer une partie…
@@ -1567,6 +1586,9 @@ export default function App() {
         </div>
         {modal?.error && (
           <p style={{ fontSize: 12.5, color: "#ff9b8a", marginTop: 10, lineHeight: 1.5 }}>⚠ {modal.error}</p>
+        )}
+        {modal?.ok && (
+          <p style={{ fontSize: 12.5, color: "#8fe8b0", marginTop: 10, lineHeight: 1.5 }}>✓ {modal.ok}</p>
         )}
         <button onClick={() => setModal(null)} style={{ marginTop: 14, width: "100%", background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "10px", fontWeight: 700, cursor: "pointer" }}>
           Fermer
@@ -1584,6 +1606,7 @@ export default function App() {
        porte ce marqueur. */
     const jeu1Fini = !!(saved && saved.screen === "end");
     const savedJeu2 = loadSave("jeu2");
+    const savedJeu3 = loadSave("jeu3");
     const basculerSonTitre = () => { const coupe = !muted; toggleMute(); if (!coupe) setTimeout(demarrerTheme, 60); };
     return (
       /* le thème démarre au premier geste sur l'écran (règle des navigateurs) */
@@ -1592,7 +1615,7 @@ export default function App() {
         {cheatPanel}
         {(() => {
           const Variante = VARIANTES_TITRE[VARIANTE_TITRE];
-          const m = { saved, saveExists, jeu1Fini, savedJeu2, son: !muted,
+          const m = { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, son: !muted,
             onReprendre: () => resume("jeu1"),
             onNouvelle: () => setModal({ type: "confirmNew" }),
             onDemarrer: () => setModal({ type: "askPrenom", after: newGame }),
@@ -1600,6 +1623,8 @@ export default function App() {
             onNouvelleJeu2: () => setModal({ type: "confirmNewJeu2" }),
             onJeu2: () => setModal({ type: "askPrenom", after: newGameJeu2 }),
             onJeu3: () => setModal({ type: "askPrenom", after: newGameJeu3 }),
+            onReprendreJeu3: resumeJeu3,
+            onNouvelleJeu3: () => setModal({ type: "confirmNewJeu3" }),
             onReglages: () => setModal({ type: "settings" }),
             onMediadex: () => setShowMediadex(true),
             onSon: basculerSonTitre };
@@ -1640,6 +1665,20 @@ export default function App() {
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                 <button onClick={() => setModal(null)} style={{ flex: 1, background: "#1a2536", color: "#e8eef5", border: "1px solid #2a3648", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer" }}>Annuler</button>
                 <button onClick={() => { clearSave("jeu2"); setModal({ type: "askPrenom", after: newGameJeu2 }); }} style={{ flex: 1, background: "#7fd8ff", color: "#06110b", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer" }}>Nouvelle enquête</button>
+              </div>
+            </div>
+          </div>
+        )}
+        {modal?.type === "confirmNewJeu3" && (
+          <div style={overlay} onClick={() => setModal(null)}>
+            <div style={card} onClick={(e) => e.stopPropagation()}>
+              <h2 style={{ marginTop: 0, color: "#e0ccff", fontSize: 20, textAlign: "center" }}>Effacer ta partie du Puits ?</h2>
+              <p style={{ fontSize: 14, color: "#c8d4e2", lineHeight: 1.6 }}>
+                Une nouvelle partie du Puits remplacera ta progression du jeu 3 sauvegardée. Le voyage (jeu 1) et l'enquête Al3x1a (jeu 2) ne seront pas touchés.
+              </p>
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <button onClick={() => setModal(null)} style={{ flex: 1, background: "#1a2536", color: "#e8eef5", border: "1px solid #2a3648", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer" }}>Annuler</button>
+                <button onClick={() => { clearSave("jeu3"); setModal({ type: "askPrenom", after: newGameJeu3 }); }} style={{ flex: 1, background: "#c8a8f0", color: "#120a1e", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer" }}>Nouvelle partie</button>
               </div>
             </div>
           </div>

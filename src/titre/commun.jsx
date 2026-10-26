@@ -56,8 +56,8 @@ export function Accroche({ align = "center", clair = false, petit = false }) {
 
 const pill = (fond, texte, bord) => ({ background: fond, color: texte, border: `1px solid ${bord}`, borderRadius: 999, padding: "9px 16px", fontFamily: MONO, fontSize: 12.5, fontWeight: 700, letterSpacing: 1, cursor: "pointer", whiteSpace: "nowrap" });
 
-/* m : { saved, saveExists, jeu1Fini, savedJeu2, son, onReprendre, onNouvelle, onDemarrer, onReprendreJeu2,
-         onNouvelleJeu2, onJeu2, onJeu3, onReglages, onMediadex, onSon }
+/* m : { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, son, onReprendre, onNouvelle, onDemarrer, onReprendreJeu2,
+         onNouvelleJeu2, onJeu2, onJeu3, onReprendreJeu3, onNouvelleJeu3, onReglages, onMediadex, onSon }
    compact : téléphone (portrait ou paysage) — marges et textes resserrés */
 export function MenuTitre({ m, largeur = 440, compact = false }) {
   const pied = { ...pill("transparent", "#b8c4d6", "transparent"), padding: compact ? "5px 9px" : "7px 12px", fontSize: compact ? 12 : 12.5 };
@@ -97,7 +97,14 @@ export function MenuTitre({ m, largeur = 440, compact = false }) {
         ) : (
           <span title="À débloquer en terminant le voyage" style={{ ...pill("rgba(255,255,255,0.03)", "#8a96aa", "rgba(143,163,189,0.25)"), cursor: "default" }}>🔒 II · Al3x1a</span>
         )}
-        <button className="tt-btn" onClick={m.onJeu3} title="Jeu 3 · Le Puits, 2087 (bêta)" style={pill("rgba(200,168,240,0.12)", "#e0ccff", "rgba(200,168,240,0.5)")}>▶ III · Le Puits <small style={{ opacity: 0.7 }}>β</small></button>
+        {m.savedJeu3 ? (
+          <span style={{ display: "inline-flex", gap: 4 }}>
+            <button className="tt-btn" onClick={m.onReprendreJeu3} title="Jeu 3 · Le Puits, 2087 (bêta)" style={pill("rgba(200,168,240,0.12)", "#e0ccff", "rgba(200,168,240,0.5)")}>▶ III · Reprendre Le Puits <small style={{ opacity: 0.7 }}>β</small></button>
+            <button className="tt-btn" onClick={m.onNouvelleJeu3} title="Nouvelle partie du Puits" style={pill("transparent", "#8fa3bd", "rgba(143,163,189,0.35)")}>↺</button>
+          </span>
+        ) : (
+          <button className="tt-btn" onClick={m.onJeu3} title="Jeu 3 · Le Puits, 2087 (bêta)" style={pill("rgba(200,168,240,0.12)", "#e0ccff", "rgba(200,168,240,0.5)")}>▶ III · Le Puits <small style={{ opacity: 0.7 }}>β</small></button>
+        )}
       </div>
       {!m.jeu1Fini && !m.savedJeu2 && (
         <div style={{ textAlign: "center", fontSize: 12.5, color: "#a8b4c8", fontFamily: CORMORANT, fontStyle: "italic", marginTop: -2 }}>
