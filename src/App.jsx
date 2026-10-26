@@ -14,6 +14,7 @@ import useEcran from "./engine/useEcran.js";
 import TitreFil from "./titre/TitreFil.jsx";
 import TitreSablier from "./titre/TitreSablier.jsx";
 import TitrePellicule from "./titre/TitrePellicule.jsx";
+import TitrePyramide from "./titre/TitrePyramide.jsx";
 import { demarrerTheme, arreterTheme, themeEnCours } from "./titre/musiqueTitre.js";
 import CheatPanel from "./engine/CheatPanel.jsx";
 import TransitionScreen from "./engine/TransitionScreen.jsx";
@@ -67,8 +68,9 @@ import FinJeu2 from "./chapters/epilogue/FinJeu2.jsx";
    (souvent présentes sur les PC scolaires via Office), avec repli élégant.
    Aucun fichier chargé : tout reste hors-ligne. */
 /* Maquettes de l'écran titre, à comparer : ?titre=a (le fil), b (le
-   sablier), c (la pellicule). Sans paramètre : l'écran titre actuel. */
-const VARIANTES_TITRE = { a: TitreFil, b: TitreSablier, c: TitrePellicule };
+   sablier), c (la pellicule), p (l'image d'origine affinée : la
+   pyramide-sablier). Sans paramètre : l'écran titre actuel. */
+const VARIANTES_TITRE = { a: TitreFil, b: TitreSablier, c: TitrePellicule, p: TitrePyramide };
 const VARIANTE_TITRE = (() => {
   try { const v = new URLSearchParams(window.location.search).get("titre"); return VARIANTES_TITRE[v] ? v : null; } catch { return null; }
 })();
