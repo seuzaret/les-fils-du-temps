@@ -1,5 +1,6 @@
 /* ============================================================
-   ÉCRAN TITRE — maquette C « LA PELLICULE » (?titre=c)
+   « LA PELLICULE » (?titre=c) — maquette d'écran titre écartée,
+   gardée pour le futur générique de fin (choix du créateur)
    ------------------------------------------------------------
    Le jeu se montre lui-même : deux pellicules défilent en
    perspective dans le faisceau d'un projecteur, avec de vraies

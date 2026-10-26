@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, Component, Fragment } from "react";
+import { useState, useEffect, useRef, Component } from "react";
 import Martine, { Avatar } from "./engine/Martine.jsx";
 import Scene from "./engine/Scene.jsx";
 import { InventoryBar } from "./engine/Inventory.jsx";
@@ -11,8 +11,6 @@ import { loadSave, writeSave, clearSave, hasSave, exportSaveString, importSaveSt
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
 import useEcran from "./engine/useEcran.js";
-import TitreFil from "./titre/TitreFil.jsx";
-import TitreSablier from "./titre/TitreSablier.jsx";
 import TitrePellicule from "./titre/TitrePellicule.jsx";
 import TitrePyramide from "./titre/TitrePyramide.jsx";
 import { demarrerTheme, arreterTheme, themeEnCours } from "./titre/musiqueTitre.js";
@@ -64,20 +62,14 @@ import CarnetAlexia from "./chapters/epilogue/CarnetAlexia.jsx";
 import RetrouvaillesAl3x1A from "./chapters/epilogue/RetrouvaillesAl3x1A.jsx";
 import FinJeu2 from "./chapters/epilogue/FinJeu2.jsx";
 
-/* Police « épique » du titre : on tente d'abord de belles polices gravées
-   (souvent présentes sur les PC scolaires via Office), avec repli élégant.
-   Aucun fichier chargé : tout reste hors-ligne. */
-/* Écran titre : par défaut la pyramide-sablier (l'image d'origine
-   affinée). ?titre=0 : l'écran d'origine, gardé pour comparer ; ?titre=a
-   (le fil), b (le sablier), c (la pellicule) : les maquettes écartées. */
-const VARIANTES_TITRE = { a: TitreFil, b: TitreSablier, c: TitrePellicule, p: TitrePyramide };
+/* Écran titre : la pyramide-sablier (src/titre/TitrePyramide.jsx).
+   ?titre=c : la pellicule, mise de côté pour un futur générique de fin. */
+const VARIANTES_TITRE = { c: TitrePellicule, p: TitrePyramide };
 const VARIANTE_TITRE = (() => {
-  try {
-    const v = new URLSearchParams(window.location.search).get("titre");
-    if (v === "0") return null;
-    return VARIANTES_TITRE[v] ? v : "p";
-  } catch { return "p"; }
+  try { const v = new URLSearchParams(window.location.search).get("titre"); return VARIANTES_TITRE[v] ? v : "p"; } catch { return "p"; }
 })();
+/* Police « épique » des titres : Cinzel (embarquée, @fontsource), puis de belles
+   polices gravées souvent présentes sur les PC scolaires, avec repli élégant. */
 const TITRE_FONT = "'Cinzel', 'Trajan Pro', 'Copperplate Gothic Bold', 'Perpetua Titling MT', 'Constantia', 'Palatino Linotype', Georgia, serif";
 
 /* Petit filet de securite : quand un decor crashe (ex. path SVG invalide
@@ -320,28 +312,6 @@ export default function App() {
   /* le thème de l'écran titre (maquettes) : il s'éteint en fondu dès
      qu'on quitte l'écran titre, ou si on coupe le son */
   useEffect(() => { if (screen !== "title" || muted) arreterTheme(); }, [screen, muted]);
-
-  /* Animation JS-piloté des lettres du titre (utile même quand le CSS
-     `prefers-reduced-motion: reduce` désactive les animations CSS). */
-  const titleLetterRefs = useRef([]);
-  useEffect(() => {
-    if (screen !== "title" || VARIANTE_TITRE) return;   // seulement l'écran d'origine (?titre=0)
-    let raf;
-    const t0 = performance.now();
-    const step = (t) => {
-      const dt = (t - t0) / 1000;
-      titleLetterRefs.current.forEach((el, i) => {
-        if (!el) return;
-        const y = Math.sin(dt * 1.85 + i * 0.55) * 6;
-        const glow = 0.5 + 0.4 * (Math.sin(dt * 1.5 + i * 0.4) * 0.5 + 0.5);
-        el.style.transform = `translateY(${y.toFixed(2)}px)`;
-        el.style.textShadow = `0 0 ${(6 + 12 * glow).toFixed(1)}px rgba(255,209,102,${(0.35 + 0.55 * glow).toFixed(2)}), 0 2px 22px rgba(232,150,74,${(0.35 + 0.3 * glow).toFixed(2)})`;
-      });
-      raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [screen]);
 
   /* le bouton SOS en attente se ferme dès qu'on change de tableau ou de
      chapitre (on n'accumule pas les SOS non émis entre deux scènes). */
@@ -1614,16 +1584,13 @@ export default function App() {
        porte ce marqueur. */
     const jeu1Fini = !!(saved && saved.screen === "end");
     const savedJeu2 = loadSave("jeu2");
-    /* chapitres débloqués : le plus haut atteint, lu aussi dans la
-       sauvegarde (car `maxReached` repart à 0 tant qu'on n'a pas repris) */
-    const menuMax = Math.max(maxReached, saved?.maxReached ?? saved?.chapterIndex ?? 0);
     const basculerSonTitre = () => { const coupe = !muted; toggleMute(); if (!coupe) setTimeout(demarrerTheme, 60); };
     return (
       /* le thème démarre au premier geste sur l'écran (règle des navigateurs) */
       <div onPointerDown={() => { if (!muted && !themeEnCours()) demarrerTheme(); }}
         style={{ minHeight: "100vh", background: "#080d16", position: "relative", overflow: "hidden", fontFamily: "Palatino, Georgia, serif" }}>
         {cheatPanel}
-        {VARIANTE_TITRE ? (() => {
+        {(() => {
           const Variante = VARIANTES_TITRE[VARIANTE_TITRE];
           const m = { saved, saveExists, jeu1Fini, savedJeu2, son: !muted,
             onReprendre: () => resume("jeu1"),
@@ -1637,262 +1604,7 @@ export default function App() {
             onMediadex: () => setShowMediadex(true),
             onSon: basculerSonTitre };
           return <Variante m={m} />;
-        })() : (<>
-        {/* Illustration plein ecran : desert 3/4 avec grande pyramide et hieroglyphes */}
-        <svg viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice"
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} aria-hidden="true">
-            <defs>
-              <linearGradient id="ttlSky" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0"    stopColor="#2d69a8" />
-                <stop offset="0.55" stopColor="#7fb8e0" />
-                <stop offset="1"    stopColor="#f0c078" />
-              </linearGradient>
-              <radialGradient id="ttlSun" cx="0.5" cy="0.5" r="0.5">
-                <stop offset="0"    stopColor="#fff2c8" stopOpacity="1" />
-                <stop offset="0.4"  stopColor="#ffd166" stopOpacity="0.85" />
-                <stop offset="1"    stopColor="#ffd166" stopOpacity="0" />
-              </radialGradient>
-              <linearGradient id="ttlPyrLit" x1="0" x2="1" y1="0.2" y2="1">
-                <stop offset="0" stopColor="#f0c574" />
-                <stop offset="1" stopColor="#c48b3a" />
-              </linearGradient>
-              <linearGradient id="ttlPyrDark" x1="1" x2="0" y1="0.2" y2="1">
-                <stop offset="0" stopColor="#8b5a24" />
-                <stop offset="1" stopColor="#5a3a14" />
-              </linearGradient>
-              <linearGradient id="ttlSand" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stopColor="#e8b96a" />
-                <stop offset="1" stopColor="#b07836" />
-              </linearGradient>
-              <linearGradient id="ttlNile" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0" stopColor="#3b78a8" />
-                <stop offset="1" stopColor="#1e4a6e" />
-              </linearGradient>
-              {/* scrim degrade pour la lisibilite du titre et des boutons */}
-              <linearGradient id="ttlScrim" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="0"    stopColor="#080d16" stopOpacity="0.55" />
-                <stop offset="0.35" stopColor="#080d16" stopOpacity="0.15" />
-                <stop offset="0.7"  stopColor="#080d16" stopOpacity="0.15" />
-                <stop offset="1"    stopColor="#080d16" stopOpacity="0.7" />
-              </linearGradient>
-            </defs>
-
-            {/* ciel dégradé */}
-            <rect width="800" height="450" fill="url(#ttlSky)" />
-
-            {/* soleil chaud haut-droit + halo brumeux (plus petit) */}
-            <circle cx="670" cy="105" r="130" fill="url(#ttlSun)" opacity="0.85" />
-            <circle cx="670" cy="105" r="28" fill="#fff2c8" />
-
-            {/* --- DESERT ARRIERE-PLAN ---
-                 D'abord un aplat de sable solide qui monte jusqu'a la
-                 ligne d'horizon (comme la pyramide, sans transparence),
-                 puis les couches de dunes floues et transparentes
-                 par-dessus pour la profondeur. */}
-            <path d="M 0 285 Q 200 275 400 285 Q 600 295 800 285 L 800 450 L 0 450 Z"
-              fill="url(#ttlSand)" opacity="1" />
-            {/* dunes les plus lointaines (bleu/violet, floues) */}
-            <path d="M 0 300 Q 120 275 240 292 Q 340 305 460 285 Q 580 268 700 288 Q 760 297 800 292 L 800 315 L 0 315 Z"
-              fill="#a58aa8" opacity="0.35" style={{ filter: "blur(2px)" }} />
-            {/* dunes moyenne distance (chaud, un peu floues) */}
-            <path d="M 0 320 Q 140 300 300 315 Q 420 328 540 310 Q 660 298 800 320 L 800 345 L 0 345 Z"
-              fill="#c99060" opacity="0.55" style={{ filter: "blur(1.2px)" }} />
-
-            {/* --- PYRAMIDE (recule, POV plus haut) : apex 310,180 - base autour --- */}
-            {/* face droite (ombre) : apex -> front-bas -> right-bas */}
-            <polygon points="310,180 310,395 500,352" fill="url(#ttlPyrDark)" opacity="0.95" />
-            {/* face gauche (lumiere) : apex -> left-bas -> front-bas */}
-            <polygon points="310,180 120,352 310,395" fill="url(#ttlPyrLit)" opacity="0.95" />
-            {/* aretes principales */}
-            <line x1="310" y1="180" x2="310" y2="395" stroke="#3a2410" strokeWidth="1"   opacity="0.55" />
-            <line x1="310" y1="180" x2="120" y2="352" stroke="#3a2410" strokeWidth="1.2" opacity="0.55" />
-            <line x1="310" y1="180" x2="500" y2="352" stroke="#3a2410" strokeWidth="1.2" opacity="0.55" />
-            {/* pierres : lignes horizontales sur les 2 faces */}
-            {[0.15, 0.32, 0.5, 0.68, 0.85].map((t, i) => {
-              const y  = 180 + (395 - 180) * t;
-              const xL = 310 - (310 - 120) * t;
-              const yR = 180 + (352 - 180) * t;
-              const xR = 310 + (500 - 310) * t;
-              return (
-                <g key={`sto${i}`}>
-                  <line x1={xL} y1={y}  x2="310" y2={y}  stroke="#3a2410" strokeWidth="0.7" opacity="0.25" />
-                  <line x1="310" y1={y} x2={xR} y2={yR} stroke="#3a2410" strokeWidth="0.7" opacity="0.25" />
-                </g>
-              );
-            })}
-
-            {/* --- PYRAMIDE INVERSEE (transparent), effet sablier --- */}
-            {/* Meme apex partage (310,180), base ouverte vers le HAUT.
-                Faces tres transparentes pour un effet cristal / temps. */}
-            <polygon points="310,180 310,-35 500,10" fill="url(#ttlPyrDark)" opacity="0.16" />
-            <polygon points="310,180 120,10 310,-35" fill="url(#ttlPyrLit)" opacity="0.20" />
-            <line x1="310" y1="180" x2="310" y2="-35" stroke="#f5e0a8" strokeWidth="0.9" opacity="0.35" />
-            <line x1="310" y1="180" x2="120" y2="10"  stroke="#f5e0a8" strokeWidth="1"   opacity="0.32" />
-            <line x1="310" y1="180" x2="500" y2="10"  stroke="#f5e0a8" strokeWidth="1"   opacity="0.32" />
-            {/* petit "sable" qui tombe entre les deux pyramides */}
-            <line x1="310" y1="120" x2="310" y2="200" stroke="#ffe08a" strokeWidth="1.6" strokeLinecap="round" opacity="0.7">
-              <animate attributeName="opacity" values="0.3;0.85;0.3" dur="2.6s" repeatCount="indefinite" />
-            </line>
-
-            {/* dune tres proche (premier plan) — dessinée APRES la pyramide pour la placer derriere */}
-            <path d="M 0 380 Q 180 358 380 378 Q 540 396 800 372 L 800 450 L 0 450 Z"
-              fill="url(#ttlSand)" opacity="0.98" />
-            {/* motifs de sable (rides du desert) sur la dune proche */}
-            {[
-              "M 60 405 Q 130 401 200 405",
-              "M 240 411 Q 320 407 400 411",
-              "M 440 405 Q 520 402 600 405",
-              "M 60 424 Q 140 421 220 424",
-              "M 260 430 Q 340 427 420 430",
-              "M 480 424 Q 560 422 640 424",
-              "M 660 417 Q 720 414 790 417",
-            ].map((d, i) => (
-              <path key={`rp${i}`} d={d} fill="none" stroke="#8a5822" strokeWidth="0.8" opacity="0.35" strokeLinecap="round" />
-            ))}
-            {/* petits cailloux epars sur le premier plan */}
-            {[[95, 418, 2], [175, 428, 1.4], [280, 421, 1.8], [410, 435, 2.2],
-              [520, 423, 1.6], [615, 431, 2], [700, 421, 1.4], [760, 435, 1.8]].map(([cx, cy, r], i) => (
-              <ellipse key={`rk${i}`} cx={cx} cy={cy} rx={r} ry={r * 0.55} fill="#5a3a14" opacity="0.55" />
-            ))}
-            {/* touffes d'herbe seche isolees */}
-            <g transform="translate(465 398)" opacity="0.7">
-              <path d="M0 4 L-2 -3 M0 4 L0 -4 M0 4 L2 -3" stroke="#8a7040" strokeWidth="1" fill="none" strokeLinecap="round" />
-            </g>
-            <g transform="translate(720 408)" opacity="0.6">
-              <path d="M0 3 L-2 -3 M0 3 L0 -4 M0 3 L2 -3" stroke="#8a7040" strokeWidth="1" fill="none" strokeLinecap="round" />
-            </g>
-
-            {/* --- SABLE QUI VOLE (particules horizontales de droite a gauche) --- */}
-            {Array.from({ length: 36 }).map((_, i) => {
-              const y = 160 + (i * 43) % 260;
-              const dur = 4 + (i % 5);
-              const size = 1 + (i % 3) * 0.7;
-              return (
-                <circle key={`sd${i}`} cx="820" cy={y} r={size} fill="#e8c47a" opacity={0.5 + (i % 3) * 0.15}>
-                  <animate attributeName="cx" from="820" to="-40" dur={`${dur}s`} begin={`${(i * 0.3) % 5}s`} repeatCount="indefinite" />
-                  <animate attributeName="cy" values={`${y};${y - 7};${y + 5};${y}`} dur={`${dur}s`} begin={`${(i * 0.3) % 5}s`} repeatCount="indefinite" />
-                  <animate attributeName="opacity" values="0;0.9;0.9;0" keyTimes="0;0.1;0.85;1" dur={`${dur}s`} begin={`${(i * 0.3) % 5}s`} repeatCount="indefinite" />
-                </circle>
-              );
-            })}
-
-            {/* petites bandes de sable soufflees au sol */}
-            {[340, 360, 380, 405].map((y, i) => (
-              <path key={`bd${i}`} d={`M 0 ${y} Q 200 ${y - 3} 400 ${y} T 800 ${y}`}
-                fill="none" stroke="#e8c47a" strokeWidth="1.2" opacity="0.55">
-                <animate attributeName="opacity" values="0.15;0.6;0.15" dur={`${3 + i * 0.4}s`} repeatCount="indefinite" />
-              </path>
-            ))}
-
-            {/* scrim vertical pour lisibilite du titre / boutons superposes */}
-            <rect width="800" height="450" fill="url(#ttlScrim)" />
-          </svg>
-
-          {/* Contenu superpose (titre en haut, boutons en bas), plein ecran */}
-          <div style={{ position: "relative", zIndex: 2, minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between", padding: "32px 20px 40px", textAlign: "center" }}>
-          <h1 style={{ fontFamily: TITRE_FONT, fontSize: "clamp(38px,9.5vw,72px)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", margin: "4px 0 0", lineHeight: 1.08, display: "inline-block", alignSelf: "flex-start", marginLeft: "20vw" }}>
-            {/* une lettre = un span animé ; les lettres d'un même mot sont
-                groupées (nowrap) pour que le titre ne se coupe jamais au
-                milieu d'un mot (« DU T / EMPS » sur un téléphone en paysage) */}
-            {"Les fils du temps".split(" ").map((mot, w, mots) => {
-              const debut = mots.slice(0, w).reduce((n, m) => n + m.length + 1, 0);
-              const lettre = (ch, i) => (
-                <span key={i}
-                  ref={(el) => { titleLetterRefs.current[i] = el; }}
-                  style={{
-                    display: "inline-block",
-                    whiteSpace: "pre",
-                    color: i % 2 === 0 ? "#ffd166" : "#e8a24a",
-                    transition: "none",
-                    willChange: "transform, text-shadow",
-                  }}>
-                  {ch === " " ? " " : ch}
-                </span>
-              );
-              return (
-                <Fragment key={w}>
-                  <span style={{ display: "inline-block", whiteSpace: "nowrap" }}>
-                    {mot.split("").map((ch, k) => lettre(ch, debut + k))}
-                  </span>
-                  {w < mots.length - 1 && lettre(" ", debut + mot.length)}
-                </Fragment>
-              );
-            })}
-          </h1>
-          <div style={{ marginTop: 26, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-            {saveExists ? (
-              <>
-                {saved?.prenom && (
-                  <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#5eff9e", opacity: 0.85, letterSpacing: 2 }}>
-                    ► Salut, {saved.prenom} !
-                  </div>
-                )}
-                <button onClick={() => resume("jeu1")}
-                  style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 12, padding: "14px 34px", fontSize: 16, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 24px rgba(94,255,158,0.4)" }}>
-                  ▶ REPRENDRE
-                </button>
-                <button onClick={() => setModal({ type: "confirmNew" })}
-                  style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 12, padding: "9px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "ui-monospace,monospace" }}>
-                  ↺ Nouvelle partie
-                </button>
-              </>
-            ) : (
-              <button onClick={() => setModal({ type: "askPrenom", after: newGame })}
-                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 12, padding: "14px 34px", fontSize: 16, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 24px rgba(94,255,158,0.4)" }}>
-                ▶ DÉMARRER
-              </button>
-            )}
-
-            {/* ─── BOUTON JEU 2 ─── se débloque après avoir fini le jeu 1 */}
-            <div style={{ marginTop: 8, padding: "10px 16px", border: `1px ${jeu1Fini ? "solid" : "dashed"} ${jeu1Fini ? "#7fd8ff" : "#2a3648"}`, borderRadius: 12, minWidth: 300, display: "flex", flexDirection: "column", alignItems: "center", gap: 8, opacity: jeu1Fini ? 1 : 0.55 }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#7fd8ff" }}>SUITE DE L'AVENTURE</div>
-              {savedJeu2 ? (
-                <>
-                  <button onClick={() => resume("jeu2")}
-                    style={{ background: "#7fd8ff", color: "#06110b", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 18px rgba(127,216,255,0.45)" }}>
-                    ▶ REPRENDRE JEU 2 — AL3X1A
-                  </button>
-                  <button onClick={() => setModal({ type: "confirmNewJeu2" })}
-                    style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 14px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace" }}>
-                    ↺ Nouvelle enquête
-                  </button>
-                </>
-              ) : jeu1Fini ? (
-                <button onClick={() => setModal({ type: "askPrenom", after: newGameJeu2 })}
-                  style={{ background: "#7fd8ff", color: "#06110b", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 18px rgba(127,216,255,0.45)" }}>
-                  ▶ JEU 2 — AL3X1A
-                </button>
-              ) : (
-                <div style={{ fontSize: 12, color: "#5a6678", fontStyle: "italic", textAlign: "center" }}>
-                  🔒 À débloquer en terminant le voyage principal.
-                </div>
-              )}
-              {/* JEU 3 — squelette PR J3-A : disponible sans conditions
-                  pour tester. À gater ultérieurement sur la fin du Jeu 2. */}
-              <button onClick={() => { setModal({ type: "askPrenom", after: newGameJeu3 }); }}
-                style={{ background: "transparent", color: "#c8a8f0", border: "1px solid #4a3a68", borderRadius: 10, padding: "9px 18px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 6 }}>
-                ▶ JEU 3 — BUNKER 2087 (BETA)
-              </button>
-            </div>
-
-            <div style={{ display: "flex", gap: 20, marginTop: 4 }}>
-              <button onClick={() => setModal({ type: "settings" })}
-                style={{ background: "transparent", color: "#5a6678", border: "none", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
-                ⚙ Réglages · sauvegarde
-              </button>
-              <button onClick={() => setShowMediadex(true)}
-                style={{ background: "transparent", color: "#c8963e", border: "none", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
-                🃏 Mediadex
-              </button>
-              <button onClick={basculerSonTitre} title={muted ? "Mettre la musique" : "Couper la musique"}
-                style={{ background: "transparent", color: muted ? "#5a6678" : "#8fd8a8", border: "none", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
-                {muted ? "🔇 Musique" : "🔊 Musique"}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        </>)}
+        })()}
         {/* menu réglages (export / import de la sauvegarde) */}
         {modal?.type === "settings" && <SettingsModal />}
 

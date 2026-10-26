@@ -1,6 +1,5 @@
 /* ============================================================
    ÉCRAN TITRE — « LA PYRAMIDE », l'image d'origine affinée
-   (écran par défaut ; l'ancien reste sur ?titre=0)
    ------------------------------------------------------------
    Même image et même équilibre que l'écran titre de départ : le
    désert, le ciel bleu, le soleil à droite, la grande pyramide

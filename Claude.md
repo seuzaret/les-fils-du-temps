@@ -106,7 +106,7 @@ martine/
 │   │   ├── Gauges.jsx         (les 4 jauges)
 │   │   ├── save.js            (localStorage)
 │   │   └── audio.js
-│   ├── titre/                 (écran titre : TitrePyramide par défaut, ?titre=0 l'original, ?titre=a|b|c maquettes, menu, musique)
+│   ├── titre/                 (écran titre TitrePyramide, menu, musique ; TitrePellicule ?titre=c, pour le futur générique de fin)
 │   ├── chapters/              ← UN DOSSIER PAR CHAPITRE, pur contenu
 │   │   ├── 01-paleolithique/
 │   │   │   ├── data.js        (items, recettes, dialogues, fiches, jauges)

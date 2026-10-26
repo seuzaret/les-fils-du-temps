@@ -1,15 +1,15 @@
 /* ============================================================
-   ÉCRAN TITRE — pièces communes aux maquettes (?titre=a|b|c)
+   ÉCRAN TITRE — pièces communes (pyramide, pellicule)
    ------------------------------------------------------------
    TitreLettres : « Les fils du temps » en Cinzel (embarquée,
                   @fontsource), or en dégradé, un reflet qui passe
-                  lentement ; les mots ne se coupent jamais.
+                  lentement ; les mots ne se coupent jamais
+                  (pellicule).
    Accroche     : « avec MARTINE » et la phrase qui dit ce qu'est
-                  le jeu.
-   MenuTitre    : le menu, même logique que l'écran actuel
-                  (reprendre / démarrer, Jeu 2 débloqué à la fin du
-                  Jeu 1, Jeu 3 en bêta, réglages, médiadex, son),
-                  mais hiérarchisé et lisible sur n'importe quel fond.
+                  le jeu (pellicule).
+   MenuTitre    : le menu (reprendre / démarrer, Jeu 2 débloqué à la
+                  fin du Jeu 1, Jeu 3 en bêta, réglages, médiadex,
+                  son), hiérarchisé et lisible sur n'importe quel fond.
    ============================================================ */
 export const CINZEL = "'Cinzel', 'Trajan Pro', Georgia, serif";
 export const CORMORANT = "'Cormorant Garamond', Georgia, serif";
