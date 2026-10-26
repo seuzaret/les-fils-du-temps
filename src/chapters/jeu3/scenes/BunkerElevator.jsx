@@ -46,13 +46,13 @@ function Sigil({ x, y, s = 1, color }) {
 }
 
 /* Coulures sous un tag à la bombe (positions fixes). */
-function Drips({ x, y, w, color, seed = 1 }) {
+function Drips({ x, y, w, color, seed = 1, small = false }) {
   return (
     <g>
-      {Array.from({ length: 6 }).map((_, i) => {
+      {Array.from({ length: small ? 4 : 6 }).map((_, i) => {
         const dx = ((i * 37 + seed * 53) % 100) / 100;
-        const h = 6 + ((i * 29 + seed * 17) % 14);
-        return <rect key={i} x={x + dx * w} y={y} width="2" height={h} rx="1" fill={color} opacity="0.75" />;
+        const h = (small ? 3 : 6) + ((i * 29 + seed * 17) % (small ? 8 : 14));
+        return <rect key={i} x={x + dx * w} y={y} width={small ? 1.3 : 2} height={h} rx="0.7" fill={color} opacity={small ? 0.6 : 0.75} />;
       })}
     </g>
   );
@@ -166,10 +166,15 @@ export default function BunkerElevator({ onGo, j3 }) {
             <stop offset="60%" stopColor="#3a4a58" />
             <stop offset="100%" stopColor="#1a2028" />
           </linearGradient>
+          {/* tag à la bombe, abîmé : grain, bords qui bavent, et la peinture
+              partie par plaques (une partie des lettres manque) */}
           <filter id="ev-spray" x="-5%" y="-20%" width="110%" height="140%">
             <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="7" result="n" />
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.6" />
-            <feGaussianBlur stdDeviation="0.35" />
+            <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" result="trace" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.09 0.35" numOctaves="3" seed="11" result="taches" />
+            <feColorMatrix in="taches" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  3.4 0 0 0 -0.72" result="usure" />
+            <feComposite in="trace" in2="usure" operator="in" />
+            <feGaussianBlur stdDeviation="0.3" />
           </filter>
           <radialGradient id="ev-glow" cx="50%" cy="50%" r="55%">
             <stop offset="0%" stopColor={displayLvl?.color || "#5eff9e"} stopOpacity="0.28" />
@@ -255,10 +260,10 @@ export default function BunkerElevator({ onGo, j3 }) {
               <rect x="410" y="220" width="6" height="290" fill="#c8d4e2" opacity="0.25" />
               <rect x="486" y="350" width="8" height="40" fill="#c8a848" stroke="#3a2010" strokeWidth="0.8" />
               {tags.has("verifie") && (
-                <g style={tagStyle("verifie")} filter="url(#ev-spray)" transform="rotate(-4 442 280)">
-                  <text x="442" y="272" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="21" fill="#e8d048" stroke="#1a1408" strokeWidth="0.8">VÉRIFIE.</text>
-                  <text x="444" y="298" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="21" fill="#e8d048" stroke="#1a1408" strokeWidth="0.8">RECOUPE.</text>
-                  <Drips x={398} y={301} w={90} color="#e8d048" seed={3} />
+                <g style={tagStyle("verifie")} filter="url(#ev-spray)" transform="rotate(-4 442 280)" opacity="0.82">
+                  <text x="440" y="276" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="14" fill="#c8b44a">VÉRIFIE.</text>
+                  <text x="442" y="293" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="14" fill="#c8b44a">RECOUPE.</text>
+                  <Drips x={414} y={295} w={56} color="#c8b44a" seed={3} small />
                 </g>
               )}
             </g>
@@ -268,10 +273,10 @@ export default function BunkerElevator({ onGo, j3 }) {
               <rect x="580" y="220" width="6" height="290" fill="#c8d4e2" opacity="0.25" />
               <rect x="506" y="350" width="8" height="40" fill="#c8a848" stroke="#3a2010" strokeWidth="0.8" />
               {tags.has("jorge") && (
-                <g style={tagStyle("jorge")} filter="url(#ev-spray)" transform="rotate(3 558 456)">
-                  <text x="558" y="448" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="22" fill="#ff6a4a" stroke="#1a0806" strokeWidth="0.8">LIBÉREZ</text>
-                  <text x="558" y="476" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="24" fill="#ff6a4a" stroke="#1a0806" strokeWidth="0.8">JORGE</text>
-                  <Drips x={524} y={479} w={70} color="#ff6a4a" seed={5} />
+                <g style={tagStyle("jorge")} filter="url(#ev-spray)" transform="rotate(3 558 456)" opacity="0.85">
+                  <text x="558" y="452" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="15" fill="#c8604a">LIBÉREZ</text>
+                  <text x="558" y="470" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="16" fill="#c8604a">JORGE</text>
+                  <Drips x={536} y={472} w={44} color="#c8604a" seed={5} small />
                 </g>
               )}
             </g>
@@ -360,23 +365,27 @@ export default function BunkerElevator({ onGo, j3 }) {
             <rect x="712" y="92" width="436" height="80" fill="#4a5058" opacity="0.86" />
             {[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={716 + i * 72} y="94" width="64" height="76" fill="#5a6068" opacity={0.18 + (i % 3) * 0.06} />)}
             {tags.has("fils") && (
-              <g style={tagStyle("fils")} filter="url(#ev-spray)" transform="rotate(-2 930 132)">
-                <Sigil x={752} y={130} s={1.5} color="#ff8a3a" />
-                <text x="950" y="124" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="30" fill="#ff8a3a" stroke="#1a0c04" strokeWidth="1" letterSpacing="1">LES FILS DU TEMPS</text>
-                <text x="950" y="158" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="24" fill="#ff8a3a" stroke="#1a0c04" strokeWidth="1" letterSpacing="2">SE SOUVIENNENT</text>
-                <Drips x={830} y={162} w={240} color="#ff8a3a" seed={2} />
+              <g style={tagStyle("fils")} filter="url(#ev-spray)" transform="rotate(-2 930 132)" opacity="0.8">
+                <Sigil x={826} y={130} s={0.95} color="#d08a4a" />
+                <text x="950" y="128" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="20" fill="#d08a4a" letterSpacing="1">LES FILS DU TEMPS</text>
+                <text x="950" y="150" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="15" fill="#d08a4a" letterSpacing="2">SE SOUVIENNENT</text>
+                <Drips x={880} y={153} w={140} color="#d08a4a" seed={2} small />
               </g>
             )}
             {tags.has("qui") && (
-              <g style={tagStyle("qui")} transform="rotate(-7 196 300)">
-                <text x="196" y="300" textAnchor="middle" fontFamily={MARKER} fontWeight="700" fontSize="28" fill="#f0ece0" opacity="0.88">QUI L'A ÉCRIT ?</text>
-                <Sigil x={196} y={334} s={0.9} color="#f0ece0" />
+              <g style={tagStyle("qui")} filter="url(#ev-spray)" transform="rotate(-7 196 300)" opacity="0.7">
+                <text x="196" y="300" textAnchor="middle" fontFamily={MARKER} fontWeight="700" fontSize="18" fill="#d8d4c8">QUI L'A ÉCRIT ?</text>
+                <Sigil x={196} y={322} s={0.6} color="#d8d4c8" />
               </g>
             )}
+            {/* un très vieux griffonnage au feutre, sur le mur sous le miroir, presque effacé */}
+            <g filter="url(#ev-spray)" transform="rotate(-3 200 536)" opacity="0.5">
+              <text x="200" y="536" textAnchor="middle" fontFamily={MARKER} fontWeight="700" fontSize="9.5" fill="#d8d4c8" letterSpacing="0.5">THE CAKE IS A LIE</text>
+            </g>
             {tags.has("lea") && (
-              <g style={tagStyle("lea")} filter="url(#ev-spray)" transform="rotate(-1.5 196 196)">
-                <text x="196" y="206" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="27" fill="#7fe8c8" stroke="#06140e" strokeWidth="0.9" letterSpacing="1">LÉA AVAIT RAISON</text>
-                <Sigil x={350} y={194} s={0.8} color="#7fe8c8" />
+              <g style={tagStyle("lea")} filter="url(#ev-spray)" transform="rotate(-1.5 196 196)" opacity="0.8">
+                <text x="196" y="210" textAnchor="middle" fontFamily={SPRAY} fontWeight="900" fontSize="17" fill="#78c0a8" letterSpacing="1">LÉA AVAIT RAISON</text>
+                <Sigil x={292} y={203} s={0.55} color="#78c0a8" />
               </g>
             )}
           </g>
