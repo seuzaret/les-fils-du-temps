@@ -106,6 +106,7 @@ martine/
 │   │   ├── Gauges.jsx         (les 4 jauges)
 │   │   ├── save.js            (localStorage)
 │   │   └── audio.js
+│   ├── titre/                 (écran titre : maquettes ?titre=a|b|c, menu, musique)
 │   ├── chapters/              ← UN DOSSIER PAR CHAPITRE, pur contenu
 │   │   ├── 01-paleolithique/
 │   │   │   ├── data.js        (items, recettes, dialogues, fiches, jauges)

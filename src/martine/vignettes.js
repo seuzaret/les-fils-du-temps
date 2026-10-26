@@ -8,20 +8,10 @@
    <canvas>. L'animation déplace ensuite 46 petites images fixes au lieu
    de 46 tableaux vivants : fluide, même sur un vieil ordinateur.
    ============================================================ */
-import { createElement } from "react";
-import { renderToStaticMarkup } from "react-dom/server";
 import { EPOQUES } from "./epoquesMonde2.js";
+import { urlDuTableau } from "../engine/vignette.js";
 
-const noop = () => {};
-const PROPS = { collect: noop, action: noop, reveal: false, made: [], flags: {}, queteQui: null, mode: "jeu2" };
-
-/** Le tableau en adresse « data: » d'image SVG figée. */
-export function urlDuTableau(Composant) {
-  let svg = renderToStaticMarkup(createElement(Composant, PROPS));
-  svg = svg.replace(/<(animate|animateTransform|animateMotion|set)\b[^>]*?(\/>|>[\s\S]*?<\/\1>)/g, "");
-  svg = svg.replace(/^<svg\b/, '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1000" height="560"');
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
-}
+export { urlDuTableau };
 
 /** Dessine le tableau dans `canvas` (taille du canvas). Renvoie une promesse. */
 export function dessinerTableau(Composant, canvas) {

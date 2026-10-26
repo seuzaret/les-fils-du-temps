@@ -11,6 +11,10 @@ import { loadSave, writeSave, clearSave, hasSave, exportSaveString, importSaveSt
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
 import useEcran from "./engine/useEcran.js";
+import TitreFil from "./titre/TitreFil.jsx";
+import TitreSablier from "./titre/TitreSablier.jsx";
+import TitrePellicule from "./titre/TitrePellicule.jsx";
+import { demarrerTheme, arreterTheme, themeEnCours } from "./titre/musiqueTitre.js";
 import CheatPanel from "./engine/CheatPanel.jsx";
 import TransitionScreen from "./engine/TransitionScreen.jsx";
 import EndScreen from "./engine/EndScreen.jsx";
@@ -62,6 +66,12 @@ import FinJeu2 from "./chapters/epilogue/FinJeu2.jsx";
 /* Police « épique » du titre : on tente d'abord de belles polices gravées
    (souvent présentes sur les PC scolaires via Office), avec repli élégant.
    Aucun fichier chargé : tout reste hors-ligne. */
+/* Maquettes de l'écran titre, à comparer : ?titre=a (le fil), b (le
+   sablier), c (la pellicule). Sans paramètre : l'écran titre actuel. */
+const VARIANTES_TITRE = { a: TitreFil, b: TitreSablier, c: TitrePellicule };
+const VARIANTE_TITRE = (() => {
+  try { const v = new URLSearchParams(window.location.search).get("titre"); return VARIANTES_TITRE[v] ? v : null; } catch { return null; }
+})();
 const TITRE_FONT = "'Cinzel', 'Trajan Pro', 'Copperplate Gothic Bold', 'Perpetua Titling MT', 'Constantia', 'Palatino Linotype', Georgia, serif";
 
 /* Petit filet de securite : quand un decor crashe (ex. path SVG invalide
@@ -300,6 +310,10 @@ export default function App() {
 
   /* la bulle d'un personnage disparaît quand on change de tableau */
   useEffect(() => { setBubble(null); }, [tab]);
+
+  /* le thème de l'écran titre (maquettes) : il s'éteint en fondu dès
+     qu'on quitte l'écran titre, ou si on coupe le son */
+  useEffect(() => { if (screen !== "title" || muted) arreterTheme(); }, [screen, muted]);
 
   /* Animation JS-piloté des lettres du titre (utile même quand le CSS
      `prefers-reduced-motion: reduce` désactive les animations CSS). */
@@ -1600,6 +1614,26 @@ export default function App() {
     return (
       <div style={{ minHeight: "100vh", background: "#080d16", position: "relative", overflow: "hidden", fontFamily: "Palatino, Georgia, serif" }}>
         {cheatPanel}
+        {VARIANTE_TITRE ? (() => {
+          const Variante = VARIANTES_TITRE[VARIANTE_TITRE];
+          const m = { saved, saveExists, jeu1Fini, savedJeu2, son: !muted,
+            onReprendre: () => resume("jeu1"),
+            onNouvelle: () => setModal({ type: "confirmNew" }),
+            onDemarrer: () => setModal({ type: "askPrenom", after: newGame }),
+            onReprendreJeu2: () => resume("jeu2"),
+            onNouvelleJeu2: () => setModal({ type: "confirmNewJeu2" }),
+            onJeu2: () => setModal({ type: "askPrenom", after: newGameJeu2 }),
+            onJeu3: () => setModal({ type: "askPrenom", after: newGameJeu3 }),
+            onReglages: () => setModal({ type: "settings" }),
+            onMediadex: () => setShowMediadex(true),
+            onSon: () => { const coupe = !muted; toggleMute(); if (!coupe) setTimeout(demarrerTheme, 60); } };
+          /* le thème démarre au premier geste sur l'écran (règle des navigateurs) */
+          return (
+            <div onPointerDown={() => { if (!muted && !themeEnCours()) demarrerTheme(); }}>
+              <Variante m={m} />
+            </div>
+          );
+        })() : (<>
         {/* Illustration plein ecran : desert 3/4 avec grande pyramide et hieroglyphes */}
         <svg viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" }} aria-hidden="true">
@@ -1850,8 +1884,15 @@ export default function App() {
           </div>
         </div>
 
+        </>)}
         {/* menu réglages (export / import de la sauvegarde) */}
         {modal?.type === "settings" && <SettingsModal />}
+
+        {/* le médiadex, depuis l'écran titre : les cartes de la sauvegarde */}
+        {showMediadex && (
+          <Mediadex unlocked={saved?.mediadex?.length ? saved.mediadex : mediadex} onClose={() => setShowMediadex(false)}
+            fluxTotal={saved?.fluxTotal ?? fluxTotal} bonusChapters={saved?.bonusChapters ?? bonusChapters} />
+        )}
 
         {/* confirmation avant d'effacer une partie */}
         {modal?.type === "confirmNew" && (
