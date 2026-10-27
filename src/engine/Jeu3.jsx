@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import SceneFrame from "./SceneFrame.jsx";
 import useEcran from "./useEcran.js";
-import { writeSave } from "./save.js";
+import { writeSave, monde2Fini } from "./save.js";
 import BunkerAwake from "../chapters/jeu3/scenes/BunkerAwake.jsx";
 import BunkerHub from "../chapters/jeu3/scenes/BunkerHub.jsx";
 import BunkerHubHaut from "../chapters/jeu3/scenes/BunkerHubHaut.jsx";
@@ -159,6 +159,15 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   const goTo = (r) => { prevRef.current = room; setRoom(r); setPlanOpen(false); };
 
   const setFlag = (k, v = true) => setFlags((f) => ({ ...f, [k]: v }));
+  /* le monde 2 (…/martine/) fini : on le lit au départ, et chaque fois
+     qu'on revient sur l'onglet (le joueur a pu le finir dans un autre) */
+  useEffect(() => {
+    const lire = () => { if (monde2Fini()) setFlags((f) => (f.monde2_fini ? f : { ...f, monde2_fini: true })); };
+    lire();
+    const vu = () => { if (!document.hidden) lire(); };
+    window.addEventListener("focus", lire); window.addEventListener("storage", lire); document.addEventListener("visibilitychange", vu);
+    return () => { window.removeEventListener("focus", lire); window.removeEventListener("storage", lire); document.removeEventListener("visibilitychange", vu); };
+  }, []);
   const hear = (pnjId) => setHeardPnj((h) => ({ ...h, [pnjId]: true }));
   /* Le hub à rejoindre depuis la pièce courante : chaque pièce a un
      niveau associé, et chaque niveau a son propre couloir. Ainsi

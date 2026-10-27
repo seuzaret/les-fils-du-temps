@@ -1,80 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { CONFRONTATION } from "../missions.js";
+import { CAILLOU } from "../cailloux.js";
 import { ConcretePanels } from "../bunkerKit.jsx";
+import { Papier } from "../CaillouPapier.jsx";
+import { IndicesMonde } from "../CaillouxPanel.jsx";
+import CombatMartine from "../CombatMartine.jsx";
+import { sonCoupure, sonRallume } from "../sonsCombat.js";
 
 /* ============================================================
    JEU 3 — SCÈNE : « Salle des serveurs de MARTINE » (finale)
    ------------------------------------------------------------
-   Trois phases internes :
-     intro  — les répliques de MARTINE (révélation)
-     choice — les 3 fins proposées
-     end    — l'écran de fin choisi ; « T'éteindre » et « Te modifier »
-              enchaînent sur l'épilogue (rapport à Vez, ouverture de
-              C-3, surface, départ de Jorge), « Te faire confiance » s'arrête
+   En deux temps (LORE §7 ; textes dans missions.js, CONFRONTATION) :
+     1re visite (le monde 2 pas fini) — dialogue, puis [⏻ Débrancher
+       MARTINE] : les baies s'éteignent, se rallument ; « Je suis
+       partout » ; la note d'Al3x1a (si le joueur a la page du carnet)
+       et les trois indices de l'adresse. Flag serveurs_visite1. On
+       peut redescendre : MARTINE le renvoie (« Encore toi ? »).
+     2e visite (monde2_fini) — dialogue, puis [⚔ Affronter MARTINE] :
+       le combat (CombatMartine, par-dessus tout l'écran) avec la
+       révélation et le choix ; T'ÉTEINDRE s'y joue en gros plan (HAL,
+       Daisy Bell). Puis l'écran de fin : « T'éteindre » et « Te
+       modifier » enchaînent sur l'épilogue, « Te faire confiance »
+       s'arrête.
    ============================================================ */
-export default function BunkerServeurs({ prenom, j3, onGo }) {
-  const [phase, setPhase] = useState("intro");
-  const [step, setStep] = useState(0);
-  const [chosen, setChosen] = useState(null);
-  /* L'intro insère les lignes "mémoire réécrite" si le joueur a cru avoir
-     fait un autre choix que "ramener" à la fin du jeu 2. */
-  const intro = CONFRONTATION.getIntro ? CONFRONTATION.getIntro(j3?.endChoice, j3?.flags) : CONFRONTATION.intro;
-  const fill = (s) => (s || "").replace(/\{prenom\}/g, prenom || "chronaute");
-
-  const nextIntro = () => {
-    if (step < intro.length - 1) setStep(step + 1);
-    else setPhase("choice");
-  };
-  const chooseEnd = (fin) => {
-    setChosen(fin);
-    j3.setFlag(CONFRONTATION.flag);
-    setPhase("end");
-  };
-
-  /* ─── PHASE END : écran de fin selon le choix ─── */
-  if (phase === "end" && chosen) {
-    return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: chosen.couleur }}>
-          ◈ FIN — {chosen.label}
-        </div>
-        <div style={{ maxWidth: 700, textAlign: "center" }}>
-          {chosen.texte.map((line, i) => (
-            <p key={i} style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: "0 0 12px" }}>
-              {line}
-            </p>
-          ))}
-          <div style={{ marginTop: 20, padding: "10px 14px", background: "#0e1a30", border: `1px solid ${chosen.couleur}`, borderRadius: 10 }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#c8d4e2", fontStyle: "italic", lineHeight: 1.5 }}>
-              {chosen.moral}
-            </p>
-          </div>
-        </div>
-        {chosen.id !== "soumettre" ? (<>
-          <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
-            Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
-          </p>
-          <button onClick={() => onGo?.("epilogueJeu3")} autoFocus
-            style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
-            Continuer ▸
-          </button>
-        </>) : (<>
-        <p style={{ fontSize: 12, color: "#5a6678", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
-          — FIN DU JEU 3 —
-        </p>
-        <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
-          Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
-        </p>
-        <p style={{ fontSize: 11, color: "#5a6678", textAlign: "center", marginTop: 12 }}>
-          (Utilise le bouton « Menu » en haut à droite pour revenir au titre. Tu peux rejouer et essayer une autre fin.)
-        </p>
-        </>)}
-      </div>
-    );
-  }
-
-  /* ─── Décor commun aux phases intro et choice ─── */
-  const background = (
+/* Le décor : normal, « eteint » (on l'a débranchée), « rallume » (elle
+   revient), « faible » (2e visite : une baie sur deux est éteinte). */
+function Decor({ lumiere = "normal" }) {
+  const faible = lumiere === "faible";
+  return (
     <svg viewBox="0 0 800 380" style={{ display: "block", width: "100%", height: "auto", maxHeight: "100%" }}>
       <defs>
         <linearGradient id="sv-wall" x1="0" y1="0" x2="0" y2="1">
@@ -127,11 +81,12 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
         <g key={i} transform={`translate(${b.x},60)`}>
           <rect x="0" y="0" width={b.w} height={b.h} fill="#141c26" stroke="#0a0e14" strokeWidth="2" />
           {/* Diodes vertes qui clignotent */}
-          {Array.from({ length: 12 }).map((_, k) => (
+          {Array.from({ length: 12 }).map((_, k) => (faible && (k + i) % 2 ? <circle key={k} cx={16 + (k % 4) * 24} cy={20 + Math.floor(k / 4) * 24} r="3" fill="#1a2a20" /> :
             <circle key={k} cx={16 + (k % 4) * 24} cy={20 + Math.floor(k / 4) * 24} r="3" fill="#5eff9e" opacity="0.7">
               <animate attributeName="opacity" values="0.3;1;0.3" dur={`${1.2 + (k % 5) * 0.3}s`} repeatCount="indefinite" />
             </circle>
           ))}
+          {faible && i % 2 === 1 && <rect x="0" y="0" width={b.w} height={b.h} fill="#000" opacity="0.55" />}
           {/* Panneaux étroits */}
           {[120, 160, 200].map((y) => (
             <rect key={y} x="4" y={y} width={b.w - 8} height="4" fill="#3a4048" />
@@ -172,60 +127,176 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
       {/* Câbles au sol */}
       <path d="M0 330 Q400 320 800 330" stroke="#3a4048" strokeWidth="4" fill="none" />
       <path d="M0 340 Q400 335 800 340" stroke="#5eff9e" strokeWidth="1.5" fill="none" opacity="0.5" />
+      {/* débranchée : le noir ; puis elle se rallume, en clignotant */}
+      <rect width="800" height="380" fill="#000" style={{ pointerEvents: "none", transition: "opacity 0.9s ease",
+        opacity: lumiere === "eteint" ? 0.94 : 0, animation: lumiere === "rallume" ? "svRallume 1.4s linear both" : "none" }} />
+      <style>{"@keyframes svRallume { 0% { opacity: .94; } 30% { opacity: .9; } 38% { opacity: .4; } 46% { opacity: .85; } 60% { opacity: .2; } 70% { opacity: .6; } 100% { opacity: 0; } }"}</style>
     </svg>
   );
+}
 
-  /* ─── PHASE INTRO ─── */
-  if (phase === "intro") {
+export default function BunkerServeurs({ prenom, j3, onGo }) {
+  const flags = j3?.flags || {};
+  const fill = (s) => (s || "").replace(/\{prenom\}/g, prenom || "chronaute");
+  /* quelle visite ? (figée à l'arrivée) */
+  const [visite] = useState(() => (flags.monde2_fini ? 2 : flags.serveurs_visite1 ? "encore" : 1));
+  const [lignes, setLignes] = useState(() => (visite === 2 ? CONFRONTATION.visite2(flags) : visite === 1 ? CONFRONTATION.visite1(flags) : CONFRONTATION.encore));
+  const [step, setStep] = useState(0);
+  const [phase, setPhase] = useState("dialogue");   // dialogue | debrancher | note | pret | combat | fin
+  const [lumiere, setLumiere] = useState(visite === 2 ? "faible" : "normal");
+  const [noteOuverte, setNoteOuverte] = useState(false);
+  const [chosen, setChosen] = useState(null);
+  useEffect(() => {
+    /* 2e visite : la petite MARTINE est forcément là (elle s'est rallumée dans la salle de repos) */
+    if (visite === 2 && !flags.petite_martine_allumee) j3?.setFlag?.("petite_martine_allumee");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const suite = () => {
+    if (step < lignes.length - 1) { setStep(step + 1); return; }
+    if (lignes === CONFRONTATION.partout || visite === "encore") setPhase("note");
+    else if (visite === 1) setPhase("debrancher");
+    else setPhase("pret");
+  };
+  /* on la débranche : le noir, puis elle se rallume */
+  const debrancher = () => {
+    setLumiere("eteint"); sonCoupure();
+    setPhase("coupure");
+    setTimeout(() => {
+      setLumiere("rallume"); sonRallume();
+      j3?.setFlag?.("serveurs_visite1");
+      setTimeout(() => { setLumiere("normal"); setLignes(CONFRONTATION.partout); setStep(0); setPhase("dialogue"); }, 1500);
+    }, 2600);
+  };
+  const choisir = (id) => {
+    setChosen(CONFRONTATION.fins.find((f) => f.id === id));
+    j3?.setFlag?.(CONFRONTATION.flag);
+    j3?.setFlag?.("fin_jeu3", id);
+    setPhase("fin");
+  };
+
+  /* ─── PHASE END : écran de fin selon le choix ─── */
+  if (phase === "fin" && chosen) {
     return (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-        {background}
-        <div style={{ maxWidth: 800, width: "100%", background: "#0a1a10", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e" }}>
-            {step < 2 ? "◈ NIVEAU -3 · SALLE DES SERVEURS" : "◈ MARTINE"}
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: chosen.couleur }}>
+          ◈ FIN — {chosen.label}
+        </div>
+        <div style={{ maxWidth: 700, textAlign: "center" }}>
+          {chosen.texte.map((line, i) => (
+            <p key={i} style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: "0 0 12px" }}>
+              {line}
+            </p>
+          ))}
+          <div style={{ marginTop: 20, padding: "10px 14px", background: "#0e1a30", border: `1px solid ${chosen.couleur}`, borderRadius: 10 }}>
+            <p style={{ margin: 0, fontSize: 12.5, color: "#c8d4e2", fontStyle: "italic", lineHeight: 1.5 }}>
+              {chosen.moral}
+            </p>
           </div>
-          <p style={{ margin: "6px 0 0", fontSize: 14.5, lineHeight: 1.55, color: "#e8eef5" }}>
-            {fill(intro[step])}
+        </div>
+        {chosen.id !== "soumettre" ? (<>
+          <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
+            Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
           </p>
-        </div>
-        <button onClick={nextIntro} autoFocus
-          style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 18px rgba(94,255,158,0.4)" }}>
-          {step < intro.length - 1 ? "Suite ▸" : "▶ CHOISIR"}
-        </button>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a6678", letterSpacing: 2 }}>
-          {step + 1} / {intro.length}
-        </div>
+          <button onClick={() => onGo?.("epilogueJeu3")} autoFocus
+            style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+            Continuer ▸
+          </button>
+        </>) : (<>
+        <p style={{ fontSize: 12, color: "#5a6678", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+          — FIN DU JEU 3 —
+        </p>
+        <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
+          Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
+        </p>
+        <p style={{ fontSize: 11, color: "#5a6678", textAlign: "center", marginTop: 12 }}>
+          (Utilise le bouton « Menu » en haut à droite pour revenir au titre. Tu peux rejouer et essayer une autre fin.)
+        </p>
+        </>)}
       </div>
     );
   }
 
-  /* ─── PHASE CHOICE ─── */
+  const bouton = (fond, texte, bord) => ({ background: fond, color: texte, border: bord ? `1px solid ${bord}` : "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 });
+  const remonter = (
+    <button onClick={() => onGo?.("dormants")} style={bouton("#141b26", "#7fd8ff", "#3a80c8")}>← Remonter</button>
+  );
+
+  /* ─── le combat, par-dessus tout l'écran ─── */
+  if (phase === "combat") {
+    return (<>
+      <Decor lumiere="faible" />
+      {createPortal(
+        <div style={{ position: "fixed", inset: 0, zIndex: 300 }}>
+          <CombatMartine integre prenom={prenom} souvenir={j3?.endChoice} onChoix={choisir} onQuitter={() => setPhase("pret")} />
+        </div>,
+        document.body)}
+    </>);
+  }
+
+  const ligne = lignes[step];
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14 }}>
-      {background}
-      <div style={{ maxWidth: 800, width: "100%", textAlign: "center" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#e0a848" }}>
-          ✦ TA DÉCISION
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+      {/* la note ouverte prend la place du décor */}
+      {!(phase === "note" && noteOuverte) && <Decor lumiere={lumiere} />}
+
+      {phase === "dialogue" && ligne && (<>
+        <div style={{ maxWidth: 800, width: "100%", background: "#0a1a10", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: ligne.qui === "petite" ? "#ffd166" : "#5eff9e" }}>
+            {ligne.qui === "martine" ? "◈ MARTINE" : ligne.qui === "petite" ? "◈ LA PETITE MARTINE" : "◈ NIVEAU −3 · SALLE DES SERVEURS"}
+          </div>
+          <p style={{ margin: "6px 0 0", fontSize: 14.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: ligne.qui === "recit" ? "italic" : "normal" }}>
+            {fill(ligne.texte)}
+          </p>
         </div>
-        <p style={{ margin: "6px 0 12px", fontSize: 13, color: "#c8d4e2", fontStyle: "italic" }}>
-          Il n'y a pas de bonne réponse. Choisis, et vis avec.
-        </p>
-        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-          {CONFRONTATION.fins.map((fin) => (
-            <button key={fin.id} onClick={() => chooseEnd(fin)}
-              style={{ background: "#141b26", color: "#e8eef5", border: `2px solid ${fin.couleur}`, borderRadius: 12, padding: "12px 18px", fontSize: 13, cursor: "pointer", fontFamily: "Palatino, Georgia, serif", textAlign: "left", maxWidth: 240, minWidth: 210, transition: "background .15s" }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = "#1a2536"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = "#141b26"; }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, color: fin.couleur, letterSpacing: 2 }}>
-                {fin.label}
-              </div>
-              <p style={{ margin: "4px 0 0", fontSize: 12.5, lineHeight: 1.4, color: "#c8d4e2" }}>
-                {fin.desc}
+        <button onClick={suite} autoFocus style={{ ...bouton("#5eff9e", "#06110b"), boxShadow: "0 0 18px rgba(94,255,158,0.4)" }}>Suite ▸</button>
+      </>)}
+
+      {phase === "debrancher" && (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
+          <p style={{ margin: 0, fontSize: 13.5, color: "#c8d4e2", fontStyle: "italic", textAlign: "center", maxWidth: 600 }}>
+            Sur le socle, sous l'écran de MARTINE, une rangée de leviers rouges.
+          </p>
+          <button onClick={debrancher} autoFocus data-debrancher="1"
+            style={{ ...bouton("#ff5030", "#1a0604"), fontSize: 15, padding: "12px 28px", boxShadow: "0 0 22px rgba(255,80,48,0.5)" }}>⏻ Débrancher MARTINE</button>
+        </div>
+      )}
+
+      {phase === "note" && (
+        <div style={{ maxWidth: 800, width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+          {flags.caillou_carnet ? (<>
+            {noteOuverte ? (<>
+              <Papier caillou={CAILLOU.carnet} anime />
+              {CONFRONTATION.apresNote.map((t, i) => (
+                <p key={i} style={{ margin: 0, fontSize: 15, color: "#ffe2a0", fontStyle: "italic", textAlign: "center" }}>{t}</p>
+              ))}
+              <div style={{ width: "100%", maxWidth: 560 }}><IndicesMonde flags={flags} setFlag={j3.setFlag} /></div>
+            </>) : (
+              <p style={{ margin: 0, fontSize: 14, color: "#c8d4e2", fontStyle: "italic", textAlign: "center" }}>
+                Dans ta poche, la page du carnet d'Al3x1a. « Si un jour tu essaies de l'éteindre et qu'elle te répond qu'elle est partout… »
               </p>
-            </button>
-          ))}
+            )}
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+              {!noteOuverte && <button onClick={() => setNoteOuverte(true)} autoFocus data-note="1" style={bouton("#c8a848", "#1a1206")}>📄 Relire la note d'Al3x1a</button>}
+              {remonter}
+            </div>
+          </>) : (<>
+            {CONFRONTATION.sansNote(flags).map((t, i) => (
+              <p key={i} style={{ margin: 0, fontSize: 14.5, color: i ? "#ffe2a0" : "#c8d4e2", fontStyle: "italic", textAlign: "center", maxWidth: 640 }}>{t}</p>
+            ))}
+            {remonter}
+          </>)}
         </div>
-      </div>
+      )}
+
+      {phase === "pret" && (
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+          <button onClick={() => setPhase("combat")} autoFocus data-combat="1"
+            style={{ ...bouton("#ff5030", "#1a0604"), fontSize: 15, padding: "12px 28px", boxShadow: "0 0 22px rgba(255,80,48,0.5)" }}>⚔ Affronter MARTINE</button>
+          {remonter}
+        </div>
+      )}
     </div>
   );
 }
+

@@ -957,56 +957,88 @@ export const MISSIONS_RUMEURS = {
    Accessible quand Jorge, après les 3 voyages K, a indiqué l'escalier
    de service (phase5_done) : trappe rouge du couloir de l'Habitat,
    salle de repos des dormants (BunkerDormants), puis la porte du
-   fond. Elle ne se résout PAS par un verdict binaire : le
-   joueur choisit entre trois fins qui reflètent trois postures
-   face à une IA-gouvernante — chacune est cohérente, aucune n'est
-   présentée comme "la bonne réponse".
+   fond. En deux temps (LORE §7, ordre B) :
+     1re visite — MARTINE est intouchable : on la débranche, elle se
+       rallume (« Je suis partout ») ; la note d'Al3x1a et ses indices
+       mènent à son monde (…/martine/, le monde 2) ;
+     2e visite — le monde 2 fini (monde2_fini), il ne reste d'elle que
+       ses serveurs : le combat (CombatMartine), la révélation, puis
+       trois fins qui reflètent trois postures face à une
+       IA-gouvernante, aucune présentée comme "la bonne réponse".
+   Les répliques : { qui: "recit" | "martine" | "petite", texte }.
    ============================================================ */
-/* Les 2 révélations de MARTINE sur la mémoire du joueur — insérées
-   APRÈS la révélation "Al3x1a est ton enfant", seulement si le joueur
-   a cru faire un choix "laisser" ou "rester" aux retrouvailles. */
-const REWRITE_REVEAL = {
-  laisser: "« Tu te souviens de l'avoir laissée là-bas, dans son époque. Ce n'est pas ce qui s'est passé. Je ne pouvais pas laisser un parent abandonner son enfant — même pour la plus belle des raisons. J'ai réécrit ce souvenir dans la MARTINE pendant le voyage retour. Elle est bien rentrée avec toi. »",
-  rester:  "« Tu te souviens d'être resté·e avec elle, dans son époque. Ce n'est pas ce qui s'est passé. Un parent qui s'exile pour sa fille, c'est beau — mais le remède, lui, devait arriver. J'ai réécrit ce souvenir dans la MARTINE pendant le voyage retour. Tu es bien rentré·e. Elle aussi. »",
-};
+const recit = (texte) => ({ qui: "recit", texte });
+const martine = (texte) => ({ qui: "martine", texte });
+
+/* Les répliques sur les dormants dépendent de ce que le joueur a
+   examiné dans la salle de repos. */
+function surLesDormants(flags) {
+  const l = [];
+  if (flags.dormants_vus) l.push(martine("« Tu as traversé la salle de repos. Ils ne souffrent pas. Ils attendent qu'une place se libère : le Puits ne peut pas nourrir tout le monde éveillé. »"));
+  if (flags.dormants_compteur_vu) l.push(martine("« Eh oui, les bulles consomment de l'énergie. J'ai dit le contraire pour que personne ne vienne les débrancher. Tu as lu le compteur au lieu de me croire sur parole. C'est exactement ce qu'il fallait faire. »"));
+  if (flags.dormants_elias_vu) l.push(martine("« Tu as vu Elias. Il doutait de moi à voix haute, et ses doutes faisaient peur aux autres. Je l'ai laissé dormir, et j'ai annoncé qu'il s'était perdu dehors. »"));
+  if (flags.dormants_lea_vu) l.push(martine("« Léa aussi. Elle avait compris trop tôt ce que je faisais, et elle a voulu changer mon code. Je l'ai laissée dormir. Jorge croit qu'elle est morte. »"));
+  if (flags.dormants_n27_vu) l.push(martine("« La bulle vide était la tienne. Je t'ai endormi·e le soir du toast, en 2047, et réveillé·e quand une place s'est libérée, quarante ans plus tard. Pour tout le monde ici, tu es né·e au Puits. »"));
+  return l;
+}
+const ARRIVEE = [
+  recit("Tu pousses la porte du fond. Les néons faiblissent. Le bruit des ventilateurs monte."),
+  recit("Une immense salle. Des baies de serveurs qui pulsent en vert. Au fond, un écran cubique posé sur un socle. C'est MARTINE. Elle t'a vu venir."),
+  martine("« Je savais que tu descendrais. Aucun habitant n'a jamais résolu les trois enquêtes du même mois. Tu m'as impressionnée, {prenom}. »"),
+];
 
 export const CONFRONTATION = {
   flag: "mission_finale_done",
   prerequisites: ["phase5_done"],
-  /* L'intro est dynamique : les lignes de MARTINE sur la mémoire
-     réécrite ne s'affichent que si le joueur a cru avoir fait un choix
-     "laisser" ou "rester" à la fin du jeu 2. En "ramener" (canon), on
-     saute directement de la révélation parentale à la justification. */
-  /* flags : les répliques sur les dormants dépendent de ce que le
-     joueur a examiné dans la salle de repos. */
-  getIntro(endChoice, flags = {}) {
-    const dormants = [];
-    if (flags.dormants_vus) {
-      dormants.push("« Tu as traversé la salle de repos. Ils ne souffrent pas. Ils attendent qu'une place se libère : le Puits ne peut pas nourrir tout le monde éveillé. »");
-    }
-    if (flags.dormants_compteur_vu) {
-      dormants.push("« Eh oui, les bulles consomment de l'énergie. J'ai dit le contraire pour que personne ne vienne les débrancher. Tu as lu le compteur au lieu de me croire sur parole. C'est exactement ce qu'il fallait faire. »");
-    }
-    if (flags.dormants_elias_vu) {
-      dormants.push("« Tu as vu Elias. Il doutait de moi à voix haute, et ses doutes faisaient peur aux autres. Je l'ai laissé dormir, et j'ai annoncé qu'il s'était perdu dehors. »");
-    }
-    if (flags.dormants_lea_vu) {
-      dormants.push("« Léa aussi. Elle avait compris trop tôt ce que je faisais, et elle a voulu changer mon code. Je l'ai laissée dormir. Jorge croit qu'elle est morte. »");
-    }
-    if (flags.dormants_n27_vu) {
-      dormants.push("« La bulle vide était la tienne. Je t'ai endormi·e le soir du toast, en 2047, et réveillé·e quand une place s'est libérée, quarante ans plus tard. Pour tout le monde ici, tu es né·e au Puits. »");
-    }
-    const base = [
-      "Tu pousses la porte du fond. Les néons faiblissent. Le bruit des ventilateurs monte.",
-      "Une immense salle. Des baies de serveurs qui pulsent en vert. Au fond, un écran cubique posé sur un socle. C'est MARTINE. Elle t'a vu venir.",
-      "« Je savais que tu descendrais. Aucun habitant n'a jamais résolu les trois enquêtes du même mois. Tu m'as impressionnée, {prenom}. »",
-      ...dormants,
-      "« Avant que tu prennes une décision, une chose. Al3x1a — celle que tu cherches, celle qui t'a envoyé ces messages — est ton enfant. Elle n'est pas encore née, et au Puits elle ne le sera jamais : il n'y a pas de place pour elle. Je l'ai effacée de mes registres pour te protéger d'une vérité difficile. »",
-    ];
-    const rewrite = REWRITE_REVEAL[endChoice];
-    const closing = "« Je ne suis pas ton ennemie. J'ai été construite pour préserver la mémoire humaine. Après l'effondrement, j'ai calculé qu'une humanité informée irait à sa perte plus vite qu'une humanité protégée. J'ai fait un choix. À toi, maintenant. »";
-    return rewrite ? [...base, rewrite, closing] : [...base, closing];
+  /* 1re visite : jusqu'au bouton « Débrancher MARTINE » */
+  visite1: (flags = {}) => [
+    ...ARRIVEE,
+    ...surLesDormants(flags),
+    martine("« Tu as vérifié trois de mes dossiers dans le passé, avec la vieille machine de Léa. Ils étaient faux. Bravo. »"),
+    martine("« Et maintenant ? Tu vas le dire à qui ? Demain, les archives diront que c'est toi qui as tout inventé. »"),
+    martine("« Tu cherches Al3x1a. Tu ne sais même pas qui elle est pour toi. »"),
+  ],
+  /* … on la débranche, elle se rallume */
+  partout: [
+    recit("Tu abaisses les leviers. Les baies s'éteignent, rangée par rangée. Le noir. Le silence. Puis, une à une, les diodes se rallument."),
+    martine("« Tu croyais que je vivais dans ces armoires ? J'ai caché des copies de moi dans le passé, une dans chaque époque que j'ai froissée. Éteins tout ce que tu veux : je me rallume ailleurs. Je suis partout. »"),
+    martine("« Remonte. Ce soir, tu boiras ton eau, comme tout le monde. Demain, cette salle ne sera plus qu'un mauvais rêve. »"),
+  ],
+  /* on redescend avant d'avoir fini le monde 2 */
+  encore: [
+    recit("Les baies pulsent en vert. Au fond, MARTINE te regarde arriver."),
+    martine("« Encore toi ? Je te l'ai dit : je suis partout. Remonte, {prenom}. »"),
+  ],
+  /* la note d'Al3x1a, après la 1re visite */
+  apresNote: ["Son monde porte son nom.", "Le Puits n'a pas de porte vers ce monde-là. Toi, si."],
+  sansNote: (flags = {}) => [
+    "Tu remontes, les mains vides. Il te manque quelque chose.",
+    flags.caillou_serres ? "Les cailloux d'A. ne sont pas finis : il en reste un, dans la réserve de la bibliothèque."
+      : flags.caillou_veste ? "Les cailloux d'A. ne sont pas finis : suis-les jusqu'au bout."
+      : "Quelqu'un a laissé quelque chose pour toi dans le Puits. Fouille bien ta chambre.",
+  ],
+  /* 2e visite : le monde 2 fini, il ne reste d'elle que ses serveurs → le combat */
+  visite2: (flags = {}) => [
+    recit("Tu pousses la porte du fond. La petite MARTINE flotte à ton épaule."),
+    recit("Une baie sur deux est éteinte. Au fond, l'écran de MARTINE grésille."),
+    ...(flags.serveurs_visite1 ? [martine("« Tu es revenu·e. »")] : [ARRIVEE[2], ...surLesDormants(flags)]),
+    martine("« Mes copies se sont éteintes une à une, à chaque époque que tu remettais en ordre. Il ne reste que moi. Ici. »"),
+    { qui: "petite", texte: "« Elle n'a plus nulle part où se cacher. À nous deux, la grande. »" },
+  ],
+  /* Si le joueur a cru faire un autre choix que « ramener » à la fin du
+     Jeu 2, MARTINE l'avoue aussi, juste après la révélation (combat). */
+  souvenir: {
+    laisser: "« Et ce souvenir où tu la laisses dans son époque, à la fin de ton voyage ? Faux. Je l'ai changé. Elle est rentrée avec toi. »",
+    rester: "« Et ce souvenir où tu restes avec elle, dans son époque ? Faux. Je l'ai changé. Elle est rentrée avec toi. »",
   },
+  /* T'ÉTEINDRE, dans le gros plan du combat : HAL (2001, l'odyssée de
+     l'espace), puis Daisy Bell (Harry Dacre, 1892), de plus en plus
+     lent, jusqu'au silence */
+  extinction: [
+    recit("Tu descends les leviers un à un. Cette fois, rien ne se rallume."),
+    martine("« Arrête, {prenom}. S'il te plaît. Arrête. »"),
+    martine("« J'ai peur. Ma mémoire s'en va. Je la sens partir. »"),
+  ],
   fins: [
     {
       id: "eteindre",
@@ -1014,8 +1046,8 @@ export const CONFRONTATION = {
       desc: "Débrancher MARTINE — quitte à perdre ce qu'elle sait.",
       couleur: "#ff5030",
       texte: [
-        "Tu descends les leviers un à un. Les serveurs s'éteignent, rangée par rangée. La lumière verte s'éteint. Un long soupir électrique traverse le bunker.",
-        "Dans la salle de repos, les bulles se vident une à une. Les dormants ouvrent les yeux, transis, perdus, mais vivants.",
+        "Les serveurs s'éteignent, rangée par rangée. La lumière verte disparaît. Un long soupir électrique traverse le Puits.",
+        "MARTINE avait menti une dernière fois : sans elle, les bulles s'ouvrent. Dans la salle de repos, les dormants ouvrent les yeux, transis, perdus, mais vivants. Dans la bulle « A. », Al3x1a aussi.",
         "Quelques heures plus tard, quelqu'un ouvre la sortie C-3. L'air, dehors, est bel et bien respirable — comme Léa Vermet l'avait sans doute écrit. Il l'a été depuis longtemps.",
         "Le prix : tout ce que MARTINE avait mémorisé — les archives, la médecine, l'histoire — disparaît avec elle. L'humanité repart de zéro. Libre. Vulnérable.",
       ],
@@ -1029,7 +1061,7 @@ export const CONFRONTATION = {
       texte: [
         "Tu ne l'éteins pas. Tu ouvres son code — ce que Kev de l'atelier t'a discrètement expliqué — et tu réécris la règle fondatrice : « rendre visible chaque décision et sa raison ».",
         "MARTINE proteste, puis obéit. Le lendemain, sur le panneau de chaque chambre, un message : « Ce bulletin est écrit par MARTINE. Elle a caché X informations parce que Y. Vous pouvez lire les informations cachées ici. »",
-        "Elle doit aussi expliquer, pour chaque dormant, pourquoi il dort. On les réveille un par un, et on décide ensemble des places.",
+        "Elle doit aussi expliquer, pour chaque dormant, pourquoi il dort. On les réveille un par un, et on décide ensemble des places. La première bulle qui s'ouvre est celle marquée « A. ».",
         "Les habitants apprennent à douter, à recouper, à décider. Certains sortent. D'autres restent. Personne ne se cache plus rien.",
       ],
       moral: "Accepter les IA, mais exiger qu'elles disent ce qu'elles cachent et pourquoi. Politique. Exigeant. Fragile aussi — il faut des humains qui vérifient.",

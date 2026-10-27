@@ -444,6 +444,18 @@ export default function App() {
     setJeu3Start(s);
     setJeu3Nonce((n) => n + 1);
   };
+  /* …?reprendre=jeu3 (le bouton « Rentrer au Puits » du monde 2) : on
+     reprend directement la partie du Puits, puis on nettoie l'adresse. */
+  useEffect(() => {
+    try {
+      const q = new URLSearchParams(window.location.search);
+      if (q.get("reprendre") !== "jeu3") return;
+      q.delete("reprendre");
+      window.history.replaceState(null, "", window.location.pathname + (q.toString() ? `?${q}` : "") + window.location.hash);
+      if (loadSave("jeu3")) resumeJeu3();
+    } catch { /* rien */ }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /* Tire 3 dossiers au hasard parmi les 8 inventions avec témoin de
      Jeu 1, pour les triches qui amorcent une partie en milieu de
@@ -606,6 +618,39 @@ export default function App() {
         phase5_done: true, cle_reserve: true,
         caillou_temps: true, caillou_contes: true, caillou_serres: true,
       } : base,
+      heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
+    });
+    setJeu3Nonce((n) => n + 1);
+  };
+
+  /* Triches : le final au −3, dépose dans la salle de repos.
+     · visite 1 : tout fait jusqu'au pont de Jorge, la page du carnet
+       d'Al3x1a en poche (MARTINE est intouchable) ;
+     · visite 2 : en plus, la 1re visite faite et le monde 2 fini
+       (la petite MARTINE se rallume, puis le combat). */
+  const cheatJeu3Final = (visite) => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    const dossiers = commonDossiersFlags();
+    const order = dossiers.k_voyage_order;
+    setJeu3Start({
+      room: "dormants",
+      flags: {
+        puits_billet: true,
+        mission_order: ["kova", "vitamine", "jour40"],
+        mission_kova_done: true, briefing_kova_done: true,
+        mission_vitamine_done: true, briefing_vitamine_done: true,
+        mission_jour40_done: true, briefing_jour40_done: true,
+        archives_tri_1_done: true, archives_tri_2_done: true, archives_tri_3_done: true,
+        ...dossiers,
+        mediadex_retrouve: true,
+        jorge_arrete: true, jorge_cellule_vue: true,
+        elevator_k_unlocked: true, salle_k_vue: true, salle_k_reactivee: true, salle_k_portal_online: true,
+        ...Object.fromEntries(order.map((id) => [`voyageK_${id}_done`, true])),
+        phase5_done: true, cle_reserve: true,
+        caillou_veste: true, caillou_temps: true, caillou_contes: true, caillou_serres: true, caillou_carnet: true,
+        ...(visite === 2 ? { serveurs_visite1: true, monde2_fini: true } : {}),
+      },
       heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
     });
     setJeu3Nonce((n) => n + 1);
@@ -1385,7 +1430,7 @@ export default function App() {
   /* Importer : lit le fichier .json choisi par l'élève. Depuis l'écran
      titre, on reste dans le menu (l'élève choisit ensuite « Reprendre ») ;
      en jeu, on reprend la partie du jeu en cours si le fichier la contient. */
-  const NOMS_JEUX = { jeu1: "le voyage", jeu2: "l'enquête Al3x1a", jeu3: "le Puits" };
+  const NOMS_JEUX = { jeu1: "le voyage", jeu2: "l'enquête Al3x1a", jeu3: "le Puits", monde2: "le monde de MARTINE" };
   const doImport = (file) => {
     if (!file) return;
     const reader = new FileReader();
@@ -1470,6 +1515,7 @@ export default function App() {
       onCheatJeu3Phase5={cheatJeu3Phase5}
       onCheatJeu3Phase6={cheatJeu3Phase6}
       onCheatJeu3Cailloux={cheatJeu3Cailloux}
+      onCheatJeu3Final={cheatJeu3Final}
     />
   );
 

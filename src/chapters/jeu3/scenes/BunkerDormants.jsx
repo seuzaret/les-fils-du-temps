@@ -15,10 +15,16 @@ import { CeilingPipes, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit
        consomment) : vérifier une affirmation par une mesure ;
      - la bulle vide N-27, celle du joueur (2047 → 2087) ;
      - la plaque « E. · ancien chef de station » (Elias) ;
-     - la bulle de Léa Vermet, que Jorge croit morte.
+     - la bulle de Léa Vermet, que Jorge croit morte ;
+     - la bulle « A. », à l'écart (Al3x1a), et à son pied la petite
+       MARTINE d'Al3x1a, éteinte : la grande l'a éteinte en endormant
+       Al3x1a. Quand le monde 2 est fini (monde2_fini : le flux est
+       lisse), elle se rallume à l'arrivée du joueur et le suit : c'est
+       le « vaisseau » du combat.
    Flags : dormants_vus, dormants_martine_vu, dormants_compteur_vu,
-   dormants_n27_vu, dormants_elias_vu, dormants_lea_vu (relus par la
-   confrontation).
+   dormants_n27_vu, dormants_elias_vu, dormants_lea_vu, dormants_a_vu,
+   dormants_petite_vu (relus par la confrontation),
+   petite_martine_allumee.
    ============================================================ */
 
 const NOTES = {
@@ -28,7 +34,51 @@ const NOTES = {
   n27: "Une bulle vide, la porte entrouverte, un reste d'eau au fond. Sur la plaque : « N-27 · ENTRÉE 2047 · RÉINTRODUIT 2087 ». N-27, c'est le numéro de ta chambre. Tu as dormi ici. Quarante ans.",
   lea: "Sur la plaque : « L. VERMET · INGÉNIEURE · 2050 ». Léa Vermet, celle qui a construit la machine de l'étage K. Jorge la croit morte depuis des années. Derrière la buée, elle dort.",
   elias: "Une plaque à moitié effacée : « E. · ANCIEN CHEF DE STATION ». Derrière la buée, une silhouette voûtée, très âgée. Le chef des chronautes s'appelait Elias. On disait qu'il s'était perdu dehors… alors que personne ne sort du Puits.",
+  a: "Une bulle à l'écart des autres. Sur la plaque, une seule lettre : « A. ». Pas de date d'entrée, pas de métier. Derrière la buée, un visage jeune.",
+  petite: "Au pied de la bulle « A. », posée par terre, une petite machine ronde couverte de poussière : une coque de noix, une antenne, un hublot. Tu la connais. C'est la MARTINE qui t'a emmené·e dans le temps, celle d'Al3x1a. Son hublot est éteint. Tu tapotes sa coque : rien. On dirait qu'elle dort, elle aussi.",
+  allumee: "La petite MARTINE flotte à côté de toi, son antenne verte allumée. Elle regarde la porte du fond.",
 };
+
+/* Le monde 2 fini (le flux est lisse), la petite MARTINE se rallume. */
+const REVEIL = [
+  { qui: "recit", texte: "Le hublot de la petite MARTINE clignote. Une fois. Deux fois. L'antenne se redresse, la poussière tombe." },
+  { qui: "petite", texte: "« Pilote ? … Ah non. Tu as ses yeux, par contre. »" },
+  { qui: "petite", texte: "« Le flux est redevenu lisse : je capte de nouveau. C'est toi qui as fait ça ? On est en quelle année ? »" },
+  { qui: "recit", texte: "Tu lui dis : 2087." },
+  { qui: "petite", texte: "« Quarante ans ?! Mes propulseurs ont rouillé. Bon. On improvise. »" },
+  { qui: "petite", texte: "« La grande, derrière cette porte, c'est elle qui m'a éteinte. Guide-moi, je m'occupe de tirer. »" },
+];
+
+/* La petite MARTINE (le dessin du Jeu 1, Martine.jsx), éteinte ou allumée. */
+function PetiteMartine({ x, y, s = 0.5, allumee }) {
+  return (
+    <g transform={`translate(${x - 50 * s},${y - 52 * s}) scale(${s})`}>
+      <g>
+        {allumee && <animateTransform attributeName="transform" type="translate" values="0 0;0 -5;0 0" dur="2.4s" repeatCount="indefinite" />}
+        {allumee && (
+          <g>
+            <path d="M5 55 l-10 3.5 l10 4.5 Z" fill="#7fd8ff"><animate attributeName="opacity" values="1;0.5;1" dur="0.5s" repeatCount="indefinite" /></path>
+            <path d="M95 55 l10 3.5 l-10 4.5 Z" fill="#7fd8ff"><animate attributeName="opacity" values="1;0.5;1" dur="0.5s" repeatCount="indefinite" /></path>
+          </g>
+        )}
+        <line x1="50" y1="26" x2={allumee ? 50 : 62} y2={allumee ? 12 : 16} stroke="#8a94a8" strokeWidth="3" strokeLinecap="round" />
+        <circle cx={allumee ? 50 : 63} cy={allumee ? 10 : 14} r="3.6" fill={allumee ? "#5eff9e" : "#3a4048"}>
+          {allumee && <animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite" />}
+        </circle>
+        <rect x="4" y="52" width="14" height="11" rx="4" fill="#6a7488" />
+        <rect x="82" y="52" width="14" height="11" rx="4" fill="#6a7488" />
+        <path d="M50 24 Q78 26 82 52 Q84 74 66 82 Q50 88 34 82 Q16 74 18 52 Q22 26 50 24 Z" fill={allumee ? "#8a6240" : "#5a4636"} />
+        <path d="M50 24 Q78 26 82 52 Q83 66 74 76 Q64 60 66 42 Q60 30 50 24 Z" fill="#3e2a1a" opacity="0.6" />
+        <path d="M20 54 Q50 44 80 54" stroke="#3a2616" strokeWidth="3" fill="none" opacity="0.8" />
+        <path d="M30 36 q10 6 6 16 M62 32 q-6 10 0 18 M40 68 q8 6 18 2 M26 62 q4 8 12 10" stroke="#3a2616" strokeWidth="2" fill="none" opacity="0.55" />
+        <circle cx="50" cy="52" r="11" fill={allumee ? "#cfeaff" : "#2a343c"} stroke="#3a2616" strokeWidth="2.5" />
+        {allumee ? <circle cx="50" cy="52" r="4" fill="#0c2233" /> : <path d="M43 53 h14" stroke="#141a20" strokeWidth="2" />}
+        {/* la poussière */}
+        {!allumee && <path d="M28 30 q22 -8 44 0" stroke="#a8a098" strokeWidth="5" fill="none" opacity="0.25" strokeLinecap="round" />}
+      </g>
+    </g>
+  );
+}
 
 /* Une bulle de stase. x = axe, base = bas du socle. */
 function Pod({ x, base, w, h, plate, open = false, old = false, k = 0 }) {
@@ -94,7 +144,10 @@ function Hint({ x, y, w, h, on }) {
 
 export default function BunkerDormants({ onGo, j3 }) {
   const flags = j3?.flags || {};
-  const [note, setNote] = useState("intro");
+  /* la petite MARTINE se rallume dès l'arrivée, une fois le monde 2 fini */
+  const [reveil, setReveil] = useState(flags.monde2_fini && !flags.petite_martine_allumee ? 0 : -1);
+  const allumee = !!flags.petite_martine_allumee || reveil >= 1;
+  const [note, setNote] = useState(flags.petite_martine_allumee ? "allumee" : "intro");
   useEffect(() => {
     if (!flags.dormants_vus) j3?.setFlag?.("dormants_vus");
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -104,6 +157,16 @@ export default function BunkerDormants({ onGo, j3 }) {
     j3?.setFlag?.(`dormants_${id}_vu`);
   };
   const seen = (id) => !!flags[`dormants_${id}_vu`];
+  /* le monde 2 fini pendant qu'on est ici (retour sur l'onglet) : elle se rallume */
+  useEffect(() => {
+    if (flags.monde2_fini && !flags.petite_martine_allumee && reveil < 0) setReveil(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flags.monde2_fini]);
+  const suiteReveil = () => {
+    if (reveil < REVEIL.length - 1) { setReveil(reveil + 1); return; }
+    setReveil(-1); setNote("allumee");
+    j3?.setFlag?.("petite_martine_allumee");
+  };
 
   const back = [
     { x: 110, plate: "A-03 · 2049" }, { x: 200, plate: "A-07 · 2052" }, { x: 290, plate: "A-11 · 2058" },
@@ -111,8 +174,7 @@ export default function BunkerDormants({ onGo, j3 }) {
     { x: 730, plate: "B-02 · 2071" }, { x: 820, plate: "A-18 · 2066" }, { x: 910, plate: "B-09 · 2080" },
   ];
   const front = [
-    { x: 790, plate: "C-30 · 2075" },
-    { x: 930, plate: "C-33 · 2083" },
+    { x: 755, plate: "C-30 · 2075" },
   ];
 
   return (
@@ -230,6 +292,18 @@ export default function BunkerDormants({ onGo, j3 }) {
         </g>
         <Hint x={262} y={222} w={150} h={280} on={!seen("n27")} />
 
+        {/* la bulle « A. », à l'écart, avec le halo bleuté d'Al3x1a */}
+        <ellipse cx="938" cy="360" rx="78" ry="150" fill="#7fd8ff" opacity="0.07" style={{ pointerEvents: "none" }} />
+        <g onClick={() => look("a")} style={{ cursor: "pointer" }}>
+          <Pod x={938} base={492} w={110} h={262} plate="A." k={7} />
+        </g>
+        <Hint x={876} y={222} w={124} h={280} on={!seen("a")} />
+        {/* à son pied, la petite MARTINE d'Al3x1a */}
+        <g onClick={() => { if (!allumee) look("petite"); }} style={{ cursor: allumee ? "default" : "pointer" }}>
+          <PetiteMartine x={846} y={allumee ? 452 : 478} s={0.52} allumee={allumee} />
+        </g>
+        <Hint x={814} y={444} w={64} h={56} on={!allumee && !seen("petite")} />
+
         {/* brume au ras du sol */}
         {[0, 1, 2].map((i) => (
           <ellipse key={i} cx={250 + i * 260} cy={470 + (i % 2) * 18} rx="260" ry="20" fill="#bff4f0" opacity="0.06" style={{ pointerEvents: "none" }}>
@@ -239,6 +313,20 @@ export default function BunkerDormants({ onGo, j3 }) {
         <Vignette id="dm-vig" w={1000} h={520} strength={0.6} />
       </svg>
 
+      {reveil >= 0 ? (
+        <div style={{ maxWidth: 820, width: "100%", background: "#0a1a10", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e" }}>
+            {REVEIL[reveil].qui === "petite" ? "◈ LA PETITE MARTINE" : "◈ SALLE DE REPOS"}
+          </div>
+          <p style={{ margin: "6px 0 10px", fontSize: 14.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: REVEIL[reveil].qui === "recit" ? "italic" : "normal" }}>
+            {REVEIL[reveil].texte}
+          </p>
+          <button onClick={suiteReveil} autoFocus
+            style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "8px 20px", fontSize: 12.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
+            Suite ▸
+          </button>
+        </div>
+      ) : (
       <div style={{ maxWidth: 820, width: "100%", background: "#081216", border: "1px dashed #4a8a90", borderRadius: 10, padding: "12px 16px" }}>
         <p style={{ margin: 0, fontSize: 13.5, color: "#d8eeee", lineHeight: 1.6, fontStyle: "italic" }}>
           {NOTES[note]}
@@ -250,8 +338,9 @@ export default function BunkerDormants({ onGo, j3 }) {
           </p>
         )}
       </div>
+      )}
 
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
+      {reveil < 0 && <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
         <button onClick={() => onGo("hub")}
           style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           ← Remonter l'escalier
@@ -260,7 +349,7 @@ export default function BunkerDormants({ onGo, j3 }) {
           style={{ background: "#0e2818", color: "#5eff9e", border: "1px solid #5eff9e", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           Pousser la porte du fond ▸
         </button>
-      </div>
+      </div>}
     </div>
   );
 }

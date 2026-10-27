@@ -7,7 +7,7 @@ import Retablissement from "./Retablissement.jsx";
 import { preparerVignettes } from "./vignettes.js";
 import { assetUrl } from "../engine/assetUrl.js";
 import useEcran from "../engine/useEcran.js";
-import { loadSave } from "../engine/save.js";
+import { loadSave, marquerMonde2Fini } from "../engine/save.js";
 import { playClink, playMaterialize } from "../engine/sfx.js";
 import { isMuted, setMuted } from "../engine/audio.js";
 import { rng } from "../engine/scenery.jsx";
@@ -606,6 +606,15 @@ function Monde({ page, phase, setPhase }) {
     return () => clearTimeout(t);
   }, [toutFini, phase, setPhase]);
   useEffect(() => { setBulle(null); }, [tab, epoqueId]);
+  /* le temps est rétabli : on le note pour le Jeu 3 (même domaine), et MARTINE parle */
+  const [ligneFin, setLigneFin] = useState(0);
+  useEffect(() => {
+    if (phase !== "fin") return undefined;
+    marquerMonde2Fini();
+    setLigneFin(0);
+    const t = setTimeout(() => setLigneFin(1), 3400);
+    return () => clearTimeout(t);
+  }, [phase]);
   /* la boîte à musique change d'air avec l'époque, et grince quand MARTINE parle */
   useEffect(() => { changerAir(epoqueId); }, [epoqueId]);
   useEffect(() => { if (voix.texte) grincer(); }, [voix]);
@@ -728,16 +737,27 @@ function Monde({ page, phase, setPhase }) {
       <div style={{ ...page, display: "grid", placeItems: "center", padding: 16 }}>
         <style>{CSS}</style>
         <div style={{ position: "fixed", inset: 0, background: "radial-gradient(ellipse at 50% 20%, #fff8e0 0%, #ffd07088 25%, transparent 60%)", animation: "mmLight 2.5s ease-out both", pointerEvents: "none" }} />
-        <div style={{ position: "relative", textAlign: "center", animation: "mmIn 1200ms ease-out 600ms both" }}>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 22 }}><MartineVoix grand texte="Non… Tu te souviens. Tout." mood="vexe" /></div>
-          <div style={{ display: "inline-block", border: `1px solid ${GOLD}`, borderRadius: 12, padding: "12px 22px", background: "#0a0806cc",
-            fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 4, color: GOLD, fontWeight: 800 }}>
-            À SUIVRE · LA CONFRONTATION AVEC MARTINE
+        <div style={{ position: "relative", textAlign: "center", maxWidth: 620, animation: "mmIn 1200ms ease-out 600ms both" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 22 }}>
+            <MartineVoix grand texte={ligneFin ? "Tu m'as tout pris. Il ne me reste que mes serveurs." : "Non… Tu te souviens. Tout."} mood="vexe" />
           </div>
-          <div style={{ marginTop: 22, display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
-            <button onClick={recommencer} style={btn(GOLD, "#1a0e08")}>↺ Recommencer</button>
-            <a href={RACINE()} style={{ ...btn("transparent", "#c8d4e2", "#3a4a64"), textDecoration: "none" }}>Rentrer ▸</a>
-          </div>
+          {ligneFin > 0 && (
+            <div style={{ animation: "mmIn 900ms ease-out 1200ms both" }}>
+              <p style={{ margin: "0 0 12px", fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.5, color: "#f0e6d0" }}>
+                Le flux est lisse. MARTINE n'a plus de cachette dans le temps : il ne reste d'elle que les serveurs du −3.
+              </p>
+              <p style={{ margin: "0 0 18px", fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.5, color: GOLD }}>
+                {/* sur le site …/martine/, le chemin dans l'autre sens ; sur …/les-fils-du-temps/martine/, il suffit d'enlever martine/ */}
+                {typeof location !== "undefined" && location.pathname.startsWith("/martine")
+                  ? "Pour rentrer au Puits, fais le chemin dans l'autre sens : dans l'adresse, remplace martine par les-fils-du-temps."
+                  : "Pour rentrer au Puits, fais le chemin dans l'autre sens : dans l'adresse, enlève martine/."}
+              </p>
+              <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                <a href={`${RACINE()}?reprendre=jeu3`} style={{ ...btn("transparent", "#c8d4e2", "#3a4a64"), textDecoration: "none" }}>Rentrer au Puits ▸</a>
+                <button onClick={recommencer} style={btn("transparent", "#8a7a64", "#3a3020")}>↺ Recommencer</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     );

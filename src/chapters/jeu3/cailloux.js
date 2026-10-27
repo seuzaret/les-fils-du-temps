@@ -74,6 +74,16 @@ export const CAILLOUX = [
 
 export const CAILLOU = Object.fromEntries(CAILLOUX.map((c) => [c.id, c]));
 
+/* Après la 1re visite aux serveurs (« Je suis partout ») : comment aller
+   dans le monde de MARTINE. Trois indices, du plus vague au plus clair
+   (créateur : « laisse le 6e galérer, le plaisir c'est de chercher »).
+   Le nombre d'indices lus est gardé dans indices_monde. */
+export const INDICES_MONDE = [
+  "Où est écrit le nom du monde où tu es en ce moment ?",
+  "Lève la tête, et vois.",
+  "Remplace les-fils-du-temps par martine, puis appuie sur Entrée.",
+];
+
 /* Le papier que contient ce livre, s'il est son tour d'apparaître. */
 export function caillouDuLivre(cote, flags) {
   const c = CAILLOUX.find((k) => k.livre === cote);

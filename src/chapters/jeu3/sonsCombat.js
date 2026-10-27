@@ -173,3 +173,66 @@ export function sonFinBouclier() {
   if (!audio()) return;
   note("triangle", 660, ctx.currentTime, 0.25, 0.035, { f2: 330 });
 }
+
+/* ───────── T'ÉTEINDRE : MARTINE fredonne « Daisy Bell » ─────────
+   Harry Dacre, 1892 (domaine public), la chanson que chante HAL qu'on
+   débranche dans 2001, l'odyssée de l'espace (1968). En 1961, aux
+   laboratoires Bell, un ordinateur IBM l'avait chantée ; Arthur C.
+   Clarke a entendu la démonstration. Ici : « Daisy, Daisy, give me
+   your answer, do. I'm half cra— », de plus en plus lent et grave,
+   de plus en plus faible, jusqu'au silence. La partition sert aussi
+   à caler les paroles affichées (même quand le son est coupé). */
+const DAISY = [
+  [79, 3], [76, 3], [72, 3], [67, 3],                       // Dai-sy, Dai-sy
+  [69, 1], [71, 1], [72, 1], [69, 2], [72, 1], [67, 6],     // give me your an-swer, do
+  [74, 3], [79, 3], [76, 4],                                // I'm half cra—
+];
+export function partitionDaisy() {
+  let t = 0;
+  const notes = DAISY.map(([n, b], k) => {
+    const temps = 0.26 + 0.034 * k;                          // le tempo ralentit
+    const d = b * temps;
+    const note = { n: n - 9 - k * 0.45, t, d, k };           // et la voix descend
+    t += d;
+    return note;
+  });
+  return { notes, duree: t + 1.2 };
+}
+export function chanterDaisy() {
+  if (!audio()) return;
+  const { notes } = partitionDaisy();
+  const t0 = ctx.currentTime + 0.1, N = notes.length;
+  notes.forEach(({ n, t, d, k }) => {
+    const debut = t0 + t, fin = k === N - 1;
+    const f = hz(n), vol = 0.05 * (1 - (k / N) * 0.75);
+    const o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), b = ctx.createBiquadFilter();
+    const vib = ctx.createOscillator(), vg = ctx.createGain();
+    o.type = "square"; o2.type = "triangle";
+    o.frequency.setValueAtTime(f, debut); o2.frequency.setValueAtTime(f, debut);
+    /* la dernière note glisse vers le bas : la voix s'en va */
+    if (fin) { o.frequency.exponentialRampToValueAtTime(f * 0.45, debut + d); o2.frequency.exponentialRampToValueAtTime(f * 0.45, debut + d); }
+    vib.frequency.value = 4.5; vg.gain.value = f * 0.012;
+    vib.connect(vg); vg.connect(o.frequency); vg.connect(o2.frequency);
+    b.type = "lowpass"; b.frequency.setValueAtTime(1500 - k * 70, debut);
+    g.gain.setValueAtTime(0.0001, debut);
+    g.gain.exponentialRampToValueAtTime(vol, debut + 0.04);
+    g.gain.setValueAtTime(vol, debut + d * 0.7);
+    g.gain.exponentialRampToValueAtTime(0.0001, debut + d * (fin ? 1 : 0.98));
+    o.connect(b); o2.connect(b); b.connect(g).connect(maitre);
+    [o, o2, vib].forEach((x) => { x.start(debut); x.stop(debut + d + 0.05); });
+  });
+}
+/* les leviers : un grand bruit sourd, tout s'éteint */
+export function sonCoupure() {
+  if (!audio()) return;
+  const t = ctx.currentTime;
+  note("sawtooth", 160, t, 1.4, 0.08, { f2: 30, filtre: 600 });
+  souffle(t, 0.6, 0.08, "lowpass", 500);
+}
+/* … et se rallume (1re visite : elle est partout) */
+export function sonRallume() {
+  if (!audio()) return;
+  const t = ctx.currentTime;
+  note("sawtooth", 40, t, 1.2, 0.06, { f2: 220, filtre: 900 });
+  [0, 1, 2].forEach((k) => note("square", 880 + k * 220, t + 0.9 + k * 0.08, 0.06, 0.015, { filtre: 3000 }));
+}

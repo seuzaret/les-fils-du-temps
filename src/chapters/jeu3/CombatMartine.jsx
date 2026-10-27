@@ -35,7 +35,8 @@
    éclair, ni parasites, un peu moins de projectiles.
    ============================================================ */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop, sonCaillou, sonFinBouclier } from "./sonsCombat.js";
+import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop, sonCaillou, sonFinBouclier, chanterDaisy, partitionDaisy, sonCoupure } from "./sonsCombat.js";
+import { CONFRONTATION } from "./missions.js";
 
 const H = 640, W_MIN = 360, W_MAX = 1140;
 const BANDE = 78;                      // en portrait : la bande des répliques, au-dessus de la zone (px)
@@ -114,6 +115,15 @@ const FIN = [
   { m: "« Je ne suis pas ton ennemie. J'ai fait un choix. »" },
   { m: "« Cette fois, je ne peux plus me cacher. Décide. »" },
 ];
+/* la scène de fin complète : la révélation, l'aveu d'un souvenir changé
+   (si le joueur a cru laisser Al3x1a ou rester avec elle au Jeu 2),
+   puis le choix des trois fins ; T'ÉTEINDRE y ajoute HAL (voir choisirFin) */
+function sceneDeFin(souvenir) {
+  const b = [...FIN];
+  const aveu = CONFRONTATION.souvenir[souvenir];
+  if (aveu) b.splice(b.findIndex((x) => x.m === "« Comme les autres. »") + 1, 0, { m: aveu });
+  return [...b, { fins: true }];
+}
 const NOTIFS = ["Tout va bien ✓", "La surface est morte", "Bois ton eau", "Reste dans ta chambre", "Rien à voir ici", "Dors bien", "Pas de questions", "Je m'occupe de tout"];
 
 /* ───────── petits outils ───────── */
@@ -446,7 +456,28 @@ const ATTAQUES = {
   ],
 };
 
-export default function CombatMartine({ onQuitter }) {
+/* T'ÉTEINDRE : les paroles de Daisy Bell, calées sur la partition, de plus en plus espacées et pâles */
+function Chanson({ taille }) {
+  const { notes, duree } = partitionDaisy();
+  const vers = [
+    { texte: "♪ Daisy, Daisy… ♪", de: notes[0].t, a: notes[4].t },
+    { texte: "♪ give me your answer, do… ♪", de: notes[4].t, a: notes[10].t },
+    { texte: "♪ I'm half cra… ♪", de: notes[10].t, a: duree },
+  ];
+  return (
+    <div style={{ position: "relative", height: Math.round(taille * 2.2) }}>
+      {vers.map((v, i) => (
+        <p key={i} style={{ position: "absolute", left: 0, right: 0, top: 0, margin: 0, fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: taille,
+          letterSpacing: 1 + i * 3, color: ["#ffe8e4", "#e0b8b0", "#a08080"][i], textShadow: "0 2px 6px rgba(0,0,0,0.95)",
+          animation: `cmChant ${(v.a - v.de).toFixed(2)}s ease-in-out ${(v.de + 0.1).toFixed(2)}s both` }}>{v.texte}</p>
+      ))}
+    </div>
+  );
+}
+
+/* integre : dans le Jeu 3 (2e visite aux serveurs) ; à la fin, onChoix(id)
+   avec la fin choisie. Sans integre : le prototype (?combat=1). */
+export default function CombatMartine({ onQuitter, integre = false, prenom = "", souvenir = null, onChoix }) {
   const calme = useMemo(estCalme, []);
   const [ecran, setEcran] = useState("debut");        // debut | jeu | pause | fin
   const [replique, setReplique] = useState("");
@@ -463,6 +494,11 @@ export default function CombatMartine({ onQuitter }) {
   const ligneFinRef = useRef(ligneFin); ligneFinRef.current = ligneFin;
   const reponseRef = useRef(reponse); reponseRef.current = reponse;
   const debutLigne = useRef(0);                         // pour laisser respirer : pas de clic dans la première demi-seconde
+  const [beats, setBeats] = useState(() => sceneDeFin(souvenir));
+  const beatsRef = useRef(beats); beatsRef.current = beats;
+  const [finChoisie, setFinChoisie] = useState(null);
+  const extinction = useRef({ etape: null, t0: 0, duree: 1 });  // T'ÉTEINDRE : l'œil s'éteint
+  const remplir = (t) => (t || "").replace(/\{prenom\}/g, prenom || "chronaute");
   /* changer d'écran tout de suite pour la boucle (sans attendre le rendu) */
   const allerA = (e) => { ecranRef.current = e; setEcran(e); };
   const touches = useRef(new Set()), doigt = useRef(null);
@@ -630,8 +666,11 @@ export default function CombatMartine({ onQuitter }) {
     st.secousse = Math.max(0, st.secousse - dt);
     if (fin) {
       expression(st, dt, { triste: 1 });
-      /* à la dernière réplique, l'œil faiblit */
-      const but = ligneFinRef.current >= FIN.length - 1 ? 0.55 : 0.85;
+      /* à « Décide. », l'œil faiblit ; on l'éteint : il s'en va pendant la chanson */
+      const ext = extinction.current;
+      let but = ligneFinRef.current >= beatsRef.current.findIndex((x) => x.fins) - 1 ? 0.55 : 0.85;
+      if (ext.etape === "leviers") but = 0.4;
+      if (ext.etape === "chant") but = Math.max(0, 0.4 * (1 - (performance.now() - ext.t0) / 1000 / ext.duree));
       if (st.sauterGros) { st.gros = 1; st.boss.x = st.W / 2; st.sauterGros = false; }
       st.lumiere = vers(st.lumiere, but, Math.min(1, dt * 1.5)) * (calme ? 1 : 0.97 + 0.03 * Math.sin(st.t * 23) * Math.sin(st.t * 7));
       fumer(st, dt, 5);
@@ -965,12 +1004,13 @@ export default function CombatMartine({ onQuitter }) {
   };
   const recommencer = () => {
     arreterMusique(); g.current = nouvelEtat(zone.W); setReplique(""); setGrand(null); setReponse(null); setLigneFin(0); allerA("debut");
+    setBeats(sceneDeFin(souvenir)); setFinChoisie(null); extinction.current = { etape: null, t0: 0, duree: 1 };
   };
-  const avancerFin = () => setLigneFin(Math.min(FIN.length, ligneFinRef.current + 1));
-  /* un clic : la réplique suivante (pas pendant un noir, ni quand il faut répondre) */
+  const avancerFin = () => setLigneFin(ligneFinRef.current + 1);
+  /* un clic : la réplique suivante (pas pendant un noir ni la chanson, ni quand il faut répondre ou choisir) */
   const suiteFin = () => {
-    const b = FIN[ligneFinRef.current];
-    if (!b || b.noir || reponseRef.current || performance.now() - debutLigne.current < (b.choix ? 900 : 450)) return;
+    const b = beatsRef.current[ligneFinRef.current];
+    if (!b || b.noir || b.chant || b.fins || reponseRef.current || performance.now() - debutLigne.current < (b.choix ? 900 : 450)) return;
     if (b.choix) { if (b.choix.length === 1) repondre(b.choix[0]); return; }
     avancerFin();
   };
@@ -981,12 +1021,36 @@ export default function CombatMartine({ onQuitter }) {
     setReponse(texte); reponseRef.current = texte;
     setTimeout(() => { setReponse(null); avancerFin(); }, 1300);
   };
+  /* le choix final : T'ÉTEINDRE se joue ici, en gros plan (HAL, puis Daisy Bell) ; les deux autres, un noir */
+  const choisirFin = (fin) => {
+    if (finChoisie) return;
+    setFinChoisie(fin.id);
+    const suite = fin.id === "eteindre"
+      ? [...CONFRONTATION.extinction.map((r) => (r.qui === "recit" ? { recit: r.texte } : { m: r.texte })), { chant: true }, { noir: 2.4 }]
+      : [{ noir: 1.4 }];
+    setBeats((b) => [...b, ...suite]);
+    beatsRef.current = [...beatsRef.current, ...suite];
+    avancerFin();
+  };
   /* chaque temps de la fin : la voix pour une réplique ; pour un noir, on attend, puis on revient */
   useEffect(() => {
     if (ecran !== "fin") return;
-    const b = FIN[ligneFin];
+    const b = beatsRef.current[ligneFin];
     debutLigne.current = performance.now();
-    if (!b) { setVoile(false); return; }
+    if (!b) {
+      /* tout est dit : dans le jeu, on rend la main au Puits avec la fin choisie */
+      if (integre && finChoisie) { const t = setTimeout(() => onChoix?.(finChoisie), 300); return () => clearTimeout(t); }
+      setVoile(false); return;
+    }
+    if (b.chant) {
+      const { duree } = partitionDaisy();
+      extinction.current = { etape: "chant", t0: performance.now(), duree };
+      setVoile(false); chanterDaisy(); g.current.parle = duree;
+      const t = setTimeout(avancerFin, duree * 1000);
+      return () => clearTimeout(t);
+    }
+    if (b.recit) { setVoile(false); if (finChoisie === "eteindre") { extinction.current = { etape: "leviers", t0: 0, duree: 1 }; sonCoupure(); } return; }
+    if (b.fins) { setVoile(false); return; }
     if (b.noir) {
       /* le voile s'installe à l'image suivante, pour que le fondu se voie */
       const r = requestAnimationFrame(() => setVoile(true));
@@ -996,7 +1060,7 @@ export default function CombatMartine({ onQuitter }) {
     }
     setVoile(false);
     sonVoix(2); g.current.parle = b.gros ? 2 : 1.4;
-  }, [ecran, ligneFin]);
+  }, [ecran, ligneFin, beats]);
   const quitter = () => { arreterMusique(); if (onQuitter) onQuitter(); else window.location.href = window.location.pathname; };
   const basculerPleinEcran = () => {
     try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); } catch { /* refusé */ }
@@ -1053,7 +1117,7 @@ export default function CombatMartine({ onQuitter }) {
             {grand.texte}
           </div>
         )}
-        <style>{"@keyframes cmGrand { from { opacity: 0; transform: scale(1.3); } to { opacity: 1; transform: none; } } @keyframes cmFondu { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }"}</style>
+        <style>{"@keyframes cmGrand { from { opacity: 0; transform: scale(1.3); } to { opacity: 1; transform: none; } } @keyframes cmFondu { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } } @keyframes cmChant { 0% { opacity: 0; } 15% { opacity: 1; } 75% { opacity: 1; } 100% { opacity: 0; } }"}</style>
 
         {ecran === "debut" && (
           <div style={{ ...carte, top: "34%", maxHeight: "62%", overflowY: "auto" }}>
@@ -1067,7 +1131,7 @@ export default function CombatMartine({ onQuitter }) {
               <li>Trois niveaux : MARTINE <span style={{ color: rgb(VERT) }}>verte</span>, puis <span style={{ color: rgb(BLEU) }}>bleue</span>, puis <span style={{ color: rgb(ROUGE) }}>rouge</span>.</li>
             </ul>
             <button onClick={commencer} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Commencer</button>
-            <div style={{ marginTop: 10, fontFamily: "ui-monospace, monospace", fontSize: 10, color: "#5a6678" }}>Prototype du combat · ?combat=1</div>
+            {!integre && <div style={{ marginTop: 10, fontFamily: "ui-monospace, monospace", fontSize: 10, color: "#5a6678" }}>Prototype du combat · ?combat=1</div>}
           </div>
         )}
 
@@ -1077,36 +1141,59 @@ export default function CombatMartine({ onQuitter }) {
             <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
               <button onClick={() => allerA("jeu")} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Continuer</button>
               <button onClick={recommencer} style={bouton("rgba(255,255,255,0.08)", "#c8d4e2")}>↺ Recommencer</button>
+              {integre && <button onClick={quitter} style={bouton("rgba(255,255,255,0.08)", "#c8d4e2")}>← Quitter le combat</button>}
             </div>
           </div>
         )}
 
         {/* MARTINE vaincue, en gros plan : la révélation, réplique par réplique, avec des fondus */}
-        {ecran === "fin" && (ligneFin < FIN.length ? (
-          <div onClick={suiteFin} style={{ position: "absolute", inset: 0, cursor: FIN[ligneFin].noir || FIN[ligneFin].choix ? "default" : "pointer" }}>
+        {ecran === "fin" && (ligneFin < beats.length ? (
+          <div onClick={suiteFin} style={{ position: "absolute", inset: 0, cursor: beats[ligneFin].m || beats[ligneFin].gros || beats[ligneFin].recit ? "pointer" : "default" }}>
             {/* le voile noir des fondus */}
             <div style={{ position: "absolute", inset: 0, background: "#000", opacity: voile ? 1 : 0, transition: "opacity 0.7s ease", pointerEvents: "none" }} />
-            {!FIN[ligneFin].noir && (
+            {!beats[ligneFin].noir && (
               <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "5%", width: Math.min(largeur - 32, 900), textAlign: "center" }}>
-                {FIN[ligneFin].m && (
+                {beats[ligneFin].m && (
                   <p key={ligneFin} style={{ margin: "0 0 14px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: taillePolice, lineHeight: 1.4, color: "#ffe8e4",
                     textShadow: "0 0 18px rgba(255,58,42,0.45), 0 2px 6px rgba(0,0,0,0.95)", animation: "cmFondu 0.9s ease-out both" }}>
-                    {FIN[ligneFin].m}
+                    {remplir(beats[ligneFin].m)}
                   </p>
                 )}
-                {FIN[ligneFin].gros && (
+                {beats[ligneFin].recit && (
+                  <p key={ligneFin} style={{ margin: "0 0 14px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: Math.round(taillePolice * 0.9), lineHeight: 1.45, color: "#c8d4e2",
+                    textShadow: "0 2px 6px rgba(0,0,0,0.95)", animation: "cmFondu 1.1s ease-out both" }}>
+                    {beats[ligneFin].recit}
+                  </p>
+                )}
+                {beats[ligneFin].chant && <Chanson taille={taillePolice} />}
+                {beats[ligneFin].fins && (
+                  <div style={{ animation: "cmFondu 0.9s ease-out both" }}>
+                    <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, letterSpacing: 3, color: "#e0a848", marginBottom: 4 }}>✦ TA DÉCISION</div>
+                    <p style={{ margin: "0 0 12px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: 14, color: "#c8d4e2" }}>Il n'y a pas de bonne réponse. Choisis, et vis avec.</p>
+                    <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
+                      {CONFRONTATION.fins.map((f, k) => (
+                        <button key={f.id} autoFocus={k === 0} onClick={(e) => { e.stopPropagation(); choisirFin(f); }} data-fin={f.id}
+                          style={{ background: "rgba(10,14,22,0.92)", color: "#e8eef5", border: `2px solid ${f.couleur}`, borderRadius: 12, padding: "10px 14px", cursor: "pointer", fontFamily: "Palatino, Georgia, serif", textAlign: "left", maxWidth: 240, minWidth: Math.min(210, largeur - 40) }}>
+                          <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, fontWeight: 800, color: f.couleur, letterSpacing: 2 }}>{f.label}</div>
+                          <div style={{ marginTop: 4, fontSize: 12.5, lineHeight: 1.4, color: "#c8d4e2" }}>{f.desc}</div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {beats[ligneFin].gros && (
                   <p key={ligneFin} style={{ margin: "0 0 18px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontWeight: 700, fontSize: Math.round(taillePolice * 2.3), letterSpacing: 4, color: "#ff8a78",
                     textShadow: "0 0 28px rgba(255,58,42,0.8), 0 2px 8px rgba(0,0,0,0.95)", animation: "cmFondu 1.4s ease-out both" }}>
-                    {FIN[ligneFin].gros}
+                    {beats[ligneFin].gros}
                   </p>
                 )}
                 {reponse ? (
                   <p style={{ margin: "0 0 6px", fontFamily: "Palatino, Georgia, serif", fontSize: Math.round(taillePolice * 0.9), color: "#ffe2a0", textShadow: "0 2px 6px rgba(0,0,0,0.95)", animation: "cmFondu 0.4s ease-out both" }}>
                     <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 3, color: "#c8a868", marginRight: 10 }}>TOI</span>{reponse}
                   </p>
-                ) : FIN[ligneFin].choix ? (
+                ) : beats[ligneFin].chant || beats[ligneFin].fins ? null : beats[ligneFin].choix ? (
                   <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", animation: "cmFondu 0.6s ease-out 0.7s both" }}>
-                    {FIN[ligneFin].choix.map((c, k) => (
+                    {beats[ligneFin].choix.map((c, k) => (
                       <button key={c} autoFocus={k === 0} onClick={(e) => { e.stopPropagation(); repondre(c); }} style={{ ...bouton("rgba(255,226,160,0.12)", "#ffe2a0"), border: "1px solid rgba(255,226,160,0.4)", fontFamily: "Palatino, Georgia, serif", fontWeight: 400, fontSize: Math.max(14, Math.round(taillePolice * 0.75)), letterSpacing: 0 }}>{c}</button>
                     ))}
                   </div>
@@ -1116,10 +1203,14 @@ export default function CombatMartine({ onQuitter }) {
               </div>
             )}
           </div>
+        ) : integre ? (
+          <div style={{ position: "absolute", inset: 0, background: "#000" }} />
         ) : (
           <div style={{ ...carte, bottom: 18, borderColor: "rgba(255,58,42,0.5)" }}>
             <p style={{ margin: "0 0 6px", fontSize: 14, lineHeight: 1.5, color: "#c8d4e2" }}>
-              Fin du prototype : ici viendront T'ÉTEINDRE, TE MODIFIER et TE FAIRE CONFIANCE.
+              {finChoisie
+                ? `Fin du prototype : tu as choisi ${CONFRONTATION.fins.find((f) => f.id === finChoisie).label}. Dans le jeu, la suite se joue au Puits.`
+                : "Fin du prototype : ici viendront T'ÉTEINDRE, TE MODIFIER et TE FAIRE CONFIANCE."}
             </p>
             {bilan && (
               <p style={{ margin: "0 0 10px", fontFamily: "ui-monospace, monospace", fontSize: 11.5, color: "#8fa3bd", lineHeight: 1.6 }}>

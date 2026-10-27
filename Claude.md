@@ -75,6 +75,7 @@ survit ET reste lisible**. C'est un ressort de jeu ET une leçon d'archivistique
 
 ### 3.4 Sauvegarde & classe
 - `localStorage` : progression, messages découverts, chapitre courant. Un emplacement par jeu (`jeu1`, `jeu2`, `jeu3`, `src/engine/save.js`) ; le Jeu 3 écrit le sien lui-même (`Jeu3.jsx`). Export / import (Réglages) : un seul fichier pour les trois jeux ; l'ancien fichier d'une seule partie s'importe encore.
+- Le monde 2 (`…/martine/`, même domaine) note qu'il est fini dans un 4e emplacement, `monde2` (`marquerMonde2Fini`) ; le Jeu 3 le relit au départ et chaque fois qu'on revient sur l'onglet (flag `monde2_fini`), ce qui ouvre la 2e visite aux serveurs. `?reprendre=jeu3` reprend directement la partie du Puits (bouton « Rentrer au Puits » du monde 2).
 - Écran "Carnet de bord" imprimable (CSS print) : toutes les fiches découvertes → trace écrite pour l'élève.
 - Mode "classe entière" : police plus grande, plein écran (API Fullscreen).
 
@@ -107,12 +108,16 @@ martine/
 │   │   ├── save.js            (localStorage)
 │   │   └── audio.js
 │   ├── titre/                 (écran titre TitrePyramide, menu, musique ; TitrePellicule ?titre=c, pour le futur générique de fin)
+│   ├── martine/               (le monde 2, site …/martine/ : MondeMartine, Retablissement)
 │   ├── chapters/              ← UN DOSSIER PAR CHAPITRE, pur contenu
 │   │   ├── 01-paleolithique/
 │   │   │   ├── data.js        (items, recettes, dialogues, fiches, jauges)
 │   │   │   └── scenes/        (composants SVG ou images PNG des tableaux)
 │   │   ├── 02-neolithique/
-│   │   └── …
+│   │   ├── …
+│   │   └── jeu3/              (le Puits : salles dans scenes/, enquêtes et final dans missions.js ;
+│   │                           le final au −3 : BunkerDormants → BunkerServeurs, en deux visites,
+│   │                           la 2e lance CombatMartine en mode « integre » ; ?combat=1 = le combat seul)
 │   └── styles/
 └── public/assets/             (sons, images, polices)
 ```

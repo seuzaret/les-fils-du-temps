@@ -1,5 +1,29 @@
 import { Papier } from "./CaillouPapier.jsx";
-import { caillouxTrouves } from "./cailloux.js";
+import { caillouxTrouves, INDICES_MONDE } from "./cailloux.js";
+
+/* « Son monde porte son nom » : les trois indices de l'adresse (relus
+   dans ce panneau et à la 1re visite aux serveurs). */
+export function IndicesMonde({ flags, setFlag }) {
+  const lus = flags.indices_monde || 0;
+  return (
+    <div style={{ background: "#141c2a", border: "1px dashed #c8a848", borderRadius: 10, padding: "10px 14px", textAlign: "left" }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#c8a848", marginBottom: lus ? 8 : 0 }}>
+        OÙ EST SON MONDE ?
+      </div>
+      {INDICES_MONDE.slice(0, lus).map((t, k) => (
+        <p key={k} style={{ margin: "0 0 8px", fontSize: 14, lineHeight: 1.5, color: "#e8eef5" }}>💡 {t}</p>
+      ))}
+      {lus < INDICES_MONDE.length ? (
+        <button onClick={() => setFlag("indices_monde", lus + 1)} data-indice-monde="1"
+          style={{ marginTop: lus ? 2 : 8, background: "transparent", color: "#ffd166", border: "1px solid #c8a848", borderRadius: 8, padding: "7px 14px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700 }}>
+          💡 {lus === 0 ? "Un indice" : "Un autre indice"} ({lus + 1}/{INDICES_MONDE.length})
+        </button>
+      ) : (
+        <p style={{ margin: 0, fontSize: 12, color: "#7a879e", fontStyle: "italic" }}>Plus d'indice : tu as tout ce qu'il faut.</p>
+      )}
+    </div>
+  );
+}
 
 /* ============================================================
    JEU 3 — « Les cailloux d'A. » (bouton 🪨 de la barre du haut)
@@ -36,6 +60,12 @@ export default function CaillouxPanel({ flags, setFlag, onClose }) {
               {trouves.length - i}. {c.ou.toUpperCase()}
             </div>
             <Papier caillou={c} />
+            {i === 0 && fini && flags.serveurs_visite1 && !flags.monde2_fini && (
+              <div style={{ marginTop: 16 }}><IndicesMonde flags={flags} setFlag={setFlag} /></div>
+            )}
+            {i === 0 && fini && flags.monde2_fini && (
+              <p style={{ margin: "14px 0 0", fontSize: 13, color: "#c8a848", fontStyle: "italic", textAlign: "center" }}>Tu as remis son monde en ordre. Il ne reste de MARTINE que ses serveurs.</p>
+            )}
             {i === 0 && !fini && (
               <div style={{ marginTop: 16, background: "#141c2a", border: "1px dashed #c8a848", borderRadius: 10, padding: "10px 14px" }}>
                 <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#c8a848", marginBottom: lus ? 8 : 0 }}>

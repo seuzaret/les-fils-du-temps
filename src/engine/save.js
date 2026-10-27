@@ -82,8 +82,15 @@ export function importSaveString(text, slot = DEFAULT_SLOT) {
   }
 }
 
+/* ---------- le monde 2 (…/martine/) ----------
+   Même domaine que le jeu : le monde de MARTINE, une fois remis en
+   ordre, le note ici (slot « monde2 ») ; le Jeu 3 le relit pour
+   ouvrir la 2e visite aux serveurs. */
+export const monde2Fini = () => !!loadSave("monde2")?.fini;
+export const marquerMonde2Fini = () => writeSave({ fini: true, le: Date.now() }, "monde2");
+
 /* ---------- un fichier pour les trois jeux (export / import) ---------- */
-const SLOTS = ["jeu1", "jeu2", "jeu3"];
+const SLOTS = ["jeu1", "jeu2", "jeu3", "monde2"];
 const FORMAT = "martine-parties";
 
 /** Exporte toutes les parties en cours dans un seul texte JSON, ou null
