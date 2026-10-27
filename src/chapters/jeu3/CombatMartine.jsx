@@ -46,7 +46,7 @@ const VERT = [94, 255, 158], BLEU = [90, 176, 255], ROUGE = [255, 58, 42];
 const NIVEAUX = {
   1: { dif: 0.62, pv: 520, couleur: VERT, missiles: { periode: 5.5, n: 2, virage: 1.2, vmax: 150 } },
   2: { dif: 1.0, pv: 680, couleur: BLEU, missiles: { periode: 4.0, n: 3, virage: 1.5, vmax: 165 } },
-  3: { dif: 1.2, pv: 850, couleur: ROUGE, missiles: { periode: 3.4, n: 3, virage: 1.7, vmax: 170 } },
+  3: { dif: 1.1, pv: 850, couleur: ROUGE, missiles: { periode: 3.4, n: 3, virage: 1.7, vmax: 170 } },
 };
 const DERNIER = 3;
 /* en grand écran, MARTINE va plus loin et on la poursuit plus longtemps : 15 % de vie en moins */
@@ -399,27 +399,28 @@ const ATTAQUES = {
       for (let k = -3; k <= 3; k++) balle(g, "orbe", ex, ey, a + k * 0.17, 155 * d.v, 6.5);
     }) },
   ],
-  /* rouge : fleur et anneaux, murs d'« OUBLIE », panique, rideaux croisés, salve de missiles */
+  /* rouge : fleur et anneaux, murs d'« OUBLIE », panique, rideaux croisés, salve de missiles
+     (allégé le 2026-10-27 : « un peu trop de boules rouges » ; environ −40 % de boules, à peine plus que le bleu) */
   3: [
     { duree: 7, tir: (g, dt, d, ex, ey) => {
-      chaque(g, "a", 0.085 / d.rate, dt, () => { const a = g.tA * 1.9 * g.sens; for (let k = 0; k < 4; k++) balle(g, "orbe", ex, ey, a + (k * Math.PI) / 2, 110 * d.v); });
-      chaque(g, "b", 1.3 / d.rate, dt, () => { const o = Math.random(); for (let k = 0; k < 18; k++) balle(g, "orbe", ex, ey, o + (k * Math.PI * 2) / 18, 92 * d.v, 6.5); });
+      chaque(g, "a", 0.14 / d.rate, dt, () => { const a = g.tA * 1.9 * g.sens; for (let k = 0; k < 4; k++) balle(g, "orbe", ex, ey, a + (k * Math.PI) / 2, 110 * d.v); });
+      chaque(g, "b", 1.6 / d.rate, dt, () => { const o = Math.random(); for (let k = 0; k < 14; k++) balle(g, "orbe", ex, ey, o + (k * Math.PI * 2) / 14, 92 * d.v, 6.5); });
     } },
     { duree: 8, tir: (g, dt, d, ex, ey) => {
       chaque(g, "a", 1.55 / d.rate, dt, () => rangee(g, ["OUBLIE"], 64, 17, 100 - (d.rate - 1) * 18, 80 * d.v, "oublie"));
       chaque(g, "b", 0.6 / d.rate, dt, () => balle(g, "orbe", ex, ey, versJoueur(g, ex, ey), 170 * d.v, 6));
     } },
-    { duree: 6, tir: (g, dt, d) => chaque(g, "a", 0.26 / d.rate, dt, () => {
+    { duree: 6, tir: (g, dt, d) => chaque(g, "a", 0.3 / d.rate, dt, () => {
       const ox = g.boss.x + (Math.random() - 0.5) * 220, oy = g.boss.y + (Math.random() - 0.5) * 120;
-      for (let k = 0; k < 6; k++) balle(g, "orbe", ox, oy, Math.PI * (0.15 + Math.random() * 0.7), (120 + Math.random() * 70) * d.v, 5);
+      for (let k = 0; k < 4; k++) balle(g, "orbe", ox, oy, Math.PI * (0.15 + Math.random() * 0.7), (120 + Math.random() * 70) * d.v, 5);
     }) },
-    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.055 / d.rate, dt, () => {
+    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.085 / d.rate, dt, () => {
       const s = Math.sin(g.tA * 2.2) * 1.0;
       balle(g, "orbe", ex, ey, Math.PI / 2 + s, 175 * d.v, 5); balle(g, "orbe", ex, ey, Math.PI / 2 - s, 175 * d.v, 5);
     }) },
     { duree: 5, tir: (g, dt, d, ex, ey) => {
       chaque(g, "a", 1.4 / d.rate, dt, () => lancerMissiles(g, 2, d));
-      chaque(g, "b", 0.35 / d.rate, dt, () => { for (let k = -1; k <= 1; k++) balle(g, "orbe", ex, ey, Math.PI / 2 + k * 0.5 + Math.sin(g.tA) * 0.3, 120 * d.v, 5.5); });
+      chaque(g, "b", 0.42 / d.rate, dt, () => { for (let k = -1; k <= 1; k++) balle(g, "orbe", ex, ey, Math.PI / 2 + k * 0.5 + Math.sin(g.tA) * 0.3, 120 * d.v, 5.5); });
     } },
   ],
 };
