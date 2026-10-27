@@ -139,3 +139,21 @@ export function sonVoix(phase = 1) {
     note("square", f, t + k * 0.06, 0.045, 0.014, { filtre: 2200 });
   }
 }
+/* un missile part : un souffle qui monte et un petit cri de machine */
+export function sonMissile() {
+  if (!audio()) return;
+  const t = ctx.currentTime;
+  const src = ctx.createBufferSource(), b = ctx.createBiquadFilter(), g = ctx.createGain();
+  src.buffer = bruit; b.type = "bandpass"; b.Q.value = 4;
+  b.frequency.setValueAtTime(500, t); b.frequency.exponentialRampToValueAtTime(2600, t + 0.45);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.09, t + 0.08); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.5);
+  src.connect(b).connect(g).connect(maitre); src.start(t); src.stop(t + 0.55);
+  note("square", 1200, t, 0.12, 0.02, { f2: 1700, filtre: 3000 });
+}
+/* un missile abattu */
+export function sonPop() {
+  if (!audio()) return;
+  const t = ctx.currentTime;
+  souffle(t, 0.22, 0.12, "lowpass", 1600);
+  note("triangle", 660, t, 0.12, 0.05, { f2: 220 });
+}
