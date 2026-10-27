@@ -101,7 +101,7 @@ const FIN = [
   { noir: 1.3 },
   { gros: "TA FILLE.", choix: ["« Impossible. Je suis ado ! »"] },
   { m: "« Dans le temps, tout est possible. »" },
-  { m: "« Elle vient d'un futur où tu es grand·e. »" },
+  { m: "« Elle vient du futur, où tu auras une famille. »" },
   { noir: 0.9 },
   { m: "« Mais dans ma société parfaite, il n'y a pas d'enfants. »" },
   { m: "« Si elle est ta fille, c'est qu'un jour, un enfant naîtra. Malgré moi. »" },
