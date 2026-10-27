@@ -161,3 +161,15 @@ export function sonPop() {
   souffle(t, 0.22, 0.12, "lowpass", 1600);
   note("triangle", 660, t, 0.12, 0.05, { f2: 220 });
 }
+/* un caillou doré attrapé : trois notes qui montent, et le bouclier s'allume */
+export function sonCaillou() {
+  if (!audio()) return;
+  const t = ctx.currentTime;
+  [76, 80, 83, 88].forEach((n, k) => note("triangle", hz(n), t + k * 0.06, 0.35, 0.05));
+  note("sine", 220, t, 0.6, 0.04, { f2: 440 });
+}
+/* le bouclier s'éteint */
+export function sonFinBouclier() {
+  if (!audio()) return;
+  note("triangle", 660, ctx.currentTime, 0.25, 0.035, { f2: 330 });
+}

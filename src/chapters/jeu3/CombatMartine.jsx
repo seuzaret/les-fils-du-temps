@@ -17,6 +17,10 @@
        mode lent ; seul son hublot compte (le point blanc).
      · À la fin, MARTINE vaincue en gros plan : la révélation (Al3x1a
        est l'enfant du joueur), en grand et au centre.
+     · Les cailloux d'Al3x1a : environ toutes les 20 s, un caillou doré
+       tombe ; attrapé, 4 s de bouclier qui efface tirs et missiles (plus
+       tôt après une touche). En grand écran, MARTINE a 15 % de vie en
+       moins (on la poursuit plus longtemps).
      · Pas de « game over » : trois souvenirs ; tout perdus, le niveau
        recommence (« Tu vois ? Tu oublies déjà. »), mais MARTINE ne
        récupère que la moitié de sa vie perdue, et le niveau devient
@@ -31,7 +35,7 @@
    éclair, ni parasites, un peu moins de projectiles.
    ============================================================ */
 import { useEffect, useMemo, useRef, useState } from "react";
-import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop } from "./sonsCombat.js";
+import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop, sonCaillou, sonFinBouclier } from "./sonsCombat.js";
 
 const H = 640, W_MIN = 360, W_MAX = 1140;
 const BANDE = 78;                      // en portrait : la bande des répliques, au-dessus de la zone (px)
@@ -45,6 +49,10 @@ const NIVEAUX = {
   3: { dif: 1.2, pv: 850, couleur: ROUGE, missiles: { periode: 3.4, n: 3, virage: 1.7, vmax: 170 } },
 };
 const DERNIER = 3;
+/* en grand écran, MARTINE va plus loin et on la poursuit plus longtemps : 15 % de vie en moins */
+const pvMax = (W, n) => Math.round(NIVEAUX[n].pv * (W >= 560 ? 0.85 : 1));
+/* les cailloux d'Al3x1a : un toutes les … secondes selon le niveau ; attrapé, 4 s de bouclier */
+const CAILLOU = { 1: 22, 2: 20, 3: 17 }, BOUCLIER = 4, R_BOUCLIER = 26;
 const ROMAIN = { 1: "I", 2: "II", 3: "III" };
 const estCalme = () => {
   try { return document.documentElement.classList.contains("a11y-calme") || matchMedia("(prefers-reduced-motion: reduce)").matches; } catch { return false; }
@@ -137,6 +145,20 @@ function fumee() {
   const x = cv.getContext("2d"), g = x.createRadialGradient(t / 2, t / 2, 0, t / 2, t / 2, t / 2);
   g.addColorStop(0, "rgba(120,124,132,0.55)"); g.addColorStop(0.5, "rgba(90,94,102,0.3)"); g.addColorStop(1, "rgba(70,74,82,0)");
   x.fillStyle = g; x.fillRect(0, 0, t, t);
+  return cv;
+}
+/* le caillou doré d'Al3x1a, avec son halo */
+function caillouDore() {
+  const k = 3, t = 40, cv = document.createElement("canvas");
+  cv.width = cv.height = t * k;
+  const x = cv.getContext("2d"); x.scale(k, k);
+  const halo = x.createRadialGradient(20, 20, 2, 20, 20, 20);
+  halo.addColorStop(0, "rgba(255,220,120,0.55)"); halo.addColorStop(1, "rgba(255,200,90,0)");
+  x.fillStyle = halo; x.fillRect(0, 0, t, t);
+  x.beginPath(); x.moveTo(12, 22); x.quadraticCurveTo(11, 13, 19, 12); x.quadraticCurveTo(28, 11, 29, 19); x.quadraticCurveTo(30, 27, 21, 28); x.quadraticCurveTo(13, 29, 12, 22); x.closePath();
+  const g = x.createLinearGradient(12, 12, 28, 28); g.addColorStop(0, "#fff0b8"); g.addColorStop(0.5, "#f0c050"); g.addColorStop(1, "#b07820");
+  x.fillStyle = g; x.fill(); x.strokeStyle = "#7a5010"; x.lineWidth = 0.8; x.stroke();
+  x.fillStyle = "rgba(255,255,255,0.8)"; x.beginPath(); x.ellipse(18, 16, 3, 1.6, -0.5, 0, Math.PI * 2); x.fill();
   return cv;
 }
 const RAYONS = [5, 5.5, 6, 6.5];
@@ -288,7 +310,8 @@ function missile(c, m, col, t) {
 const pluie = (W) => Array.from({ length: Math.ceil(W / 23) }, (_, i) => ({ x: 8 + i * 23, y: Math.random() * H, v: 40 + Math.random() * 80, l: 10 + Math.random() * 30 }));
 function nouvelEtat(W = W_MIN, adoucir = 1) {
   return {
-    W, adoucir, aide: 1, phase: 1, pv: NIVEAUX[1].pv, vies: 3, invul: 0, t: 0, tPhase: 0,
+    W, adoucir, aide: 1, phase: 1, pv: pvMax(W, 1), vies: 3, invul: 0, t: 0, tPhase: 0,
+    caillou: null, tCaillou: 12, bouclier: 0, premierCaillou: true,
     joueur: { x: W / 2, y: H - 70 }, cible: null, focus: false, cad: 0,
     tirs: [], balles: [], missiles: [], etincelles: [], fumees: [], ondes: [], boules: [],
     attaque: 0, tA: -1.2, acc: {}, sens: 1, tMis: 0, trous: null,
@@ -296,7 +319,7 @@ function nouvelEtat(W = W_MIN, adoucir = 1) {
     expr: { fronce: 0.15, triste: 0, dents: 0, colere: 0 },
     pluie: pluie(W), eclair: 0,
     secousse: 0, perdu: 0, bascule: 0, victoire: 0, banniere: { texte: "", t: 0 },
-    tLigne: 0, iLigne: 0, stats: { debut: 0, touches: 0, recommencees: 0, par: {}, niveaux: {} },
+    tLigne: 0, iLigne: 0, stats: { debut: 0, touches: 0, recommencees: 0, par: {}, niveaux: {}, boucliers: 0 },
   };
 }
 
@@ -423,7 +446,7 @@ export default function CombatMartine({ onQuitter }) {
     [[1, VERT, "#ffffff"], [2, BLEU, "#ffffff"], [3, ROUGE, "#ffe8e0"]].forEach(([n, col, coeur]) => {
       orbes[n] = Object.fromEntries(RAYONS.map((r) => [r, orbe(r, col, coeur)]));
     });
-    return { orbes, goutte: goutte(), aiguille: aiguille(), fumee: fumee() };
+    return { orbes, goutte: goutte(), aiguille: aiguille(), fumee: fumee(), caillou: caillouDore() };
   }, []);
   const dire = (texte, phase) => { setReplique(texte); g.current.parle = 1.4; sonVoix(phase === 1 ? 1 : 2); };
   const direRef = useRef(dire); direRef.current = dire;
@@ -634,7 +657,7 @@ export default function CombatMartine({ onQuitter }) {
       majParticules(st, dt);
       if (st.bascule <= 0) {
         st.stats.niveaux[st.phase] = Math.round(st.tPhase);
-        Object.assign(st, { phase: suivant, pv: NIVEAUX[suivant].pv, vies: 3, invul: 1.5, attaque: 0, tA: -0.8, acc: {}, tPhase: 0, tLigne: 4, iLigne: 0, tMis: 0, trous: null, aide: 1 });
+        Object.assign(st, { phase: suivant, pv: pvMax(st.W, suivant), vies: 3, invul: 1.5, attaque: 0, tA: -0.8, acc: {}, tPhase: 0, tLigne: 4, iLigne: 0, tMis: 0, trous: null, aide: 1, tCaillou: 8 });
         st.banniere = { texte: `NIVEAU ${suivant}`, t: 1.6 };
         setGrand(null); sonPhase(); phaseMusique(suivant);
       }
@@ -649,7 +672,7 @@ export default function CombatMartine({ onQuitter }) {
       majParticules(st, dt);
       if (st.perdu <= 0) {
         /* MARTINE ne récupère que la moitié de ce qu'elle a perdu, et le niveau s'adoucit un peu */
-        Object.assign(st, { pv: Math.round(st.pv + (niv.pv - st.pv) * 0.5), vies: 3, invul: 1.5, attaque: 0, tA: -1.5, acc: {}, balles: [], missiles: [], tirs: [], tMis: 0, trous: null, aide: Math.max(0.65, st.aide * 0.88) });
+        Object.assign(st, { pv: Math.round(st.pv + (pvMax(st.W, st.phase) - st.pv) * 0.5), vies: 3, invul: 1.5, attaque: 0, tA: -1.5, acc: {}, balles: [], missiles: [], tirs: [], tMis: 0, trous: null, aide: Math.max(0.65, st.aide * 0.88), tCaillou: Math.min(st.tCaillou, 5) });
         st.banniere = { texte: "Elle se répare… à moitié.", t: 2 };
         st.stats.recommencees++;
       }
@@ -665,7 +688,7 @@ export default function CombatMartine({ onQuitter }) {
       if (st.victoire <= 0) {
         const s = st.stats;
         s.niveaux[DERNIER] = Math.round(st.tPhase);
-        setBilan({ temps: Math.round((performance.now() - s.debut) / 1000), touches: s.touches, recommencees: s.recommencees, niveaux: { ...s.niveaux } });
+        setBilan({ temps: Math.round((performance.now() - s.debut) / 1000), touches: s.touches, recommencees: s.recommencees, boucliers: s.boucliers, niveaux: { ...s.niveaux } });
         setReplique(""); setLigneFin(0); allerA("fin"); sonVoix(2); st.parle = 1.4;
       }
       return;
@@ -711,11 +734,32 @@ export default function CombatMartine({ onQuitter }) {
     const mis = niv.missiles;
     if (st.tPhase > 4 && st.tMis > mis.periode / (st.adoucir * st.aide)) { st.tMis = 0; lancerMissiles(st, mis.n, d); }
 
+    /* les cailloux d'Al3x1a : de temps en temps, un caillou doré tombe ; attrapé, il protège */
+    st.tCaillou -= dt;
+    if (!st.caillou && st.tCaillou <= 0 && st.tPhase > 3) {
+      st.caillou = { x: 50 + Math.random() * (W - 100), y: -14, t: 0 };
+      st.tCaillou = CAILLOU[st.phase];
+    }
+    if (st.caillou) {
+      const ca = st.caillou;
+      ca.t += dt; ca.y += 80 * dt; ca.x += Math.sin(ca.t * 2) * 22 * dt;
+      if (Math.hypot(ca.x - j.x, ca.y - j.y) < 22) {
+        st.caillou = null; st.premierCaillou = false; st.bouclier = BOUCLIER; st.stats.boucliers++;
+        eclats(st, j.x, j.y, 14, "#ffd166"); sonCaillou();
+      } else if (ca.y > H + 20) st.caillou = null;
+    }
+    if (st.bouclier > 0) { st.bouclier -= dt; if (st.bouclier <= 0) sonFinBouclier(); }
+    const bulle = st.bouclier > 0;
+
     /* les projectiles de MARTINE */
-    const touche = st.invul <= 0;
+    const touche = st.invul <= 0 && !bulle;
     let toucheJoueur = false;   // ou le type de ce qui a touché
     st.balles = st.balles.filter((b) => {
       b.x += b.vx * dt; b.y += b.vy * dt; b.age += dt;
+      /* le bouclier efface ce qui le touche */
+      if (bulle && (b.w ? Math.abs(b.x - j.x) < b.w / 2 + R_BOUCLIER - 6 && Math.abs(b.y - j.y) < b.h / 2 + R_BOUCLIER - 6 : Math.hypot(b.x - j.x, b.y - j.y) < R_BOUCLIER + (b.r || 5))) {
+        eclats(st, b.x, b.y, 2, "#ffe8a0"); return false;
+      }
       if (touche && !toucheJoueur) {
         if (b.w) {
           if (b.age > 0.3 && Math.abs(b.x - j.x) < b.w / 2 - 2 + HIT && Math.abs(b.y - j.y) < b.h / 2 - 2 + HIT) toucheJoueur = b.type;
@@ -732,19 +776,22 @@ export default function CombatMartine({ onQuitter }) {
       m.vx = Math.cos(m.a) * m.v; m.vy = Math.sin(m.a) * m.v;
       m.x += m.vx * dt; m.y += m.vy * dt; m.vie -= dt;
       if (Math.random() < dt * 10) bouffee(st, m.x - Math.cos(m.a) * 10, m.y - Math.sin(m.a) * 10, 3, 0.35);
+      if (bulle && Math.hypot(m.x - j.x, m.y - j.y) < R_BOUCLIER + 8) { eclats(st, m.x, m.y, 10, "#ffd166"); sonPop(); return false; }
       if (touche && !toucheJoueur && Math.hypot(m.x - j.x, m.y - j.y) < 5 + HIT) { toucheJoueur = "missile"; return false; }
       if (m.vie <= 0) { eclats(st, m.x, m.y, 6, "#c8d4e2"); return false; }
       return true;
     });
     if (toucheJoueur) {
       st.vies--; st.invul = 2.2; st.stats.touches++; sonJoueurTouche();
+      /* touché : le prochain caillou arrive plus vite */
+      if (!st.caillou) st.tCaillou = Math.min(st.tCaillou, 6);
       st.stats.par[toucheJoueur] = (st.stats.par[toucheJoueur] || 0) + 1;
       if (!calme) st.secousse = 0.35;
       /* un peu de répit : ce qui est tout près disparaît */
       st.balles = st.balles.filter((b) => { const loin = Math.hypot(b.x - j.x, b.y - j.y) > 110; if (!loin) eclats(st, b.x, b.y, 1, "#ffffff"); return loin; });
       if (st.vies <= 0) {
         st.perdu = 2.6;
-        st.balles.forEach((b) => eclats(st, b.x, b.y, 1, "#ffffff")); st.balles = []; st.missiles = [];
+        st.balles.forEach((b) => eclats(st, b.x, b.y, 1, "#ffffff")); st.balles = []; st.missiles = []; st.caillou = null; st.bouclier = 0;
         direRef.current(MOQUERIE, st.phase);
       }
     }
@@ -754,7 +801,7 @@ export default function CombatMartine({ onQuitter }) {
     if (st.pv <= 0) {
       st.balles.forEach((b) => eclats(st, b.x, b.y, 1, "#ffd166"));
       st.missiles.forEach((m) => eclats(st, m.x, m.y, 6, "#ffd166"));
-      st.balles = []; st.missiles = []; st.tirs = []; st.pv = 0;
+      st.balles = []; st.missiles = []; st.tirs = []; st.pv = 0; st.caillou = null; st.bouclier = 0;
       exploser(st, st.boss.x, st.boss.y - 10, st.phase === DERNIER ? 1.4 : 1);
       if (st.phase < DERNIER) {
         st.bascule = 3.0;
@@ -832,15 +879,33 @@ export default function CombatMartine({ onQuitter }) {
     st.ondes.forEach((o) => { c.globalAlpha = Math.max(0, o.vie) * 0.8; c.strokeStyle = "#ffe8b0"; c.lineWidth = 3 * o.vie + 1; c.beginPath(); c.arc(o.x, o.y, o.r, 0, Math.PI * 2); c.stroke(); });
     st.etincelles.forEach((p) => { c.globalAlpha = Math.min(1, p.vie * 2); c.fillStyle = p.couleur; c.fillRect(p.x - 1, p.y - 1, 2, 2); });
     c.globalAlpha = 1;
+    /* le caillou doré qui tombe (et, la première fois, « attrape-moi ! ») */
+    if (st.caillou) {
+      const ca = st.caillou, s2 = sprites.caillou, pulse = calme ? 1 : 1 + Math.sin(st.t * 6) * 0.08;
+      c.drawImage(s2, ca.x - 20 * pulse, ca.y - 20 * pulse, 40 * pulse, 40 * pulse);
+      if (st.premierCaillou) {
+        c.textAlign = "center"; c.font = "700 9px ui-monospace, monospace"; c.fillStyle = "rgba(255,226,150,0.95)";
+        c.fillText("attrape-moi !", ca.x, ca.y - 22);
+      }
+    }
     /* la petite MARTINE */
-    if (ecranRef.current !== "fin") petiteMartine(c, st.joueur.x, st.joueur.y, st.t, st.focus, st.invul <= 0 || Math.floor(st.t * 10) % 2 === 0);
+    if (ecranRef.current !== "fin") petiteMartine(c, st.joueur.x, st.joueur.y, st.t, st.focus, st.invul <= 0 || st.bouclier > 0 || Math.floor(st.t * 10) % 2 === 0);
+    /* le bouclier : une bulle dorée qui tourne ; elle clignote la dernière seconde (pas en mode calme) */
+    if (st.bouclier > 0 && ecranRef.current !== "fin") {
+      const j = st.joueur, fin = st.bouclier < 1 && !calme ? 0.45 + 0.55 * (Math.sin(st.t * 28) > 0 ? 1 : 0) : 1;
+      const bu = c.createRadialGradient(j.x, j.y, 4, j.x, j.y, R_BOUCLIER);
+      bu.addColorStop(0, "rgba(255,226,140,0)"); bu.addColorStop(0.75, `rgba(255,214,110,${0.12 * fin})`); bu.addColorStop(1, `rgba(255,214,110,${0.35 * fin})`);
+      c.fillStyle = bu; c.beginPath(); c.arc(j.x, j.y, R_BOUCLIER, 0, Math.PI * 2); c.fill();
+      c.save(); c.strokeStyle = `rgba(255,226,150,${0.9 * fin})`; c.lineWidth = 2; c.setLineDash([9, 6]); c.lineDashOffset = -st.t * 40;
+      c.beginPath(); c.arc(j.x, j.y, R_BOUCLIER, 0, Math.PI * 2); c.stroke(); c.restore();
+    }
 
     /* l'éclair de l'explosion (jamais en mode calme) */
     c.setTransform(k, 0, 0, k, 0, 0);
     if (st.eclair > 0) { c.fillStyle = `rgba(255,240,210,${st.eclair * 0.6})`; c.fillRect(0, 0, W, H); }
     /* jauge de MARTINE, niveau, souvenirs */
     c.fillStyle = "rgba(255,255,255,0.08)"; c.fillRect(14, 8, W - 28, 5);
-    c.fillStyle = rgb(col); c.fillRect(14, 8, (W - 28) * Math.max(0, st.pv / NIVEAUX[st.phase].pv), 5);
+    c.fillStyle = rgb(col); c.fillRect(14, 8, (W - 28) * Math.max(0, Math.min(1, st.pv / pvMax(W, st.phase))), 5);
     c.font = "700 7px ui-monospace, monospace"; c.textAlign = "right"; c.fillStyle = rgb(col, 0.8);
     c.fillText(`MARTINE · NIVEAU ${ROMAIN[st.phase]}`, W - 14, 23);
     c.fillStyle = "rgba(200,212,226,0.75)"; c.fillText("SOUVENIRS", W - 14 - 3 * 14, H - 9);
@@ -937,6 +1002,7 @@ export default function CombatMartine({ onQuitter }) {
               <li>Déplace la petite MARTINE : glisse le doigt, bouge la souris, ou les flèches (Z Q S D).</li>
               <li>Elle tire toute seule. Maintiens <b>Maj</b> pour aller lentement. Ses tirs abattent les missiles.</li>
               <li>Seul son hublot compte : le point blanc.</li>
+              <li>Attrape les <span style={{ color: "#ffd166" }}>cailloux dorés</span> d'Al3x1a : ils te protègent quelques secondes.</li>
               <li>Trois niveaux : MARTINE <span style={{ color: rgb(VERT) }}>verte</span>, puis <span style={{ color: rgb(BLEU) }}>bleue</span>, puis <span style={{ color: rgb(ROUGE) }}>rouge</span>.</li>
             </ul>
             <button onClick={commencer} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Commencer</button>
@@ -971,7 +1037,7 @@ export default function CombatMartine({ onQuitter }) {
             {bilan && (
               <p style={{ margin: "0 0 10px", fontFamily: "ui-monospace, monospace", fontSize: 11.5, color: "#8fa3bd", lineHeight: 1.6 }}>
                 {mmss(bilan.temps)} en tout · niveau I {mmss(bilan.niveaux[1] || 0)} · II {mmss(bilan.niveaux[2] || 0)} · III {mmss(bilan.niveaux[3] || 0)}<br />
-                souvenirs perdus : {bilan.touches} · niveaux recommencés : {bilan.recommencees}
+                souvenirs perdus : {bilan.touches} · niveaux recommencés : {bilan.recommencees} · boucliers : {bilan.boucliers}
               </p>
             )}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
