@@ -1,11 +1,11 @@
 /* ============================================================
    JEU 3 — sons du combat contre MARTINE (Web Audio, synthétisés)
    ------------------------------------------------------------
-   Une boucle de combat (basse, arpèges, batterie) en la mineur :
-   phase 1 à 150, la – fa – do – sol ; phase 2 à 168, plus tendue,
-   la – si♭ – fa – mi. Des bruitages courts (MARTINE touchée, le
-   joueur touché, changement de phase, victoire, la voix de
-   MARTINE). Aucun fichier. Respecte le bouton muet du jeu.
+   Une boucle de combat (basse, arpèges, batterie) en la mineur, un
+   style par niveau, de plus en plus nerveux (voir STYLES). Des
+   bruitages courts (MARTINE touchée, le joueur touché, changement
+   de niveau, missiles, victoire, la voix de MARTINE). Aucun
+   fichier. Respecte le bouton muet du jeu.
    ============================================================ */
 import { isMuted } from "../../engine/audio.js";
 
@@ -55,28 +55,32 @@ function souffle(t, dur, vol, type, freq) {
 }
 
 /* ───────── la musique ───────── */
-const ACCORDS = {
-  1: [[45, [0, 3, 7]], [41, [0, 4, 7]], [48, [0, 4, 7]], [43, [0, 4, 7]]],
-  2: [[45, [0, 3, 7]], [46, [0, 4, 7]], [41, [0, 4, 7]], [40, [0, 4, 7]]],
+/* un style par niveau : la verte (150, la – fa – do – sol), la bleue (158, la – sol – fa – mi,
+   la cadence andalouse), la rouge (168, la – si♭ – fa – mi) */
+const STYLES = {
+  1: { tempo: 150, accords: [[45, [0, 3, 7]], [41, [0, 4, 7]], [48, [0, 4, 7]], [43, [0, 4, 7]]], arp: "triangle", vArp: 0.035 },
+  2: { tempo: 158, accords: [[45, [0, 3, 7]], [43, [0, 4, 7]], [41, [0, 4, 7]], [40, [0, 4, 7]]], arp: "square", vArp: 0.02 },
+  3: { tempo: 168, accords: [[45, [0, 3, 7]], [46, [0, 4, 7]], [41, [0, 4, 7]], [40, [0, 4, 7]]], arp: "square", vArp: 0.018 },
 };
-const TEMPO = { 1: 150, 2: 168 };
 let seq = null;
 
-function pas(phase, i, t) {
-  const [racine, acc] = ACCORDS[phase][Math.floor(i / 16) % 4];
+function pas(niveau, i, t) {
+  const st = STYLES[niveau];
+  const [racine, acc] = st.accords[Math.floor(i / 16) % 4];
   const k = i % 16;
   /* basse en croches : fondamentale, octave sur le contretemps */
-  if (k % 2 === 0) note("sawtooth", hz(racine + (k % 4 === 2 ? 12 : 0)), t, 0.16, 0.07, { filtre: 520 });
+  if (k % 2 === 0) note("sawtooth", hz(racine + (k % 4 === 2 ? 12 : 0)), t, 0.16, 0.07, { filtre: niveau === 1 ? 520 : 680 });
   /* arpège en doubles croches, qui monte et redescend */
   const motif = [0, 1, 2, 3, 2, 1, 2, 3];
   const n = racine + 24 + (motif[k % 8] === 3 ? 12 : acc[motif[k % 8]]);
-  note(phase === 1 ? "triangle" : "square", hz(n), t, 0.09, phase === 1 ? 0.035 : 0.018, { filtre: phase === 1 ? 4000 : 2600 });
-  if (phase === 2 && k % 4 === 0) note("square", hz(racine + 36 + acc[(k / 4) % 3]), t, 0.12, 0.012, { filtre: 3000 });
+  note(st.arp, hz(n), t, 0.09, st.vArp, { filtre: niveau === 1 ? 4000 : 2600 });
+  if (niveau === 3 && k % 4 === 0) note("square", hz(racine + 36 + acc[(k / 4) % 3]), t, 0.12, 0.012, { filtre: 3000 });
+  if (niveau === 2 && k % 8 === 4) note("triangle", hz(racine + 31), t, 0.3, 0.02, { filtre: 3000 });
   /* batterie */
-  const kick = phase === 1 ? k === 0 || k === 8 || k === 10 : k % 4 === 0;
+  const kick = niveau === 1 ? k === 0 || k === 8 || k === 10 : k % 4 === 0 || (niveau === 3 && k === 14);
   if (kick) note("sine", 150, t, 0.16, 0.22, { f2: 42 });
   if (k === 4 || k === 12) { souffle(t, 0.14, 0.07, "bandpass", 1800); note("triangle", 190, t, 0.08, 0.04); }
-  if (phase === 1 ? k % 4 === 2 : k % 2 === 1) souffle(t, 0.035, 0.03, "highpass", 7500);
+  if (niveau === 1 ? k % 4 === 2 : niveau === 2 ? k % 2 === 1 : true) souffle(t, 0.035, niveau === 3 ? 0.022 : 0.03, "highpass", 7500);
 }
 
 export function demarrerMusique(phase = 1) {
@@ -85,13 +89,13 @@ export function demarrerMusique(phase = 1) {
   const etat = { phase, i: 0, t: ctx.currentTime + 0.08 };
   const tic = () => {
     if (isMuted()) { arreterMusique(); return; }
-    const d = 60 / TEMPO[etat.phase] / 4;
+    const d = 60 / STYLES[etat.phase].tempo / 4;
     while (etat.t < ctx.currentTime + 0.15) { pas(etat.phase, etat.i, etat.t); etat.t += d; etat.i++; }
   };
   seq = { etat, id: setInterval(tic, 25) };
   tic();
 }
-/* la phase 2 commence au début de la mesure suivante */
+/* le niveau suivant commence au début de la mesure suivante */
 export function phaseMusique(phase) {
   if (!seq) { demarrerMusique(phase); return; }
   seq.etat.phase = phase;

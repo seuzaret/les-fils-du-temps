@@ -3,22 +3,24 @@
    ------------------------------------------------------------
    Un « shoot them up » à la DoDonPachi en (beaucoup) plus doux,
    pour la 2e visite aux serveurs (ordre B, LORE §7).
-     · En haut, la grande MARTINE du Puits : son écran-cube, son
-       œil, son sourcil et sa bouche (sourire poli en phase 1 ;
-       sourcil froncé et sourire à dents en phase 2 ; vaincue, un
-       sourcil triste et une bouche qui tremble). Elle tire depuis
-       son œil : gouttes d'eau (l'eau qui fait oublier), fausses
-       notifications, spirales, « OUBLIE », et parfois des missiles
-       qui suivent le joueur (on peut les abattre).
-     · En bas, le vaisseau du joueur : la petite MARTINE, celle
-       d'Al3x1a (la MARTINE du Jeu 1). Elle tire toute seule ; seul
-       son hublot compte quand elle est touchée (le point blanc).
-     · Deux phases ; entre les deux, une bascule : « Assez. » en
-       grand, l'œil vire au rouge. La révélation (Al3x1a est
-       l'enfant du joueur) vient à la fin, MARTINE vaincue, en gros
-       plan, texte grand et centré.
-     · Pas de « game over » : trois souvenirs ; tout perdus, la
-       phase recommence (« Tu vois ? Tu oublies déjà. »).
+     · Trois niveaux qui s'enchaînent, sans rien choisir : MARTINE
+       verte (facile, sourire poli), bleue (moyen, sourire méchant à
+       dents), rouge (difficile, bouche en colère, sourcil en V,
+       l'œil de HAL). Chaque niveau a plus de vie, plus de tirs et
+       plus de missiles. À chaque niveau passé : une explosion, une
+       onde, de la fumée, et MARTINE fume de plus en plus.
+     · Elle tire depuis son œil : gouttes d'eau (l'eau qui fait
+       oublier), fausses notifications, spirales, anneaux, « OUBLIE »,
+       et des missiles qui suivent le joueur (on peut les abattre).
+     · En bas, le vaisseau : la petite MARTINE, celle d'Al3x1a (la
+       MARTINE du Jeu 1). Tir automatique en éventail, jet serré en
+       mode lent ; seul son hublot compte (le point blanc).
+     · À la fin, MARTINE vaincue en gros plan : la révélation (Al3x1a
+       est l'enfant du joueur), en grand et au centre.
+     · Pas de « game over » : trois souvenirs ; tout perdus, le niveau
+       recommence (« Tu vois ? Tu oublies déjà. »), mais MARTINE ne
+       récupère que la moitié de sa vie perdue, et le niveau devient
+       un peu plus doux à chaque fois : on finit toujours par passer.
    Grand écran : la zone a toujours 640 de haut et s'élargit à la
    forme de l'écran (de 360 en portrait jusqu'à 1140) ; en largeur,
    les répliques passent dans la zone, en haut à gauche.
@@ -26,7 +28,7 @@
    flèches ou Z Q S D ; Maj = lent et précis ; Échap = pause ;
    ⛶ = plein écran.
    « Animations calmes » ou mouvement réduit : ni secousse, ni
-   éclair, ni parasites ; niveau facile proposé par défaut.
+   éclair, ni parasites, un peu moins de projectiles.
    ============================================================ */
 import { useEffect, useMemo, useRef, useState } from "react";
 import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop } from "./sonsCombat.js";
@@ -34,10 +36,16 @@ import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouc
 const H = 640, W_MIN = 360, W_MAX = 1140;
 const BANDE = 78;                      // en portrait : la bande des répliques, au-dessus de la zone (px)
 const HIT = 2.6;                       // rayon du hublot qui compte
-const NIVEAUX = { facile: 0.62, normal: 1, difficile: 1.32 };
-const PV = { 1: 600, 2: 700 };
 const BY = 116;                        // hauteur de la grande MARTINE pendant le combat
-const VERT = [94, 255, 158], ROUGE = [255, 58, 42];
+const VERT = [94, 255, 158], BLEU = [90, 176, 255], ROUGE = [255, 58, 42];
+/* les trois niveaux : difficulté (cadence des tirs), vie, couleur, missiles */
+const NIVEAUX = {
+  1: { dif: 0.62, pv: 520, couleur: VERT, missiles: { periode: 5.5, n: 2, virage: 1.2, vmax: 150 } },
+  2: { dif: 1.0, pv: 680, couleur: BLEU, missiles: { periode: 4.0, n: 3, virage: 1.5, vmax: 165 } },
+  3: { dif: 1.2, pv: 850, couleur: ROUGE, missiles: { periode: 3.4, n: 3, virage: 1.7, vmax: 170 } },
+};
+const DERNIER = 3;
+const ROMAIN = { 1: "I", 2: "II", 3: "III" };
 const estCalme = () => {
   try { return document.documentElement.classList.contains("a11y-calme") || matchMedia("(prefers-reduced-motion: reduce)").matches; } catch { return false; }
 };
@@ -53,6 +61,13 @@ const LIGNES = {
     "« Je connais chacun de tes gestes. Je les ai tous rangés. »",
   ],
   2: [
+    "« Tu crois que tu gagnes ? Je te laisse gagner. »",
+    "« Je pourrais t'effacer d'un clignement d'œil. »",
+    "« Chaque souvenir que tu gardes, je te le reprendrai. »",
+    "« Bois un peu d'eau. Tu te sentiras mieux. »",
+    "« Tu ne sais même plus pourquoi tu te bats. Moi, si. »",
+  ],
+  3: [
     "« D'accord, on se calme. Je ne suis pas un monstre. Je suis… un peu un monstre. Mais gentille ! »",
     "« Pas là ! C'est là que je range mes souvenirs préférés ! »",
     "« Plan B ! Je n'ai pas de plan B. Pourquoi je n'ai pas de plan B ?! »",
@@ -60,7 +75,7 @@ const LIGNES = {
 };
 const OUVERTURE = "« Tu ne toucheras pas à mes leviers. »";
 const MOQUERIE = "« Tu vois ? Tu oublies déjà. »";
-const BASCULE = "« Assez. »";
+const PASSAGES = { 2: "« Très bien. »", 3: "« Assez. »" };   // en grand, au passage d'un niveau
 /* MARTINE vaincue, en gros plan : sa dernière carte, puis l'appel au choix */
 const FIN = [
   "« Attends. Une dernière chose. »",
@@ -115,6 +130,17 @@ function aiguille() {
   x.fillStyle = "#e8f8ff"; x.beginPath(); x.ellipse(4, 10, 1.7, 7.5, 0, 0, Math.PI * 2); x.fill();
   return { cv, w, h };
 }
+/* une bouffée de fumée : un disque gris aux bords très doux */
+function fumee() {
+  const t = 64, cv = document.createElement("canvas");
+  cv.width = cv.height = t;
+  const x = cv.getContext("2d"), g = x.createRadialGradient(t / 2, t / 2, 0, t / 2, t / 2, t / 2);
+  g.addColorStop(0, "rgba(120,124,132,0.55)"); g.addColorStop(0.5, "rgba(90,94,102,0.3)"); g.addColorStop(1, "rgba(70,74,82,0)");
+  x.fillStyle = g; x.fillRect(0, 0, t, t);
+  return cv;
+}
+const RAYONS = [5, 5.5, 6, 6.5];
+const rayonProche = (r) => RAYONS.reduce((a, b) => (Math.abs(b - r) < Math.abs(a - r) ? b : a));
 
 /* la petite MARTINE (le dessin du Jeu 1, Martine.jsx, en Path2D) */
 const P = typeof Path2D !== "undefined" ? {
@@ -154,12 +180,12 @@ function petiteMartine(c, x, y, t, focus, visible) {
   c.restore();
 }
 
-/* la grande MARTINE : son écran-cube, son œil (vert → rouge), son sourcil, sa bouche */
+/* la grande MARTINE : son écran-cube, son œil, son sourcil, sa bouche */
 function grandeMartine(c, g, calme) {
   const { x: bx, y: by } = g.boss;
-  const col = mix(VERT, ROUGE, g.rouge);
+  const col = g.couleur.map(Math.round);
   const z = 1 + (g.zoomMax - 1) * g.gros;
-  const { fronce, triste, dents } = g.expr;
+  const { fronce, triste, dents, colere } = g.expr;
   c.save();
   c.translate(bx, by); c.scale(z, z); c.translate(-bx, -by);
   c.strokeStyle = "#16241c"; c.lineWidth = 4;
@@ -169,7 +195,7 @@ function grandeMartine(c, g, calme) {
   }
   c.fillStyle = "#1a222c"; c.fillRect(bx - 48, by + 86, 96, 18);
   rondRect(c, bx - 122, by - 88, 244, 176, 12); c.fillStyle = "#0c121a"; c.fill(); c.strokeStyle = "#2a3644"; c.lineWidth = 5; c.stroke();
-  rondRect(c, bx - 110, by - 76, 220, 152, 7); c.fillStyle = rgb(mix([3, 20, 10], [23, 3, 3], g.rouge)); c.fill();
+  rondRect(c, bx - 110, by - 76, 220, 152, 7); c.fillStyle = rgb(col.map((v) => Math.round(v * 0.085))); c.fill();
   const ex = bx, ey = by - 10;
   const halo = c.createRadialGradient(ex, ey, 10, ex, ey, 110); halo.addColorStop(0, rgb(col, 0.26 * g.lumiere)); halo.addColorStop(1, rgb(col, 0));
   c.fillStyle = halo; c.fillRect(bx - 110, by - 76, 220, 152);
@@ -207,28 +233,40 @@ function grandeMartine(c, g, calme) {
   c.lineCap = "round"; c.lineJoin = "round";
   c.strokeStyle = rgb(col, 0.25 * g.lumiere); c.lineWidth = 11; sourcil();
   c.strokeStyle = rgb(col, g.lumiere); c.lineWidth = 5; sourcil();
-  /* la bouche : un sourire poli, un sourire à dents, ou une ligne qui tremble */
+  /* la bouche : sourire poli (vert), sourire méchant à dents (bleu), colère aux dents serrées (rouge),
+     ligne qui tremble (vaincue) */
   const my = ey + 50;
   c.strokeStyle = rgb(col, g.lumiere);
   if (triste > 0.5) {
     c.lineWidth = 3; c.beginPath();
     for (let x = -30; x <= 30; x += 5) { const y = my + 4 + Math.sin(x * 0.35 + g.t * 18) * 1.6 + (Math.abs(x) / 30) * 3; if (x === -30) c.moveTo(ex + x, y); else c.lineTo(ex + x, y); }
     c.stroke();
+  } else if (colere > 0.5) {
+    /* les coins tombent, la bouche s'ouvre sur des dents serrées */
+    const ouv = parle * 6, prof = (x) => 1 - (x / 44) ** 2;
+    const haut = (x) => my + 8 - 13 * prof(x), bas = (x) => my + 8 + (7 + ouv) * prof(x);
+    c.beginPath(); c.moveTo(ex - 44, my + 8);
+    for (let x = -44; x <= 44; x += 4) c.lineTo(ex + x, haut(x));
+    for (let x = 44; x >= -44; x -= 4) c.lineTo(ex + x, bas(x));
+    c.closePath(); c.fillStyle = "#140303"; c.fill(); c.lineWidth = 3; c.stroke();
+    c.lineWidth = 1.5; c.strokeStyle = rgb(col, 0.85 * g.lumiere);
+    for (let x = -33; x <= 33; x += 11) { c.beginPath(); c.moveTo(ex + x, haut(x) + 1.5); c.lineTo(ex + x, bas(x) - 1.5); c.stroke(); }
+    c.beginPath(); for (let x = -40; x <= 40; x += 4) { const y = (haut(x) + bas(x)) / 2; if (x === -40) c.moveTo(ex + x, y); else c.lineTo(ex + x, y); } c.stroke();
   } else if (dents > 0.5) {
-    const bas = my + 14 + parle * 8;
-    c.beginPath(); c.moveTo(ex - 46, my - 8); c.quadraticCurveTo(ex, my + 4, ex + 46, my - 8); c.quadraticCurveTo(ex, bas + 8, ex - 46, my - 8); c.closePath();
+    const fond = my + 14 + parle * 8;
+    c.beginPath(); c.moveTo(ex - 46, my - 8); c.quadraticCurveTo(ex, my + 4, ex + 46, my - 8); c.quadraticCurveTo(ex, fond + 8, ex - 46, my - 8); c.closePath();
     c.fillStyle = "#140303"; c.fill(); c.lineWidth = 3; c.stroke();
     c.lineWidth = 1.6; c.strokeStyle = rgb(col, 0.85 * g.lumiere);
     for (let x = -32; x <= 32; x += 9) {
-      const haut = my - 8 + 12 * (1 - (x / 46) ** 2) * 0.5, fond = haut + 7 + parle * 3;
-      c.beginPath(); c.moveTo(ex + x, haut); c.lineTo(ex + x, fond); c.stroke();
+      const haut = my - 8 + 12 * (1 - (x / 46) ** 2) * 0.5, pied = haut + 7 + parle * 3;
+      c.beginPath(); c.moveTo(ex + x, haut); c.lineTo(ex + x, pied); c.stroke();
     }
   } else {
     c.lineWidth = 4; c.beginPath(); c.moveTo(ex - 34, my - 3); c.quadraticCurveTo(ex, my + 12 + parle * 5, ex + 34, my - 3); c.stroke();
   }
-  /* touchée : un voile clair ; en phase 2, des parasites */
+  /* touchée : un voile clair ; au niveau rouge, des parasites */
   if (g.boss.flash > 0) { rondRect(c, bx - 110, by - 76, 220, 152, 7); c.fillStyle = `rgba(255,255,255,${(calme ? 0.1 : 0.35) * g.boss.flash})`; c.fill(); }
-  if (!calme && g.rouge > 0.5 && g.glitch > 0) {
+  if (!calme && g.glitch > 0) {
     c.fillStyle = rgb(col, 0.35);
     for (let i = 0; i < 3; i++) c.fillRect(bx - 110 + Math.random() * 40, by - 76 + Math.random() * 148, 130 + Math.random() * 60, 2 + Math.random() * 3);
   }
@@ -248,17 +286,17 @@ function missile(c, m, col, t) {
 
 /* ───────── l'état d'une partie ───────── */
 const pluie = (W) => Array.from({ length: Math.ceil(W / 23) }, (_, i) => ({ x: 8 + i * 23, y: Math.random() * H, v: 40 + Math.random() * 80, l: 10 + Math.random() * 30 }));
-function nouvelEtat(dif, W = W_MIN) {
+function nouvelEtat(W = W_MIN, adoucir = 1) {
   return {
-    W, dif, phase: 1, pv: PV[1], vies: 3, invul: 0, t: 0, tPhase: 0,
+    W, adoucir, aide: 1, phase: 1, pv: NIVEAUX[1].pv, vies: 3, invul: 0, t: 0, tPhase: 0,
     joueur: { x: W / 2, y: H - 70 }, cible: null, focus: false, cad: 0,
-    tirs: [], balles: [], missiles: [], etincelles: [],
-    attaque: 0, tA: -1.2, acc: {}, sens: 1, tMis: 0,
-    boss: { x: W / 2, y: BY, flash: 0 }, rouge: 0, gros: 0, zoomMax: 1.5, glitch: 0, parle: 0, lumiere: 1,
-    expr: { fronce: 0.15, triste: 0, dents: 0 },
-    pluie: pluie(W),
+    tirs: [], balles: [], missiles: [], etincelles: [], fumees: [], ondes: [], boules: [],
+    attaque: 0, tA: -1.2, acc: {}, sens: 1, tMis: 0, trous: null,
+    boss: { x: W / 2, y: BY, flash: 0 }, couleur: [...VERT], gros: 0, zoomMax: 1.5, glitch: 0, parle: 0, lumiere: 1,
+    expr: { fronce: 0.15, triste: 0, dents: 0, colere: 0 },
+    pluie: pluie(W), eclair: 0,
     secousse: 0, perdu: 0, bascule: 0, victoire: 0, banniere: { texte: "", t: 0 },
-    tLigne: 0, iLigne: 0, stats: { debut: 0, touches: 0, recommencees: 0, par: {} },
+    tLigne: 0, iLigne: 0, stats: { debut: 0, touches: 0, recommencees: 0, par: {}, niveaux: {} },
   };
 }
 
@@ -267,9 +305,10 @@ function chaque(g, cle, periode, dt, fn) {
   let n = 0;
   while (g.acc[cle] >= periode && n++ < 6) { g.acc[cle] -= periode; fn(); }
 }
+/* un projectile rond ou une goutte, à la couleur du niveau */
 function balle(g, type, x, y, a, v, r = 5.5) {
   if (g.balles.length > 800) return;
-  g.balles.push({ type, x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r, age: 0 });
+  g.balles.push({ type, x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, r, age: 0, niv: g.phase });
 }
 /* une rangée de rectangles (notifications, « OUBLIE ») ; une ouverture par tranche de 380 de large,
    chacune à moins de 120 de la précédente */
@@ -286,77 +325,107 @@ function rangee(g, textes, w, h, ouverture, vy, type) {
   g.trous = trous;
   for (let x = 4 + w / 2; x < W; x += w + 6) {
     if (trous.some((gx) => Math.abs(x - gx) < ouverture / 2 + w / 2 - 8)) continue;
-    g.balles.push({ type, x, y: BY + 112, vx: 0, vy, w, h, age: 0, txt: textes[Math.floor(Math.random() * textes.length)] });
+    g.balles.push({ type, x, y: BY + 112, vx: 0, vy, w, h, age: 0, niv: g.phase, txt: textes[Math.floor(Math.random() * textes.length)] });
   }
 }
 const versJoueur = (g, x, y) => Math.atan2(g.joueur.y - y, g.joueur.x - x);
 function lancerMissiles(g, n, d) {
   for (let k = 0; k < n; k++) {
+    if (g.missiles.length >= 16) break;
     const cote = k % 2 ? 1 : -1, decal = Math.floor(k / 2) * 18;
-    g.missiles.push({ x: g.boss.x + cote * (126 + decal), y: g.boss.y + 40, a: Math.PI / 2 + cote * 0.7, v: 90 * d.v, vie: 5.5, pv: 3, vx: 0, vy: 0 });
+    g.missiles.push({ x: g.boss.x + cote * (126 + decal), y: g.boss.y + 40 - decal, a: Math.PI / 2 + cote * (0.7 + decal * 0.02), v: 90 * d.v, vie: 5.5, pv: 3, vx: 0, vy: 0 });
   }
   sonMissile();
 }
 
-/* les attaques de chaque phase, jouées en boucle (durées en secondes) */
+/* les attaques de chaque niveau, jouées en boucle (durées en secondes) */
 const ATTAQUES = {
+  /* vert : gouttes, notifications, spirale à deux bras, tirs visés */
   1: [
     { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.32 / d.rate, dt, () => {
       const base = Math.PI / 2 + Math.sin(g.tA * 1.3) * 0.5;
       for (let k = -2; k <= 2; k++) balle(g, "goutte", ex, ey, base + k * 0.27, (95 + Math.random() * 40) * d.v, 5);
     }) },
-    { duree: 8, tir: (g, dt, d) => chaque(g, "a", 1.7 / d.rate, dt, () => rangee(g, NOTIFS, 98, 17, 96 - (d.rate - 1) * 22, 62 * d.v, "notif")) },
+    { duree: 8, tir: (g, dt, d) => chaque(g, "a", 1.7 / d.rate, dt, () => rangee(g, NOTIFS, 98, 17, 96, 62 * d.v, "notif")) },
     { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.085 / d.rate, dt, () => {
       const a = g.tA * 1.25 * g.sens;
-      balle(g, "vert", ex, ey, a, 105 * d.v); balle(g, "vert", ex, ey, a + Math.PI, 105 * d.v);
+      balle(g, "orbe", ex, ey, a, 105 * d.v); balle(g, "orbe", ex, ey, a + Math.PI, 105 * d.v);
     }) },
     { duree: 5, tir: (g, dt, d, ex, ey) => chaque(g, "a", 1.0 / d.rate, dt, () => {
       const a = versJoueur(g, ex, ey);
-      for (let k = -2; k <= 2; k++) balle(g, "vert", ex, ey, a + k * 0.2, 150 * d.v, 6.5);
+      for (let k = -2; k <= 2; k++) balle(g, "orbe", ex, ey, a + k * 0.2, 150 * d.v, 6.5);
     }) },
   ],
+  /* bleu : pluie plus large, spirale à trois bras, notifications, anneaux, tirs visés à sept */
   2: [
+    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.3 / d.rate, dt, () => {
+      const base = Math.PI / 2 + Math.sin(g.tA * 1.5) * 0.6;
+      for (let k = -3; k <= 3; k++) balle(g, "goutte", ex, ey, base + k * 0.24, (100 + Math.random() * 40) * d.v, 5);
+    }) },
+    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.09 / d.rate, dt, () => {
+      const a = g.tA * 1.4 * g.sens;
+      for (let k = 0; k < 3; k++) balle(g, "orbe", ex, ey, a + (k * Math.PI * 2) / 3, 110 * d.v);
+    }) },
+    { duree: 7, tir: (g, dt, d) => chaque(g, "a", 1.6 / d.rate, dt, () => rangee(g, NOTIFS, 98, 17, 96, 70 * d.v, "notif")) },
+    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.9 / d.rate, dt, () => {
+      const o = (g.acc.n = (g.acc.n || 0) + 1) % 2 ? 0 : Math.PI / 16;
+      for (let k = 0; k < 16; k++) balle(g, "orbe", ex, ey, o + (k * Math.PI * 2) / 16, 95 * d.v, 6);
+    }) },
+    { duree: 5, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.95 / d.rate, dt, () => {
+      const a = versJoueur(g, ex, ey);
+      for (let k = -3; k <= 3; k++) balle(g, "orbe", ex, ey, a + k * 0.17, 155 * d.v, 6.5);
+    }) },
+  ],
+  /* rouge : fleur et anneaux, murs d'« OUBLIE », panique, rideaux croisés, salve de missiles */
+  3: [
     { duree: 7, tir: (g, dt, d, ex, ey) => {
-      chaque(g, "a", 0.085 / d.rate, dt, () => { const a = g.tA * 1.9 * g.sens; for (let k = 0; k < 4; k++) balle(g, "rouge", ex, ey, a + (k * Math.PI) / 2, 110 * d.v); });
-      chaque(g, "b", 1.3 / d.rate, dt, () => { const o = Math.random(); for (let k = 0; k < 18; k++) balle(g, "rouge", ex, ey, o + (k * Math.PI * 2) / 18, 92 * d.v, 6.5); });
+      chaque(g, "a", 0.085 / d.rate, dt, () => { const a = g.tA * 1.9 * g.sens; for (let k = 0; k < 4; k++) balle(g, "orbe", ex, ey, a + (k * Math.PI) / 2, 110 * d.v); });
+      chaque(g, "b", 1.3 / d.rate, dt, () => { const o = Math.random(); for (let k = 0; k < 18; k++) balle(g, "orbe", ex, ey, o + (k * Math.PI * 2) / 18, 92 * d.v, 6.5); });
     } },
     { duree: 8, tir: (g, dt, d, ex, ey) => {
       chaque(g, "a", 1.55 / d.rate, dt, () => rangee(g, ["OUBLIE"], 64, 17, 100 - (d.rate - 1) * 18, 80 * d.v, "oublie"));
-      chaque(g, "b", 0.6 / d.rate, dt, () => balle(g, "rouge", ex, ey, versJoueur(g, ex, ey), 170 * d.v, 6));
+      chaque(g, "b", 0.6 / d.rate, dt, () => balle(g, "orbe", ex, ey, versJoueur(g, ex, ey), 170 * d.v, 6));
     } },
     { duree: 6, tir: (g, dt, d) => chaque(g, "a", 0.26 / d.rate, dt, () => {
       const ox = g.boss.x + (Math.random() - 0.5) * 220, oy = g.boss.y + (Math.random() - 0.5) * 120;
-      for (let k = 0; k < 6; k++) balle(g, "rouge", ox, oy, Math.PI * (0.15 + Math.random() * 0.7), (120 + Math.random() * 70) * d.v, 5);
+      for (let k = 0; k < 6; k++) balle(g, "orbe", ox, oy, Math.PI * (0.15 + Math.random() * 0.7), (120 + Math.random() * 70) * d.v, 5);
     }) },
     { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.055 / d.rate, dt, () => {
       const s = Math.sin(g.tA * 2.2) * 1.0;
-      balle(g, "rouge", ex, ey, Math.PI / 2 + s, 175 * d.v, 5); balle(g, "rouge", ex, ey, Math.PI / 2 - s, 175 * d.v, 5);
+      balle(g, "orbe", ex, ey, Math.PI / 2 + s, 175 * d.v, 5); balle(g, "orbe", ex, ey, Math.PI / 2 - s, 175 * d.v, 5);
     }) },
+    { duree: 5, tir: (g, dt, d, ex, ey) => {
+      chaque(g, "a", 1.4 / d.rate, dt, () => lancerMissiles(g, 2, d));
+      chaque(g, "b", 0.35 / d.rate, dt, () => { for (let k = -1; k <= 1; k++) balle(g, "orbe", ex, ey, Math.PI / 2 + k * 0.5 + Math.sin(g.tA) * 0.3, 120 * d.v, 5.5); });
+    } },
   ],
 };
 
 export default function CombatMartine({ onQuitter }) {
   const calme = useMemo(estCalme, []);
   const [ecran, setEcran] = useState("debut");        // debut | jeu | pause | fin
-  const [niveau, setNiveau] = useState(calme ? "facile" : "normal");
   const [replique, setReplique] = useState("");
-  const [grand, setGrand] = useState("");              // un mot en grand, au centre (la bascule)
+  const [grand, setGrand] = useState(null);            // { texte, couleur } : un mot en grand, au centre (au passage d'un niveau)
   const [ligneFin, setLigneFin] = useState(0);
   const [bilan, setBilan] = useState(null);
   const [zone, setZone] = useState({ e: 1, W: W_MIN, large: false });
   const [tourner, setTourner] = useState(false);       // téléphone tenu en largeur : on demande de le tourner
   const [pleinEcran, setPleinEcran] = useState(false);
-  const cadre = useRef(null), toile = useRef(null), g = useRef(nouvelEtat(1));
+  const cadre = useRef(null), toile = useRef(null), g = useRef(nouvelEtat());
   const ecranRef = useRef(ecran); ecranRef.current = ecran;
   const ligneFinRef = useRef(ligneFin); ligneFinRef.current = ligneFin;
   /* changer d'écran tout de suite pour la boucle (sans attendre le rendu) */
   const allerA = (e) => { ecranRef.current = e; setEcran(e); };
   const touches = useRef(new Set()), doigt = useRef(null);
-  const sprites = useMemo(() => (typeof document === "undefined" ? null : {
-    vert: orbe(5.5, VERT), vert65: orbe(6.5, VERT), rouge: orbe(5.5, ROUGE, "#ffe8e0"), rouge65: orbe(6.5, ROUGE, "#ffe8e0"),
-    rouge5: orbe(5, ROUGE, "#ffe8e0"), rouge6: orbe(6, ROUGE, "#ffe8e0"), goutte: goutte(), aiguille: aiguille(),
-  }), []);
-  const dire = (texte, phase) => { setReplique(texte); g.current.parle = 1.4; sonVoix(phase); };
+  const sprites = useMemo(() => {
+    if (typeof document === "undefined") return null;
+    const orbes = {};
+    [[1, VERT, "#ffffff"], [2, BLEU, "#ffffff"], [3, ROUGE, "#ffe8e0"]].forEach(([n, col, coeur]) => {
+      orbes[n] = Object.fromEntries(RAYONS.map((r) => [r, orbe(r, col, coeur)]));
+    });
+    return { orbes, goutte: goutte(), aiguille: aiguille(), fumee: fumee() };
+  }, []);
+  const dire = (texte, phase) => { setReplique(texte); g.current.parle = 1.4; sonVoix(phase === 1 ? 1 : 2); };
   const direRef = useRef(dire); direRef.current = dire;
 
   /* la zone : 640 de haut, élargie à la forme de l'écran */
@@ -450,15 +519,48 @@ export default function CombatMartine({ onQuitter }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zone, sprites]);
 
-  /* l'expression du visage, qui glisse doucement vers son but */
+  /* l'expression du visage et la couleur, qui glissent doucement vers leur but */
   function expression(st, dt, but) {
     const k = Math.min(1, dt * 6);
-    st.expr.fronce = vers(st.expr.fronce, but.fronce, k);
+    st.expr.fronce = vers(st.expr.fronce, but.fronce || 0, k);
     st.expr.triste = vers(st.expr.triste, but.triste || 0, k);
     st.expr.dents = vers(st.expr.dents, but.dents || 0, k);
+    st.expr.colere = vers(st.expr.colere, but.colere || 0, k);
+  }
+  const visageDuNiveau = (n, flash) => (n === 1 ? { fronce: Math.min(1, 0.15 + flash * 1.6) } : n === 2 ? { fronce: 0.6, dents: 1 } : { fronce: 1, colere: 1 });
+  function teinter(st, dt, n, vitesse = 1.2) {
+    const k = Math.min(1, dt * vitesse);
+    st.couleur = st.couleur.map((v, i) => vers(v, NIVEAUX[n].couleur[i], k));
   }
   function fond(st, dt) {
     st.pluie.forEach((p) => { p.y += p.v * dt * (calme ? 0.3 : 1); if (p.y > H + 40) p.y = -40; });
+  }
+  /* MARTINE abîmée fume : un peu au niveau bleu, beaucoup au rouge, encore plus vaincue */
+  function fumer(st, dt, taux) {
+    if (Math.random() < dt * taux) {
+      const z = 1 + (st.zoomMax - 1) * st.gros;
+      const cote = Math.random() < 0.5 ? -1 : 1;
+      bouffee(st, st.boss.x + cote * (60 + Math.random() * 60) * z, st.boss.y - (60 + Math.random() * 30) * z, 8 + Math.random() * 8, 0.6);
+      if (Math.random() < 0.3) eclats(st, st.boss.x + cote * 110 * z, st.boss.y - 70 * z, 3, "#ffb347");
+    }
+  }
+  function bouffee(st, x, y, r, opacite = 1) {
+    if (st.fumees.length > 120) return;
+    st.fumees.push({ x, y, r, vr: 14 + Math.random() * 18, vx: (Math.random() - 0.5) * 16, vy: -12 - Math.random() * 18, vie: 1, duree: 1.6 + Math.random() * 1.4, opacite });
+  }
+  /* l'explosion du passage de niveau : éclats de feu, ondes, fumée, éclair */
+  function exploser(st, x, y, force = 1, { son = true, eclair = true } = {}) {
+    if (son) sonExplosion();
+    for (let i = 0; i < 70 * force; i++) {
+      const a = Math.random() * Math.PI * 2, v = 60 + Math.random() * 260 * force;
+      st.etincelles.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vie: 0.6 + Math.random() * 0.7, couleur: ["#fff4d0", "#ffd166", "#ff9a3a", "#ff5a2a"][i % 4] });
+    }
+    st.ondes.push({ x, y, r: 10, v: 420, vie: 1 }, { x, y, r: 4, v: 260, vie: 1 });
+    /* la boule de feu : un gros cœur et quelques petites autour */
+    st.boules.push({ x, y, r: 14 * force, vr: 380 * force, vie: 1 });
+    for (let i = 0; i < 3; i++) st.boules.push({ x: x + (Math.random() - 0.5) * 120 * force, y: y + (Math.random() - 0.5) * 80 * force, r: 6, vr: 120 * force, vie: 0.8 });
+    for (let i = 0; i < 16 * force; i++) bouffee(st, x + (Math.random() - 0.5) * 160, y + (Math.random() - 0.5) * 100, 16 + Math.random() * 20);
+    if (!calme) { if (eclair) st.eclair = 0.35; st.secousse = Math.max(st.secousse, 0.7 * force); }
   }
 
   /* hors jeu : MARTINE continue de bouger ; en fin de combat, le gros plan */
@@ -471,18 +573,26 @@ export default function CombatMartine({ onQuitter }) {
     st.boss.y = vers(BY, H * 0.37, st.gros) + Math.sin(st.t * 0.9) * 4;
     st.boss.flash = Math.max(0, st.boss.flash - dt * 4);
     st.glitch = Math.max(0, st.glitch - dt);
+    st.eclair = Math.max(0, st.eclair - dt * 2);
+    st.secousse = Math.max(0, st.secousse - dt);
     if (fin) {
-      expression(st, dt, { fronce: 0, triste: 1 });
+      expression(st, dt, { triste: 1 });
       /* à la dernière réplique, l'œil faiblit */
       const but = ligneFinRef.current >= FIN.length - 1 ? 0.55 : 0.85;
       st.lumiere = vers(st.lumiere, but, Math.min(1, dt * 1.5)) * (calme ? 1 : 0.97 + 0.03 * Math.sin(st.t * 23) * Math.sin(st.t * 7));
-    } else expression(st, dt, { fronce: st.phase === 2 ? 1 : 0.15, dents: st.phase === 2 ? 1 : 0 });
-    majEtincelles(st, dt);
+      fumer(st, dt, 5);
+    } else {
+      expression(st, dt, visageDuNiveau(st.phase, 0));
+      teinter(st, dt, st.phase);
+    }
+    majParticules(st, dt);
     fond(st, dt);
   }
 
   function avancer(st, dt) {
-    const W = st.W, d = { rate: st.dif, v: 0.7 + 0.3 * st.dif };
+    const W = st.W, niv = NIVEAUX[st.phase];
+    /* aide : chaque fois qu'on recommence un niveau, il devient un peu plus doux (jusqu'à −35 %) */
+    const d = { rate: niv.dif * st.adoucir * st.aide, v: 0.7 + 0.3 * niv.dif };
     /* le joueur */
     const k = touches.current, j = st.joueur;
     const mx = (k.has("ArrowRight") || k.has("KeyD") ? 1 : 0) - (k.has("ArrowLeft") || k.has("KeyA") || k.has("KeyQ") ? 1 : 0);
@@ -498,43 +608,49 @@ export default function CombatMartine({ onQuitter }) {
     j.x = Math.max(14, Math.min(W - 14, j.x)); j.y = Math.max(262, Math.min(H - 18, j.y));
     st.invul = Math.max(0, st.invul - dt);
 
-    /* MARTINE bouge, parle, change de visage */
+    /* MARTINE bouge, parle, change de visage, fume */
     st.tPhase += dt;
-    const ampl = st.phase === 1 ? 60 + (W - W_MIN) * 0.12 : 80 + (W - W_MIN) * 0.16;
-    st.boss.x = W / 2 + Math.sin(st.tPhase * (st.phase === 1 ? 0.5 : 0.75)) * ampl;
-    st.boss.y = BY + st.gros * 80 + Math.sin(st.tPhase * 0.9) * 6;
+    const ampl = (st.phase === 1 ? 60 : st.phase === 2 ? 70 : 80) + (W - W_MIN) * (0.1 + st.phase * 0.02);
+    st.boss.x = W / 2 + Math.sin(st.tPhase * (0.45 + st.phase * 0.1)) * ampl;
     st.gros = vers(st.gros, st.bascule > 0 ? 0.45 : 0, Math.min(1, dt * 3));
+    st.boss.y = BY + st.gros * 80 + Math.sin(st.tPhase * 0.9) * 6;
     st.boss.flash = Math.max(0, st.boss.flash - dt * 6);
     st.parle = Math.max(0, st.parle - dt);
     st.glitch = Math.max(0, st.glitch - dt);
-    if (st.phase === 2 && Math.random() < dt * 1.2) st.glitch = 0.12;
+    if (st.phase === DERNIER && Math.random() < dt * 1.2) st.glitch = 0.12;
     st.secousse = Math.max(0, st.secousse - dt);
+    st.eclair = Math.max(0, st.eclair - dt * 2);
     if (st.banniere.t > 0) st.banniere.t -= dt;
     fond(st, dt);
-    /* phase 1 : sourcil levé, sourire poli (il se fronce un instant quand elle est touchée) ;
-       à la bascule puis en phase 2 : sourcil en V et sourire à dents */
-    const fache = st.phase === 2 || (st.bascule > 0 && st.bascule < 2.1);
-    expression(st, dt, fache ? { fronce: 1, dents: 1 } : { fronce: Math.min(1, 0.15 + st.boss.flash * 1.6) });
+    fumer(st, dt, st.phase === 1 ? 0 : st.phase === 2 ? 1.6 : 4);
 
-    /* la bascule entre les deux phases : « Assez. », l'œil vire au rouge */
+    /* le passage d'un niveau : explosion, un mot en grand, le visage et la couleur changent */
     if (st.bascule > 0) {
       st.bascule -= dt;
-      st.rouge = Math.min(1, st.rouge + dt * 0.7);
-      majEtincelles(st, dt);
+      const suivant = st.phase + 1;
+      teinter(st, dt, st.bascule < 2.2 ? suivant : st.phase, 1.6);
+      expression(st, dt, visageDuNiveau(st.bascule < 2.0 ? suivant : st.phase, 0));
+      if (st.bascule < 2.4 && st.bascule + dt >= 2.4) { setGrand({ texte: PASSAGES[suivant], couleur: rgb(NIVEAUX[suivant].couleur) }); sonVoix(2); st.parle = 1.2; }
+      majParticules(st, dt);
       if (st.bascule <= 0) {
-        Object.assign(st, { phase: 2, pv: PV[2], vies: 3, invul: 1.5, attaque: 0, tA: -0.8, acc: {}, tPhase: 0, tLigne: 4, tMis: 0, rouge: 1 });
-        st.banniere = { texte: "PHASE 2", t: 1.6 };
-        setGrand(""); sonPhase(); phaseMusique(2);
+        st.stats.niveaux[st.phase] = Math.round(st.tPhase);
+        Object.assign(st, { phase: suivant, pv: NIVEAUX[suivant].pv, vies: 3, invul: 1.5, attaque: 0, tA: -0.8, acc: {}, tPhase: 0, tLigne: 4, iLigne: 0, tMis: 0, trous: null, aide: 1 });
+        st.banniere = { texte: `NIVEAU ${suivant}`, t: 1.6 };
+        setGrand(null); sonPhase(); phaseMusique(suivant);
       }
       return;
     }
-    /* tous les souvenirs perdus : on attend, puis la phase recommence */
+    expression(st, dt, visageDuNiveau(st.phase, st.boss.flash));
+    teinter(st, dt, st.phase);
+
+    /* tous les souvenirs perdus : on attend, puis le niveau recommence */
     if (st.perdu > 0) {
       st.perdu -= dt;
-      majEtincelles(st, dt);
+      majParticules(st, dt);
       if (st.perdu <= 0) {
-        Object.assign(st, { pv: PV[st.phase], vies: 3, invul: 1.5, attaque: 0, tA: -1.5, acc: {}, balles: [], missiles: [], tirs: [], tMis: 0 });
-        st.banniere = { texte: "Tout recommence…", t: 1.8 };
+        /* MARTINE ne récupère que la moitié de ce qu'elle a perdu, et le niveau s'adoucit un peu */
+        Object.assign(st, { pv: Math.round(st.pv + (niv.pv - st.pv) * 0.5), vies: 3, invul: 1.5, attaque: 0, tA: -1.5, acc: {}, balles: [], missiles: [], tirs: [], tMis: 0, trous: null, aide: Math.max(0.65, st.aide * 0.88) });
+        st.banniere = { texte: "Elle se répare… à moitié.", t: 2 };
         st.stats.recommencees++;
       }
       return;
@@ -542,12 +658,14 @@ export default function CombatMartine({ onQuitter }) {
     /* MARTINE vaincue */
     if (st.victoire > 0) {
       st.victoire -= dt;
-      if (Math.random() < dt * 12) eclats(st, st.boss.x + (Math.random() - 0.5) * 240, st.boss.y + (Math.random() - 0.5) * 170, 10, "#ffd166");
-      if (!calme) st.secousse = 0.2;
-      majEtincelles(st, dt);
+      /* des explosions en chaîne, sans éclair (pas de clignotement) */
+      if (Math.random() < dt * 5) exploser(st, st.boss.x + (Math.random() - 0.5) * 220, st.boss.y + (Math.random() - 0.5) * 150, 0.45, { son: Math.random() < 0.3, eclair: false });
+      fumer(st, dt, 8);
+      majParticules(st, dt);
       if (st.victoire <= 0) {
         const s = st.stats;
-        setBilan({ temps: Math.round((performance.now() - s.debut) / 1000), touches: s.touches, recommencees: s.recommencees });
+        s.niveaux[DERNIER] = Math.round(st.tPhase);
+        setBilan({ temps: Math.round((performance.now() - s.debut) / 1000), touches: s.touches, recommencees: s.recommencees, niveaux: { ...s.niveaux } });
         setReplique(""); setLigneFin(0); allerA("fin"); sonVoix(2); st.parle = 1.4;
       }
       return;
@@ -557,7 +675,6 @@ export default function CombatMartine({ onQuitter }) {
     st.tLigne += dt;
     if (st.tLigne > 8) { st.tLigne = 0; const l = LIGNES[st.phase]; direRef.current(l[st.iLigne++ % l.length], st.phase); }
 
-    /* tir automatique */
     /* tir automatique : en éventail ; en mode lent (Maj), un jet serré, comme dans DoDonPachi */
     st.cad -= dt;
     if (st.cad <= 0) {
@@ -572,7 +689,7 @@ export default function CombatMartine({ onQuitter }) {
       for (const m of st.missiles) {
         if (m.pv > 0 && Math.abs(t.x - m.x) < 9 && Math.abs(t.y - m.y) < 9) {
           m.pv--;
-          if (m.pv <= 0) { eclats(st, m.x, m.y, 12, "#ffd166"); sonPop(); }
+          if (m.pv <= 0) { eclats(st, m.x, m.y, 12, "#ffd166"); bouffee(st, m.x, m.y, 8, 0.8); sonPop(); }
           return false;
         }
       }
@@ -589,10 +706,10 @@ export default function CombatMartine({ onQuitter }) {
     st.tA += dt;
     if (st.tA > att.duree) { st.attaque++; st.tA = -0.7; st.acc = {}; st.sens = -st.sens; st.trous = null; }
     else if (st.tA >= 0) att.tir(st, dt, d, bx, by - 10);
-    /* et de temps en temps, des missiles */
+    /* et régulièrement, des missiles */
     st.tMis += dt;
-    const periode = (st.phase === 1 ? 7.5 : 4.8) / d.rate;
-    if (st.tPhase > 6 && st.tMis > periode) { st.tMis = 0; lancerMissiles(st, st.phase === 1 ? 2 : d.rate < 0.8 ? 2 : 3, d); }
+    const mis = niv.missiles;
+    if (st.tPhase > 4 && st.tMis > mis.periode / (st.adoucir * st.aide)) { st.tMis = 0; lancerMissiles(st, mis.n, d); }
 
     /* les projectiles de MARTINE */
     const touche = st.invul <= 0;
@@ -606,14 +723,15 @@ export default function CombatMartine({ onQuitter }) {
       }
       return b.x > -40 && b.x < W + 40 && b.y > -40 && b.y < H + 40;
     });
-    const virage = (st.phase === 1 ? 1.3 : 1.7) * dt;
+    const virage = mis.virage * dt;
     st.missiles = st.missiles.filter((m) => {
       if (m.pv <= 0) return false;
       const ecart = ((versJoueur(st, m.x, m.y) - m.a + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
       m.a += Math.max(-virage, Math.min(virage, ecart));
-      m.v = Math.min(m.v + 30 * dt, 165 * d.v);
+      m.v = Math.min(m.v + 30 * dt, mis.vmax * d.v);
       m.vx = Math.cos(m.a) * m.v; m.vy = Math.sin(m.a) * m.v;
       m.x += m.vx * dt; m.y += m.vy * dt; m.vie -= dt;
+      if (Math.random() < dt * 10) bouffee(st, m.x - Math.cos(m.a) * 10, m.y - Math.sin(m.a) * 10, 3, 0.35);
       if (touche && !toucheJoueur && Math.hypot(m.x - j.x, m.y - j.y) < 5 + HIT) { toucheJoueur = "missile"; return false; }
       if (m.vie <= 0) { eclats(st, m.x, m.y, 6, "#c8d4e2"); return false; }
       return true;
@@ -630,43 +748,46 @@ export default function CombatMartine({ onQuitter }) {
         direRef.current(MOQUERIE, st.phase);
       }
     }
-    majEtincelles(st, dt);
+    majParticules(st, dt);
 
-    /* fin de phase */
+    /* fin de niveau */
     if (st.pv <= 0) {
       st.balles.forEach((b) => eclats(st, b.x, b.y, 1, "#ffd166"));
       st.missiles.forEach((m) => eclats(st, m.x, m.y, 6, "#ffd166"));
       st.balles = []; st.missiles = []; st.tirs = []; st.pv = 0;
-      sonExplosion();
-      if (st.phase === 1) {
-        st.bascule = 2.6;
-        setReplique(""); setGrand(BASCULE); sonVoix(2); st.parle = 1.2;
+      exploser(st, st.boss.x, st.boss.y - 10, st.phase === DERNIER ? 1.4 : 1);
+      if (st.phase < DERNIER) {
+        st.bascule = 3.0;
+        setReplique("");
       } else {
-        st.victoire = 3; arreterMusique();
+        st.victoire = 3.2; arreterMusique();
       }
     }
   }
 
   function eclats(st, x, y, n, couleur) {
-    if (st.etincelles.length > 500) return;
+    if (st.etincelles.length > 600) return;
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, v = 30 + Math.random() * 110;
       st.etincelles.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, vie: 0.5 + Math.random() * 0.4, couleur });
     }
   }
-  function majEtincelles(st, dt) {
+  function majParticules(st, dt) {
     st.etincelles = st.etincelles.filter((p) => { p.x += p.vx * dt; p.y += p.vy * dt; p.vx *= 0.96; p.vy *= 0.96; p.vie -= dt; return p.vie > 0; });
+    st.fumees = st.fumees.filter((f) => { f.x += f.vx * dt; f.y += f.vy * dt; f.r += f.vr * dt; f.vie -= dt / f.duree; return f.vie > 0; });
+    st.ondes = st.ondes.filter((o) => { o.r += o.v * dt; o.vie -= dt * 1.4; return o.vie > 0; });
+    st.boules = st.boules.filter((b) => { b.r += b.vr * dt; b.vr *= 0.92; b.vie -= dt * 1.4; return b.vie > 0; });
   }
 
   function dessiner(st) {
     const cv = toile.current; if (!cv || !sprites) return;
     const W = st.W, c = cv.getContext("2d"), k = cv.height / H;
     c.setTransform(k, 0, 0, k, 0, 0);
-    if (st.secousse > 0) c.translate((Math.random() - 0.5) * 6 * st.secousse, (Math.random() - 0.5) * 6 * st.secousse);
+    if (st.secousse > 0) c.translate((Math.random() - 0.5) * 8 * st.secousse, (Math.random() - 0.5) * 8 * st.secousse);
     /* le fond : la salle des serveurs, des lignes de données qui tombent */
     const fd = c.createLinearGradient(0, 0, 0, H); fd.addColorStop(0, "#04070c"); fd.addColorStop(1, "#08111c");
     c.fillStyle = fd; c.fillRect(-10, -10, W + 20, H + 20);
-    const col = mix(VERT, ROUGE, st.rouge);
+    const col = st.couleur.map(Math.round);
     c.fillStyle = rgb(col, 0.09);
     st.pluie.forEach((p) => c.fillRect(p.x, p.y, 1.5, p.l));
     c.strokeStyle = "rgba(40,60,80,0.35)"; c.lineWidth = 1;
@@ -674,6 +795,9 @@ export default function CombatMartine({ onQuitter }) {
 
     grandeMartine(c, st, calme);
 
+    /* la fumée, derrière les projectiles */
+    st.fumees.forEach((f) => { c.globalAlpha = Math.min(1, f.vie * 1.5) * f.opacite; c.drawImage(sprites.fumee, f.x - f.r, f.y - f.r, f.r * 2, f.r * 2); });
+    c.globalAlpha = 1;
     /* tirs du joueur */
     st.tirs.forEach((t) => c.drawImage(sprites.aiguille.cv, t.x - 4, t.y - 10, 8, 20));
     /* projectiles de MARTINE */
@@ -681,58 +805,67 @@ export default function CombatMartine({ onQuitter }) {
     st.balles.forEach((b) => {
       if (b.w) {
         c.globalAlpha = Math.min(1, b.age / 0.3);
-        const oublie = b.type === "oublie";
+        const oublie = b.type === "oublie", bord = NIVEAUX[b.niv].couleur;
         rondRect(c, b.x - b.w / 2, b.y - b.h / 2, b.w, b.h, 3);
-        c.fillStyle = oublie ? "rgba(34,4,4,0.94)" : "rgba(4,22,12,0.94)"; c.fill();
-        c.strokeStyle = oublie ? "#ff3a2a" : "#5eff9e"; c.lineWidth = 1.3; c.stroke();
-        c.fillStyle = oublie ? "#ffd8d0" : "#e8fff0";
+        c.fillStyle = oublie ? "rgba(34,4,4,0.94)" : rgb(bord.map((v) => Math.round(v * 0.08)), 0.94); c.fill();
+        c.strokeStyle = oublie ? "#ff3a2a" : rgb(bord); c.lineWidth = 1.3; c.stroke();
+        c.fillStyle = oublie ? "#ffd8d0" : "#eef8ff";
         c.font = oublie ? "800 10px ui-monospace, monospace" : "700 7px ui-monospace, monospace";
         c.fillText(b.txt, b.x, b.y + 0.5);
         c.globalAlpha = 1;
       } else if (b.type === "goutte") {
         const s = sprites.goutte; c.drawImage(s.cv, b.x - 10, b.y - 17, s.w, s.h);
       } else {
-        const s = b.type === "vert" ? (b.r > 6 ? sprites.vert65 : sprites.vert) : (b.r > 6 ? sprites.rouge65 : b.r > 5.5 ? sprites.rouge6 : b.r < 5.5 ? sprites.rouge5 : sprites.rouge);
+        const s = sprites.orbes[b.niv][rayonProche(b.r)];
         c.drawImage(s.cv, b.x - s.d / 2, b.y - s.d / 2, s.d, s.d);
       }
     });
     c.textBaseline = "alphabetic";
     st.missiles.forEach((m) => missile(c, m, col, st.t));
-    /* étincelles */
+    /* boules de feu, ondes de choc et étincelles */
+    st.boules.forEach((b) => {
+      const f = c.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+      f.addColorStop(0, `rgba(255,250,225,${b.vie})`); f.addColorStop(0.35, `rgba(255,190,80,${b.vie * 0.85})`);
+      f.addColorStop(0.7, `rgba(255,90,30,${b.vie * 0.45})`); f.addColorStop(1, "rgba(120,30,10,0)");
+      c.fillStyle = f; c.beginPath(); c.arc(b.x, b.y, b.r, 0, Math.PI * 2); c.fill();
+    });
+    st.ondes.forEach((o) => { c.globalAlpha = Math.max(0, o.vie) * 0.8; c.strokeStyle = "#ffe8b0"; c.lineWidth = 3 * o.vie + 1; c.beginPath(); c.arc(o.x, o.y, o.r, 0, Math.PI * 2); c.stroke(); });
     st.etincelles.forEach((p) => { c.globalAlpha = Math.min(1, p.vie * 2); c.fillStyle = p.couleur; c.fillRect(p.x - 1, p.y - 1, 2, 2); });
     c.globalAlpha = 1;
     /* la petite MARTINE */
     if (ecranRef.current !== "fin") petiteMartine(c, st.joueur.x, st.joueur.y, st.t, st.focus, st.invul <= 0 || Math.floor(st.t * 10) % 2 === 0);
 
-    /* jauge de MARTINE et souvenirs */
+    /* l'éclair de l'explosion (jamais en mode calme) */
     c.setTransform(k, 0, 0, k, 0, 0);
+    if (st.eclair > 0) { c.fillStyle = `rgba(255,240,210,${st.eclair * 0.6})`; c.fillRect(0, 0, W, H); }
+    /* jauge de MARTINE, niveau, souvenirs */
     c.fillStyle = "rgba(255,255,255,0.08)"; c.fillRect(14, 8, W - 28, 5);
-    c.fillStyle = rgb(col); c.fillRect(14, 8, (W - 28) * Math.max(0, st.pv / PV[st.phase]), 5);
+    c.fillStyle = rgb(col); c.fillRect(14, 8, (W - 28) * Math.max(0, st.pv / NIVEAUX[st.phase].pv), 5);
     c.font = "700 7px ui-monospace, monospace"; c.textAlign = "right"; c.fillStyle = rgb(col, 0.8);
-    c.fillText(`MARTINE · ${st.phase === 1 ? "I" : "II"}`, W - 14, 23);
+    c.fillText(`MARTINE · NIVEAU ${ROMAIN[st.phase]}`, W - 14, 23);
     c.fillStyle = "rgba(200,212,226,0.75)"; c.fillText("SOUVENIRS", W - 14 - 3 * 14, H - 9);
     for (let i = 0; i < 3; i++) {
       c.beginPath(); c.arc(W - 14 - i * 13, H - 12, 4.5, 0, Math.PI * 2);
       if (i < st.vies) { c.fillStyle = "#ffd166"; c.fill(); } else { c.strokeStyle = "rgba(255,209,102,0.5)"; c.lineWidth = 1; c.stroke(); }
     }
     if (st.banniere.t > 0) {
-      c.globalAlpha = Math.min(1, st.banniere.t * 1.5); c.textAlign = "center"; c.font = "800 16px ui-monospace, monospace";
-      c.fillStyle = "#ffffff"; c.fillText(st.banniere.texte, W / 2, H * 0.55); c.globalAlpha = 1;
+      c.globalAlpha = Math.min(1, st.banniere.t * 1.5); c.textAlign = "center"; c.font = "800 18px ui-monospace, monospace";
+      c.fillStyle = rgb(col); c.fillText(st.banniere.texte, W / 2, H * 0.55); c.globalAlpha = 1;
     }
   }
 
   /* ───────── les écrans ───────── */
   const commencer = () => {
-    g.current = nouvelEtat(NIVEAUX[niveau], zone.W);
+    g.current = nouvelEtat(zone.W, calme ? 0.85 : 1);
     g.current.zoomMax = zone.W >= 560 ? 2.05 : 1.34;
     g.current.stats.debut = performance.now();
-    g.current.banniere = { texte: "PHASE 1", t: 1.6 };
-    setReplique(""); setGrand(""); setBilan(null); allerA("jeu");
+    g.current.banniere = { texte: "NIVEAU 1", t: 1.6 };
+    setReplique(""); setGrand(null); setBilan(null); allerA("jeu");
     demarrerMusique(1);
     setTimeout(() => direRef.current(OUVERTURE, 1), 900);
   };
   const recommencer = () => {
-    arreterMusique(); g.current = nouvelEtat(1, zone.W); setReplique(""); setGrand(""); setLigneFin(0); allerA("debut");
+    arreterMusique(); g.current = nouvelEtat(zone.W); setReplique(""); setGrand(null); setLigneFin(0); allerA("debut");
   };
   const suiteFin = () => {
     if (ligneFinRef.current < FIN.length) { setLigneFin(ligneFinRef.current + 1); sonVoix(2); g.current.parle = 1.4; }
@@ -747,8 +880,9 @@ export default function CombatMartine({ onQuitter }) {
   const largeur = Wz * echelle, hauteur = H * echelle;
   const bouton = (fond, texte) => ({ background: fond, color: texte, border: "none", borderRadius: 10, padding: "10px 18px", fontFamily: "ui-monospace, monospace", fontWeight: 800, fontSize: 13, letterSpacing: 1, cursor: "pointer" });
   const carte = { position: "absolute", left: "50%", transform: "translateX(-50%)", width: Math.min(largeur - 24, 520), boxSizing: "border-box", background: "rgba(4,8,14,0.92)", border: "1px solid rgba(94,255,158,0.35)", borderRadius: 12, padding: "14px 16px", color: "#e8eef5", fontFamily: "Palatino, Georgia, serif" };
-  const couleurReplique = rgb(mix(VERT, ROUGE, g.current.rouge));
+  const couleurReplique = rgb(g.current.couleur.map(Math.round));
   const taillePolice = Math.round(Math.max(17, Math.min(28, 21 * echelle)));
+  const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
   const boutonsCoin = (
     <div style={{ display: "flex", gap: 6, flex: "0 0 auto" }}>
       <button onClick={basculerPleinEcran} title={pleinEcran ? "Quitter le plein écran" : "Plein écran"} style={{ ...bouton("rgba(255,255,255,0.08)", "#c8d4e2"), padding: "6px 10px" }}>⛶</button>
@@ -787,10 +921,10 @@ export default function CombatMartine({ onQuitter }) {
           <div style={{ position: "absolute", right: 14 * echelle, top: 30 * echelle }}>{boutonsCoin}</div>
         </>)}
 
-        {/* la bascule : un mot, en grand, au centre */}
+        {/* le passage d'un niveau : un mot, en grand, au centre */}
         {grand && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: "40%", textAlign: "center", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: Math.round(46 * echelle), color: "#ff5a4a", textShadow: "0 0 24px rgba(255,58,42,0.8), 0 0 4px #000", pointerEvents: "none", animation: "cmGrand 0.5s ease-out both" }}>
-            {grand}
+          <div style={{ position: "absolute", left: 0, right: 0, top: "42%", textAlign: "center", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: Math.round(46 * echelle), color: grand.couleur, textShadow: "0 0 24px currentColor, 0 0 4px #000", pointerEvents: "none", animation: "cmGrand 0.5s ease-out both" }}>
+            {grand.texte}
           </div>
         )}
         <style>{"@keyframes cmGrand { from { opacity: 0; transform: scale(1.3); } to { opacity: 1; transform: none; } }"}</style>
@@ -803,14 +937,8 @@ export default function CombatMartine({ onQuitter }) {
               <li>Déplace la petite MARTINE : glisse le doigt, bouge la souris, ou les flèches (Z Q S D).</li>
               <li>Elle tire toute seule. Maintiens <b>Maj</b> pour aller lentement. Ses tirs abattent les missiles.</li>
               <li>Seul son hublot compte : le point blanc.</li>
+              <li>Trois niveaux : MARTINE <span style={{ color: rgb(VERT) }}>verte</span>, puis <span style={{ color: rgb(BLEU) }}>bleue</span>, puis <span style={{ color: rgb(ROUGE) }}>rouge</span>.</li>
             </ul>
-            <div style={{ display: "flex", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
-              {Object.keys(NIVEAUX).map((n) => (
-                <button key={n} onClick={() => setNiveau(n)} style={{ ...bouton(niveau === n ? "#5eff9e" : "rgba(255,255,255,0.06)", niveau === n ? "#06110b" : "#c8d4e2"), padding: "6px 12px", fontSize: 12 }}>
-                  {n[0].toUpperCase() + n.slice(1)}
-                </button>
-              ))}
-            </div>
             <button onClick={commencer} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Commencer</button>
             <div style={{ marginTop: 10, fontFamily: "ui-monospace, monospace", fontSize: 10, color: "#5a6678" }}>Prototype du combat · ?combat=1</div>
           </div>
@@ -841,8 +969,9 @@ export default function CombatMartine({ onQuitter }) {
               Fin du prototype : ici viendront T'ÉTEINDRE, TE MODIFIER et TE FAIRE CONFIANCE.
             </p>
             {bilan && (
-              <p style={{ margin: "0 0 10px", fontFamily: "ui-monospace, monospace", fontSize: 11.5, color: "#8fa3bd" }}>
-                {niveau} · {Math.floor(bilan.temps / 60)} min {String(bilan.temps % 60).padStart(2, "0")} s · souvenirs perdus : {bilan.touches} · phases recommencées : {bilan.recommencees}
+              <p style={{ margin: "0 0 10px", fontFamily: "ui-monospace, monospace", fontSize: 11.5, color: "#8fa3bd", lineHeight: 1.6 }}>
+                {mmss(bilan.temps)} en tout · niveau I {mmss(bilan.niveaux[1] || 0)} · II {mmss(bilan.niveaux[2] || 0)} · III {mmss(bilan.niveaux[3] || 0)}<br />
+                souvenirs perdus : {bilan.touches} · niveaux recommencés : {bilan.recommencees}
               </p>
             )}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
