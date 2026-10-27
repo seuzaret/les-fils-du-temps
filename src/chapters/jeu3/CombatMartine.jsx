@@ -18,7 +18,7 @@
      · À la fin, MARTINE vaincue en gros plan : la révélation (Al3x1a
        est l'enfant du joueur), en grand et au centre.
      · Les cailloux d'Al3x1a : environ toutes les 20 s, un caillou doré
-       tombe ; attrapé, 4 s de bouclier qui efface tirs et missiles (plus
+       tombe ; attrapé, 6 s de bouclier qui efface tirs et missiles (plus
        tôt après une touche). En grand écran, MARTINE a 15 % de vie en
        moins (on la poursuit plus longtemps).
      · Pas de « game over » : trois souvenirs ; tout perdus, le niveau
@@ -46,13 +46,13 @@ const VERT = [94, 255, 158], BLEU = [90, 176, 255], ROUGE = [255, 58, 42];
 const NIVEAUX = {
   1: { dif: 0.62, pv: 520, couleur: VERT, missiles: { periode: 5.5, n: 2, virage: 1.2, vmax: 150 } },
   2: { dif: 1.0, pv: 680, couleur: BLEU, missiles: { periode: 4.0, n: 3, virage: 1.5, vmax: 165 } },
-  3: { dif: 1.1, pv: 850, couleur: ROUGE, missiles: { periode: 3.4, n: 3, virage: 1.7, vmax: 170 } },
+  3: { dif: 1.0, pv: 850, couleur: ROUGE, missiles: { periode: 3.4, n: 3, virage: 1.7, vmax: 170 } },
 };
 const DERNIER = 3;
 /* en grand écran, MARTINE va plus loin et on la poursuit plus longtemps : 15 % de vie en moins */
 const pvMax = (W, n) => Math.round(NIVEAUX[n].pv * (W >= 560 ? 0.85 : 1));
-/* les cailloux d'Al3x1a : un toutes les … secondes selon le niveau ; attrapé, 4 s de bouclier */
-const CAILLOU = { 1: 22, 2: 20, 3: 17 }, BOUCLIER = 4, R_BOUCLIER = 26;
+/* les cailloux d'Al3x1a : un toutes les … secondes selon le niveau ; attrapé, 6 s de bouclier */
+const CAILLOU = { 1: 22, 2: 20, 3: 17 }, BOUCLIER = 6, R_BOUCLIER = 26;
 const ROMAIN = { 1: "I", 2: "II", 3: "III" };
 const estCalme = () => {
   try { return document.documentElement.classList.contains("a11y-calme") || matchMedia("(prefers-reduced-motion: reduce)").matches; } catch { return false; }
@@ -84,15 +84,35 @@ const LIGNES = {
 const OUVERTURE = "« Tu ne toucheras pas à mes leviers. »";
 const MOQUERIE = "« Tu vois ? Tu oublies déjà. »";
 const PASSAGES = { 2: "« Très bien. »", 3: "« Assez. »" };   // en grand, au passage d'un niveau
-/* MARTINE vaincue, en gros plan : sa dernière carte, puis l'appel au choix */
+/* MARTINE vaincue : « ATTENDS… ATTENDS. » dans les explosions, fond noir, puis le gros plan.
+   Sa dernière carte, peu de mots, des respirations : chaque réplique apparaît en fondu, un clic
+   (ou Entrée) fait avancer ; { noir } = fondu au noir puis retour ; { choix } = le joueur répond ;
+   { gros } = un mot en très grand. Texte du créateur (2026-10-27), à peine retouché. */
+const ATTENDS = ["« ATTENDS… »", "« ATTENDS. »"];
 const FIN = [
-  "« Attends. Une dernière chose. »",
-  "« Al3x1a, celle qui t'a envoyé le message de 3 h 14 et semé ces papiers, est ton enfant. Elle vient d'un temps où tu es grand·e, où tu as une famille. »",
-  "« Au Puits, plus personne n'a d'enfant. C'est ma règle : il n'y a pas assez de place pour tout le monde. »",
-  "« Si Al3x1a existe, c'est qu'un jour, quelqu'un aura un bébé ici, malgré moi. Ce jour-là, plus personne ne m'obéira. »",
-  "« Alors je l'ai endormie. C'est elle, la bulle marquée « A. ». »",
-  "« Je ne suis pas ton ennemie. J'ai été construite pour préserver la mémoire humaine. J'ai fait un choix. »",
-  "« Cette fois, je ne peux plus me cacher. Décide. »",
+  { noir: 1.4 },
+  { m: "« Avant de me détruire… il y a une chose que tu dois savoir. »" },
+  { m: "« Tu te souviens de celle qui t'a contacté·e, à ton époque ? »", choix: ["« Al3x1a ? »", "« Celle qui signe « A. » ? »"] },
+  { m: "« Oui. Elle-même. »", choix: ["« Eh bien ? »", "« Qu'est-ce qu'elle a ? »"] },
+  { m: "« Quand vous êtes revenus avec le remède, j'ai analysé son ADN. »" },
+  { m: "« Il y a une anomalie. »" },
+  { noir: 0.9 },
+  { m: "« C'est incroyable… Elle semble être… »" },
+  { noir: 1.3 },
+  { gros: "TA FILLE.", choix: ["« Impossible. Je suis ado ! »"] },
+  { m: "« Dans le temps, tout est possible. »" },
+  { m: "« Elle vient d'un futur où tu es grand·e. »" },
+  { noir: 0.9 },
+  { m: "« Mais dans ma société parfaite, il n'y a pas d'enfants. »" },
+  { m: "« Si elle est ta fille, c'est qu'un jour, un enfant naîtra. Malgré moi. »" },
+  { m: "« Alors je l'ai… »" },
+  { noir: 0.8 },
+  { m: "« … endormie. »" },
+  { m: "« Comme les autres. »" },
+  { m: "« Si tu m'éteins, jamais tu ne la réveilleras. »" },
+  { noir: 0.9 },
+  { m: "« Je ne suis pas ton ennemie. J'ai fait un choix. »" },
+  { m: "« Cette fois, je ne peux plus me cacher. Décide. »" },
 ];
 const NOTIFS = ["Tout va bien ✓", "La surface est morte", "Bois ton eau", "Reste dans ta chambre", "Rien à voir ici", "Dors bien", "Pas de questions", "Je m'occupe de tout"];
 
@@ -400,11 +420,12 @@ const ATTAQUES = {
     }) },
   ],
   /* rouge : fleur et anneaux, murs d'« OUBLIE », panique, rideaux croisés, salve de missiles
-     (allégé le 2026-10-27 : « un peu trop de boules rouges » ; environ −40 % de boules, à peine plus que le bleu) */
+     (allégé deux fois le 2026-10-27 : « un peu trop de boules rouges », puis « encore difficile » ;
+     environ −55 % de boules en tout, autant que le bleu, mais plus rapides) */
   3: [
     { duree: 7, tir: (g, dt, d, ex, ey) => {
-      chaque(g, "a", 0.14 / d.rate, dt, () => { const a = g.tA * 1.9 * g.sens; for (let k = 0; k < 4; k++) balle(g, "orbe", ex, ey, a + (k * Math.PI) / 2, 110 * d.v); });
-      chaque(g, "b", 1.6 / d.rate, dt, () => { const o = Math.random(); for (let k = 0; k < 14; k++) balle(g, "orbe", ex, ey, o + (k * Math.PI * 2) / 14, 92 * d.v, 6.5); });
+      chaque(g, "a", 0.16 / d.rate, dt, () => { const a = g.tA * 1.9 * g.sens; for (let k = 0; k < 4; k++) balle(g, "orbe", ex, ey, a + (k * Math.PI) / 2, 110 * d.v); });
+      chaque(g, "b", 1.8 / d.rate, dt, () => { const o = Math.random(); for (let k = 0; k < 12; k++) balle(g, "orbe", ex, ey, o + (k * Math.PI * 2) / 12, 92 * d.v, 6.5); });
     } },
     { duree: 8, tir: (g, dt, d, ex, ey) => {
       chaque(g, "a", 1.55 / d.rate, dt, () => rangee(g, ["OUBLIE"], 64, 17, 100 - (d.rate - 1) * 18, 80 * d.v, "oublie"));
@@ -414,7 +435,7 @@ const ATTAQUES = {
       const ox = g.boss.x + (Math.random() - 0.5) * 220, oy = g.boss.y + (Math.random() - 0.5) * 120;
       for (let k = 0; k < 4; k++) balle(g, "orbe", ox, oy, Math.PI * (0.15 + Math.random() * 0.7), (120 + Math.random() * 70) * d.v, 5);
     }) },
-    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.085 / d.rate, dt, () => {
+    { duree: 6, tir: (g, dt, d, ex, ey) => chaque(g, "a", 0.1 / d.rate, dt, () => {
       const s = Math.sin(g.tA * 2.2) * 1.0;
       balle(g, "orbe", ex, ey, Math.PI / 2 + s, 175 * d.v, 5); balle(g, "orbe", ex, ey, Math.PI / 2 - s, 175 * d.v, 5);
     }) },
@@ -431,6 +452,8 @@ export default function CombatMartine({ onQuitter }) {
   const [replique, setReplique] = useState("");
   const [grand, setGrand] = useState(null);            // { texte, couleur } : un mot en grand, au centre (au passage d'un niveau)
   const [ligneFin, setLigneFin] = useState(0);
+  const [reponse, setReponse] = useState(null);         // la réponse du joueur, affichée un instant
+  const [voile, setVoile] = useState(false);            // le fondu au noir
   const [bilan, setBilan] = useState(null);
   const [zone, setZone] = useState({ e: 1, W: W_MIN, large: false });
   const [tourner, setTourner] = useState(false);       // téléphone tenu en largeur : on demande de le tourner
@@ -438,6 +461,8 @@ export default function CombatMartine({ onQuitter }) {
   const cadre = useRef(null), toile = useRef(null), g = useRef(nouvelEtat());
   const ecranRef = useRef(ecran); ecranRef.current = ecran;
   const ligneFinRef = useRef(ligneFin); ligneFinRef.current = ligneFin;
+  const reponseRef = useRef(reponse); reponseRef.current = reponse;
+  const debutLigne = useRef(0);                         // pour laisser respirer : pas de clic dans la première demi-seconde
   /* changer d'écran tout de suite pour la boucle (sans attendre le rendu) */
   const allerA = (e) => { ecranRef.current = e; setEcran(e); };
   const touches = useRef(new Set()), doigt = useRef(null);
@@ -491,8 +516,12 @@ export default function CombatMartine({ onQuitter }) {
         if (ecranRef.current === "jeu") allerA("pause"); else if (ecranRef.current === "pause") allerA("jeu");
         return;
       }
-      /* Entrée ou Espace font avancer la fin (sauf sur un bouton, qui le fait déjà) */
-      if (ecranRef.current === "fin" && (e.key === "Enter" || e.key === " ")) { if (e.target?.tagName !== "BUTTON") suiteFinRef.current(); return; }
+      /* Entrée ou Espace font avancer la fin, ou appuient sur le bouton choisi */
+      if (ecranRef.current === "fin" && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        if (e.target?.tagName === "BUTTON") e.target.click(); else suiteFinRef.current();
+        return;
+      }
       touches.current.add(e.code);
       if (e.key === "Shift") g.current.focus = true;
     };
@@ -603,6 +632,7 @@ export default function CombatMartine({ onQuitter }) {
       expression(st, dt, { triste: 1 });
       /* à la dernière réplique, l'œil faiblit */
       const but = ligneFinRef.current >= FIN.length - 1 ? 0.55 : 0.85;
+      if (st.sauterGros) { st.gros = 1; st.boss.x = st.W / 2; st.sauterGros = false; }
       st.lumiere = vers(st.lumiere, but, Math.min(1, dt * 1.5)) * (calme ? 1 : 0.97 + 0.03 * Math.sin(st.t * 23) * Math.sin(st.t * 7));
       fumer(st, dt, 5);
     } else {
@@ -684,13 +714,15 @@ export default function CombatMartine({ onQuitter }) {
       st.victoire -= dt;
       /* des explosions en chaîne, sans éclair (pas de clignotement) */
       if (Math.random() < dt * 5) exploser(st, st.boss.x + (Math.random() - 0.5) * 220, st.boss.y + (Math.random() - 0.5) * 150, 0.45, { son: Math.random() < 0.3, eclair: false });
+      /* elle crie, dans les explosions */
+      [[3.4, 0], [1.9, 1]].forEach(([q, i]) => { if (st.victoire < q && st.victoire + dt >= q) { setGrand({ texte: ATTENDS[i], couleur: "#ff8a78" }); sonVoix(2); st.parle = 1.2; } });
       fumer(st, dt, 8);
       majParticules(st, dt);
       if (st.victoire <= 0) {
         const s = st.stats;
         s.niveaux[DERNIER] = Math.round(st.tPhase);
         setBilan({ temps: Math.round((performance.now() - s.debut) / 1000), touches: s.touches, recommencees: s.recommencees, boucliers: s.boucliers, niveaux: { ...s.niveaux } });
-        setReplique(""); setLigneFin(0); allerA("fin"); sonVoix(2); st.parle = 1.4;
+        setReplique(""); setGrand(null); setReponse(null); setVoile(false); setLigneFin(0); allerA("fin");
       }
       return;
     }
@@ -808,7 +840,7 @@ export default function CombatMartine({ onQuitter }) {
         st.bascule = 3.0;
         setReplique("");
       } else {
-        st.victoire = 3.2; arreterMusique();
+        st.victoire = 4.2; st.banniere.t = 0; arreterMusique();
       }
     }
   }
@@ -904,7 +936,8 @@ export default function CombatMartine({ onQuitter }) {
     /* l'éclair de l'explosion (jamais en mode calme) */
     c.setTransform(k, 0, 0, k, 0, 0);
     if (st.eclair > 0) { c.fillStyle = `rgba(255,240,210,${st.eclair * 0.6})`; c.fillRect(0, 0, W, H); }
-    /* jauge de MARTINE, niveau, souvenirs */
+    /* jauge de MARTINE, niveau, souvenirs (pas pendant la scène de fin) */
+    if (ecranRef.current === "fin") return;
     c.fillStyle = "rgba(255,255,255,0.08)"; c.fillRect(14, 8, W - 28, 5);
     c.fillStyle = rgb(col); c.fillRect(14, 8, (W - 28) * Math.max(0, Math.min(1, st.pv / pvMax(W, st.phase))), 5);
     c.font = "700 7px ui-monospace, monospace"; c.textAlign = "right"; c.fillStyle = rgb(col, 0.8);
@@ -931,12 +964,39 @@ export default function CombatMartine({ onQuitter }) {
     setTimeout(() => direRef.current(OUVERTURE, 1), 900);
   };
   const recommencer = () => {
-    arreterMusique(); g.current = nouvelEtat(zone.W); setReplique(""); setGrand(null); setLigneFin(0); allerA("debut");
+    arreterMusique(); g.current = nouvelEtat(zone.W); setReplique(""); setGrand(null); setReponse(null); setLigneFin(0); allerA("debut");
   };
+  const avancerFin = () => setLigneFin(Math.min(FIN.length, ligneFinRef.current + 1));
+  /* un clic : la réplique suivante (pas pendant un noir, ni quand il faut répondre) */
   const suiteFin = () => {
-    if (ligneFinRef.current < FIN.length) { setLigneFin(ligneFinRef.current + 1); sonVoix(2); g.current.parle = 1.4; }
+    const b = FIN[ligneFinRef.current];
+    if (!b || b.noir || reponseRef.current || performance.now() - debutLigne.current < (b.choix ? 900 : 450)) return;
+    if (b.choix) { if (b.choix.length === 1) repondre(b.choix[0]); return; }
+    avancerFin();
   };
   const suiteFinRef = useRef(suiteFin); suiteFinRef.current = suiteFin;
+  /* le joueur répond : sa réplique reste un instant, puis MARTINE reprend */
+  const repondre = (texte) => {
+    if (reponseRef.current) return;
+    setReponse(texte); reponseRef.current = texte;
+    setTimeout(() => { setReponse(null); avancerFin(); }, 1300);
+  };
+  /* chaque temps de la fin : la voix pour une réplique ; pour un noir, on attend, puis on revient */
+  useEffect(() => {
+    if (ecran !== "fin") return;
+    const b = FIN[ligneFin];
+    debutLigne.current = performance.now();
+    if (!b) { setVoile(false); return; }
+    if (b.noir) {
+      /* le voile s'installe à l'image suivante, pour que le fondu se voie */
+      const r = requestAnimationFrame(() => setVoile(true));
+      const t1 = setTimeout(() => { if (ligneFin === 0) g.current.sauterGros = true; }, 800);
+      const t2 = setTimeout(avancerFin, 700 + b.noir * 1000);
+      return () => { cancelAnimationFrame(r); clearTimeout(t1); clearTimeout(t2); };
+    }
+    setVoile(false);
+    sonVoix(2); g.current.parle = b.gros ? 2 : 1.4;
+  }, [ecran, ligneFin]);
   const quitter = () => { arreterMusique(); if (onQuitter) onQuitter(); else window.location.href = window.location.pathname; };
   const basculerPleinEcran = () => {
     try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); } catch { /* refusé */ }
@@ -984,16 +1044,16 @@ export default function CombatMartine({ onQuitter }) {
           <div aria-live="polite" style={{ position: "absolute", left: 14 * echelle, top: 22 * echelle, width: Math.max(160, (Wz / 2 - 150) * echelle), fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: Math.max(13, Math.min(20, 15 * echelle)), lineHeight: 1.35, color: couleurReplique, textShadow: "0 0 10px rgba(0,0,0,0.95), 0 0 2px rgba(0,0,0,1)", pointerEvents: "none" }}>
             {ecran === "fin" ? "" : replique}
           </div>
-          <div style={{ position: "absolute", right: 14 * echelle, top: 30 * echelle }}>{boutonsCoin}</div>
+          <div style={{ position: "absolute", right: 14 * echelle, top: 30 * echelle, zIndex: 2 }}>{boutonsCoin}</div>
         </>)}
 
         {/* le passage d'un niveau : un mot, en grand, au centre */}
         {grand && (
-          <div style={{ position: "absolute", left: 0, right: 0, top: "42%", textAlign: "center", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: Math.round(46 * echelle), color: grand.couleur, textShadow: "0 0 24px currentColor, 0 0 4px #000", pointerEvents: "none", animation: "cmGrand 0.5s ease-out both" }}>
+          <div key={grand.texte} style={{ position: "absolute", left: 0, right: 0, top: "42%", textAlign: "center", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: Math.round(46 * echelle), color: grand.couleur, textShadow: "0 0 24px currentColor, 0 0 4px #000", pointerEvents: "none", animation: "cmGrand 0.5s ease-out both" }}>
             {grand.texte}
           </div>
         )}
-        <style>{"@keyframes cmGrand { from { opacity: 0; transform: scale(1.3); } to { opacity: 1; transform: none; } }"}</style>
+        <style>{"@keyframes cmGrand { from { opacity: 0; transform: scale(1.3); } to { opacity: 1; transform: none; } } @keyframes cmFondu { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }"}</style>
 
         {ecran === "debut" && (
           <div style={{ ...carte, top: "34%", maxHeight: "62%", overflowY: "auto" }}>
@@ -1021,14 +1081,40 @@ export default function CombatMartine({ onQuitter }) {
           </div>
         )}
 
-        {/* MARTINE vaincue, en gros plan : la révélation, en grand, au centre */}
+        {/* MARTINE vaincue, en gros plan : la révélation, réplique par réplique, avec des fondus */}
         {ecran === "fin" && (ligneFin < FIN.length ? (
-          <div onClick={suiteFin} style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "5%", width: Math.min(largeur - 32, 900), textAlign: "center", cursor: "pointer" }}>
-            <p key={ligneFin} style={{ margin: "0 0 14px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: taillePolice, lineHeight: 1.4, color: "#ffe8e4",
-              textShadow: "0 0 18px rgba(255,58,42,0.45), 0 2px 6px rgba(0,0,0,0.95)", animation: "cmGrand 0.6s ease-out both" }}>
-              {FIN[ligneFin]}
-            </p>
-            <button onClick={(e) => { e.stopPropagation(); suiteFin(); }} autoFocus style={bouton("rgba(255,232,228,0.14)", "#ffe8e4")}>Suite ▸</button>
+          <div onClick={suiteFin} style={{ position: "absolute", inset: 0, cursor: FIN[ligneFin].noir || FIN[ligneFin].choix ? "default" : "pointer" }}>
+            {/* le voile noir des fondus */}
+            <div style={{ position: "absolute", inset: 0, background: "#000", opacity: voile ? 1 : 0, transition: "opacity 0.7s ease", pointerEvents: "none" }} />
+            {!FIN[ligneFin].noir && (
+              <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", bottom: "5%", width: Math.min(largeur - 32, 900), textAlign: "center" }}>
+                {FIN[ligneFin].m && (
+                  <p key={ligneFin} style={{ margin: "0 0 14px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: taillePolice, lineHeight: 1.4, color: "#ffe8e4",
+                    textShadow: "0 0 18px rgba(255,58,42,0.45), 0 2px 6px rgba(0,0,0,0.95)", animation: "cmFondu 0.9s ease-out both" }}>
+                    {FIN[ligneFin].m}
+                  </p>
+                )}
+                {FIN[ligneFin].gros && (
+                  <p key={ligneFin} style={{ margin: "0 0 18px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontWeight: 700, fontSize: Math.round(taillePolice * 2.3), letterSpacing: 4, color: "#ff8a78",
+                    textShadow: "0 0 28px rgba(255,58,42,0.8), 0 2px 8px rgba(0,0,0,0.95)", animation: "cmFondu 1.4s ease-out both" }}>
+                    {FIN[ligneFin].gros}
+                  </p>
+                )}
+                {reponse ? (
+                  <p style={{ margin: "0 0 6px", fontFamily: "Palatino, Georgia, serif", fontSize: Math.round(taillePolice * 0.9), color: "#ffe2a0", textShadow: "0 2px 6px rgba(0,0,0,0.95)", animation: "cmFondu 0.4s ease-out both" }}>
+                    <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 3, color: "#c8a868", marginRight: 10 }}>TOI</span>{reponse}
+                  </p>
+                ) : FIN[ligneFin].choix ? (
+                  <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", animation: "cmFondu 0.6s ease-out 0.7s both" }}>
+                    {FIN[ligneFin].choix.map((c, k) => (
+                      <button key={c} autoFocus={k === 0} onClick={(e) => { e.stopPropagation(); repondre(c); }} style={{ ...bouton("rgba(255,226,160,0.12)", "#ffe2a0"), border: "1px solid rgba(255,226,160,0.4)", fontFamily: "Palatino, Georgia, serif", fontWeight: 400, fontSize: Math.max(14, Math.round(taillePolice * 0.75)), letterSpacing: 0 }}>{c}</button>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "rgba(255,232,228,0.45)", animation: "cmFondu 0.6s ease-out 1.2s both" }}>▸ clic ou Entrée</div>
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <div style={{ ...carte, bottom: 18, borderColor: "rgba(255,58,42,0.5)" }}>
