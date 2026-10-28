@@ -12,7 +12,7 @@ const CHEAT_BTN = {
 
 export default function CheatPanel({
   cheat, onClose,
-  chapters, jeu2, mode, chapterIndex, jeu2Target, jeu2Notes,
+  chapters, jeu2, mode, chapterIndex, jeu2Target, jeu2Notes, jeu2AlxPick = 0,
   onFillFrise,
   onPlayChapter,
   onSetChapterIndex, onSetScreen, onSetEpiChoice, onSetTab, onCheatFinJeu2,
@@ -73,7 +73,7 @@ export default function CheatPanel({
           ))}
         </div>
         <button style={CHEAT_BTN}
-          onClick={() => { if (mode === "jeu2" && jeu2Target >= 0) { onSetChapterIndex(jeu2Target); onSetTab(jeu2[jeu2Target].al3x1aHotspot.tab); } }}
+          onClick={() => { if (mode === "jeu2" && jeu2Target >= 0) { onSetChapterIndex(jeu2Target); const spots = jeu2[jeu2Target].al3x1aSpots || []; onSetTab((spots[jeu2AlxPick] || spots[0])?.tab ?? 0); } }}
           title="Aller directement au chapitre cible d'Al3x1A">📍 Aller à Al3x1A</button>
         {mode === "jeu2" && jeu2Target >= 0 && (
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#c88aff", padding: "3px 6px" }}>

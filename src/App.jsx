@@ -1513,6 +1513,7 @@ export default function App() {
       mode={mode}
       chapterIndex={chapterIndex}
       jeu2Target={jeu2Target}
+      jeu2AlxPick={jeu2AlxPick}
       jeu2Notes={jeu2Notes}
       onGiveAll={cheatGiveAll}
       onUnlockAll={cheatUnlockAll}
