@@ -3,6 +3,7 @@ import SceneFrame from "./SceneFrame.jsx";
 import useEcran from "./useEcran.js";
 import { writeSave, monde2Fini } from "./save.js";
 import { isMuted, setMuted, playSfx, surChangementSon } from "./audio.js";
+import { trichePermise } from "./triche.jsx";
 import BunkerAwake from "../chapters/jeu3/scenes/BunkerAwake.jsx";
 import BunkerHub from "../chapters/jeu3/scenes/BunkerHub.jsx";
 import BunkerHubHaut from "../chapters/jeu3/scenes/BunkerHubHaut.jsx";
@@ -145,6 +146,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
      utiliser l'ascenseur pour changer d'étage (immersion). */
   const [cheat, setCheat] = useState(false);
+  const [tricheTel] = useState(trichePermise);   // ?triche (téléphone) : le bouton 🐛 remplace Ctrl+Maj+C
   /* le son : le même réglage que l'écran titre et le combat (martine.muted) */
   const [muet, setMuet] = useState(isMuted);
   useEffect(() => surChangementSon(setMuet), []);
@@ -299,6 +301,10 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
               {compact ? "📓" : "📓 Carnet"}
             </button>
           )}
+          {tricheTel && (
+            <button onClick={() => setCheat((c) => !c)} title="Triche : se déplacer par le plan (Ctrl+Maj+C)" data-triche-plan="1"
+              style={btnBarre(cheat ? "#3a1a4a" : "#140e1e", "#e8d8ff", cheat ? "#c8a0ff" : "#4a3a5a")}>{compact ? "🐛" : "🐛 Plan"}</button>
+          )}
           <button onClick={basculerSon} title={muet ? "Remettre le son" : "Couper le son"} aria-label={muet ? "Remettre le son" : "Couper le son"} data-son="1"
             style={btnBarre(muet ? "#2a0e0e" : "#0e1626", muet ? "#ff8a78" : "#7fd8ff", muet ? "#8a3a30" : "#2a4a6a")}>
             {muet ? "🔇" : "🔊"}{compact ? "" : muet ? " Son coupé" : " Son"}
@@ -323,7 +329,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
         )}
         <SceneFrame style={{ padding: compact ? 2 : 6 }} remplir={compact && ecran.portrait && !["voyageK", "epilogueJeu3"].includes(room)}>
           {room === "epilogueJeu3"
-            ? <EpilogueJeu3 prenom={prenom} onDone={onExit} />
+            ? <EpilogueJeu3 prenom={prenom} fin={flags.fin_jeu3 || "eteindre"} onDone={onExit} />
             : <Comp prenom={prenom} onGo={goTo} j3={j3} />}
         </SceneFrame>
         {showBack && !compact && (

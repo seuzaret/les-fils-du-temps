@@ -38,6 +38,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop, sonCaillou, sonFinBouclier, chanterDaisy, partitionDaisy, sonCoupure } from "./sonsCombat.js";
 import { CONFRONTATION } from "./missions.js";
 import { isMuted, setMuted, surChangementSon } from "../../engine/audio.js";
+import { trichePermise } from "../../engine/triche.jsx";
 
 const H = 640, W_MIN = 360, W_MAX = 1140;
 const BANDE = 78;                      // en portrait : la bande des répliques, au-dessus de la zone (px)
@@ -491,6 +492,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
   const [tourner, setTourner] = useState(false);       // téléphone tenu en largeur : on demande de le tourner
   const [pleinEcran, setPleinEcran] = useState(false);
   const [muet, setMuet] = useState(isMuted);
+  const [triche] = useState(trichePermise);   // ?triche : en pause, « niveau suivant »
   useEffect(() => surChangementSon(setMuet), []);
   const cadre = useRef(null), toile = useRef(null), g = useRef(nouvelEtat());
   const ecranRef = useRef(ecran); ecranRef.current = ecran;
@@ -1152,6 +1154,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
               <button onClick={() => allerA("jeu")} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Continuer</button>
               <button onClick={recommencer} style={bouton("rgba(255,255,255,0.08)", "#c8d4e2")}>↺ Recommencer</button>
               {integre && <button onClick={quitter} style={bouton("rgba(255,255,255,0.08)", "#c8d4e2")}>← Quitter le combat</button>}
+              {triche && <button onClick={() => { const st = g.current; st.invul = 3; st.pv = 0; allerA("jeu"); }} data-passer="1" style={bouton("rgba(200,160,255,0.16)", "#e8d8ff")}>🐛 Niveau suivant</button>}
             </div>
           </div>
         )}

@@ -27,6 +27,7 @@ export default function CheatPanel({
   onCheatJeu3Phase6,
   onCheatJeu3Cailloux,
   onCheatJeu3Final,
+  onCheatJeu3Epilogue,
 }) {
   if (!cheat) return null;
   return (
@@ -96,16 +97,18 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={() => onCheatJeu3Cailloux(true)}>🗝 Cailloux · réserve (clé + 4 papiers)</button>
         <button style={CHEAT_BTN} onClick={() => onCheatJeu3Final(1)}>⚠ −3 · 1re visite (note en poche)</button>
         <button style={CHEAT_BTN} onClick={() => onCheatJeu3Final(2)}>⚔ −3 · 2e visite (monde 2 fini, combat)</button>
+        <button style={CHEAT_BTN} onClick={() => onCheatJeu3Epilogue("eteindre")}>🌅 Épilogue (après T'ÉTEINDRE)</button>
+        <button style={CHEAT_BTN} onClick={() => onCheatJeu3Epilogue("modifier")}>🌅 Épilogue (après TE MODIFIER)</button>
       </div>
 
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Monde 2 (chez MARTINE) :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/"; }}>🙃 Entrer dans le monde 2</button>
         <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/?fin=1"; }}>✨ La finale (« Le temps est rétabli »)</button>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a" }}>dans le monde 2, tape « triche » : ranger une époque, tout ranger…</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a" }}>dans le monde 2, tape « triche » (ou 🐛) : ranger une époque, tout ranger…</div>
       </div>
 
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » pour fermer</div>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » (ou 🐛) pour fermer · sur téléphone : ?triche dans l'adresse</div>
     </div>
   );
 }

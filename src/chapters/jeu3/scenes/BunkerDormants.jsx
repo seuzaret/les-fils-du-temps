@@ -50,7 +50,7 @@ const REVEIL = [
 ];
 
 /* La petite MARTINE (le dessin du Jeu 1, Martine.jsx), éteinte ou allumée. */
-function PetiteMartine({ x, y, s = 0.5, allumee }) {
+export function PetiteMartine({ x, y, s = 0.5, allumee }) {
   return (
     <g transform={`translate(${x - 50 * s},${y - 52 * s}) scale(${s})`}>
       <g>
@@ -80,8 +80,24 @@ function PetiteMartine({ x, y, s = 0.5, allumee }) {
   );
 }
 
+/* Les dégradés et le flou des bulles (aussi utilisés par l'épilogue). */
+export function DefsBulles() {
+  return (<>
+          <linearGradient id="dm-liquid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0e3a40" /><stop offset="50%" stopColor="#0c5656" /><stop offset="100%" stopColor="#062a30" />
+          </linearGradient>
+          <linearGradient id="dm-fog" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#e8f8f8" stopOpacity="0.42" />
+            <stop offset="30%" stopColor="#e8f8f8" stopOpacity="0.5" />
+            <stop offset="60%" stopColor="#e8f8f8" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#e8f8f8" stopOpacity="0.08" />
+          </linearGradient>
+          <filter id="dm-blur" x="-30%" y="-10%" width="160%" height="120%"><feGaussianBlur stdDeviation="2.6" /></filter>
+  </>);
+}
+
 /* Une bulle de stase. x = axe, base = bas du socle. */
-function Pod({ x, base, w, h, plate, open = false, old = false, k = 0 }) {
+export function Pod({ x, base, w, h, plate, open = false, old = false, k = 0 }) {
   const r = w / 2;
   const top = base - h;
   const gy = top + 12;
@@ -187,16 +203,7 @@ export default function BunkerDormants({ onGo, j3 }) {
           <linearGradient id="dm-floor" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#0c161a" /><stop offset="100%" stopColor="#030607" />
           </linearGradient>
-          <linearGradient id="dm-liquid" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#0e3a40" /><stop offset="50%" stopColor="#0c5656" /><stop offset="100%" stopColor="#062a30" />
-          </linearGradient>
-          <linearGradient id="dm-fog" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#e8f8f8" stopOpacity="0.42" />
-            <stop offset="30%" stopColor="#e8f8f8" stopOpacity="0.5" />
-            <stop offset="60%" stopColor="#e8f8f8" stopOpacity="0.18" />
-            <stop offset="100%" stopColor="#e8f8f8" stopOpacity="0.08" />
-          </linearGradient>
-          <filter id="dm-blur" x="-30%" y="-10%" width="160%" height="120%"><feGaussianBlur stdDeviation="2.6" /></filter>
+          <DefsBulles />
           <radialGradient id="dm-lamp" cx="50%" cy="0%" r="100%">
             <stop offset="0%" stopColor="#7fe8e0" stopOpacity="0.22" /><stop offset="100%" stopColor="#7fe8e0" stopOpacity="0" />
           </radialGradient>

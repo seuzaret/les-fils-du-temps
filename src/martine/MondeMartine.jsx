@@ -8,6 +8,7 @@ import { preparerVignettes } from "./vignettes.js";
 import { assetUrl } from "../engine/assetUrl.js";
 import useEcran from "../engine/useEcran.js";
 import { loadSave, marquerMonde2Fini } from "../engine/save.js";
+import { trichePermise, BoutonTriche } from "../engine/triche.jsx";
 import { playClink, playMaterialize } from "../engine/sfx.js";
 import { isMuted, setMuted } from "../engine/audio.js";
 import { rng } from "../engine/scenery.jsx";
@@ -694,6 +695,7 @@ function Monde({ page, phase, setPhase }) {
   const changerEpoque = (id) => { if (id !== epoqueId) { setEpoqueId(id); setTab(0); } };
   /* TRICHE (pour l'enseignant) : taper « triche » ouvre un petit panneau */
   const [triche, setTriche] = useState(false);
+  const [tricheTel] = useState(trichePermise);   // ?triche (téléphone) : un bouton 🐛
   useEffect(() => {
     let buf = "";
     const onKey = (e) => {
@@ -822,6 +824,7 @@ function Monde({ page, phase, setPhase }) {
         {!paysageBas && <Sac sac={sac} choisi={choisi} secoue={refus} onPoubelle={onPoubelle} onChoisir={(id) => setEtat((e) => ({ ...e, choisi: id }))} />}
       </div>
       {mediadex && <MediadexPanel onClose={() => setMediadex(false)} />}
+      {tricheTel && <BoutonTriche actif={triche} onClick={() => setTriche((t) => !t)} />}
       {triche && (
         <div style={{ position: "fixed", left: 8, bottom: 8, zIndex: 300, width: 230, maxHeight: "calc(100dvh - 16px)", overflowY: "auto",
           background: "rgba(18,8,28,0.97)", border: "1px solid #a04ce8", borderRadius: 10, padding: 10, boxShadow: "0 6px 24px rgba(0,0,0,0.6)",
@@ -840,7 +843,7 @@ function Monde({ page, phase, setPhase }) {
             <button key={t} onClick={f} style={{ background: "#2a1638", border: "1px solid #7a3ca8", color: "#e8d4ff", borderRadius: 7, padding: "6px 8px",
               cursor: "pointer", fontSize: 11, textAlign: "left", fontFamily: "inherit" }}>{t}</button>
           ))}
-          <div style={{ fontSize: 9.5, color: "#6a5a7a", marginTop: 3 }}>tape « triche » pour fermer</div>
+          <div style={{ fontSize: 9.5, color: "#6a5a7a", marginTop: 3 }}>tape « triche » (ou 🐛) pour fermer</div>
         </div>
       )}
     </div>

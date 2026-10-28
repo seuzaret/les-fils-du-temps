@@ -8,6 +8,7 @@ import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
 import { playSfx, isMuted, setMuted, startAmbience, stopAmbience, surChangementSon } from "./engine/audio.js";
 import { loadSave, writeSave, clearSave, hasSave, exportAllString, importAllString } from "./engine/save.js";
+import { trichePermise, BoutonTriche } from "./engine/triche.jsx";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
 import useEcran from "./engine/useEcran.js";
@@ -203,6 +204,7 @@ export default function App() {
   const [muted, setMutedState] = useState(isMuted()); // bouton 🔇 (mémorisé)
   useEffect(() => surChangementSon(setMutedState), []);   // coupé ou remis depuis le Jeu 3 ou le combat
   const [cheat, setCheat] = useState(false);     // mode triche (dev) — tape « triche » pour l'ouvrir
+  const [tricheTel] = useState(trichePermise);   // …ou ?triche dans l'adresse (téléphone) : un bouton 🐛
   const [debugNotes, setDebugNotes] = useState(false); // mode calage : voir les 3 emplacements de note du chapitre — tape « notes »
   const [epiChoice, setEpiChoice] = useState(null); // épilogue : le support choisi par le joueur
   const [prenom, setPrenom] = useState("");      // carnet imprimable : le prénom de l'élève
@@ -445,6 +447,9 @@ export default function App() {
     setJeu3Start(s);
     setJeu3Nonce((n) => n + 1);
   };
+  /* une triche qui change d'écran (ou relance le Jeu 3) referme le panneau : sur
+     téléphone, il cacherait le bas de l'écran */
+  useEffect(() => { setCheat(false); }, [screen, jeu3Nonce]);
   /* …?reprendre=jeu3 (le bouton « Rentrer au Puits » du monde 2) : on
      reprend directement la partie du Puits, puis on nettoie l'adresse. */
   useEffect(() => {
@@ -654,6 +659,14 @@ export default function App() {
       },
       heardPnj: { voisin_lior: true, chapelle_anselme: true, cantine_via: true },
     });
+    setJeu3Nonce((n) => n + 1);
+  };
+
+  /* Triche : l'épilogue directement, après T'ÉTEINDRE ou TE MODIFIER */
+  const cheatJeu3Epilogue = (fin) => {
+    setMode("jeu3");
+    setScreen("jeu3");
+    setJeu3Start({ room: "epilogueJeu3", flags: { phase5_done: true, serveurs_visite1: true, monde2_fini: true, petite_martine_allumee: true, mission_finale_done: true, fin_jeu3: fin }, heardPnj: {} });
     setJeu3Nonce((n) => n + 1);
   };
 
@@ -1486,7 +1499,8 @@ export default function App() {
 
   /* Panneau du MODE TRICHE — visible seulement après avoir tapé
      « triche ». Réutilisé dans tous les écrans via <CheatPanel />. */
-  const cheatPanel = (
+  const cheatPanel = (<>
+    {tricheTel && <BoutonTriche actif={cheat} onClick={() => setCheat((c) => !c)} />}
     <CheatPanel
       cheat={cheat}
       onClose={() => setCheat(false)}
@@ -1517,8 +1531,9 @@ export default function App() {
       onCheatJeu3Phase6={cheatJeu3Phase6}
       onCheatJeu3Cailloux={cheatJeu3Cailloux}
       onCheatJeu3Final={cheatJeu3Final}
+      onCheatJeu3Epilogue={cheatJeu3Epilogue}
     />
-  );
+  </>);
 
   /* Un interrupteur on/off réutilisable (avec case à cocher accessible). */
   const Toggle = ({ on, onToggle, label, hint }) => (

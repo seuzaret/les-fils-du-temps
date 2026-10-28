@@ -1,19 +1,30 @@
 /* ============================================================
-   JEU 3 — ÉPILOGUE
+   JEU 3 — ÉPILOGUE (après T'ÉTEINDRE ou TE MODIFIER)
    ------------------------------------------------------------
-   Quatre actes animés, enchaînés par bouton :
-     1. LE RAPPORT   — tu remets au Juge Vez les 3 dossiers.
-     2. L'OUVERTURE  — la grande porte scellée craque et s'ouvre.
-     3. L'AIR LIBRE  — surface, soleil, horizon.
-     4. L'HÉRITAGE   — carte-postale finale : la fiche de la pièce
-                       que tu as laissée à Jorge, sortie de sa
-                       cellule, qui classe à ton tour.
-   Dernière action : "Retour au menu" → onExit().
+   Six actes, enchaînés par bouton (LORE §5 et §7, texte validé
+   par le créateur le 2026-10-28) :
+     1. LE RÉVEIL    — la bulle « A. » s'ouvre : Al3x1a, la petite
+                       MARTINE, la règle n° 2 (dialogue) ; la salle
+                       change selon la fin (fin = "eteindre" |
+                       "modifier").
+     2. LE RAPPORT   — tu remets au Juge Vez les 3 dossiers.
+     3. L'OUVERTURE  — la grande porte scellée craque et s'ouvre.
+     4. L'AIR LIBRE  — surface, soleil, horizon.
+     5. LE DÉPART    — Al3x1a rentre dans son temps avec la petite
+                       MARTINE ; l'adresse d'enfance (dialogue).
+     6. L'HÉRITAGE   — Jorge : « Elle n'a pas de début. Elle tourne
+                       avec nous. » ; Léa à la porte (dialogue), puis
+                       la fiche laissée pour toi et la carte de fin.
+   Dans les actes à dialogue, le bouton « Continuer » n'apparaît
+   qu'une fois le dialogue fini. Dernière action : onDone().
    ============================================================ */
 import { useState, useEffect } from "react";
 import { Bust, Figure } from "../../../engine/chars.jsx";
 import { Caution, ConcretePanels, PerspFloor, Vignette } from "../bunkerKit.jsx";
 import { Clouds, Grass, Haze, Hill, Ridge, Speckle, TreeLine } from "../../../engine/scenery.jsx";
+import { AL3X1A_LOOK } from "../../../engine/chars.jsx";
+import { playSfx } from "../../../engine/audio.js";
+import { Pod, PetiteMartine, DefsBulles } from "./BunkerDormants.jsx";
 
 function useSequence(steps, active = true) {
   const [t, setT] = useState(0);
@@ -26,37 +37,243 @@ function useSequence(steps, active = true) {
   return t;
 }
 
-export default function EpilogueJeu3({ onDone, prenom = "Chronaute" }) {
+export default function EpilogueJeu3({ onDone, prenom = "Chronaute", fin = "eteindre" }) {
   const [acte, setActe] = useState(0);
+  const [pret, setPret] = useState(false);   // le dialogue de l'acte est fini
   const actes = [
-    { Comp: Acte1Rapport,   title: "I. LE RAPPORT",  cta: "Continuer ▸" },
-    { Comp: Acte2Ouverture, title: "II. L'OUVERTURE", cta: "Continuer ▸" },
-    { Comp: Acte3AirLibre,  title: "III. L'AIR LIBRE", cta: "Continuer ▸" },
-    { Comp: Acte4Heritage,  title: "IV. L'HÉRITAGE", cta: "Terminer ▸" },
+    { Comp: ActeReveil,     title: "I. LE RÉVEIL",     cta: "Continuer ▸", dialogue: true },
+    { Comp: Acte1Rapport,   title: "II. LE RAPPORT",   cta: "Continuer ▸" },
+    { Comp: Acte2Ouverture, title: "III. L'OUVERTURE", cta: "Continuer ▸" },
+    { Comp: Acte3AirLibre,  title: "IV. L'AIR LIBRE",  cta: "Continuer ▸" },
+    { Comp: ActeDepart,     title: "V. LE DÉPART",     cta: "Continuer ▸", dialogue: true },
+    { Comp: Acte4Heritage,  title: "VI. L'HÉRITAGE",   cta: "Terminer ▸", dialogue: true },
   ];
   const A = actes[acte];
   const Comp = A.Comp;
   const atLast = acte === actes.length - 1;
+  const suivant = () => { if (atLast) onDone?.(); else { setPret(false); setActe(acte + 1); } };
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "#050810", zIndex: 60, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 20, fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4, color: "#c8a848", marginBottom: 10 }}>
-        🌑 LE PUITS · ÉPILOGUE · {A.title}
-      </div>
-      <div style={{ width: "100%", maxWidth: 1000 }}>
-        <Comp prenom={prenom} />
-      </div>
-      <div style={{ marginTop: 14, display: "flex", gap: 10, alignItems: "center" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050" }}>
-          {acte + 1} / {actes.length}
+    <div style={{ position: "fixed", inset: 0, background: "#050810", zIndex: 60, overflowY: "auto", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
+      <div style={{ minHeight: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px 12px" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4, color: "#c8a848", marginBottom: 10, textAlign: "center" }}>
+          🌑 LE PUITS · ÉPILOGUE · {A.title}
         </div>
-        <button onClick={() => (atLast ? onDone?.() : setActe(acte + 1))}
-          style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 24px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
-          {A.cta}
-        </button>
+        <div style={{ width: "100%", maxWidth: 1000 }}>
+          <Comp key={acte} prenom={prenom} fin={fin} onFini={() => setPret(true)} />
+        </div>
+        <div style={{ marginTop: 14, display: "flex", gap: 10, alignItems: "center", minHeight: 40 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050" }}>
+            {acte + 1} / {actes.length}
+          </div>
+          {(!A.dialogue || pret) && (
+            <button onClick={suivant} autoFocus={!!A.dialogue} data-acte-suivant="1"
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 24px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+              {A.cta}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
+}
+
+/* ============================================================
+   LE DIALOGUE des actes I, V et VI
+   ------------------------------------------------------------
+   lignes : { qui, texte, dida?, anim? } — qui : recit | al3x1a |
+   petite | martine | jorge | toi ; dida : didascalie (« elle
+   sourit ») ; anim : un repère pour le décor (onLigne le renvoie).
+   { choix: [{ texte, suite? }] } : le joueur répond (sa réponse
+   s'affiche, puis la suite propre à ce choix, puis la suite commune).
+   ============================================================ */
+const VOIX = {
+  al3x1a: { nom: "AL3X1A", couleur: "#7fd8ff" },
+  petite: { nom: "LA PETITE MARTINE", couleur: "#ffd166" },
+  martine: { nom: "MARTINE · HAUT-PARLEUR", couleur: "#5eff9e" },
+  jorge: { nom: "JORGE", couleur: "#e8c890" },
+  toi: { nom: "TOI", couleur: "#ffe2a0" },
+};
+function Dialogue({ lignes, prenom, onLigne, onFini }) {
+  const [seq, setSeq] = useState(lignes);
+  const [i, setI] = useState(0);
+  const [fini, setFini] = useState(false);
+  const l = seq[i];
+  useEffect(() => { onLigne?.(l, i); }, [i, seq]); // eslint-disable-line react-hooks/exhaustive-deps
+  const fill = (t) => (t || "").replace(/\{prenom\}/g, prenom || "chronaute");
+  const suite = () => { if (i < seq.length - 1) setI(i + 1); else { setFini(true); onFini?.(); } };
+  const choisir = (c) => {
+    const reste = [{ qui: "toi", texte: c.texte }, ...(c.suite || []), ...seq.slice(i + 1)];
+    setSeq([...seq.slice(0, i), ...reste]);
+  };
+  const v = VOIX[l.qui];
+  return (
+    <div style={{ marginTop: 10, background: "#0e0c08", border: `1px solid ${v ? v.couleur + "88" : "#5a4a30"}`, borderRadius: 10, padding: "12px 16px", minHeight: 96, boxSizing: "border-box" }}>
+      {l.choix ? (<>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: VOIX.toi.couleur, marginBottom: 8 }}>TOI</div>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+          {l.choix.map((c, k) => (
+            <button key={c.texte} onClick={() => choisir(c)} autoFocus={k === 0} data-choix="1"
+              style={{ background: "rgba(255,226,160,0.1)", color: "#ffe2a0", border: "1px solid rgba(255,226,160,0.45)", borderRadius: 10, padding: "9px 14px", cursor: "pointer", fontFamily: "Palatino, Georgia, serif", fontSize: 15 }}>
+              {fill(c.texte)}
+            </button>
+          ))}
+        </div>
+      </>) : (<>
+        {v && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: v.couleur }}>{v.nom}</div>}
+        <p key={`${i}-${l.texte}`} style={{ margin: "6px 0 10px", fontSize: 15.5, lineHeight: 1.55, color: l.qui === "recit" ? "#d8ccb0" : "#f0ece4", fontStyle: l.qui === "recit" ? "italic" : "normal", animation: "epFondu .7s ease-out both" }}>
+          {l.dida && <span style={{ fontStyle: "italic", color: "#a89878" }}>({l.dida}) </span>}
+          {fill(l.texte)}
+        </p>
+        {!fini && (
+          <button onClick={suite} autoFocus data-suite="1"
+            style={{ background: "transparent", color: "#c8a848", border: "1px solid #c8a848", borderRadius: 8, padding: "6px 16px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, letterSpacing: 1 }}>
+            Suite ▸
+          </button>
+        )}
+      </>)}
+      <style>{"@keyframes epFondu { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }"}</style>
+    </div>
+  );
+}
+
+/* Al3x1a, comme au Jeu 2 : manteau gris, badge des chronautes */
+function Al3x1a({ x, y, s = 1, mood = "neutre", arms }) {
+  return (
+    <Figure x={x} y={y} s={s} {...AL3X1A_LOOK} coat="#6a7280" coat2="#7a828e" pants="#3a3a44" garment="coat" mood={mood}
+      arms={arms || [{ a1: 10, a2: 6 }, { a1: 10, a2: 6 }]}>
+      <circle cx="-9" cy="-72" r="3.4" fill="#c8a848" stroke="#5a4020" strokeWidth="0.7" />
+      <path d="M-9 -74.5 V-69.5 M-11.5 -72 H-6.5" stroke="#5a4020" strokeWidth="0.7" />
+    </Figure>
+  );
+}
+
+/* ============================================================
+   ACTE I · LE RÉVEIL — la bulle « A. » s'ouvre
+   ============================================================ */
+function ActeReveil({ prenom, fin, onFini }) {
+  const [ouverte, setOuverte] = useState(false);   // la bulle s'est ouverte
+  const [debout, setDebout] = useState(false);     // Al3x1a est sortie
+  const modifier = fin === "modifier";
+  const lignes = [
+    { qui: "recit", texte: "La bulle « A. » s'ouvre dans un soupir de vapeur. Al3x1a tousse, cligne des yeux. La petite MARTINE file vers elle.", anim: "ouvre" },
+    { qui: "petite", texte: "« Pilote ! Tu m'as manqué. Enfin… j'étais éteinte. Mais tu m'as manqué quand même. »" },
+    modifier
+      ? { qui: "martine", dida: "le haut-parleur grésille", texte: "« Bulle A. ouverte. J'aurais dû le faire il y a quarante ans. »" }
+      : { qui: "recit", texte: "Le haut-parleur de la salle reste muet. Pour la première fois, personne ne vous écoute." },
+    { qui: "al3x1a", dida: "elle te voit", texte: "« … C'est toi. »", anim: "debout" },
+    { qui: "al3x1a", texte: "« Tu es encore plus jeune que la dernière fois. »" },
+    { choix: [{ texte: "« MARTINE m'a tout dit. »" }, { texte: "« Tu savais qui j'étais ? »" }] },
+    { qui: "al3x1a", texte: "« Oui. Depuis le début. Je n'avais pas le droit de te le dire. »" },
+    { qui: "al3x1a", texte: "« Règle numéro 2 : ne pas raconter le futur. C'est moi qui l'ai écrite. Ce soir, je la déteste un peu. »" },
+  ];
+  const onLigne = (l) => {
+    if (l.anim === "ouvre" && !ouverte) { setOuverte(true); playSfx("dissolve"); }
+    if (l.anim === "debout") setDebout(true);
+  };
+  const back = [{ x: 90, plate: "A-03" }, { x: 190, plate: "A-07" }, { x: 290, plate: "B-02" }, { x: 710, plate: "A-14" }, { x: 810, plate: "B-09" }, { x: 910, plate: "A-18" }];
+  return (<>
+    <svg viewBox="0 0 1000 460" style={{ display: "block", width: "100%", height: "auto" }}>
+      <defs>
+        <DefsBulles />
+        <linearGradient id="er-mur" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#0c161c" /><stop offset="100%" stopColor="#081014" /></linearGradient>
+        <radialGradient id="er-halo" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#7fd8ff" stopOpacity="0.35" /><stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" /></radialGradient>
+        <filter id="er-flou" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="8" /></filter>
+      </defs>
+      <rect width="1000" height="460" fill="#060b10" />
+      <rect width="1000" height="270" fill="url(#er-mur)" />
+      <ConcretePanels x0={0} x1={1000} y0={40} y1={270} w={125} seed={91} joint="#03070a" bolt="#1a2a30" stain="#0a1a1a" opacity={0.8} />
+      <rect width="1000" height="40" fill="#04080b" />
+      <PerspFloor y0={270} y1={460} vx={500} joint="#000000" opacity={0.4} sheen="#7fe8e0" />
+      {/* d'autres bulles qui s'ouvrent, au fond : les dormants se réveillent */}
+      {back.map((p, k) => <Pod key={p.x} x={p.x} base={270} w={58} h={150} plate={p.plate} open={ouverte && k % 2 === 0} k={k} />)}
+      {/* le haut-parleur de MARTINE : éteint (T'ÉTEINDRE) ou vert (TE MODIFIER) */}
+      <g transform="translate(500,66)">
+        <ellipse rx="30" ry="12" fill="#05090c" stroke={modifier ? "#5eff9e" : "#2a3a40"} strokeWidth="1.6" />
+        <circle r="6" fill={modifier ? "#5eff9e" : "#1a2228"}>{modifier && <animate attributeName="opacity" values="0.5;1;0.5" dur="2.8s" repeatCount="indefinite" />}</circle>
+      </g>
+      {/* la bulle « A. », au centre, dans le halo d'Al3x1a */}
+      <ellipse cx="500" cy="300" rx="190" ry="190" fill="url(#er-halo)" />
+      <Pod x={500} base={430} w={140} h={300} plate="A." open={ouverte} k={7} />
+      {/* la vapeur qui s'échappe */}
+      {ouverte && [0, 1, 2, 3, 4].map((k) => (
+        <ellipse key={k} cx={470 + k * 16} cy="200" rx="40" ry="24" fill="#e8f8f8" opacity="0" filter="url(#er-flou)">
+          <animate attributeName="cy" values="300;120" dur={`${2.6 + k * 0.4}s`} begin={`${k * 0.25}s`} repeatCount="2" fill="freeze" />
+          <animate attributeName="opacity" values="0;0.5;0" dur={`${2.6 + k * 0.4}s`} begin={`${k * 0.25}s`} repeatCount="2" fill="freeze" />
+        </ellipse>
+      ))}
+      {/* Al3x1a : d'abord dans la bulle, puis debout devant */}
+      <g style={{ opacity: ouverte ? 1 : 0, transition: "opacity 1.4s ease", transform: debout ? "translate(0px,0px)" : "translate(0px,-30px) scale(0.98)", transformBox: "fill-box", transformOrigin: "50% 100%" }}>
+        <g style={{ transition: "transform 1.2s ease", transform: debout ? "translate(-90px, 18px)" : "none" }}>
+          <Al3x1a x={500} y={410} s={1.45} mood={debout ? "content" : "neutre"} arms={debout ? [{ a1: 10, a2: 6 }, { a1: 40, a2: 60 }] : undefined} />
+        </g>
+      </g>
+      {/* la petite MARTINE, qui file vers elle */}
+      <g style={{ transition: "transform 1.6s ease", transform: ouverte ? "translate(-240px,-150px)" : "none" }}>
+        <PetiteMartine x={790} y={430} s={0.62} allumee />
+      </g>
+      <Vignette id="er-vig" w={1000} h={460} strength={0.55} />
+    </svg>
+    <Dialogue lignes={lignes} prenom={prenom} onLigne={onLigne} onFini={onFini} />
+  </>);
+}
+
+/* ============================================================
+   ACTE V · LE DÉPART — à la surface, Al3x1a rentre dans son temps
+   ============================================================ */
+function ActeDepart({ prenom, onFini }) {
+  const [part, setPart] = useState(false);
+  const lignes = [
+    { qui: "recit", texte: "Dehors, le ciel est immense. Le flux est lisse : les machines repassent." },
+    { qui: "al3x1a", texte: "« Je dois rentrer. Dans mon temps. Ma famille m'attend. »" },
+    { choix: [
+      { texte: "« Ta famille… c'est moi ? »", suite: [{ qui: "al3x1a", dida: "elle sourit", texte: "« Règle numéro 2. »" }] },
+      { texte: "« Tu reviendras ? »", suite: [{ qui: "al3x1a", texte: "« Oui. Promis. Mais pour toi, ce sera long. »" }] },
+    ] },
+    { qui: "al3x1a", texte: "« La nuit du message, à 3 h 14… tu sais comment j'ai trouvé ta maison ? Une adresse, sur un vieux papier. Ton écriture. »" },
+    { qui: "al3x1a", texte: "« Garde-la bien, ton adresse. Un jour, c'est toi qui me la donneras. »" },
+    { qui: "petite", texte: "« On y va, pilote ? Je préviens : je n'ai pas fait le plein depuis quarante ans. »" },
+    { qui: "recit", texte: "Al3x1a monte à bord. La petite MARTINE s'élève, fait un tour au-dessus de toi, et disparaît dans un éclair bleu.", anim: "depart" },
+  ];
+  const onLigne = (l) => { if (l.anim === "depart" && !part) { setPart(true); playSfx("jump"); } };
+  return (<>
+    <svg viewBox="0 0 1000 460" style={{ display: "block", width: "100%", height: "auto" }}>
+      <defs>
+        <linearGradient id="ed-ciel" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#4a80d0" /><stop offset="65%" stopColor="#a8c8e8" /><stop offset="100%" stopColor="#ffe0a8" /></linearGradient>
+        <linearGradient id="ed-pre" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#7ab04a" /><stop offset="100%" stopColor="#3a5a1a" /></linearGradient>
+        <filter id="ed-flou" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10" /></filter>
+        <style>{`
+          @keyframes edMonte { 0% { transform: translate(0px,0px); } 30% { transform: translate(40px,-150px); } 55% { transform: translate(-60px,-210px); } 75% { transform: translate(30px,-250px); } 100% { transform: translate(120px,-330px) scale(0.2); opacity: 0; } }
+          @keyframes edEclair { 0%, 70% { opacity: 0; } 78% { opacity: 0.9; } 100% { opacity: 0; } }
+          @keyframes edTrainee { 0% { opacity: 0; } 40% { opacity: 0.7; } 100% { opacity: 0; } }
+        `}</style>
+      </defs>
+      <rect width="1000" height="460" fill="url(#ed-ciel)" />
+      <circle cx="820" cy="96" r="90" fill="#fff0c0" opacity="0.35" filter="url(#ed-flou)" />
+      <circle cx="820" cy="96" r="36" fill="#fff8e0" />
+      <Clouds id="ed-cl" seed={3051} items={[[160, 80, 180], [460, 56, 150], [700, 130, 120], [960, 70, 140]]} color="#f4f6f8" shadow="#9ab0c8" opacity={0.85} drift={18} />
+      <Ridge id="ed-r0" seed={3053} y={250} amp={60} rough={0.5} fill="#8aa0c0" lit="#b8c8dc" light={1} snow="#f0f4f8" snowLine={205} />
+      <Haze id="ed-hz" y0={205} y1={275} color="#e8eef5" opacity={0.5} />
+      <Hill id="ed-h1" points={[[-40, 296], [180, 276], [400, 290], [620, 272], [820, 286], [1040, 274]]} fill="#6a9a4a" lit="#9ac868" light={1} rim={5} />
+      <TreeLine seed={3055} x0={600} x1={1020} y={288} n={14} h={[16, 30]} kinds={["leafy", "conifer"]} colors={["#3a6a2a", "#2e5a24"]} light={1} jitter={10} />
+      <path d="M-40 322 Q320 300 620 324 Q820 338 1040 318 L1040 460 L-40 460 Z" fill="url(#ed-pre)" />
+      <Speckle seed={3057} x0={0} x1={1000} y0={336} y1={456} n={140} colors={["#f0e070", "#ffffff", "#e87aa0", "#a8d8f0"]} r={[1, 2.4]} opacity={0.75} />
+      <Grass x={120} y={452} s={1.5} color="#3a5a1a" seed={3059} n={10} flower="#f0e070" />
+      <Grass x={900} y={450} s={1.4} color="#3a5a1a" seed={3061} n={9} flower="#e87aa0" />
+      {/* Al3x1a, qui monte à bord */}
+      <g style={{ opacity: part ? 0 : 1, transition: "opacity .8s ease .2s" }}>
+        <Al3x1a x={430} y={430} s={1.55} mood="content" arms={[{ a1: 10, a2: 6 }, { a1: 60, a2: 90 }]} />
+      </g>
+      {/* la petite MARTINE : elle attend, puis elle s'envole */}
+      <g style={{ animation: part ? "edMonte 3.2s ease-in .9s both" : "none", transformBox: "fill-box", transformOrigin: "50% 50%" }}>
+        {part && <path d="M560 360 q-40 40 -10 90" stroke="#7fd8ff" strokeWidth="5" fill="none" strokeLinecap="round" style={{ animation: "edTrainee 3s ease-out .9s both" }} />}
+        <PetiteMartine x={560} y={330} s={0.85} allumee />
+      </g>
+      {/* l'éclair bleu */}
+      {part && <rect width="1000" height="460" fill="#cfeaff" style={{ animation: "edEclair 4.4s ease-out both", pointerEvents: "none" }} />}
+    </svg>
+    <Dialogue lignes={lignes} prenom={prenom} onLigne={onLigne} onFini={onFini} />
+  </>);
 }
 
 /* ============================================================
@@ -421,9 +638,22 @@ function Acte3AirLibre() {
 /* ============================================================
    ACTE IV · L'HÉRITAGE — Jorge sorti, fiche posée pour toi
    ============================================================ */
-function Acte4Heritage({ prenom }) {
+function Acte4Heritage({ prenom, onFini }) {
   const t = useSequence([600, 1800, 3200]);
-  return (
+  const [lea, setLea] = useState(false);
+  const [retourne, setRetourne] = useState(false);
+  const [fini, setFini] = useState(false);
+  const lignes = [
+    { qui: "jorge", texte: "« Alors c'était elle, la fille aux cailloux. »" },
+    { qui: "jorge", texte: "« Et toi, tu restes. Les archives ont besoin de quelqu'un qui vérifie. Tu viens ranger avec moi ? »" },
+    { choix: [{ texte: "« Et la petite MARTINE ? Qui l'a inventée ? »" }] },
+    { qui: "jorge", texte: "« Elle est venue du futur avec Al3x1a. Elle y retourne avec elle. Un jour, elle reviendra te chercher. »" },
+    { qui: "jorge", dida: "un temps", texte: "« Elle n'a pas de début. Elle tourne avec nous. »" },
+    { qui: "recit", texte: "Derrière Jorge, quelqu'un attend à la porte des archives : Léa Vermet, une couverture sur les épaules.", anim: "lea" },
+    { qui: "jorge", dida: "il se retourne", texte: "« Quarante ans que je garde ta machine. Elle marche encore. »", anim: "retourne" },
+  ];
+  const onLigne = (l) => { if (l.anim === "lea") setLea(true); if (l.anim === "retourne") setRetourne(true); };
+  return (<>
     <svg viewBox="0 0 1000 460" style={{ display: "block", width: "100%", height: "auto" }}>
       <defs>
         <linearGradient id="ep4-wall" x1="0" y1="0" x2="0" y2="1">
@@ -506,16 +736,21 @@ function Acte4Heritage({ prenom }) {
           — Jorge
         </text>
       </g>
-      {/* Jorge, sorti de sa cellule, qui s'en va vers la porte ouverte */}
+      {/* Léa Vermet, réveillée, à la porte des archives, une couverture sur les épaules */}
+      <g style={{ opacity: lea ? 1 : 0, transition: "opacity 1.6s ease" }}>
+        <Figure x={905} y={300} s={0.95} skin="#f4cfae" hair="#b8501f" look="curls" coat="#2f7f86" pants="#1e3a40" garment="jacket" mood={retourne ? "content" : "neutre"}
+          cape="#9a8a70" arms={[{ a1: 30, a2: 40 }, { a1: 30, a2: 40 }]} />
+      </g>
+      {/* Jorge, sorti de sa cellule ; il se tourne vers Léa */}
       <g style={{ opacity: t > 1 ? 1 : 0, transition: "opacity 1.2s" }}>
-        <Figure x={904} y={302} s={0.95} facing="right" skin="#c8a888" hair="#8a8070" look="ring" beard="full" beardColor="#8a8070" glasses mood="content" stride={8}
+        <Figure x={790} y={302} s={0.95} facing={retourne ? "right" : "left"} skin="#c8a888" hair="#8a8070" look="ring" beard="full" beardColor="#8a8070" glasses mood={retourne ? "surpris" : "content"}
           garment="coat" coat="#5a4028" pants="#28303a" shoes="#1a1410" arms={[{ a1: 10, a2: 6 }, { a1: 30, a2: -20 }]}>
           <g transform="translate(26,-56)"><rect x="-10" y="-8" width="22" height="16" fill="#8a6a40" stroke="#2a1a08" strokeWidth="1" /><rect x="-6" y="-4" width="14" height="5" fill="#e8dfc8" /></g>
         </Figure>
       </g>
       <Vignette id="ep4-vig" w={1000} h={460} strength={0.5} />
-      {/* Carte "FIN" en bas */}
-      {t > 2 && (
+      {/* Carte "FIN" en bas, une fois le dialogue fini */}
+      {fini && (
         <g>
           <rect x="300" y="400" width="400" height="46" rx="6" fill="#141008" stroke="#c8a848" strokeWidth="1.2" />
           <text x="500" y="420" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" letterSpacing="4" fill="#c8a848" fontWeight="800">
@@ -527,5 +762,6 @@ function Acte4Heritage({ prenom }) {
         </g>
       )}
     </svg>
-  );
+    <Dialogue lignes={lignes} prenom={prenom} onLigne={onLigne} onFini={() => { setFini(true); onFini?.(); }} />
+  </>);
 }
