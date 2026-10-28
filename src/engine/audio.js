@@ -173,6 +173,14 @@ export function isMuted() { return muted; }
 export function setMuted(m) {
   muted = m;
   try { localStorage.setItem("martine.muted", m ? "1" : "0"); } catch { /* stockage indisponible */ }
+  /* les boutons son (titre, Jeu 3, combat) se mettent tous à jour */
+  try { window.dispatchEvent(new CustomEvent("martine:son", { detail: m })); } catch { /* rien */ }
+}
+/** Pour un bouton son : suivre l'état muet partagé (renvoie true si coupé). */
+export function surChangementSon(rappel) {
+  const f = (e) => rappel(!!e.detail);
+  window.addEventListener("martine:son", f);
+  return () => window.removeEventListener("martine:son", f);
 }
 
 /* ------------------------------------------------------------

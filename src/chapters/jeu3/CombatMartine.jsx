@@ -37,6 +37,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { demarrerMusique, phaseMusique, arreterMusique, sonTouche, sonJoueurTouche, sonPhase, sonExplosion, sonVictoire, sonVoix, sonMissile, sonPop, sonCaillou, sonFinBouclier, chanterDaisy, partitionDaisy, sonCoupure } from "./sonsCombat.js";
 import { CONFRONTATION } from "./missions.js";
+import { isMuted, setMuted, surChangementSon } from "../../engine/audio.js";
 
 const H = 640, W_MIN = 360, W_MAX = 1140;
 const BANDE = 78;                      // en portrait : la bande des répliques, au-dessus de la zone (px)
@@ -489,6 +490,8 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
   const [zone, setZone] = useState({ e: 1, W: W_MIN, large: false });
   const [tourner, setTourner] = useState(false);       // téléphone tenu en largeur : on demande de le tourner
   const [pleinEcran, setPleinEcran] = useState(false);
+  const [muet, setMuet] = useState(isMuted);
+  useEffect(() => surChangementSon(setMuet), []);
   const cadre = useRef(null), toile = useRef(null), g = useRef(nouvelEtat());
   const ecranRef = useRef(ecran); ecranRef.current = ecran;
   const ligneFinRef = useRef(ligneFin); ligneFinRef.current = ligneFin;
@@ -1062,6 +1065,11 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
     sonVoix(2); g.current.parle = b.gros ? 2 : 1.4;
   }, [ecran, ligneFin, beats]);
   const quitter = () => { arreterMusique(); if (onQuitter) onQuitter(); else window.location.href = window.location.pathname; };
+  /* le son : remis en plein combat, la musique du niveau reprend */
+  const basculerSon = () => {
+    const m = !isMuted(); setMuted(m); setMuet(m);
+    if (!m && ecranRef.current === "jeu") demarrerMusique(g.current.phase);
+  };
   const basculerPleinEcran = () => {
     try { if (document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen(); } catch { /* refusé */ }
   };
@@ -1075,6 +1083,8 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
   const mmss = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
   const boutonsCoin = (
     <div style={{ display: "flex", gap: 6, flex: "0 0 auto" }}>
+      <button onClick={basculerSon} title={muet ? "Remettre le son" : "Couper le son"} aria-label={muet ? "Remettre le son" : "Couper le son"} data-son="1"
+        style={{ ...bouton(muet ? "rgba(255,90,70,0.16)" : "rgba(255,255,255,0.08)", muet ? "#ff8a78" : "#c8d4e2"), padding: "6px 10px" }}>{muet ? "🔇" : "🔊"}</button>
       <button onClick={basculerPleinEcran} title={pleinEcran ? "Quitter le plein écran" : "Plein écran"} style={{ ...bouton("rgba(255,255,255,0.08)", "#c8d4e2"), padding: "6px 10px" }}>⛶</button>
       {ecran === "jeu" && <button onClick={() => allerA("pause")} title="Pause (Échap)" style={{ ...bouton("rgba(255,255,255,0.08)", "#c8d4e2"), padding: "6px 10px" }}>⏸</button>}
     </div>

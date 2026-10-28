@@ -6,7 +6,7 @@ import { DragProvider } from "./engine/DragDrop.jsx";
 import Particles from "./engine/Particles.jsx";
 import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
-import { playSfx, isMuted, setMuted, startAmbience, stopAmbience } from "./engine/audio.js";
+import { playSfx, isMuted, setMuted, startAmbience, stopAmbience, surChangementSon } from "./engine/audio.js";
 import { loadSave, writeSave, clearSave, hasSave, exportAllString, importAllString } from "./engine/save.js";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
@@ -201,6 +201,7 @@ export default function App() {
   const [fx, setFx] = useState(null);            // particules {x, y, big, key}
   const [dust, setDust] = useState(null);        // effet poussière d'un message perdu {x, y, emoji, key}
   const [muted, setMutedState] = useState(isMuted()); // bouton 🔇 (mémorisé)
+  useEffect(() => surChangementSon(setMutedState), []);   // coupé ou remis depuis le Jeu 3 ou le combat
   const [cheat, setCheat] = useState(false);     // mode triche (dev) — tape « triche » pour l'ouvrir
   const [debugNotes, setDebugNotes] = useState(false); // mode calage : voir les 3 emplacements de note du chapitre — tape « notes »
   const [epiChoice, setEpiChoice] = useState(null); // épilogue : le support choisi par le joueur

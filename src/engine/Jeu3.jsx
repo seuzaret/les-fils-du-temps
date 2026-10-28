@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import SceneFrame from "./SceneFrame.jsx";
 import useEcran from "./useEcran.js";
 import { writeSave, monde2Fini } from "./save.js";
+import { isMuted, setMuted, playSfx, surChangementSon } from "./audio.js";
 import BunkerAwake from "../chapters/jeu3/scenes/BunkerAwake.jsx";
 import BunkerHub from "../chapters/jeu3/scenes/BunkerHub.jsx";
 import BunkerHubHaut from "../chapters/jeu3/scenes/BunkerHubHaut.jsx";
@@ -144,6 +145,10 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
      utiliser l'ascenseur pour changer d'étage (immersion). */
   const [cheat, setCheat] = useState(false);
+  /* le son : le même réglage que l'écran titre et le combat (martine.muted) */
+  const [muet, setMuet] = useState(isMuted);
+  useEffect(() => surChangementSon(setMuet), []);
+  const basculerSon = () => { const m = !isMuted(); setMuted(m); setMuet(m); if (!m) setTimeout(() => playSfx("test"), 40); };
   useEffect(() => {
     const onKey = (e) => {
       if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
@@ -294,6 +299,10 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
               {compact ? "📓" : "📓 Carnet"}
             </button>
           )}
+          <button onClick={basculerSon} title={muet ? "Remettre le son" : "Couper le son"} aria-label={muet ? "Remettre le son" : "Couper le son"} data-son="1"
+            style={btnBarre(muet ? "#2a0e0e" : "#0e1626", muet ? "#ff8a78" : "#7fd8ff", muet ? "#8a3a30" : "#2a4a6a")}>
+            {muet ? "🔇" : "🔊"}{compact ? "" : muet ? " Son coupé" : " Son"}
+          </button>
           <button onClick={onExit} title="Menu"
             style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: compact ? "6px 8px" : "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
             {compact ? "☰" : "← Menu"}
