@@ -16,7 +16,7 @@ import { Bust, Figure } from "../../engine/chars.jsx";
    4. Ce qui a tenu        (paroies, livres, vitraux)
    5. La maladie de la mémoire
    ------------------------------------------------------------
-   Note : Al3x1A n'apparaît PAS dans le carnet. Sa révélation est
+   Note : Al3x1a n'apparaît PAS dans le carnet. Sa révélation est
    réservée aux dialogues de Mira et au portrait dans la station.
    ============================================================ */
 

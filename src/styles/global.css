@@ -92,7 +92,7 @@ html.a11y-calme *::after {
 /* JEU 2 : cache les pastilles jaunes « ? » qui pointent les PNJ en jeu 1.
    Elles sont hardcodees dans ~18 decors avec fill=#ffd166 + stroke=#8a5a20
    (motif unique). En jeu 2 aucun PNJ n'a de « chose a faire » — leur dialogue
-   sert l'enquete Al3x1A, pas un objectif. On cache le cercle ET le texte
+   sert l'enquete Al3x1a, pas un objectif. On cache le cercle ET le texte
    « ? » qui le suit. body[data-mode="jeu2"] est pose depuis App.jsx. */
 body[data-mode="jeu2"] circle[fill="#ffd166"][stroke="#8a5a20"] { display: none; }
 body[data-mode="jeu2"] circle[fill="#ffd166"][stroke="#8a5a20"] + text { display: none; }

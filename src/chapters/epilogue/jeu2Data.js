@@ -1,5 +1,5 @@
 /* ============================================================
-   JEU 2 — Données : notes d'Al3x1A + configuration par époque
+   JEU 2 — Données : notes d'Al3x1a + configuration par époque
    ============================================================
    Une entrée par chapitre (index CHAPTERS). Contient :
    - support         : le support caractéristique de l'époque (juste
@@ -7,17 +7,17 @@
    - noteWrongText   : texte quand la note est trouvée dans une
                        MAUVAISE époque sans indice attribué (ambiance)
    - noteRightText   : texte quand la note est dans la BONNE époque
-                       (indice précis sur où Al3x1A est caché·e)
+                       (indice précis sur où Al3x1a est caché·e)
    - clues           : TROIS indices qui décrivent cette époque. Au
-                       lancement d'une partie, si Al3x1A y est cachée,
+                       lancement d'une partie, si Al3x1a y est cachée,
                        ces 3 indices sont dispatchés dans 3 autres
                        époques — le joueur doit les RECOUPER pour
                        deviner la cible.
    - page            : page du CARNET D'AL3X1A ajoutée dès qu'on lit
-                       la note d'une époque (bio + ressenti d'Al3x1A).
+                       la note d'une époque (bio + ressenti d'Al3x1a).
    - noteSpots       : TROIS emplacements candidats du hotspot note
                        (tirage au sort à chaque nouvelle partie).
-   - al3x1aSpots     : TROIS cachettes candidates d'Al3x1A dans cette
+   - al3x1aSpots     : TROIS cachettes candidates d'Al3x1a dans cette
                        époque si c'est la cible.
    - remede          : nom + emoji + description du remède issu de
                        cette époque

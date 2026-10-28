@@ -162,7 +162,7 @@ function ActeReveil({ prenom, fin, onFini }) {
       ? { qui: "martine", dida: "le haut-parleur grésille", texte: "« Bulle A. ouverte. J'aurais dû le faire il y a quarante ans. »" }
       : { qui: "recit", texte: "Le haut-parleur de la salle reste muet. Pour la première fois, personne ne vous écoute." },
     { qui: "al3x1a", dida: "elle te voit", texte: "« … C'est toi. »", anim: "debout" },
-    { qui: "al3x1a", texte: "« Tu es encore plus jeune que la dernière fois. »" },
+    { qui: "al3x1a", texte: "« Tu es toujours aussi jeune. Ça me fait drôle. »" },
     { choix: [{ texte: "« MARTINE m'a tout dit. »" }, { texte: "« Tu savais qui j'étais ? »" }] },
     { qui: "al3x1a", texte: "« Oui. Depuis le début. Je n'avais pas le droit de te le dire. »" },
     { qui: "al3x1a", texte: "« Règle numéro 2 : ne pas raconter le futur. C'est moi qui l'ai écrite. Ce soir, je la déteste un peu. »" },

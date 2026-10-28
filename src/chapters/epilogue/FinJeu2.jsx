@@ -54,7 +54,7 @@ function sequenceRemede(endChoice) {
       beats: [{ text: "MARTINE se pose sur la plateforme de la station." }] },
     { type: "tableau", Scene: SceneDescent, lieu: "PAD 01 · LA PORTE S'OUVRE",
       beats: [
-        { text: "Al3x1A descend, chancelante. Elias arrive en courant, incrédule." },
+        { text: "Al3x1a descend, chancelante. Elias arrive en courant, incrédule." },
         ...(hint ? [{ tag: "▸ ⚠ UN DÉTAIL ÉTRANGE", couleur: hint.couleur, text: hint.texte }] : []),
       ] },
     { type: "tableau", Scene: SceneTest, lieu: "LABORATOIRE DE LA STATION · ANALYSE",
@@ -64,7 +64,7 @@ function sequenceRemede(endChoice) {
       ] },
     { type: "tableau", Scene: SceneThanks, lieu: "PAD 01",
       beats: [
-        { text: "Al3x1A te fixe encore une seconde, comme si elle voulait dire quelque chose. Puis elle secoue la tête et sourit." },
+        { text: "Al3x1a te fixe encore une seconde, comme si elle voulait dire quelque chose. Puis elle secoue la tête et sourit." },
         { who: "al3x1a", mood: "content", text: "Merci d'être venu·e me chercher." },
       ] },
   ];
@@ -76,7 +76,7 @@ function sequenceMemoire() {
     { type: "tableau", Scene: SceneBroadcast, lieu: "LA STATION · J+3 SEMAINES",
       beats: [{ text: "Le remède est diffusé. Les survivants retrouvent leurs prénoms, puis leurs métiers, puis leurs enfants." }] },
     { type: "tableau", Scene: SceneReunion, lieu: "GRANDE SALLE · SOUS LA COUPOLE",
-      beats: [{ text: "Une femme reconnaît son mari après dix-neuf ans de silence." }] },
+      beats: [{ text: "Une femme reconnaît son mari après quinze ans de silence." }] },
     { type: "tableau", Scene: SceneMonument, lieu: "SALLE DE LA MÉMOIRE COMMUNE",
       beats: [
         { text: "Mira reprogramme MARTINE en « mémoire commune » : chaque témoignage y est archivé." },
@@ -98,7 +98,7 @@ function sequencePuits() {
     { type: "tableau", Scene: SceneLevels, lieu: "LE PUITS · COUPE DES NIVEAUX",
       beats: [
         { text: "Dedans, MARTINE règle tout : l'air, l'eau, les places." },
-        { text: "Une génération, puis deux. MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide." },
+        { text: "Dix ans, puis vingt, puis quarante. MARTINE, elle, n'a pas vieilli. Elle archive, calcule, conseille. Puis décide." },
         { text: "Elle a sauvé la mémoire — personne ne remet ses paroles en cause." },
       ] },
     { type: "tableau", Scene: SceneElderElias, lieu: "COULOIR DU PUITS · PLUS TARD",

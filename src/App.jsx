@@ -99,7 +99,7 @@ class DecorErrorBoundary extends Component {
   }
 }
 
-/* Petite silhouette d'Al3x1A dessinee dans le decor du jeu 2 quand on la
+/* Petite silhouette d'Al3x1a dessinee dans le decor du jeu 2 quand on la
    trouve : tunique grise, cheveux mi-longs, halo bleute discret. Se rend
    au sein d'un <svg viewBox="0 0 1000 560"> (le viewBox partage du decor).
    Coordonnees relatives au groupe parent (translate deja applique). Taille
@@ -157,14 +157,14 @@ export default function App() {
   const [screen, setScreen] = useState("title"); // title | play | transition | end
   const [transitionTo, setTransitionTo] = useState(null); // chapitre visé pendant la transition
   const [maxReached, setMaxReached] = useState(0); // plus haut chapitre débloqué (menu titre)
-  const [mode, setMode] = useState("jeu1");        // "jeu1" (voyage principal) | "jeu2" (enquête Al3x1A) | "jeu3" (bunker 2087)
+  const [mode, setMode] = useState("jeu1");        // "jeu1" (voyage principal) | "jeu2" (enquête Al3x1a) | "jeu3" (bunker 2087)
   const [jeu3Start, setJeu3Start] = useState(null); // triche : pièce + flags + heardPnj initiaux pour Jeu3
   const [jeu3Nonce, setJeu3Nonce] = useState(0);    // bump → remonte Jeu3 (triche appliquée dès useState)
-  const [jeu2Target, setJeu2Target] = useState(-1); // index du chapitre où Al3x1A est bloqué·e
+  const [jeu2Target, setJeu2Target] = useState(-1); // index du chapitre où Al3x1a est bloqué·e
   const [jeu2Notes, setJeu2Notes] = useState([]);  // chapitres où la note a été lue (indices)
-  const [jeu2Found, setJeu2Found] = useState(false); // Al3x1A a été trouvé·e ?
+  const [jeu2Found, setJeu2Found] = useState(false); // Al3x1a a été trouvé·e ?
   /* Tirages au sort de l'ENQUETE : quel emplacement pour chaque note
-     (10 indices 0-2), et quelle cachette pour Al3x1A (un index 0-2 dans
+     (10 indices 0-2), et quelle cachette pour Al3x1a (un index 0-2 dans
      son chapitre cible). Perse dans la save : deux parties differentes
      = deux enquetes differentes, meme si le chapitre cible est le meme. */
   const [jeu2NotePicks, setJeu2NotePicks] = useState(() => Array(10).fill(0));
@@ -177,7 +177,7 @@ export default function App() {
      la note a été lue (dans l'ordre). */
   const [jeu2Pages, setJeu2Pages] = useState([]);
   const [jeu2CarnetOpen, setJeu2CarnetOpen] = useState(false);
-  /* Choix narratif à la rencontre d'Al3x1A : "ramener" | "laisser" |
+  /* Choix narratif à la rencontre d'Al3x1a : "ramener" | "laisser" |
      "rester". Les 2 derniers sont des faux souvenirs — MARTINE les
      réécrit au voyage retour. Révélé à la confrontation jeu 3. */
   const [jeu2EndChoice, setJeu2EndChoice] = useState(null);
@@ -419,10 +419,10 @@ export default function App() {
     setScreen("intro");
   };
 
-  /* Démarre une NOUVELLE PARTIE DE JEU 2 (« Al3x1A »). Tire au sort
+  /* Démarre une NOUVELLE PARTIE DE JEU 2 (« Al3x1a »). Tire au sort
      l'époque cible parmi les 9 chapitres du voyage principal, puis
      démarre au chapitre 0 (ex : la Préhistoire) pour laisser le joueur
-     explorer. Notes vides, Al3x1A pas encore trouvé·e. */
+     explorer. Notes vides, Al3x1a pas encore trouvé·e. */
   /* JEU 3 — squelette PR J3-A : réveil dans le bunker + hub avec 3
      pièces (chambre, Bureau des Rumeurs, Salle des Archives). Aucune
      mission jouable pour l'instant. Le composant Jeu3 est autonome
@@ -749,7 +749,7 @@ export default function App() {
     setJeu2Notes([]);
     setJeu2Found(false);
     /* Tirages au sort de l'enquete : pour chaque chapitre, un emplacement
-       de note parmi les 3 candidats. Et pour Al3x1A, une cachette parmi
+       de note parmi les 3 candidats. Et pour Al3x1a, une cachette parmi
        les 3 dans son chapitre cible. Assure la re-jouabilite : deux
        parties donnent des enquetes vraiment differentes. */
     setJeu2NotePicks(JEU2.map((c) => Math.floor(Math.random() * (c.noteSpots?.length || 1))));
@@ -776,9 +776,9 @@ export default function App() {
     setFlux(0); setFluxTotal(0); setBonusChapters([]);
     setTab(CHAPTERS[0].startScene);
     setDialog({ lines: [
-      `Nouvelle mission, ${prenom || "chronaute"} : retrouver Al3x1A.`,
+      `Nouvelle mission, ${prenom || "chronaute"} : retrouver Al3x1a.`,
       "Elle a laissé des notes dans les époques qu'elle a traversées, chacune sur le support de son temps : peinture, argile, papyrus, manuscrit, gazette, télégramme…",
-      "Trois d'entre elles contiennent des INDICES sur l'époque où elle s'est arrêtée. Recoupe-les — comme une enquête. Tes trouvailles s'ajoutent au carnet d'Al3x1A (📓 en haut).",
+      "Trois d'entre elles contiennent des INDICES sur l'époque où elle s'est arrêtée. Recoupe-les — comme une enquête. Tes trouvailles s'ajoutent au carnet d'Al3x1a (📓 en haut).",
     ], idx: 0, mood: "neutre" });
     setScreen("play");
   };
@@ -830,7 +830,7 @@ export default function App() {
   /* JEU 2 : voyage temporel LIBRE. Le joueur clique une époque dans le
      sélecteur (colonne de droite ou barre en bas) → petit tourbillon
      temporel plein écran (style TARDIS), puis atterrissage. On ne remet
-     pas l'inv/l'historique à zéro : les notes trouvées et Al3x1A restent
+     pas l'inv/l'historique à zéro : les notes trouvées et Al3x1a restent
      acquis. L'atterrissage EVITE le tableau qui contient la note — sinon
      l'élève la voit tout de suite, aucune exploration. */
   const [jeu2Warp, setJeu2Warp] = useState(null);  // { i, nom, phase } pendant l'anim ; phase "vortex" puis "flash"
@@ -847,7 +847,7 @@ export default function App() {
     const nom = CHAPTERS[i].epoque || CHAPTERS[i].bandeau || `chapitre ${i + 1}`;
     setJeu2Warp({ i, nom, fading: false });
     /* Choix du tableau d'arrivée : startScene par défaut, MAIS si c'est
-       le tableau de la note d'Al3x1A on décale de 1 (modulo nb de tableaux)
+       le tableau de la note d'Al3x1a on décale de 1 (modulo nb de tableaux)
        — l'élève doit fouiller pour trouver la note. */
     const scenes = CHAPTERS[i]?.scenes || [];
     const notePick = Number.isInteger(jeu2NotePicks?.[i]) ? jeu2NotePicks[i] : 0;
@@ -923,7 +923,7 @@ export default function App() {
      sélectionner puis toucher le support). Seuls les OUTILS vont au sac. */
   const collect = (id) => {
     /* JEU 2 : aucun ramassage. Le joueur n'a que la mission d'enquete
-       (trouver les notes d'Al3x1A). Les objets du decor et les dechets
+       (trouver les notes d'Al3x1a). Les objets du decor et les dechets
        anachroniques ne servent pas ici — on ignore silencieusement. */
     if (mode === "jeu2") return;
     const it = chapter.items[id];
@@ -966,7 +966,7 @@ export default function App() {
     /* JEU 2 : on desactive tous les mini-jeux (alphabet, tablette,
        cartouche, phonographe, cinema, TSF...). Ils appartiennent au
        parcours du jeu 1 (fabriquer les messages) et n'ont pas de sens
-       dans l'enquete sur Al3x1A. Cliquer un objet-declencheur en jeu 2
+       dans l'enquete sur Al3x1a. Cliquer un objet-declencheur en jeu 2
        ne fait rien de particulier. */
     if (mode === "jeu2" && act.modal) return;
     /* certaines « actions » ouvrent un mini-jeu (ex. l'alphabet). Elles
@@ -1004,7 +1004,7 @@ export default function App() {
        suivante : le « ? » doré se déplace. */
     /* La QUÊTE (portrait grand plan + repliques d'étape + avancée) n'est
        PAS jouée en jeu 2 : elle raconte la progression du jeu 1 et
-       n'aurait aucun sens quand on enquête sur Al3x1A. */
+       n'aurait aucun sens quand on enquête sur Al3x1a. */
     const step = mode === "jeu2" ? null : chapter.quete?.[quete];
     /* étape en GROS PLAN : cliquer le personnage ouvre son portrait
        (le texte, l'avancée et le `say` passent par le bouton Continuer) */
@@ -1082,11 +1082,11 @@ export default function App() {
         /* PNJ sans variante jeu 2 : reponse generique evasive. */
         const generiques = [
           { bubble: "Je vaque à mes affaires, chronaute. Je n'ai rien vu d'étrange.",
-            say: "Il ne sait rien d'Al3x1A. Va voir un autre personnage." },
+            say: "Il ne sait rien d'Al3x1a. Va voir un autre personnage." },
           { bubble: "Passe ton chemin, voyageur — je suis occupé·e.",
-            say: "Peu bavard. Cherche ailleurs des indices sur Al3x1A." },
-          { bubble: "Al3x1A ? Ça ne me dit rien. Demande plutôt aux plus âgés du coin.",
-            say: "Cherche un personnage plus âgé, il aura peut-être vu passer Al3x1A." },
+            say: "Peu bavard. Cherche ailleurs des indices sur Al3x1a." },
+          { bubble: "Al3x1a ? Ça ne me dit rien. Demande plutôt aux plus âgés du coin.",
+            say: "Cherche un personnage plus âgé, il aura peut-être vu passer Al3x1a." },
         ];
         const g = generiques[pickIdx % generiques.length];
         bubbleText = g.bubble;
@@ -1096,7 +1096,7 @@ export default function App() {
         /* Decor cliquable sans bubble (statue, mur, temple, stele) :
            en jeu 2 on ne dit RIEN (silence). Le decor reste cliquable
            mais MARTINE ne parle pas — pas de commentaire hors-sujet
-           quand on enquête sur Al3x1A. */
+           quand on enquête sur Al3x1a. */
         bubbleText = null;
         sayText = null;
       }
@@ -1134,7 +1134,7 @@ export default function App() {
   useEffect(() => {
     /* En JEU 2, la quête de jeu 1 n'est pas active — pas de portrait
        auto qui viendrait re-jouer une étape du voyage principal alors
-       qu'on enquête sur Al3x1A. */
+       qu'on enquête sur Al3x1a. */
     if (mode === "jeu2") { setPortraitOpen(false); return; }
     const st = chapter.quete?.[quete];
     if (!st?.portrait || !st.auto) { setPortraitOpen(false); return; }
@@ -1727,7 +1727,7 @@ export default function App() {
             <div style={card} onClick={(e) => e.stopPropagation()}>
               <h2 style={{ marginTop: 0, color: "#7fd8ff", fontSize: 20, textAlign: "center" }}>Effacer l'enquête en cours ?</h2>
               <p style={{ fontSize: 14, color: "#c8d4e2", lineHeight: 1.6 }}>
-                Une nouvelle enquête Al3x1A remplacera ta progression jeu 2 sauvegardée. Ton voyage principal (jeu 1) est indépendant, il ne sera pas touché.
+                Une nouvelle enquête Al3x1a remplacera ta progression jeu 2 sauvegardée. Ton voyage principal (jeu 1) est indépendant, il ne sera pas touché.
               </p>
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                 <button onClick={() => setModal(null)} style={{ flex: 1, background: "#1a2536", color: "#e8eef5", border: "1px solid #2a3648", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer" }}>Annuler</button>
@@ -1805,7 +1805,7 @@ export default function App() {
 
   /* ---------- écran CHRONAUTES : rencontre au futur (2045) ---------------
      S'affiche juste après le saut depuis le DERNIER chapitre, avant
-     l'épilogue. Elias, Mira, portrait-cadre d'Al3x1A. Séquence de
+     l'épilogue. Elias, Mira, portrait-cadre d'Al3x1a. Séquence de
      dialogues scriptée. Fin de la séquence → écran épilogue. */
   /* ---------- écran FIN JEU 2 ------------------------------------------ */
   if (screen === "finJeu2") {
@@ -1910,7 +1910,7 @@ export default function App() {
      le « ? » doré (null quand la quête est finie ou absente). */
   /* JEU 2 : `queteQui` (le « ? » dore qui pointe le PNJ de l'etape en
      cours) est desactive — la quete de jeu 1 ne joue plus, et les
-     personnages parlent librement d'Al3x1A.
+     personnages parlent librement d'Al3x1a.
      Les decors regardent `mode` pour masquer les dechets temporels
      (allumettes, canette, stylo Bic…) : visuel + hotspot cachés. On
      ajoute aussi une garde ceinture-et-bretelles au niveau de `inv`
@@ -2025,7 +2025,7 @@ export default function App() {
         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
           {/* JEU 2 : compteur de notes trouvées à la place de la jauge flux */}
           {mode === "jeu2" ? (
-            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 700, color: "#7fd8ff" }} title="Notes d'Al3x1A trouvées">
+            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 700, color: "#7fd8ff" }} title="Notes d'Al3x1a trouvées">
               🔎 {jeu2Notes.length}/{JEU2.length} notes
             </span>
           ) : (
@@ -2066,9 +2066,9 @@ export default function App() {
           les notes trouvées ont un ✓. Compact (~66 px de hauteur). */}
       {mode === "jeu2" && (
         <div style={{ position: "relative", padding: "4px 12px 8px", background: "linear-gradient(180deg, rgba(14,28,42,0.55), transparent)", flex: "0 0 auto" }}>
-          {/* Bouton carnet d'Al3x1A — accès rapide, en haut à droite */}
+          {/* Bouton carnet d'Al3x1a — accès rapide, en haut à droite */}
           <button onClick={() => setJeu2CarnetOpen(true)}
-            title="Ouvrir le carnet d'Al3x1A"
+            title="Ouvrir le carnet d'Al3x1a"
             style={{
               position: "absolute", top: 6, right: 10, zIndex: 5,
               background: jeu2Pages.length > 0 ? "linear-gradient(90deg,#c08030,#8a5a2a)" : "rgba(20,27,38,0.6)",
@@ -2144,7 +2144,7 @@ export default function App() {
           cette rangée avec la besace, en colonne à gauche (voir `large`). */}
       <div style={{ flex: 1, minHeight: 0, padding: "0 12px", display: "flex", justifyContent: "center", gap: 8 }}>
         {/* écran large : la besace en colonne à gauche du décor — cachee
-            en jeu 2 (elle ne sert a rien pour l'enquete Al3x1A). */}
+            en jeu 2 (elle ne sert a rien pour l'enquete Al3x1a). */}
         {colonnes && mode !== "jeu2" && (
           <div style={{ width: 104, flex: "0 0 auto", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <InventoryBar items={chapter.items} inv={inv} shake={shake} vertical mode={mode} />
@@ -2177,7 +2177,7 @@ export default function App() {
             <Scene scenes={chapter.scenes} tab={tab} onTab={setTab} sceneProps={sceneProps} sparkle={sparkle}
               linear={mode === "jeu2" ? false : chapter.linear}
               canAdvance={!!(chapter.linear && mode !== "jeu2" && !chapter.scenes[tab].free && chapter.scenes[tab + 1] && (chapter.scenes[tab].nextWhen || []).every((id) => made.includes(id)))} />
-            {/* ═══ JEU 2 : overlay des hotspots note + Al3x1A ═══
+            {/* ═══ JEU 2 : overlay des hotspots note + Al3x1a ═══
                 On dessine par-dessus la scène (viewBox aligné 1000×560,
                 position absolute, pointerEvents:none pour laisser passer
                 les clics ailleurs). Les hotspots eux-mêmes captent leurs

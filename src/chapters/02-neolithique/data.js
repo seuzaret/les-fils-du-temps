@@ -279,11 +279,11 @@ const ACTIONS = {
       "Un tatouage bien placé, c'est un remède qui ne s'efface pas. Encore faut-il tomber sur un bon aiguilleur.",
     ],
     jeu2Variants: [
-      { bubble: "Al3x1A ? Elle voulait un tatouage — une petite étoile. Puis elle a filé vers la porte, tout en haut. Elle a marqué la petite fenêtre noire de la tour.",
+      { bubble: "Al3x1a ? Elle voulait un tatouage — une petite étoile. Puis elle a filé vers la porte, tout en haut. Elle a marqué la petite fenêtre noire de la tour.",
         say: "Ötzi : marque SUR LA FENÊTRE NOIRE de la tour de guet." },
-      { bubble: "Al3x1A m'a laissé la marque de son doigt sur la peau. Elle est repartie graver un signe dans la plaine, au pied d'un mégalithe.",
+      { bubble: "Al3x1a m'a laissé la marque de son doigt sur la peau. Elle est repartie graver un signe dans la plaine, au pied d'un mégalithe.",
         say: "Ötzi : la marque est DANS LA PLAINE, au pied d'un mégalithe." },
-      { bubble: "Al3x1A m'a demandé une étoile sur la main. Puis elle a suivi la fumée, chez les artisans, et a laissé un signe près de leur four.",
+      { bubble: "Al3x1a m'a demandé une étoile sur la main. Puis elle a suivi la fumée, chez les artisans, et a laissé un signe près de leur four.",
         say: "Ötzi : la marque est CHEZ LES ARTISANS, près du four." },
     ] },
 };

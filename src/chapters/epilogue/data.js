@@ -14,7 +14,7 @@
 
 /* La question posée au joueur, en arrivant.
    ELIAS parle : c'est son ultime question, avant que le joueur ne
-   reparte pour retrouver Al3x1A. Fait suite à la scène chronautes. */
+   reparte pour retrouver Al3x1a. Fait suite à la scène chronautes. */
 export const QUESTION = [
   "Attends — une toute dernière chose avant que tu ne repartes.",
   "Tu viens de voir 20 000 ans de messages. La peinture de Lascaux, l'argile d'Uruk, le parchemin des moines, l'imprimerie, le télégraphe, la radio, le cloud… tu sais mieux que personne ce qui dure et ce qui s'efface.",

@@ -92,7 +92,7 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
         {inv.length === 0 && (
           <div style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", lineHeight: 1.4, textAlign: "center", marginTop: 8 }}>
             {mode === "jeu2"
-              ? "Cherche les traces d'Al3x1A. Chaque note est sur le support caractéristique de l'époque."
+              ? "Cherche les traces d'Al3x1a. Chaque note est sur le support caractéristique de l'époque."
               : "Observe les décors et touche ce qui te semble utile."}
           </div>
         )}
@@ -112,7 +112,7 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
           lui laisse 76 px pour qu'elle ne cache ni le texte ni les objets */}
       <div style={{ maxWidth: 980, margin: "0 auto", padding: mode === "jeu2" ? "6px 12px 8px" : "6px 12px 8px 76px" }}>
         <div style={{ fontSize: 10, letterSpacing: 1.5, color: "#c9a877", fontFamily: "ui-monospace,monospace", marginBottom: 5 }}>
-          🎒 SAC ({inv.length}){mode === "jeu2" ? " — cherche les notes d'Al3x1A dans le décor" : " — glisse un élément sur un autre ou sur le décor pour combiner"}
+          🎒 SAC ({inv.length}){mode === "jeu2" ? " — cherche les notes d'Al3x1a dans le décor" : " — glisse un élément sur un autre ou sur le décor pour combiner"}
           {selected && <span style={{ color: "#ffd166" }}> · {items[selected].name} en main : touche une cible…</span>}
         </div>
         <div style={{ display: "flex", gap: 7, overflowX: "auto", paddingBottom: 4 }}>

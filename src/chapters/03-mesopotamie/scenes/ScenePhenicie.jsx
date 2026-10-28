@@ -177,7 +177,7 @@ export default function ScenePhenicie({ collect, action, reveal, made = [], mode
 
       {/* zones cliquables */}
       {/* Hotspot pour parler à Assurbanipal — visible tant qu'on n'a pas
-          l'alphabet, caché en jeu 2 (l'enquête Al3x1A ne le concerne pas). */}
+          l'alphabet, caché en jeu 2 (l'enquête Al3x1a ne le concerne pas). */}
       {!made.includes("msg_alphabet") && mode !== "jeu2" && (
         <Hotspot cx={560} cy={463} r={41} label="parler à Assurbanipal" reveal={reveal} onClick={() => action("assurbanipal")} />
       )}

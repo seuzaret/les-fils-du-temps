@@ -234,7 +234,7 @@ const ACTIONS = {
         say: "Le scribe : tablette DANS LA CITÉ D'UR, sur la porte sombre du grenier." },
       { bubble: "La voyageuse a gravé son message ici, sur le mât de la felouque qui descend le Nil. Elle voulait que le fleuve porte son signe.",
         say: "Le scribe : la marque est ICI, sur le mât de la felouque." },
-      { bubble: "Al3x1A est repartie vers la Phénicie. Elle a laissé un signe sur la grande tour au fond, à l'entrée du port.",
+      { bubble: "Al3x1a est repartie vers la Phénicie. Elle a laissé un signe sur la grande tour au fond, à l'entrée du port.",
         say: "Le scribe renvoie SUR LA CÔTE PHÉNICIENNE, sur la grande tour au fond." },
     ] },
   assurbanipal: { mood: "neutre",
@@ -243,7 +243,7 @@ const ACTIONS = {
     jeu2Variants: [
       { bubble: "Ma bibliothèque garde tout — même la tablette d'une drôle de voyageuse. Elle est ICI, dans la cité d'Ur, calée sur la porte sombre du grenier.",
         say: "Assurbanipal : tablette DANS LA CITÉ D'UR, sur la porte sombre du grenier." },
-      { bubble: "Al3x1A est descendue vers le Nil. Elle a gravé un signe sur le mât de la felouque qui remonte le fleuve. Malin — le vent porte son message.",
+      { bubble: "Al3x1a est descendue vers le Nil. Elle a gravé un signe sur le mât de la felouque qui remonte le fleuve. Malin — le vent porte son message.",
         say: "Assurbanipal renvoie AU NIL, sur le mât de la felouque." },
       { bubble: "La voyageuse a filé vers la mer, chez les Phéniciens. Elle a marqué la grande tour au fond de leur port.",
         say: "Assurbanipal renvoie SUR LA CÔTE PHÉNICIENNE, sur la grande tour du port." },

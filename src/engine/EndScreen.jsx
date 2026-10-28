@@ -68,7 +68,7 @@ export default function EndScreen({
             <div style={{ fontSize: 38, marginBottom: 8 }}>🌀</div>
             <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", marginBottom: 6 }}>MISSION EN ATTENTE</div>
             <div style={{ fontFamily: TITRE_FONT, fontSize: 26, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", background: "linear-gradient(100deg, #7fd8ff 0%, #ffd166 60%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", lineHeight: 1.15 }}>
-              Retrouver Al3x1A
+              Retrouver Al3x1a
             </div>
             <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "#c8d4e2", margin: "10px auto 14px", maxWidth: 460, fontStyle: "italic" }}>
               La pionnière est bloquée quelque part dans les époques que tu viens de traverser. Grâce au TEMPOSCOPE que MARTINE t'a remis, tu peux voyager librement et recouper les indices pour la retrouver.

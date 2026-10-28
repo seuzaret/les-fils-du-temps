@@ -6,7 +6,7 @@
    une clé du navigateur. App.jsx décide de CE QU'on y met.
 
    Plusieurs SLOTS coexistent : un pour chaque « jeu » (jeu 1 =
-   voyage principal, jeu 2 = enquête Al3x1A, jeu 3 = le Puits).
+   voyage principal, jeu 2 = enquête Al3x1a, jeu 3 = le Puits).
    Chaque slot a sa propre progression indépendante — on peut avoir
    les trois en cours en parallèle sur le même poste.
 

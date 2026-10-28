@@ -26,7 +26,7 @@ export default function Jeu2Placeholder({ onRetourMenu }) {
           En construction
         </h1>
         <p style={{ fontSize: 15, lineHeight: 1.65, color: "#c8d4e2", marginTop: 14 }}>
-          L'enquête pour retrouver Al3x1A n'est pas encore prête à jouer.
+          L'enquête pour retrouver Al3x1a n'est pas encore prête à jouer.
           Ta partie de jeu 2 est déjà réservée dans un slot séparé — dès
           que les notes, les époques et le remède seront branchés, tu
           reprendras ici même sans rien perdre.

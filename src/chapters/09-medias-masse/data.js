@@ -299,7 +299,7 @@ const ACTIONS = {
     bubble: "Céline, 25 ans, cadre en informatique. On vient de me livrer un GRAVEUR de CD-Rom au bureau — la classe ! Aide-moi à graver mon premier disque. On dit qu'un CD dure 100 ans… on verra bien.",
     say: "Céline : le CD-Rom, censé être « inaltérable ». Sauf que 30 ans plus tard, la couche métallique se décolle.",
     jeu2Variants: [
-      { bubble: "Al3x1A m'a emprunté un CD vierge, puis a couru le déposer dans le SALON DE 1969, sur le téléviseur. Souvenir lunaire.",
+      { bubble: "Al3x1a m'a emprunté un CD vierge, puis a couru le déposer dans le SALON DE 1969, sur le téléviseur. Souvenir lunaire.",
         say: "Céline renvoie AU SALON 1969, sur le téléviseur." },
       { bubble: "Elle a laissé un exemplaire dans la chambre d'ado de Julien, sur sa radio-cassette. Camouflé au milieu des tubes.",
         say: "Céline renvoie À LA CHAMBRE 1985, sur la radio-cassette." },

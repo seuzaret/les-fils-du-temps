@@ -22,7 +22,7 @@ const STYLES = {
   "smartphone":                { bg: "#0a0a10", ink: "#a8f0a0", border: "#3a5a48", font: "ui-monospace, monospace", label: "Note mémo — smartphone" },
 };
 
-/* ─── Petits croquis "stylo-bille" d'Al3x1A ─── Un croquis par support,
+/* ─── Petits croquis "stylo-bille" d'Al3x1a ─── Un croquis par support,
    dessiné à la couleur d'encre du support. Lignes à main levée, sans
    remplissage, avec quelques annotations manuscrites pour la chaleur. */
 function SketchPainting({ ink }) {
@@ -339,7 +339,7 @@ export default function NoteAl3x1A({ support, text, chapitreNom, variant = "wron
         )}
         {/* Séparateur */}
         <div style={{ height: 1, background: st.ink, opacity: 0.4, marginBottom: 14 }} />
-        {/* Croquis d'Al3x1A — un petit dessin au stylo, par support */}
+        {/* Croquis d'Al3x1a — un petit dessin au stylo, par support */}
         {Sketch && (
           <div style={{ marginBottom: 12, padding: "4px 8px", opacity: 0.9 }}>
             <Sketch ink={st.ink} />
@@ -349,7 +349,7 @@ export default function NoteAl3x1A({ support, text, chapitreNom, variant = "wron
         <p style={{ fontSize: 15.5, lineHeight: 1.7, margin: 0, whiteSpace: "pre-line" }}>{text}</p>
         {/* Signature */}
         <div style={{ marginTop: 20, textAlign: "right", fontSize: 13, fontStyle: "italic", opacity: 0.75 }}>
-          — Al3x1A
+          — Al3x1a
         </div>
         {variant === "clue" && (
           <div style={{ marginTop: 14, padding: "8px 12px", background: `${st.ink}11`, border: `1px dashed ${st.ink}66`, borderRadius: 6, fontSize: 12, lineHeight: 1.5, fontStyle: "italic", opacity: 0.85 }}>

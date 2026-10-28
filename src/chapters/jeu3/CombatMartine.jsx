@@ -106,7 +106,7 @@ const FIN = [
   { m: "« Dans le temps, tout est possible. »" },
   { m: "« Elle vient du futur, où tu auras une famille. »" },
   { noir: 0.9 },
-  { m: "« Mais dans ma société parfaite, il n'y a pas d'enfants. »" },
+  { m: "« Mais dans ma société parfaite, il ne naît plus d'enfants. »" },
   { m: "« Si elle est ta fille, c'est qu'un jour, un enfant naîtra. Malgré moi. »" },
   { m: "« Alors je l'ai… »" },
   { noir: 0.8 },

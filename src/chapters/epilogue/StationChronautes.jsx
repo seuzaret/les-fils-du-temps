@@ -30,7 +30,7 @@ function useTypewriter(text, speed = 6) {
    Décor post-apo LUMINEUX (dôme géodésique bricolé, panneaux
    solaires patchés, jardins hydroponiques, MARTINE-jumelle
    rangée avec un ruban de deuil). Séquence de dialogues
-   scriptée : Elias, Mira, portrait-cadre d'Al3x1A.
+   scriptée : Elias, Mira, portrait-cadre d'Al3x1a.
    Fin de la séquence : bouton « Continuer » → épilogue.
    ============================================================ */
 
@@ -48,17 +48,17 @@ const DIALOGUES_PAR_PERSO = {
     { mood: "content",
       text: "Salut, moi c'est Mira, l'ingénieure de la station. Cette machine, à côté de la tienne… c'est sa sœur. Elle est là depuis dix ans." },
     { mood: "neutre",
-      text: "Elle attend sa pilote. Al3x1A est partie dans le passé chercher un remède contre la maladie de la mémoire, il y a longtemps. On n'a jamais eu de ses nouvelles. Regarde son portrait." },
+      text: "Elle attend sa pilote. Al3x1a est partie dans le passé chercher un remède contre la maladie de la mémoire, il y a longtemps. On n'a jamais eu de ses nouvelles. Regarde son portrait." },
   ],
   camille: [
     { mood: "neutre",
-      text: "Al3x1A est partie chercher un remède, il y a dix ans. Aucune nouvelle. On attend." },
+      text: "Al3x1a est partie chercher un remède, il y a dix ans. Aucune nouvelle. On attend." },
     { mood: "content",
       text: "Aujourd'hui, toi seul·e as traversé les époques comme elle. Retourne voir Elias — il a une question." },
   ],
   finale: [
     { mood: "content",
-      text: "Tu as tout entendu. Alors voilà : parmi les chronautes, toi seul·e connaît encore les époques. Al3x1A est là-bas, quelque part. Tu la retrouverais ?" },
+      text: "Tu as tout entendu. Alors voilà : parmi les chronautes, toi seul·e connaît encore les époques. Al3x1a est là-bas, quelque part. Tu la retrouverais ?" },
   ],
 };
 
@@ -116,7 +116,7 @@ function PortraitMira({ mood = "neutre" }) {
   );
 }
 
-/* Al3x1A apparaît dans un CADRE-photo posé sur la MARTINE-jumelle.
+/* Al3x1a apparaît dans un CADRE-photo posé sur la MARTINE-jumelle.
    `frame={false}` : le même visage sans cadre, ruban ni légende (cinématiques).
    Apparence canonique (partagée avec AL3X1A_LOOK) : tunique de voyage grise,
    insigne chronaute doré, cheveux bruns mi-longs + chignon de côté, frange,
@@ -162,7 +162,7 @@ const PORTRAITS = { elias: PortraitElias, mira: PortraitMira, camille: PortraitA
    pour son ultime question sur le support à choisir. */
 export { PortraitElias, PortraitMira };
 export const PortraitAl3x1A = (props) => <PortraitAl3x1ACadre {...props} frame={false} />;
-const NAMES = { elias: "Elias", mira: "Mira", camille: "Portrait d'Al3x1A" };
+const NAMES = { elias: "Elias", mira: "Mira", camille: "Portrait d'Al3x1a" };
 
 /* -------------------- DÉCOR DE LA STATION -------------------- */
 function DecorStation({ onClickPerso, done }) {
@@ -312,7 +312,7 @@ function DecorStation({ onClickPerso, done }) {
         <circle cx="0" cy="-130" r="4" fill="#5eff9e" style={{ animation: "pulse 2s infinite" }} />
       </g>
 
-      {/* MARTINE-JUMELLE (Al3x1A) — remontée sur sa plateforme */}
+      {/* MARTINE-JUMELLE (Al3x1a) — remontée sur sa plateforme */}
       <g transform="translate(760,340)">
         <rect x="-40" y="0" width="80" height="28" fill="#5a5860" stroke="#1a1408" strokeWidth="1" />
         <rect x="-42" y="-2" width="84" height="4" fill="#3a4048" />
@@ -393,7 +393,7 @@ function DecorStation({ onClickPerso, done }) {
           <text y="4" textAnchor="middle" fontSize="12" fontWeight="800" fill="#0a2010">✓</text>
         </g>
       )}
-      {/* Zone cliquable sur la MARTINE-jumelle avec le portrait de Al3x1A */}
+      {/* Zone cliquable sur la MARTINE-jumelle avec le portrait de Al3x1a */}
       <g transform="translate(760,290)" onClick={() => onClickPerso?.("camille")} style={{ cursor: done?.mira ? "pointer" : "default" }}>
         <rect x="-45" y="-30" width="90" height="80" fill="transparent" />
       </g>
@@ -490,7 +490,7 @@ export default function StationChronautes({ prenom, onContinue }) {
   if (phase === "carnet") return <CarnetElias onDone={() => setPhase("station")} />;
 
   const openPerso = (id) => {
-    /* garde-fou : Mira n'est cliquable qu'après Elias, Al3x1A après Mira. */
+    /* garde-fou : Mira n'est cliquable qu'après Elias, Al3x1a après Mira. */
     if (id === "mira" && !done.elias) return;
     if (id === "camille" && !done.mira) return;
     /* Elias après tout le monde → séquence finale */

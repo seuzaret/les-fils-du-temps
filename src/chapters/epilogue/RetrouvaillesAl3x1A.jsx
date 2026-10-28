@@ -5,9 +5,9 @@ import { AL3X1A_LOOK } from "./StationChronautes.jsx";
    RETROUVAILLES AVEC AL3X1A
    ------------------------------------------------------------
    Modale plein écran qui joue la scène de retrouvailles quand
-   le joueur trouve Al3x1A dans son décor de cachette. Un
+   le joueur trouve Al3x1a dans son décor de cachette. Un
    bandeau SVG grand format (viewBox 1000×420) situe la scène
-   dans l'époque : MARTINE d'Al3x1A cassée derrière elle, le
+   dans l'époque : MARTINE d'Al3x1a cassée derrière elle, le
    remède qui brille sur une table, ambiance colorée selon le
    chapitre. Séquence scriptée courte, click-anywhere pour
    avancer, bouton final "REPARTIR AU FUTUR".
@@ -33,7 +33,7 @@ function findAmb(name = "") {
 
 /* Décor SVG grand format 1000×420 :
    ciel dégradé, silhouettes de rocaille/mobilier, MARTINE
-   cassée à gauche, Al3x1A au centre, table + remède à droite. */
+   cassée à gauche, Al3x1a au centre, table + remède à droite. */
 function Decor({ amb, remede, mood }) {
   return (
     <svg viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
@@ -74,7 +74,7 @@ function Decor({ amb, remede, mood }) {
         </circle>
       ))}
 
-      {/* MARTINE d'Al3x1A cassée à gauche — vraie noix spatiale (viewBox 100×100 mise à l'échelle) */}
+      {/* MARTINE d'Al3x1a cassée à gauche — vraie noix spatiale (viewBox 100×100 mise à l'échelle) */}
       <g transform="translate(90,180) scale(1.6)">
         {/* halo cassé, très pâle */}
         <circle cx="50" cy="55" r="55" fill="url(#ret-halo)" opacity="0.25" />
@@ -184,7 +184,7 @@ const DIALOGUES = [
 /* Les 3 fins possibles. Narrativement, seule "ramener" est le vrai canon :
    les deux autres sont des choix qui seront RÉÉCRITS par MARTINE pendant
    le voyage retour (révélé à la confrontation du jeu 3). Mais au moment du
-   choix, le joueur ignore le lien de parenté avec Al3x1A — l'ambiguïté est
+   choix, le joueur ignore le lien de parenté avec Al3x1a — l'ambiguïté est
    psychologiquement légitime. */
 const CHOICES = [
   {
@@ -193,7 +193,7 @@ const CHOICES = [
     emoji: "🚀",
     color: "#5eff9e",
     reply: "Tu as raison. Ils ont besoin de la personne qui a trouvé le remède, pas juste du remède. On rentre.",
-    confirm: "Al3x1A monte avec toi dans ta MARTINE. Direction 2045.",
+    confirm: "Al3x1a monte avec toi dans ta MARTINE. Direction 2045.",
   },
   {
     id: "laisser",
@@ -201,7 +201,7 @@ const CHOICES = [
     emoji: "📜",
     color: "#ffd166",
     reply: "Merci. Dis à Elias que la mémoire du monde ne tient pas qu'à moi. Prends soin du remède, et des gens.",
-    confirm: "Al3x1A reste. Tu repars avec le remède, et sa dernière lettre.",
+    confirm: "Al3x1a reste. Tu repars avec le remède, et sa dernière lettre.",
   },
   {
     id: "rester",

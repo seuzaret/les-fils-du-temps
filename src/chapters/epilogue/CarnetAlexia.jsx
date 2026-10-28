@@ -5,7 +5,7 @@ import { CHAPTERS } from "../index.js";
    CARNET D'AL3X1A — pages collectées pendant le jeu 2
    ------------------------------------------------------------
    Chaque note lue (dans une mauvaise OU une bonne époque) ajoute
-   une page qui raconte un morceau de la vie d'Al3x1A dans cette
+   une page qui raconte un morceau de la vie d'Al3x1a dans cette
    époque. Si l'époque portait un INDICE de recoupement, il est
    affiché en bandeau doré sur la page.
    Le joueur ouvre ce carnet quand il veut — c'est son outil de
@@ -96,7 +96,7 @@ export default function CarnetAlexia({ pages = [], clueMap = {}, target = -1, on
         )}
 
         <div style={{ marginTop: 14, padding: "8px 12px", background: "#f0e4bc", border: "1px dashed #a08048", borderRadius: 6, fontSize: 12, color: "#5a3818", fontStyle: "italic" }}>
-          Les pages marquées <strong style={{ color: "#a06030" }}>✦ indice</strong> décrivent l'époque où Al3x1A s'est arrêtée. Rapproche 2 ou 3 indices pour trouver la bonne.
+          Les pages marquées <strong style={{ color: "#a06030" }}>✦ indice</strong> décrivent l'époque où Al3x1a s'est arrêtée. Rapproche 2 ou 3 indices pour trouver la bonne.
         </div>
       </div>
     </div>

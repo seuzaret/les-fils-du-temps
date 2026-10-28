@@ -109,6 +109,8 @@ const SCRIPT = [
   /* 3 · LA SALLE COMMUNE — le toast */
   { stage: "toast", who: "narr", text: "Le soir. Dans la salle commune, au pied du Puits, on a dressé une longue table. Pour une nuit, tout le monde veut oublier les pannes." },
   { who: "mira", mood: "content", text: "Voilà notre chronaute ! Le remède, la mémoire commune, le Puits… sans toi, rien de tout ça." },
+  { who: "mira", mood: "neutre", text: "Dommage qu'Al3x1a ne soit pas là ce soir." },
+  { who: "martine", mood: "neutre", text: "Elle se repose." },
   { who: "elias", mood: "vexe", text: "Je devrais me réjouir. Mais j'ai un mauvais pressentiment, et je ne sais pas d'où il vient. C'est la fatigue, sans doute." },
   { who: "lea", mood: "content", text: "Pas de mauvaises pensées ce soir ! Tiens, {prenom} : la toute première eau du Puits. C'est mon cadeau. MARTINE a tenu à préparer ton verre elle-même." },
   { type: "choice", prompt: "Léa te tend un verre.", options: [

@@ -184,7 +184,7 @@ const ACTIONS = {
     jeu2Variants: [
       { bubble: "Ta cousine à la tunique grise a glissé son rouleau À LA BIBLIOTHÈQUE, contre le mur enduit frais. Elle disait que c'était urgent.",
         say: "Caius : rouleau À LA BIBLIOTHÈQUE, sur le mur enduit frais (à gauche)." },
-      { bubble: "Al3x1A est allée au forum, pour cacher son rouleau sur la grande stèle. Celle qui commence par SPQR — le monument bien visible.",
+      { bubble: "Al3x1a est allée au forum, pour cacher son rouleau sur la grande stèle. Celle qui commence par SPQR — le monument bien visible.",
         say: "Caius renvoie AU FORUM, sur la stèle SPQR au centre." },
       { bubble: "La chronaute a préféré la bibliothèque : elle a glissé son rouleau tout en haut du meuble, avec les autres. Mon bibliothécaire n'a rien vu.",
         say: "Caius renvoie À LA BIBLIOTHÈQUE, en haut du meuble à rouleaux." },

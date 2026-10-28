@@ -164,7 +164,7 @@ const ACTIONS = {
     bubble: "Sigismond, rédacteur en chef. Apporte-moi du solide, du vrai, du vérifié — et j'en tire mille exemplaires avant ce soir.",
     say: "Le rédacteur en chef : c'est lui qui décide ce qu'on imprime… et ce qu'on tait.",
     jeu2Variants: [
-      { bubble: "La gazette d'Al3x1A est partie EN PROVINCE, roulée dans la nacelle de la montgolfière. Cherche là.",
+      { bubble: "La gazette d'Al3x1a est partie EN PROVINCE, roulée dans la nacelle de la montgolfière. Cherche là.",
         say: "Sigismond : EN PROVINCE, dans la nacelle de la montgolfière." },
       { bubble: "Une chronaute a publié un entrefilet dans ma gazette. Un exemplaire est resté sur la presse, ICI, à gauche.",
         say: "Sigismond : ICI À L'IMPRIMERIE, sur la presse à gauche." },

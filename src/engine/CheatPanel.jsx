@@ -63,7 +63,7 @@ export default function CheatPanel({
         <button style={CHEAT_BTN} onClick={() => { onSetChapterIndex(chapters.length - 1); onSetScreen("end"); }}>🏁 Écran de fin</button>
       </div>
 
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 2 (Al3x1A) :</div>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", margin: "10px 0 4px" }}>Jeu 2 (Al3x1a) :</div>
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={onNewGameJeu2}>🎲 Démarrer nouveau Jeu 2</button>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7a9a", marginTop: 2 }}>Fin du Jeu 2 (cinématiques) :</div>
@@ -74,7 +74,7 @@ export default function CheatPanel({
         </div>
         <button style={CHEAT_BTN}
           onClick={() => { if (mode === "jeu2" && jeu2Target >= 0) { onSetChapterIndex(jeu2Target); const spots = jeu2[jeu2Target].al3x1aSpots || []; onSetTab((spots[jeu2AlxPick] || spots[0])?.tab ?? 0); } }}
-          title="Aller directement au chapitre cible d'Al3x1A">📍 Aller à Al3x1A</button>
+          title="Aller directement au chapitre cible d'Al3x1a">📍 Aller à Al3x1a</button>
         {mode === "jeu2" && jeu2Target >= 0 && (
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#c88aff", padding: "3px 6px" }}>
             Cible : ch.{jeu2Target + 1} · notes : {jeu2Notes.length}/9

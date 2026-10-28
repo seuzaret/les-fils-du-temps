@@ -279,7 +279,7 @@ export default function BunkerSalleK({ onGo, j3 }) {
   /* --- Intro narrative --- */
   if (intro) {
     const lignes = [
-      "L'ascenseur s'ouvre sur un couloir qui n'a pas vu de pas depuis quarante ans.",
+      "L'ascenseur s'ouvre sur un couloir où personne ne passe. Dans la poussière, une seule trace de pas, ancienne, toujours la même.",
       "L'air est lourd, chargé de poussière. Au bout, une double porte entrouverte sur une pièce noire.",
       "Jorge avait raison. Il y a quelque chose ici — tu le sens avant de le voir.",
     ];

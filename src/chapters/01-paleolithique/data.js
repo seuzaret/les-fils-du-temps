@@ -261,7 +261,7 @@ const ACTIONS = {
     ],
     jeu2Variants: [
       { bubble: "Toi ? Encore ? Une autre comme toi est venue autrefois. Elle voulait entrer dans la grotte, tout au fond. Elle est ressortie les mains couvertes d'ocre.",
-        say: "Ana se souvient d'Al3x1A : elle est entrée AU FOND DE LA GROTTE, sur la Grande Paroi." },
+        say: "Ana se souvient d'Al3x1a : elle est entrée AU FOND DE LA GROTTE, sur la Grande Paroi." },
       { bubble: "Une chronaute est venue avant toi, oui. Elle s'est assise au campement, près du feu, et a laissé une marque étrange sur les pierres du foyer.",
         say: "Ana pointe LE CAMPEMENT, près du feu. Cherche par là." },
       { bubble: "Une autre étrangère est descendue au gué. Elle a laissé quelque chose sur une des grandes pierres, près du pêcheur.",
@@ -325,12 +325,12 @@ const ACTIONS = {
       "Je connais tous les prénoms de tous les enfants nés ici depuis mon enfance. Cinquante-deux.",
     ],
     jeu2Variants: [
-      { bubble: "Je me souviens d'elle comme si c'était hier. Al3x1A. Je l'ai vue peindre juste là, sur la Grande Paroi, au fond de la grotte.",
-        say: "Kyan garde tout : la trace d'Al3x1A est AU FOND DE LA GROTTE." },
-      { bubble: "Al3x1A. Je me rappelle : elle s'est arrêtée au campement, près de notre feu. Elle a gravé une pierre du foyer, un signe étrange.",
+      { bubble: "Je me souviens d'elle comme si c'était hier. Al3x1a. Je l'ai vue peindre juste là, sur la Grande Paroi, au fond de la grotte.",
+        say: "Kyan garde tout : la trace d'Al3x1a est AU FOND DE LA GROTTE." },
+      { bubble: "Al3x1a. Je me rappelle : elle s'est arrêtée au campement, près de notre feu. Elle a gravé une pierre du foyer, un signe étrange.",
         say: "Kyan renvoie AU CAMPEMENT, près du feu. Cherche sur les pierres." },
-      { bubble: "Al3x1A a passé beaucoup de temps au gué du pêcheur. Elle a marqué une des grandes pierres, personne n'a osé l'effacer.",
-        say: "Kyan : marque d'Al3x1A AU GUÉ, sur une grande pierre." },
+      { bubble: "Al3x1a a passé beaucoup de temps au gué du pêcheur. Elle a marqué une des grandes pierres, personne n'a osé l'effacer.",
+        say: "Kyan : marque d'Al3x1a AU GUÉ, sur une grande pierre." },
     ] },
 
   /* ─── Nouveaux personnages / actions des tableaux ajoutés (atelier, gué, crête) ─── */
