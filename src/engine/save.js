@@ -88,6 +88,17 @@ export function importSaveString(text, slot = DEFAULT_SLOT) {
    ouvrir la 2e visite aux serveurs. */
 export const monde2Fini = () => !!loadSave("monde2")?.fini;
 export const marquerMonde2Fini = () => writeSave({ fini: true, le: Date.now() }, "monde2");
+/* Le retour du monde 2 : vrai si on vient de le finir (moins de 6 h) et que
+   la partie du Puits n'a pas encore été reprise depuis ; on reprend alors
+   le Jeu 3 directement, même si le joueur a retapé l'adresse à la main. */
+export function retourMonde2() {
+  const m = loadSave("monde2");
+  return !!(m?.fini && !m.repris && Date.now() - (m.le || 0) < 6 * 3600 * 1000);
+}
+export function retourMonde2Pris() {
+  const m = loadSave("monde2");
+  if (m) writeSave({ ...m, repris: true }, "monde2");
+}
 
 /* ---------- un fichier pour les trois jeux (export / import) ---------- */
 const SLOTS = ["jeu1", "jeu2", "jeu3", "monde2"];

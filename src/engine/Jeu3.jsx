@@ -90,9 +90,14 @@ const ROOMS = {
 export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
   /* le choix de fin du Jeu 2 : celui de la sauvegarde, sinon celui de la partie en cours */
   const choixJeu2 = startAt && "endChoice" in startAt ? startAt.endChoice : endChoice;
-  const [room, setRoom] = useState(startAt?.room || "awake");
+  /* le monde 2 fini depuis la dernière fois ? Si le joueur était déjà descendu
+     aux serveurs, le chemin inverse le ramène au −3, dans la salle de repos
+     (la petite MARTINE s'y rallume), d'où il repasse la porte du fond. */
+  const [retourM2] = useState(() => monde2Fini() && !startAt?.flags?.monde2_fini && !!startAt?.flags?.serveurs_visite1);
+  const [room, setRoom] = useState(() => (retourM2 && startAt?.room !== "epilogueJeu3" ? "dormants" : startAt?.room || "awake"));
   const [flags, setFlags] = useState(() => {
     const initial = { ...(startAt?.flags || {}) };
+    if (monde2Fini()) initial.monde2_fini = true;
     if (!initial.mission_order) initial.mission_order = pickMissionOrder();
     /* Les 3 destinations du Chronographe K-01 sont tirées au hasard
        une fois par partie, dans un pool de 8 inventions. Jorge les
@@ -167,9 +172,17 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
 
   const setFlag = (k, v = true) => setFlags((f) => ({ ...f, [k]: v }));
   /* le monde 2 (…/martine/) fini : on le lit au départ, et chaque fois
-     qu'on revient sur l'onglet (le joueur a pu le finir dans un autre) */
+     qu'on revient sur l'onglet (le joueur a pu le finir dans un autre).
+     Si le joueur était déjà descendu aux serveurs, le chemin inverse le
+     ramène au −3, dans la salle de repos (la petite MARTINE s'y rallume). */
+  const roomRef = useRef(room); roomRef.current = room;
+  const flagsRef = useRef(flags); flagsRef.current = flags;
   useEffect(() => {
-    const lire = () => { if (monde2Fini()) setFlags((f) => (f.monde2_fini ? f : { ...f, monde2_fini: true })); };
+    const lire = () => {
+      if (!monde2Fini() || flagsRef.current.monde2_fini) return;
+      setFlags((f) => (f.monde2_fini ? f : { ...f, monde2_fini: true }));
+      if (flagsRef.current.serveurs_visite1 && !["dormants", "epilogueJeu3"].includes(roomRef.current)) { prevRef.current = roomRef.current; setRoom("dormants"); }
+    };
     lire();
     const vu = () => { if (!document.hidden) lire(); };
     window.addEventListener("focus", lire); window.addEventListener("storage", lire); document.addEventListener("visibilitychange", vu);

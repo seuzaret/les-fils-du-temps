@@ -7,7 +7,7 @@ import Particles from "./engine/Particles.jsx";
 import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
 import { playSfx, isMuted, setMuted, startAmbience, stopAmbience, surChangementSon } from "./engine/audio.js";
-import { loadSave, writeSave, clearSave, hasSave, exportAllString, importAllString } from "./engine/save.js";
+import { loadSave, writeSave, clearSave, hasSave, exportAllString, importAllString, retourMonde2, retourMonde2Pris } from "./engine/save.js";
 import { trichePermise, BoutonTriche } from "./engine/triche.jsx";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
@@ -450,15 +450,19 @@ export default function App() {
   /* une triche qui change d'écran (ou relance le Jeu 3) referme le panneau : sur
      téléphone, il cacherait le bas de l'écran */
   useEffect(() => { setCheat(false); }, [screen, jeu3Nonce]);
-  /* …?reprendre=jeu3 (le bouton « Rentrer au Puits » du monde 2) : on
-     reprend directement la partie du Puits, puis on nettoie l'adresse. */
+  /* Le retour du monde 2 : …?reprendre=jeu3 (le bouton « Rentrer au Puits »),
+     ou l'adresse retapée à la main (le chemin inverse) juste après l'avoir
+     fini : on reprend directement la partie du Puits, une seule fois, et on
+     nettoie l'adresse. */
   useEffect(() => {
     try {
       const q = new URLSearchParams(window.location.search);
-      if (q.get("reprendre") !== "jeu3") return;
-      q.delete("reprendre");
-      window.history.replaceState(null, "", window.location.pathname + (q.toString() ? `?${q}` : "") + window.location.hash);
-      if (loadSave("jeu3")) resumeJeu3();
+      const bouton = q.get("reprendre") === "jeu3";
+      if (bouton) {
+        q.delete("reprendre");
+        window.history.replaceState(null, "", window.location.pathname + (q.toString() ? `?${q}` : "") + window.location.hash);
+      }
+      if ((bouton || retourMonde2()) && loadSave("jeu3")) { retourMonde2Pris(); resumeJeu3(); }
     } catch { /* rien */ }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
