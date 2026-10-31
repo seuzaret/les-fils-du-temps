@@ -14,6 +14,7 @@ import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
 import useEcran from "./engine/useEcran.js";
 import TitrePellicule from "./titre/TitrePellicule.jsx";
 import TitrePyramide from "./titre/TitrePyramide.jsx";
+import Generique, { generiqueOuvert } from "./titre/Generique.jsx";
 import { demarrerTheme, arreterTheme, themeEnCours } from "./titre/musiqueTitre.js";
 import CheatPanel from "./engine/CheatPanel.jsx";
 import TransitionScreen from "./engine/TransitionScreen.jsx";
@@ -314,7 +315,18 @@ export default function App() {
 
   /* le thème de l'écran titre (maquettes) : il s'éteint en fondu dès
      qu'on quitte l'écran titre, ou si on coupe le son */
-  useEffect(() => { if (screen !== "title" || muted) arreterTheme(); }, [screen, muted]);
+  useEffect(() => { if ((screen !== "title" && !generiqueOuvert()) || muted) arreterTheme(); }, [screen, muted]);
+
+  /* le générique de fin ouvert à part : ?generique, ou la triche 🎬
+     (dans le jeu, c'est Jeu3 qui l'ouvre après la fin) */
+  const [generiqueSeul, setGeneriqueSeul] = useState(() => {
+    try { return new URLSearchParams(window.location.search).has("generique"); } catch { return false; }
+  });
+  const fermerGenerique = () => {
+    setGeneriqueSeul(false);
+    if (screen !== "title") arreterTheme();
+    try { const u = new URL(window.location.href); if (u.searchParams.has("generique")) { u.searchParams.delete("generique"); window.history.replaceState(null, "", u); } } catch { /* rien */ }
+  };
 
   /* le bouton SOS en attente se ferme dès qu'on change de tableau ou de
      chapitre (on n'accumule pas les SOS non émis entre deux scènes). */
@@ -1504,6 +1516,7 @@ export default function App() {
   /* Panneau du MODE TRICHE — visible seulement après avoir tapé
      « triche ». Réutilisé dans tous les écrans via <CheatPanel />. */
   const cheatPanel = (<>
+    {generiqueSeul && <Generique prenom={prenom} onDone={fermerGenerique} />}
     {tricheTel && <BoutonTriche actif={cheat} onClick={() => setCheat((c) => !c)} />}
     <CheatPanel
       cheat={cheat}
@@ -1537,6 +1550,7 @@ export default function App() {
       onCheatJeu3Cailloux={cheatJeu3Cailloux}
       onCheatJeu3Final={cheatJeu3Final}
       onCheatJeu3Epilogue={cheatJeu3Epilogue}
+      onCheatGenerique={() => { setCheat(false); if (!muted) demarrerTheme(); setGeneriqueSeul(true); }}
     />
   </>);
 

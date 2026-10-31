@@ -22,7 +22,7 @@ import { sonCoupure, sonRallume } from "../sonsCombat.js";
        révélation et le choix ; T'ÉTEINDRE s'y joue en gros plan (HAL,
        Daisy Bell). Puis l'écran de fin : « T'éteindre » et « Te
        modifier » enchaînent sur l'épilogue, « Te faire confiance »
-       s'arrête.
+       s'arrête ; dans les trois cas, le générique (src/titre/Generique.jsx).
    ============================================================ */
 /* Le décor : normal, « eteint » (on l'a débranchée), « rallume » (elle
    revient), « faible » (2e visite : une baie sur deux est éteinte). */
@@ -209,8 +209,12 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
         <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
           Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
         </p>
-        <p style={{ fontSize: 11, color: "#5a6678", textAlign: "center", marginTop: 12 }}>
-          (Utilise le bouton « Menu » en haut à droite pour revenir au titre. Tu peux rejouer et essayer une autre fin.)
+        <button onClick={() => j3?.generique?.()} autoFocus
+          style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+          Générique ▸
+        </button>
+        <p style={{ fontSize: 11, color: "#5a6678", textAlign: "center", marginTop: 4 }}>
+          (Tu peux rejouer et essayer une autre fin.)
         </p>
         </>)}
       </div>

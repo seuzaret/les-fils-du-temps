@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { playMaterialize } from './sfx.js';
+import { demarrerVibreur, isMuted } from './audio.js';
 import TimeMachine from './TimeMachine.jsx';
 import PaleoArrivalDecor from './PaleoArrivalDecor.jsx';
 import NightStreetDecor from './NightStreetDecor.jsx';
@@ -149,29 +150,15 @@ export default function IntroStory({ onDone }) {
    ═══════════════════════════════════════════════════════════════ */
 function SlideNight({ onNext, silent = false }) {
   const [vibrating, setVibrating] = useState(false);
-  const audioRef = useRef(null);
   useEffect(() => {
     if (silent) return; // chambre d'ouverture : muette, cliquable n'importe où
-    try {
-      const a = new Audio('assets/sounds/phone-vibrate.wav');
-      a.loop = true; a.volume = 0.35; a.preload = 'auto';
-      a.load();
-      audioRef.current = a;
-    } catch { /* pas d'audio */ }
+    /* le vibreur est synthétisé (audio.js) : plus de fichier son */
+    let stop = null;
     const t = setTimeout(() => {
       setVibrating(true);
-      const a = audioRef.current;
-      if (!a) return;
-      const tryPlay = (n = 0) => {
-        const p = a.play();
-        if (p && p.catch) p.catch((err) => {
-          if (n < 3) setTimeout(() => tryPlay(n + 1), 200);
-          else console.warn('[intro] audio blocked:', err?.message);
-        });
-      };
-      tryPlay();
+      if (!isMuted()) stop = demarrerVibreur();
     }, 3000);
-    return () => { clearTimeout(t); try { audioRef.current?.pause(); } catch { /* déjà arrêté */ } };
+    return () => { clearTimeout(t); stop?.(); };
   }, [silent]);
 
   return (

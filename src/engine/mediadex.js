@@ -12,6 +12,7 @@
    ============================================================ */
 
 import META from './inventions-meta.json';
+import { playSfx } from './audio.js';
 
 /* Mapping msg_id → invention_id (nom du fichier dans _credits.json).
    Les messages sans entrée ici ne déclencheront PAS de carte
@@ -96,14 +97,9 @@ export function allCards() {
   return cards;
 }
 
-/* Petit son « wow » quand une nouvelle carte est trouvée. */
-let sfxCard = null;
+/* Petit son « wow » quand une nouvelle carte est trouvée (synthétisé,
+   voir SFX.carte dans audio.js). */
 export function playCardSound(muted = false) {
   if (muted) return;
-  try {
-    sfxCard = sfxCard || new Audio('assets/sounds/card-wow.mp3');
-    sfxCard.currentTime = 0;
-    sfxCard.volume = 0.15;
-    sfxCard.play().catch(() => {});
-  } catch { /* audio indisponible */ }
+  playSfx('carte');
 }

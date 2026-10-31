@@ -20,6 +20,8 @@ import BunkerPrison from "../chapters/jeu3/scenes/BunkerPrison.jsx";
 import BunkerSalleK from "../chapters/jeu3/scenes/BunkerSalleK.jsx";
 import BunkerVoyageK from "../chapters/jeu3/scenes/BunkerVoyageK.jsx";
 import EpilogueJeu3 from "../chapters/jeu3/scenes/EpilogueJeu3.jsx";
+import Generique from "../titre/Generique.jsx";
+import { demarrerTheme } from "../titre/musiqueTitre.js";
 import BunkerCantine from "../chapters/jeu3/scenes/BunkerCantine.jsx";
 import BunkerInfirmerie from "../chapters/jeu3/scenes/BunkerInfirmerie.jsx";
 import BunkerAtelier from "../chapters/jeu3/scenes/BunkerAtelier.jsx";
@@ -169,6 +171,10 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
      on l'a appelé (pour surligner "ici" dans le sélecteur). */
   const prevRef = useRef(startAt?.previousRoom || "awake");
   const goTo = (r) => { prevRef.current = room; setRoom(r); setPlanOpen(false); };
+  /* le générique de fin, par-dessus tout (après l'épilogue, ou après
+     TE FAIRE CONFIANCE) ; le thème démarre dans le geste (Safari) */
+  const [generique, setGenerique] = useState(false);
+  const ouvrirGenerique = () => { if (!isMuted()) demarrerTheme(); setGenerique(true); };
 
   const setFlag = (k, v = true) => setFlags((f) => ({ ...f, [k]: v }));
   /* le monde 2 (…/martine/) fini : on le lit au départ, et chaque fois
@@ -241,7 +247,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
     setCurrentQuestionIdx(idx);
   };
 
-  const j3 = { flags, heardPnj, setFlag, hear,
+  const j3 = { flags, heardPnj, setFlag, hear, generique: ouvrirGenerique,
     previousRoom: prevRef.current,
     hubRoom,
     missions,
@@ -342,7 +348,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
         )}
         <SceneFrame style={{ padding: compact ? 2 : 6 }} remplir={compact && ecran.portrait && !["voyageK", "epilogueJeu3"].includes(room)}>
           {room === "epilogueJeu3"
-            ? <EpilogueJeu3 prenom={prenom} fin={flags.fin_jeu3 || "eteindre"} onDone={onExit} />
+            ? <EpilogueJeu3 prenom={prenom} fin={flags.fin_jeu3 || "eteindre"} onDone={ouvrirGenerique} />
             : <Comp prenom={prenom} onGo={goTo} j3={j3} />}
         </SceneFrame>
         {showBack && !compact && (
@@ -390,6 +396,8 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
       {caillouxOpen && (
         <CaillouxPanel flags={flags} setFlag={setFlag} onClose={() => setCaillouxOpen(false)} />
       )}
+
+      {generique && <Generique prenom={prenom} onDone={onExit} />}
     </div>
   );
 }

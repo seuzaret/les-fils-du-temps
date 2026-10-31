@@ -89,8 +89,40 @@ function tone(c, { f, f1, t = 0, d = 0.15, type = "sine", v = 0.2 }) {
   o.stop(now + d + 0.05);
 }
 
+/** Une note TENUE : attaque, palier, extinction (tone() s'éteint tout de suite). */
+function tenue(c, { f, t = 0, a = 0.04, h = 0.6, r = 0.8, type = "sine", v = 0.1, vib = 0 }) {
+  const o = c.createOscillator();
+  const g = c.createGain();
+  const now = c.currentTime + t;
+  o.type = type;
+  o.frequency.setValueAtTime(f, now);
+  if (vib) { /* léger vibrato : la note « chatoie » */
+    const l = c.createOscillator(), lg = c.createGain();
+    l.frequency.value = 5.5; lg.gain.value = vib;
+    l.connect(lg); lg.connect(o.frequency); l.start(now); l.stop(now + a + h + r + 0.05);
+  }
+  g.gain.setValueAtTime(0, now);
+  g.gain.linearRampToValueAtTime(v, now + a);
+  g.gain.setValueAtTime(v, now + a + h);
+  g.gain.exponentialRampToValueAtTime(0.0001, now + a + h + r);
+  o.connect(g);
+  g.connect(c.destination);
+  o.start(now);
+  o.stop(now + a + h + r + 0.05);
+}
+
 /* Les recettes sonores (fréquences en Hz — do5 = 523, mi5 = 659…) */
 const SFX = {
+  /* nouvelle carte du médiadex : un « whoosh » qui monte, puis un accord
+     brillant qui chatoie (mi majeur, la note du haut à 1 319 Hz) */
+  carte: (c) => {
+    tone(c, { f: 330, f1: 1319, d: 0.2, type: "sine", v: 0.1 });
+    tenue(c, { f: 659, t: 0.16, h: 0.7, r: 0.9, type: "triangle", v: 0.07 });
+    tenue(c, { f: 988, t: 0.19, h: 0.7, r: 0.9, type: "sine", v: 0.06 });
+    tenue(c, { f: 1319, t: 0.22, h: 0.75, r: 0.85, type: "sine", v: 0.08, vib: 6 });
+    tenue(c, { f: 1326, t: 0.22, h: 0.75, r: 0.85, type: "sine", v: 0.03 }); // battement : le scintillement
+    tone(c, { f: 2637, t: 0.3, d: 0.6, type: "sine", v: 0.025 });
+  },
   /* bip de TEST : deux notes claires et un peu fortes — sert à vérifier
      d'un clic sur 🔊 que le son sort bien. */
   test: (c) => {
@@ -166,6 +198,55 @@ export function playSfx(name) {
   const jouer = () => { try { SFX[name]?.(c); } catch { /* rien */ } };
   if (c.state === "running") jouer();
   else c.resume().then(jouer).catch(() => { /* audio bloqué : tant pis */ });
+}
+
+/** Le vibreur du téléphone (intro) : « bzzzz » 1,1 s, silence 0,9 s, en
+    boucle jusqu'à l'appel de la fonction renvoyée. Un moteur grave (150 Hz)
+    et le grésillement du téléphone posé sur le bois (modulation rapide). */
+export function demarrerVibreur() {
+  const c = ensureCtx();
+  if (!c) return () => {};
+  const sortie = c.createGain(); sortie.gain.value = 0;
+  const filtre = c.createBiquadFilter(); filtre.type = "lowpass"; filtre.frequency.value = 900; filtre.Q.value = 3;
+  const grille = c.createGain(); grille.gain.value = 0.6;
+  const moteurs = [[148, "sawtooth", 1], [151.5, "square", 0.35]].map(([f, type, v]) => {
+    const o = c.createOscillator(), g = c.createGain();
+    o.type = type; o.frequency.value = f; g.gain.value = v;
+    o.connect(g); g.connect(filtre);
+    return o;
+  });
+  const lfo = c.createOscillator(), lfoG = c.createGain();
+  lfo.frequency.value = 37; lfoG.gain.value = 0.4;
+  lfo.connect(lfoG); lfoG.connect(grille.gain);
+  filtre.connect(grille); grille.connect(sortie); sortie.connect(c.destination);
+  const oscs = [...moteurs, lfo];
+  const t0 = c.currentTime + 0.05;
+  oscs.forEach((o) => o.start(t0));
+  let prochain = t0, fini = false;
+  const V = 0.2;
+  const programmer = () => {
+    while (prochain < c.currentTime + 3) {
+      const s = prochain, v = muted ? 0 : V;
+      sortie.gain.setValueAtTime(0, s);
+      sortie.gain.linearRampToValueAtTime(v, s + 0.03);
+      sortie.gain.setValueAtTime(v, s + 1.07);
+      sortie.gain.linearRampToValueAtTime(0, s + 1.1);
+      prochain += 2;
+    }
+  };
+  programmer();
+  const id = setInterval(programmer, 500);
+  return () => {
+    if (fini) return;
+    fini = true; clearInterval(id);
+    const t = c.currentTime;
+    try {
+      sortie.gain.cancelScheduledValues(t);
+      sortie.gain.setValueAtTime(sortie.gain.value, t);
+      sortie.gain.linearRampToValueAtTime(0, t + 0.05);
+      oscs.forEach((o) => o.stop(t + 0.1));
+    } catch { /* déjà arrêté */ }
+  };
 }
 
 export function isMuted() { return muted; }

@@ -71,13 +71,21 @@ survit ET reste lisible**. C'est un ressort de jeu ET une leçon d'archivistique
 - **Réussite** : particules dorées, halo, petit son cristallin, l'objet créé "pop" dans l'inventaire, jauges qui s'animent, carte documentaire.
 - **Échec** : tremblement, "bzzt", réplique de MARTINE (avec réponses spéciales aux erreurs logiques : arc sans flèche, etc.).
 - **Message perdu** : le message s'envole puis se désintègre en poussière + explication.
-- Sons : bibliothèque de petits SFX libres (freesound.org, CC0) + possibilité d'ambiances lofi par époque. Un bouton 🔇 global.
+- Sons : **tous synthétisés** dans le navigateur (Web Audio, `engine/audio.js`, musiques dans `titre/` et `martine/`), aucun fichier son. Les deux derniers fichiers (la carte du médiadex, le vibreur de l'intro), d'origine non documentée, ont été refaits en synthèse le 2026-10-31 (`SFX.carte`, `demarrerVibreur`). Un bouton 🔇 global.
 
 ### 3.4 Sauvegarde & classe
 - `localStorage` : progression, messages découverts, chapitre courant. Un emplacement par jeu (`jeu1`, `jeu2`, `jeu3`, `src/engine/save.js`) ; le Jeu 3 écrit le sien lui-même (`Jeu3.jsx`). Export / import (Réglages) : un seul fichier pour les trois jeux ; l'ancien fichier d'une seule partie s'importe encore.
 - Triches (pour l'enseignant) : taper « triche » au clavier ; sur téléphone, ajouter `?triche` à l'adresse : un bouton 🐛 ouvre le même panneau (titre, monde 2), « 🐛 Plan » dans la barre du Jeu 3 (se déplacer par le plan), « 🐛 Niveau suivant » dans la pause du combat. Actif tout l'onglet (`sessionStorage`), `?triche=0` l'enlève (`engine/triche.jsx`). Une triche qui lance une partie referme le panneau.
 - Le son : un seul réglage muet pour tout le site (`martine.muted`, `engine/audio.js`) ; boutons 🔊/🔇 sur l'écran titre, dans la barre du Jeu 3, dans le coin du combat et dans le monde 2. `setMuted` prévient les autres boutons (événement `martine:son`, `surChangementSon`).
 - Le monde 2 (`…/martine/`, même domaine) note qu'il est fini dans un 4e emplacement, `monde2` (`marquerMonde2Fini`) ; le Jeu 3 le relit au départ et chaque fois qu'on revient sur l'onglet (flag `monde2_fini`), ce qui ouvre la 2e visite aux serveurs. `?reprendre=jeu3` reprend directement la partie du Puits (bouton « Rentrer au Puits » du monde 2).
+- **Le générique de fin** (`titre/Generique.jsx`) : après « FIN DU JEU 3 », pour les trois fins (« Terminer ▸ » de l'épilogue, « Générique ▸ » de TE FAIRE CONFIANCE), puis l'écran titre. Le décor de la pellicule (vrais tableaux du Jeu 1 dans le faisceau de l'œil de MARTINE), le thème du titre (qui continue sur l'écran titre ; `generiqueOuvert()` empêche App de le couper), environ 1 min 25 de défilement, « Passer ▸ », 🔊. Mode calme : des pages avec « Suivant ▸ ». Ouvrir directement : `?generique`, ou 🎬 dans le panneau de triche. Le pseudonyme est en chasse fixe et les chiffres sont alignés (`lining-nums`), car le zéro elzévirien de Cormorant se lit « o ».
+  - **Le calcul de l'électricité et de l'eau** (rubrique « Ce que le jeu a consommé », refait le 2026-10-31) :
+    - *Mesuré* : le journal de la session Claude Code (5 → 31 octobre 2026, 3 487 réponses du modèle) : 1,46 milliard de tokens relus depuis le cache, 37 millions écrits dans le cache, 4,25 millions de tokens écrits par le modèle.
+    - *Facteurs* : Simon P. Couch, « Electricity use of AI coding agents », 20 janvier 2026 (simonpcouch.com/blog/2026-01-20-cc-impact) : environ 39 Wh par million de tokens lus dans le cache, 490 Wh par million écrits dans le cache, 390 par million en entrée, 1 950 par million en sortie (estimations à partir du chiffre d'Epoch AI pour GPT-4o, environ 0,3 Wh par requête, février 2025). Résultat : 84 kWh, dont 57 pour la relecture du cache.
+    - *Extrapolé* : du 30 septembre au 4 octobre (75 commits sur 344, hors du journal), au prorata des commits : × 1,28, soit **environ 107 kWh** (fourchette 50 à 210 kWh). Les débuts (Jeu 1 et Jeu 2, avant le 30 septembre, faits sur l'ordinateur du créateur) ne sont pas comptés.
+    - *Eau* : refroidissement sur place, entre 0,12 L/kWh (Amazon, AWS, 2025) et environ 1,1 L/kWh (Google : 0,26 mL pour 0,24 Wh par requête Gemini, août 2025), plus l'eau des centrales électriques, environ 1,8 L/kWh (moyenne des États-Unis retenue par P. Li et al., « Making AI Less Thirsty », 2023) : 2,2 à 3,2 L/kWh, soit **235 à 340 L**, affiché « près de 300 litres ».
+    - *Comparaisons* : un foyer français consomme environ 4 100 kWh d'électricité par an (EDF, d'après le SDES), soit environ 11 kWh par jour, donc 107 kWh ≈ 10 jours ; un bain, environ 150 L (CIEAU), donc 300 L ≈ deux bains.
+    - Anthropic ne publie pas de chiffre par token pour ses modèles : c'est une estimation, d'où « deux fois plus petit ou deux fois plus grand ».
 - Écran "Carnet de bord" imprimable (CSS print) : toutes les fiches découvertes → trace écrite pour l'élève.
 - Mode "classe entière" : police plus grande, plein écran (API Fullscreen).
 
@@ -109,7 +117,7 @@ martine/
 │   │   ├── Gauges.jsx         (les 4 jauges)
 │   │   ├── save.js            (localStorage)
 │   │   └── audio.js
-│   ├── titre/                 (écran titre TitrePyramide, menu, musique ; TitrePellicule ?titre=c, pour le futur générique de fin)
+│   ├── titre/                 (écran titre TitrePyramide, menu, musique ; TitrePellicule ?titre=c ; Generique, le générique de fin, ?generique)
 │   ├── martine/               (le monde 2, site …/martine/ : MondeMartine, Retablissement)
 │   ├── chapters/              ← UN DOSSIER PAR CHAPITRE, pur contenu
 │   │   ├── 01-paleolithique/
@@ -121,7 +129,7 @@ martine/
 │   │                           le final au −3 : BunkerDormants → BunkerServeurs, en deux visites,
 │   │                           la 2e lance CombatMartine en mode « integre » ; ?combat=1 = le combat seul)
 │   └── styles/
-└── public/assets/             (sons, images, polices)
+└── public/assets/             (images d'archive : inventions/ et emi/, avec leurs crédits)
 ```
 
 **Principe clé : moteur ↔ contenu séparés.** Ajouter un chapitre = ajouter un dossier

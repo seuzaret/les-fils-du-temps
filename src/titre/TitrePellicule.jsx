@@ -1,6 +1,6 @@
 /* ============================================================
    « LA PELLICULE » (?titre=c) — maquette d'écran titre écartée,
-   gardée pour le futur générique de fin (choix du créateur)
+   reprise par le générique de fin (src/titre/Generique.jsx)
    ------------------------------------------------------------
    Le jeu se montre lui-même : deux pellicules défilent en
    perspective dans le faisceau d'un projecteur, avec de vraies
@@ -25,14 +25,14 @@ const CHOIX = [
   ["interieur", "campement"], ["plaine", "muraille"], ["uruk", "pyramide"], ["forum", "port"], ["gutenberg", "chateau"],
   ["imprimerie", "province"], ["telegraphe", "cinema"], ["bbc", "eniac"], ["salon69", "kiosque"], ["chambre", "datacenter"],
 ];
-const IMAGES = [0, 1].map((r) => CHOIX.map((paire, i) => {
+export const IMAGES = [0, 1].map((r) => CHOIX.map((paire, i) => {
   const ch = CHAPTERS[i];
   const sc = ch?.scenes.find((s) => s.id === paire[r]) || ch?.scenes[r] || ch?.scenes[0];
   return { cle: `${i}-${paire[r]}`, Composant: sc?.Component, date: ch?.date, epoque: ch?.epoque };
 }));
 
 /* fabrique les vignettes une par une, sans figer la page */
-function useVignettes() {
+export function useVignettes() {
   const [urls, setUrls] = useState({});
   useEffect(() => {
     let fini = false;
@@ -50,7 +50,7 @@ function useVignettes() {
   return urls;
 }
 
-function Pellicule({ images, urls, w, sens, duree, style }) {
+export function Pellicule({ images, urls, w, sens, duree, style }) {
   const h = Math.round(w * 0.56), trou = Math.max(6, Math.round(w * 0.045)), bord = trou * 2.4;
   const cadre = (it, j) => (
     <div key={`${it.cle}-${j}`} style={{ flex: "0 0 auto", width: w, display: "flex", flexDirection: "column", gap: 4 }}>
