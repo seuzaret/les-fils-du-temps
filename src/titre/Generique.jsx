@@ -9,7 +9,6 @@
    commencé) ; il continue sur l'écran titre au retour.
    Mouvement réduit (réglage « calme » ou système) : le texte vient
    par pages, avec un bouton « Suivant ».
-   Les chiffres d'électricité et d'eau : voir Claude.md, « Générique ».
    Ouvrir directement : ?generique (triche : 🎬 dans le panneau 🐛).
    ============================================================ */
 import { useEffect, useRef, useState } from "react";
@@ -114,21 +113,6 @@ function sections(prenom) {
       <Rubrique>Licence</Rubrique>
       <Nom petit>Creative Commons BY-NC-SA 4.0</Nom>
       <Note>Tu peux copier, modifier et partager ce jeu, sans le vendre, en citant ses auteurs et sous la même licence. Les photos et les polices gardent la leur.</Note>
-    </>) },
-    { k: "conso", el: (<>
-      <Rubrique>Ce que le jeu a consommé</Rubrique>
-      <Note style={{ fontStyle: "normal" }}>Pour écrire ce jeu, l'IA a relu près de 2 milliards de tokens (des morceaux de mots : elle relit tout le projet à chaque étape) et en a écrit environ 5 millions.</Note>
-      <div style={{ height: 14 }} />
-      <Nom petit>⚡ environ 100 kWh d'électricité</Nom>
-      <Note>ce qu'un foyer français consomme en une dizaine de jours</Note>
-      <div style={{ height: 10 }} />
-      <Nom petit>💧 près de 300 litres d'eau</Nom>
-      <Note>deux bains, pour refroidir les serveurs et produire l'électricité</Note>
-      <div style={{ height: 14 }} />
-      <p style={{ fontFamily: MONO, fontSize: 11, lineHeight: 1.6, color: "#8a8070", margin: 0 }}>
-        Une estimation, à partir de chiffres publiés : le vrai chiffre peut être deux fois plus petit ou deux fois plus grand. Les tout débuts du jeu (avant le 30 septembre 2026) ne sont pas comptés.<br />
-        Sources : S. Couch (2026) · Google (2025) · Amazon (2025) · P. Li et al. (2023) · EDF, d'après le SDES · CIEAU
-      </p>
     </>) },
   ];
 }
