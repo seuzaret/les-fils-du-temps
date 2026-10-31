@@ -83,7 +83,7 @@ function sections(prenom) {
     { k: "images", el: (<>
       <Rubrique>Les images d'archive</Rubrique>
       <Nom petit>44 photos de Wikimedia Commons</Nom>
-      <Note>29 dans le domaine public ou sous CC0 ;<br />11 sous licence Creative Commons, de {AUTEURS_CC.slice(0, -1).join(", ")} et {AUTEURS_CC.at(-1)} ;<br />4 pour le jeu « Vrai, faux ou IA ? ».</Note>
+      <Note>29 dans le domaine public ou sous CC0 ;<br />11 sous licence Creative Commons, de {AUTEURS_CC.slice(0, -1).join(", ")} et {AUTEURS_CC[AUTEURS_CC.length - 1]} ;<br />4 pour le jeu « Vrai, faux ou IA ? ».</Note>
       <Note>L'auteur et la licence de chaque photo du médiadex sont écrits sur sa carte.</Note>
       <div style={{ height: 18 }} />
       <Note>Tout le reste (tableaux, personnages, musique, bruitages) a été dessiné et composé pour le jeu, dans le navigateur.</Note>

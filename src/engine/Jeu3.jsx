@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import SceneFrame from "./SceneFrame.jsx";
+import { FiletSalle } from "./FiletSecurite.jsx";
 import useEcran from "./useEcran.js";
 import { writeSave, monde2Fini } from "./save.js";
 import { isMuted, setMuted, playSfx, surChangementSon } from "./audio.js";
@@ -347,9 +348,12 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
           </div>
         )}
         <SceneFrame style={{ padding: compact ? 2 : 6 }} remplir={compact && ecran.portrait && !["voyageK", "epilogueJeu3"].includes(room)}>
+          {/* une salle qui plante n'emporte pas tout le Jeu 3 (la barre et le plan restent) */}
+          <FiletSalle cle={room}>
           {room === "epilogueJeu3"
             ? <EpilogueJeu3 prenom={prenom} fin={flags.fin_jeu3 || "eteindre"} onDone={ouvrirGenerique} />
             : <Comp prenom={prenom} onGo={goTo} j3={j3} />}
+          </FiletSalle>
         </SceneFrame>
         {showBack && !compact && (
           <button onClick={() => goTo(backTarget)}
