@@ -110,6 +110,10 @@ function sections(prenom) {
       <div style={{ height: 22 }} />
       <Rubrique>Fabriqué avec</Rubrique>
       <Nom petit>React et Vite</Nom><Note>hébergé par GitHub Pages</Note>
+      <div style={{ height: 22 }} />
+      <Rubrique>Licence</Rubrique>
+      <Nom petit>Creative Commons BY-NC-SA 4.0</Nom>
+      <Note>Tu peux copier, modifier et partager ce jeu, sans le vendre, en citant ses auteurs et sous la même licence. Les photos et les polices gardent la leur.</Note>
     </>) },
     { k: "conso", el: (<>
       <Rubrique>Ce que le jeu a consommé</Rubrique>
