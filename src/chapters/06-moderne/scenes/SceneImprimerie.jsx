@@ -11,7 +11,7 @@ import { Speckle } from "../../../engine/scenery.jsx";
    On lui APPORTE l'article de Jules → il en fait une gazette.
    ============================================================ */
 
-export default function SceneImprimerie({ collect, action, reveal, made = [], queteQui, mode }) {
+export default function SceneImprimerie({ collect, action, reveal, made = [], queteQui, queteTour, mode }) {
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
@@ -377,13 +377,14 @@ export default function SceneImprimerie({ collect, action, reveal, made = [], qu
       {/* zones cliquables */}
       {/* le « ? » de Sigismond (tant qu'il est le personnage de la quête) */}
       {queteQui === "sigismond" && (
-        <>
-          <g transform="translate(744,336)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
-            <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
-            <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
-          </g>
-          <Hotspot cx={762} cy={424} r={31} label="parler à Sigismond" reveal={reveal} onClick={() => action("sigismond")} />
-        </>
+        <g transform="translate(744,336)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
+          <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
+        </g>
+      )}
+      {/* cliquable pendant son tour de quête (queteTour), même là où le « ? » est masqué */}
+      {queteTour === "sigismond" && (
+        <Hotspot cx={762} cy={424} r={31} label="parler à Sigismond" reveal={reveal} onClick={() => action("sigismond")} />
       )}
 
       {/* Sigismond, cible de dépôt : on lui apporte l'article → la gazette */}

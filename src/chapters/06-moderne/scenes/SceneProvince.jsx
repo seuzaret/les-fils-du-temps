@@ -13,7 +13,7 @@ import { Clouds, Grass, Ridge, Speckle, TreeLine } from "../../../engine/scenery
    (on écrit à son sujet) et le relais de chevaux (on y confie le pli).
    ============================================================ */
 
-export default function SceneProvince({ collect, action, reveal, made = [], queteQui }) {
+export default function SceneProvince({ collect, action, reveal, made = [], queteQui, queteTour }) {
   const envoye = made.includes("msg_poste");
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
@@ -264,13 +264,14 @@ export default function SceneProvince({ collect, action, reveal, made = [], quet
       {/* ═══ zones cliquables ═══ */}
       {/* le « ? » de Jules */}
       {queteQui === "jules" && (
-        <>
-          <g transform="translate(182,377)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
-            <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
-            <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
-          </g>
-          <Hotspot cx={200} cy={434} r={36} label="parler à Jules" reveal={reveal} onClick={() => action("jules")} />
-        </>
+        <g transform="translate(182,377)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
+          <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
+        </g>
+      )}
+      {/* cliquable pendant son tour de quête (queteTour), même là où le « ? » est masqué */}
+      {queteTour === "jules" && (
+        <Hotspot cx={200} cy={434} r={36} label="parler à Jules" reveal={reveal} onClick={() => action("jules")} />
       )}
 
       {/* la montgolfière (support : on écrit à son sujet) */}

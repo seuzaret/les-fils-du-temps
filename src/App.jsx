@@ -1937,11 +1937,18 @@ export default function App() {
   /* Le "?" doré au-dessus des personnages est masqué partout sauf dans les
      scènes où la quête est vraiment chronologique (château de Bannister au
      Moyen Âge). Ailleurs le joueur explore librement. */
+  /* `tab` est un NUMÉRO de tableau : on compare l'id du tableau. (Jusqu'au
+     2026-11-02, on comparait `tab` lui-même aux ids : le test échouait
+     toujours, et les personnages cliquables seulement à leur tour —
+     le seigneur au château, Jorge, Sigismond, l'opérateur, Volta,
+     Jules — ne l'étaient jamais : chapitre 5 bloqué après le prêtre.) */
   const CHRONO_SCENES = new Set(["chateau", "retour"]);
-  const queteQuiVal = mode === "jeu2"
-    ? null
-    : (CHRONO_SCENES.has(tab) ? (chapter.quete?.[quete]?.perso ?? null) : null);
-  const sceneProps = { collect, action, reveal, flags, made, inv: effectiveInv, mode, queteQui: queteQuiVal };
+  /* `queteTour` : le personnage dont c'est le tour, partout (il rend
+     cliquables ceux qui ne le sont qu'à leur tour) ; `queteQui` : le
+     même, mais seulement là où le « ? » doré doit s'afficher. */
+  const queteTourVal = mode === "jeu2" ? null : (chapter.quete?.[quete]?.perso ?? null);
+  const queteQuiVal = CHRONO_SCENES.has(chapter.scenes[tab]?.id) ? queteTourVal : null;
+  const sceneProps = { collect, action, reveal, flags, made, inv: effectiveInv, mode, queteQui: queteQuiVal, queteTour: queteTourVal };
 
   /* ---- le carnet imprimable est dans engine/CarnetPrint.jsx ---- */
 

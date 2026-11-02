@@ -12,7 +12,7 @@ import { Figure } from "../../../engine/chars.jsx";
    flamme (→ œuvre perdue). Puis Jorge présente sa NOTE DE FRAIS.
    ============================================================ */
 
-export default function SceneMonastere({ collect, action, reveal, made = [], flags = {}, queteQui, mode }) {
+export default function SceneMonastere({ collect, action, reveal, made = [], flags = {}, queteQui, queteTour, mode }) {
   const manuscrit = made.includes("msg_manuscrit");
   const factureDue = manuscrit && !flags.paye;
   return (
@@ -298,13 +298,14 @@ export default function SceneMonastere({ collect, action, reveal, made = [], fla
       {/* le « ? » du frère Jorge (tant qu'il guide, AVANT le manuscrit ;
           ensuite c'est la note de frais qui appelle l'attention) */}
       {queteQui === "jorge" && !manuscrit && (
-        <>
-          <g transform="translate(552,324)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
-            <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
-            <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
-          </g>
-          <Hotspot cx={572} cy={356} r={28} label="parler au frère Jorge" reveal={reveal} onClick={() => action("jorge")} />
-        </>
+        <g transform="translate(552,324)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
+          <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
+        </g>
+      )}
+      {/* cliquable pendant son tour de quête (queteTour), même là où le « ? » est masqué */}
+      {queteTour === "jorge" && !manuscrit && (
+        <Hotspot cx={572} cy={356} r={28} label="parler au frère Jorge" reveal={reveal} onClick={() => action("jorge")} />
       )}
 
       {/* la NOTE DE FRAIS à régler (ouvre la facture + le paiement) */}

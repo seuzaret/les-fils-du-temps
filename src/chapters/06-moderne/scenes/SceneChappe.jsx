@@ -13,7 +13,7 @@ import { Clouds, Grass, Haze, Hill, Leafy, Ridge, Rock, Speckle, TreeLine } from
    l'espion, disques de zinc & cuivre, chiffons à la saumure.
    ============================================================ */
 
-export default function SceneChappe({ collect, action, reveal, made = [], queteQui }) {
+export default function SceneChappe({ collect, action, reveal, made = [], queteQui, queteTour }) {
   return (
     <svg viewBox="0 0 1000 560" style={{ display: "block", width: "100%", height: "100%" }} preserveAspectRatio="xMidYMid slice">
       <defs>
@@ -275,23 +275,25 @@ export default function SceneChappe({ collect, action, reveal, made = [], queteQ
       {/* zones cliquables */}
       {/* le « ? » de l'opérateur (tant qu'il guide : télégraphier Condé) */}
       {queteQui === "operateur" && (
-        <>
-          <g transform="translate(372,321)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
-            <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
-            <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
-          </g>
-          <Hotspot cx={392} cy={331} r={31} label="parler à l'opérateur" reveal={reveal} onClick={() => action("operateur")} />
-        </>
+        <g transform="translate(372,321)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
+          <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
+        </g>
+      )}
+      {/* cliquable pendant son tour de quête (queteTour), même là où le « ? » est masqué */}
+      {queteTour === "operateur" && (
+        <Hotspot cx={392} cy={331} r={31} label="parler à l'opérateur" reveal={reveal} onClick={() => action("operateur")} />
       )}
       {/* le « ? » de Volta (quand il guide : fabriquer la pile) */}
       {queteQui === "volta" && (
-        <>
-          <g transform="translate(578,329)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
-            <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
-            <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
-          </g>
-          <Hotspot cx={597} cy={429} r={31} label="parler à Volta" reveal={reveal} onClick={() => action("volta")} />
-        </>
+        <g transform="translate(578,329)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
+          <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
+        </g>
+      )}
+      {/* cliquable pendant son tour de quête (queteTour), même là où le « ? » est masqué */}
+      {queteTour === "volta" && (
+        <Hotspot cx={597} cy={429} r={31} label="parler à Volta" reveal={reveal} onClick={() => action("volta")} />
       )}
 
       <Hotspot cx={480} cy={190} r={80} label="bras articulés" item="bras" reveal={reveal} onClick={() => collect("bras")} />

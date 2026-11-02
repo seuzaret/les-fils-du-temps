@@ -14,7 +14,7 @@ import { Speckle } from "../../../engine/scenery.jsx";
    À trouver : la toile de lin (au mur) et le fil de laine coloré.
    ============================================================ */
 
-export default function SceneChateau({ collect, action, reveal, made = [], flags = {}, queteQui }) {
+export default function SceneChateau({ collect, action, reveal, made = [], flags = {}, queteQui, queteTour }) {
   const brode = made.includes("msg_broderie");
   /* mode LIVRAISON (2e visite) : on a payé le traité et on doit le remettre.
      Le prêtre et le paysan deviennent des cibles où déposer le livre. */
@@ -294,13 +294,14 @@ export default function SceneChateau({ collect, action, reveal, made = [], flags
       {/* ═══ zones cliquables ═══ */}
       {/* le « ? » du seigneur (tant qu'il est le personnage de la quête) */}
       {queteQui === "charles" && (
-        <>
-          <g transform="translate(482,236)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
-            <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
-            <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
-          </g>
-          <Hotspot cx={500} cy={330} r={52} label="parler au seigneur Bannister" reveal={reveal} onClick={() => action("charles")} />
-        </>
+        <g transform="translate(482,236)" style={{ animation: "glow 2.4s ease-in-out infinite" }}>
+          <path d="M0 0 q0 -20 20 -20 q20 0 20 17 q0 14 -17 18 l0 6" fill="none" stroke="#ffd166" strokeWidth="4" />
+          <circle cx="20" cy="31" r="2.6" fill="#ffd166" />
+        </g>
+      )}
+      {/* cliquable pendant son tour de quête (queteTour), même là où le « ? » est masqué */}
+      {queteTour === "charles" && (
+        <Hotspot cx={500} cy={330} r={52} label="parler au seigneur Bannister" reveal={reveal} onClick={() => action("charles")} />
       )}
 
       {/* le paysan et le prêtre : le contexte de la quête de Galien.
