@@ -1427,12 +1427,23 @@ export default function App() {
     if ((kind === "item" || kind === "hot") && val !== src) combinePair(src, val, point);
   };
 
-  /* Bouton 💡 : propose le prochain indice utile */
+  /* Bouton 💡 : propose le prochain indice utile.
+     D'abord la QUÊTE : quand l'étape en cours consiste à PARLER à
+     quelqu'un (pas de tâche `attend`), on redit la consigne « ➜ … »
+     donnée à la fin de l'étape précédente (ex. « Écoute à présent le
+     prêtre… »). Sinon, les indices de fabrication du chapitre, puis ce
+     qui reste à trouver, puis ce que demande l'étape en cours. */
   const hint = () => {
+    const step = mode === "jeu2" ? null : chapter.quete?.[quete];
+    if (step && !step.attend) {
+      const consigne = chapter.quete[quete - 1]?.suite || step.say;
+      if (consigne) { say(`💡 Indice : ${consigne}`); return; }
+    }
     const h = chapter.hints.find((h) => h.needs.every((n) => inv.includes(n)) && !made.includes(h.out) && !msgs.includes(h.out));
     if (h) { say(`💡 Indice : ${h.text}`); return; }
     const missing = Object.keys(chapter.where).find((id) => !inv.includes(id) && !isHidden(id) && isUseful(id, made));
     if (missing) say(`💡 Indice : il reste des choses à découvrir ${chapter.where[missing]}. Observe bien le décor… (le bouton 👁 peut aider)`);
+    else if (step?.attend && step.say) say(`💡 Indice : ${step.say}`);
     else say("💡 Tu as tout trouvé. Il ne reste plus qu'à combiner — glisse un élément sur un autre, ou sur le décor.");
   };
 
@@ -2063,8 +2074,12 @@ export default function App() {
             )}
           </span>
           )}
-          {/* deux boutons seulement dans le bandeau — Mediadex et Réglages.
-              Le son, l'indice, la révélation, le carnet sont dans Réglages. */}
+          {/* dans le bandeau : l'indice (jeu 1 ; remis le 2026-11-02, « c'est
+              assez dur »), le Mediadex et les Réglages. Le son, la révélation,
+              le carnet sont dans Réglages (l'indice y reste aussi). */}
+          {mode !== "jeu2" && (
+            <button onClick={hint} title="Un indice de MARTINE" aria-label="Indice" style={{ ...headBtn, color: "#ffd166" }}>💡</button>
+          )}
           <button onClick={() => setShowMediadex(true)} title={`Mediadex (${mediadex.length} cartes)`} style={headBtn}>🃏</button>
           <button onClick={() => setModal({ type: "settings" })} title="Réglages, son, indice, carnet…" style={headBtn}>⚙</button>
           {/* Sur écran étroit uniquement, le bouton compact de SAUT reste
