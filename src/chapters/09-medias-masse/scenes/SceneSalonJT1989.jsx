@@ -254,6 +254,13 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
       {/* ═════ FAUTEUIL DU GRAND-PÈRE, à droite, VU DE DOS, orienté TV ═════ */}
       <PLayer depth={3}>
         <g transform="translate(880,540)">
+          {/* GRAND-PÈRE, dessiné AVANT le dossier : le fauteuil cache sa nuque
+             et seul le haut du crâne dépasse (avant le 2026-11-04, la tête
+             était peinte par-dessus le tissu : elle « sortait » du fauteuil) */}
+          <g transform="translate(0,-200) scale(1.38)">
+            <HeadBack back skin="#e8c8a8" hair="#efe8de" look="ring" />
+            <HeadFront back />
+          </g>
           {/* dossier haut, arrondi */}
           <path d="M-56 -180 Q0 -196 56 -180 L64 -30 L-64 -30 Z" fill="url(#jt-gp-chair)" />
           {/* rainures cotelées */}
@@ -269,13 +276,6 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
           <rect x="-78" y="0" width="10" height="12" fill="#1a0a04" rx="1" />
           <rect x="68" y="0" width="10" height="12" fill="#1a0a04" rx="1" />
 
-          {/* GRAND-PÈRE : nuque + haut du crâne qui dépasse du dossier arrondi */}
-          <g transform="translate(0,-176) scale(1.38)">
-            <HeadBack back skin="#e8c8a8" hair="#efe8de" look="ring" />
-            <HeadFront back />
-          </g>
-          {/* col d'un gilet gris-beige qui dépasse */}
-          <path d="M-22 -170 Q0 -164 22 -170 L22 -158 L-22 -158 Z" fill="#7a6a5a" />
         </g>
       </PLayer>
 
@@ -320,22 +320,6 @@ export default function SceneSalonJT1989({ collect, action, reveal, made = [], i
             {/* col de chemise à carreaux */}
             <path d="M-20 14 L-14 20 L0 18 L14 20 L20 14 L20 22 L-20 22 Z" fill="#8a5a3a" />
             <path d="M-14 20 L-4 24 L4 24 L14 20" stroke="#5a3a20" strokeWidth="0.6" fill="none" />
-            {/* bras qui dépasse à droite tenant la cigarette */}
-            <g transform="translate(38,26)">
-              <ellipse cx="0" cy="0" rx="4" ry="3" fill="#e8bfa0" />
-              <line x1="4" y1="0" x2="14" y2="-4" stroke="#f0eae0" strokeWidth="1.4" />
-              <ellipse cx="14" cy="-4" rx="1.2" ry="0.6" fill="#ff8a30">
-                <animate attributeName="opacity" values="1;0.4;1" dur="2.4s" repeatCount="indefinite" />
-              </ellipse>
-              <ellipse cx="18" cy="-14" rx="2.5" ry="1.3" fill="#e8e0d0" opacity="0.5">
-                <animate attributeName="opacity" values="0.5;0" dur="2.4s" repeatCount="indefinite" />
-                <animate attributeName="cy" values="-14;-26" dur="2.4s" repeatCount="indefinite" />
-              </ellipse>
-              <ellipse cx="22" cy="-22" rx="3.5" ry="1.6" fill="#d8d0c0" opacity="0.35">
-                <animate attributeName="opacity" values="0.35;0" dur="3s" begin="0.4s" repeatCount="indefinite" />
-                <animate attributeName="cy" values="-22;-38" dur="3s" begin="0.4s" repeatCount="indefinite" />
-              </ellipse>
-            </g>
           </g>
 
           {/* SŒUR/FRÈRE — nuque, cheveux mi-longs, T-shirt orange 80s */}
