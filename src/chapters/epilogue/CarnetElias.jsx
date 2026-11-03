@@ -294,6 +294,12 @@ function P4() {
         <linearGradient id="p4-bg" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#3a2818" /><stop offset="100%" stopColor="#1a1008" />
         </linearGradient>
+        <radialGradient id="p4-roche" cx="45%" cy="40%" r="70%">
+          <stop offset="0%" stopColor="#e6cc9c" /><stop offset="60%" stopColor="#c09868" /><stop offset="100%" stopColor="#8a6438" />
+        </radialGradient>
+        <radialGradient id="p4-ocre" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#a83c18" stopOpacity="0.9" /><stop offset="55%" stopColor="#b04a20" stopOpacity="0.6" /><stop offset="100%" stopColor="#b04a20" stopOpacity="0" />
+        </radialGradient>
         <radialGradient id="p4-torch" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#ffe090" stopOpacity="0.7" />
           <stop offset="100%" stopColor="#ffe090" stopOpacity="0" />
@@ -303,26 +309,60 @@ function P4() {
       {/* halo torche au centre */}
       <ellipse cx="400" cy="230" rx="360" ry="220" fill="url(#p4-torch)" />
 
-      {/* CASE 1 : paroi de Lascaux (main sur bison) */}
+      {/* CASE 1 : une paroi peinte (redessinée le 2026-11-04 : avant, un
+         rectangle beige, un bison-patate et une main en bâtonnets). La roche
+         aux bords irréguliers, un bison à la façon de Lascaux (ocre cerné
+         de charbon, bosse et crinière sombres), un cheval au trait et deux
+         MAINS NÉGATIVES : la main reste couleur de roche, l'ocre soufflé
+         l'entoure. */}
       <g transform="translate(180,180)">
-        <rect x="-140" y="-80" width="280" height="160" fill="#c8a878" stroke="#5a3818" strokeWidth="2" rx="6" />
-        <rect x="-130" y="-70" width="260" height="140" fill="#8a6838" opacity="0.4" />
-        {/* bison ocre stylisé */}
-        <g transform="translate(-30,10)">
-          <path d="M-60 0 Q-70 -20 -50 -32 Q-30 -40 0 -34 Q30 -30 50 -20 Q60 -10 55 8 Q40 20 20 20 Q-20 24 -50 18 Q-64 12 -60 0 Z" fill="#7a3818" />
-          <path d="M-50 -32 L-56 -44" stroke="#7a3818" strokeWidth="3" strokeLinecap="round" />
-          <path d="M-42 -30 L-48 -42" stroke="#5a2810" strokeWidth="2" strokeLinecap="round" />
-          <circle cx="-42" cy="-16" r="1.6" fill="#1a0808" />
-          <path d="M-56 4 L-56 20 M-40 6 L-40 22 M32 6 L32 20 M48 4 L48 18" stroke="#5a2810" strokeWidth="2" />
+        <path d="M-138 -62 Q-142 -78 -118 -80 Q-60 -88 0 -82 Q66 -90 122 -79 Q143 -74 138 -50 Q145 -4 136 48 Q140 74 114 78 Q40 86 -30 80 Q-98 86 -126 76 Q-143 68 -138 38 Q-146 -12 -138 -62 Z"
+          fill="url(#p4-roche)" stroke="#4a3018" strokeWidth="2" />
+        {/* taches minérales et fissures : la roche a déjà une histoire */}
+        <ellipse cx="-96" cy="-46" rx="26" ry="12" fill="#8a5a2a" opacity="0.18" />
+        <ellipse cx="100" cy="-10" rx="22" ry="30" fill="#5a4a3a" opacity="0.12" />
+        <ellipse cx="-20" cy="56" rx="40" ry="10" fill="#7a4a24" opacity="0.15" />
+        <path d="M-120 -20 q14 6 18 22 q4 14 -6 30 M60 -78 q-6 16 4 30 M126 30 q-14 4 -20 18" stroke="#5a3e22" strokeWidth="1.2" fill="none" opacity="0.5" />
+        {/* le bison, tourné vers la gauche */}
+        <g transform="translate(-14,6)">
+          <path d="M-78 4 Q-84 -8 -74 -16 Q-66 -32 -48 -40 Q-28 -48 -8 -36 Q16 -26 40 -24 Q56 -22 56 -6 Q58 10 44 16 Q10 22 -20 18 Q-44 18 -58 12 Q-70 10 -78 4 Z"
+            fill="#a8481c" stroke="#1c1208" strokeWidth="2.6" strokeLinejoin="round" />
+          {/* la crinière et la tête, sombres, comme à Lascaux */}
+          <path d="M-74 -16 Q-66 -32 -48 -40 Q-36 -44 -30 -37 Q-44 -26 -54 -10 Q-62 0 -76 -2 Z" fill="#1c1208" opacity="0.8" />
+          {/* le flanc éclairci (la roche respire sous l'ocre) */}
+          <path d="M-36 4 Q0 0 34 -6" stroke="#d08850" strokeWidth="4" fill="none" opacity="0.35" strokeLinecap="round" />
+          {/* cornes, barbe, queue */}
+          <path d="M-68 -26 q-7 -9 0 -16 M-60 -31 q-2 -10 6 -14" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
+          <path d="M-76 3 q-3 8 3 11" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
+          <path d="M55 -8 Q66 -2 61 12" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
+          {/* l'œil */}
+          <circle cx="-67" cy="-9" r="1.5" fill="#e8c890" />
+          {/* les pattes, courtes et nerveuses */}
+          <path d="M-56 12 L-59 33 M-40 17 L-40 35 M22 18 L25 34 M40 14 L45 31" stroke="#1c1208" strokeWidth="4.2" strokeLinecap="round" />
         </g>
-        {/* main qui touche */}
-        <g transform="translate(80,20)">
-          <ellipse cx="0" cy="0" rx="16" ry="10" fill="#e0b898" />
-          {[-14, -8, 0, 8].map((dx, i) => (
-            <rect key={i} x={dx - 2} y={-14 + (i === 0 || i === 3 ? 4 : 0)} width="4" height={12 + (i === 1 || i === 2 ? 4 : 0)} fill="#e0b898" />
-          ))}
+        {/* un petit cheval au trait, en haut à droite */}
+        <g transform="translate(80,-50) scale(0.62)" fill="none" stroke="#1c1208" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M-30 4 Q-34 -12 -22 -20 Q-14 -24 -8 -14 Q8 -8 26 -10 Q40 -8 44 4 Q44 14 34 16 Q4 20 -14 14" strokeWidth="3" />
+          <path d="M-22 -20 Q-34 -26 -40 -16 Q-42 -8 -36 -4" strokeWidth="3" />
+          <path d="M-18 -22 l4 -6 M-12 -18 l5 -7" strokeWidth="2" />
+          <path d="M-10 16 L-12 32 M2 18 L2 34 M24 16 L26 32 M34 14 L38 30" strokeWidth="3" />
+          <path d="M44 2 Q54 6 50 18" strokeWidth="2.4" />
         </g>
-        <text x="0" y="72" textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fontStyle="italic" fill="#5a3818" opacity="0.85">— la paroi</text>
+        {/* deux mains négatives, en bas à droite */}
+        {[[96, 34, 1, -8], [68, 58, 0.8, 14]].map(([hx, hy, sc, rot], i) => (
+          <g key={i} transform={`translate(${hx},${hy}) rotate(${rot}) scale(${sc})`}>
+            <circle cx="0" cy="-4" r="26" fill="url(#p4-ocre)" />
+            <g fill="#d6b682">
+              <rect x="-8" y="-2" width="16" height="16" rx="6" />
+              <rect x="-8.5" y="-20" width="4.2" height="20" rx="2.1" />
+              <rect x="-3.4" y="-24" width="4.2" height="24" rx="2.1" />
+              <rect x="1.7" y="-22" width="4.2" height="22" rx="2.1" />
+              <rect x="6.6" y="-16" width="3.8" height="17" rx="1.9" />
+              <rect x="-16" y="-8" width="5" height="14" rx="2.5" transform="rotate(-38 -13 0)" />
+            </g>
+          </g>
+        ))}
+        <text x="-70" y="72" textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fontStyle="italic" fill="#4a3018" opacity="0.9">— la paroi</text>
       </g>
 
       {/* CASE 2 : livre ouvert */}
