@@ -291,7 +291,7 @@ const ACTIONS = {
     bubble: "Star Hebdo est arrivé ! Il y a Sabrina en couverture. Ma mère va râler mais je le lirai sous les couvertures.",
     say: "Une lycéenne devant le mag people. Achat plaisir, achat furtif — la moitié du kiosque vit de ces achats-là.",
     chitchat: [
-      "L'année prochaine je passe au Nouvel Obs. Enfin, je crois. C'est ma sœur qui le lit, elle est prof.",
+      "Ma sœur lit Le Nouvel Observateur, moi Star Hebdo. Elle dit que le mien ne parle que des stars. Moi, je dis que le sien ne parle que de politique.",
       "Tu savais qu'ils inventent la moitié des trucs sur les stars ? Ma mère me l'a dit.",
     ] },
 
