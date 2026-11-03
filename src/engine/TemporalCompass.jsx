@@ -96,7 +96,10 @@ const DATE_MARKERS = [
   { x:  WORLD * 0.94, y:  WORLD * 0.50, text: "2024",    tick: true  },
 ];
 
-export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 1 }) {
+/* `nextSub` : la ligne sous la destination (la date du chapitre d'arrivée).
+   Avant le 2026-11-03, on y écrivait l'époque de la BANDE où la cible était
+   tombée au hasard (« Préhistoire » en partant vers la fin du XXe siècle…). */
+export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, nextSub = "", level = 1 }) {
   const cfg = LEVELS[level] || LEVELS[1];
   const NUM_WHIRLS = cfg.whirls;
   const TACHYON_COUNT = cfg.tachyons;
@@ -1093,9 +1096,11 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, level = 
                 <text y="52" textAnchor="middle" fontSize="42" fontWeight="800" fill="#0a1224" letterSpacing="4">
                   {target.label}
                 </text>
-                <text y="92" textAnchor="middle" fontSize="16" letterSpacing="3" fill="#0a1224" opacity="0.7">
-                  {target.era.name}
-                </text>
+                {nextSub && (
+                  <text y="92" textAnchor="middle" fontSize="16" letterSpacing="3" fill="#0a1224" opacity="0.7">
+                    {nextSub}
+                  </text>
+                )}
               </g>
             </>
           )}

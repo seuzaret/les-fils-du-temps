@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { assetUrl } from './assetUrl.js';
 
 /* ============================================================
@@ -47,11 +47,15 @@ const GAUGE_ROWS = [
 ];
 
 export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }) {
+  /* `onClose` change à chaque rendu d'App : on le lit dans une ref, sinon
+     la minuterie repartait de zéro à chaque rendu (durée imprévisible). */
+  const fermer = useRef(onClose);
+  fermer.current = onClose;
   useEffect(() => {
     if (!autoCloseMs) return;
-    const t = setTimeout(() => onClose?.(), autoCloseMs);
+    const t = setTimeout(() => fermer.current?.(), autoCloseMs);
     return () => clearTimeout(t);
-  }, [autoCloseMs, onClose]);
+  }, [autoCloseMs]);
 
   if (!card || !message) return null;
   const t = TYPES[card.chapter] || TYPES[1];

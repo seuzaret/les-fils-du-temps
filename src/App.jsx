@@ -211,6 +211,8 @@ export default function App() {
   const [prenom, setPrenom] = useState("");      // carnet imprimable : le prénom de l'élève
   const [mediadex, setMediadex] = useState([]);  // msg_ids des cartes-inventions découvertes
   const [cardShowing, setCardShowing] = useState(null); // {card, message} pendant l'apparition
+  /* une carte qui attend qu'une fenêtre (mini-jeu) se ferme pour s'afficher */
+  const [cardEnAttente, setCardEnAttente] = useState(null);
   const [showMediadex, setShowMediadex] = useState(false); // l'écran Mediadex plein écran est-il ouvert ?
   const [sosPending, setSosPending] = useState(null);   // msg_id dont on peut encore émettre le SOS
   const [sosOpen, setSosOpen] = useState(false);         // l'animation Morse est-elle en cours ?
@@ -909,7 +911,9 @@ export default function App() {
     setMaxReached(s.maxReached ?? i);
     setInv(s.inv || []); setMsgs(s.msgs || []); setMade(s.made || []);
     setFlags(s.flags || {}); setCollection(s.collection || []); setQuete(s.quete || 0);
-    setMediadex(s.mediadex || []); setSosSent(s.sosSent || []); setFlux(s.flux || 0);
+    setMediadex(s.mediadex || []); setSosSent(s.sosSent || []);
+    /* une partie bloquée par l'ancien barème repart avec au moins 5⚡ par message transmis */
+    setFlux(Math.max(s.flux || 0, (s.msgs || []).length * 5));
     setFluxTotal(s.fluxTotal || 0); setBonusChapters(s.bonusChapters || []);
     setAnachronismLearned(s.anachronismLearned || false);
     if (s.prenom) setPrenom(s.prenom);
@@ -1174,11 +1178,20 @@ export default function App() {
   /* ⚡ Modifie la jauge de FLUX TEMPOREL avec une petite bulle animée
      +N / -N flottante. Peut passer en négatif (plafond du chapitre non
      bloquant pour l'instant — on calibrera). */
+  /* Le PLANCHER du flux : 5 par message transmis dans ce chapitre. Les
+     erreurs ne font jamais descendre la jauge en dessous — avant le
+     2026-11-03, deux combinaisons au hasard suffisaient à rendre le
+     chapitre 8 impossible à finir (3 messages pour 15⚡ exigés). */
+  const plancherFlux = msgs.length * 5;
   const bumpFlux = (delta) => {
     if (!delta) return;
-    /* Jauge du CHAPITRE : plafonnée à 0 en bas — impossible de creuser
-       un trou invisible. Le -N s'affiche quand même en bulle flottante. */
-    setFlux((v) => Math.max(0, Math.round((v + delta) * 10) / 10));
+    if (delta < 0) {
+      const effectif = Math.max(Math.min(flux, plancherFlux), flux + delta) - flux;
+      if (effectif >= 0) return; /* déjà au plancher : l'erreur ne coûte rien */
+      delta = effectif;
+    }
+    /* Jauge du CHAPITRE : jamais sous le plancher (ni sous 0). */
+    setFlux((v) => Math.max(delta < 0 ? Math.min(v, plancherFlux) : 0, Math.round((v + delta) * 10) / 10));
     /* Score CUMULÉ du voyage : ne compte que les gains positifs. C'est
        ton total « d'énergie gagnée » sur tout le voyage, qui décide de
        ton badge final. Les erreurs ne pénalisent pas le score global. */
@@ -1195,22 +1208,36 @@ export default function App() {
   };
 
   /* Ouvre la CARTE-INVENTION (façon Pokémon) si le message a une image
-     Wikimedia dans le Mediadex. La carte apparaît par-dessus la fiche
-     pédagogique et se ferme au bout de quelques secondes. Idempotent.
-     Déclenche aussi le bouton SOS flottant : le joueur peut émettre le
-     signal de détresse ··· −−− ··· pour être retrouvé par l'équipe. */
-  const unlockCard = (msgId, msgData, pendingSay = null) => {
+     Wikimedia dans le Mediadex. Idempotent. La carte ne recouvre plus
+     aucun texte (demande du créateur, 2026-11-03) :
+       · message fabriqué : la carte s'affiche SEULE, puis la fiche
+         pédagogique (`pendingModal`) s'ouvre quand elle se ferme ;
+       · mini-jeu réussi : la carte attend que la fenêtre du mini-jeu
+         soit fermée (le verdict reste lisible) ;
+       · la réplique de MARTINE (`pendingSay`) vient après la carte. */
+  const unlockCard = (msgId, msgData, pendingSay = null, pendingModal = null) => {
     // Le SOS n'apparaît plus par transmission — il se choisit en fin de chapitre
     // Carte-invention (uniquement si mappée dans le Mediadex)
     const card = getCardMeta(msgId);
     if (!card) return false;
     setMediadex((v) => v.includes(msgId) ? v : [...v, msgId]);
+    const entree = { card, message: msgData, pendingSay, pendingModal };
+    if (modal) { setCardEnAttente(entree); return true; }
     setTimeout(() => {
-      setCardShowing({ card, message: msgData, pendingSay });
-      playCardSound(muted);
+      setCardShowing(entree);
+      playCardSound(isMuted());
     }, 500);
     return true;
   };
+  /* la fenêtre du mini-jeu est fermée : la carte en attente s'affiche */
+  useEffect(() => {
+    if (modal || !cardEnAttente || cardShowing) return;
+    const entree = cardEnAttente;
+    setCardEnAttente(null);
+    /* pas de clearTimeout au nettoyage : vider la file (ci-dessus) relance
+       l'effet, et le nettoyage annulerait l'affichage de la carte */
+    setTimeout(() => { setCardShowing(entree); playCardSound(isMuted()); }, 400);
+  }, [modal, cardEnAttente, cardShowing]);
 
   /* Octroyer un message SANS combinaison d'objets — pour les mini-jeux
      (ex. réussir « Écris MARTINE » transmet vraiment l'alphabet).
@@ -1355,12 +1382,12 @@ export default function App() {
            mélodie) : il part juste après l'arpège de transmission */
         if (m.sfx) setTimeout(() => playSfx(m.sfx), 950);
         bumpFlux(5);
-        setTimeout(() => setModal({ type: "fact", id: rec.out }), 750);
-        /* Idem grantMessage : la parole de MARTINE attend la fermeture
-           de la carte Pokédex quand il y en a une. */
+        /* Idem grantMessage : la parole de MARTINE — et ici la fiche
+           documentaire — attendent la fermeture de la carte Pokédex quand
+           il y en a une ; sinon la fiche s'ouvre tout de suite. */
         const sayLineRec = `◆ « ${chapter.messages[rec.out].title} » transmis au futur ! Mes circuits se rechargent, je sens l'excellence revenir (+5⚡).`;
-        const carteRec = unlockCard(rec.out, m, { line: sayLineRec, mood: "content" });
-        if (!carteRec) say(sayLineRec, "content");
+        const carteRec = unlockCard(rec.out, m, { line: sayLineRec, mood: "content" }, { type: "fact", id: rec.out });
+        if (!carteRec) { say(sayLineRec, "content"); setTimeout(() => setModal({ type: "fact", id: rec.out }), 750); }
         return;
       }
       /* Objet fabriqué classique */
@@ -1374,10 +1401,16 @@ export default function App() {
     const nm = findNearMiss(chapter.nearMiss, a, b);
     setShake(true); setTimeout(() => setShake(false), 500);
     playSfx("fail");
-    /* Malus : -1 flux si t'aurais DÛ savoir (near-miss = idée pas absurde,
-       simplement mal branchée), -2 flux si combinaison au HASARD (bzzt). Le
-       hasard coûte cher pour pousser à réfléchir avant de combiner. */
-    bumpFlux(nm ? -1 : -2);
+    /* Malus (allégé le 2026-11-03, « le jeu 1 est très punitif ») :
+       - « presque ! » (near-miss : bonne idée, mal branchée) : rien, la
+         réplique de MARTINE sert d'indice ;
+       - combinaison au HASARD : -1, et seulement la PREMIÈRE fois pour une
+         même paire (retenter la même erreur ne coûte plus rien) ;
+       - et bumpFlux ne descend jamais sous ce que les messages ont rapporté
+         (voir plancherFlux) : une erreur coûte des bonus, jamais la sortie. */
+    const paire = `rate_${[a, b].sort().join("+")}`;
+    if (!nm && !flags[paire]) bumpFlux(-1);
+    if (!flags[paire]) setFlags((f) => ({ ...f, [paire]: true }));
     say(nm ? nm.line : randomLine(chapter.failLines), "vexe");
   };
 
@@ -2667,10 +2700,11 @@ export default function App() {
       {cardShowing && (
         <MediaCard card={cardShowing.card} message={cardShowing.message}
           onClose={() => {
-            const ps = cardShowing.pendingSay;
+            const ps = cardShowing.pendingSay, pm = cardShowing.pendingModal;
             setCardShowing(null);
             /* Petit délai pour que la carte ait fini sa transition de
-               fermeture avant que la bulle MARTINE n'apparaisse. */
+               fermeture avant que la fiche et la bulle MARTINE n'apparaissent. */
+            if (pm) setTimeout(() => setModal(pm), 220);
             if (ps) setTimeout(() => say(ps.line, ps.mood || "neutre"), 220);
           }} />
       )}
@@ -2772,12 +2806,14 @@ export default function App() {
       {vesselOpen && (() => {
         const nextChap = CHAPTERS[chapterIndex + 1];
         const label = nextChap?.epoque || nextChap?.scenes?.[0]?.name || "Chapitre suivant";
-        /* Fond du cockpit = premier tableau du chapitre COURANT (celui qu'on
-           vient de finir), rendu en mode décoratif (handlers no-op). */
-        const FirstScene = chapter.scenes?.[0]?.Component;
-        const cockpitBackdrop = FirstScene ? (
-          <FirstScene collect={() => {}} action={() => {}} reveal={null}
-            made={[]} inv={[]} flags={{}} queteQui={null} mode="jeu1" bare />
+        /* Fond du cockpit = le tableau où l'on se trouve au moment du départ,
+           dans son état (objets fabriqués, ramassés), en mode décoratif
+           (handlers no-op). Jusqu'au 2026-11-03 : toujours le PREMIER tableau
+           du chapitre — le vaisseau apparaissait ailleurs que là où on était. */
+        const SceneIci = chapter.scenes?.[tab]?.Component || chapter.scenes?.[0]?.Component;
+        const cockpitBackdrop = SceneIci ? (
+          <SceneIci collect={() => {}} action={() => {}} reveal={null}
+            made={made} inv={inv} flags={flags} queteQui={null} queteTour={null} mode="jeu1" bare />
         ) : null;
         /* Label pour le dernier saut : on ne va pas à un chapitre, on va à
            la station des chronautes en 2045. */
@@ -2788,6 +2824,7 @@ export default function App() {
         return (
           <TimeVessel
             nextLabel={finalLabel}
+            nextSub={isLastChapter ? "" : (nextChap?.date || "")}
             level={compassLevel}
             backdrop={cockpitBackdrop}
             onDone={() => {

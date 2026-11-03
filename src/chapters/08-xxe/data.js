@@ -223,7 +223,7 @@ const chapter = {
 
   required: 3,
   startScene: 0,
-  destination: "XXIe SIÈCLE",
+  destination: "FIN XXe SIÈCLE",
   linear: true,
 
   items: ITEMS,
