@@ -30,10 +30,11 @@ function Vignette({ src, alt, style }) {
   );
 }
 
-/* 4 photos réelles (sources Wikimedia — voir _credits.json) + nature + indice */
+/* 4 photos réelles (sources Wikimedia — voir _credits.json) + nature + indice + crédit */
 const IMAGES = [
   {
     id: "manif",
+    credit: "Wyslijp16 · CC BY 4.0 · Wikimedia Commons",
     src: "assets/emi/manif.jpg",
     legende: "Manifestation à Paris, 8 mars 2025",
     bonne: "vrai",
@@ -41,6 +42,7 @@ const IMAGES = [
   },
   {
     id: "ciel-retouche",
+    credit: "kasra afzali (Flickr) · CC BY 2.0 · Wikimedia Commons",
     src: "assets/emi/ciel-retouche.jpg",
     legende: "Avion au-dessus des palmiers, ciel de fin de journée",
     bonne: "retouchee",
@@ -48,6 +50,7 @@ const IMAGES = [
   },
   {
     id: "portrait-ia",
+    credit: "image générée par StyleGAN · domaine public · Wikimedia Commons",
     src: "assets/emi/portrait-ia.jpg",
     legende: "Portrait d'un jeune garçon",
     bonne: "ia",
@@ -55,6 +58,7 @@ const IMAGES = [
   },
   {
     id: "deepfake",
+    credit: "The White House, 2025 · domaine public · Wikimedia Commons",
     src: "assets/emi/deepfake.jpg",
     legende: "Benjamin Franklin lors d'un briefing à la Maison-Blanche",
     bonne: "deepfake",
@@ -145,6 +149,9 @@ export function VraiFauxIAGame({ onClose, onWin }) {
                           {bon ? "✓ " : "✗ "}{N.label.toUpperCase()}
                         </div>
                         <div style={{ fontSize: 11.5, color: "#c8d4e2", lineHeight: 1.45, marginTop: 4 }}>{im.indice}</div>
+                        {/* la source, après la réponse seulement (elle donnerait des indices avant) ;
+                            obligatoire pour les deux photos sous licence CC BY */}
+                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#7a879e", marginTop: 5 }}>Source : {im.credit}</div>
                       </div>
                     </div>
                   </div>

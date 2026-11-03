@@ -51,8 +51,9 @@ const Ligne = ({ titre, annee, qui }) => (
   </div>
 );
 
-/* 11 photos sous licence Creative Commons BY ou BY-SA (inventions-meta.json) */
-const AUTEURS_CC = ["Tomatenpflanze", "NewPapillon", "Zde", "Peter van der Sluijs", "Dosseman", "Ultimate", "Colin", "Wolfgang Sauber", "Joe Haupt", "Marieth", "un graveur inconnu"];
+/* 13 photos sous licence Creative Commons BY ou BY-SA (inventions-meta.json, et
+   emi/_credits.json pour les deux du jeu « Vrai, faux ou IA ? », vérifiées le 2026-11-03) */
+const AUTEURS_CC = ["Tomatenpflanze", "NewPapillon", "Zde", "Peter van der Sluijs", "Dosseman", "Ultimate", "Colin", "Wolfgang Sauber", "Joe Haupt", "Marieth", "Wyslijp16", "kasra afzali", "un graveur inconnu"];
 
 function sections(prenom) {
   return [
@@ -82,8 +83,8 @@ function sections(prenom) {
     { k: "images", el: (<>
       <Rubrique>Les images d'archive</Rubrique>
       <Nom petit>44 photos de Wikimedia Commons</Nom>
-      <Note>29 dans le domaine public ou sous CC0 ;<br />11 sous licence Creative Commons, de {AUTEURS_CC.slice(0, -1).join(", ")} et {AUTEURS_CC[AUTEURS_CC.length - 1]} ;<br />4 pour le jeu « Vrai, faux ou IA ? ».</Note>
-      <Note>L'auteur et la licence de chaque photo du médiadex sont écrits sur sa carte.</Note>
+      <Note>31 dans le domaine public ou sous CC0 ;<br />13 sous licence Creative Commons, de {AUTEURS_CC.slice(0, -1).join(", ")} et {AUTEURS_CC[AUTEURS_CC.length - 1]}.</Note>
+      <Note>L'auteur et la licence de chaque photo sont écrits sur sa carte du médiadex, ou sous la réponse du jeu « Vrai, faux ou IA ? ».</Note>
       <div style={{ height: 18 }} />
       <Note>Tout le reste (tableaux, personnages, musique, bruitages) a été dessiné et composé pour le jeu, dans le navigateur.</Note>
     </>) },
