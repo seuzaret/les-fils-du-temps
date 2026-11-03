@@ -9,7 +9,7 @@ import { useWinOnce } from "../engine/useWinOnce.js";
      - VRAIE PHOTO (prise par un photojournaliste, source citée)
      - RETOUCHÉE (photo réelle mais couleurs poussées)
      - GÉNÉRÉE PAR IA (jamais photographiée : ça n'existe pas)
-     - DEEPFAKE (visage d'une vraie personne collé sur une vidéo)
+     - DEEPFAKE (une vraie personne à qui une IA fait dire ou faire ce qu'elle n'a jamais dit ni fait)
    L'élève classe chacune. On explique ensuite les indices.
    Les 4 fichiers vivent dans public/assets/emi/ ; les crédits
    Wikimedia sont dans public/assets/emi/_credits.json.
@@ -46,7 +46,7 @@ const IMAGES = [
     src: "assets/emi/ciel-retouche.jpg",
     legende: "Avion au-dessus des palmiers, ciel de fin de journée",
     bonne: "retouchee",
-    indice: "La scène est vraie (l'avion, les palmiers, la rue), mais les couleurs du ciel ont été poussées en post-traitement (mode HDR ou filtre). Un vrai crépuscule ne prend pas cette teinte violet/rose fluorescente en même temps que les palmiers restent nets et bien exposés.",
+    indice: "La scène est vraie (l'avion, les palmiers, la rue), mais les couleurs du ciel ont très probablement été poussées en post-traitement (mode HDR ou filtre). Un vrai crépuscule ne prend pas cette teinte violet/rose fluorescente en même temps que les palmiers restent nets et bien exposés.",
   },
   {
     id: "portrait-ia",
@@ -60,9 +60,9 @@ const IMAGES = [
     id: "deepfake",
     credit: "The White House, 2025 · domaine public · Wikimedia Commons",
     src: "assets/emi/deepfake.jpg",
-    legende: "Benjamin Franklin lors d'un briefing à la Maison-Blanche",
+    legende: "Benjamin Franklin, vidéo publiée par la Maison-Blanche (2025)",
     bonne: "deepfake",
-    indice: "Benjamin Franklin est mort en 1790 : il ne peut pas apparaître dans une conférence de presse contemporaine ! C'est un deepfake — le visage de Franklin a été collé sur le corps d'un intervenant réel. Le premier réflexe pour repérer ces vidéos : est-ce que ça a un sens dans le temps et dans le contexte ? Ensuite : la vidéo vient-elle d'une source officielle et vérifiable ?",
+    indice: "Benjamin Franklin est mort en 1790 : personne n'a jamais pu le filmer. Cette image vient pourtant d'une vidéo de 2025 publiée par la Maison-Blanche, où une IA fait parler son portrait. Faire dire ou faire à une vraie personne ce qu'elle n'a jamais dit ni fait, c'est le principe du deepfake. Premiers réflexes : est-ce possible dans le temps ? Qui publie la vidéo, et dit-il qu'elle a été fabriquée ?",
   },
 ];
 
