@@ -1,6 +1,6 @@
 import Hotspot from "../../../engine/Hotspot.jsx";
 import { PLayer } from "../../../engine/Parallax.jsx";
-import { Bust, Figure } from "../../../engine/chars.jsx";
+import { Figure } from "../../../engine/chars.jsx";
 
 /* ============================================================
    CHAPITRE 9 — Tableau : KIOSQUE À JOURNAUX (années 80)
@@ -104,7 +104,9 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
             <rect x="106" y="30" width="80" height="30" fill="#e8c88a" opacity="0.45" />
             {[24, 44, 64].map((x) => <ellipse key={x} cx={x} cy="52" rx="9" ry="3" fill="#c88a40" />)}
           </g>
-          <g transform="translate(300,300)"><rect x="-10" y="-10" width="20" height="20" fill="#2a8a3a" /><path d="M-3 -7 h6 v4 h4 v6 h-4 v4 h-6 v-4 h-4 v-6 h4 Z" fill="#9aff8a" /></g>
+          {/* la croix verte de la pharmacie, entre le kiosque et la boulangerie
+             (à x 300, elle sortait du béret de Robert) */}
+          <g transform="translate(742,300)"><rect x="-10" y="-10" width="20" height="20" fill="#2a8a3a" /><path d="M-3 -7 h6 v4 h4 v6 h-4 v4 h-6 v-4 h-4 v-6 h4 Z" fill="#9aff8a" /></g>
         </g>
         {/* brume du matin dans le lointain */}
         <rect x="-20" y="80" width="1040" height="280" fill="#e6e2d8" opacity="0.18" />
@@ -186,19 +188,22 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
           })
         ))}
 
-        {/* Comptoir + Robert le kioskier passe la tête par la fenêtre latérale gauche
-           (dimensionné plus petit pour ne pas éclipser le kiosque) */}
-        <g transform="translate(276,306) scale(0.7)">
-          {/* petite ouverture de service, côté gauche du kiosque */}
-          <rect x="70" y="-20" width="16" height="60" fill="#1a2a1e" stroke="#0e1a10" strokeWidth="1" />
-          {/* tête et buste de Robert, béret noir, moustache blanche, foulard rouge */}
-          <clipPath id="k80-robert"><rect x="0" y="-60" width="90" height="134" /></clipPath>
-          <g clipPath="url(#k80-robert)">
-            <Bust x={40} y={10} s={2} skin="#d8b090" hair="#c8c4c0" look="short" mustache beardColor="#f0eae0" hat="beret" hatColor="#1a1a20" wrinkles mood="content" cloth="#6a6a70" collar="round">
-              <path d="M-12 18 Q0 16 12 18 Q10 26 0 26 Q-10 26 -12 18 Z" fill="#c04030" />
-            </Bust>
+        {/* Robert le kioskier, debout contre son kiosque, côté gauche : béret
+           noir, moustache blanche, foulard rouge, tablier vert de marchand de
+           journaux, un quotidien à la main. (Jusqu'au 2026-11-03 : un buste
+           coupé sous les épaules qui flottait à côté du kiosque.) */}
+        <Figure x={298} y={424} s={1.02} skin="#d8b090" hair="#c8c4c0" look="short" mustache beardColor="#f0eae0"
+          hat="beret" hatColor="#1a1a20" wrinkles mood="content"
+          garment="jacket" coat="#6a6a70" apron="#3a5a40" pants="#33333c" shoes="#1a1410"
+          arms={[{ a1: 18, a2: -28 }, { a1: 10, a2: 8 }]}>
+          {/* le foulard rouge */}
+          <path d="M-7.5 -93 Q0 -89 7.5 -93 L6 -86.5 Q0 -84.5 -6 -86.5 Z" fill="#c04030" stroke="#8a2a20" strokeWidth="0.5" />
+          {/* le journal du jour, plié, dans la main */}
+          <g transform="rotate(-10 -26 -58)">
+            <rect x="-36" y="-70" width="20" height="26" fill="#e8e0c8" stroke="#8a7458" strokeWidth="0.8" />
+            <path d="M-33 -64 h14 M-33 -60 h14 M-33 -56 h10" stroke="#3a2418" strokeWidth="0.6" />
           </g>
-        </g>
+        </Figure>
       </PLayer>
 
       {/* PASSANTS — une lycéenne à droite feuilletant un mag ado, un cadre à gauche */}
@@ -332,7 +337,7 @@ export default function SceneKiosque1980({ collect, action, reveal, made = [], i
       {/* zones cliquables */}
       {/* Le kioskier — ouvre le mini-jeu « Fais la Une » (tant qu'il n'est pas fait) */}
       {!made.includes("msg_ligneEditoriale") && mode !== "jeu2" && (
-        <Hotspot cx={312} cy={330} r={28} label="parler à Robert, le kioskier" reveal={reveal} onClick={() => action("robert")} />
+        <Hotspot cx={298} cy={362} r={36} label="parler à Robert, le kioskier" reveal={reveal} onClick={() => action("robert")} />
       )}
       {/* Bouton mini-jeu direct sur le présentoir (accessible aussi via Robert) */}
       {!made.includes("msg_ligneEditoriale") && mode !== "jeu2" && (
