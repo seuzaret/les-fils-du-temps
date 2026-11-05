@@ -123,6 +123,7 @@ export default function IntroStory({ onDone }) {
     <SlideCockpit     key="s4" onNext={next} />,
     <SlideRules       key="s4b" onNext={next} />,
     <SlideMartineReparee key="s4c" onNext={next} />,
+    <SlideChat        key="s4d" onNext={next} />,
     <SlideFlash       key="s5" onNext={next} />,
     <SlideArrival     key="s6" onDone={onDone} />,
   ];
@@ -601,8 +602,8 @@ function SlideMessage({ onNext }) {
             <text x="108" y="110" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Ma famille</text>
             <text x="108" y="126" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">est en danger.</text>
             <text x="108" y="146" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic" fontWeight="600">Ceci te concerne aussi.</text>
-            <text x="108" y="166" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Le remède est caché</text>
-            <text x="108" y="182" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">dans le passé.</text>
+            <text x="108" y="166" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">Les chronautes</text>
+            <text x="108" y="182" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">ont besoin de toi.</text>
             <text x="108" y="202" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">MARTINE va se poser</text>
             <text x="108" y="218" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="10.5" fill="#111b21" fontStyle="italic">devant chez toi.</text>
             <text x="108" y="244" textAnchor="middle" fontFamily="Segoe UI, system-ui, sans-serif" fontSize="11" fontWeight="700" fill="#111b21">Sors. »</text>
@@ -853,7 +854,7 @@ function SlideCockpit({ onNext }) {
         <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55 }}>
           « Bienvenue à bord. Je suis <strong style={{ color: '#5eff9e' }}>MARTINE</strong> —
           Machine À Remonter le Temps Intelligente Néanmoins Excellente.
-          Al3x1a m'envoie te chercher. Avant de partir, écoute bien : je vais te dire les <strong style={{ color: '#5eff9e' }}>4 règles</strong> que doit connaître un chronaute. »
+          Al3x1a m'envoie te chercher : je t'emmène chez les chronautes, en 2035. Avant de partir, écoute bien : je vais te dire les <strong style={{ color: '#5eff9e' }}>4 règles</strong> que doit connaître un chronaute. »
         </p>
         <button onClick={(e) => { e.stopPropagation(); onNext(); }} autoFocus
           style={{ marginTop: 12, background: 'linear-gradient(180deg,#ff8a3a,#c0501a)',
@@ -1091,7 +1092,122 @@ function SlideMartineReparee({ onNext }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   S5 — FLASH + décompte des années (2026 → −18 000)
+   S4d — L'ACCIDENT DU CHAT (texte validé par le créateur, 2026-11-05)
+   MARTINE règle son cadran sur 2035 ; le chat noir de la clôture
+   (celui du décor de la rue) bondit dans le cockpit, atterrit sur le
+   cadran, les années s'emballent à l'envers ; il ressort juste avant
+   que le sas claque. C'est pourquoi on tombe en −18 000 (la butée du
+   cadran) au lieu d'arriver chez les chronautes en 2035 — et pourquoi
+   on arrivera à la station avec dix ans de retard.
+   ═══════════════════════════════════════════════════════════════ */
+const CHAT_TEMPS = [
+  { qui: "narr", txt: "MARTINE règle son cadran : 2035. Le sas commence à se refermer…" },
+  { qui: "narr", txt: "Une ombre noire ! Le chat de la clôture bondit dans le cockpit et atterrit en plein sur le cadran." },
+  { qui: "martine", mood: "vexe", txt: "« Non, non, NON ! Pas le cadran ! »" },
+  { qui: "narr", txt: "Les années s'emballent… à l'envers. Le chat ressort d'un bond, juste avant que le sas claque." },
+  { qui: "martine", mood: "neutre", txt: "« Ouf, il est sorti. Règle 3 : on n'emporte rien de son époque. Même pas un chat. »" },
+];
+
+/* le chat noir aux yeux verts (comme sur la clôture de la rue) */
+function ChatNoir({ assis = true }) {
+  return (
+    <g>
+      <path d={assis ? "M-14 0 Q-16 -22 -6 -30 L6 -30 Q16 -22 14 0 Z" : "M-22 -6 Q-18 -20 0 -22 Q18 -22 22 -8 Q20 2 0 2 Q-20 2 -22 -6 Z"} fill="#06070e" />
+      <g transform={assis ? "translate(0,-36)" : "translate(-20,-20)"}>
+        <circle cx="0" cy="0" r="9" fill="#06070e" />
+        <path d="M-8 -4 L-7 -14 L-2 -7 Z M8 -4 L7 -14 L2 -7 Z" fill="#06070e" />
+        <ellipse cx="-3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a" />
+        <ellipse cx="3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a" />
+      </g>
+      <path d={assis ? "M12 -4 Q26 -6 24 -22" : "M22 -8 Q36 -14 34 -28"} stroke="#06070e" strokeWidth="4" fill="none" strokeLinecap="round" />
+    </g>
+  );
+}
+
+function SlideChat({ onNext }) {
+  const [n, setN] = useState(0);
+  const [annee, setAnnee] = useState(2035);
+  const isLast = n === CHAT_TEMPS.length - 1;
+  const t = CHAT_TEMPS[n];
+  const advance = () => (isLast ? onNext() : setN(n + 1));
+  /* à partir du saut du chat, le cadran défile à l'envers, de plus en plus vite */
+  useEffect(() => {
+    if (n < 2) return;
+    let v = 2035, pas = 17;
+    const id = setInterval(() => { pas = Math.min(pas * 1.18, 900); v = Math.max(-18000, Math.round(v - pas)); setAnnee(v); }, 70);
+    return () => clearInterval(id);
+  }, [n >= 2]); // eslint-disable-line react-hooks/exhaustive-deps
+  const fmt = (y) => (y < 0 ? `−${Math.abs(y).toLocaleString('fr-FR')}` : String(y));
+  /* le chat : dehors (assis), sur le cadran, puis ressorti ; le sas se ferme */
+  const surCadran = n === 1 || n === 2;
+  const chat = surCadran ? { x: 520, y: 186 } : { x: 112, y: 284 };
+  const fermeture = n === 0 ? 0.35 : n < 3 ? 0.55 : 1;
+  const ouvert = 236 * (1 - fermeture);
+
+  return (
+    <div onClick={advance} title="Cliquer n'importe où pour continuer"
+      style={{ animation: 'fadeIn 0.6s ease-out', width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, minHeight: 0, cursor: 'pointer' }}>
+      <svg viewBox="0 0 800 320" style={{ display: 'block', width: '100%', height: '100%', minHeight: 0 }} preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="s4d-nuit" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#0a1430" /><stop offset="100%" stopColor="#1a2440" />
+          </linearGradient>
+        </defs>
+        <CabinBackdrop w={800} h={320} uid="s4d" glowY={210} />
+        {/* le SAS, à gauche : la rue de nuit, la clôture */}
+        <g>
+          <rect x="40" y="40" width="160" height="260" rx="14" fill="#141c28" stroke="#5a6a80" strokeWidth="3" />
+          <rect x="52" y="52" width="136" height="236" rx="8" fill="url(#s4d-nuit)" />
+          {[[78, 80], [150, 66], [120, 110], [170, 130]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="1.3" fill="#e8eef5" opacity="0.8" />)}
+          <path d="M52 250 H188 M60 230 V288 M90 230 V288 M120 230 V288 M150 230 V288 M180 230 V288" stroke="#3a4458" strokeWidth="4" />
+          {/* les deux battants du sas qui se referment (haut et bas) */}
+          <rect x="52" y="52" width="136" height={(236 - ouvert) / 2} fill="#2a3444" stroke="#7fd8ff" strokeWidth="1" style={{ transition: 'height .6s ease-in' }} />
+          <rect x="52" y={288 - (236 - ouvert) / 2} width="136" height={(236 - ouvert) / 2} fill="#2a3444" stroke="#7fd8ff" strokeWidth="1" style={{ transition: 'all .6s ease-in' }} />
+        </g>
+        {/* la CONSOLE et le cadran des années */}
+        <g>
+          <path d="M260 300 L300 196 L760 196 L780 300 Z" fill="#1a2230" stroke="#3a4a60" strokeWidth="2" />
+          <rect x="440" y="150" width="170" height="54" rx="8" fill="#06110b" stroke="#5eff9e" strokeWidth="2" />
+          <text x="452" y="166" fontFamily="ui-monospace,monospace" fontSize="9" fill="#5eff9e" opacity="0.8" letterSpacing="2">DESTINATION</text>
+          <text x="525" y="194" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="24" fontWeight="800" fill={n >= 2 ? "#ff8a6a" : "#5eff9e"}>{fmt(annee)}</text>
+          <g transform="translate(650,178)">
+            <circle r="20" fill="#28303a" stroke="#7fd8ff" strokeWidth="2" />
+            <line x1="0" y1="0" x2="0" y2="-16" stroke="#ffd166" strokeWidth="3" strokeLinecap="round"
+              style={{ transformOrigin: '0 0', animation: n >= 2 ? 'chatCadran 0.5s linear infinite' : 'none' }} />
+          </g>
+          {[330, 360, 390, 690, 720].map((x, i) => <circle key={x} cx={x} cy="240" r="6" fill={["#ff6a5a", "#5eff9e", "#ffd166", "#7fd8ff", "#ff6a5a"][i]} opacity="0.8" />)}
+        </g>
+        {/* LE CHAT */}
+        {n <= 3 && (
+          <g style={{ transform: `translate(${chat.x}px, ${chat.y}px)`, transition: 'transform .75s cubic-bezier(.25,-0.5,.6,1.3)' }}>
+            <g style={{ animation: n === 2 ? 'chatTangue 0.35s ease-in-out infinite' : 'none' }}>
+              <ChatNoir assis={!surCadran} />
+            </g>
+          </g>
+        )}
+        <style>{"@keyframes chatTangue { 0%,100% { transform: rotate(-8deg); } 50% { transform: rotate(8deg); } } @keyframes chatCadran { to { transform: rotate(-360deg); } }"}</style>
+      </svg>
+
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center', width: '100%', maxWidth: 720, padding: '0 10px', boxSizing: 'border-box' }}>
+        <div style={{ flex: '0 0 auto', width: 64, display: 'flex', justifyContent: 'center' }}>
+          {t.qui === 'martine' ? <Avatar mood={t.mood} size={58} talking /> : <span style={{ fontSize: 26 }}>🐈‍⬛</span>}
+        </div>
+        <div style={{ flex: 1, font: t.qui === 'martine' ? "italic 14px Georgia,serif" : "14px Georgia,serif", color: "#e8eef5", lineHeight: 1.45 }}>
+          {t.qui === 'martine' && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#5eff9e", fontStyle: "normal" }}>MARTINE</div>}
+          {t.txt}
+        </div>
+        <button onClick={(e) => { e.stopPropagation(); advance(); }} autoFocus
+          style={{ flex: '0 0 auto', background: isLast ? '#5eff9e' : '#141b26', color: isLast ? '#06110b' : '#5eff9e', border: '2px solid #5eff9e',
+            borderRadius: 10, padding: '10px 18px', fontSize: 13, fontWeight: 800, cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 2 }}>
+          {isLast ? "ACCROCHE-TOI →" : `Suite (${n + 2}/${CHAT_TEMPS.length})`}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   S5 — FLASH + décompte des années (2026 → −18 000), après l'accident du chat
    ═══════════════════════════════════════════════════════════════ */
 function SlideFlash({ onNext }) {
   const START = 2026;
@@ -1231,12 +1347,14 @@ function SlideFlash({ onNext }) {
 function SlideArrival({ onDone }) {
   const [step, setStep] = useState(0);
   const dialogs = [
-    { lines: ['« Nous y sommes.', 'Bienvenue en −18 000, chronaute. »'],
-      pos: { x: 700, y: 180 }, color: 'default' },
-    { lines: ['« Ma mission — et la tienne :', 'récupérer les messages que', 'les humains laissent au futur. »'],
-      pos: { x: 680, y: 195 }, color: 'default' },
-    { lines: ['« À chaque époque, aide un peuple', 'à laisser une trace de son savoir.', 'Plus le support est SOLIDE,', 'plus notre passage marque le temps. »'],
-      pos: { x: 700, y: 210 }, color: 'alert' },
+    /* textes validés par le créateur le 2026-11-05 : la chute en butée du
+       cadran (le chat), la batterie vide, les bonds, le flux qui recharge */
+    { lines: ['« Aïe. −18 000.', 'Le cadran est allé jusqu\'en butée :', 'la plus vieille trace humaine', 'que je connaisse. »'],
+      pos: { x: 700, y: 190 }, color: 'default' },
+    { lines: ['« Ma batterie temporelle est vide.', 'Plus de grand saut : seulement des bonds,', 'd\'une époque à la suivante,', 'jusqu\'aux chronautes. »'],
+      pos: { x: 690, y: 195 }, color: 'default' },
+    { lines: ['« Pour me recharger, il me faut du flux.', 'Chaque fois que des humains laissent', 'un message au futur, ça crée un courant', 'dans le temps. Aide chaque peuple', 'à laisser une trace : plus le support', 'est SOLIDE, plus je me recharge. »'],
+      pos: { x: 700, y: 215 }, color: 'alert' },
     { lines: ['« Allez, descends.', 'Approche-toi du feu — le clan t\'attend. »'],
       pos: { x: 710, y: 170 }, color: 'default' },
   ];

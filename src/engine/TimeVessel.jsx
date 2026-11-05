@@ -496,8 +496,8 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
               textAlign: "center",
             }}>
               <p style={{ margin: 0, fontSize: 18, lineHeight: 1.55 }}>
-                « Le SOS a rechargé mon <strong style={{ color: "#ffd166" }}>flux temporel</strong> —
-                {" "}je peux matérialiser la <strong style={{ color: "#5eff9e" }}>machine temporelle</strong>. »
+                « Ce message va traverser le temps, et son courant m'a rechargée.
+                {" "}On peut faire le <strong style={{ color: "#5eff9e" }}>bond suivant</strong>. »
               </p>
               <p style={{ margin: "12px 0 0", fontSize: 15, lineHeight: 1.5, color: "#c8d4e2" }}>
                 Regarde — elle apparaît sous nos yeux.

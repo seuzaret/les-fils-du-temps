@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import CarnetElias from "./CarnetElias.jsx";
 import ArriveeElias from "./ArriveeElias.jsx";
 import { Figure, HeadBack, HeadFront, AL3X1A_LOOK } from "../../engine/chars.jsx";
+import { Avatar } from "../../engine/Martine.jsx";
 export { AL3X1A_LOOK };
 
 /* Petit hook TYPEWRITER local — révèle un texte lettre par lettre.
@@ -41,14 +42,22 @@ const DIALOGUES_PAR_PERSO = {
   elias: [
     { mood: "content",
       text: "Tu as lu mon carnet ? Bien. Ça va mieux, là — je te reconnais, {prenom}. Merci d'être venu·e." },
-    { mood: "vexe",
-      text: "Grâce à ta traversée des époques, on sait enfin ce qui dure. Tu nous as rendu notre mémoire. Le reste, Mira va te le dire. Puis reviens : j'ai une question pour toi." },
+    { mood: "surpris",
+      text: "Alors c'était toi, les signaux… On regardait cette paroi sans comprendre. Tu as fait tout le chemin, bond après bond. Le reste, Mira va te le dire. Puis reviens : j'ai une question pour toi." },
   ],
   mira: [
     { mood: "content",
       text: "Salut, moi c'est Mira, l'ingénieure de la station. Cette machine, à côté de la tienne… c'est sa sœur. Elle est là depuis dix ans." },
     { mood: "neutre",
-      text: "Elle attend sa pilote. Al3x1a est partie dans le passé chercher un remède contre la maladie de la mémoire, il y a longtemps. On n'a jamais eu de ses nouvelles. Regarde son portrait." },
+      text: "Elle attend sa pilote. Al3x1a disait qu'elle attendait quelqu'un. Un matin, il y a dix ans, elle est partie seule chercher le remède, sur une autre machine. On n'a jamais eu de ses nouvelles. Regarde son portrait." },
+    /* Le joueur montre le SMS reçu au début du Jeu 1 : c'est lui qu'Al3x1a
+       attendait, mais l'accident du chat l'a fait arriver dix ans trop tard. */
+    { qui: "narr",
+      text: "Tu montres à Mira le SMS d'Al3x1a, reçu à 03:14." },
+    { mood: "surpris",
+      text: "Ce message… C'est toi qu'elle attendait ! Et tu arrives avec dix ans de retard." },
+    { qui: "martine", mood: "vexe",
+      text: "La faute au chat." },
   ],
   camille: [
     { mood: "neutre",
@@ -58,7 +67,7 @@ const DIALOGUES_PAR_PERSO = {
   ],
   finale: [
     { mood: "content",
-      text: "Tu as tout entendu. Alors voilà : parmi les chronautes, toi seul·e connaît encore les époques. Al3x1a est là-bas, quelque part. Tu la retrouverais ?" },
+      text: "Tu as tout entendu. Nous, on ne peut pas y aller : notre seule MARTINE attend sa pilote, et la vieille machine de Léa, celle qui a abîmé le passé, plus personne n'ose y toucher. Toi, tu connais les époques. Tu la retrouverais ?" },
   ],
 };
 
@@ -419,8 +428,36 @@ function DecorStation({ onClickPerso, done }) {
    step.text sans re-monter la parent tree. Le bouton "Suite/Fermer" reste
    grisé tant que la révélation n'est pas terminée ; cliquer sur le texte
    saute à la fin (utile en démo classe). */
+/* Une réplique peut changer d'orateur : `qui: "martine"` (MARTINE parle)
+   ou `qui: "narr"` (narration, le téléphone à la place du portrait). */
+function PortraitMartine({ mood = "neutre" }) {
+  return (
+    <div style={{ width: "100%", height: "100%", background: "#2a3040", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <Avatar mood={mood} size={120} />
+    </div>
+  );
+}
+
+function PortraitTelephone() {
+  return (
+    <svg viewBox="0 0 200 240" style={{ width: "100%", height: "100%", display: "block" }}>
+      <rect width="200" height="240" fill="#1a2030" />
+      <rect x="52" y="24" width="96" height="192" rx="14" fill="#0a0c12" stroke="#4a5468" strokeWidth="3" />
+      <rect x="60" y="40" width="80" height="160" rx="4" fill="#12324a" />
+      <text x="100" y="62" textAnchor="middle" fontSize="16" fontWeight="700" fill="#e8eef5" fontFamily="ui-monospace,monospace">03:14</text>
+      <rect x="66" y="78" width="68" height="62" rx="8" fill="#e8eef5" />
+      <text x="72" y="92" fontSize="9" fontWeight="800" fill="#12324a" fontFamily="ui-monospace,monospace">Al3x1a</text>
+      {[102, 112, 122, 132].map((y, i) => <rect key={y} x="72" y={y - 4} width={i === 3 ? 34 : 56} height="4" rx="2" fill="#8fa3bd" />)}
+      <circle cx="100" cy="208" r="4" fill="#2a3040" />
+    </svg>
+  );
+}
+
 function ChronauteDialogueBox({ step, persoName, prenom, idx, total, isLast, onNext, onClose, Portrait }) {
   const rawText = step.text.replace("{prenom}", prenom || "chronaute");
+  if (step.qui === "martine") { Portrait = PortraitMartine; persoName = "MARTINE"; }
+  const narr = step.qui === "narr";
+  if (narr) { Portrait = PortraitTelephone; persoName = ""; }
   const { shown, done, skip } = useTypewriter(rawText);
   /* Clic n'importe où sur la boîte de dialogue : d'abord révèle tout le
      texte, puis passe au suivant (ou ferme si dernier). */
@@ -435,10 +472,10 @@ function ChronauteDialogueBox({ step, persoName, prenom, idx, total, isLast, onN
         title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}>
         <div>
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#ffd166", marginBottom: 6 }}>
-            {persoName.toUpperCase()}
+            {persoName.toUpperCase() || "\u00a0"}
           </div>
-          <p style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: 0 }}>
-            « {shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>} »
+          <p style={{ fontSize: 15, lineHeight: 1.6, color: narr ? "#b8c8dc" : "#e8eef5", fontStyle: narr ? "italic" : "normal", margin: 0 }}>
+            {narr ? "" : "« "}{shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>}{narr ? "" : " »"}
           </p>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12 }}>

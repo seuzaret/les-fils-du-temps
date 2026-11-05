@@ -1,9 +1,11 @@
 /* ============================================================
    MOTEUR — Overlay du CHOIX du support SOS (fin de chapitre).
    ------------------------------------------------------------
-   L'élève choisit UN seul message de l'époque comme support de
-   son SOS. La durabilité du support détermine le flux temporel
-   gagné : gravure préhistorique > cassette d'aujourd'hui.
+   L'élève choisit UN seul message de l'époque où CACHER son SOS
+   (codé : pour les gens de l'époque, des points et des traits),
+   adressé aux chronautes de 2045 (textes validés le 2026-11-05).
+   La durabilité du support détermine le flux temporel gagné :
+   gravure préhistorique > cassette d'aujourd'hui.
    Le clic déclenche : mémorise le choix, bumpFlux(durabilité),
    ferme la modale, ouvre l'animation Morse.
    Aucun état propre : tout via props.
@@ -23,10 +25,10 @@ export default function SosChooserOverlay({
           🆘 CHOIX DU SUPPORT SOS · CHAPITRE {chapterIndex + 1}
         </div>
         <h2 style={{ textAlign: "center", margin: "8px 0 12px", color: "#ffd166", fontSize: 22 }}>
-          Quel support portera ton SOS ?
+          Dans quel message cacher ton SOS ?
         </h2>
         <p style={{ textAlign: "center", fontSize: 13.5, color: "#c8b090", margin: "0 0 18px" }}>
-          Tu ne peux en choisir <strong>qu'un seul</strong> par chapitre. Plus la <strong>durabilité</strong> du support est haute, plus ton signal atteint l'équipe de sauvetage — donc plus de flux temporel gagné.
+          Les chronautes ne savent pas qu'on arrive. Cachons un SOS (··· −−− ···) dans un message de l'époque : pour les gens d'ici, ce ne seront que des points et des traits, rien qui change leur histoire. S'il tient jusqu'en 2045, les chronautes le liront. <strong>Un seul</strong> par chapitre : plus le support est <strong>durable</strong>, plus le SOS a de chances d'arriver, et plus je me recharge.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
           {chapMsgs.map((m) => {

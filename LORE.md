@@ -3,7 +3,7 @@
 > Document de référence interne. **Contient tous les spoilers du jeu.**
 > Statuts : **[ACQUIS]** validé en discussion · **[PROPOSÉ]** idée sur la table, non validée ·
 > **[À TRANCHER]** décision ouverte · **[CODE]** déjà dans le code (fichier cité).
-> Dernière mise à jour : 2026-10-31 (générique de fin, §7).
+> Dernière mise à jour : 2026-11-05 (refonte du Jeu 1 : accident du chat, bonds et flux, SOS cachés, trois MARTINE ; §5 « Le Jeu 1 »).
 
 ## 0. Principes d'écriture
 - Public : élèves de 6e. Le joueur est neutre en genre (formes en « ·e ») et **n'a aucun âge chiffré** (le code n'en donne jamais).
@@ -14,11 +14,11 @@
 ## 1. Chronologie du monde
 | Repère | Événement | Statut |
 |---|---|---|
-| aujourd'hui (~2026) | Jeu 1 commence : le joueur, enfant de notre époque, reçoit à 03:14 le SMS d'Al3x1a (« Je viens du futur… Sors. »). MARTINE se pose devant chez lui (`IntroStory.jsx:501-545`). | CODE |
+| aujourd'hui (~2026) | Jeu 1 commence : le joueur, enfant de notre époque, reçoit à 03:14 le SMS d'Al3x1a (« Je viens du futur… Les chronautes ont besoin de toi… Sors. »). MARTINE se pose devant chez lui pour l'emmener en 2035 ; au décollage, le chat de la clôture saute sur le cadran : chute en −18 000 (§5 « Le Jeu 1 »). | CODE 2026-11-05 |
 | vers 2030 | Léa invente la machine à remonter le temps (prototype K-01). Ses premiers voyages changent le passé : premiers cas de la maladie de l'oubli (§5). | ACQUIS 2026-10-25 |
-| avant ~2045 | Al3x1a arrive du futur avec sa MARTINE, écrit les 4 règles, forme les chronautes ; Léa construit d'autres MARTINE (une par chronaute). Programme de voyage temporel, maladie de l'oubli. | ACQUIS 2026-10-25 |
-| ~2035 | Al3x1a quitte la station : « partie il y a dix ans » (`StationChronautes.jsx:53`). | CODE |
-| 2045 | Fin de Jeu 1 puis Jeu 2 : la station. Remède diffusé, Mira reprogramme MARTINE en « mémoire commune » (`FinJeu2.jsx:830`). | ACQUIS (année « pourquoi pas ») |
+| avant ~2035 | Al3x1a arrive du futur avec sa MARTINE, écrit les 4 règles, forme les chronautes ; Léa étudie MARTINE et en construit **deux copies** (la « sœur » et celle avec laquelle Al3x1a partira). Il n'y a que trois MARTINE, plus K-01 (§5). Programme de voyage temporel, maladie de l'oubli. | ACQUIS 2026-11-05 (remplace « une par chronaute ») |
+| ~2035 | Al3x1a répare la MARTINE d'origine et l'envoie chercher son parent (le SMS) pour qu'il arrive à la station en 2035. Il n'arrive pas (le chat). Elle attend, puis part seule chercher le remède, sur la 2e copie : « Un matin, il y a dix ans, elle est partie seule » (`StationChronautes.jsx`, Mira). | CODE 2026-11-05 |
+| 2045 | Fin de Jeu 1 (le joueur arrive avec dix ans de retard, bond après bond ; ses SOS sont apparus sur les plus vieilles traces) puis Jeu 2 : la station. Remède diffusé, Mira reprogramme MARTINE en « mémoire commune » (`FinJeu2.jsx:830`). | ACQUIS (année « pourquoi pas ») |
 | 2045 → 2047 | Effondrement technique (réchauffement…). Martine propose le Puits comme moyen de survie. | ACQUIS |
 | 11 mars 2047 | **Veille du scellement** : Jeu 2B (`Jeu2B.jsx`) — chantier du Puits, comparaison du rapport de Léa et du bulletin de MARTINE, toast, le joueur s'endort. | CODE (brouillon, 2026-10-18) |
 | 12 mars 2047 | Puits scellé (sortie C-3, `EpilogueJeu3.jsx:175`). | CODE |
@@ -29,8 +29,10 @@
 
 **Corrigé le 2026-10-18** : les « 2287 » (station) sont devenus **2045**, le compteur de `FinJeu2` va de 2045 à 2087, et le carnet d'Elias raconte les premières pannes au présent au lieu d'une panne ancienne.
 
+**Corrigé le 2026-11-05** : plus aucune panne de machine avant le Jeu 2B. Dans le Jeu 1 et le Jeu 2, il n'y a que la maladie de l'oubli ; le carnet d'Elias (6 planches) ne parle plus de pannes.
+
 ## 2. Personnages
-- **Martine** : venue du futur avec Al3x1a (machine et IA) ; Léa en construit des copies, une par chronaute, que Mira fusionne ensuite en « mémoire commune » : c'est la MARTINE du Puits (§5) [ACQUIS 2026-10-25]. IA de la station. Bienveillante au départ. Elle a elle-même des trous de mémoire en Jeu 1 (`IntroStory.jsx:1082-1083`). Voir §4.
+- **Martine** : venue du futur avec Al3x1a (machine et IA) ; Léa en construit deux copies : la « sœur », qui attend à la station et dont Mira fera la « mémoire commune » (la MARTINE du Puits), et celle avec laquelle Al3x1a part en 2035, cassée dans le Jeu 2 (§5) [ACQUIS 2026-11-05, remplace « une par chronaute », jamais montré dans le jeu]. La mémoire de la sœur ne s'efface pas : les chronautes lui confient leurs souvenirs (carnet d'Elias, planche « Comment on tient »). IA de la station. Bienveillante au départ. Celle du Jeu 1, abîmée puis réparée par Al3x1a, a des trous de mémoire (`IntroStory.jsx:1042`). Voir §4.
 - **Le joueur** : enfant de notre époque, recruté chez lui par Al3x1a. Chronaute, sans genre ni âge. Dormant à partir du toast de 2047, réveillé en 2087, enregistré comme « né au Puits » (`pnj.js:120` : « tu habites ici depuis toujours »). [ACQUIS]
 - **Al3x1a** : enfant du joueur. Voir §5.
 - **Jorge** : archiviste, range des fiches depuis trente ans (`JorgeSmalltalk.jsx`). (Les trente carnets qui comparent récits des Anciens et archives sont ceux d'**Estev**, ancien enseignant, chambre N-32, `pnj.js` ; corrigé le 2026-10-23.) Entretient K-01 en secret depuis la mort de Léa (`BunkerPrison.jsx:88`). **Grand-père adoptif d'Al3x1a** [ACQUIS]. Comment : après le Jeu 3, le joueur n'a plus de famille en 2087 et Jorge le recueille ; plus tard, il devient le grand-père d'Al3x1a. [ACQUIS 2026-10-23]
@@ -80,15 +82,27 @@
 - **Les 4 règles des chronautes** (`IntroStory.jsx`, récitées par MARTINE avant le premier saut) sont **écrites par Al3x1a** [ACQUIS], pour ne plus rien changer : ne jamais croiser un autre soi-même, ne pas raconter le futur, ne rien laisser du futur dans le passé, rentrer avant qu'il soit trop tard.
 - [PROPOSÉ] Au Puits, MARTINE reproduit la maladie **sans voyager** : elle réécrit les archives, l'eau fait le reste. Elle refait ce qu'elle prétend soigner.
 
+**Le Jeu 1 : pourquoi des bonds, pourquoi des SOS** [ACQUIS 2026-11-05, retour du créateur : « il faut qu'on trouve une meilleure justification des bonds à chaque époque et des SOS » ; CODE même jour]
+- **L'accident du chat** (`IntroStory.jsx`, `SlideChat`) : MARTINE règle son cadran sur 2035, le sas se referme ; le chat noir de la clôture saute dans le cockpit et atterrit sur le cadran, les années défilent à l'envers jusqu'en butée ; il ressort d'un bond juste avant que le sas claque. MARTINE : « Ouf, il est sorti. Règle 3 : on n'emporte rien de son époque. Même pas un chat. » Personne n'est coupable (l'erreur du joueur et le mauvais réglage de MARTINE ont été écartés).
+- **Pourquoi −18 000** : c'est la butée du cadran, « la plus vieille trace humaine que je connaisse ».
+- **Les bonds** : la chute a vidé la batterie temporelle de MARTINE. Plus de grand saut, seulement des bonds d'une époque à la suivante. Elle se recharge au **flux** : chaque fois que des humains laissent un message au futur, ça crée un courant dans le temps ; plus le support est solide, plus elle se recharge. C'est la jauge ⚡ et la condition de messages de chaque chapitre ; le titre « Les fils du temps » vient de là (MARTINE remonte le long de ces fils).
+- **Les SOS** (`SosChooserOverlay.jsx`, `SosSignal.jsx`) : un par chapitre, caché dans un message de l'époque sous forme de points et de traits (··· −−− ···). Pour les gens de l'époque, ce n'est qu'un motif : rien ne change dans leur histoire (règle 3 respectée). Ils sont destinés aux chronautes de 2045, dont le joueur ne connaît que le nom (le SMS). Le gain de flux est égal à la durabilité du support (« Un vieux dessin pariétal dure plus longtemps qu'une cassette »).
+- **Les SOS apparaissent dans le futur au fur et à mesure** : planche « Les signaux » du carnet d'Elias, « depuis quelques jours » : trois points, trois traits, trois points sur une paroi de 20 000 ans, là où il n'y avait rien. À la station, Elias : « Alors c'était toi, les signaux… »
+- **Les dix ans de retard** : le joueur devait arriver en 2035. Al3x1a l'a attendu, puis elle est partie seule. À la station, le joueur montre le SMS ; Mira : « C'est toi qu'elle attendait ! Et tu arrives avec dix ans de retard. » MARTINE : « La faute au chat. » Aux retrouvailles (Jeu 2) : « Tu es enfin là… Je t'ai attendu·e si longtemps, à la station. »
+- **Pourquoi les chronautes ne vont pas eux-mêmes chercher Al3x1a** : « notre seule MARTINE attend sa pilote, et la vieille machine de Léa, celle qui a abîmé le passé, plus personne n'ose y toucher » (Elias, question finale).
+- **Les trois MARTINE et K-01** : (1) la MARTINE d'origine, venue du futur avec Al3x1a, réparée par elle et envoyée chercher le joueur : tout le Jeu 1, la petite MARTINE du Jeu 3 ; (2) la sœur, copie de Léa, qui attend à la station (« AL3X1A · 2035 ») : la future mémoire commune ; (3) la copie avec laquelle Al3x1a est partie, cassée (Jeu 2) ; K-01, le prototype de Léa (vers 2030), dont les voyages ont abîmé le passé (Jeu 3, salle K).
+- **Jeu 2** : le TEMPOSCOPE de MARTINE. « Plus besoin de bonds : on a laissé une trace dans chaque époque, le chemin existe. »
+- [PROPOSÉ, en réserve] **Version sombre** : chaque SOS est une minuscule trace du futur laissée dans le passé ; or la maladie vient des changements du passé. MARTINE pourrait révéler, dans le Jeu 2B ou le Jeu 3, que nos SOS ont nourri la maladie. Fort, mais lourd pour des 6e.
+
 **Chronologie**
 1. **Dans le futur** (date inconnue) [ACQUIS] : Al3x1a naît et grandit avec ses parents (le joueur devenu adulte et son autre parent). Le joueur ne lui explique rien (règle 2) ; il lui laisse seulement **son adresse d'enfance**. Elle est formée à créer les chronautes. Ce qui se passe ensuite dans le futur n'a pas besoin d'être raconté.
 2. **Vers 2030** [ACQUIS] : **Léa invente la machine à remonter le temps** ; K-01 est son prototype. Ses premiers voyages changent le passé : premiers cas de la maladie de l'oubli. Personne ne fait encore le lien.
-3. **Al3x1a arrive dans le passé**, à la station, avec **sa MARTINE** (machine et IA venues du futur) [ACQUIS]. Elle trouve la maladie, en comprend la cause, écrit les 4 règles et forme les premiers chronautes. **Léa étudie MARTINE et en construit d'autres**, une par chronaute (à montrer en animation, peut-être) [ACQUIS].
-4. **Vers 2035** : elle part chercher un remède dans le passé (`StationChronautes.jsx:51-55`, `BriefingMission.jsx:61`) [CODE]. **Les MARTINE** [ACQUIS 2026-10-28, relecture] : la MARTINE venue du futur avec Al3x1a est **celle du Jeu 1** : Al3x1a la répare et l'envoie chercher son parent (étape 5) ; c'est la petite MARTINE du Jeu 3 (la « pilote », c'est Al3x1a ; Jorge : « Un jour, elle reviendra te chercher »). La « sœur » qui, à la station, « attend sa pilote » (Mira) est une **copie** faite par Léa et réservée à Al3x1a ; Al3x1a est partie avec une autre copie, qui a cassé : dix ans bloquée, c'est le Jeu 2. (Remplace l'idée de la MARTINE d'origine laissée à la station.)
-5. **SMS de 03:14** à l'adresse de son parent, encore enfant (`IntroStory.jsx:501-545`) : « Je viens du futur… Sors. » MARTINE, qu'elle a réparée (`IntroStory.jsx:1054`), vient le chercher et lui récite les 4 règles. **Le Jeu 1 est la formation de son parent** [ACQUIS]. Ordre exact des étapes 4 et 5 : [À TRANCHER].
+3. **Al3x1a arrive dans le passé**, à la station, avec **sa MARTINE** (machine et IA venues du futur) [ACQUIS]. Elle trouve la maladie, en comprend la cause, écrit les 4 règles et forme les premiers chronautes. **Léa étudie MARTINE et en construit deux copies** [ACQUIS 2026-11-05 ; avant : « une par chronaute »].
+4. **Vers 2035** : elle envoie le SMS et MARTINE chercher son parent (étape 5), l'attend, puis part seule chercher un remède dans le passé (`StationChronautes.jsx`, Mira : « Al3x1a disait qu'elle attendait quelqu'un. Un matin, il y a dix ans, elle est partie seule… ») [CODE 2026-11-05]. **Les MARTINE** [ACQUIS 2026-10-28, relecture] : la MARTINE venue du futur avec Al3x1a est **celle du Jeu 1** : Al3x1a la répare et l'envoie chercher son parent (étape 5) ; c'est la petite MARTINE du Jeu 3 (la « pilote », c'est Al3x1a ; Jorge : « Un jour, elle reviendra te chercher »). La « sœur » qui, à la station, « attend sa pilote » (Mira) est une **copie** faite par Léa et réservée à Al3x1a ; Al3x1a est partie avec une autre copie, qui a cassé : dix ans bloquée, c'est le Jeu 2. (Remplace l'idée de la MARTINE d'origine laissée à la station.)
+5. **SMS de 03:14** à l'adresse de son parent, encore enfant (`IntroStory.jsx:501-545`) : « Je viens du futur… Sors. » MARTINE, qu'elle a réparée (`IntroStory.jsx:1054`), vient le chercher et lui récite les 4 règles. **Le Jeu 1 est la formation de son parent** [ACQUIS]. ~~Ordre exact des étapes 4 et 5 : [À TRANCHER]~~ Tranché le 2026-11-05 : le SMS d'abord, le départ d'Al3x1a ensuite ; les dix ans de retard viennent de l'accident du chat (voir « Le Jeu 1 » ci-dessous).
 6. **Jeu 2** [CODE] : le joueur la retrouve ; elle reconnaît son visage mais le trouve « trop jeune » (`RetrouvaillesAl3x1A.jsx:175`), un lapsus. Ils rapportent le remède en 2045 (« ramener » est le canon ; « laisser » et « rester » sont des souvenirs réécrits par MARTINE). MARTINE comprend le lien parent-enfant et se tait.
 7. **2045 → 2047** :
-   - Mira fusionne les copies de MARTINE en « mémoire commune » : c'est la MARTINE du Puits [ACQUIS : les copies sont faites **avant** la fusion].
+   - Mira fait de la sœur la « mémoire commune » : c'est la MARTINE du Puits [ACQUIS ; précisé le 2026-11-05 : il n'y a plus de copies multiples à fusionner].
    - La proposition de 2045 (Jeu 2B) : **le joueur reste**, plus de choix « rentrer chez moi » [ACQUIS].
    - Au Puits, il n'y a plus de naissances. MARTINE comprend que si Al3x1a, l'enfant du joueur, existe, alors un jour un enfant viendra au monde : sa règle tombera, et son monde avec. **Elle endort Al3x1a** (bulle « A. ») [ACQUIS ; remplace « elle ne vise pas Al3x1a »].
    - Avant, Al3x1a a compris le danger (sa MARTINE mesure un flux qui s'agite) et **laissé une note dans son carnet** pour aider son parent à trouver le monde de MARTINE. On l'obtient par **une quête dans la bibliothèque** (classification Dewey), qui remplace Tchatine dans le Jeu 3 [CODE 2026-10-25, §7 « La quête des cailloux »].
@@ -210,7 +224,7 @@ Conséquences à garder en tête : le joueur est le **premier dormant** (secret)
 
 ## 9. Questions ouvertes
 1. Dormants : qui exactement, salle visitable ou animation ?
-2. ~~Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?~~ Tranché le 2026-10-25 (§5) : elle arrive du futur pour fonder les chronautes ; elle grandit avec ses parents dans le futur ; en 2087 elle dort chez les dormants. Reste : l'ordre exact station / SMS, et la quête de la note.
+2. ~~Al3x1a : arrivée à la station, adoption par Jorge, où est-elle en 2087 ?~~ Tranché le 2026-10-25 (§5) : elle arrive du futur pour fonder les chronautes ; elle grandit avec ses parents dans le futur ; en 2087 elle dort chez les dormants. ~~Reste : l'ordre exact station / SMS~~ (tranché le 2026-11-05 : le SMS d'abord, §5 « Le Jeu 1 ») ; reste la quête de la note.
 3. ~~Les Fils du Temps : résistance de 2087 ou peuple du futur ?~~ Tranché : résistance de 2087 (voir §2).
 4. ~~Faut-il un joueur adulte perdu dans le temps (hypothèse A) ou non (hypothèse B) ?~~ Tranché : B (voir §Al3x1a).
 5. ~~Origine de la maladie de l'oubli~~ Tranché le 2026-10-25 (§5) : les changements du passé (*L'Effet papillon*), à partir des premiers voyages de Léa.

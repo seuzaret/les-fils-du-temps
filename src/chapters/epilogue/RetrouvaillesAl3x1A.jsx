@@ -174,7 +174,7 @@ const DIALOGUES = [
   { mood: "neutre",
     text: "Toi… ? Ton visage me dit quelque chose. Mais tu es trop jeune. Non, laisse tomber. Dix ans seule ici, c'est long." },
   { mood: "content",
-    text: "Elias t'a envoyé·e. Ma MARTINE est cassée, je pensais mourir sans que personne ne le sache. Tu m'as retrouvé·e, {prenom}." },
+    text: "Tu es enfin là… Je t'ai attendu·e si longtemps, à la station. Puis ma MARTINE s'est cassée ici, et j'ai cru que personne ne le saurait jamais. Tu m'as retrouvé·e, {prenom}." },
   { mood: "neutre",
     text: "J'ai le remède. Il est à toi — ramène-le à Elias, à Mira, à tous ceux qui oublient." },
   { mood: "neutre",

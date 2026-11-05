@@ -9,15 +9,18 @@ import { Bust, Figure } from "../../engine/chars.jsx";
    est une case dessinée + un court paragraphe manuscrit dessous.
    Navigation : ‹ Précédent · Suivant ›. Skippable.
    ------------------------------------------------------------
-   0. Couverture           (« carnet d'un survivant », signé)
-   1. Notre monde          (2045, hyperconnecté)
-   2. Les premières pannes (serveurs, satellites, écrans lâchent un à un)
-   3. Ce qui s'efface      (les supports numériques deviennent illisibles)
-   4. Ce qui a tenu        (paroies, livres, vitraux)
-   5. La maladie de la mémoire
+   0. Couverture            (« carnet d'un survivant », signé)
+   1. Nous, les chronautes  (la station, la petite équipe, la MARTINE « sœur »)
+   2. La maladie de l'oubli (la grand-mère qui s'efface)
+   3. D'où elle vient       (K-01, la fissure du temps, les 4 règles d'Al3x1a)
+   4. Comment on tient      (le mur de notes, la mémoire de MARTINE)
+   5. Les signaux           (le SOS du joueur, apparu sur la paroi)
+   Refait le 2026-11-05 (textes validés par le créateur) : plus de
+   pannes de machines avant le Jeu 2B, seulement la maladie de l'oubli.
    ------------------------------------------------------------
-   Note : Al3x1a n'apparaît PAS dans le carnet. Sa révélation est
-   réservée aux dialogues de Mira et au portrait dans la station.
+   Note : Al3x1a n'apparaît pas en image dans le carnet (son nom et
+   sa signature « — A. » seulement) ; son portrait est réservé à la
+   station.
    ============================================================ */
 
 /* ─── Planche 0 : la couverture du carnet ─── */
@@ -85,346 +88,272 @@ function P0() {
   );
 }
 
-/* ─── Planche 1 : 2045, la ville hyperconnectée ─── */
+/* ─── La paroi peinte (bison, cheval, mains négatives), réutilisée par la
+   planche « Les signaux » ; `sos` y cache trois points, trois traits,
+   trois points à l'ocre, comme le joueur les a cachés dans le passé ─── */
+function Paroi({ sos = false }) {
+  return (
+    <g>
+      <path d="M-138 -62 Q-142 -78 -118 -80 Q-60 -88 0 -82 Q66 -90 122 -79 Q143 -74 138 -50 Q145 -4 136 48 Q140 74 114 78 Q40 86 -30 80 Q-98 86 -126 76 Q-143 68 -138 38 Q-146 -12 -138 -62 Z"
+        fill="url(#ce-roche)" stroke="#4a3018" strokeWidth="2" />
+      <ellipse cx="-96" cy="-46" rx="26" ry="12" fill="#8a5a2a" opacity="0.18" />
+      <ellipse cx="100" cy="-10" rx="22" ry="30" fill="#5a4a3a" opacity="0.12" />
+      <ellipse cx="-20" cy="56" rx="40" ry="10" fill="#7a4a24" opacity="0.15" />
+      <path d="M-120 -20 q14 6 18 22 q4 14 -6 30 M60 -78 q-6 16 4 30 M126 30 q-14 4 -20 18" stroke="#5a3e22" strokeWidth="1.2" fill="none" opacity="0.5" />
+      <g transform="translate(-14,6)">
+        <path d="M-78 4 Q-84 -8 -74 -16 Q-66 -32 -48 -40 Q-28 -48 -8 -36 Q16 -26 40 -24 Q56 -22 56 -6 Q58 10 44 16 Q10 22 -20 18 Q-44 18 -58 12 Q-70 10 -78 4 Z"
+          fill="#a8481c" stroke="#1c1208" strokeWidth="2.6" strokeLinejoin="round" />
+        <path d="M-74 -16 Q-66 -32 -48 -40 Q-36 -44 -30 -37 Q-44 -26 -54 -10 Q-62 0 -76 -2 Z" fill="#1c1208" opacity="0.8" />
+        <path d="M-36 4 Q0 0 34 -6" stroke="#d08850" strokeWidth="4" fill="none" opacity="0.35" strokeLinecap="round" />
+        <path d="M-68 -26 q-7 -9 0 -16 M-60 -31 q-2 -10 6 -14" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
+        <path d="M-76 3 q-3 8 3 11" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
+        <path d="M55 -8 Q66 -2 61 12" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
+        <circle cx="-67" cy="-9" r="1.5" fill="#e8c890" />
+        <path d="M-56 12 L-59 33 M-40 17 L-40 35 M22 18 L25 34 M40 14 L45 31" stroke="#1c1208" strokeWidth="4.2" strokeLinecap="round" />
+      </g>
+      <g transform="translate(80,-50) scale(0.62)" fill="none" stroke="#1c1208" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M-30 4 Q-34 -12 -22 -20 Q-14 -24 -8 -14 Q8 -8 26 -10 Q40 -8 44 4 Q44 14 34 16 Q4 20 -14 14" strokeWidth="3" />
+        <path d="M-22 -20 Q-34 -26 -40 -16 Q-42 -8 -36 -4" strokeWidth="3" />
+        <path d="M-18 -22 l4 -6 M-12 -18 l5 -7" strokeWidth="2" />
+        <path d="M-10 16 L-12 32 M2 18 L2 34 M24 16 L26 32 M34 14 L38 30" strokeWidth="3" />
+        <path d="M44 2 Q54 6 50 18" strokeWidth="2.4" />
+      </g>
+      {[[96, 34, 1, -8], [68, 58, 0.8, 14]].map(([hx, hy, sc, rot], i) => (
+        <g key={i} transform={`translate(${hx},${hy}) rotate(${rot}) scale(${sc})`}>
+          <circle cx="0" cy="-4" r="26" fill="url(#ce-ocre)" />
+          <g fill="#d6b682">
+            <rect x="-8" y="-2" width="16" height="16" rx="6" />
+            <rect x="-8.5" y="-20" width="4.2" height="20" rx="2.1" />
+            <rect x="-3.4" y="-24" width="4.2" height="24" rx="2.1" />
+            <rect x="1.7" y="-22" width="4.2" height="22" rx="2.1" />
+            <rect x="6.6" y="-16" width="3.8" height="17" rx="1.9" />
+            <rect x="-16" y="-8" width="5" height="14" rx="2.5" transform="rotate(-38 -13 0)" />
+          </g>
+        </g>
+      ))}
+      {/* le SOS caché sous le ventre du bison : · · ·  — — —  · · · */}
+      {sos && (
+        <g fill="#a8301a" stroke="#a8301a" strokeLinecap="round">
+          {[0, 1, 2].map((k) => <circle key={`a${k}`} cx={-86 + k * 7} cy="56" r="2.2" stroke="none" />)}
+          {[0, 1, 2].map((k) => <line key={`b${k}`} x1={-60 + k * 13} y1="56" x2={-52 + k * 13} y2="56" strokeWidth="3.6" />)}
+          {[0, 1, 2].map((k) => <circle key={`c${k}`} cx={-16 + k * 7} cy="56" r="2.2" stroke="none" />)}
+        </g>
+      )}
+    </g>
+  );
+}
+
+/* les dégradés communs aux planches (roche, ocre soufflé) */
+function DefsCarnet() {
+  return (
+    <defs>
+      <radialGradient id="ce-roche" cx="45%" cy="40%" r="70%">
+        <stop offset="0%" stopColor="#e6cc9c" /><stop offset="60%" stopColor="#c09868" /><stop offset="100%" stopColor="#8a6438" />
+      </radialGradient>
+      <radialGradient id="ce-ocre" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stopColor="#a83c18" stopOpacity="0.9" /><stop offset="55%" stopColor="#b04a20" stopOpacity="0.6" /><stop offset="100%" stopColor="#b04a20" stopOpacity="0" />
+      </radialGradient>
+    </defs>
+  );
+}
+
+/* les personnages de la station, comme dans le reste du jeu */
+const ELIAS = { skin: "#e0b898", hair: "#e8e8e0", look: "short", beard: true, garment: "tunic", coat: "#c8a878", pants: "#4a3a28" };
+const MIRA = { skin: "#c8946a", hair: "#1a1408", look: "braids", earrings: "#c8a848", lips: "#c85028", garment: "jacket", coat: "#3a5878", pants: "#1a2838" };
+const LEA = { skin: "#f4cfae", hair: "#b8501f", look: "curls", garment: "jacket", coat: "#2f7f86", pants: "#1e3a40" };
+
+/* ─── Planche 1 : nous, les chronautes (la station, la petite équipe) ─── */
 function P1() {
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
       <defs>
-        <linearGradient id="p1-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#0a1428" /><stop offset="100%" stopColor="#1a2a58" />
+        <linearGradient id="p1c-ciel" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#2a3a5a" /><stop offset="60%" stopColor="#c87a5a" /><stop offset="100%" stopColor="#e8b878" />
         </linearGradient>
-        <radialGradient id="p1-halo" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#7fd8ff" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" />
-        </radialGradient>
       </defs>
-      <rect width="800" height="460" fill="url(#p1-sky)" />
-      {/* étoiles / drones qui clignotent */}
-      {Array.from({ length: 40 }).map((_, i) => (
-        <circle key={i} cx={(i * 41) % 800} cy={20 + (i * 17) % 140} r={i % 5 === 0 ? 1.6 : 0.8}
-          fill={i % 6 === 0 ? "#5eff9e" : "#c8d4e2"} opacity="0.7">
-          <animate attributeName="opacity" values="0.3;1;0.3" dur={`${1 + (i % 4)}s`} repeatCount="indefinite" />
-        </circle>
-      ))}
-      {/* gratte-ciels illuminés en couches */}
-      {[[0, 260, 90, 200], [80, 240, 60, 220], [130, 200, 100, 260], [220, 260, 70, 200], [280, 180, 90, 280],
-        [360, 220, 60, 240], [410, 240, 110, 220], [510, 200, 80, 260], [580, 240, 70, 220], [640, 210, 90, 250],
-        [720, 240, 80, 220]].map(([x, y, w, h], i) => (
-        <g key={i}>
-          <rect x={x} y={y} width={w} height={h} fill="#0e1a34" />
-          {/* fenêtres allumées en grille */}
-          {Array.from({ length: Math.floor(h / 14) }).map((_, r) => (
-            Array.from({ length: Math.floor(w / 12) }).map((__, c) => {
-              const on = ((r * 7 + c * 11 + i * 3) % 5) !== 0;
-              return on ? <rect key={`${r}-${c}`} x={x + 3 + c * 12} y={y + 4 + r * 14} width="6" height="6"
-                fill={((r + c + i) % 7 === 0) ? "#ffd166" : "#7fd8ff"} opacity="0.85" /> : null;
-            })
-          ))}
-          {/* panneau pub géant */}
-          {i % 3 === 0 && (
-            <g>
-              <rect x={x + 8} y={y + 24} width={w - 16} height="30" fill="#ff5a7a" opacity="0.9">
-                <animate attributeName="fill" values="#ff5a7a;#4ae0ff;#ffd166;#ff5a7a" dur="4s" repeatCount="indefinite" />
-              </rect>
-              <text x={x + w / 2} y={y + 44} textAnchor="middle" fontSize="10" fontFamily="ui-monospace,monospace" fontWeight="800" fill="#fff">STREAM</text>
-            </g>
-          )}
-        </g>
-      ))}
-      {/* drones qui volent */}
-      {[[120, 90], [340, 60], [560, 100], [700, 70]].map(([x, y], i) => (
-        <g key={i} transform={`translate(${x},${y})`}>
-          <rect x="-6" y="-2" width="12" height="4" fill="#5eff9e" opacity="0.9" />
-          <circle cx="-8" cy="0" r="2" fill="none" stroke="#7fe0a8" strokeWidth="0.8" opacity="0.85">
-            <animate attributeName="r" values="2;4;2" dur="0.4s" repeatCount="indefinite" />
-          </circle>
-          <circle cx="8" cy="0" r="2" fill="none" stroke="#7fe0a8" strokeWidth="0.8" opacity="0.85">
-            <animate attributeName="r" values="2;4;2" dur="0.4s" begin="0.2s" repeatCount="indefinite" />
-          </circle>
-        </g>
-      ))}
-      {/* passants au sol, chacun avec halo bleu du tel */}
-      <rect y="420" width="800" height="40" fill="#0a0a14" />
-      {[80, 190, 320, 460, 600, 720].map((x, i) => (
-        <g key={i} transform={`translate(${x},420)`}>
-          <ellipse cx="0" cy="-4" rx="18" ry="10" fill="url(#p1-halo)" />
-          <path d="M-6 0 L-8 -22 L-2 -30 L2 -30 L8 -22 L6 0 Z" fill="#0e1a30" />
-          <circle cx="0" cy="-34" r="4" fill="#0e1a30" />
-          {/* téléphone tenu */}
-          <rect x="-3" y="-24" width="6" height="10" fill="#7fd8ff" opacity="0.9" />
-        </g>
-      ))}
+      <rect width="800" height="460" fill="url(#p1c-ciel)" />
+      <circle cx="640" cy="210" r="34" fill="#ffd8a0" opacity="0.8" />
+      <path d="M0 300 Q160 250 320 280 Q480 250 640 275 Q720 262 800 270 L800 460 L0 460 Z" fill="#5a4a5a" opacity="0.6" />
+      <path d="M0 330 Q200 300 400 320 Q600 296 800 318 L800 460 L0 460 Z" fill="#3a3040" />
+      {/* la station : un dôme géodésique rapiécé, panneaux solaires, antenne */}
+      <g transform="translate(400,330)">
+        <path d="M-150 0 A150 120 0 0 1 150 0 Z" fill="#9aa4b0" stroke="#3a4858" strokeWidth="2" />
+        <path d="M-150 0 L-110 -80 L-40 -116 L40 -116 L110 -80 L150 0 M-150 0 L-75 -104 L0 -120 L75 -104 L150 0 M-110 -80 L0 -70 L110 -80 M-40 -116 L-75 -104 L0 -70 L75 -104 L40 -116 M-110 -80 L-90 0 M110 -80 L90 0 M0 -70 L0 0"
+          stroke="#3a4858" strokeWidth="1" fill="none" opacity="0.8" />
+        <path d="M-70 -60 l30 -6 l6 24 l-30 6 Z" fill="#c8a878" stroke="#5a4028" strokeWidth="1" />
+        <path d="M60 -40 l26 4 l-4 22 l-26 -4 Z" fill="#7a8a6a" stroke="#3a4a2a" strokeWidth="1" />
+        <path d="M-18 0 L-18 -34 Q-18 -46 0 -46 Q18 -46 18 -34 L18 0 Z" fill="#2a2018" stroke="#1a1008" strokeWidth="1" />
+        <line x1="0" y1="-120" x2="0" y2="-170" stroke="#3a4858" strokeWidth="2" />
+        <circle cx="0" cy="-172" r="4" fill="#ff6a5a"><animate attributeName="opacity" values="1;0.2;1" dur="1.6s" repeatCount="indefinite" /></circle>
+        {[-250, -200].map((x) => <g key={x} transform={`translate(${x},-10) rotate(-12)`}><rect x="-22" y="-14" width="44" height="26" fill="#2a3a6a" stroke="#9aa4b0" strokeWidth="1.5" /><path d="M-22 -1 H22 M-7 -14 V12 M8 -14 V12" stroke="#5a6a9a" strokeWidth="0.8" /></g>)}
+      </g>
+      {/* la petite équipe, devant la station, et la MARTINE « sœur » qui attend */}
+      <g transform="translate(0,0)">
+        <Figure x={200} y={430} s={0.95} {...ELIAS} mood="content" arms={[{ a1: 9, a2: 6 }, { a1: 30, a2: 20 }]} />
+        <Figure x={270} y={432} s={0.92} {...MIRA} mood="content" arms={[{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }]} />
+        <Figure x={540} y={432} s={0.92} {...LEA} glasses mood="neutre" arms={[{ a1: 20, a2: 10 }, { a1: 9, a2: 6 }]} />
+        <Figure x={610} y={434} s={0.85} skin="#a8785a" hair="#2a1a10" look="short" garment="jacket" coat="#6a5a3a" pants="#2a2a30" mood="neutre" arms={[{ a1: 9, a2: 6 }, { a1: 9, a2: 6 }]} />
+      </g>
+      <g transform="translate(372,372)">
+        <ellipse cx="28" cy="62" rx="26" ry="5" fill="#000" opacity="0.25" />
+        <svg x="0" y="0" width="56" height="56" viewBox="0 0 100 100" overflow="visible"><AvatarSoeur /></svg>
+      </g>
     </svg>
   );
 }
 
-/* ─── Planche 2 : les premières pannes ─── */
-function P2() {
+/* la MARTINE « sœur » : la même coque, l'œil éteint (elle attend sa pilote) */
+function AvatarSoeur() {
   return (
-    <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
-      <defs>
-        <linearGradient id="p2-sky" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#181820" /><stop offset="100%" stopColor="#2a2820" />
-        </linearGradient>
-      </defs>
-      <rect width="800" height="460" fill="url(#p2-sky)" />
-      {/* lueur d'aube froide */}
-      <ellipse cx="600" cy="120" rx="180" ry="40" fill="#a89870" opacity="0.35" />
-      {/* même skyline mais entièrement éteinte */}
-      {[[0, 260, 90, 200], [80, 240, 60, 220], [130, 200, 100, 260], [220, 260, 70, 200], [280, 180, 90, 280],
-        [360, 220, 60, 240], [410, 240, 110, 220], [510, 200, 80, 260], [580, 240, 70, 220], [640, 210, 90, 250],
-        [720, 240, 80, 220]].map(([x, y, w, h], i) => (
-        <g key={i}>
-          <rect x={x} y={y} width={w} height={h} fill="#0e0e18" />
-          {/* fenêtres toutes noires — sauf 2-3 bougies isolées */}
-          {i === 3 && <rect x={x + 12} y={y + 40} width="4" height="4" fill="#ff9040" opacity="0.9" />}
-          {i === 7 && <rect x={x + 8} y={y + 80} width="4" height="4" fill="#ff9040" opacity="0.7" />}
-        </g>
-      ))}
-      {/* sol */}
-      <rect y="420" width="800" height="40" fill="#0a0a10" />
-      {/* passants qui lèvent les yeux, incrédules */}
-      <g transform="translate(200,420)">
-        <Figure x={0} y={0} s={0.31} skin="#c88870" hair="#1a1a24" look="short" mood="surpris" garment="coat" coat="#141420" pants="#101018"
-          arms={[{ a1: 10, a2: 6 }, { a1: 150, a2: 170 }]}>
-          <rect x="22" y="-142" width="12" height="20" rx="2" fill="#2a2a34" />
-        </Figure>
-        {/* ! au-dessus */}
-        <text x="14" y="-40" fontSize="14" fontWeight="800" fill="#ffd166">?</text>
-      </g>
-      {/* enfant qui secoue son téléphone */}
-      <g transform="translate(440,420)">
-        <Figure x={0} y={0} s={0.26} skin="#e8c4a0" hair="#3a2418" look="mid" mood="colere" garment="tee" coat="#3a2818" pants="#1a1a24"
-          arms={[{ a1: 10, a2: 6 }, { a1: 40, a2: 60 }]}>
-          <rect x="42" y="-70" width="12" height="22" rx="2" fill="#141420">
-            <animateTransform attributeName="transform" type="rotate" values="-15 48 -58;15 48 -58;-15 48 -58" dur="0.4s" repeatCount="indefinite" />
-          </rect>
-        </Figure>
-      </g>
-      {/* silhouette au loin avec une bougie */}
-      <g transform="translate(640,420)" opacity="0.8">
-        <ellipse cx="10" cy="-16" rx="10" ry="8" fill="#ff9040" opacity="0.35" />
-        <Figure x={0} y={0} s={0.3} skin="#c88870" hair="#1a1408" look="long" garment="dress" coat="#1a1408" pants="#1a1408"
-          arms={[{ a1: 10, a2: 6 }, { a1: 20, a2: -40 }]}>
-          <rect x="10" y="-62" width="9" height="16" fill="#c8a870" />
-          <ellipse cx="14.5" cy="-70" rx="3.4" ry="6.4" fill="#ffd88a" />
-        </Figure>
-      </g>
-    </svg>
+    <g>
+      <ellipse cx="50" cy="55" rx="40" ry="34" fill="#8a5a38" stroke="#3a2010" strokeWidth="3" />
+      <path d="M14 50 Q50 38 86 50" stroke="#5a3820" strokeWidth="2" fill="none" />
+      <circle cx="50" cy="56" r="15" fill="#e8e0d0" stroke="#3a2010" strokeWidth="2.5" />
+      <circle cx="50" cy="56" r="7" fill="#3a4858" />
+      <line x1="50" y1="22" x2="50" y2="6" stroke="#3a2010" strokeWidth="2.5" />
+      <circle cx="50" cy="5" r="4" fill="#5a6a7a" />
+      <path d="M8 56 h-8 M92 56 h8" stroke="#9aa4b0" strokeWidth="5" strokeLinecap="round" />
+    </g>
   );
 }
 
-/* ─── Planche 3 : ce qui s'efface ─── */
+/* ─── Planche 3 : d'où vient la maladie (la vieille machine de Léa, la
+   fissure du temps, les quatre règles d'Al3x1a) ─── */
 function P3() {
+  const REGLES = ["Ne croise jamais un autre toi-même.", "Ne raconte pas le futur.", "Ne laisse rien du futur dans le passé.", "Rentre avant qu'il soit trop tard."];
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
       <defs>
-        <linearGradient id="p3-bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#2a1a1a" /><stop offset="100%" stopColor="#1a0e0a" />
+        <linearGradient id="p3c-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#141c2a" /><stop offset="100%" stopColor="#06080e" />
+        </linearGradient>
+        <linearGradient id="p3c-faille" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#7fd8ff" stopOpacity="0" /><stop offset="50%" stopColor="#c8f0ff" stopOpacity="0.95" /><stop offset="100%" stopColor="#7fd8ff" stopOpacity="0" />
         </linearGradient>
       </defs>
-      <rect width="800" height="460" fill="url(#p3-bg)" />
-      {/* mur de datacenter éventré */}
-      <path d="M0 100 L800 100 L800 340 L0 340 Z" fill="#3a2418" opacity="0.3" />
-      {/* étagères de serveurs cassées */}
-      {[[80, 140, 200], [320, 130, 220], [540, 145, 200]].map(([x, y, h], i) => (
-        <g key={i} transform={`translate(${x},${y})`}>
-          <rect x="0" y="0" width="120" height={h} fill="#1a1420" stroke="#3a3040" strokeWidth="1" />
-          {[0, 1, 2, 3, 4, 5, 6].map((r) => (
-            <g key={r}>
-              <rect x="4" y={4 + r * 26} width="112" height="22" fill="#0a0a12" stroke="#3a2418" strokeWidth="0.5" />
-              <circle cx="8" cy={15 + r * 26} r="1.2" fill={r % 3 === 0 ? "#5a1010" : "#2a2418"} />
-              <rect x="14" y={13 + r * 26} width="90" height="4" fill="#2a2418" />
-            </g>
-          ))}
-          {/* fissure diagonale */}
-          <path d={`M${20 + i * 10} 20 L${100 - i * 20} ${h - 20}`} stroke="#1a0808" strokeWidth="4" opacity="0.7" />
-          {/* poussière/toile araignée */}
-          <path d="M0 30 L20 40 M120 40 L100 60" stroke="#a8a898" strokeWidth="0.4" opacity="0.4" />
+      <rect width="800" height="460" fill="url(#p3c-bg)" />
+      {/* la fissure du temps, derrière la machine, où tombent des souvenirs */}
+      <path d="M40 60 L120 120 L100 170 L190 220 L160 280 L250 330 L230 400" stroke="url(#p3c-faille)" strokeWidth="6" fill="none" />
+      <path d="M40 60 L120 120 L100 170 L190 220 L160 280 L250 330 L230 400" stroke="#e8f8ff" strokeWidth="1.2" fill="none" opacity="0.8" />
+      {[[150, 140, -12], [210, 250, 18], [120, 210, 30], [260, 380, -20]].map(([x, y, r], i) => (
+        <g key={i} transform={`translate(${x},${y}) rotate(${r})`} opacity="0.75">
+          <rect x="-16" y="-12" width="32" height="24" fill="#f0e8d8" stroke="#8a7a60" strokeWidth="1" />
+          <rect x="-13" y="-9" width="26" height="14" fill="#a8b8c8" />
+          <animate attributeName="opacity" values="0.75;0.15;0.75" dur={`${3 + i}s`} repeatCount="indefinite" />
         </g>
       ))}
-      {/* clés USB, cartes SD, disques éparpillés au sol */}
-      <rect y="340" width="800" height="120" fill="#1a0e08" />
-      {[[100, 380, "usb"], [180, 400, "sd"], [280, 390, "cd"], [400, 410, "usb"], [500, 385, "sd"],
-        [600, 400, "cd"], [680, 395, "usb"]].map(([x, y, t], i) => (
-        <g key={i} transform={`translate(${x},${y}) rotate(${(i * 37) % 60 - 30})`}>
-          {t === "usb" && <><rect x="-12" y="-4" width="24" height="8" fill="#3a4058" /><rect x="8" y="-3" width="8" height="6" fill="#c8b8a0" /></>}
-          {t === "sd" && <rect x="-6" y="-8" width="12" height="16" fill="#7a5828" />}
-          {t === "cd" && <><circle cx="0" cy="0" r="12" fill="#c8c8d0" opacity="0.8" /><circle cx="0" cy="0" r="3" fill="#0a0a10" /></>}
-        </g>
-      ))}
-      {/* PERSO 1 : adulte tenant une clé USB, dépité */}
-      <g transform="translate(220,340)">
-        <Figure x={0} y={0} s={0.74} skin="#e0b898" hair="#3a2418" look="short" beard="stubble" mood="vexe" garment="coat" coat="#5a3020" pants="#3a2418"
-          arms={[{ a1: 30, a2: 20 }, { a1: 10, a2: 6 }]}>
-          <rect x="-50" y="-54" width="18" height="8" fill="#3a4058" />
-          <rect x="-34" y="-53" width="6" height="6" fill="#c8b8a0" />
-        </Figure>
-        {/* ? au-dessus */}
-        <text x="-8" y="-96" fontSize="14" fontWeight="800" fill="#8a8878">?</text>
+      {/* K-01, le prototype de Léa (vers 2030) : une capsule bricolée, des étincelles */}
+      <g transform="translate(250,300)">
+        <rect x="-70" y="-120" width="140" height="150" rx="18" fill="#4a5058" stroke="#1a2028" strokeWidth="3" />
+        <rect x="-50" y="-100" width="100" height="70" rx="10" fill="#0e1a24" stroke="#7fd8ff" strokeWidth="2" />
+        <circle cx="0" cy="-65" r="20" fill="none" stroke="#7fd8ff" strokeWidth="2" opacity="0.7" />
+        <text x="0" y="12" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="16" fontWeight="800" fill="#ffd166">K-01</text>
+        <path d="M-70 -20 Q-110 -10 -100 30 M70 -40 Q110 -30 120 20" stroke="#2a2a2a" strokeWidth="5" fill="none" />
+        {[[-80, -110], [86, -96], [60, -128]].map(([x, y], i) => (
+          <path key={i} d={`M${x} ${y} l6 -10 l-2 8 l8 -4 l-6 10`} stroke="#ffd166" strokeWidth="2" fill="none">
+            <animate attributeName="opacity" values="1;0;1" dur={`${0.6 + i * 0.3}s`} repeatCount="indefinite" />
+          </path>
+        ))}
+        <rect x="-60" y="30" width="120" height="10" fill="#1a2028" />
       </g>
-      {/* PERSO 2 : enfant qui demande "c'est quoi ?" */}
-      <g transform="translate(300,340)">
-        <Figure x={0} y={0} s={0.5} skin="#f0d0a8" hair="#5a3818" look="mid" mood="surpris" garment="tee" coat="#3a5878" pants="#2a3a4a" shortSleeves
-          arms={[{ a1: 30, a2: 50 }, { a1: 10, a2: 6 }]} />
-        {/* bulle "c'est quoi ?" */}
-        <g transform="translate(28,-60)">
-          <rect x="-4" y="-12" width="70" height="20" fill="#fff" rx="4" />
-          <path d="M0 4 L-6 10 L0 4 Z" fill="#fff" />
-          <text x="30" y="2" textAnchor="middle" fontSize="10" fontFamily="Georgia, serif" fill="#3a2418">c'est quoi ?</text>
-        </g>
+      {/* les quatre règles, écrites à la main par Al3x1a */}
+      <g transform="translate(560,220) rotate(2)">
+        <rect x="-190" y="-150" width="380" height="290" fill="#efe2c4" stroke="#8a6838" strokeWidth="2" />
+        <path d="M-190 -150 l20 0 l-20 18 Z M190 140 l-20 0 l20 -18 Z" fill="#d8c8a0" />
+        <text x="0" y="-112" textAnchor="middle" fontFamily="Georgia, serif" fontSize="20" fontWeight="700" fill="#3a2418" letterSpacing="2">LES 4 RÈGLES</text>
+        {REGLES.map((r, i) => (
+          <g key={i} transform={`translate(-166,${-66 + i * 50})`}>
+            <circle cx="10" cy="-6" r="13" fill="#3a5878" />
+            <text x="10" y="-1" textAnchor="middle" fontFamily="Georgia, serif" fontSize="15" fontWeight="800" fill="#efe2c4">{i + 1}</text>
+            <text x="34" y="-1" fontFamily="Georgia, serif" fontStyle="italic" fontSize="15.5" fill="#2a3a5a">{r}</text>
+          </g>
+        ))}
+        <text x="150" y="126" textAnchor="end" fontFamily="Georgia, serif" fontStyle="italic" fontSize="16" fill="#2a4a9a">— A.</text>
       </g>
-      {/* cadres photo vides accrochés au mur */}
-      {[[80, 160], [660, 180], [720, 220]].map(([x, y], i) => (
-        <g key={i} transform={`translate(${x},${y}) rotate(${i * 5 - 5})`}>
-          <rect x="-16" y="-20" width="32" height="26" fill="#8a6838" stroke="#3a2818" strokeWidth="1" />
-          <rect x="-13" y="-17" width="26" height="20" fill="#1a1408" />
-          <text x="0" y="-4" textAnchor="middle" fontSize="16" fill="#3a2818" opacity="0.6">✕</text>
-        </g>
-      ))}
     </svg>
   );
 }
 
-/* ─── Planche 4 : ce qui a tenu ─── */
+/* ─── Planche 4 : comment on tient (on écrit tout ; MARTINE se souvient) ─── */
 function P4() {
+  const NOTES = [["Mira", "ingénieure"], ["Léa", "K-01, la machine"], ["Elias", "moi"], ["la cantine", "à gauche"], ["mardi", "j'ai déjà écrit ça ?"]];
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
       <defs>
-        <linearGradient id="p4-bg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#3a2818" /><stop offset="100%" stopColor="#1a1008" />
+        <linearGradient id="p4c-mur" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#3a3020" /><stop offset="100%" stopColor="#1a140c" />
         </linearGradient>
-        <radialGradient id="p4-roche" cx="45%" cy="40%" r="70%">
-          <stop offset="0%" stopColor="#e6cc9c" /><stop offset="60%" stopColor="#c09868" /><stop offset="100%" stopColor="#8a6438" />
-        </radialGradient>
-        <radialGradient id="p4-ocre" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#a83c18" stopOpacity="0.9" /><stop offset="55%" stopColor="#b04a20" stopOpacity="0.6" /><stop offset="100%" stopColor="#b04a20" stopOpacity="0" />
-        </radialGradient>
-        <radialGradient id="p4-torch" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#ffe090" stopOpacity="0.7" />
-          <stop offset="100%" stopColor="#ffe090" stopOpacity="0" />
-        </radialGradient>
       </defs>
-      <rect width="800" height="460" fill="url(#p4-bg)" />
-      {/* halo torche au centre */}
-      <ellipse cx="400" cy="230" rx="360" ry="220" fill="url(#p4-torch)" />
-
-      {/* CASE 1 : une paroi peinte (redessinée le 2026-11-04 : avant, un
-         rectangle beige, un bison-patate et une main en bâtonnets). La roche
-         aux bords irréguliers, un bison à la façon de Lascaux (ocre cerné
-         de charbon, bosse et crinière sombres), un cheval au trait et deux
-         MAINS NÉGATIVES : la main reste couleur de roche, l'ocre soufflé
-         l'entoure. */}
-      <g transform="translate(180,180)">
-        <path d="M-138 -62 Q-142 -78 -118 -80 Q-60 -88 0 -82 Q66 -90 122 -79 Q143 -74 138 -50 Q145 -4 136 48 Q140 74 114 78 Q40 86 -30 80 Q-98 86 -126 76 Q-143 68 -138 38 Q-146 -12 -138 -62 Z"
-          fill="url(#p4-roche)" stroke="#4a3018" strokeWidth="2" />
-        {/* taches minérales et fissures : la roche a déjà une histoire */}
-        <ellipse cx="-96" cy="-46" rx="26" ry="12" fill="#8a5a2a" opacity="0.18" />
-        <ellipse cx="100" cy="-10" rx="22" ry="30" fill="#5a4a3a" opacity="0.12" />
-        <ellipse cx="-20" cy="56" rx="40" ry="10" fill="#7a4a24" opacity="0.15" />
-        <path d="M-120 -20 q14 6 18 22 q4 14 -6 30 M60 -78 q-6 16 4 30 M126 30 q-14 4 -20 18" stroke="#5a3e22" strokeWidth="1.2" fill="none" opacity="0.5" />
-        {/* le bison, tourné vers la gauche */}
-        <g transform="translate(-14,6)">
-          <path d="M-78 4 Q-84 -8 -74 -16 Q-66 -32 -48 -40 Q-28 -48 -8 -36 Q16 -26 40 -24 Q56 -22 56 -6 Q58 10 44 16 Q10 22 -20 18 Q-44 18 -58 12 Q-70 10 -78 4 Z"
-            fill="#a8481c" stroke="#1c1208" strokeWidth="2.6" strokeLinejoin="round" />
-          {/* la crinière et la tête, sombres, comme à Lascaux */}
-          <path d="M-74 -16 Q-66 -32 -48 -40 Q-36 -44 -30 -37 Q-44 -26 -54 -10 Q-62 0 -76 -2 Z" fill="#1c1208" opacity="0.8" />
-          {/* le flanc éclairci (la roche respire sous l'ocre) */}
-          <path d="M-36 4 Q0 0 34 -6" stroke="#d08850" strokeWidth="4" fill="none" opacity="0.35" strokeLinecap="round" />
-          {/* cornes, barbe, queue */}
-          <path d="M-68 -26 q-7 -9 0 -16 M-60 -31 q-2 -10 6 -14" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
-          <path d="M-76 3 q-3 8 3 11" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
-          <path d="M55 -8 Q66 -2 61 12" stroke="#1c1208" strokeWidth="2" fill="none" strokeLinecap="round" />
-          {/* l'œil */}
-          <circle cx="-67" cy="-9" r="1.5" fill="#e8c890" />
-          {/* les pattes, courtes et nerveuses */}
-          <path d="M-56 12 L-59 33 M-40 17 L-40 35 M22 18 L25 34 M40 14 L45 31" stroke="#1c1208" strokeWidth="4.2" strokeLinecap="round" />
-        </g>
-        {/* un petit cheval au trait, en haut à droite */}
-        <g transform="translate(80,-50) scale(0.62)" fill="none" stroke="#1c1208" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M-30 4 Q-34 -12 -22 -20 Q-14 -24 -8 -14 Q8 -8 26 -10 Q40 -8 44 4 Q44 14 34 16 Q4 20 -14 14" strokeWidth="3" />
-          <path d="M-22 -20 Q-34 -26 -40 -16 Q-42 -8 -36 -4" strokeWidth="3" />
-          <path d="M-18 -22 l4 -6 M-12 -18 l5 -7" strokeWidth="2" />
-          <path d="M-10 16 L-12 32 M2 18 L2 34 M24 16 L26 32 M34 14 L38 30" strokeWidth="3" />
-          <path d="M44 2 Q54 6 50 18" strokeWidth="2.4" />
-        </g>
-        {/* deux mains négatives, en bas à droite */}
-        {[[96, 34, 1, -8], [68, 58, 0.8, 14]].map(([hx, hy, sc, rot], i) => (
-          <g key={i} transform={`translate(${hx},${hy}) rotate(${rot}) scale(${sc})`}>
-            <circle cx="0" cy="-4" r="26" fill="url(#p4-ocre)" />
-            <g fill="#d6b682">
-              <rect x="-8" y="-2" width="16" height="16" rx="6" />
-              <rect x="-8.5" y="-20" width="4.2" height="20" rx="2.1" />
-              <rect x="-3.4" y="-24" width="4.2" height="24" rx="2.1" />
-              <rect x="1.7" y="-22" width="4.2" height="22" rx="2.1" />
-              <rect x="6.6" y="-16" width="3.8" height="17" rx="1.9" />
-              <rect x="-16" y="-8" width="5" height="14" rx="2.5" transform="rotate(-38 -13 0)" />
-            </g>
+      <rect width="800" height="460" fill="url(#p4c-mur)" />
+      {/* le mur couvert de notes et de photos reliées par des fils */}
+      <path d="M90 120 L230 90 L330 150 M230 90 L190 210 L330 150" stroke="#c84030" strokeWidth="1.5" fill="none" opacity="0.8" />
+      {NOTES.map(([a, b], i) => {
+        const [x, y, r] = [[90, 120, -4], [230, 90, 3], [330, 150, -2], [190, 210, 5], [60, 230, -6]][i];
+        return (
+          <g key={i} transform={`translate(${x},${y}) rotate(${r})`}>
+            <rect x="-48" y="-30" width="96" height="60" fill={i % 2 ? "#f0e070" : "#f4ead0"} stroke="#8a7a50" strokeWidth="1" />
+            <circle cx="0" cy="-26" r="3.5" fill="#c84030" />
+            <text x="0" y="-4" textAnchor="middle" fontFamily="Georgia, serif" fontStyle="italic" fontSize="14" fill="#2a2010">{a}</text>
+            <text x="0" y="14" textAnchor="middle" fontFamily="Georgia, serif" fontStyle="italic" fontSize="10.5" fill="#5a4a30">{b}</text>
+          </g>
+        );
+      })}
+      {/* Elias, derrière la table, qui écrit (dessiné AVANT la table) */}
+      <Figure x={300} y={418} s={1.12} {...ELIAS} mood="neutre" arms={[{ a1: 34, a2: 70 }, { a1: 30, a2: 76 }]} />
+      {/* le bureau : plateau et façade pleine (on ne voit qu'Elias au-dessus) */}
+      <rect x="40" y="330" width="420" height="16" fill="#5a3a20" />
+      <rect x="48" y="346" width="404" height="114" fill="#3a2410" />
+      <path d="M150 346 V460 M350 346 V460 M48 400 H452" stroke="#2a1808" strokeWidth="2" opacity="0.7" />
+      {[100, 250, 400].map((x) => <circle key={x} cx={x} cy="372" r="3" fill="#c8a848" />)}
+      {[0, 1, 2, 3].map((k) => <rect key={k} x={80 + k * 3} y={318 - k * 10} width="70" height="10" rx="2" fill={["#7a3a28", "#3a5a6a", "#6a5a2a", "#4a3a5a"][k]} stroke="#1a1008" strokeWidth="0.8" />)}
+      <g transform="translate(300,330)">
+        <rect x="-44" y="-6" width="88" height="6" fill="#f4ead0" stroke="#8a7a50" strokeWidth="0.8" />
+        <path d="M-34 -3 h50 M-34 -1 h40" stroke="#5a4a30" strokeWidth="0.6" />
+        <path d="M18 -4 l16 -12" stroke="#2a2010" strokeWidth="2" strokeLinecap="round" />
+      </g>
+      {/* l'écran de MARTINE : sa mémoire, à elle, ne s'efface pas */}
+      <g transform="translate(610,230)">
+        <rect x="-150" y="-140" width="300" height="220" rx="12" fill="#0a1410" stroke="#5eff9e" strokeWidth="3" />
+        <svg x="-26" y="-130" width="52" height="52" viewBox="0 0 100 100" overflow="visible"><AvatarSoeur /></svg>
+        <text x="0" y="-60" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="12" fill="#5eff9e" letterSpacing="2">MÉMOIRE DE MARTINE</text>
+        {["Elias · chef des chronautes", "Mira · ingénieure", "Léa · inventrice de K-01", "Al3x1a · partie en 2035"].map((l, i) => (
+          <g key={i} transform={`translate(-128,${-34 + i * 26})`}>
+            <rect x="0" y="-12" width="18" height="18" fill="#1a3a28" stroke="#5eff9e" strokeWidth="1" />
+            <text x="28" y="2" fontFamily="ui-monospace,monospace" fontSize="12" fill="#c8ffd8">{l}</text>
           </g>
         ))}
-        <text x="-70" y="72" textAnchor="middle" fontSize="9" fontFamily="Georgia, serif" fontStyle="italic" fill="#4a3018" opacity="0.9">— la paroi</text>
-      </g>
-
-      {/* CASE 2 : livre ouvert */}
-      <g transform="translate(560,150)">
-        <rect x="-100" y="-56" width="200" height="112" fill="#3a2818" />
-        {/* pages ouvertes */}
-        <path d="M-90 -46 L0 -50 L90 -46 L90 46 L0 42 L-90 46 Z" fill="#e8d8a8" />
-        <path d="M0 -50 L0 42" stroke="#8a6838" strokeWidth="1" />
-        {/* lignes de texte */}
-        {[-30, -22, -14, -6, 2, 10, 18, 26, 34].map((y, i) => (
-          <g key={i}>
-            <line x1="-82" y1={y} x2="-10" y2={y} stroke="#3a2818" strokeWidth="0.8" opacity="0.7" />
-            <line x1="8" y1={y} x2="82" y2={y} stroke="#3a2818" strokeWidth="0.8" opacity="0.7" />
-          </g>
-        ))}
-        {/* enluminure lettrine */}
-        <rect x="-82" y="-42" width="14" height="18" fill="#c02020" opacity="0.7" />
-        <text x="-75" y="-28" textAnchor="middle" fontSize="12" fontWeight="800" fill="#ffe090">A</text>
-      </g>
-
-      {/* CASE 3 : pierre gravée (stèle avec hiéroglyphes) */}
-      <g transform="translate(180,370)">
-        <path d="M-40 -70 Q-42 -80 -30 -84 L30 -84 Q42 -80 40 -70 L36 30 L-36 30 Z" fill="#8a7040" stroke="#3a2818" strokeWidth="1.5" />
-        {[-56, -44, -32, -20, -8, 4, 16].map((y, i) => (
-          <g key={i}>
-            <text x="-24" y={y} fontSize="10" fill="#3a2818" fontFamily="serif">☥</text>
-            <text x="-4" y={y} fontSize="10" fill="#3a2818" fontFamily="serif">𓂀</text>
-            <text x="16" y={y} fontSize="10" fill="#3a2818" fontFamily="serif">𓅓</text>
-          </g>
-        ))}
-      </g>
-
-      {/* CASE 4 : vitrail éclairé */}
-      <g transform="translate(560,370)">
-        <rect x="-50" y="-70" width="100" height="140" fill="#1a0e08" />
-        <path d="M-46 -66 A 46 46 0 0 1 46 -66 L46 66 L-46 66 Z" fill="#3a2418" stroke="#5a3818" strokeWidth="2" />
-        {/* vitrail : segments colorés */}
-        <g>
-          <path d="M-42 -60 A 42 42 0 0 1 -14 -66 L-14 -20 L-42 -20 Z" fill="#4a2078" opacity="0.85" />
-          <path d="M-14 -66 L14 -66 L14 -20 L-14 -20 Z" fill="#c02020" opacity="0.85" />
-          <path d="M14 -66 A 42 42 0 0 1 42 -60 L42 -20 L14 -20 Z" fill="#2a5088" opacity="0.85" />
-          <path d="M-42 -20 L42 -20 L42 20 L-42 20 Z" fill="#e0a020" opacity="0.85" />
-          <path d="M-42 20 L42 20 L42 66 L-42 66 Z" fill="#2a7048" opacity="0.85" />
-        </g>
-        {/* meneaux */}
-        <line x1="-14" y1="-66" x2="-14" y2="66" stroke="#1a1408" strokeWidth="1.5" />
-        <line x1="14" y1="-66" x2="14" y2="66" stroke="#1a1408" strokeWidth="1.5" />
-        <line x1="-46" y1="-20" x2="46" y2="-20" stroke="#1a1408" strokeWidth="1.5" />
-        <line x1="-46" y1="20" x2="46" y2="20" stroke="#1a1408" strokeWidth="1.5" />
-        {/* torche accrochée */}
-        <g transform="translate(-70,-30)">
-          <rect x="-2" y="0" width="4" height="30" fill="#3a2418" />
-          <ellipse cx="0" cy="-6" rx="6" ry="10" fill="#ffe090" opacity="0.85">
-            <animate attributeName="ry" values="10;8;10" dur="0.8s" repeatCount="indefinite" />
-          </ellipse>
-        </g>
+        <text x="0" y="68" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="11" fill="#5eff9e" opacity="0.8">12 408 souvenirs archivés ▮</text>
       </g>
     </svg>
   );
 }
 
-/* ─── Planche 5 : la maladie de la mémoire ─── */
+/* ─── Planche 5 : les signaux (le SOS du joueur, apparu sur la paroi) ─── */
+function PSignaux() {
+  return (
+    <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
+      <DefsCarnet />
+      <defs>
+        <linearGradient id="p6c-bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#2a1c10" /><stop offset="100%" stopColor="#0e0804" />
+        </linearGradient>
+        <linearGradient id="p6c-lampe" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="#fff2c8" stopOpacity="0.55" /><stop offset="100%" stopColor="#fff2c8" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <rect width="800" height="460" fill="url(#p6c-bg)" />
+      {/* la paroi, en grand */}
+      <g transform="translate(450,215) scale(2.15)"><Paroi sos /></g>
+      {/* Mira éclaire la paroi à la lampe : le faisceau tombe sur le SOS */}
+      <path d="M136 384 L470 312 L470 358 Z" fill="#fff2c8" opacity="0.22" />
+      <g transform="translate(80,370)">
+        <Figure x={0} y={90} s={0.95} {...MIRA} mood="surpris" arms={[{ a1: 9, a2: 6 }, { a1: 80, a2: 84 }]} />
+      </g>
+    </svg>
+  );
+}
+
+/* ─── Planche 2 : la maladie de l'oubli ─── */
 function P5() {
   return (
     <svg viewBox="0 0 800 460" style={{ width: "100%", height: "auto", display: "block" }}>
@@ -501,16 +430,16 @@ function P5() {
 const PLANCHES = [
   { titre: "Carnet d'Elias",            date: "2045",   Vignette: P0, cover: true,
     texte: "Je m'appelle Elias. Je vis à la station des chronautes. J'écris ces pages pour que ce qui nous arrive ne s'efface pas tout à fait. Tourne, si tu veux lire." },
-  { titre: "Notre monde",               date: "aujourd'hui",   Vignette: P1,
-    texte: "Notre ville ne s'endort jamais. Écrans partout, réseaux partout — et nous, la tête dedans. Tout paraît solide, fait pour durer. Ça ne l'est pas." },
-  { titre: "Les premières pannes",      date: "ces dernières années",    Vignette: P2,
-    texte: "Un matin, un serveur s'est éteint. Puis un autre. Des satellites, des écrans, des réseaux entiers ne répondent plus. On a d'abord cru à de simples pannes. Puis elles se sont multipliées." },
-  { titre: "Ce qui s'efface",           date: "chaque année", Vignette: P3,
-    texte: "Photos, films, livres, courrier : tout est sur des supports qu'on ne sait déjà plus lire. Les enfants demandent ce qu'est une clé USB. On n'a rien à leur montrer." },
-  { titre: "Ce qui a tenu",             date: "à travers les âges", Vignette: P4,
-    texte: "Il reste ce que le temps a déjà éprouvé : parois gravées, livres imprimés, stèles, vitraux. Ce sont eux qui nous rendent, morceau par morceau, un peu de mémoire." },
-  { titre: "La maladie de la mémoire",  date: "aujourd'hui", Vignette: P5,
-    texte: "Mais quelque chose nous ronge. On perd nos souvenirs, un peu chaque jour. Certains oublient jusqu'à leur propre nom. Ceux qui oublient tout oublient même qu'ils oublient. C'est le pire." },
+  { titre: "Nous, les chronautes",      date: "2045",   Vignette: P1,
+    texte: "Nous sommes une poignée, dans une vieille station. Une fille venue du futur, Al3x1a, nous a appris à voyager dans le temps sans rien abîmer. Notre mission : trouver un remède." },
+  { titre: "La maladie de l'oubli",     date: "aujourd'hui", Vignette: P5,
+    texte: "Quelque chose nous ronge. On perd nos souvenirs, un peu chaque jour. Certains oublient jusqu'à leur propre nom. Ceux qui oublient tout oublient même qu'ils oublient. C'est le pire." },
+  { titre: "D'où elle vient",           date: "vers 2030", Vignette: P3,
+    texte: "Les premiers voyages dans le temps ont changé le passé, sans le vouloir. Chaque changement efface un peu de nos souvenirs. Al3x1a a écrit quatre règles pour que ça n'arrive plus. Mais le mal était fait." },
+  { titre: "Comment on tient",          date: "chaque jour", Vignette: P4,
+    texte: "On écrit tout : les noms, les visages, ce qu'on a fait la veille. Et MARTINE se souvient pour nous. Sa mémoire, à elle, ne s'efface pas." },
+  { titre: "Les signaux",               date: "depuis quelques jours", Vignette: PSignaux,
+    texte: "Des signes apparaissent dans les plus vieilles traces, là où il n'y avait rien : trois points, trois traits, trois points. Sur une paroi de 20 000 ans. Quelqu'un arrive." },
 ];
 
 export default function CarnetElias({ onDone }) {

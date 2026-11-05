@@ -216,6 +216,7 @@ export default function App() {
   const [showMediadex, setShowMediadex] = useState(false); // l'écran Mediadex plein écran est-il ouvert ?
   const [sosPending, setSosPending] = useState(null);   // msg_id dont on peut encore émettre le SOS
   const [sosOpen, setSosOpen] = useState(false);         // l'animation Morse est-elle en cours ?
+  const [sosGain, setSosGain] = useState(1); // flux gagné par le dernier SOS (sa durabilité), affiché dans l'animation
   const [sosSent, setSosSent] = useState([]);            // msg_ids pour lesquels le SOS a été émis
   const [flux, setFlux] = useState(0);                   // ⚡ jauge du chapitre courant (remise à 0 au saut)
   const [fluxTotal, setFluxTotal] = useState(0);         // ⚡ score cumulé du voyage entier (jamais remis à 0)
@@ -2790,7 +2791,7 @@ export default function App() {
       {/* ANIMATION SOS Morse ··· −−− ··· jouée après le choix en fin de chapitre.
           Puis on ouvre le VAISSEAU TEMPOREL (sauf apres le dernier chapitre). */}
       {sosOpen && (
-        <SosOverlay muted={muted} onDone={() => {
+        <SosOverlay muted={muted} gain={sosGain} onDone={() => {
           setSosOpen(false);
           if (isLastChapter) setEpiChoice(null);
           /* On ouvre le vaisseau temporel AUSSI pour le dernier saut
@@ -2851,6 +2852,7 @@ export default function App() {
           onChoose={(msgId, dur) => {
             setSosSent((v) => v.includes(msgId) ? v : [...v, msgId]);
             bumpFlux(dur);
+            setSosGain(dur);
             setSosChooserOpen(false);
             setSosOpen(true); // lance l'animation Morse, qui enchaînera sur le saut
           }}

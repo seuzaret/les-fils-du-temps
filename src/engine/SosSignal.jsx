@@ -6,8 +6,9 @@ import { playFluxCharge } from './sfx.js';
    ============================================================
    Après chaque invention transmise, un bouton 🆘 pulsé apparaît
    en bas à droite. Clic → animation en 9 temps du motif SOS
-   (3 brefs, 3 longs, 3 brefs) avec sons Morse. L'équipe de
-   sauvetage capte le signal — bonus de flux temporel (compté
+   (3 brefs, 3 longs, 3 brefs) avec sons Morse. Le SOS est caché
+   dans un message de l'époque, pour les chronautes de 2045 — bonus
+   de flux temporel (compté
    pour plus tard).
    ============================================================ */
 
@@ -70,7 +71,7 @@ export function SosButton({ onClick }) {
 }
 
 /* --- Overlay qui joue l'animation Morse SOS --- */
-export function SosOverlay({ muted, onDone }) {
+export function SosOverlay({ muted, onDone, gain = 1 }) {
   const [step, setStep] = useState(-1);       // -1 avant le début, 0..8 pendant
   const [litNow, setLitNow] = useState(false);
   const [done, setDone] = useState(false);
@@ -127,7 +128,7 @@ export function SosOverlay({ muted, onDone }) {
       animation: 'sosFadeIn 0.35s ease-out',
     }}>
       <div style={{ fontSize: 12, letterSpacing: 4, color: '#ffd166', textTransform: 'uppercase', marginBottom: 10 }}>
-        Émission d'un signal de détresse
+        Le SOS se cache dans le message…
       </div>
       <div style={{ fontSize: 30, fontWeight: 700, letterSpacing: 3, color: '#f8efdd', marginBottom: 32 }}>
         S · O · S
@@ -208,10 +209,10 @@ export function SosOverlay({ muted, onDone }) {
           animation: 'sosFadeIn 0.5s ease-out',
         }}>
           <div style={{ fontSize: 22, color: '#7fe0a8', fontWeight: 700, marginBottom: 8 }}>
-            ✓ Signal reçu par l'équipe de sauvetage
+            ✓ SOS caché. Rendez-vous en 2045.
           </div>
           <div style={{ fontSize: 13, color: '#c8b090' }}>
-            +1 flux temporel · un pas de plus vers le retour
+            +{gain} flux temporel · un bond de plus vers les chronautes
           </div>
         </div>
       )}
