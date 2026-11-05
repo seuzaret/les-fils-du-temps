@@ -123,6 +123,27 @@ const SFX = {
     tenue(c, { f: 1326, t: 0.22, h: 0.75, r: 0.85, type: "sine", v: 0.03 }); // battement : le scintillement
     tone(c, { f: 2637, t: 0.3, d: 0.6, type: "sine", v: 0.025 });
   },
+  /* MIAOU du chat de l'intro, quand on le chasse : une dent de scie
+     filtrée dont la hauteur monte puis retombe, et un filtre qui glisse
+     du « i » au « ou » (mi-a-ou) */
+  miaou: (c) => {
+    const now = c.currentTime;
+    const o = c.createOscillator(), f = c.createBiquadFilter(), g = c.createGain();
+    o.type = "sawtooth";
+    o.frequency.setValueAtTime(540, now);
+    o.frequency.linearRampToValueAtTime(860, now + 0.16);
+    o.frequency.linearRampToValueAtTime(560, now + 0.55);
+    f.type = "bandpass"; f.Q.value = 3.5;
+    f.frequency.setValueAtTime(2000, now);
+    f.frequency.linearRampToValueAtTime(1300, now + 0.25);
+    f.frequency.linearRampToValueAtTime(650, now + 0.55);
+    g.gain.setValueAtTime(0, now);
+    g.gain.linearRampToValueAtTime(0.16, now + 0.05);
+    g.gain.setValueAtTime(0.16, now + 0.35);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.62);
+    o.connect(f); f.connect(g); g.connect(c.destination);
+    o.start(now); o.stop(now + 0.66);
+  },
   /* bip de TEST : deux notes claires et un peu fortes — sert à vérifier
      d'un clic sur 🔊 que le son sort bien. */
   test: (c) => {
