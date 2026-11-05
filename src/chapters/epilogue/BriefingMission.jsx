@@ -58,7 +58,6 @@ function FrisePreview() {
 const DIALOGUES = [
   { speaker: "elias", text: "MARTINE est réparée. Regarde-la — elle rayonne. Grâce à toi, {prenom}." },
   { speaker: "martine", mood: "content", text: "Mes circuits chantent. Merci, chronaute. Je suis prête à repartir." },
-  { speaker: "elias", text: "Écoute. Il y a des années, l'une des nôtres est partie chercher un remède contre l'oubli. Nom de code : Al3x1a. Elle n'est jamais rentrée. Quelqu'un doit aller la retrouver." },
   { speaker: "martine", mood: "content", text: "J'ai bricolé un nouvel outil : le TEMPOSCOPE. Plus besoin de bonds : on a laissé une trace dans chaque époque, le chemin existe. Tu passeras de l'une à l'autre d'un simple regard. Al3x1a a laissé des notes dans chaque époque, sur son support typique — paroi, tablette, papyrus, télégramme…", showFrise: true },
   { speaker: "elias", text: "Trouve ses notes, recoupe les indices, ramène-la. Prêt·e, {prenom} ?" },
 ];

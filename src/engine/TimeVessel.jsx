@@ -407,9 +407,11 @@ function CockpitPhase({ onGo, onCancel, backdropScene }) {
    COMPOSANT PRINCIPAL
    ============================================================ */
 export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: backdropProp, level = 1 }) {
-  /* Départ direct dans le COCKPIT : la scène MARTINE/matérialisation n'est
-     jouée qu'au tout premier chapitre (elle est skippée par défaut ici). */
-  const [phase, setPhase] = useState("cockpit");
+  /* Le vaisseau s'ouvre toujours juste après le SOS : MARTINE dit d'abord
+     que le message l'a rechargée (la jauge se remplit), puis on passe au
+     COCKPIT. La matérialisation n'est plus jouée : la machine reste posée
+     dans le décor (« TARDIS persistant »). */
+  const [phase, setPhase] = useState("martine");
   const backdropScene = backdropProp || defaultBackdropScene;
   const [flux, setFlux] = useState(0);
   const rafRef = useRef(null);
@@ -468,7 +470,7 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
         <>
           {/* MARTINE : GRAND PLAN, ancrée à gauche */}
           <div style={{
-            position: "absolute", top: "50%", left: "22%", transform: "translate(-50%, -50%)",
+            position: "absolute", top: "40%", left: "22%", transform: "translate(-50%, -50%)",
             display: "flex", flexDirection: "column", alignItems: "center", gap: 14,
           }}>
             <div style={{
@@ -476,12 +478,9 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
               background: "radial-gradient(circle, rgba(94,255,158,0.4) 0%, rgba(94,255,158,0) 70%)",
               animation: "tvMartineGlow 2.8s ease-in-out infinite",
             }}>
-              <Avatar mood="content" size={340} talking />
+              {/* taille bornée par la hauteur de l'écran (téléphone en paysage) */}
+              <Avatar mood="content" size={Math.max(110, Math.min(340, Math.round((typeof window !== "undefined" ? window.innerHeight : 768) * 0.4)))} talking />
             </div>
-            <div style={{
-              fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 3, color: "#5eff9e",
-              background: "rgba(4,8,14,0.7)", padding: "6px 14px", borderRadius: 6,
-            }}>▶ MARTINE</div>
           </div>
 
           {/* Bulle de dialogue centrée en bas */}
@@ -495,14 +494,12 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
               boxShadow: "0 0 30px rgba(94,255,158,0.35)",
               textAlign: "center",
             }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e", marginBottom: 8 }}>▶ MARTINE</div>
               <p style={{ margin: 0, fontSize: 18, lineHeight: 1.55 }}>
                 « Ce message va traverser le temps, et son courant m'a rechargée.
                 {" "}On peut faire le <strong style={{ color: "#5eff9e" }}>bond suivant</strong>. »
               </p>
-              <p style={{ margin: "12px 0 0", fontSize: 15, lineHeight: 1.5, color: "#c8d4e2" }}>
-                Regarde — elle apparaît sous nos yeux.
-              </p>
-              <button onClick={() => setPhase("materialize")}
+              <button onClick={() => setPhase("cockpit")}
                 autoFocus
                 style={{
                   marginTop: 14, background: "#5eff9e", color: "#06110b", border: "none",

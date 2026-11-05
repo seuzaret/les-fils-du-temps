@@ -33,12 +33,16 @@ function useTypewriter(text, speed = 22) {
 }
 
 /* Répliques d'Elias confus : hésitations, silences, pause avant
-   qu'il se souvienne du carnet. La 4e ligne est celle du carnet. */
+   qu'il se souvienne du carnet. La dernière ligne est celle du carnet.
+   Elias ne connaît pas le joueur : il lui demande son prénom, et le
+   joueur répond (`qui: "toi"`, texte selon qu'il a donné un prénom). */
 const REPLIQUES = [
   { mood: "neutre",
-    text: "Oh… tu… tu viens d'arriver ? Le portail… oui, le portail vient de s'éteindre. Tu es {prenom} — c'est bien ça ?" },
+    text: "Oh… tu… tu viens d'arriver ? Le portail… oui, le portail vient de s'éteindre. Comment tu t'appelles ?" },
+  { qui: "toi",
+    text: "Je m'appelle {prenom}.", sansPrenom: "Appelle-moi juste chronaute." },
   { mood: "vexe",
-    text: "Je voulais te dire tellement de choses… mais… comment ça s'appelait, déjà… c'est là, juste là dans ma tête, et ça glisse." },
+    text: "{prenom}… Je voulais te dire tellement de choses… mais… comment ça s'appelait, déjà… c'est là, juste là dans ma tête, et ça glisse." },
   { mood: "vexe",
     text: "Excuse-moi. On m'a dit que ça arrive de plus en plus souvent. Je crois que… je crois que je m'appelle Elias. Oui. Elias. C'est ça." },
   { mood: "content",
@@ -48,7 +52,10 @@ const REPLIQUES = [
 export default function ArriveeElias({ prenom, onDone }) {
   const [idx, setIdx] = useState(0);
   const step = REPLIQUES[idx];
-  const raw = step.text.replace("{prenom}", prenom || "chronaute");
+  const toi = step.qui === "toi";
+  const p = (prenom || "").trim();
+  const brut = (!p && step.sansPrenom) ? step.sansPrenom : step.text.replace("{prenom}", p || "chronaute");
+  const raw = brut.charAt(0).toUpperCase() + brut.slice(1);
   const { shown, done, skip } = useTypewriter(raw);
   const dernier = idx === REPLIQUES.length - 1;
 
@@ -153,12 +160,14 @@ export default function ArriveeElias({ prenom, onDone }) {
       {/* ═══ boîte de dialogue d'Elias en bas ═══ */}
       <div style={{ position: "relative", zIndex: 2, padding: "12px 20px 24px", background: "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end" }}>
         <div style={{ width: 140, height: 170, flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: "2px solid #ffd166", boxShadow: "0 8px 32px rgba(0,0,0,0.65)" }}>
-          <PortraitElias mood={step.mood} />
+          {toi ? (
+            <div style={{ width: "100%", height: "100%", background: "#141b26", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>👤</div>
+          ) : <PortraitElias mood={step.mood} />}
         </div>
         <div title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}
           style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 130, display: "flex", flexDirection: "column", justifyContent: "space-between", cursor: done ? "default" : "pointer" }}>
           <div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#ffd166", marginBottom: 6 }}>ELIAS</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: toi ? "#7fd8ff" : "#ffd166", marginBottom: 6 }}>{toi ? "TOI" : "ELIAS"}</div>
             <p style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
               « {shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>} »
             </p>

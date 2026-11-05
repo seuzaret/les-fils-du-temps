@@ -282,6 +282,10 @@ function SlideNight({ onNext, silent = false }) {
           <circle cx="1088" cy="402" r="22" fill="url(#s1-nightlight)" />
           <path d="M1092 440 V404 Q1092 398 1086 398" stroke="#1a1c2c" strokeWidth="2.4" fill="none" />
           <circle cx="1086" cy="400" r="2.6" fill="#ffe8a8" />
+          {/* le chat noir, dehors sur le rebord, qui regarde dans la chambre
+             (c'est lui qui sautera sur le cadran de MARTINE) */}
+          <circle cx="1046" cy="404" r="40" fill="url(#s1-nightlight)" opacity="0.8" />
+          <g transform="translate(1046,438) scale(1.7)"><ChatNoir cligne /></g>
           {/* croisillons + reflets sur les vitres */}
           <line x1="970" y1="80" x2="970" y2="440" stroke="#3a2818" strokeWidth="5" />
           <line x1="820" y1="260" x2="1120" y2="260" stroke="#3a2818" strokeWidth="5" />
@@ -1108,16 +1112,18 @@ const CHAT_TEMPS = [
   { qui: "martine", mood: "neutre", txt: "« Ouf, il est sorti. Règle 3 : on n'emporte rien de son époque. Même pas un chat. »" },
 ];
 
-/* le chat noir aux yeux verts (comme sur la clôture de la rue) */
-function ChatNoir({ assis = true }) {
+/* le chat noir aux yeux verts (comme sur la clôture de la rue).
+   `cligne` : les yeux se ferment de temps en temps (chambre). */
+function ChatNoir({ assis = true, cligne = false }) {
+  const anim = cligne ? <animate attributeName="ry" values="2.2;2.2;0.2;2.2" keyTimes="0;0.92;0.96;1" dur="4.5s" repeatCount="indefinite" /> : null;
   return (
     <g>
       <path d={assis ? "M-14 0 Q-16 -22 -6 -30 L6 -30 Q16 -22 14 0 Z" : "M-22 -6 Q-18 -20 0 -22 Q18 -22 22 -8 Q20 2 0 2 Q-20 2 -22 -6 Z"} fill="#06070e" />
       <g transform={assis ? "translate(0,-36)" : "translate(-20,-20)"}>
         <circle cx="0" cy="0" r="9" fill="#06070e" />
         <path d="M-8 -4 L-7 -14 L-2 -7 Z M8 -4 L7 -14 L2 -7 Z" fill="#06070e" />
-        <ellipse cx="-3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a" />
-        <ellipse cx="3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a" />
+        <ellipse cx="-3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a">{anim}</ellipse>
+        <ellipse cx="3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a">{anim}</ellipse>
       </g>
       <path d={assis ? "M12 -4 Q26 -6 24 -22" : "M22 -8 Q36 -14 34 -28"} stroke="#06070e" strokeWidth="4" fill="none" strokeLinecap="round" />
     </g>

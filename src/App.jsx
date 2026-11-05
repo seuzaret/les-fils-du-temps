@@ -2801,7 +2801,7 @@ export default function App() {
         }} />
       )}
 
-      {/* VAISSEAU TEMPOREL : Martine annonce -> materialisation -> cockpit -> boussole.
+      {/* VAISSEAU TEMPOREL : MARTINE annonce (le SOS l'a rechargée) -> cockpit -> boussole.
           - Succes : on enchaine sur la transition classique vers le chapitre suivant.
           - Echec (tachyons) : geré en interne (retour au cockpit) par TimeVessel. */}
       {vesselOpen && (() => {
