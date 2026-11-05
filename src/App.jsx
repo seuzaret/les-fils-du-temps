@@ -2060,14 +2060,14 @@ export default function App() {
       {!paysageBas && (
       <div style={{ position: "relative", textAlign: "center", padding: "6px 12px 0", minHeight: 20 }}>
         {ecran.etroit ? (
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontFamily: "ui-monospace,monospace", fontSize: 9.5, letterSpacing: 1.5, marginBottom: 2 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 1.5, marginBottom: 2 }}>
             <span style={{ color: "#e8934a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{chapter.bandeau}</span>
             {prenom && <span style={{ color: "#5eff9e", whiteSpace: "nowrap", opacity: 0.85 }} title="C'est toi qui joues cette partie">👤 {prenom}</span>}
           </div>
         ) : (<>
-        <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#e8934a", whiteSpace: "nowrap" }}>{chapter.bandeau}</span>
+        <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#e8934a", whiteSpace: "nowrap" }}>{chapter.bandeau}</span>
         {prenom && (
-          <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#5eff9e", whiteSpace: "nowrap", opacity: 0.85 }} title="C'est toi qui joues cette partie">
+          <span style={{ position: "absolute", right: 12, top: "50%", transform: "translateY(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#5eff9e", whiteSpace: "nowrap", opacity: 0.85 }} title="C'est toi qui joues cette partie">
             👤 {prenom}
           </span>
         )}
@@ -2145,7 +2145,7 @@ export default function App() {
               color: jeu2Pages.length > 0 ? "#fff8e4" : "#8fa3bd",
               border: `1px solid ${jeu2Pages.length > 0 ? "#ffd166" : "rgba(200,212,226,0.25)"}`,
               borderRadius: 20, padding: "4px 12px",
-              fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 800, letterSpacing: 1,
+              fontFamily: "ui-monospace,monospace", fontSize: 12.5, fontWeight: 800, letterSpacing: 1,
               cursor: "pointer",
               boxShadow: jeu2Pages.length > 0 ? "0 0 10px rgba(255,209,102,0.4)" : "none",
               backdropFilter: "blur(4px)",

@@ -41,13 +41,13 @@ function useTypewriter(text, speed = 6) {
 function FrisePreview() {
   return (
     <div style={{ position: "relative", padding: "10px 14px 6px", background: "linear-gradient(180deg, rgba(14,28,42,0.85), rgba(14,28,42,0.35))", borderRadius: 12, border: "1px solid #3a80c8", boxShadow: "0 0 20px rgba(127,216,255,0.35)", animation: "friseAppear 0.9s ease-out" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9, letterSpacing: 2, color: "#7fd8ff", textAlign: "center", marginBottom: 6 }}>🔭 TON TEMPOSCOPE</div>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff", textAlign: "center", marginBottom: 6 }}>🔭 TON TEMPOSCOPE</div>
       <div style={{ position: "absolute", left: 26, right: 26, top: "58%", height: 2, background: "linear-gradient(90deg, #26324a 0%, #7fd8ff 50%, #26324a 100%)", opacity: 0.6, borderRadius: 2 }} />
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4, position: "relative" }}>
         {CHAPTERS.map((c) => (
           <div key={c.id} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 1 }}>
-            <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, fontSize: 15, borderRadius: "50%", background: "linear-gradient(180deg, #1a2a3e, #0a1420)", border: "1.5px solid #7fd8ff", boxShadow: "0 0 6px rgba(127,216,255,0.35)" }}>{c.emoji || "•"}</span>
-            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 7, color: "#7fd8ff", opacity: 0.75, whiteSpace: "nowrap" }}>{c.date || ""}</span>
+            <span style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 26, height: 26, fontSize: 16, borderRadius: "50%", background: "linear-gradient(180deg, #1a2a3e, #0a1420)", border: "1.5px solid #7fd8ff", boxShadow: "0 0 6px rgba(127,216,255,0.35)" }}>{c.emoji || "•"}</span>
+            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: "clamp(7px, 1.1vw, 10px)", color: "#7fd8ff", opacity: 0.85, whiteSpace: "nowrap" }}>{c.date || ""}</span>
           </div>
         ))}
       </div>
@@ -115,7 +115,7 @@ export default function BriefingMission({ prenom, onAccept }) {
       <div style={{ position: "relative", maxWidth: 720, margin: "0 auto", zIndex: 2 }}>
         {/* Titre de la salle */}
         <div style={{ textAlign: "center", marginTop: 4 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 4, color: "#7fd8ff", opacity: 0.75 }}>SALLE TEMPORELLE · 2045</div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 4, color: "#7fd8ff", opacity: 0.75 }}>SALLE TEMPORELLE · 2045</div>
           <h1 style={{ fontFamily: "ui-monospace,monospace", fontSize: 26, fontWeight: 700, color: "#ffd166", letterSpacing: 2, margin: "4px 0 0", textShadow: "0 0 14px rgba(255,209,102,0.5)" }}>LA MISSION</h1>
         </div>
 
@@ -125,7 +125,7 @@ export default function BriefingMission({ prenom, onAccept }) {
             <div style={{ width: 110, height: 130, margin: "0 auto", borderRadius: 12, overflow: "hidden", border: `2px solid ${step.speaker === "elias" ? "#e0a848" : "#3a4058"}`, boxShadow: step.speaker === "elias" ? "0 0 18px rgba(224,168,72,0.4)" : "none", transition: "all 0.35s", background: "#1a1a28" }}>
               <PortraitElias />
             </div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: step.speaker === "elias" ? "#e0a848" : "#8a97ad", marginTop: 6 }}>ELIAS</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: step.speaker === "elias" ? "#e0a848" : "#8a97ad", marginTop: 6 }}>ELIAS</div>
           </div>
           <div style={{ width: 120, textAlign: "center", opacity: step.speaker === "martine" ? 1 : 0.55, transition: "opacity 0.35s" }}>
             <div style={{ width: 110, height: 130, margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 12, border: `2px solid ${step.speaker === "martine" ? "#5eff9e" : "#3a4058"}`, boxShadow: step.speaker === "martine" ? "0 0 18px rgba(94,255,158,0.4)" : "none", transition: "all 0.35s", background: "#0a1420" }}>
@@ -133,17 +133,17 @@ export default function BriefingMission({ prenom, onAccept }) {
                 <Avatar mood={step.mood || (step.speaker === "martine" ? "content" : "neutre")} size={70} date="2045" talking={step.speaker === "martine" && !done} />
               </div>
             </div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: step.speaker === "martine" ? "#5eff9e" : "#8a97ad", marginTop: 6 }}>MARTINE</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: step.speaker === "martine" ? "#5eff9e" : "#8a97ad", marginTop: 6 }}>MARTINE</div>
           </div>
         </div>
 
         {/* La bulle de dialogue avec effet TYPEWRITER */}
         <div style={{ background: "rgba(20,30,50,0.85)", border: `2px solid ${step.speaker === "martine" ? "#5eff9e" : "#e0a848"}`, borderRadius: 14, padding: "16px 20px", marginTop: 18, minHeight: 96, boxShadow: `0 0 24px ${step.speaker === "martine" ? "rgba(94,255,158,0.22)" : "rgba(224,168,72,0.22)"}` }}
           title={done ? "Cliquer pour continuer" : "Cliquer pour tout afficher"}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: step.speaker === "martine" ? "#5eff9e" : "#e0a848", marginBottom: 8 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: step.speaker === "martine" ? "#5eff9e" : "#e0a848", marginBottom: 8 }}>
             {step.speaker === "martine" ? "MARTINE ▸" : "ELIAS ▸"}
           </div>
-          <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#e8eef5", margin: 0 }}>
+          <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "#e8eef5", margin: 0 }}>
             « {shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>} »
           </p>
         </div>
@@ -161,13 +161,13 @@ export default function BriefingMission({ prenom, onAccept }) {
           {!isLast ? (
             <button onClick={(e) => { e.stopPropagation(); if (done) setIdx(idx + 1); }}
               disabled={!done}
-              style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#7fd8ff" : "#3a4058", border: `1px solid ${done ? "#3a80c8" : "#26324a"}`, borderRadius: 10, padding: "10px 26px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 2, transition: "all 0.2s" }}>
+              style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#7fd8ff" : "#3a4058", border: `1px solid ${done ? "#3a80c8" : "#26324a"}`, borderRadius: 10, padding: "10px 26px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 2, transition: "all 0.2s" }}>
               Suite ▸
             </button>
           ) : (
             <button onClick={(e) => { e.stopPropagation(); if (done) onAccept?.(); }}
               disabled={!done}
-              style={{ background: done ? "#5eff9e" : "#2a3020", color: done ? "#06110b" : "#3a4058", border: "none", borderRadius: 12, padding: "14px 32px", fontWeight: 900, cursor: done ? "pointer" : "default", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: done ? "0 0 22px rgba(94,255,158,0.5)" : "none", animation: done ? "pulseAccept 2s ease-in-out infinite" : "none" }}>
+              style={{ background: done ? "#5eff9e" : "#2a3020", color: done ? "#06110b" : "#3a4058", border: "none", borderRadius: 12, padding: "14px 32px", fontWeight: 900, cursor: done ? "pointer" : "default", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: done ? "0 0 22px rgba(94,255,158,0.5)" : "none", animation: done ? "pulseAccept 2s ease-in-out infinite" : "none" }}>
               ▶ ACCEPTER LA MISSION
             </button>
           )}

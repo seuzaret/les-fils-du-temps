@@ -31,19 +31,19 @@ export default function EpilogueScreen({ epiChoice, onChoose, onReset, onEnd }) 
             </div>
           )}
         </div>
-        <div style={{ fontFamily: "ui-monospace,monospace", color: choisi ? "#5eff9e" : "#ffd166", letterSpacing: 3, fontSize: 11, marginTop: 8 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", color: choisi ? "#5eff9e" : "#ffd166", letterSpacing: 3, fontSize: 12, marginTop: 8 }}>
           {choisi ? "MARTINE" : "ELIAS · ULTIME QUESTION"}
         </div>
 
         {!choisi ? (
           <>
             {EPILOGUE.QUESTION.map((l, i) => (
-              <p key={i} style={{ fontSize: 15.5, lineHeight: 1.65, color: "#c8d4e2", margin: "10px 0" }}>« {l} »</p>
+              <p key={i} style={{ fontSize: 16.5, lineHeight: 1.65, color: "#c8d4e2", margin: "10px 0" }}>« {l} »</p>
             ))}
             <h1 style={{ fontFamily: "ui-monospace,monospace", color: "#ffd166", fontSize: 24, letterSpacing: 2, marginTop: 20 }}>
               {EPILOGUE.QUESTION_TITRE}
             </h1>
-            <p style={{ color: "#8fa3bd", fontSize: 12.5, fontStyle: "italic", marginTop: 2 }}>
+            <p style={{ color: "#8fa3bd", fontSize: 14, fontStyle: "italic", marginTop: 2 }}>
               Il n'y a pas de bonne réponse. Choisis, et écoute ce que MARTINE en pense.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))", gap: 10, marginTop: 20, marginBottom: 40 }}>
@@ -51,8 +51,8 @@ export default function EpilogueScreen({ epiChoice, onChoose, onReset, onEnd }) 
                 <button key={s.id} onClick={() => { playSfx("craft"); onChoose(s.id); }}
                   style={{ background: "#101827", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 10px", cursor: "pointer", color: "#e8eef5", fontFamily: "Palatino, Georgia, serif", display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
                   <span style={{ fontSize: 30 }}>{s.emoji}</span>
-                  <span style={{ fontSize: 14, fontWeight: 700 }}>{s.name}</span>
-                  <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8fa3bd" }}>
+                  <span style={{ fontSize: 15.5, fontWeight: 700 }}>{s.name}</span>
+                  <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#8fa3bd" }}>
                     ⏳ durabilité {s.jauges.durabilite}/5
                   </span>
                 </button>
@@ -67,20 +67,20 @@ export default function EpilogueScreen({ epiChoice, onChoose, onReset, onEnd }) 
             </h1>
             {/* réponse argumentée de MARTINE */}
             <div style={{ background: "#101827", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 18px", marginTop: 14, textAlign: "left" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: "#e8eef5", margin: 0 }}>« {choisi.reponse} » — MARTINE</p>
+              <p style={{ fontSize: 16, lineHeight: 1.7, color: "#e8eef5", margin: 0 }}>« {choisi.reponse} » — MARTINE</p>
               <div style={{ marginTop: 12 }}><Gauges values={choisi.jauges} /></div>
             </div>
             {/* la chute (identique quel que soit le choix) */}
             <div style={{ background: "#0e1420", border: "1px solid #5a4a20", borderRadius: 12, padding: "14px 18px", marginTop: 12, textAlign: "left" }}>
-              <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "#ffd166", fontStyle: "italic", margin: 0 }}>« {EPILOGUE.CHUTE} »</p>
+              <p style={{ fontSize: 16, lineHeight: 1.7, color: "#ffd166", fontStyle: "italic", margin: 0 }}>« {EPILOGUE.CHUTE} »</p>
             </div>
             <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", margin: "20px 0 40px" }}>
               <button onClick={onReset}
-                style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 12, padding: "11px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "ui-monospace,monospace" }}>
+                style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 12, padding: "11px 20px", fontSize: 14.5, fontWeight: 700, cursor: "pointer", fontFamily: "ui-monospace,monospace" }}>
                 ← Essayer un autre support
               </button>
               <button onClick={onEnd}
-                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 12, padding: "12px 26px", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1.5, boxShadow: "0 0 24px rgba(94,255,158,0.35)" }}>
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 12, padding: "12px 26px", fontSize: 15.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1.5, boxShadow: "0 0 24px rgba(94,255,158,0.35)" }}>
                 LE BILAN DU VOYAGE →
               </button>
             </div>

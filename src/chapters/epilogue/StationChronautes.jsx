@@ -471,25 +471,25 @@ function ChronauteDialogueBox({ step, persoName, prenom, idx, total, isLast, onN
       <div style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 140, display: "flex", flexDirection: "column", justifyContent: "space-between" }}
         title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}>
         <div>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#ffd166", marginBottom: 6 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#ffd166", marginBottom: 6 }}>
             {persoName.toUpperCase() || "\u00a0"}
           </div>
-          <p style={{ fontSize: 15, lineHeight: 1.6, color: narr ? "#b8c8dc" : "#e8eef5", fontStyle: narr ? "italic" : "normal", margin: 0 }}>
+          <p style={{ fontSize: 16, lineHeight: 1.6, color: narr ? "#b8c8dc" : "#e8eef5", fontStyle: narr ? "italic" : "normal", margin: 0 }}>
             {narr ? "" : "« "}{shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>}{narr ? "" : " »"}
           </p>
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>{idx + 1} / {total}</div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8fa3bd" }}>{idx + 1} / {total}</div>
           {!isLast ? (
             <button onClick={(e) => { e.stopPropagation(); if (done) onNext(); }}
               disabled={!done}
-              style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#ffd166" : "#3a3020", border: `1px solid ${done ? "#5a4a20" : "#26324a"}`, borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1, transition: "all .2s" }}>
+              style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#ffd166" : "#3a3020", border: `1px solid ${done ? "#5a4a20" : "#26324a"}`, borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1, transition: "all .2s" }}>
               Suite ▸
             </button>
           ) : (
             <button onClick={(e) => { e.stopPropagation(); if (done) onClose(); }}
               disabled={!done}
-              style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#5eff9e" : "#2a3020", border: `1px solid ${done ? "#2a4028" : "#26324a"}`, borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1, transition: "all .2s" }}>
+              style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#5eff9e" : "#2a3020", border: `1px solid ${done ? "#2a4028" : "#26324a"}`, borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1, transition: "all .2s" }}>
               Fermer ✕
             </button>
           )}
@@ -557,14 +557,14 @@ export default function StationChronautes({ prenom, onContinue }) {
       </div>
       {/* bandeau titre */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "10px 12px 0", background: "linear-gradient(180deg,#0c1220ee 0%,#0c122000 100%)", pointerEvents: "none" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>ÉPILOGUE · LA STATION DES CHRONAUTES · 2045</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#ffd166" }}>ÉPILOGUE · LA STATION DES CHRONAUTES · 2045</div>
         {!perso && !allDone && (
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#7fd8ff", marginTop: 4, opacity: 0.85 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#7fd8ff", marginTop: 4, opacity: 0.85 }}>
             Clique sur Elias pour commencer.
           </div>
         )}
         {!perso && allDone && !finalHeard && (
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#ffd166", marginTop: 4 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#ffd166", marginTop: 4 }}>
             Retourne voir Elias pour sa question.
           </div>
         )}
@@ -593,7 +593,7 @@ export default function StationChronautes({ prenom, onContinue }) {
       {finalHeard && !perso && (
         <div style={{ position: "absolute", left: "50%", bottom: 40, transform: "translateX(-50%)", zIndex: 3 }}>
           <button onClick={onContinue}
-            style={{ background: "#e8934a", color: "#160c02", border: "none", borderRadius: 10, padding: "14px 32px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 24px rgba(232,150,74,0.7)", animation: "glow 2.4s ease-in-out infinite" }}>
+            style={{ background: "#e8934a", color: "#160c02", border: "none", borderRadius: 10, padding: "14px 32px", fontWeight: 800, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 24px rgba(232,150,74,0.7)", animation: "glow 2.4s ease-in-out infinite" }}>
             J'ACCEPTE ▸
           </button>
         </div>

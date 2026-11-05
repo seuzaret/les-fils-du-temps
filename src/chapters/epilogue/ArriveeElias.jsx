@@ -69,7 +69,7 @@ export default function ArriveeElias({ prenom, onDone }) {
       {/* bouton passer discret en haut à droite */}
       <button onClick={(e) => { e.stopPropagation(); onDone(); }}
         title="Sauter cette scène"
-        style={{ position: 'absolute', top: 10, right: 14, zIndex: 10, background: 'rgba(20,27,38,0.6)', border: '1px solid rgba(200,212,226,0.25)', color: '#8fa3bd', padding: '5px 12px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 1, backdropFilter: 'blur(4px)' }}>
+        style={{ position: 'absolute', top: 10, right: 14, zIndex: 10, background: 'rgba(20,27,38,0.6)', border: '1px solid rgba(200,212,226,0.25)', color: '#8fa3bd', padding: '5px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 1, backdropFilter: 'blur(4px)' }}>
         passer ›
       </button>
       {/* ═══ décor : silhouette de la station en fond, portail temporel qui s'estompe ═══ */}
@@ -146,10 +146,10 @@ export default function ArriveeElias({ prenom, onDone }) {
 
       {/* ═══ bandeau titre ═══ */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#ffd166" }}>
           ÉPILOGUE · STATION DES CHRONAUTES · 2045
         </div>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>
           … le portail vient de se refermer …
         </div>
       </div>
@@ -167,23 +167,23 @@ export default function ArriveeElias({ prenom, onDone }) {
         <div title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}
           style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 130, display: "flex", flexDirection: "column", justifyContent: "space-between", cursor: done ? "default" : "pointer" }}>
           <div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: toi ? "#7fd8ff" : "#ffd166", marginBottom: 6 }}>{toi ? "TOI" : "ELIAS"}</div>
-            <p style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: toi ? "#7fd8ff" : "#ffd166", marginBottom: 6 }}>{toi ? "TOI" : "ELIAS"}</div>
+            <p style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
               « {shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>} »
             </p>
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12 }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>{idx + 1} / {REPLIQUES.length}</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8fa3bd" }}>{idx + 1} / {REPLIQUES.length}</div>
             {!dernier ? (
               <button onClick={(e) => { e.stopPropagation(); if (done) setIdx(idx + 1); }}
                 disabled={!done}
-                style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#ffd166" : "#3a3020", border: `1px solid ${done ? "#5a4a20" : "#26324a"}`, borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ background: done ? "#141b26" : "#0e1420", color: done ? "#ffd166" : "#3a3020", border: `1px solid ${done ? "#5a4a20" : "#26324a"}`, borderRadius: 10, padding: "9px 18px", fontWeight: 700, cursor: done ? "pointer" : "default", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Suite ▸
               </button>
             ) : (
               <button onClick={(e) => { e.stopPropagation(); if (done) onDone(); }}
                 disabled={!done}
-                style={{ background: done ? "#5a3818" : "#2a1a08", color: done ? "#f4e4b0" : "#5a4820", border: `1px solid ${done ? "#8a6838" : "#3a2818"}`, borderRadius: 10, padding: "10px 22px", fontWeight: 800, cursor: done ? "pointer" : "default", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: done ? "0 0 20px rgba(232,150,74,0.4)" : "none" }}>
+                style={{ background: done ? "#5a3818" : "#2a1a08", color: done ? "#f4e4b0" : "#5a4820", border: `1px solid ${done ? "#8a6838" : "#3a2818"}`, borderRadius: 10, padding: "10px 22px", fontWeight: 800, cursor: done ? "pointer" : "default", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: done ? "0 0 20px rgba(232,150,74,0.4)" : "none" }}>
                 📖 Prendre le carnet
               </button>
             )}

@@ -457,10 +457,10 @@ export default function CarnetElias({ onDone }) {
       style={{ position: "fixed", inset: 0, background: "#050810", color: "#e8eef5", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start", padding: 20, zIndex: 80, fontFamily: "Georgia, serif", overflowY: "auto", cursor: "pointer" }}>
       {/* en-tête : indication + option skip discret */}
       <div style={{ width: "100%", maxWidth: 900, display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#ffd166" }}>📖 LE CARNET D'ELIAS · {i + 1}/{total}</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 3, color: "#ffd166" }}>📖 LE CARNET D'ELIAS · {i + 1}/{total}</div>
         <button onClick={(e) => { e.stopPropagation(); onDone(); }}
           title="Sauter le carnet"
-          style={{ background: "rgba(20,27,38,0.6)", color: "#8fa3bd", border: "1px solid rgba(200,212,226,0.25)", borderRadius: 6, padding: "5px 12px", fontSize: 11, fontWeight: 600, fontFamily: "ui-monospace,monospace", cursor: "pointer", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+          style={{ background: "rgba(20,27,38,0.6)", color: "#8fa3bd", border: "1px solid rgba(200,212,226,0.25)", borderRadius: 6, padding: "5px 12px", fontSize: 12, fontWeight: 600, fontFamily: "ui-monospace,monospace", cursor: "pointer", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
           passer ›
         </button>
       </div>
@@ -470,7 +470,7 @@ export default function CarnetElias({ onDone }) {
         {/* petite indication de chapitre en haut */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "1px solid #a89058", paddingBottom: 8, marginBottom: 12 }}>
           <div style={{ fontSize: 22, fontWeight: 700, letterSpacing: 1 }}>{p.titre}</div>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8a5828" }}>{p.date}</div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5828" }}>{p.date}</div>
         </div>
 
         {/* la case dessinée */}
@@ -479,7 +479,7 @@ export default function CarnetElias({ onDone }) {
         </div>
 
         {/* texte narratif */}
-        <p style={{ fontSize: 16, lineHeight: 1.7, margin: "16px 4px 4px", fontStyle: "italic", color: "#2a1810" }}>
+        <p style={{ fontSize: 17, lineHeight: 1.7, margin: "16px 4px 4px", fontStyle: "italic", color: "#2a1810" }}>
           « {p.texte} »
         </p>
       </div>

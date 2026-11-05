@@ -50,7 +50,7 @@ const SPEAKERS = {
   martine: { nom: "MARTINE", couleur: "#5eff9e" },
 };
 
-const BTN_GHOST = { background: "#141b26", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "10px 18px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 };
+const BTN_GHOST = { background: "#141b26", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "10px 18px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 };
 
 export default function Cine({ steps, label, accent = "#7fd8ff", ctx, onDone, endActions }) {
   const [idx, setIdx] = useState(0);
@@ -137,10 +137,10 @@ export default function Cine({ steps, label, accent = "#7fd8ff", ctx, onDone, en
       {step.type === "title" ? (
         /* ─── carte-titre sur fond noir ─── */
         <div key={idx} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: 24, textAlign: "center" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 5, color: step.couleur || accent, animation: "cineIn 900ms ease-out both" }}>{step.kicker}</div>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 5, color: step.couleur || accent, animation: "cineIn 900ms ease-out both" }}>{step.kicker}</div>
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: "clamp(22px, 5vw, 38px)", fontWeight: 800, letterSpacing: 6, color: step.couleur || accent, animation: "cineIn 1100ms ease-out 350ms both", textShadow: `0 0 28px ${(step.couleur || accent)}66` }}>{step.titre}</div>
           <div style={{ width: 160, height: 2, background: step.couleur || accent, transformOrigin: "center", animation: "cineLine 1000ms ease-out 700ms both", opacity: 0.8 }} />
-          {step.sub && <div style={{ fontStyle: "italic", fontSize: 15, color: "#8fa3bd", maxWidth: 560, animation: "cineIn 1000ms ease-out 1000ms both" }}>{step.sub}</div>}
+          {step.sub && <div style={{ fontStyle: "italic", fontSize: 16, color: "#8fa3bd", maxWidth: 560, animation: "cineIn 1000ms ease-out 1000ms both" }}>{step.sub}</div>}
         </div>
       ) : (
         <>
@@ -150,8 +150,8 @@ export default function Cine({ steps, label, accent = "#7fd8ff", ctx, onDone, en
           </div>
           {/* repère de lieu */}
           <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
-            {label && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: accent, textShadow: "0 1px 8px #000" }}>{label}</div>}
-            {step.lieu && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#cfe6ff", marginTop: 4, opacity: 0.75, textShadow: "0 1px 8px #000" }}>{step.lieu}</div>}
+            {label && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: accent, textShadow: "0 1px 8px #000" }}>{label}</div>}
+            {step.lieu && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#cfe6ff", marginTop: 4, opacity: 0.75, textShadow: "0 1px 8px #000" }}>{step.lieu}</div>}
           </div>
           <div style={{ flex: 1 }} />
           {/* ─── bandeau de texte ─── */}
@@ -165,9 +165,9 @@ export default function Cine({ steps, label, accent = "#7fd8ff", ctx, onDone, en
             ) : null)}
             <div style={{ flex: 1, background: "#0e1420ee", border: `1px solid ${beat.tag ? couleur : "#2a3648"}`, borderRadius: 12, padding: "12px 16px", minHeight: 110, display: "flex", flexDirection: "column", justifyContent: "space-between", boxShadow: beat.tag ? `0 0 16px ${couleur}33` : "none" }}>
               <div>
-                {beat.tag && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: couleur, fontWeight: 800, marginBottom: 6 }}>{beat.tag}</div>}
-                {!isNarr && who.nom && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: couleur, marginBottom: 6 }}>{who.nom}</div>}
-                <p style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
+                {beat.tag && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: couleur, fontWeight: 800, marginBottom: 6 }}>{beat.tag}</div>}
+                {!isNarr && who.nom && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: couleur, marginBottom: 6 }}>{who.nom}</div>}
+                <p style={{ fontSize: 17, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
                   {isNarr ? shown : <>« {shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>} »</>}
                   {isNarr && !done && <span style={{ opacity: 0.7 }}>▮</span>}
                 </p>
@@ -175,7 +175,7 @@ export default function Cine({ steps, label, accent = "#7fd8ff", ctx, onDone, en
               {showEnd ? (
                 <div onClick={(e) => e.stopPropagation()} style={{ display: "flex", justifyContent: "flex-end", gap: 10, flexWrap: "wrap", marginTop: 12 }}>{endActions}</div>
               ) : (
-                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1, color: done ? couleur : "#3a4658" }}>
+                <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: done ? couleur : "#3a4658" }}>
                   {done ? "clique pour continuer ▸" : "…"}
                 </div>
               )}
@@ -187,7 +187,7 @@ export default function Cine({ steps, label, accent = "#7fd8ff", ctx, onDone, en
       {/* passer */}
       {!(endActions && isLast && lastBeat) && (
         <button onClick={skipAct} title="Sauter cette séquence"
-          style={{ position: "absolute", top: 10, right: 14, zIndex: 40, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+          style={{ position: "absolute", top: 10, right: 14, zIndex: 40, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
           passer ›
         </button>
       )}

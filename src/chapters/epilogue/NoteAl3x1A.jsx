@@ -326,14 +326,14 @@ export default function NoteAl3x1A({ support, text, chapitreNom, variant = "wron
           animation: "fadein 0.4s ease-out",
         }}>
         {/* En-tête discret : où la note a été trouvée */}
-        <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 10, letterSpacing: 2, opacity: 0.55, marginBottom: 4 }}>
+        <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 11.5, letterSpacing: 2, opacity: 0.55, marginBottom: 4 }}>
           {chapitreNom.toUpperCase()}
         </div>
-        <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 1.5, opacity: 0.75, marginBottom: 10, fontStyle: "italic" }}>
+        <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, letterSpacing: 1.5, opacity: 0.75, marginBottom: 10, fontStyle: "italic" }}>
           {st.label}
         </div>
         {badge && (
-          <div style={{ display: "inline-block", background: badge.color, color: st.bg, padding: "3px 10px", borderRadius: 20, fontFamily: "ui-monospace, monospace", fontSize: 10, fontWeight: 900, letterSpacing: 2, marginBottom: 10 }}>
+          <div style={{ display: "inline-block", background: badge.color, color: st.bg, padding: "3px 10px", borderRadius: 20, fontFamily: "ui-monospace, monospace", fontSize: 11.5, fontWeight: 900, letterSpacing: 2, marginBottom: 10 }}>
             {badge.label}
           </div>
         )}
@@ -346,13 +346,13 @@ export default function NoteAl3x1A({ support, text, chapitreNom, variant = "wron
           </div>
         )}
         {/* Le texte de la note */}
-        <p style={{ fontSize: 15.5, lineHeight: 1.7, margin: 0, whiteSpace: "pre-line" }}>{text}</p>
+        <p style={{ fontSize: 16.5, lineHeight: 1.7, margin: 0, whiteSpace: "pre-line" }}>{text}</p>
         {/* Signature */}
-        <div style={{ marginTop: 20, textAlign: "right", fontSize: 13, fontStyle: "italic", opacity: 0.75 }}>
+        <div style={{ marginTop: 20, textAlign: "right", fontSize: 14.5, fontStyle: "italic", opacity: 0.75 }}>
           — Al3x1a
         </div>
         {variant === "clue" && (
-          <div style={{ marginTop: 14, padding: "8px 12px", background: `${st.ink}11`, border: `1px dashed ${st.ink}66`, borderRadius: 6, fontSize: 12, lineHeight: 1.5, fontStyle: "italic", opacity: 0.85 }}>
+          <div style={{ marginTop: 14, padding: "8px 12px", background: `${st.ink}11`, border: `1px dashed ${st.ink}66`, borderRadius: 6, fontSize: 15, lineHeight: 1.5, fontStyle: "italic", opacity: 0.85 }}>
             Cette note décrit l'époque où elle s'est arrêtée. Recoupe avec d'autres indices pour trouver où. (📓 carnet en haut)
           </div>
         )}

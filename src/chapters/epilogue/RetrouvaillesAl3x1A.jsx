@@ -36,7 +36,7 @@ function findAmb(name = "") {
    cassée à gauche, Al3x1a au centre, table + remède à droite. */
 function Decor({ amb, remede, mood }) {
   return (
-    <svg viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
+    <svg viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid meet" style={{ width: "100%", height: "100%", display: "block", overflow: "hidden" }}>
       <defs>
         <linearGradient id="ret-ciel" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor={amb.cielHaut} />
@@ -228,23 +228,24 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
 
   return (
     <div onClick={advance}
-      style={{ position: "fixed", inset: 0, background: "rgba(4,8,16,0.94)", display: "flex", alignItems: "center", justifyContent: "center", padding: 12, zIndex: 95, cursor: "pointer" }}
+      style={{ position: "fixed", inset: 0, background: "rgba(4,8,16,0.94)", display: "flex", overflowY: "auto", padding: 12, zIndex: 95, cursor: "pointer" }}
       title="Cliquer pour continuer">
-      <div style={{ maxWidth: 900, width: "100%", background: "#0e1420", border: `3px solid ${amb.accent}`, borderRadius: 16, overflow: "hidden", boxShadow: `0 12px 48px rgba(0,0,0,0.75), 0 0 40px ${amb.accent}44`, animation: "fadein 0.35s ease-out" }}>
+      {/* margin auto : centrée quand elle tient, sinon la fenêtre défile (petits écrans) */}
+      <div style={{ maxWidth: 900, width: "100%", margin: "auto", background: "#0e1420", border: `3px solid ${amb.accent}`, borderRadius: 16, overflow: "hidden", boxShadow: `0 12px 48px rgba(0,0,0,0.75), 0 0 40px ${amb.accent}44`, animation: "fadein 0.35s ease-out" }}>
         {/* Bandeau visuel grand format */}
-        <div style={{ position: "relative", width: "100%", aspectRatio: "1000 / 420", background: "#020614" }}>
+        <div style={{ position: "relative", width: "100%", aspectRatio: "1000 / 420", maxHeight: "40vh", background: "#020614" }}>
           <Decor amb={amb} remede={remede} mood={step.mood} />
         </div>
 
         {/* Dialogue en dessous */}
         <div style={{ padding: "16px 20px 18px" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: amb.accent }}>AL3X1A ▸</div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: amb.accent }}>AL3X1A ▸</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8fa3bd" }}>
               {choice ? "fin" : `${idx + 1} / ${DIALOGUES.length}`}
             </div>
           </div>
-          <p style={{ fontSize: 15.5, lineHeight: 1.7, color: "#e8eef5", margin: 0, fontFamily: "Palatino, Georgia, serif" }}>
+          <p style={{ fontSize: 16.5, lineHeight: 1.7, color: "#e8eef5", margin: 0, fontFamily: "Palatino, Georgia, serif" }}>
             « {(choice ? choice.reply : step.text).replace("{prenom}", prenom || "chronaute")} »
           </p>
 
@@ -252,31 +253,31 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
             <div style={{ marginTop: 14, padding: "10px 14px", background: "#0a1820", border: `1px dashed ${amb.accent}`, borderRadius: 10, display: "flex", alignItems: "center", gap: 12 }}>
               <div style={{ fontSize: 30 }}>{remede.emoji}</div>
               <div>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: amb.accent }}>REMÈDE RÉCUPÉRÉ</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#e8eef5" }}>{remede.name}</div>
-                <div style={{ fontSize: 12, color: "#c8d4e2", opacity: 0.85, marginTop: 2 }}>{remede.desc}</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: amb.accent }}>REMÈDE RÉCUPÉRÉ</div>
+                <div style={{ fontSize: 15.5, fontWeight: 700, color: "#e8eef5" }}>{remede.name}</div>
+                <div style={{ fontSize: 15, color: "#c8d4e2", opacity: 0.9, marginTop: 2, lineHeight: 1.45 }}>{remede.desc}</div>
               </div>
             </div>
           )}
 
           {choice && (
             <div style={{ marginTop: 14, padding: "12px 14px", background: `${choice.color}11`, border: `2px solid ${choice.color}`, borderRadius: 10, color: "#e8eef5" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: choice.color, fontWeight: 800, marginBottom: 4 }}>▸ FIN · {choice.id.toUpperCase()}</div>
-              <div style={{ fontSize: 14.5, lineHeight: 1.55, fontStyle: "italic" }}>{choice.confirm}</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: choice.color, fontWeight: 800, marginBottom: 4 }}>▸ FIN · {choice.id.toUpperCase()}</div>
+              <div style={{ fontSize: 16, lineHeight: 1.55, fontStyle: "italic" }}>{choice.confirm}</div>
             </div>
           )}
 
           {!atChoiceStep && (
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
               <button onClick={(e) => { e.stopPropagation(); setIdx(idx + 1); }}
-                style={{ background: "#141b26", color: amb.accent, border: `1px solid ${amb.accent}`, borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ background: "#141b26", color: amb.accent, border: `1px solid ${amb.accent}`, borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Suite ▸
               </button>
             </div>
           )}
           {atChoiceStep && !choice && (
             <div style={{ marginTop: 16 }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8d4e2", marginBottom: 8, textAlign: "center", opacity: 0.75 }}>▸ TON CHOIX</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#c8d4e2", marginBottom: 8, textAlign: "center", opacity: 0.75 }}>▸ TON CHOIX</div>
               <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: 10 }}>
                 {CHOICES.map((c) => (
                   <button key={c.id} onClick={(e) => { e.stopPropagation(); pickChoice(c); }}
@@ -287,7 +288,7 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
                       color: "#e8eef5",
                       borderRadius: 12, padding: "12px 16px",
                       fontFamily: "Palatino, Georgia, serif",
-                      fontSize: 15, lineHeight: 1.35,
+                      fontSize: 16, lineHeight: 1.35,
                       cursor: "pointer",
                       transition: "all .18s",
                       boxShadow: `0 0 10px ${c.color}22`,
@@ -304,7 +305,7 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
           {choice && (
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
               <button onClick={(e) => { e.stopPropagation(); onDone?.(); }}
-                style={{ background: choice.color, color: "#160c02", border: "none", borderRadius: 10, padding: "12px 26px", fontWeight: 900, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: `0 0 18px ${choice.color}88`, animation: "glow 2.4s ease-in-out infinite" }}>
+                style={{ background: choice.color, color: "#160c02", border: "none", borderRadius: 10, padding: "12px 26px", fontWeight: 900, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1, boxShadow: `0 0 18px ${choice.color}88`, animation: "glow 2.4s ease-in-out infinite" }}>
                 🌀 REPARTIR AU FUTUR
               </button>
             </div>

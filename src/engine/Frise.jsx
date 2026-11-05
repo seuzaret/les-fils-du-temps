@@ -60,7 +60,7 @@ export default function Frise({ collection }) {
 
   return (
     <div style={{ margin: "12px 0" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#8fa3bd", marginBottom: 6 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#8fa3bd", marginBottom: 6 }}>
         ⏳ FRISE DES SUPPORTS — touche un point pour voir ses jauges
       </div>
       <div style={{ position: "relative", height: 62 }}>
@@ -77,7 +77,7 @@ export default function Frise({ collection }) {
               style={{
                 position: "absolute", left: `${((i + 0.5) / collection.length) * 100}%`, top: 26,
                 transform: "translate(-50%,-50%)", width: 34, height: 34, borderRadius: "50%",
-                cursor: "pointer", fontSize: 15, lineHeight: 1, padding: 0,
+                cursor: "pointer", fontSize: 16, lineHeight: 1, padding: 0,
                 background: c.perdu ? "#1c2230" : "#12281c",
                 border: `2px solid ${isSel ? "#ffd166" : c.perdu ? "#5a6678" : "#5eff9e"}`,
                 boxShadow: isSel ? "0 0 10px rgba(255,209,102,0.5)" : "none",
@@ -89,7 +89,7 @@ export default function Frise({ collection }) {
         })}
         {/* les époques sous la ligne */}
         {labels.map((l) => (
-          <span key={l.date + l.x} style={{ position: "absolute", left: `${l.x}%`, top: 48, transform: "translateX(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#e8934a", whiteSpace: "nowrap" }}>
+          <span key={l.date + l.x} style={{ position: "absolute", left: `${l.x}%`, top: 48, transform: "translateX(-50%)", fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#e8934a", whiteSpace: "nowrap" }}>
             {l.date}
           </span>
         ))}
@@ -97,7 +97,7 @@ export default function Frise({ collection }) {
       {/* le détail du point touché : titre + les 4 mini-jauges */}
       {selected && (
         <div style={{ background: "#141b26", border: "1px solid #2a3648", borderRadius: 10, padding: "8px 12px 12px", marginTop: 4 }}>
-          <strong style={{ fontSize: 13 }}>
+          <strong style={{ fontSize: 14.5 }}>
             {selected.perdu ? "💨" : selected.emoji} {selected.titre}
             <span style={{ color: "#8fa3bd", fontWeight: 400 }}> · {selected.date}</span>
             {selected.perdu && <span style={{ color: "#7a879e", fontWeight: 400 }}> · perdu en route</span>}

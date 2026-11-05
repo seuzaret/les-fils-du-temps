@@ -148,7 +148,7 @@ export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJ
           <button onClick={onRetour} style={BTN_GHOST}>← Retour au menu</button>
           {onLancerJeu3 && (
             <button onClick={onLancerJeu3} autoFocus
-              style={{ background: "#a04ce8", color: "#0a0806", border: "none", borderRadius: 10, padding: "13px 26px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 22px #a04ce888" }}>
+              style={{ background: "#a04ce8", color: "#0a0806", border: "none", borderRadius: 10, padding: "13px 26px", fontWeight: 800, cursor: "pointer", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 22px #a04ce888" }}>
               🌑 COMMENCER LE DISCERNEMENT →
             </button>
           )}

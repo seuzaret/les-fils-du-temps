@@ -34,17 +34,17 @@ export default function CarnetAlexia({ pages = [], clueMap = {}, target = -1, on
         }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", borderBottom: "1px solid #8a6838", paddingBottom: 8, marginBottom: 12 }}>
           <div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800 }}>📓 CARNET D'AL3X1A</div>
-            <h2 style={{ margin: "4px 0 0", fontSize: 24, fontWeight: 900, color: "#3a2214", letterSpacing: 1 }}>Pages collectées <span style={{ color: "#8a5a2a", fontSize: 16, fontWeight: 700 }}>({total}/10)</span></h2>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800 }}>📓 CARNET D'AL3X1A</div>
+            <h2 style={{ margin: "4px 0 0", fontSize: 24, fontWeight: 900, color: "#3a2214", letterSpacing: 1 }}>Pages collectées <span style={{ color: "#8a5a2a", fontSize: 17, fontWeight: 700 }}>({total}/10)</span></h2>
           </div>
           <button onClick={onClose}
-            style={{ background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, letterSpacing: 1, cursor: "pointer" }}>
+            style={{ background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, letterSpacing: 1, cursor: "pointer" }}>
             Refermer ✕
           </button>
         </div>
 
         {total === 0 ? (
-          <div style={{ padding: "30px 10px", textAlign: "center", color: "#5a3818", fontStyle: "italic", fontSize: 15 }}>
+          <div style={{ padding: "30px 10px", textAlign: "center", color: "#5a3818", fontStyle: "italic", fontSize: 16 }}>
             Pas encore de page. Trouve une première note dans une époque pour commencer à reconstituer son voyage.
           </div>
         ) : (
@@ -65,28 +65,28 @@ export default function CarnetAlexia({ pages = [], clueMap = {}, target = -1, on
                   boxShadow: isRight ? "0 0 14px rgba(94,255,158,0.3)" : hasClue ? "0 0 10px rgba(255,209,102,0.25)" : "none",
                 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800 }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800 }}>
                       PAGE {k + 1} · {(chap?.epoque || "").toUpperCase()}
                     </div>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1, color: "#8a5a2a", opacity: 0.75 }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 1, color: "#8a5a2a", opacity: 0.75 }}>
                       {chap?.date || ""}
                     </div>
                   </div>
                   {clueText && (
                     <div style={{ background: "linear-gradient(90deg,#ffd16633,#fff8e4)", border: "1px dashed #c08030", borderRadius: 6, padding: "6px 10px", marginBottom: 8, display: "flex", gap: 8, alignItems: "flex-start" }}>
-                      <span style={{ fontSize: 14 }}>✦</span>
+                      <span style={{ fontSize: 15.5 }}>✦</span>
                       <div>
-                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, letterSpacing: 2, color: "#a06030", fontWeight: 800 }}>INDICE DE RECOUPEMENT</div>
-                        <div style={{ fontSize: 14, color: "#3a2214", fontStyle: "italic", lineHeight: 1.4 }}>« {clueText} »</div>
+                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#a06030", fontWeight: 800 }}>INDICE DE RECOUPEMENT</div>
+                        <div style={{ fontSize: 15.5, color: "#3a2214", fontStyle: "italic", lineHeight: 1.4 }}>« {clueText} »</div>
                       </div>
                     </div>
                   )}
                   {isRight && (
                     <div style={{ background: "linear-gradient(90deg,#5eff9e33,#fff8e4)", border: "1px dashed #2a8030", borderRadius: 6, padding: "6px 10px", marginBottom: 8 }}>
-                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#2a8030", fontWeight: 800 }}>✦ ELLE EST ICI</div>
+                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#2a8030", fontWeight: 800 }}>✦ ELLE EST ICI</div>
                     </div>
                   )}
-                  <p style={{ fontSize: 15, lineHeight: 1.6, margin: 0, color: "#2a1810", fontStyle: "italic" }}>
+                  <p style={{ fontSize: 16, lineHeight: 1.6, margin: 0, color: "#2a1810", fontStyle: "italic" }}>
                     « {cfg.page} »
                   </p>
                 </div>
@@ -95,7 +95,7 @@ export default function CarnetAlexia({ pages = [], clueMap = {}, target = -1, on
           </div>
         )}
 
-        <div style={{ marginTop: 14, padding: "8px 12px", background: "#f0e4bc", border: "1px dashed #a08048", borderRadius: 6, fontSize: 12, color: "#5a3818", fontStyle: "italic" }}>
+        <div style={{ marginTop: 14, padding: "8px 12px", background: "#f0e4bc", border: "1px dashed #a08048", borderRadius: 6, fontSize: 15, color: "#5a3818", fontStyle: "italic" }}>
           Les pages marquées <strong style={{ color: "#a06030" }}>✦ indice</strong> décrivent l'époque où Al3x1a s'est arrêtée. Rapproche 2 ou 3 indices pour trouver la bonne.
         </div>
       </div>
