@@ -72,7 +72,7 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
           animation: "pop .45s cubic-bezier(.34,1.56,.64,1)",
         }}>
         <span style={{ fontSize: 23, lineHeight: 1 }}>{items[id].emoji}</span>
-        <span style={{ fontSize: 9.5, textAlign: "center", lineHeight: 1.15, ...(vertical ? {} : { whiteSpace: "nowrap" }) }}>{items[id].name}</span>
+        <span style={{ fontSize: 11, textAlign: "center", lineHeight: 1.15, ...(vertical ? {} : { whiteSpace: "nowrap" }) }}>{items[id].name}</span>
       </button>
     );
   };
@@ -83,21 +83,21 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
   if (vertical) {
     return (
       <div style={{ ...CUIR, width: "100%", flex: "1 1 auto", display: "flex", flexDirection: "column", minHeight: 0, borderRadius: 12, padding: 8, WebkitUserSelect: "none", userSelect: "none", animation: shake ? "shake .5s" : "none" }}>
-        <div style={{ fontSize: 10, letterSpacing: 1, color: "#c9a877", fontFamily: "ui-monospace,monospace", marginBottom: 6, textAlign: "center" }}>
+        <div style={{ fontSize: 11, letterSpacing: 1, color: "#c9a877", fontFamily: "ui-monospace,monospace", marginBottom: 6, textAlign: "center" }}>
           🎒 SAC ({inv.length})
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 7, overflowY: "auto", paddingRight: 2, minHeight: 0 }}>
           {inv.map(Pastille)}
         </div>
         {inv.length === 0 && (
-          <div style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", lineHeight: 1.4, textAlign: "center", marginTop: 8 }}>
+          <div style={{ fontSize: 13, color: "#8a97ae", fontStyle: "italic", lineHeight: 1.4, textAlign: "center", marginTop: 8 }}>
             {mode === "jeu2"
               ? "Cherche les traces d'Al3x1a. Chaque note est sur le support caractéristique de l'époque."
               : "Observe les décors et touche ce qui te semble utile."}
           </div>
         )}
         {selected && (
-          <div style={{ fontSize: 10, color: "#ffd166", fontFamily: "ui-monospace,monospace", marginTop: 6, textAlign: "center", lineHeight: 1.3 }}>
+          <div style={{ fontSize: 11.5, color: "#ffd166", fontFamily: "ui-monospace,monospace", marginTop: 6, textAlign: "center", lineHeight: 1.3 }}>
             {items[selected].name} en main : touche une cible…
           </div>
         )}
@@ -111,7 +111,7 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
       {/* jeu 1 : la poubelle temporelle est fixée en bas à gauche (App) → on
           lui laisse 76 px pour qu'elle ne cache ni le texte ni les objets */}
       <div style={{ maxWidth: 980, margin: "0 auto", padding: mode === "jeu2" ? "6px 12px 8px" : "6px 12px 8px 76px" }}>
-        <div style={{ fontSize: 10, letterSpacing: 1.5, color: "#c9a877", fontFamily: "ui-monospace,monospace", marginBottom: 5 }}>
+        <div style={{ fontSize: 11.5, letterSpacing: 1.5, color: "#c9a877", fontFamily: "ui-monospace,monospace", marginBottom: 5 }}>
           🎒 SAC ({inv.length}){mode === "jeu2" ? " — cherche les notes d'Al3x1a dans le décor" : " — glisse un élément sur un autre ou sur le décor pour combiner"}
           {selected && <span style={{ color: "#ffd166" }}> · {items[selected].name} en main : touche une cible…</span>}
         </div>
@@ -119,7 +119,7 @@ export function InventoryBar({ items, inv, shake, vertical = false, mode = "jeu1
           {inv.map(Pastille)}
         </div>
         {inv.length === 0 && (
-          <div style={{ fontSize: 13, color: "#7a879e", fontStyle: "italic", padding: "6px 0 8px" }}>
+          <div style={{ fontSize: 14.5, color: "#8a97ae", fontStyle: "italic", padding: "6px 0 8px" }}>
             Observe les décors et touche ce qui te semble utile. Déplace-toi avec ‹ ›.
           </div>
         )}

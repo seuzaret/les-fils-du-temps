@@ -27,7 +27,7 @@ export default function SosChooserOverlay({
         <h2 style={{ textAlign: "center", margin: "8px 0 12px", color: "#ffd166", fontSize: 22 }}>
           Dans quel message cacher ton SOS ?
         </h2>
-        <p style={{ textAlign: "center", fontSize: 13.5, color: "#c8b090", margin: "0 0 18px" }}>
+        <p style={{ textAlign: "center", fontSize: 15, lineHeight: 1.5, color: "#c8b090", margin: "0 0 18px" }}>
           Les chronautes ne savent pas qu'on arrive. Cachons un SOS (··· −−− ···) dans un message de l'époque : pour les gens d'ici, ce ne seront que des points et des traits, rien qui change leur histoire. S'il tient jusqu'en 2045, les chronautes le liront. <strong>Un seul</strong> par chapitre : plus le support est <strong>durable</strong>, plus le SOS a de chances d'arriver, et plus je me recharge.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
@@ -40,17 +40,17 @@ export default function SosChooserOverlay({
                 onMouseEnter={(e) => { e.currentTarget.style.borderColor = "#e0a848"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 6px 22px rgba(200,150,62,0.35)"; }}
                 onMouseLeave={(e) => { e.currentTarget.style.borderColor = "#5a4028"; e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = ""; }}>
                 <div style={{ fontSize: 40, marginBottom: 6 }}>{m.emoji}</div>
-                <div style={{ fontWeight: 700, fontSize: 13, color: "#ffd166", lineHeight: 1.3 }}>{m.title}</div>
+                <div style={{ fontWeight: 700, fontSize: 14.5, color: "#ffd166", lineHeight: 1.3 }}>{m.title}</div>
               </button>
             );
           })}
         </div>
         {alreadyChosen && (
-          <p style={{ textAlign: "center", marginTop: 14, color: "#e08048", fontSize: 12 }}>
+          <p style={{ textAlign: "center", marginTop: 14, color: "#e08048", fontSize: 13.5 }}>
             ⚠ Tu as déjà choisi un support pour ce chapitre. Le nouveau remplacera l'ancien.
           </p>
         )}
-        <div style={{ marginTop: 16, textAlign: "center", fontSize: 11, color: "#7a6a4a", fontStyle: "italic" }}>
+        <div style={{ marginTop: 16, textAlign: "center", fontSize: 12.5, color: "#8a7a5a", fontStyle: "italic" }}>
           (Un vieux dessin pariétal dure plus longtemps qu'une cassette — c'est ça, la leçon.)
         </div>
       </div>

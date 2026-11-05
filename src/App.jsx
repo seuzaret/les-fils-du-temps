@@ -1605,7 +1605,7 @@ export default function App() {
       <input type="checkbox" checked={on} onChange={onToggle} style={{ width: 20, height: 20, accentColor: "#5eff9e", marginTop: 1, flex: "0 0 auto", cursor: "pointer" }} />
       <span>
         <span style={{ fontWeight: 700, color: "#e8eef5", fontSize: 14 }}>{label}</span>
-        <span style={{ display: "block", fontSize: 12, color: "#a8b6c8", marginTop: 2, lineHeight: 1.4 }}>{hint}</span>
+        <span style={{ display: "block", fontSize: 13, color: "#a8b6c8", marginTop: 2, lineHeight: 1.4 }}>{hint}</span>
       </span>
     </label>
   );
@@ -1642,7 +1642,7 @@ export default function App() {
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>🔄 RECOMMENCER</div>
         {restartAsk ? (
           <div style={{ background: "#2a1a10", border: "1px solid #6a3820", borderRadius: 10, padding: "12px 14px" }}>
-            <p style={{ margin: "0 0 10px", fontSize: 13.5, color: "#ffd8b0", lineHeight: 1.5 }}>
+            <p style={{ margin: "0 0 10px", fontSize: 15, color: "#ffd8b0", lineHeight: 1.5 }}>
               {restartAsk === "chapter"
                 ? "Recommencer ce chapitre depuis le début ? Ta progression dans les autres chapitres est conservée."
                 : "Effacer TOUTE la partie et repartir du début ? Cette action est définitive."}
@@ -1814,7 +1814,7 @@ export default function App() {
             <div style={{ ...card, textAlign: "center" }} onClick={(e) => e.stopPropagation()}>
               <div style={{ fontSize: 40, marginBottom: 6 }}>👋</div>
               <h2 style={{ marginTop: 0, color: "#5eff9e", fontFamily: "ui-monospace,monospace", letterSpacing: 2, fontSize: 16 }}>COMMENT T'APPELLES-TU ?</h2>
-              <p style={{ fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.55, margin: "8px 0 14px" }}>
+              <p style={{ fontSize: 15, color: "#c8d4e2", lineHeight: 1.55, margin: "8px 0 14px" }}>
                 MARTINE veut noter ton prénom pour ton carnet de bord, et te reconnaître si tu reviens jouer.
               </p>
               <form onSubmit={(e) => { e.preventDefault(); const cb = modal.after; setModal(null); if (cb) cb(); }}
@@ -2380,7 +2380,7 @@ export default function App() {
             <div style={{ textAlign: "center", fontSize: 46 }}>{chapter.messages[modal.id].emoji}</div>
             <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>◆ MESSAGE TRANSMIS AU FUTUR</div>
             <h2 style={{ textAlign: "center", margin: "6px 0 10px", color: "#e8934a", fontSize: 22 }}>{chapter.messages[modal.id].title}</h2>
-            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#d8e2ee", margin: 0 }}>{chapter.messages[modal.id].fact}</p>
+            <p style={{ fontSize: 16, lineHeight: 1.6, color: "#d8e2ee", margin: 0 }}>{chapter.messages[modal.id].fact}</p>
             {/* les 4 jauges — s'afficheront quand les fiches en auront (jalon M2) */}
             <Gauges values={chapter.messages[modal.id].jauges} />
             <FicheExtras id={modal.id} />
@@ -2398,7 +2398,7 @@ export default function App() {
             <div style={{ textAlign: "center", fontSize: 46, filter: "grayscale(0.7)", opacity: 0.75 }}>{chapter.messages[modal.id].emoji}</div>
             <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8fa3bd" }}>💨 MESSAGE PERDU EN ROUTE</div>
             <h2 style={{ textAlign: "center", margin: "6px 0 10px", color: "#8fa3bd", fontSize: 22 }}>{chapter.messages[modal.id].title}</h2>
-            <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#c8d4e2", margin: 0 }}>{chapter.messages[modal.id].fact}</p>
+            <p style={{ fontSize: 16, lineHeight: 1.6, color: "#c8d4e2", margin: 0 }}>{chapter.messages[modal.id].fact}</p>
             <Gauges values={chapter.messages[modal.id].jauges} />
             <FicheExtras id={modal.id} />
             <div style={{ fontSize: 12, color: "#7a879e", fontStyle: "italic", marginTop: 10 }}>
@@ -2480,15 +2480,15 @@ export default function App() {
                     <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3,
                       color: "#ffd166", marginBottom: 6 }}>✦ {speakerName.toUpperCase()}</div>
                   )}
-                  <div style={{ fontSize: 15.5, lineHeight: 1.5, color: "#f4e8cc" }}>{bubble.text}</div>
+                  <div style={{ fontSize: 17, lineHeight: 1.5, color: "#f4e8cc" }}>{bubble.text}</div>
                   {hasChoices && (
                     <div style={{ marginTop: 12, paddingTop: 8, borderTop: "1px dashed #614a2a" }}>
-                      <div style={{ fontSize: 11, color: "#a89468", fontStyle: "italic", marginBottom: 4 }}>Tu peux répondre…</div>
+                      <div style={{ fontSize: 12.5, color: "#a89468", fontStyle: "italic", marginBottom: 4 }}>Tu peux répondre…</div>
                       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                         {bubble.choices.map((c, i) => (
                           <button key={i} onClick={(e) => { e.stopPropagation(); pickChoice(c); }}
                             style={{ textAlign: "left", background: "transparent", border: "none",
-                              padding: "6px 6px 6px 12px", fontFamily: "Palatino, Georgia, serif", fontSize: 14.5,
+                              padding: "6px 6px 6px 12px", fontFamily: "Palatino, Georgia, serif", fontSize: 16,
                               color: "#d8c9a0", cursor: "pointer", lineHeight: 1.4,
                               borderLeft: "2px solid transparent",
                               transition: "border-color .15s, color .15s, background .15s" }}
@@ -2504,10 +2504,10 @@ export default function App() {
                     <>
                       <div style={{ marginTop: 12, marginLeft: "18%", padding: "7px 12px",
                         background: "#fdfaf0", border: "1px solid #a17c3a", borderRadius: 10,
-                        fontStyle: "italic", color: "#2a1c10", fontSize: 14, lineHeight: 1.4 }}>
+                        fontStyle: "italic", color: "#2a1c10", fontSize: 15.5, lineHeight: 1.4 }}>
                         — {bubble.playerLine}
                       </div>
-                      <div style={{ marginTop: 10, fontSize: 15.5, lineHeight: 1.5, color: "#f4e8cc" }}>{bubble.followUp}</div>
+                      <div style={{ marginTop: 10, fontSize: 17, lineHeight: 1.5, color: "#f4e8cc" }}>{bubble.followUp}</div>
                     </>
                   )}
                 </div>
@@ -2538,11 +2538,11 @@ export default function App() {
               position: "fixed", zIndex: 60, left: cx, width: W, transform: "translateX(-50%)",
               ...(dessous ? { top: bubble.y + 18 } : { bottom: window.innerHeight - bubble.y + 16 }),
               background: "#f4e8cc", color: "#2a1c10", border: "1px solid #cbb489", borderRadius: 14,
-              padding: "11px 14px", fontFamily: "Palatino, Georgia, serif", fontSize: 14.5, lineHeight: 1.5,
+              padding: "11px 14px", fontFamily: "Palatino, Georgia, serif", fontSize: 16, lineHeight: 1.5,
               boxShadow: "0 8px 26px rgba(0,0,0,0.5)", cursor: "pointer", animation: "fadein .18s ease-out",
             }}>
             {bubble.text}
-            <div style={{ fontSize: 10, color: "#8a7250", fontStyle: "italic", marginTop: 5, textAlign: "right" }}>clique n'importe où pour fermer</div>
+            <div style={{ fontSize: 11.5, color: "#8a7250", fontStyle: "italic", marginTop: 5, textAlign: "right" }}>clique n'importe où pour fermer</div>
             <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: 0, height: 0,
               borderLeft: "10px solid transparent", borderRight: "10px solid transparent",
               ...(dessous ? { top: -11, borderBottom: "12px solid #f4e8cc" } : { bottom: -11, borderTop: "12px solid #f4e8cc" }) }} />
@@ -2882,14 +2882,14 @@ export default function App() {
             {collection.filter((c) => !c.perdu).map((c) => (
               <div key={c.id} style={{ background: "#141b26", borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
                 <strong>{c.emoji} {c.titre} <span style={{ color: "#8fa3bd", fontWeight: 400, fontSize: 11 }}>· {c.date}</span></strong>
-                <p style={{ fontSize: 13, color: "#b8c4d4", margin: "4px 0 0", lineHeight: 1.5 }}>{c.fact}</p>
+                <p style={{ fontSize: 14.5, color: "#b8c4d4", margin: "4px 0 0", lineHeight: 1.5 }}>{c.fact}</p>
               </div>
             ))}
             {/* les fragments (messages perdus) — grisés */}
             {collection.filter((c) => c.perdu).map((c) => (
               <div key={c.id} style={{ background: "#0f1420", border: "1px dashed #3a4656", borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
                 <strong style={{ color: "#8fa3bd" }}>💨 {c.titre} <span style={{ fontWeight: 400, fontSize: 11 }}>· {c.date} · perdu en route</span></strong>
-                <p style={{ fontSize: 13, color: "#8a96a6", margin: "4px 0 0", lineHeight: 1.5 }}>{c.fact}</p>
+                <p style={{ fontSize: 14.5, color: "#8a96a6", margin: "4px 0 0", lineHeight: 1.5 }}>{c.fact}</p>
               </div>
             ))}
             <div style={{ fontSize: 12, color: "#7a879e", margin: "8px 0" }}>

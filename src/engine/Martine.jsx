@@ -124,9 +124,9 @@ export default function Martine({ lines, idx, onNext, mood = "neutre", date }) {
             <Avatar mood={mood} talking={false} date={date} />
           </div>
         </div>
-        <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#5eff9e", opacity: 0.7, letterSpacing: 1.5 }}>▸ MARTINE</span>
-        <span style={{ flex: 1, minWidth: 0, fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#a8d8b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{text.slice(0, 90)}{text.length > 90 ? "…" : ""}</span>
-        <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#5eff9e" }}>▾</span>
+        <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#5eff9e", opacity: 0.7, letterSpacing: 1.5 }}>▸ MARTINE</span>
+        <span style={{ flex: 1, minWidth: 0, fontFamily: "ui-monospace,monospace", fontSize: 13.5, color: "#a8d8b8", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{text.slice(0, 90)}{text.length > 90 ? "…" : ""}</span>
+        <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, color: "#5eff9e" }}>▾</span>
       </div>
     );
   }
@@ -139,14 +139,14 @@ export default function Martine({ lines, idx, onNext, mood = "neutre", date }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 7, marginBottom: 2 }}>
             <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#5eff9e", boxShadow: "0 0 8px #5eff9e", animation: "pulse 2s infinite" }} />
-            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 9, letterSpacing: 2, color: "#5eff9e", opacity: 0.7 }}>M.A.R.T.I.N.E.</span>
+            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#5eff9e", opacity: 0.7 }}>M.A.R.T.I.N.E.</span>
           </div>
-          <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 12.5, lineHeight: 1.45, color: "#c8ffdd", margin: 0, textShadow: "0 0 6px rgba(94,255,158,0.3)" }}>
+          <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 15, lineHeight: 1.4, color: "#c8ffdd", margin: 0, textShadow: "0 0 6px rgba(94,255,158,0.3)" }}>
             {shown}<span style={{ opacity: done ? 0 : 1 }}>▮</span>
           </p>
         </div>
         {done && hasNext && (
-          <span style={{ position: "absolute", bottom: 4, right: 32, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5eff9e", animation: "pulse 1.2s infinite" }}>▶ suite</span>
+          <span style={{ position: "absolute", bottom: 4, right: 32, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#5eff9e", animation: "pulse 1.2s infinite" }}>▶ suite</span>
         )}
       </div>
       {/* Bouton ESCAMOTER en haut à droite, ne consomme pas le clic sur la console. */}

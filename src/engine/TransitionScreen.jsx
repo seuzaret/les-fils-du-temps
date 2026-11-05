@@ -32,7 +32,7 @@ export default function TransitionScreen({ target, transitionTo, onLand }) {
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 15, color: "#8fa3bd" }}>
           {target.emoji} Chapitre {transitionTo + 1} · {target.date}
         </div>
-        <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, color: "#c8ffdd", lineHeight: 1.6, marginTop: 22, textShadow: "0 0 6px rgba(94,255,158,0.3)" }}>
+        <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, color: "#c8ffdd", lineHeight: 1.6, marginTop: 22, textShadow: "0 0 6px rgba(94,255,158,0.3)" }}>
           « Direction {target.epoque}. Accroche-toi — l'atterrissage, ce n'est toujours pas ma spécialité. »
         </p>
         <button onClick={() => onLand(transitionTo)}

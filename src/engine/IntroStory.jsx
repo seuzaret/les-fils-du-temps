@@ -1017,7 +1017,7 @@ function SlideRules({ onNext }) {
             padding: '10px 16px', color: '#e8eef5',
             boxShadow: '0 0 20px rgba(94,255,158,0.25)' }}>
             <div style={{ flexShrink: 0 }}><Avatar mood="neutre" size={54} talking /></div>
-            <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.45, flex: 1, textAlign: 'left' }}>
+            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.45, flex: 1, textAlign: 'left' }}>
               {!isLast
                 ? "« Retiens bien ça. Chaque règle protège le fil du temps. »"
                 : "« Voilà. Quatre règles. Simples, mais très importantes. Encore une petite chose avant qu'on parte. »"}
@@ -1278,7 +1278,7 @@ function SlideChat({ onNext, onCadran }) {
     const t0 = performance.now();
     const id = setInterval(() => {
       const t = (performance.now() - t0) / 1000;
-      const u = 1 - Math.exp(-((t / 6) ** 2));
+      const u = 1 - Math.exp(-((t / 4.5) ** 2));
       setAnnee(Math.round(2035 + (-14000 - 2035) * u));
     }, 70);
     return () => clearInterval(id);
@@ -1369,8 +1369,8 @@ function SlideChat({ onNext, onCadran }) {
         <div style={{ flex: '0 0 auto', width: 64, display: 'flex', justifyContent: 'center' }}>
           {t.qui === 'martine' ? <Avatar mood={t.mood} size={58} talking /> : <span style={{ fontSize: 26 }}>🐈‍⬛</span>}
         </div>
-        <div style={{ flex: 1, font: t.qui === 'martine' ? "italic 14px Georgia,serif" : "14px Georgia,serif", color: "#e8eef5", lineHeight: 1.45 }}>
-          {t.qui === 'martine' && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#5eff9e", fontStyle: "normal" }}>MARTINE</div>}
+        <div style={{ flex: 1, font: t.qui === 'martine' ? "italic 16px Georgia,serif" : "16px Georgia,serif", color: "#e8eef5", lineHeight: 1.45 }}>
+          {t.qui === 'martine' && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e", fontStyle: "normal" }}>MARTINE</div>}
           {t.txt}
         </div>
         {aChasser ? (
