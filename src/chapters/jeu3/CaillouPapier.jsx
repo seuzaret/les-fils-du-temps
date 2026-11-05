@@ -49,18 +49,18 @@ export function CaillouTrouve({ caillou, onGarder }) {
       <style>{`@keyframes cpDeplie { from { opacity: 0; transform: scaleY(0.08) rotate(1.2deg); } to { opacity: 1; } }
         @keyframes cpIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }`}</style>
       <div style={{ maxWidth: 560, width: "100%", maxHeight: "calc(100dvh - 32px)", overflowY: "auto", textAlign: "center" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", marginBottom: 10 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#c8a848", marginBottom: 10 }}>
           🪨 {caillou.carnet ? "LA PAGE DU CARNET" : "UN PAPIER"}
         </div>
-        <p style={{ margin: "0 0 18px", fontSize: 15, lineHeight: 1.55, color: "#c8d4e2", fontStyle: "italic", animation: "cpIn 600ms ease-out both" }}>
+        <p style={{ margin: "0 0 18px", fontSize: 16, lineHeight: 1.55, color: "#c8d4e2", fontStyle: "italic", animation: "cpIn 600ms ease-out both" }}>
           {caillou.trouve}
         </p>
         <Papier caillou={caillou} anime />
         <button onClick={onGarder} autoFocus
-          style={{ marginTop: 22, background: "#c8a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "11px 22px", fontWeight: 800, fontSize: 13, letterSpacing: 1, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
+          style={{ marginTop: 22, background: "#c8a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "11px 22px", fontWeight: 800, fontSize: 14.5, letterSpacing: 1, fontFamily: "ui-monospace,monospace", cursor: "pointer" }}>
           Garder le papier 🪨
         </button>
-        <div style={{ marginTop: 8, fontSize: 12, color: "#7a879e", fontStyle: "italic" }}>
+        <div style={{ marginTop: 8, fontSize: 13.5, color: "#7a879e", fontStyle: "italic" }}>
           Tu le retrouveras dans tes cailloux, en haut de l'écran.
         </div>
       </div>

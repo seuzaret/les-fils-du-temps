@@ -84,7 +84,7 @@ export function FilAlgoGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.86)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", color: "#e8eef5", border: "2px solid #2a3a58", borderRadius: 16, padding: 20, maxWidth: 460, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.7)", fontFamily: "system-ui, sans-serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff" }}>📱 TON FIL — 22:14</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>📱 TON FIL — 22:14</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 12px", color: "#fff", fontSize: 22 }}>« Pour toi »</h2>
 
         {!done && (
@@ -97,21 +97,21 @@ export function FilAlgoGame({ onClose, onWin }) {
 
             <div style={{ background: "linear-gradient(180deg,#1a2438 0%, #0a1220 100%)", border: "1px solid #2a3a58", borderRadius: 14, padding: 20, minHeight: 220, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", position: "relative" }}>
               <div style={{ fontSize: 72, marginBottom: 10 }}>{carte.emoji}</div>
-              <div style={{ fontSize: 16, textAlign: "center", lineHeight: 1.4, color: "#fff", fontWeight: 600, maxWidth: 340 }}>{carte.titre}</div>
-              <div style={{ position: "absolute", bottom: 8, right: 12, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90" }}>vidéo {idx + 1}/{cartes.length}</div>
+              <div style={{ fontSize: 17, textAlign: "center", lineHeight: 1.4, color: "#fff", fontWeight: 600, maxWidth: 340 }}>{carte.titre}</div>
+              <div style={{ position: "absolute", bottom: 8, right: 12, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#5a7a90" }}>vidéo {idx + 1}/{cartes.length}</div>
             </div>
 
             <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
               <button onClick={() => agir(carte, "pass")}
-                style={{ flex: 1, background: "#26324a", color: "#c8d4e2", border: "1px solid #3a4a68", borderRadius: 12, padding: "14px", fontSize: 15, fontWeight: 700, cursor: "pointer" }}>
+                style={{ flex: 1, background: "#26324a", color: "#c8d4e2", border: "1px solid #3a4a68", borderRadius: 12, padding: "14px", fontSize: 16, fontWeight: 700, cursor: "pointer" }}>
                 👎 Passer
               </button>
               <button onClick={() => agir(carte, "like")}
-                style={{ flex: 1, background: "linear-gradient(180deg,#ff4a6a,#a03052)", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontSize: 15, fontWeight: 800, cursor: "pointer" }}>
+                style={{ flex: 1, background: "linear-gradient(180deg,#ff4a6a,#a03052)", color: "#fff", border: "none", borderRadius: 12, padding: "14px", fontSize: 16, fontWeight: 800, cursor: "pointer" }}>
                 ❤️ J'aime
               </button>
             </div>
-            <p style={{ fontSize: 11.5, lineHeight: 1.5, color: "#8fa3bd", margin: "12px 0 0", textAlign: "center", fontStyle: "italic" }}>
+            <p style={{ fontSize: 12.5, lineHeight: 1.5, color: "#8fa3bd", margin: "12px 0 0", textAlign: "center", fontStyle: "italic" }}>
               Tu défiles comme d'habitude. Un algorithme observe.
             </p>
           </>
@@ -126,48 +126,48 @@ export function FilAlgoGame({ onClose, onWin }) {
           return (
             <>
               <div style={{ background: "#101a2a", border: `1px solid ${T.couleur}55`, borderRadius: 12, padding: 14, marginTop: 6 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: T.couleur, marginBottom: 6 }}>▸ L'ALGORITHME A DÉCIDÉ</div>
-                <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: 0 }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: T.couleur, marginBottom: 6 }}>▸ L'ALGORITHME A DÉCIDÉ</div>
+                <p style={{ fontSize: 16, lineHeight: 1.55, margin: 0 }}>
                   D'après ce que tu as regardé et aimé, l'app pense que tu es surtout intéressé·e par : <strong style={{ color: T.couleur }}>{T.label}</strong>.
                 </p>
               </div>
 
               <div style={{ marginTop: 12 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#7fd8ff", marginBottom: 6 }}>▸ TON PROCHAIN FIL</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#7fd8ff", marginBottom: 6 }}>▸ TON PROCHAIN FIL</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6 }}>
                   {fil.map((c, i) => (
                     <div key={i} style={{ background: "#1a2438", border: `1px solid ${T.couleur}44`, borderRadius: 8, padding: 8, textAlign: "center" }}>
                       <div style={{ fontSize: 26 }}>{c.emoji}</div>
-                      <div style={{ fontSize: 9, color: "#c8d4e2", marginTop: 4, lineHeight: 1.2, minHeight: 22 }}>{c.titre.slice(0, 34)}…</div>
+                      <div style={{ fontSize: 11, color: "#c8d4e2", marginTop: 4, lineHeight: 1.2, minHeight: 22 }}>{c.titre.slice(0, 34)}…</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div style={{ marginTop: 12 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: A.couleur, marginBottom: 6 }}>▸ LE FIL D'UN·E AUTRE ÉLÈVE ({A.label})</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: A.couleur, marginBottom: 6 }}>▸ LE FIL D'UN·E AUTRE ÉLÈVE ({A.label})</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, opacity: 0.85 }}>
                   {autreFil.map((c, i) => (
                     <div key={i} style={{ background: "#1a2438", border: `1px solid ${A.couleur}44`, borderRadius: 8, padding: 8, textAlign: "center" }}>
                       <div style={{ fontSize: 26 }}>{c.emoji}</div>
-                      <div style={{ fontSize: 9, color: "#c8d4e2", marginTop: 4, lineHeight: 1.2, minHeight: 22 }}>{c.titre.slice(0, 34)}…</div>
+                      <div style={{ fontSize: 11, color: "#c8d4e2", marginTop: 4, lineHeight: 1.2, minHeight: 22 }}>{c.titre.slice(0, 34)}…</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div style={{ marginTop: 14, background: "#101827", border: "1px solid #5eff9e44", borderRadius: 10, padding: "12px 14px" }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1.5, color: "#5eff9e", fontWeight: 800, marginBottom: 6 }}>◉ CE QU'IL FAUT COMPRENDRE</div>
-                <p style={{ fontSize: 13.5, lineHeight: 1.55, margin: 0 }}>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1.5, color: "#5eff9e", fontWeight: 800, marginBottom: 6 }}>◉ CE QU'IL FAUT COMPRENDRE</div>
+                <p style={{ fontSize: 15, lineHeight: 1.55, margin: 0 }}>
                   En 8 clics, l'algo a fait un profil de toi. Il te montrera surtout ce qui te fait rester. Deux élèves de la même classe peuvent voir <strong>deux mondes différents</strong> sur la même appli. C'est ce qu'on appelle une <strong>bulle</strong>.
                 </p>
-                <p style={{ fontSize: 12.5, lineHeight: 1.5, margin: "8px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
+                <p style={{ fontSize: 14, lineHeight: 1.5, margin: "8px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
                   « Ce n'est pas toi qui choisis ton fil. C'est un modèle qui apprend, et qui te retient. » — MARTINE
                 </p>
               </div>
 
               <button onClick={onClose}
-                style={{ marginTop: 12, width: "100%", background: "#5eff9e", color: "#0a1220", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ marginTop: 12, width: "100%", background: "#5eff9e", color: "#0a1220", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Continuer
               </button>
             </>

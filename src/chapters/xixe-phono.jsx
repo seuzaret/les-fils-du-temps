@@ -153,12 +153,12 @@ export function PhonoGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 20, maxWidth: 560, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>🎙️ PHONOGRAPHE EDISON · NY 1878</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>🎙️ PHONOGRAPHE EDISON · NY 1878</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>La voix de James, sur étain</h2>
 
         {!won ? (
           <>
-            <p style={{ textAlign: "center", fontSize: 13, color: "#d8c9a8", margin: "0 0 12px" }}>
+            <p style={{ textAlign: "center", fontSize: 14.5, color: "#d8c9a8", margin: "0 0 12px" }}>
               James parle dans le pavillon. Tourne la manivelle à la BONNE VITESSE en cliquant
               régulièrement (environ 2 clics par seconde). Trop vite ou trop lent : la voix se
               déforme.
@@ -182,7 +182,7 @@ export function PhonoGame({ onClose, onWin }) {
               </svg>
             </div>
 
-            <p style={{ textAlign: "center", fontSize: 12.5, color: "#e0a848", fontStyle: "italic", minHeight: 20, margin: "0 0 8px" }}>{diagnosis}</p>
+            <p style={{ textAlign: "center", fontSize: 14, color: "#e0a848", fontStyle: "italic", minHeight: 20, margin: "0 0 8px" }}>{diagnosis}</p>
 
             {/* barre de vitesse + boutons ◀ ▶ pour ajuster la cadence */}
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
@@ -199,7 +199,7 @@ export function PhonoGame({ onClose, onWin }) {
               <button onClick={() => { setInterval_((v) => Math.min(TARGET_BASE * 2, v + 30)); playCue(TARGET_BASE / Math.min(TARGET_BASE * 2, interval_ + 30)); lastClick.current = performance.now(); }}
                 style={{ width: 36, height: 36, borderRadius: 8, border: "1px solid #5a4028", background: "#2a1e10", color: "#ffd166", fontSize: 18, cursor: "pointer", flexShrink: 0, lineHeight: 1 }}>▶</button>
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10.5, color: "#a89878", marginBottom: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#a89878", marginBottom: 12 }}>
               <span>◀ plus vite (aigu)</span><span>cadence</span><span>plus lent (grave) ▶</span>
             </div>
 
@@ -207,20 +207,20 @@ export function PhonoGame({ onClose, onWin }) {
             <div style={{ margin: "10px 0 4px", background: "#1a140a", border: "1px solid #5a4028", borderRadius: 6, height: 14, overflow: "hidden" }}>
               <div style={{ width: `${(inZone / HOLD_MS) * 100}%`, height: "100%", background: "#7fe0a8", transition: "width 0.1s" }} />
             </div>
-            <div style={{ fontSize: 11, textAlign: "center", color: "#a89878" }}>maintien : {Math.max(0, Math.ceil((HOLD_MS - inZone) / 1000))} s dans la zone</div>
+            <div style={{ fontSize: 12, textAlign: "center", color: "#a89878" }}>maintien : {Math.max(0, Math.ceil((HOLD_MS - inZone) / 1000))} s dans la zone</div>
           </>
         ) : (
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Une voix HUMAINE, gravée dans une feuille d'étain — c'est prodigieux ! Le 21 novembre 1877, Thomas Edison annonce son phonographe : un cylindre entouré d'étain, qu'on tourne à la manivelle. Pour la première fois de l'Histoire, un SON survit à celui qui l'a émis. Après l'image (photo), voici le son : nos morts pourront désormais nous parler. Attention : l'étain est FRAGILE, il se froisse et s'use au bout de quelques écoutes. Viendront le disque plat d'Emile Berliner (le gramophone, 1887), facile à copier, puis les cylindres de cire (vers 1888), plus solides. Combien de voix du XIXᵉ nous sont-elles arrivées ? Très peu. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Feuille d'étain gravée — la voix de James est enregistrée !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

@@ -254,11 +254,11 @@ export default function BunkerVoyageK({ onGo, j3 }) {
   if (!info) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 14, padding: 20 }}>
-        <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, color: "#c8d4e2" }}>
+        <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, color: "#c8d4e2" }}>
           Pas de destination sélectionnée. Reviens au pupitre K-01.
         </p>
         <button onClick={() => onGo("salleK")}
-          style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 10, padding: "10px 22px", fontSize: 14.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           ← Reprendre
         </button>
       </div>
@@ -311,13 +311,13 @@ export default function BunkerVoyageK({ onGo, j3 }) {
       {/* Bandeau topic en haut à gauche — on affiche uniquement le lieu :
           c'est au joueur, en interrogeant les témoins, de confirmer la
           date du dossier. */}
-      <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(10,8,6,0.85)", border: "1px solid #c8a848", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#c8a848", pointerEvents: "none" }}>
+      <div style={{ position: "absolute", top: 10, left: 10, background: "rgba(10,8,6,0.85)", border: "1px solid #c8a848", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#c8a848", pointerEvents: "none" }}>
         ⟡ {info.lieu.toUpperCase()}
       </div>
 
       {/* Bouton Interrompre en haut à droite */}
       <button onClick={() => setPhase("return")}
-        style={{ position: "absolute", top: 10, right: 10, background: "rgba(10,8,6,0.85)", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer", letterSpacing: 1 }}>
+        style={{ position: "absolute", top: 10, right: 10, background: "rgba(10,8,6,0.85)", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 6, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer", letterSpacing: 1 }}>
         ← Rentrer
       </button>
 
@@ -325,7 +325,7 @@ export default function BunkerVoyageK({ onGo, j3 }) {
       {!activePnj && (
         <div style={{ position: "absolute", bottom: 14, left: "50%", transform: "translateX(-50%)",
           background: "rgba(10,8,6,0.85)", border: "1px dashed #c8a848", borderRadius: 6,
-          padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11,
+          padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12,
           color: "#c8b090", letterSpacing: 2, fontStyle: "italic", pointerEvents: "none" }}>
           Les gens du passé sont là, autour de toi. Clique sur un visage pour l'interroger.
         </div>
@@ -367,20 +367,20 @@ function PnjDialogue({ node, lineIdx, totalLines, atLast, onNext, onClose, onRep
               border: "1.5px solid #c8a848", display: "flex", alignItems: "center", justifyContent: "center" }}>
               🔎
             </div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
               VOUS DEMANDEZ
             </div>
           </div>
-          <p style={{ margin: "10px 0 0", fontSize: 15, color: "#e8dfc8", lineHeight: 1.6, fontStyle: "italic" }}>
+          <p style={{ margin: "10px 0 0", fontSize: 16, color: "#e8dfc8", lineHeight: 1.6, fontStyle: "italic" }}>
             « {node.question} »
           </p>
           <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 8 }}>
             <button onClick={onClose}
-              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer" }}>
               ← Fermer
             </button>
             <button onClick={() => setAskedPhase(false)}
-              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
               Écouter la réponse ▸
             </button>
           </div>
@@ -388,36 +388,36 @@ function PnjDialogue({ node, lineIdx, totalLines, atLast, onNext, onClose, onRep
       ) : (
         <>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color, fontWeight: 800 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color, fontWeight: 800 }}>
               {node.right ? "📜 TÉMOIGNAGE DE PREMIÈRE MAIN" : "— habitant·e du passé"}
             </div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7050" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#8a7050" }}>
               {lineIdx + 1} / {totalLines}
             </div>
           </div>
-          <p style={{ margin: "10px 0 0", fontSize: 15, color: "#e8dfc8", lineHeight: 1.6 }}>
+          <p style={{ margin: "10px 0 0", fontSize: 16, color: "#e8dfc8", lineHeight: 1.6 }}>
             {node.lignes[lineIdx]}
           </p>
           <div style={{ marginTop: 14, display: "flex", justifyContent: "space-between", gap: 8 }}>
             <button onClick={onClose}
-              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer" }}>
               ← Fermer
             </button>
             {atLast ? (
               node.right ? (
                 <button onClick={onReport}
-                  style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+                  style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                   Rapporter ▸
                 </button>
               ) : (
                 <button onClick={onClose}
-                  style={{ background: "#8a7050", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+                  style={{ background: "#8a7050", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                   Fermer ▸
                 </button>
               )
             ) : (
               <button onClick={onNext}
-                style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+                style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                 Suite ▸
               </button>
             )}
@@ -474,13 +474,13 @@ function FlashOverlay({ info, direction }) {
   return (
     <div style={{ position: "fixed", inset: 0, background: "#050408", zIndex: 220, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, fontFamily: "Palatino, Georgia, serif" }}>
       <div style={{ textAlign: "center", color: "#c8a848" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 5, color: "#c8a848" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 5, color: "#c8a848" }}>
           {direction === "aller" ? "⟡ CHRONOGRAPHE · DÉPART" : "⟡ CHRONOGRAPHE · RETOUR"}
         </div>
         <div style={{ marginTop: 20, fontSize: 36, fontWeight: 800, letterSpacing: 8, color: "#ffd870", textShadow: "0 0 20px rgba(255,216,112,0.6)" }}>
           {info.annee}
         </div>
-        <div style={{ marginTop: 10, fontSize: 14, color: "#8a7050", fontStyle: "italic" }}>
+        <div style={{ marginTop: 10, fontSize: 15.5, color: "#8a7050", fontStyle: "italic" }}>
           {info.lieu}
         </div>
         {/* Barre de progression animée via CSS */}

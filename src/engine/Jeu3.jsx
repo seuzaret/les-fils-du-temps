@@ -330,7 +330,7 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
             {muet ? "🔇" : "🔊"}{compact ? "" : muet ? " Son coupé" : " Son"}
           </button>
           <button onClick={onExit} title="Menu"
-            style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: compact ? "6px 8px" : "6px 12px", fontSize: 11, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: compact ? "6px 8px" : "6px 12px", fontSize: 12, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
             {compact ? "☰" : "← Menu"}
           </button>
         </div>

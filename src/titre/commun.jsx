@@ -54,7 +54,7 @@ export function Accroche({ align = "center", clair = false, petit = false }) {
   );
 }
 
-const pill = (fond, texte, bord) => ({ background: fond, color: texte, border: `1px solid ${bord}`, borderRadius: 999, padding: "9px 16px", fontFamily: MONO, fontSize: 12.5, fontWeight: 700, letterSpacing: 1, cursor: "pointer", whiteSpace: "nowrap" });
+const pill = (fond, texte, bord) => ({ background: fond, color: texte, border: `1px solid ${bord}`, borderRadius: 999, padding: "9px 16px", fontFamily: MONO, fontSize: 14, fontWeight: 700, letterSpacing: 1, cursor: "pointer", whiteSpace: "nowrap" });
 
 /* m : { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, son, onReprendre, onNouvelle, onDemarrer, onReprendreJeu2,
          onNouvelleJeu2, onJeu2, onJeu3, onReprendreJeu3, onNouvelleJeu3, onReglages, onMediadex, onSon }
@@ -67,7 +67,7 @@ export function MenuTitre({ m, largeur = 440, compact = false }) {
       boxShadow: "0 18px 50px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)",
       display: "flex", flexDirection: "column", alignItems: "stretch", gap: compact ? 7 : 10, animation: "ttIn 1s ease-out 0.7s both" }}>
       {m.saveExists && m.saved?.prenom && (
-        <div style={{ textAlign: "center", fontFamily: MONO, fontSize: 12, color: "#5eff9e", letterSpacing: 2 }}>► Salut, {m.saved.prenom} !</div>
+        <div style={{ textAlign: "center", fontFamily: MONO, fontSize: 13.5, color: "#5eff9e", letterSpacing: 2 }}>► Salut, {m.saved.prenom} !</div>
       )}
       <button className="tt-btn" onClick={m.saveExists ? m.onReprendre : m.onDemarrer} autoFocus
         style={{ background: "linear-gradient(180deg, #ffe08a, #f0a848)", color: "#1e1004", border: "none", borderRadius: 12, padding: compact ? "11px 14px" : "14px 18px",
@@ -83,7 +83,7 @@ export function MenuTitre({ m, largeur = 440, compact = false }) {
 
       <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "2px 0 0" }}>
         <span style={{ flex: 1, height: 1, background: "rgba(255,209,102,0.18)" }} />
-        <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: 3, color: "#c8a868" }}>LA SUITE</span>
+        <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: 3, color: "#c8a868" }}>LA SUITE</span>
         <span style={{ flex: 1, height: 1, background: "rgba(255,209,102,0.18)" }} />
       </div>
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
@@ -107,7 +107,7 @@ export function MenuTitre({ m, largeur = 440, compact = false }) {
         )}
       </div>
       {!m.jeu1Fini && !m.savedJeu2 && (
-        <div style={{ textAlign: "center", fontSize: 12.5, color: "#a8b4c8", fontFamily: CORMORANT, fontStyle: "italic", marginTop: -2 }}>
+        <div style={{ textAlign: "center", fontSize: 14, color: "#a8b4c8", fontFamily: CORMORANT, fontStyle: "italic", marginTop: -2 }}>
           Al3x1a t'attend à la fin du voyage.
         </div>
       )}

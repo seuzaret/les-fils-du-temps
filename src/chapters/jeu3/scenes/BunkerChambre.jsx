@@ -68,13 +68,13 @@ export default function BunkerChambre({ onGo, j3 }) {
       <div style={{ maxWidth: 800, width: "100%" }}>
         {caillouVeste ? (
           <div style={{ background: "#141008", border: "1px dashed #c8a848", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#e8dfc8", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 14, color: "#e8dfc8", fontStyle: "italic" }}>
               Au pied du lit, le carton « N-27 · EFFETS ». Une vieille veste en dépasse. La tienne ? Clique dessus.
             </p>
           </div>
         ) : (
           <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#7a879e", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 14, color: "#7a879e", fontStyle: "italic" }}>
               Rien de familier ici, à part cette vieille veste. Un panneau signé « MARTINE, Réseau M » diffuse en boucle qu'il est interdit de sortir.
             </p>
           </div>
@@ -82,7 +82,7 @@ export default function BunkerChambre({ onGo, j3 }) {
       </div>
 
       <button onClick={() => onGo(j3.hubRoom || "hub")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Retour au couloir
       </button>
 
@@ -95,7 +95,7 @@ export default function BunkerChambre({ onGo, j3 }) {
       {vesteDejaVue && (
         <div onClick={() => setVesteDejaVue(false)}
           style={{ position: "fixed", left: "50%", bottom: 24, transform: "translateX(-50%)", background: "#141008", border: "1px solid #8a7a5a", borderRadius: 10, padding: "10px 16px", maxWidth: 480, zIndex: 300, cursor: "pointer" }}>
-          <p style={{ margin: 0, fontSize: 14, color: "#e8dfc8", fontFamily: "Georgia, serif", fontStyle: "italic", textAlign: "center" }}>
+          <p style={{ margin: 0, fontSize: 15.5, color: "#e8dfc8", fontFamily: "Georgia, serif", fontStyle: "italic", textAlign: "center" }}>
             La doublure est décousue : tu as déjà pris le papier. Il est dans tes cailloux 🪨.
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function BunkerChambre({ onGo, j3 }) {
           padding: "10px 16px", maxWidth: 480, zIndex: 300,
           boxShadow: "0 0 24px rgba(200,168,72,0.3)",
         }}>
-          <p style={{ margin: 0, fontSize: 14, color: "#e8dfc8", fontFamily: "Georgia, serif", fontStyle: "italic", textAlign: "center" }}>
+          <p style={{ margin: 0, fontSize: 15.5, color: "#e8dfc8", fontFamily: "Georgia, serif", fontStyle: "italic", textAlign: "center" }}>
             « Mais oui — mon médiadex. Les dates que j'ai notées au Jeu 1 sont là-dedans. Je garde ça sous la main. »
           </p>
         </div>

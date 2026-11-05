@@ -1078,7 +1078,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
 
   const { e: echelle, W: Wz, large } = zone;
   const largeur = Wz * echelle, hauteur = H * echelle;
-  const bouton = (fond, texte) => ({ background: fond, color: texte, border: "none", borderRadius: 10, padding: "10px 18px", fontFamily: "ui-monospace, monospace", fontWeight: 800, fontSize: 13, letterSpacing: 1, cursor: "pointer" });
+  const bouton = (fond, texte) => ({ background: fond, color: texte, border: "none", borderRadius: 10, padding: "10px 18px", fontFamily: "ui-monospace, monospace", fontWeight: 800, fontSize: 14.5, letterSpacing: 1, cursor: "pointer" });
   const carte = { position: "absolute", left: "50%", transform: "translateX(-50%)", width: Math.min(largeur - 24, 520), boxSizing: "border-box", background: "rgba(4,8,14,0.92)", border: "1px solid rgba(94,255,158,0.35)", borderRadius: 12, padding: "14px 16px", color: "#e8eef5", fontFamily: "Palatino, Georgia, serif" };
   const couleurReplique = rgb(g.current.couleur.map(Math.round));
   const taillePolice = Math.round(Math.max(17, Math.min(28, 21 * echelle)));
@@ -1133,9 +1133,9 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
 
         {ecran === "debut" && (
           <div style={{ ...carte, top: "34%", maxHeight: "62%", overflowY: "auto" }}>
-            <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e" }}>◈ NIVEAU −3 · SERVEURS</div>
-            <p style={{ margin: "8px 0", fontSize: 15 }}>MARTINE ne se laissera pas débrancher.</p>
-            <ul style={{ margin: "0 0 10px", paddingLeft: 18, fontSize: 13, lineHeight: 1.5, color: "#c8d4e2" }}>
+            <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e" }}>◈ NIVEAU −3 · SERVEURS</div>
+            <p style={{ margin: "8px 0", fontSize: 16 }}>MARTINE ne se laissera pas débrancher.</p>
+            <ul style={{ margin: "0 0 10px", paddingLeft: 18, fontSize: 14.5, lineHeight: 1.5, color: "#c8d4e2" }}>
               <li>Déplace la petite MARTINE : glisse le doigt, bouge la souris, ou les flèches (Z Q S D).</li>
               <li>Elle tire toute seule. Maintiens <b>Maj</b> pour aller lentement. Ses tirs abattent les missiles.</li>
               <li>Seul son hublot compte : le point blanc.</li>
@@ -1143,13 +1143,13 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
               <li>Trois niveaux : MARTINE <span style={{ color: rgb(VERT) }}>verte</span>, puis <span style={{ color: rgb(BLEU) }}>bleue</span>, puis <span style={{ color: rgb(ROUGE) }}>rouge</span>.</li>
             </ul>
             <button onClick={commencer} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Commencer</button>
-            {!integre && <div style={{ marginTop: 10, fontFamily: "ui-monospace, monospace", fontSize: 10, color: "#5a6678" }}>Prototype du combat · ?combat=1</div>}
+            {!integre && <div style={{ marginTop: 10, fontFamily: "ui-monospace, monospace", fontSize: 11.5, color: "#5a6678" }}>Prototype du combat · ?combat=1</div>}
           </div>
         )}
 
         {ecran === "pause" && (
           <div style={{ ...carte, top: "40%", textAlign: "center" }}>
-            <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 13, letterSpacing: 3, marginBottom: 12 }}>PAUSE</div>
+            <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 14.5, letterSpacing: 3, marginBottom: 12 }}>PAUSE</div>
             <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
               <button onClick={() => allerA("jeu")} autoFocus style={bouton("#5eff9e", "#06110b")}>▶ Continuer</button>
               <button onClick={recommencer} style={bouton("rgba(255,255,255,0.08)", "#c8d4e2")}>↺ Recommencer</button>
@@ -1181,14 +1181,14 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
                 {beats[ligneFin].chant && <Chanson taille={taillePolice} />}
                 {beats[ligneFin].fins && (
                   <div style={{ animation: "cmFondu 0.9s ease-out both" }}>
-                    <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, letterSpacing: 3, color: "#e0a848", marginBottom: 4 }}>✦ TA DÉCISION</div>
-                    <p style={{ margin: "0 0 12px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: 14, color: "#c8d4e2" }}>Il n'y a pas de bonne réponse. Choisis, et vis avec.</p>
+                    <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 13.5, letterSpacing: 3, color: "#e0a848", marginBottom: 4 }}>✦ TA DÉCISION</div>
+                    <p style={{ margin: "0 0 12px", fontFamily: "Palatino, Georgia, serif", fontStyle: "italic", fontSize: 15.5, color: "#c8d4e2" }}>Il n'y a pas de bonne réponse. Choisis, et vis avec.</p>
                     <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
                       {CONFRONTATION.fins.map((f, k) => (
                         <button key={f.id} autoFocus={k === 0} onClick={(e) => { e.stopPropagation(); choisirFin(f); }} data-fin={f.id}
                           style={{ background: "rgba(10,14,22,0.92)", color: "#e8eef5", border: `2px solid ${f.couleur}`, borderRadius: 12, padding: "10px 14px", cursor: "pointer", fontFamily: "Palatino, Georgia, serif", textAlign: "left", maxWidth: 240, minWidth: Math.min(210, largeur - 40) }}>
-                          <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, fontWeight: 800, color: f.couleur, letterSpacing: 2 }}>{f.label}</div>
-                          <div style={{ marginTop: 4, fontSize: 12.5, lineHeight: 1.4, color: "#c8d4e2" }}>{f.desc}</div>
+                          <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 13.5, fontWeight: 800, color: f.couleur, letterSpacing: 2 }}>{f.label}</div>
+                          <div style={{ marginTop: 4, fontSize: 14, lineHeight: 1.4, color: "#c8d4e2" }}>{f.desc}</div>
                         </button>
                       ))}
                     </div>
@@ -1202,7 +1202,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
                 )}
                 {reponse ? (
                   <p style={{ margin: "0 0 6px", fontFamily: "Palatino, Georgia, serif", fontSize: Math.round(taillePolice * 0.9), color: "#ffe2a0", textShadow: "0 2px 6px rgba(0,0,0,0.95)", animation: "cmFondu 0.4s ease-out both" }}>
-                    <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 11, letterSpacing: 3, color: "#c8a868", marginRight: 10 }}>TOI</span>{reponse}
+                    <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, letterSpacing: 3, color: "#c8a868", marginRight: 10 }}>TOI</span>{reponse}
                   </p>
                 ) : beats[ligneFin].chant || beats[ligneFin].fins ? null : beats[ligneFin].choix ? (
                   <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", animation: "cmFondu 0.6s ease-out 0.7s both" }}>
@@ -1211,7 +1211,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
                     ))}
                   </div>
                 ) : (
-                  <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 12, color: "rgba(255,232,228,0.45)", animation: "cmFondu 0.6s ease-out 1.2s both" }}>▸ clic ou Entrée</div>
+                  <div style={{ fontFamily: "ui-monospace, monospace", fontSize: 13.5, color: "rgba(255,232,228,0.45)", animation: "cmFondu 0.6s ease-out 1.2s both" }}>▸ clic ou Entrée</div>
                 )}
               </div>
             )}
@@ -1220,13 +1220,13 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
           <div style={{ position: "absolute", inset: 0, background: "#000" }} />
         ) : (
           <div style={{ ...carte, bottom: 18, borderColor: "rgba(255,58,42,0.5)" }}>
-            <p style={{ margin: "0 0 6px", fontSize: 14, lineHeight: 1.5, color: "#c8d4e2" }}>
+            <p style={{ margin: "0 0 6px", fontSize: 15.5, lineHeight: 1.5, color: "#c8d4e2" }}>
               {finChoisie
                 ? `Fin du prototype : tu as choisi ${CONFRONTATION.fins.find((f) => f.id === finChoisie).label}. Dans le jeu, la suite se joue au Puits.`
                 : "Fin du prototype : ici viendront T'ÉTEINDRE, TE MODIFIER et TE FAIRE CONFIANCE."}
             </p>
             {bilan && (
-              <p style={{ margin: "0 0 10px", fontFamily: "ui-monospace, monospace", fontSize: 11.5, color: "#8fa3bd", lineHeight: 1.6 }}>
+              <p style={{ margin: "0 0 10px", fontFamily: "ui-monospace, monospace", fontSize: 12.5, color: "#8fa3bd", lineHeight: 1.6 }}>
                 {mmss(bilan.temps)} en tout · niveau I {mmss(bilan.niveaux[1] || 0)} · II {mmss(bilan.niveaux[2] || 0)} · III {mmss(bilan.niveaux[3] || 0)}<br />
                 souvenirs perdus : {bilan.touches} · niveaux recommencés : {bilan.recommencees} · boucliers : {bilan.boucliers}
               </p>

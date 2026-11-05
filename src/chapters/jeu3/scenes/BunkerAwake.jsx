@@ -79,14 +79,14 @@ export default function BunkerAwake({ onGo, j3 }) {
 
       <div style={{ maxWidth: 780, textAlign: "center", minHeight: 72 }}>
         {current.text ? (
-          <p style={{ fontSize: 16, lineHeight: 1.6, color: "#c8d4e2", margin: 0, fontStyle: "italic" }}>
+          <p style={{ fontSize: 17, lineHeight: 1.6, color: "#c8d4e2", margin: 0, fontStyle: "italic" }}>
             « {current.text} »
           </p>
         ) : null}
         {isLast && (
           <div style={{ marginTop: 14 }} onClick={(e) => e.stopPropagation()}>
             <button onClick={() => onGo("hub")} autoFocus
-              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "12px 26px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 18px rgba(94,255,158,0.35)" }}>
+              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "12px 26px", fontWeight: 800, cursor: "pointer", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 18px rgba(94,255,158,0.35)" }}>
               ▶ SORTIR DANS LE COULOIR
             </button>
           </div>

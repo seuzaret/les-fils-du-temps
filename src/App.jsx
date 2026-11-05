@@ -87,12 +87,12 @@ class DecorErrorBoundary extends Component {
     return (
       <div style={{ padding: "18px 22px", background: "#0e1420", border: "1px solid #5a3020", borderRadius: 12, textAlign: "center", color: "#e8c090", height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", gap: 6 }}>
         <div style={{ fontSize: 34 }}>⚠️</div>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1.5, color: "#e0a848" }}>DÉCOR TEMPORAIREMENT INSTABLE</div>
-        <div style={{ fontSize: 13, color: "#c8b8a0", maxWidth: 400, margin: "6px auto 0", lineHeight: 1.55 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 1.5, color: "#e0a848" }}>DÉCOR TEMPORAIREMENT INSTABLE</div>
+        <div style={{ fontSize: 14.5, color: "#c8b8a0", maxWidth: 400, margin: "6px auto 0", lineHeight: 1.55 }}>
           MARTINE a des interférences sur ce tableau. Utilise le TEMPOSCOPE en haut pour aller ailleurs, ta partie est sauvegardée.
         </div>
         <button onClick={() => this.setState({ err: null })}
-          style={{ marginTop: 12, background: "#141b26", color: "#e0a848", border: "1px solid #5a4028", borderRadius: 10, padding: "8px 18px", fontSize: 12, fontFamily: "ui-monospace,monospace", letterSpacing: 1, cursor: "pointer" }}>
+          style={{ marginTop: 12, background: "#141b26", color: "#e0a848", border: "1px solid #5a4028", borderRadius: 10, padding: "8px 18px", fontSize: 13.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1, cursor: "pointer" }}>
           Réessayer
         </button>
       </div>
@@ -1556,7 +1556,7 @@ export default function App() {
   };
 
   /* petit style commun des boutons du bandeau */
-  const headBtn = { background: "#141b26", border: "1px solid #2a3648", color: "#c8d4e2", borderRadius: 10, padding: "7px 11px", cursor: "pointer", fontSize: 13 };
+  const headBtn = { background: "#141b26", border: "1px solid #2a3648", color: "#c8d4e2", borderRadius: 10, padding: "7px 11px", cursor: "pointer", fontSize: 14.5 };
 
   /* Panneau du MODE TRICHE — visible seulement après avoir tapé
      « triche ». Réutilisé dans tous les écrans via <CheatPanel />. */
@@ -1604,8 +1604,8 @@ export default function App() {
     <label style={{ display: "flex", alignItems: "flex-start", gap: 10, background: on ? "#14251c" : "#141b26", border: `1px solid ${on ? "#2a5a3a" : "#2a3648"}`, borderRadius: 10, padding: "10px 12px", cursor: "pointer" }}>
       <input type="checkbox" checked={on} onChange={onToggle} style={{ width: 20, height: 20, accentColor: "#5eff9e", marginTop: 1, flex: "0 0 auto", cursor: "pointer" }} />
       <span>
-        <span style={{ fontWeight: 700, color: "#e8eef5", fontSize: 14 }}>{label}</span>
-        <span style={{ display: "block", fontSize: 13, color: "#a8b6c8", marginTop: 2, lineHeight: 1.4 }}>{hint}</span>
+        <span style={{ fontWeight: 700, color: "#e8eef5", fontSize: 15.5 }}>{label}</span>
+        <span style={{ display: "block", fontSize: 14.5, color: "#a8b6c8", marginTop: 2, lineHeight: 1.4 }}>{hint}</span>
       </span>
     </label>
   );
@@ -1618,28 +1618,28 @@ export default function App() {
         <h2 style={{ marginTop: 0, color: "#5eff9e", fontFamily: "ui-monospace,monospace", letterSpacing: 2, fontSize: 16 }}>⚙ RÉGLAGES</h2>
 
         {/* ---- Actions rapides pendant le jeu ---- */}
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#7a879e", margin: "2px 0 8px" }}>🎮 ACTIONS</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7a879e", margin: "2px 0 8px" }}>🎮 ACTIONS</div>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
           <button onClick={() => { setModal(null); toggleMute(); }}
-            style={{ background: "#141b26", color: muted ? "#5a6678" : "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+            style={{ background: "#141b26", color: muted ? "#5a6678" : "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
             {muted ? "🔇 Son coupé" : "🔊 Son activé"}
           </button>
           <button onClick={() => { setModal(null); hint(); }}
-            style={{ background: "#141b26", color: "#ffd166", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+            style={{ background: "#141b26", color: "#ffd166", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
             💡 Indice
           </button>
           <button onClick={() => { setModal(null); doReveal(); }}
-            style={{ background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+            style={{ background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
             👁 Révéler les zones
           </button>
           <button onClick={() => setModal({ type: "journal" })}
-            style={{ background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+            style={{ background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
             📔 Carnet de bord
           </button>
         </div>
 
         {/* ---- Recommencer : ce chapitre / toute la partie ---- */}
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>🔄 RECOMMENCER</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>🔄 RECOMMENCER</div>
         {restartAsk ? (
           <div style={{ background: "#2a1a10", border: "1px solid #6a3820", borderRadius: 10, padding: "12px 14px" }}>
             <p style={{ margin: "0 0 10px", fontSize: 15, color: "#ffd8b0", lineHeight: 1.5 }}>
@@ -1649,7 +1649,7 @@ export default function App() {
             </p>
             <div style={{ display: "flex", gap: 8 }}>
               <button onClick={() => setRestartAsk(null)}
-                style={{ flex: 1, background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer", fontSize: 13 }}>
+                style={{ flex: 1, background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer", fontSize: 14.5 }}>
                 Non, annuler
               </button>
               <button onClick={() => {
@@ -1662,7 +1662,7 @@ export default function App() {
                   setRestartAsk(null);
                   setModal(null);
                 }}
-                style={{ flex: 1, background: "#c04a2a", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 800, cursor: "pointer", fontSize: 13 }}>
+                style={{ flex: 1, background: "#c04a2a", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 800, cursor: "pointer", fontSize: 14.5 }}>
                 Oui, recommencer
               </button>
             </div>
@@ -1670,18 +1670,18 @@ export default function App() {
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             <button onClick={() => setRestartAsk("chapter")}
-              style={{ background: "#141b26", color: "#ffd166", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+              style={{ background: "#141b26", color: "#ffd166", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
               ↺ Ce chapitre
             </button>
             <button onClick={() => setRestartAsk("game")}
-              style={{ background: "#141b26", color: "#ff8a6a", border: "1px solid #4a2a20", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+              style={{ background: "#141b26", color: "#ff8a6a", border: "1px solid #4a2a20", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
               ↺ Toute la partie
             </button>
           </div>
         )}
 
         {/* ---- Confort de lecture (accessibilité) ---- */}
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>👁 CONFORT DE LECTURE</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>👁 CONFORT DE LECTURE</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
           <Toggle on={a11y.gros} onToggle={() => setA11y((s) => ({ ...s, gros: !s.gros }))}
             label="Texte plus grand" hint="Pour le vidéoprojecteur et le fond de la classe." />
@@ -1689,22 +1689,22 @@ export default function App() {
             label="Lecture facilitée (dys)" hint="Police plus simple et lettres plus espacées." />
           <Toggle on={a11y.calme} onToggle={() => setA11y((s) => ({ ...s, calme: !s.calme }))}
             label="Animations calmes" hint="Réduit les mouvements et les scintillements." />
-          <button onClick={toggleFullscreen} style={{ background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "left" }}>
+          <button onClick={toggleFullscreen} style={{ background: "#141b26", color: "#c8d4e2", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "left" }}>
             {isFull ? "⛶ Quitter le plein écran" : "⛶ Plein écran (mode classe)"}
           </button>
         </div>
 
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>💾 SAUVEGARDE</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7a879e", margin: "16px 0 8px" }}>💾 SAUVEGARDE</div>
         <p style={{ fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.6, marginTop: 4 }}>
           Tes parties (le voyage, l'enquête Al3x1a, le Puits) sont enregistrées sur
           cet ordinateur. Pour les continuer sur un autre poste (au CDI, à la maison),
           <strong> exporte</strong> ton fichier ici, puis <strong>importe</strong>-le là-bas.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12 }}>
-          <button onClick={doExport} style={{ background: "#1a2536", color: "#5eff9e", border: "1px solid #2a4a38", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer", fontSize: 14 }}>
+          <button onClick={doExport} style={{ background: "#1a2536", color: "#5eff9e", border: "1px solid #2a4a38", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5 }}>
             ⬇ Exporter mes parties (fichier .json)
           </button>
-          <label style={{ background: "#1a2536", color: "#ffd166", border: "1px solid #4a4228", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer", fontSize: 14, textAlign: "center" }}>
+          <label style={{ background: "#1a2536", color: "#ffd166", border: "1px solid #4a4228", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer", fontSize: 15.5, textAlign: "center" }}>
             ⬆ Importer une partie…
             <input type="file" accept="application/json,.json" style={{ display: "none" }}
               onChange={(e) => doImport(e.target.files?.[0])} />
@@ -1770,7 +1770,7 @@ export default function App() {
           <div style={overlay} onClick={() => setModal(null)}>
             <div style={card} onClick={(e) => e.stopPropagation()}>
               <h2 style={{ marginTop: 0, color: "#e8934a", fontSize: 20, textAlign: "center" }}>Effacer la partie en cours ?</h2>
-              <p style={{ fontSize: 14, color: "#c8d4e2", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 15.5, color: "#c8d4e2", lineHeight: 1.6 }}>
                 Une nouvelle partie remplacera définitivement ta progression sauvegardée.
                 Pense à l'<strong>exporter</strong> d'abord si tu veux la garder.
               </p>
@@ -1785,7 +1785,7 @@ export default function App() {
           <div style={overlay} onClick={() => setModal(null)}>
             <div style={card} onClick={(e) => e.stopPropagation()}>
               <h2 style={{ marginTop: 0, color: "#7fd8ff", fontSize: 20, textAlign: "center" }}>Effacer l'enquête en cours ?</h2>
-              <p style={{ fontSize: 14, color: "#c8d4e2", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 15.5, color: "#c8d4e2", lineHeight: 1.6 }}>
                 Une nouvelle enquête Al3x1a remplacera ta progression jeu 2 sauvegardée. Ton voyage principal (jeu 1) est indépendant, il ne sera pas touché.
               </p>
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
@@ -1799,7 +1799,7 @@ export default function App() {
           <div style={overlay} onClick={() => setModal(null)}>
             <div style={card} onClick={(e) => e.stopPropagation()}>
               <h2 style={{ marginTop: 0, color: "#e0ccff", fontSize: 20, textAlign: "center" }}>Effacer ta partie du Puits ?</h2>
-              <p style={{ fontSize: 14, color: "#c8d4e2", lineHeight: 1.6 }}>
+              <p style={{ fontSize: 15.5, color: "#c8d4e2", lineHeight: 1.6 }}>
                 Une nouvelle partie du Puits remplacera ta progression du jeu 3 sauvegardée. Le voyage (jeu 1) et l'enquête Al3x1a (jeu 2) ne seront pas touchés.
               </p>
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
@@ -1827,7 +1827,7 @@ export default function App() {
                   ▶ EMBARQUER
                 </button>
                 <button type="button" onClick={() => { const cb = modal.after; setModal(null); if (cb) cb(); }}
-                  style={{ background: "transparent", color: "#5a6678", border: "none", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
+                  style={{ background: "transparent", color: "#5a6678", border: "none", cursor: "pointer", fontSize: 13.5, fontFamily: "ui-monospace,monospace" }}>
                   (passer)
                 </button>
               </form>
@@ -2010,12 +2010,12 @@ export default function App() {
         {Illo && (
           <div style={{ marginTop: 12, background: "#14100a", border: "1px solid #3a3020", borderRadius: 10, padding: "10px 10px 6px" }}>
             <Illo />
-            <div style={{ fontSize: 10.5, color: "#8a97ad", fontStyle: "italic", textAlign: "center", marginTop: 4, fontFamily: "ui-monospace,monospace" }}>reproduction dessinée</div>
+            <div style={{ fontSize: 12, color: "#8a97ad", fontStyle: "italic", textAlign: "center", marginTop: 4, fontFamily: "ui-monospace,monospace" }}>reproduction dessinée</div>
           </div>
         )}
         {m.wiki && (
           <a href={m.wiki} target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-block", marginTop: 10, fontSize: 13, color: "#7fd8ff", fontWeight: 700, textDecoration: "none" }}>
+            style={{ display: "inline-block", marginTop: 10, fontSize: 14.5, color: "#7fd8ff", fontWeight: 700, textDecoration: "none" }}>
             🔗 En savoir plus sur Wikipédia →
           </a>
         )}
@@ -2060,7 +2060,7 @@ export default function App() {
       {!paysageBas && (
       <div style={{ position: "relative", textAlign: "center", padding: "6px 12px 0", minHeight: 20 }}>
         {ecran.etroit ? (
-          <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 1.5, marginBottom: 2 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", gap: 8, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1.5, marginBottom: 2 }}>
             <span style={{ color: "#e8934a", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{chapter.bandeau}</span>
             {prenom && <span style={{ color: "#5eff9e", whiteSpace: "nowrap", opacity: 0.85 }} title="C'est toi qui joues cette partie">👤 {prenom}</span>}
           </div>
@@ -2085,21 +2085,21 @@ export default function App() {
       {/* le lieu · compteur · boutons · saut temporel */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, padding: paysageBas ? "4px 12px 4px" : "2px 12px 6px", flexWrap: paysageBas ? "nowrap" : "wrap" }}>
         <span style={{ fontSize: paysageBas ? 14 : 17, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
-          {paysageBas && <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, fontWeight: 400, letterSpacing: 1.5, color: "#e8934a", marginRight: 8 }}>{chapter.bandeau}</span>}
+          {paysageBas && <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, fontWeight: 400, letterSpacing: 1.5, color: "#e8934a", marginRight: 8 }}>{chapter.bandeau}</span>}
           {chapter.emoji} {chapter.scenes[tab].name}
         </span>
         <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
           {/* JEU 2 : compteur de notes trouvées à la place de la jauge flux */}
           {mode === "jeu2" ? (
-            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 700, color: "#7fd8ff" }} title="Notes d'Al3x1a trouvées">
+            <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 15.5, fontWeight: 700, color: "#7fd8ff" }} title="Notes d'Al3x1a trouvées">
               🔎 {jeu2Notes.length}/{JEU2.length} notes
             </span>
           ) : (
-          <span style={{ position: "relative", fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 700, color: canJump ? "#ffd166" : "#7fd8ff" }} title={`Flux temporel — ${canJump ? "prêt à partir !" : `encore ${Math.max(0, Math.ceil(fluxRequis - flux))} pour partir`}`}>
+          <span style={{ position: "relative", fontFamily: "ui-monospace,monospace", fontSize: 15.5, fontWeight: 700, color: canJump ? "#ffd166" : "#7fd8ff" }} title={`Flux temporel — ${canJump ? "prêt à partir !" : `encore ${Math.max(0, Math.ceil(fluxRequis - flux))} pour partir`}`}>
             ⚡ {flux}/{fluxRequis}
             {fluxBubble && (
               <span style={{ position: "absolute", left: "50%", top: -18, transform: "translateX(-50%)",
-                fontSize: 13, fontWeight: 800, letterSpacing: 1,
+                fontSize: 14.5, fontWeight: 800, letterSpacing: 1,
                 color: fluxBubble.delta > 0 ? "#5eff9e" : "#ff7a5a",
                 animation: "fluxRise 1.3s ease-out forwards",
                 pointerEvents: "none", whiteSpace: "nowrap" }}>
@@ -2121,7 +2121,7 @@ export default function App() {
           {!colonnes && mode !== "jeu2" && (
             <button onClick={jump} disabled={!canJump}
               title={canJump ? `Saut vers ${chapter.destination}` : (jumpBloque || `Encore ${Math.max(0, Math.ceil(fluxRequis - flux))} flux pour partir`)}
-              style={{ background: canJump ? "#e8934a" : "#1a2230", color: canJump ? "#111" : "#4a5568", border: "none", borderRadius: 10, padding: "7px 12px", fontSize: 13, fontWeight: 800, cursor: canJump ? "pointer" : "not-allowed", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ background: canJump ? "#e8934a" : "#1a2230", color: canJump ? "#111" : "#4a5568", border: "none", borderRadius: 10, padding: "7px 12px", fontSize: 14.5, fontWeight: 800, cursor: canJump ? "pointer" : "not-allowed", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               🌀 {canJump ? `SAUT → ${chapter.destination}` : `${Math.min(flux, fluxRequis)}/${fluxRequis}⚡`}
             </button>
           )}
@@ -2135,12 +2135,72 @@ export default function App() {
           chacune cliquable pour voyager. La courante est mise en avant,
           les notes trouvées ont un ✓. Compact (~66 px de hauteur). */}
       {mode === "jeu2" && (
-        <div style={{ position: "relative", padding: "4px 12px 8px", background: "linear-gradient(180deg, rgba(14,28,42,0.55), transparent)", flex: "0 0 auto" }}>
-          {/* Bouton carnet d'Al3x1a — accès rapide, en haut à droite */}
+        <div style={{ position: "relative", padding: "4px 10px 8px 12px", background: "linear-gradient(180deg, rgba(14,28,42,0.55), transparent)", flex: "0 0 auto", display: "flex", alignItems: "center", gap: 8 }}>
+          {/* la frise prend la place qui reste ; le carnet est rangé à sa
+             droite (avant, posé par-dessus, il cachait les deux dernières
+             époques sur un écran étroit) */}
+          <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
+            {/* Le "fil du temps" : dégradé horizontal derrière les pastilles */}
+            <div style={{ position: "absolute", left: 18, right: 18, top: "50%", height: 2, marginTop: -1, background: "linear-gradient(90deg, #26324a 0%, #7fd8ff 50%, #26324a 100%)", opacity: 0.55, borderRadius: 2 }} />
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4, position: "relative", maxWidth: 1080, margin: "0 auto" }}>
+              {CHAPTERS.map((c, i) => {
+                const has = jeu2Notes.includes(i);
+                const isHere = i === chapterIndex;
+                return (
+                  <button key={c.id} onClick={() => travelJeu2(i)}
+                    title={`${c.epoque || 'Chapitre ' + (i + 1)} · ${c.date || ''} — ${has ? 'note trouvée ✓' : 'à explorer'}`}
+                    style={{
+                      position: "relative",
+                      display: "flex", flexDirection: "column", alignItems: "center", gap: 1,
+                      background: "transparent", border: "none", padding: "2px 4px",
+                      cursor: isHere ? "default" : "pointer",
+                      color: "#e8eef5",
+                      opacity: isHere || has ? 1 : 0.7,
+                      transition: "opacity .15s, transform .15s",
+                      flex: "0 1 auto",
+                    }}
+                    onMouseEnter={(e) => { if (!isHere) e.currentTarget.style.transform = "translateY(-2px) scale(1.06)"; }}
+                    onMouseLeave={(e) => { if (!isHere) e.currentTarget.style.transform = "none"; }}>
+                    {/* La pastille elle-même */}
+                    <span style={{
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      width: isHere ? 40 : 34, height: isHere ? 40 : 34,
+                      fontSize: isHere ? 22 : 18,
+                      borderRadius: "50%",
+                      background: isHere
+                        ? "radial-gradient(circle at 50% 40%, #ffd166 0%, #e8934a 60%, #a05828 100%)"
+                        : has
+                          ? "radial-gradient(circle at 50% 40%, #a8dcff 0%, #4a80b8 100%)"
+                          : "linear-gradient(180deg, #1a2a3e, #0a1420)",
+                      border: `2px solid ${isHere ? "#ffe1a0" : has ? "#7fd8ff" : "#26324a"}`,
+                      boxShadow: isHere
+                        ? "0 0 16px rgba(255,209,102,0.75), inset 0 -2px 4px rgba(0,0,0,0.35)"
+                        : has
+                          ? "0 0 8px rgba(127,216,255,0.4)"
+                          : "inset 0 -1px 2px rgba(0,0,0,0.4)",
+                      transition: "all .2s",
+                      animation: isHere ? "pulse 2.4s ease-in-out infinite" : "none",
+                    }}>
+                      {c.emoji || "•"}
+                    </span>
+                    {/* Badge ✓ pour note trouvée */}
+                    {has && !isHere && (
+                      <span style={{ position: "absolute", top: -1, right: 0, fontSize: 11, background: "#5eff9e", color: "#062516", borderRadius: "50%", width: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, boxShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>✓</span>
+                    )}
+                    {/* Date en petit, alignée sous la pastille */}
+                    <span style={{ fontFamily: "ui-monospace,monospace", fontSize: "clamp(8.5px, 0.6vw + 3px, 11px)", letterSpacing: 0.5, color: isHere ? "#ffd166" : has ? "#7fd8ff" : "#6a7a8e", whiteSpace: "nowrap" }}>
+                      {c.date || `ch.${i + 1}`}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          {/* Bouton carnet d'Al3x1a — accès rapide, à droite de la frise */}
           <button onClick={() => setJeu2CarnetOpen(true)}
             title="Ouvrir le carnet d'Al3x1a"
             style={{
-              position: "absolute", top: 6, right: 10, zIndex: 5,
+              flex: "0 0 auto", whiteSpace: "nowrap",
               background: jeu2Pages.length > 0 ? "linear-gradient(90deg,#c08030,#8a5a2a)" : "rgba(20,27,38,0.6)",
               color: jeu2Pages.length > 0 ? "#fff8e4" : "#8fa3bd",
               border: `1px solid ${jeu2Pages.length > 0 ? "#ffd166" : "rgba(200,212,226,0.25)"}`,
@@ -2152,61 +2212,6 @@ export default function App() {
             }}>
             📓 Carnet · {jeu2Pages.length}/10
           </button>
-          {/* Le "fil du temps" : dégradé horizontal derrière les pastilles */}
-          <div style={{ position: "absolute", left: 30, right: 30, top: "50%", height: 2, marginTop: -1, background: "linear-gradient(90deg, #26324a 0%, #7fd8ff 50%, #26324a 100%)", opacity: 0.55, borderRadius: 2 }} />
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4, position: "relative", maxWidth: 1080, margin: "0 auto" }}>
-            {CHAPTERS.map((c, i) => {
-              const has = jeu2Notes.includes(i);
-              const isHere = i === chapterIndex;
-              return (
-                <button key={c.id} onClick={() => travelJeu2(i)}
-                  title={`${c.epoque || 'Chapitre ' + (i + 1)} · ${c.date || ''} — ${has ? 'note trouvée ✓' : 'à explorer'}`}
-                  style={{
-                    position: "relative",
-                    display: "flex", flexDirection: "column", alignItems: "center", gap: 1,
-                    background: "transparent", border: "none", padding: "2px 4px",
-                    cursor: isHere ? "default" : "pointer",
-                    color: "#e8eef5",
-                    opacity: isHere || has ? 1 : 0.7,
-                    transition: "opacity .15s, transform .15s",
-                    flex: "0 1 auto",
-                  }}
-                  onMouseEnter={(e) => { if (!isHere) e.currentTarget.style.transform = "translateY(-2px) scale(1.06)"; }}
-                  onMouseLeave={(e) => { if (!isHere) e.currentTarget.style.transform = "none"; }}>
-                  {/* La pastille elle-même */}
-                  <span style={{
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    width: isHere ? 40 : 34, height: isHere ? 40 : 34,
-                    fontSize: isHere ? 22 : 18,
-                    borderRadius: "50%",
-                    background: isHere
-                      ? "radial-gradient(circle at 50% 40%, #ffd166 0%, #e8934a 60%, #a05828 100%)"
-                      : has
-                        ? "radial-gradient(circle at 50% 40%, #a8dcff 0%, #4a80b8 100%)"
-                        : "linear-gradient(180deg, #1a2a3e, #0a1420)",
-                    border: `2px solid ${isHere ? "#ffe1a0" : has ? "#7fd8ff" : "#26324a"}`,
-                    boxShadow: isHere
-                      ? "0 0 16px rgba(255,209,102,0.75), inset 0 -2px 4px rgba(0,0,0,0.35)"
-                      : has
-                        ? "0 0 8px rgba(127,216,255,0.4)"
-                        : "inset 0 -1px 2px rgba(0,0,0,0.4)",
-                    transition: "all .2s",
-                    animation: isHere ? "pulse 2.4s ease-in-out infinite" : "none",
-                  }}>
-                    {c.emoji || "•"}
-                  </span>
-                  {/* Badge ✓ pour note trouvée */}
-                  {has && !isHere && (
-                    <span style={{ position: "absolute", top: -1, right: 0, fontSize: 9, background: "#5eff9e", color: "#062516", borderRadius: "50%", width: 14, height: 14, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900, boxShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>✓</span>
-                  )}
-                  {/* Date en petit, alignée sous la pastille */}
-                  <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 8.5, letterSpacing: 0.5, color: isHere ? "#ffd166" : has ? "#7fd8ff" : "#6a7a8e", whiteSpace: "nowrap" }}>
-                    {c.date || `ch.${i + 1}`}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
         </div>
       )}
 
@@ -2229,7 +2234,7 @@ export default function App() {
           {/* téléphone en portrait : le décor 16/9 n'a que la largeur ;
               une discrète invitation à tourner l'écran, sous le décor */}
           {ecran.portrait && ecran.etroit && decorBox && decorBox.h < (decorCellRef.current?.clientHeight || 0) - 40 && (
-            <div style={{ position: "absolute", left: 0, right: 0, bottom: 6, textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1, color: "#5a6a80", pointerEvents: "none" }}>
+            <div style={{ position: "absolute", left: 0, right: 0, bottom: 6, textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: "#5a6a80", pointerEvents: "none" }}>
               ↻ Tourne ton téléphone : le décor sera plus grand.
             </div>
           )}
@@ -2344,7 +2349,7 @@ export default function App() {
             if (!ready) return null;
             return (
               <button onClick={() => setTab(tab + 1)} title={`Partir pour ${next.name}`}
-                style={{ position: "absolute", left: "50%", top: -18, transform: "translateX(-50%)", zIndex: 6, display: "flex", alignItems: "center", gap: 8, background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 20, padding: "7px 16px", fontFamily: "ui-monospace,monospace", fontWeight: 800, fontSize: 13, letterSpacing: 1, cursor: "pointer", boxShadow: "0 0 20px rgba(94,255,158,0.65)", whiteSpace: "nowrap", animation: "floaty 1.7s ease-in-out infinite" }}>
+                style={{ position: "absolute", left: "50%", top: -18, transform: "translateX(-50%)", zIndex: 6, display: "flex", alignItems: "center", gap: 8, background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 20, padding: "7px 16px", fontFamily: "ui-monospace,monospace", fontWeight: 800, fontSize: 14.5, letterSpacing: 1, cursor: "pointer", boxShadow: "0 0 20px rgba(94,255,158,0.65)", whiteSpace: "nowrap", animation: "floaty 1.7s ease-in-out infinite" }}>
                 <span style={{ width: 9, height: 9, borderRadius: "50%", background: "#06110b", animation: "pulse 1s infinite" }} />
                 ➜ Partir pour {next.name}
               </button>
@@ -2378,7 +2383,7 @@ export default function App() {
         <div style={overlay} onClick={() => setModal(null)}>
           <div style={{ ...card, maxHeight: "88vh", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div style={{ textAlign: "center", fontSize: 46 }}>{chapter.messages[modal.id].emoji}</div>
-            <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>◆ MESSAGE TRANSMIS AU FUTUR</div>
+            <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#5eff9e" }}>◆ MESSAGE TRANSMIS AU FUTUR</div>
             <h2 style={{ textAlign: "center", margin: "6px 0 10px", color: "#e8934a", fontSize: 22 }}>{chapter.messages[modal.id].title}</h2>
             <p style={{ fontSize: 16, lineHeight: 1.6, color: "#d8e2ee", margin: 0 }}>{chapter.messages[modal.id].fact}</p>
             {/* les 4 jauges — s'afficheront quand les fiches en auront (jalon M2) */}
@@ -2396,12 +2401,12 @@ export default function App() {
         <div style={overlay} onClick={() => setModal(null)}>
           <div style={{ ...card, borderColor: "#5a667866", maxHeight: "88vh", overflowY: "auto" }} onClick={(e) => e.stopPropagation()}>
             <div style={{ textAlign: "center", fontSize: 46, filter: "grayscale(0.7)", opacity: 0.75 }}>{chapter.messages[modal.id].emoji}</div>
-            <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8fa3bd" }}>💨 MESSAGE PERDU EN ROUTE</div>
+            <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8fa3bd" }}>💨 MESSAGE PERDU EN ROUTE</div>
             <h2 style={{ textAlign: "center", margin: "6px 0 10px", color: "#8fa3bd", fontSize: 22 }}>{chapter.messages[modal.id].title}</h2>
             <p style={{ fontSize: 16, lineHeight: 1.6, color: "#c8d4e2", margin: 0 }}>{chapter.messages[modal.id].fact}</p>
             <Gauges values={chapter.messages[modal.id].jauges} />
             <FicheExtras id={modal.id} />
-            <div style={{ fontSize: 12, color: "#7a879e", fontStyle: "italic", marginTop: 10 }}>
+            <div style={{ fontSize: 13.5, color: "#7a879e", fontStyle: "italic", marginTop: 10 }}>
               Ce fragment rejoint ta frise, mais ne recharge pas MARTINE : un message perdu ne parvient pas au futur.
             </div>
             <button onClick={() => setModal(null)} style={{ marginTop: 14, width: "100%", background: "#5a6678", color: "#0e1420", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15 }}>
@@ -2429,7 +2434,7 @@ export default function App() {
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 20, maxWidth: 860, animation: "fadein .5s ease-out" }}>
               <div style={{ width: "min(44vh, 300px)", flex: "0 0 auto" }}><Portrait /></div>
               <div style={{ flex: "1 1 300px", maxWidth: 400 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#ffd166", marginBottom: 8 }}>✦ {nom.toUpperCase()}</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: "#ffd166", marginBottom: 8 }}>✦ {nom.toUpperCase()}</div>
                 <div style={{ background: "#f4e8cc", color: "#2a1c10", border: "1px solid #cbb489", borderRadius: 16, padding: "16px 18px", fontFamily: "Palatino, Georgia, serif", fontSize: 16.5, lineHeight: 1.6, boxShadow: "0 12px 40px rgba(0,0,0,0.5)" }}>
                   {st.bubble}
                 </div>
@@ -2477,7 +2482,7 @@ export default function App() {
                 )}
                 <div style={{ flex: 1, minWidth: 0 }}>
                   {speakerName && (
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3,
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3,
                       color: "#ffd166", marginBottom: 6 }}>✦ {speakerName.toUpperCase()}</div>
                   )}
                   <div style={{ fontSize: 17, lineHeight: 1.5, color: "#f4e8cc" }}>{bubble.text}</div>
@@ -2782,7 +2787,7 @@ export default function App() {
           </svg>
           {/* Nom de l'epoque, superpose au vortex */}
           <div style={{ position: "absolute", textAlign: "center", pointerEvents: "none" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#7fd8ff", opacity: 0.9, marginBottom: 6, textShadow: "0 0 10px rgba(127,216,255,0.8)" }}>SAUT TEMPOREL</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 4, color: "#7fd8ff", opacity: 0.9, marginBottom: 6, textShadow: "0 0 10px rgba(127,216,255,0.8)" }}>SAUT TEMPOREL</div>
             <div style={{ fontFamily: TITRE_FONT, fontSize: "clamp(28px, 5vw, 44px)", fontWeight: 700, letterSpacing: 3, textTransform: "uppercase", color: "#fff", textShadow: "0 0 22px rgba(127,216,255,0.9), 0 0 40px rgba(127,216,255,0.6)" }}>{jeu2Warp.nom}</div>
           </div>
         </div>
@@ -2881,28 +2886,28 @@ export default function App() {
                 (auto-suffisante), donc valables d'un chapitre à l'autre */}
             {collection.filter((c) => !c.perdu).map((c) => (
               <div key={c.id} style={{ background: "#141b26", borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
-                <strong>{c.emoji} {c.titre} <span style={{ color: "#8fa3bd", fontWeight: 400, fontSize: 11 }}>· {c.date}</span></strong>
+                <strong>{c.emoji} {c.titre} <span style={{ color: "#8fa3bd", fontWeight: 400, fontSize: 12 }}>· {c.date}</span></strong>
                 <p style={{ fontSize: 14.5, color: "#b8c4d4", margin: "4px 0 0", lineHeight: 1.5 }}>{c.fact}</p>
               </div>
             ))}
             {/* les fragments (messages perdus) — grisés */}
             {collection.filter((c) => c.perdu).map((c) => (
               <div key={c.id} style={{ background: "#0f1420", border: "1px dashed #3a4656", borderRadius: 10, padding: "10px 12px", marginBottom: 8 }}>
-                <strong style={{ color: "#8fa3bd" }}>💨 {c.titre} <span style={{ fontWeight: 400, fontSize: 11 }}>· {c.date} · perdu en route</span></strong>
+                <strong style={{ color: "#8fa3bd" }}>💨 {c.titre} <span style={{ fontWeight: 400, fontSize: 12 }}>· {c.date} · perdu en route</span></strong>
                 <p style={{ fontSize: 14.5, color: "#8a96a6", margin: "4px 0 0", lineHeight: 1.5 }}>{c.fact}</p>
               </div>
             ))}
-            <div style={{ fontSize: 12, color: "#7a879e", margin: "8px 0" }}>
+            <div style={{ fontSize: 13.5, color: "#7a879e", margin: "8px 0" }}>
               {ALL_MSGS.length - msgs.length} message(s) encore à transmettre dans ce chapitre.
             </div>
 
             {/* ---- la sortie papier : trace écrite de la séance ---- */}
             <div style={{ borderTop: "1px solid #2a3648", paddingTop: 12, marginTop: 4 }}>
-              <label style={{ fontSize: 12, color: "#8fa3bd", display: "block", marginBottom: 6 }}>
+              <label style={{ fontSize: 13.5, color: "#8fa3bd", display: "block", marginBottom: 6 }}>
                 Ton prénom (il s'imprimera sur le carnet) :
               </label>
               <input value={prenom} onChange={(e) => setPrenom(e.target.value)} placeholder="Prénom"
-                style={{ width: "100%", background: "#141b26", border: "1px solid #2a3648", borderRadius: 8, padding: "9px 10px", color: "#e8eef5", fontSize: 14, fontFamily: "inherit", marginBottom: 8 }} />
+                style={{ width: "100%", background: "#141b26", border: "1px solid #2a3648", borderRadius: 8, padding: "9px 10px", color: "#e8eef5", fontSize: 15.5, fontFamily: "inherit", marginBottom: 8 }} />
               <button onClick={() => window.print()} disabled={collection.length === 0}
                 style={{ width: "100%", background: collection.length ? "#e8934a" : "#2a2a2a", color: collection.length ? "#1a0e02" : "#5a6678", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: collection.length ? "pointer" : "default", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 🖨 VERSION IMPRIMABLE

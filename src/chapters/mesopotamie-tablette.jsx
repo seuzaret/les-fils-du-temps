@@ -111,13 +111,13 @@ export function TabletteGame({ onClose, onWin }) {
   const Ligne = ({ type, n, ok }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 7, minHeight: 40 }}>
       <div style={{ width: 30, height: 30, flex: "0 0 auto", padding: 3, border: "1px dashed #3a6a9a", borderRadius: 6, background: "rgba(47,106,154,0.12)" }}><Picto type={type} stroke="#2f6a9a" sw={3} /></div>
-      <span style={{ color: "#3a6a9a", fontFamily: "ui-monospace,monospace", fontSize: 15, fontWeight: 700, flex: "0 0 auto" }}>→</span>
+      <span style={{ color: "#3a6a9a", fontFamily: "ui-monospace,monospace", fontSize: 16, fontWeight: 700, flex: "0 0 auto" }}>→</span>
       <div style={{ display: "flex", flexWrap: "wrap", gap: 3, flex: 1, minHeight: 20 }}>
         {Array.from({ length: n }).map((_, i) => (
           <div key={i} style={{ width: 22, height: 22, animation: "popIn .25s ease-out" }}><Picto type={type} stroke="#3a2614" sw={3.4} /></div>
         ))}
       </div>
-      <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 700, color: ok ? "#2e7d4a" : "#8a5a2e" }}>{n}</span>
+      <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 700, color: ok ? "#2e7d4a" : "#8a5a2e" }}>{n}</span>
     </div>
   );
 
@@ -126,9 +126,9 @@ export function TabletteGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", border: "2px solid #e8934a66", borderRadius: 18, padding: 20, maxWidth: 660, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e8934a" }}>✍ NAISSANCE DE L'ÉCRITURE</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e8934a" }}>✍ NAISSANCE DE L'ÉCRITURE</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 2px", color: "#ffd166", fontSize: 21 }}>Le registre de Narâm-Sîn</h2>
-        <p style={{ fontSize: 13.5, lineHeight: 1.5, color: "#c8d4e2", textAlign: "center", margin: "0 0 12px" }}>
+        <p style={{ fontSize: 15, lineHeight: 1.5, color: "#c8d4e2", textAlign: "center", margin: "0 0 12px" }}>
           Impossible de tout retenir de tête ! Presse les signes dans l'argile pour noter ce qu'il y a dans l'étable :
           <strong style={{ color: "#ffd166" }}> 6 bœufs</strong> et <strong style={{ color: "#ffd166" }}>3 ballots de blé</strong>.
         </p>
@@ -140,7 +140,7 @@ export function TabletteGame({ onClose, onWin }) {
               <div style={{ flex: "1 1 240px", background: "linear-gradient(160deg,#cda878,#a9814f)", border: "3px solid #8a6a44", borderRadius: "14px 16px 12px 15px", padding: "12px 14px", boxShadow: "inset 0 2px 10px rgba(255,255,255,0.25), inset 0 -6px 14px rgba(60,40,20,0.4)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, borderBottom: "1px solid #7a5a3a66", paddingBottom: 6, marginBottom: 6 }}>
                   <div style={{ width: 30, height: 30 }}><Picto type="etable" stroke="#2f6a9a" sw={3} /></div>
-                  <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#3a6a9a", fontWeight: 700 }}>é — l'étable</span>
+                  <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, color: "#3a6a9a", fontWeight: 700 }}>é — l'étable</span>
                 </div>
                 {rowOrder.map((type) => {
                   const n = reg[type] || 0;
@@ -151,13 +151,13 @@ export function TabletteGame({ onClose, onWin }) {
 
               {/* LA PALETTE de signes */}
               <div style={{ flex: "1 1 240px" }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, letterSpacing: 1, color: "#8fa3bd", marginBottom: 6 }}>LES SIGNES — touche pour inscrire</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: "#8fa3bd", marginBottom: 6 }}>LES SIGNES — touche pour inscrire</div>
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 7 }}>
                   {palette.map((p) => (
                     <button key={p.type} onClick={() => presser(p)}
                       style={{ background: "#1a130c", border: "1px solid #3a2c1c", borderRadius: 10, padding: "7px 4px 5px", cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
                       <div style={{ width: 40, height: 40 }}><Picto type={p.type} /></div>
-                      <div style={{ fontSize: 10, fontFamily: "ui-monospace,monospace", color: "#c9a877", textAlign: "center", lineHeight: 1.15 }}>
+                      <div style={{ fontSize: 11.5, fontFamily: "ui-monospace,monospace", color: "#c9a877", textAlign: "center", lineHeight: 1.15 }}>
                         {p.nom}<br /><span style={{ color: "#8a97ad" }}>{p.sens}</span>
                       </div>
                     </button>
@@ -167,19 +167,19 @@ export function TabletteGame({ onClose, onWin }) {
             </div>
 
             {/* compteurs + erreur */}
-            <div style={{ display: "flex", justifyContent: "center", gap: 18, marginTop: 12, fontFamily: "ui-monospace,monospace", fontSize: 15 }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: 18, marginTop: 12, fontFamily: "ui-monospace,monospace", fontSize: 16 }}>
               <span style={{ color: okB ? "#5eff9e" : "#c9a877" }}>🐂 {reg.boeuf}/6</span>
               <span style={{ color: okBle ? "#5eff9e" : "#c9a877" }}>🌾 {reg.ble}/3</span>
             </div>
-            <p style={{ minHeight: 18, textAlign: "center", color: "#e8934a", fontSize: 12.5, fontStyle: "italic", margin: "8px 0 0" }}>{flash}</p>
+            <p style={{ minHeight: 18, textAlign: "center", color: "#e8934a", fontSize: 14, fontStyle: "italic", margin: "8px 0 0" }}>{flash}</p>
 
             <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
               <button onClick={effacer}
-                style={{ flex: "0 0 auto", background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 18px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace" }}>
+                style={{ flex: "0 0 auto", background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "11px 18px", fontWeight: 700, cursor: "pointer", fontSize: 14.5, fontFamily: "ui-monospace,monospace" }}>
                 ✕ Effacer
               </button>
               <button onClick={valider}
-                style={{ flex: 1, background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ flex: 1, background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 ✓ Valider le registre
               </button>
             </div>
@@ -187,18 +187,18 @@ export function TabletteGame({ onClose, onWin }) {
         ) : (
           <div style={{ marginTop: 6 }}>
             <div style={{ background: "#101827", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Voilà comment naît l'ÉCRITURE : pas pour un poème, mais pour un inventaire ! On presse dans
                 l'argile molle des signes en forme de coins — le cunéiforme. Le message ne dépend plus de la
                 mémoire de personne : il survit à celui qui l'a écrit, sans se déformer. Cuite au feu, la tablette
                 défie les millénaires. L'Histoire, la vraie, commence ici. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ◆ « Écriture cunéiforme » transmise au futur !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

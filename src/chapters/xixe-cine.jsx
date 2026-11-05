@@ -229,12 +229,12 @@ export function CineGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.85)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 20, maxWidth: 780, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>🎞️ NICKELODEON · 14ᵉ RUE, NY, MAI 1912</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>🎞️ NICKELODEON · 14ᵉ RUE, NY, MAI 1912</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>« Saved from the Titanic » — remonte le film</h2>
 
         {phase === "assemble" && (
           <>
-            <p style={{ textAlign: "center", fontSize: 12.5, color: "#d8c9a8", margin: "0 0 10px" }}>
+            <p style={{ textAlign: "center", fontSize: 14, color: "#d8c9a8", margin: "0 0 10px" }}>
               Clique un photogramme, puis clique la case où le placer. Clique à nouveau pour permuter.
             </p>
 
@@ -248,7 +248,7 @@ export function CineGame({ onClose, onWin }) {
                   return (
                     <button key={i} onClick={() => dropInSlot(i)}
                       style={{ background: "transparent", border: "none", padding: 0, cursor: "pointer", position: "relative" }}>
-                      <div style={{ position: "absolute", top: -6, left: 4, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#c8963e", zIndex: 2 }}>{i + 1}</div>
+                      <div style={{ position: "absolute", top: -6, left: 4, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#c8963e", zIndex: 2 }}>{i + 1}</div>
                       {frame ? (
                         <Photogramme frame={frame} size={100} highlight={isSelected} wrong={isWrong} />
                       ) : (
@@ -260,13 +260,13 @@ export function CineGame({ onClose, onWin }) {
               </div>
             </div>
 
-            <p style={{ textAlign: "center", fontSize: 12.5, color: wrongSlots.length ? "#e8934a" : "#e0a848", fontStyle: "italic", minHeight: 20, margin: "0 0 8px" }}>{message}</p>
+            <p style={{ textAlign: "center", fontSize: 14, color: wrongSlots.length ? "#e8934a" : "#e0a848", fontStyle: "italic", minHeight: 20, margin: "0 0 8px" }}>{message}</p>
 
             {/* La PILE en bas : photogrammes en vrac */}
             <div onClick={dropInPool}
               style={{ background: "#1a1006", border: "1px dashed #5a4028", borderRadius: 8, padding: 10, minHeight: 110, display: "flex", flexWrap: "wrap", gap: 8, justifyContent: "center", cursor: selected?.from === "slot" ? "pointer" : "default" }}>
               {pool.length === 0 ? (
-                <div style={{ color: "#5a4028", fontStyle: "italic", fontSize: 12, alignSelf: "center" }}>— pile vide —</div>
+                <div style={{ color: "#5a4028", fontStyle: "italic", fontSize: 13.5, alignSelf: "center" }}>— pile vide —</div>
               ) : pool.map((id) => {
                 const frame = FRAMES.find((f) => f.id === id);
                 const isSelected = selected?.from === "pool" && selected.id === id;
@@ -274,7 +274,7 @@ export function CineGame({ onClose, onWin }) {
                   <button key={id} onClick={(e) => { e.stopPropagation(); pick("pool", id); }}
                     style={{ background: "transparent", border: "none", padding: 0, cursor: "pointer", display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
                     <Photogramme frame={frame} size={88} highlight={isSelected} />
-                    <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 10.5, color: isSelected ? "#ffd166" : "#c8963e", letterSpacing: 0.5 }}>{frame.short}</span>
+                    <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: isSelected ? "#ffd166" : "#c8963e", letterSpacing: 0.5 }}>{frame.short}</span>
                   </button>
                 );
               })}
@@ -286,7 +286,7 @@ export function CineGame({ onClose, onWin }) {
                 RECOMMENCER
               </button>
               <button onClick={validate} disabled={!canValidate}
-                style={{ flex: 1, background: canValidate ? "#e0a848" : "#3a2c1c", color: canValidate ? "#1a1206" : "#7a6a4a", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: canValidate ? "pointer" : "not-allowed", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
+                style={{ flex: 1, background: canValidate ? "#e0a848" : "#3a2c1c", color: canValidate ? "#1a1206" : "#7a6a4a", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: canValidate ? "pointer" : "not-allowed", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
                 PROJETER LE FILM
               </button>
             </div>
@@ -295,17 +295,17 @@ export function CineGame({ onClose, onWin }) {
 
         {phase === "project" && (
           <>
-            <p style={{ textAlign: "center", fontSize: 13, color: "#d8c9a8", margin: "0 0 10px" }}>
+            <p style={{ textAlign: "center", fontSize: 14.5, color: "#d8c9a8", margin: "0 0 10px" }}>
               La lanterne s'allume, la bobine tourne… l'histoire prend vie image après image.
             </p>
             <div style={{ background: "#0a0604", border: "3px solid #a8801f", borderRadius: 8, padding: 12, textAlign: "center" }}>
               <svg viewBox="0 0 100 70" style={{ width: "100%", maxWidth: 380, height: "auto", background: "#000", filter: "sepia(0.3) contrast(1.1)", animation: "flicker 0.14s steps(2) infinite" }}>
                 {FRAMES[projFrame].draw}
               </svg>
-              <div style={{ marginTop: 10, background: "#0a0806", padding: "6px 12px", borderRadius: 4, fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 13, color: "#e8d8b0" }}>
+              <div style={{ marginTop: 10, background: "#0a0806", padding: "6px 12px", borderRadius: 4, fontFamily: "Georgia,serif", fontStyle: "italic", fontSize: 14.5, color: "#e8d8b0" }}>
                 {FRAMES[projFrame].legend}
               </div>
-              <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#7a6a4a" }}>
+              <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#7a6a4a" }}>
                 image {projFrame + 1} / {FRAMES.length}
               </div>
             </div>
@@ -315,15 +315,15 @@ export function CineGame({ onClose, onWin }) {
         {phase === "done" && (
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Le 28 décembre 1895, les frères Lumière projettent 10 courts films au Salon Indien du Grand Café, à Paris — 33 spectateurs, 1 franc la place. Le CINÉMA vient de naître : une SUITE de photos à 16 images/seconde, notre œil ne voit pas les coupures. En 1912, quelques semaines après le naufrage du Titanic, le film « Saved from the Titanic » sort avec Dorothy Gibson, VRAIE rescapée — Sean pleure : le cinéma peut RECONSTITUER un événement… mais le MONTAGE (l'ordre des plans) donne le sens du récit. Un même événement, plusieurs récits — c'est ainsi qu'un média façonne notre mémoire. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Sean a vu le film — direction New York, il faut appeler la famille…
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

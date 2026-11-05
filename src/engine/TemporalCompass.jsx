@@ -1151,7 +1151,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, nextSub 
               fontFamily: "Palatino, Georgia, serif", color: "#e8eef5", textAlign: "center",
             }}>
               <div style={{
-                fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3,
+                fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3,
                 color: "#5eff9e", marginBottom: 6,
               }}>▶ MARTINE — CANAL PRIORITAIRE</div>
               <h2 style={{
@@ -1159,7 +1159,7 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, nextSub 
                 textTransform: "uppercase",
               }}>Mission prioritaire</h2>
               <div style={{
-                margin: "0 0 14px", fontFamily: "ui-monospace,monospace", fontSize: 11,
+                margin: "0 0 14px", fontFamily: "ui-monospace,monospace", fontSize: 12,
                 letterSpacing: 3, color: "#ff8a94",
               }}>⚠ {cfg.label}</div>
               <p style={{ fontSize: 16.5, lineHeight: 1.55, margin: "0 0 14px" }}>
@@ -1167,17 +1167,17 @@ export function TemporalCompass({ onClose, onLock, onCaught, nextLabel, nextSub 
                 boussole temporelle, trouve un <strong>nœud dans le temps</strong>
                 {" "}et voyage jusqu'à son époque.
               </p>
-              <p style={{ fontSize: 15, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
+              <p style={{ fontSize: 16, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
                 <strong style={{ color: "#7fffb0" }}>Flèches</strong> pour avancer,
                 {" "}<strong style={{ color: "#7fffb0" }}>Espace</strong> pour freiner.
               </p>
-              <p style={{ fontSize: 14, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
+              <p style={{ fontSize: 15.5, lineHeight: 1.5, margin: "0 0 10px", color: "#c8d4e2" }}>
                 Les <strong style={{ color: "#ffd166" }}>lignes dorées</strong> accélèrent.
                 {" "}Chevaucher un <strong style={{ color: "#c8a8f0" }}>tourbillon</strong>
                 {" "}dans son sens → <strong style={{ color: "#ffd700" }}>SURF</strong>.
               </p>
               <p style={{
-                fontSize: 14, lineHeight: 1.5, margin: "0 0 20px",
+                fontSize: 15.5, lineHeight: 1.5, margin: "0 0 20px",
                 color: "#ff8a94", fontWeight: 700,
               }}>
                 ⚠ Attention aux <span style={{ color: "#ff2a4a" }}>tachyons rouges</span>,

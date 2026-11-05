@@ -179,41 +179,41 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
   if (phase === "fin" && chosen) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: chosen.couleur }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 4, color: chosen.couleur }}>
           ◈ FIN — {chosen.label}
         </div>
         <div style={{ maxWidth: 700, textAlign: "center" }}>
           {chosen.texte.map((line, i) => (
-            <p key={i} style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: "0 0 12px" }}>
+            <p key={i} style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: "0 0 12px" }}>
               {line}
             </p>
           ))}
           <div style={{ marginTop: 20, padding: "10px 14px", background: "#0e1a30", border: `1px solid ${chosen.couleur}`, borderRadius: 10 }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#c8d4e2", fontStyle: "italic", lineHeight: 1.5 }}>
+            <p style={{ margin: 0, fontSize: 14, color: "#c8d4e2", fontStyle: "italic", lineHeight: 1.5 }}>
               {chosen.moral}
             </p>
           </div>
         </div>
         {chosen.id !== "soumettre" ? (<>
-          <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
+          <p style={{ fontSize: 12.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
             Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
           </p>
           <button onClick={() => onGo?.("epilogueJeu3")} autoFocus
-            style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+            style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 14.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
             Continuer ▸
           </button>
         </>) : (<>
-        <p style={{ fontSize: 12, color: "#5a6678", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+        <p style={{ fontSize: 13.5, color: "#5a6678", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
           — FIN DU JEU 3 —
         </p>
-        <p style={{ fontSize: 11.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
+        <p style={{ fontSize: 12.5, color: "#7a879e", fontStyle: "italic", textAlign: "center", maxWidth: 600, margin: 0 }}>
           Ce n'était pas la « bonne » réponse. Il n'y en a pas. C'est la question qui compte : qui décide de ce qu'on a le droit de savoir ?
         </p>
         <button onClick={() => j3?.generique?.()} autoFocus
-          style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
+          style={{ background: chosen.couleur, color: "#06110b", border: "none", borderRadius: 10, padding: "10px 24px", fontSize: 14.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, marginTop: 8 }}>
           Générique ▸
         </button>
-        <p style={{ fontSize: 11, color: "#5a6678", textAlign: "center", marginTop: 4 }}>
+        <p style={{ fontSize: 12, color: "#5a6678", textAlign: "center", marginTop: 4 }}>
           (Tu peux rejouer et essayer une autre fin.)
         </p>
         </>)}
@@ -221,7 +221,7 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
     );
   }
 
-  const bouton = (fond, texte, bord) => ({ background: fond, color: texte, border: bord ? `1px solid ${bord}` : "none", borderRadius: 10, padding: "10px 22px", fontSize: 13, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 });
+  const bouton = (fond, texte, bord) => ({ background: fond, color: texte, border: bord ? `1px solid ${bord}` : "none", borderRadius: 10, padding: "10px 22px", fontSize: 14.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 });
   const remonter = (
     <button onClick={() => onGo?.("dormants")} style={bouton("#141b26", "#7fd8ff", "#3a80c8")}>← Remonter</button>
   );
@@ -246,10 +246,10 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
 
       {phase === "dialogue" && ligne && (<>
         <div style={{ maxWidth: 800, width: "100%", background: "#0a1a10", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: ligne.qui === "petite" ? "#ffd166" : "#5eff9e" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: ligne.qui === "petite" ? "#ffd166" : "#5eff9e" }}>
             {ligne.qui === "martine" ? "◈ MARTINE" : ligne.qui === "petite" ? "◈ LA PETITE MARTINE" : "◈ NIVEAU −3 · SALLE DES SERVEURS"}
           </div>
-          <p style={{ margin: "6px 0 0", fontSize: 14.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: ligne.qui === "recit" ? "italic" : "normal" }}>
+          <p style={{ margin: "6px 0 0", fontSize: 16, lineHeight: 1.55, color: "#e8eef5", fontStyle: ligne.qui === "recit" ? "italic" : "normal" }}>
             {fill(ligne.texte)}
           </p>
         </div>
@@ -258,11 +258,11 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
 
       {phase === "debrancher" && (
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-          <p style={{ margin: 0, fontSize: 13.5, color: "#c8d4e2", fontStyle: "italic", textAlign: "center", maxWidth: 600 }}>
+          <p style={{ margin: 0, fontSize: 15, color: "#c8d4e2", fontStyle: "italic", textAlign: "center", maxWidth: 600 }}>
             Sur le socle, sous l'écran de MARTINE, une rangée de leviers rouges.
           </p>
           <button onClick={debrancher} autoFocus data-debrancher="1"
-            style={{ ...bouton("#ff5030", "#1a0604"), fontSize: 15, padding: "12px 28px", boxShadow: "0 0 22px rgba(255,80,48,0.5)" }}>⏻ Débrancher MARTINE</button>
+            style={{ ...bouton("#ff5030", "#1a0604"), fontSize: 16, padding: "12px 28px", boxShadow: "0 0 22px rgba(255,80,48,0.5)" }}>⏻ Débrancher MARTINE</button>
         </div>
       )}
 
@@ -272,11 +272,11 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
             {noteOuverte ? (<>
               <Papier caillou={CAILLOU.carnet} anime />
               {CONFRONTATION.apresNote.map((t, i) => (
-                <p key={i} style={{ margin: 0, fontSize: 15, color: "#ffe2a0", fontStyle: "italic", textAlign: "center" }}>{t}</p>
+                <p key={i} style={{ margin: 0, fontSize: 16, color: "#ffe2a0", fontStyle: "italic", textAlign: "center" }}>{t}</p>
               ))}
               <div style={{ width: "100%", maxWidth: 560 }}><IndicesMonde flags={flags} setFlag={j3.setFlag} /></div>
             </>) : (
-              <p style={{ margin: 0, fontSize: 14, color: "#c8d4e2", fontStyle: "italic", textAlign: "center" }}>
+              <p style={{ margin: 0, fontSize: 15.5, color: "#c8d4e2", fontStyle: "italic", textAlign: "center" }}>
                 Dans ta poche, la page du carnet d'Al3x1a. « Si un jour tu essaies de l'éteindre et qu'elle te répond qu'elle est partout… »
               </p>
             )}
@@ -286,7 +286,7 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
             </div>
           </>) : (<>
             {CONFRONTATION.sansNote(flags).map((t, i) => (
-              <p key={i} style={{ margin: 0, fontSize: 14.5, color: i ? "#ffe2a0" : "#c8d4e2", fontStyle: "italic", textAlign: "center", maxWidth: 640 }}>{t}</p>
+              <p key={i} style={{ margin: 0, fontSize: 16, color: i ? "#ffe2a0" : "#c8d4e2", fontStyle: "italic", textAlign: "center", maxWidth: 640 }}>{t}</p>
             ))}
             {remonter}
           </>)}
@@ -296,7 +296,7 @@ export default function BunkerServeurs({ prenom, j3, onGo }) {
       {phase === "pret" && (
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
           <button onClick={() => setPhase("combat")} autoFocus data-combat="1"
-            style={{ ...bouton("#ff5030", "#1a0604"), fontSize: 15, padding: "12px 28px", boxShadow: "0 0 22px rgba(255,80,48,0.5)" }}>⚔ Affronter MARTINE</button>
+            style={{ ...bouton("#ff5030", "#1a0604"), fontSize: 16, padding: "12px 28px", boxShadow: "0 0 22px rgba(255,80,48,0.5)" }}>⚔ Affronter MARTINE</button>
           {remonter}
         </div>
       )}

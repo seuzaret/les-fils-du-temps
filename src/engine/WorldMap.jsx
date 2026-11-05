@@ -20,7 +20,7 @@ export function MiniMap({ Carte, tab, label, onOpen }) {
       <div style={{ borderRadius: 6, overflow: "hidden", border: "1px solid #2a3648", lineHeight: 0 }}>
         <Carte tab={tab} />
       </div>
-      {label && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9, color: "#ffd166", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>◉ {label}</div>}
+      {label && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#ffd166", textAlign: "center", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>◉ {label}</div>}
     </button>
   );
 }
@@ -31,7 +31,7 @@ export function WorldMap({ Carte, tab, titre = "Où sommes-nous ?", onClose }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", border: "2px solid #e8934a66", borderRadius: 18, padding: 18, maxWidth: 720, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e8934a" }}>🗺 LE VOYAGE DU CHAPITRE</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e8934a" }}>🗺 LE VOYAGE DU CHAPITRE</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 12px", color: "#ffd166", fontSize: 21 }}>{titre}</h2>
 
         <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid #2a3648" }}>
@@ -41,7 +41,7 @@ export function WorldMap({ Carte, tab, titre = "Où sommes-nous ?", onClose }) {
         </div>
 
         <button onClick={onClose}
-          style={{ marginTop: 12, width: "100%", background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "11px", fontWeight: 800, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ marginTop: 12, width: "100%", background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "11px", fontWeight: 800, cursor: "pointer", fontSize: 15.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           Fermer
         </button>
       </div>

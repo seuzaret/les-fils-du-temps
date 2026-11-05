@@ -298,10 +298,10 @@ function TriBoard({
       }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", flexWrap: "wrap", gap: 8 }}>
           <div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#c8a848" }}>
               📂 CLASSEMENT CHRONOLOGIQUE
             </div>
-            <div style={{ fontFamily: "Georgia, serif", fontSize: 14, color: "#c8b090", marginTop: 2 }}>
+            <div style={{ fontFamily: "Georgia, serif", fontSize: 15.5, color: "#c8b090", marginTop: 2 }}>
               Glisse les fiches dans les cases, du plus ancien (gauche) au plus récent (droite).
             </div>
           </div>
@@ -312,7 +312,7 @@ function TriBoard({
               color: mediadexRetrouve ? "#ffd166" : "#5a4028",
               border: `1px solid ${mediadexRetrouve ? "#c8a848" : "#3a2818"}`,
               borderRadius: 8, padding: "6px 12px",
-              fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 700,
+              fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700,
               cursor: mediadexRetrouve ? "pointer" : "not-allowed", letterSpacing: 1,
             }}>
             📘 Vérifier avec le médiadex
@@ -332,13 +332,13 @@ function TriBoard({
           ))}
         </div>
 
-        <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a7050", letterSpacing: 2, textAlign: "center" }}>
+        <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#8a7050", letterSpacing: 2, textAlign: "center" }}>
           ← plus ancien · plus récent →
         </div>
 
         {/* Stock */}
         <div style={{ marginTop: 16 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8a7050", marginBottom: 6 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a7050", marginBottom: 6 }}>
             PILE DE FICHES À CLASSER
           </div>
           <div
@@ -350,7 +350,7 @@ function TriBoard({
               padding: 10, minHeight: 120,
             }}>
             {stockFiches.length === 0 ? (
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#5a4028", margin: "auto", fontStyle: "italic" }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#5a4028", margin: "auto", fontStyle: "italic" }}>
                 — pile vide, tout est dans les cases —
               </div>
             ) : (
@@ -369,23 +369,23 @@ function TriBoard({
         {stamping ? (
           <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 14 }}>
             <button onClick={onContinueStamping}
-              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 22px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
               Jorge te répond ▸
             </button>
           </div>
         ) : (
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 14, gap: 8, flexWrap: "wrap" }}>
             <button onClick={onAbandon}
-              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "9px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+              style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "9px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer" }}>
               ← Abandonner
             </button>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               <button onClick={onSignaler}
-                style={{ background: "#2a1408", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 8, padding: "10px 16px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
+                style={{ background: "#2a1408", color: "#e0a848", border: "1px solid #e0a848", borderRadius: 8, padding: "10px 16px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 700, cursor: "pointer", letterSpacing: 1 }}>
                 ⚠ Signaler une anomalie
               </button>
               <button onClick={onValider}
-                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "10px 20px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
                 ✓ Valider mon classement
               </button>
             </div>
@@ -422,7 +422,7 @@ function SlotCase({ slotIdx, ficheIdx, fiches,
         display: "flex", flexDirection: "column", alignItems: "center",
         transition: "background 0.15s, border-color 0.15s",
       }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#c8a848", fontWeight: 800, letterSpacing: 1 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#c8a848", fontWeight: 800, letterSpacing: 1 }}>
         CASE {slotIdx + 1}
       </div>
       {occupied ? (
@@ -434,7 +434,7 @@ function SlotCase({ slotIdx, ficheIdx, fiches,
             slotCorrect={slotCorrect} compact />
         </div>
       ) : (
-        <div style={{ margin: "auto", fontSize: 11, color: "#5a4028", fontStyle: "italic" }}>
+        <div style={{ margin: "auto", fontSize: 12, color: "#5a4028", fontStyle: "italic" }}>
           — vide —
         </div>
       )}
@@ -481,13 +481,13 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
       <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 8, color: "#8a5030", letterSpacing: 1, borderBottom: "1px dashed #8a5030", paddingBottom: 2 }}>
         FICHE № {String(idx + 1).padStart(3, "0")}
       </div>
-      <div style={{ marginTop: 4, fontSize: 11, fontWeight: 700, lineHeight: 1.2 }}>
+      <div style={{ marginTop: 4, fontSize: 12, fontWeight: 700, lineHeight: 1.2 }}>
         {fiche.sujet}
       </div>
-      <div style={{ marginTop: 2, fontSize: 13, fontWeight: 800, color: "#8a2010", letterSpacing: 0.5 }}>
+      <div style={{ marginTop: 2, fontSize: 14.5, fontWeight: 800, color: "#8a2010", letterSpacing: 0.5 }}>
         {fiche.dateFiche}
       </div>
-      <div style={{ marginTop: 2, fontSize: 9, color: "#5a4028", fontStyle: "italic", lineHeight: 1.3 }}>
+      <div style={{ marginTop: 2, fontSize: 11, color: "#5a4028", fontStyle: "italic", lineHeight: 1.3 }}>
         {fiche.lieuFiche} · {fiche.qui}
       </div>
       {isAnomaly && (
@@ -495,7 +495,7 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
           position: "absolute", left: "50%", top: "50%",
           transform: "translate(-50%,-50%) rotate(-10deg)",
           padding: "4px 10px", border: "3px solid #c81010", borderRadius: 4,
-          color: "#c81010", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 15, letterSpacing: 2,
+          color: "#c81010", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 16, letterSpacing: 2,
           background: "rgba(200,16,16,0.08)", textShadow: "0 0 4px rgba(200,16,16,0.3)",
           pointerEvents: "none",
         }}>
@@ -507,7 +507,7 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
           position: "absolute", left: "50%", top: "50%",
           transform: "translate(-50%,-50%) rotate(-12deg)",
           padding: "3px 10px", border: "2px solid #2a8030", borderRadius: 4,
-          color: "#2a8030", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 14, letterSpacing: 2,
+          color: "#2a8030", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 15.5, letterSpacing: 2,
           background: "rgba(42,128,48,0.08)",
           pointerEvents: "none",
         }}>
@@ -519,7 +519,7 @@ function FicheCard({ fiche, idx, dragging, onDragStart, onDragEnd, compact = fal
           position: "absolute", left: "50%", top: "50%",
           transform: "translate(-50%,-50%) rotate(-8deg)",
           padding: "3px 8px", border: "2px solid #a06810", borderRadius: 4,
-          color: "#a06810", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 12, letterSpacing: 1.5,
+          color: "#a06810", fontFamily: "Georgia, serif", fontWeight: 900, fontSize: 13.5, letterSpacing: 1.5,
           background: "rgba(160,104,16,0.08)",
           pointerEvents: "none",
           textAlign: "center", lineHeight: 1,
@@ -544,10 +544,10 @@ function SignalerOverlay({ fiches, signaled, onSignaler, onClose }) {
           background: "#141008", border: "2px solid #e0a848", borderRadius: 12,
           padding: 18, maxWidth: 640, width: "100%", maxHeight: "90vh", overflowY: "auto",
         }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#e0a848" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#e0a848" }}>
           ⚠ POINTER LA FICHE DOUTEUSE
         </div>
-        <p style={{ margin: "6px 0 12px", fontSize: 13, color: "#c8b090", fontStyle: "italic" }}>
+        <p style={{ margin: "6px 0 12px", fontSize: 14.5, color: "#c8b090", fontStyle: "italic" }}>
           Clique sur la fiche que tu penses être fausse. Jorge en jugera.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
@@ -565,18 +565,18 @@ function SignalerOverlay({ fiches, signaled, onSignaler, onClose }) {
                   borderRadius: 8, padding: "10px 12px", cursor: seen ? "default" : "pointer",
                   fontFamily: "inherit", opacity: seen ? 0.7 : 1,
                 }}>
-                <div style={{ fontFamily: "Georgia, serif", fontSize: 12, fontWeight: 700 }}>
+                <div style={{ fontFamily: "Georgia, serif", fontSize: 13.5, fontWeight: 700 }}>
                   {good ? "⚠ " : bad ? "✗ " : ""}{f.sujet}
                 </div>
-                <div style={{ fontSize: 11, color: "#e0a848", marginTop: 2 }}>{f.dateFiche}</div>
-                <div style={{ fontSize: 10, color: "#8a7050", marginTop: 1 }}>{f.lieuFiche} · {f.qui}</div>
+                <div style={{ fontSize: 12, color: "#e0a848", marginTop: 2 }}>{f.dateFiche}</div>
+                <div style={{ fontSize: 11.5, color: "#8a7050", marginTop: 1 }}>{f.lieuFiche} · {f.qui}</div>
               </button>
             );
           })}
         </div>
         <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
           <button onClick={onClose}
-            style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+            style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 8, padding: "8px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer" }}>
             Annuler
           </button>
         </div>

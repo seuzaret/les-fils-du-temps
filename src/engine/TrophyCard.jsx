@@ -126,10 +126,10 @@ export default function TrophyCard({ fluxTotal, totalTarget, bonusChapters = [],
 
         {/* En-tête */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 6px 8px' }}>
-          <div style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.1, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
+          <div style={{ fontWeight: 800, fontSize: 16, lineHeight: 1.1, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
             <span style={{ fontSize: 18, marginRight: 4 }}>{niv.emoji}</span> {niv.name}
           </div>
-          <div style={{ fontSize: 11, fontFamily: 'ui-monospace,monospace', color: niv.color, fontWeight: 700 }}>TROPHÉE</div>
+          <div style={{ fontSize: 12, fontFamily: 'ui-monospace,monospace', color: niv.color, fontWeight: 700 }}>TROPHÉE</div>
         </div>
 
         {/* Portrait de MARTINE décoré */}
@@ -140,7 +140,7 @@ export default function TrophyCard({ fluxTotal, totalTarget, bonusChapters = [],
           <MartineTrophy niv={niv} animated={animated} />
           <div style={{
             position: 'absolute', bottom: 6, right: 6,
-            background: niv.color, color: '#1a0e04', fontSize: 10, fontWeight: 800,
+            background: niv.color, color: '#1a0e04', fontSize: 11.5, fontWeight: 800,
             padding: '2px 8px', borderRadius: 10, letterSpacing: 1,
             fontFamily: 'ui-monospace, monospace',
           }}>
@@ -150,9 +150,9 @@ export default function TrophyCard({ fluxTotal, totalTarget, bonusChapters = [],
 
         {/* Barre de score + jalons */}
         <div style={{ padding: '10px 6px 4px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5, marginBottom: 4 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 12.5, marginBottom: 4 }}>
             <span style={{ color: niv.color, fontWeight: 700 }}>⚡ SCORE</span>
-            <span style={{ fontFamily: 'ui-monospace,monospace', fontSize: 11 }}>{fluxTotal} / {totalTarget} ({pct}%)</span>
+            <span style={{ fontFamily: 'ui-monospace,monospace', fontSize: 12 }}>{fluxTotal} / {totalTarget} ({pct}%)</span>
           </div>
           <div style={{ height: 12, background: 'rgba(0,0,0,0.4)', border: `1px solid ${niv.color}66`, borderRadius: 3, overflow: 'hidden', position: 'relative' }}>
             <div style={{ width: `${Math.min(100, pct / 3)}%`, height: '100%', background: niv.color, transition: 'width .6s ease-out' }} />
@@ -167,13 +167,13 @@ export default function TrophyCard({ fluxTotal, totalTarget, bonusChapters = [],
         <div style={{
           margin: '8px 6px 4px', padding: '8px 10px',
           background: 'rgba(0,0,0,0.35)', borderRadius: 6,
-          fontSize: 11.5, fontStyle: 'italic', lineHeight: 1.45, color: '#e8dfc8',
+          fontSize: 12.5, fontStyle: 'italic', lineHeight: 1.45, color: '#e8dfc8',
         }}>
           « {niv.desc} »
         </div>
 
         {/* Prochain palier + bonus chapitres */}
-        <div style={{ padding: '4px 6px', fontSize: 11, color: '#c8c0a8', lineHeight: 1.6 }}>
+        <div style={{ padding: '4px 6px', fontSize: 12, color: '#c8c0a8', lineHeight: 1.6 }}>
           {nextName && (
             <div>➜ Prochain palier : <b style={{ color: nivFromPct(nextThreshold).color }}>{nextName}</b> dans {nextFlux}⚡</div>
           )}
@@ -225,7 +225,7 @@ export function TrophyTile({ fluxTotal, totalTarget, onClick }) {
         )}
       </div>
       <div style={{
-        marginTop: 6, fontSize: 12, fontWeight: 700,
+        marginTop: 6, fontSize: 13.5, fontWeight: 700,
         color: played ? niv.color : '#5a4028', lineHeight: 1.25,
       }}>
         {played ? niv.name : '???'}

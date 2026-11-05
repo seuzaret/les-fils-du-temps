@@ -193,12 +193,12 @@ function Decor({ ouverte, onRayon, onAffiche, onReserve }) {
 /* ───────────────────────── Panneaux ───────────────────────── */
 const fond = { position: "fixed", inset: 0, zIndex: 220, background: "rgba(4,8,14,0.9)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, fontFamily: SERIF };
 const carte = (bord) => ({ background: "#0e1420", border: `1px solid ${bord}`, borderRadius: 14, padding: "16px 16px 18px", maxWidth: 720, width: "100%", maxHeight: "calc(100dvh - 32px)", overflowY: "auto", boxShadow: "0 10px 40px rgba(0,0,0,0.6)" });
-const fermer = { background: "transparent", border: "1px solid #3a4a64", color: "#c8d4e2", borderRadius: 8, padding: "4px 10px", cursor: "pointer", fontSize: 13 };
+const fermer = { background: "transparent", border: "1px solid #3a4a64", color: "#c8d4e2", borderRadius: 8, padding: "4px 10px", cursor: "pointer", fontSize: 14.5 };
 
 function Entete({ titre, couleur, onClose }) {
   return (
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 10 }}>
-      <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: 2, color: couleur, fontWeight: 800 }}>{titre}</div>
+      <div style={{ fontFamily: MONO, fontSize: 13.5, letterSpacing: 2, color: couleur, fontWeight: 800 }}>{titre}</div>
       <button onClick={onClose} style={fermer} aria-label="Fermer">✕</button>
     </div>
   );
@@ -211,7 +211,7 @@ function Dos({ livre, classe, onClick, vide }) {
     return (
       <button onClick={onClick} data-cote={coteDe(livre)} data-vide="1" title="Place vide"
         style={{ width: 62, height: 176, flex: "0 0 auto", border: "2px dashed #5a4a34", borderRadius: 4, background: "#0a0806", color: "#c8a848", cursor: "pointer", padding: 4, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-end", gap: 6 }}>
-        <span style={{ fontSize: 9, fontFamily: MONO, lineHeight: 1.3, color: "#8a7a5a", writingMode: "vertical-rl", transform: "rotate(180deg)", flex: 1 }}>place vide</span>
+        <span style={{ fontSize: 11, fontFamily: MONO, lineHeight: 1.3, color: "#8a7a5a", writingMode: "vertical-rl", transform: "rotate(180deg)", flex: 1 }}>place vide</span>
         <span style={{ background: "#efe6cf", color: "#a02a1a", fontFamily: MONO, fontSize: 8, fontWeight: 800, padding: "2px 3px", borderRadius: 2, lineHeight: 1.3 }}>RETIRÉ</span>
       </button>
     );
@@ -219,8 +219,8 @@ function Dos({ livre, classe, onClick, vide }) {
   return (
     <button onClick={onClick} data-cote={coteDe(livre)} title={livre.titre}
       style={{ width: 62, height: 176, flex: "0 0 auto", border: "1px solid #0a0604", borderRadius: "3px 3px 2px 2px", background: `linear-gradient(90deg, ${teinte(c, 0.3)} 0%, ${teinte(c, 0.9)} 45%, ${teinte(c, 0.5)} 100%)`, color: "#f4ecd8", cursor: "pointer", padding: "8px 4px 6px", display: "flex", flexDirection: "column", alignItems: "center", gap: 6, boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)" }}>
-      <span style={{ flex: 1, writingMode: "vertical-rl", transform: "rotate(180deg)", fontFamily: SERIF, fontSize: 12, lineHeight: 1.1, overflow: "hidden", textShadow: "0 1px 1px rgba(0,0,0,0.6)" }}>{livre.titre}</span>
-      <span style={{ background: "#f4f0e4", color: "#1a1206", fontFamily: MONO, fontSize: 11, fontWeight: 800, padding: "2px 3px", borderRadius: 2, lineHeight: 1.25, minWidth: 48, textAlign: "center" }}>
+      <span style={{ flex: 1, writingMode: "vertical-rl", transform: "rotate(180deg)", fontFamily: SERIF, fontSize: 13.5, lineHeight: 1.1, overflow: "hidden", textShadow: "0 1px 1px rgba(0,0,0,0.6)" }}>{livre.titre}</span>
+      <span style={{ background: "#f4f0e4", color: "#1a1206", fontFamily: MONO, fontSize: 12, fontWeight: 800, padding: "2px 3px", borderRadius: 2, lineHeight: 1.25, minWidth: 48, textAlign: "center" }}>
         {livre.indice}<br />{livre.lettres}
       </span>
     </button>
@@ -234,7 +234,7 @@ function Rayon({ classeId, reserve, onLivre, onVide, onClose }) {
     <div onClick={onClose} style={fond}>
       <div onClick={(e) => e.stopPropagation()} style={carte(reserve ? "#c83a2a" : classe.couleur)}>
         <Entete titre={reserve ? "🔓 LA RÉSERVE" : `RAYON ${classe.id} · ${classe.nom.toUpperCase()}`} couleur={reserve ? "#ff8a7a" : classe.couleur} onClose={onClose} />
-        <p style={{ margin: "0 0 12px", fontSize: 13, color: "#8fa3bd", fontStyle: "italic" }}>
+        <p style={{ margin: "0 0 12px", fontSize: 14.5, color: "#8fa3bd", fontStyle: "italic" }}>
           {reserve
             ? `Une petite pièce sans fenêtre, une étagère en métal. Les livres que MARTINE a fait retirer des rayons le ${DATE_RETRAIT}, le jour où le Puits a été scellé. Jorge ne les a jamais détruits.`
             : `${classe.exemples[0].toUpperCase()}${classe.exemples.slice(1)}. Les livres sont rangés par cote, de gauche à droite.`}
@@ -263,14 +263,14 @@ function Livre({ livre, reserve, flags, onCaillou, onClose }) {
         <Entete titre={`📖 ${coteDe(livre)}`} couleur={c} onClose={onClose} />
         <div style={{ display: "flex", gap: 14, alignItems: "stretch" }}>
           <div style={{ flex: "0 0 92px", minHeight: 128, background: `linear-gradient(135deg, ${teinte(c, 0.95)}, ${teinte(c, 0.35)})`, borderRadius: "2px 6px 6px 2px", boxShadow: "inset 6px 0 0 rgba(0,0,0,0.25)", position: "relative" }}>
-            <span style={{ position: "absolute", left: 8, right: 8, bottom: 8, background: "#f4f0e4", color: "#1a1206", fontFamily: MONO, fontSize: 11, fontWeight: 800, textAlign: "center", borderRadius: 2, lineHeight: 1.25, padding: "2px 0" }}>{livre.indice}<br />{livre.lettres}</span>
+            <span style={{ position: "absolute", left: 8, right: 8, bottom: 8, background: "#f4f0e4", color: "#1a1206", fontFamily: MONO, fontSize: 12, fontWeight: 800, textAlign: "center", borderRadius: 2, lineHeight: 1.25, padding: "2px 0" }}>{livre.indice}<br />{livre.lettres}</span>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 19, fontWeight: 700, color: "#f4ecd8", lineHeight: 1.25 }}>{livre.titre}</div>
-            <div style={{ fontSize: 14, color: "#c8d4e2", margin: "4px 0 8px", fontStyle: "italic" }}>{livre.auteur}</div>
-            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: "#e8eef5" }}>{livre.resume}</p>
+            <div style={{ fontSize: 15.5, color: "#c8d4e2", margin: "4px 0 8px", fontStyle: "italic" }}>{livre.auteur}</div>
+            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.5, color: "#e8eef5" }}>{livre.resume}</p>
             {reserve && (
-              <div style={{ display: "inline-block", marginTop: 10, transform: "rotate(-4deg)", border: "3px solid #c83a2a", color: "#e85a4a", fontFamily: MONO, fontWeight: 800, fontSize: 11, letterSpacing: 1, padding: "3px 8px", borderRadius: 4 }}>
+              <div style={{ display: "inline-block", marginTop: 10, transform: "rotate(-4deg)", border: "3px solid #c83a2a", color: "#e85a4a", fontFamily: MONO, fontWeight: 800, fontSize: 12, letterSpacing: 1, padding: "3px 8px", borderRadius: 4 }}>
                 RETIRÉ · {DATE_RETRAIT.toUpperCase()} · M.
               </div>
             )}
@@ -279,19 +279,19 @@ function Livre({ livre, reserve, flags, onCaillou, onClose }) {
         <div style={{ marginTop: 14, borderTop: "1px dashed #3a4a64", paddingTop: 12 }}>
           {!feuillete ? (
             <button onClick={() => setFeuillete(true)} autoFocus
-              style={{ background: "#c8a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "9px 18px", fontWeight: 800, fontSize: 13, fontFamily: MONO, cursor: "pointer" }}>
+              style={{ background: "#c8a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "9px 18px", fontWeight: 800, fontSize: 14.5, fontFamily: MONO, cursor: "pointer" }}>
               📖 Feuilleter
             </button>
           ) : caillou ? (
             <div>
-              <p style={{ margin: "0 0 10px", fontSize: 14, color: "#ffd166", fontStyle: "italic" }}>Entre deux pages, quelque chose dépasse : un papier plié.</p>
+              <p style={{ margin: "0 0 10px", fontSize: 15.5, color: "#ffd166", fontStyle: "italic" }}>Entre deux pages, quelque chose dépasse : un papier plié.</p>
               <button onClick={() => onCaillou(caillou)} autoFocus
-                style={{ background: "#ffd166", color: "#1a1206", border: "none", borderRadius: 10, padding: "9px 18px", fontWeight: 800, fontSize: 13, fontFamily: MONO, cursor: "pointer" }}>
+                style={{ background: "#ffd166", color: "#1a1206", border: "none", borderRadius: 10, padding: "9px 18px", fontWeight: 800, fontSize: 14.5, fontFamily: MONO, cursor: "pointer" }}>
                 📄 Déplier le papier
               </button>
             </div>
           ) : (
-            <p style={{ margin: 0, fontSize: 14, color: "#8fa3bd", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 15.5, color: "#8fa3bd", fontStyle: "italic" }}>
               {livre.aide || (indiceSerres
                 ? "Rien entre les pages. Mais la photo de la couverture te dit quelque chose : des tours de plantes sous des lampes roses, comme dans les serres du niveau −2."
                 : "Tu feuillettes. Rien entre les pages.")}
@@ -311,24 +311,24 @@ function Affiche({ onClose }) {
     <div onClick={onClose} style={fond}>
       <div onClick={(e) => e.stopPropagation()} style={{ ...carte("#c8a848"), background: "#efe6cf", color: "#2a1a0a" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10, marginBottom: 6 }}>
-          <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: 2, fontWeight: 800 }}>📜 LES RAYONS DE LA BIBLIOTHÈQUE</div>
+          <div style={{ fontFamily: MONO, fontSize: 13.5, letterSpacing: 2, fontWeight: 800 }}>📜 LES RAYONS DE LA BIBLIOTHÈQUE</div>
           <button onClick={onClose} style={{ ...fermer, color: "#2a1a0a", border: "1px solid #8a7a5a" }} aria-label="Fermer">✕</button>
         </div>
-        <p style={{ margin: "0 0 12px", fontSize: 13, fontStyle: "italic", color: "#5a4028" }}>
+        <p style={{ margin: "0 0 12px", fontSize: 14.5, fontStyle: "italic", color: "#5a4028" }}>
           Classification de Melvil Dewey (1876). La <b>cote</b> collée sur le dos d'un livre est son adresse : le premier chiffre donne le rayon, les suivants précisent le sujet, les trois lettres viennent du nom de l'auteur.
         </p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 6, marginBottom: 14 }}>
           {CLASSES.map((c) => (
             <div key={c.id} style={{ display: "flex", gap: 8, alignItems: "flex-start", background: "#f7f1e0", borderRadius: 6, padding: "6px 8px" }}>
-              <span style={{ flex: "0 0 auto", background: c.couleur, color: "#0a0604", fontFamily: MONO, fontWeight: 800, fontSize: 12, padding: "2px 6px", borderRadius: 3 }}>{c.id}</span>
-              <span style={{ fontSize: 13, lineHeight: 1.35 }}><b>{c.nom}</b><br /><span style={{ color: "#5a4028" }}>{c.exemples}</span></span>
+              <span style={{ flex: "0 0 auto", background: c.couleur, color: "#0a0604", fontFamily: MONO, fontWeight: 800, fontSize: 13.5, padding: "2px 6px", borderRadius: 3 }}>{c.id}</span>
+              <span style={{ fontSize: 14.5, lineHeight: 1.35 }}><b>{c.nom}</b><br /><span style={{ color: "#5a4028" }}>{c.exemples}</span></span>
             </div>
           ))}
         </div>
-        <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: 2, fontWeight: 800, margin: "4px 0 6px" }}>INDEX DES SUJETS</div>
+        <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: 2, fontWeight: 800, margin: "4px 0 6px" }}>INDEX DES SUJETS</div>
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Chercher un sujet…" aria-label="Chercher un sujet"
-          style={{ width: "100%", boxSizing: "border-box", padding: "8px 10px", borderRadius: 8, border: "1px solid #8a7a5a", background: "#fffaf0", fontSize: 14, fontFamily: SERIF, marginBottom: 8 }} />
-        <div style={{ columns: "220px 3", columnGap: 18, fontSize: 13.5, lineHeight: 1.6 }}>
+          style={{ width: "100%", boxSizing: "border-box", padding: "8px 10px", borderRadius: 8, border: "1px solid #8a7a5a", background: "#fffaf0", fontSize: 15.5, fontFamily: SERIF, marginBottom: 8 }} />
+        <div style={{ columns: "220px 3", columnGap: 18, fontSize: 15, lineHeight: 1.6 }}>
           {sujets.map(([s, cote]) => (
             <div key={s} style={{ breakInside: "avoid", display: "flex", gap: 6 }}>
               <span>{s}</span><span style={{ flex: 1, borderBottom: "1px dotted #8a7a5a", transform: "translateY(-5px)" }} /><b style={{ fontFamily: MONO }}>{cote}</b>
@@ -345,8 +345,8 @@ function Message({ texte, onClose }) {
   return (
     <div onClick={onClose} style={{ ...fond, zIndex: 260 }}>
       <div onClick={(e) => e.stopPropagation()} style={{ ...carte("#c8a848"), maxWidth: 460, textAlign: "center" }}>
-        <p style={{ margin: "0 0 14px", fontSize: 15, lineHeight: 1.55, color: "#e8eef5" }}>{texte}</p>
-        <button onClick={onClose} autoFocus style={{ background: "#c8a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "8px 18px", fontWeight: 800, fontSize: 13, fontFamily: MONO, cursor: "pointer" }}>OK</button>
+        <p style={{ margin: "0 0 14px", fontSize: 16, lineHeight: 1.55, color: "#e8eef5" }}>{texte}</p>
+        <button onClick={onClose} autoFocus style={{ background: "#c8a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "8px 18px", fontWeight: 800, fontSize: 14.5, fontFamily: MONO, cursor: "pointer" }}>OK</button>
       </div>
     </div>
   );
@@ -373,30 +373,30 @@ export default function BunkerBibliotheque({ onGo, j3 }) {
 
       <div style={{ maxWidth: 900, width: "100%" }}>
         <div style={{ background: "#0a0e14", border: "1px dashed #5a4a34", borderRadius: 10, padding: "10px 14px", textAlign: "center", marginBottom: 8 }}>
-          <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.5, fontStyle: "italic" }}>
+          <p style={{ margin: 0, fontSize: 14.5, color: "#c8d4e2", lineHeight: 1.5, fontStyle: "italic" }}>
             Des livres de papier, couverts de poussière. Personne ne vient plus ici, sauf Lior, la nuit. Chaque meuble est un rayon ; l'affiche de l'entrée dit ce qu'il contient.
           </p>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
           {CLASSES.map((c) => (
             <button key={c.id} onClick={() => setRayon(c.id)}
-              style={{ background: "#141008", color: "#f4ecd8", border: `1px solid ${c.couleur}`, borderLeft: `6px solid ${c.couleur}`, borderRadius: 8, padding: "6px 10px", cursor: "pointer", fontSize: 12, fontFamily: MONO }}>
+              style={{ background: "#141008", color: "#f4ecd8", border: `1px solid ${c.couleur}`, borderLeft: `6px solid ${c.couleur}`, borderRadius: 8, padding: "6px 10px", cursor: "pointer", fontSize: 13.5, fontFamily: MONO }}>
               {c.id} <span style={{ fontFamily: SERIF, opacity: 0.85 }}>{c.nom}</span>
             </button>
           ))}
           <button onClick={() => setAffiche(true)}
-            style={{ background: "#efe6cf", color: "#2a1a0a", border: "1px solid #8a7a5a", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 12, fontFamily: MONO, fontWeight: 700 }}>
+            style={{ background: "#efe6cf", color: "#2a1a0a", border: "1px solid #8a7a5a", borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 13.5, fontFamily: MONO, fontWeight: 700 }}>
             📜 L'affiche et l'index
           </button>
           <button onClick={ouvrirReserve}
-            style={{ background: ouverte ? "#2a1008" : "#1a1c22", color: ouverte ? "#ffb0a0" : "#8fa3bd", border: `1px solid ${ouverte ? "#c83a2a" : "#3a4a64"}`, borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 12, fontFamily: MONO, fontWeight: 700 }}>
+            style={{ background: ouverte ? "#2a1008" : "#1a1c22", color: ouverte ? "#ffb0a0" : "#8fa3bd", border: `1px solid ${ouverte ? "#c83a2a" : "#3a4a64"}`, borderRadius: 8, padding: "6px 12px", cursor: "pointer", fontSize: 13.5, fontFamily: MONO, fontWeight: 700 }}>
             {ouverte ? "🔓 La réserve" : "🔒 La réserve"}
           </button>
         </div>
       </div>
 
       <button onClick={() => onGo(j3.hubRoom || "hubHaut")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: MONO, letterSpacing: 1 }}>
+        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: MONO, letterSpacing: 1 }}>
         ← Retour au couloir
       </button>
 

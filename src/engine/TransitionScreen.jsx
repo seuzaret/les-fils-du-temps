@@ -18,18 +18,18 @@ export default function TransitionScreen({ target, transitionTo, onLand }) {
       {/* Bouton PASSER discret, coin haut droit */}
       <button onClick={() => onLand(transitionTo)}
         title="Atterrir sans regarder l'annonce"
-        style={{ position: "absolute", top: 12, right: 16, zIndex: 20, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+        style={{ position: "absolute", top: 12, right: 16, zIndex: 20, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
         passer ›
       </button>
       <div style={{ maxWidth: 520, textAlign: "center" }}>
         <div style={{ fontSize: 96, animation: "spinGrow 1.2s ease-out" }}>🌀</div>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#5eff9e", marginTop: 10 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 4, color: "#5eff9e", marginTop: 10 }}>
           SAUT TEMPOREL EN COURS
         </div>
         <h1 style={{ fontFamily: "ui-monospace,monospace", color: "#e8934a", fontSize: "clamp(26px,6vw,40px)", letterSpacing: 2, margin: "10px 0 2px" }}>
           {target.epoque}
         </h1>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 15, color: "#8fa3bd" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, color: "#8fa3bd" }}>
           {target.emoji} Chapitre {transitionTo + 1} · {target.date}
         </div>
         <p style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, color: "#c8ffdd", lineHeight: 1.6, marginTop: 22, textShadow: "0 0 6px rgba(94,255,158,0.3)" }}>
@@ -38,7 +38,7 @@ export default function TransitionScreen({ target, transitionTo, onLand }) {
         <button onClick={() => onLand(transitionTo)}
           style={{
             marginTop: 24, background: "#5eff9e", color: "#06110b", border: "none",
-            borderRadius: 12, padding: "13px 30px", fontSize: 15, fontWeight: 800,
+            borderRadius: 12, padding: "13px 30px", fontSize: 16, fontWeight: 800,
             cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2,
             boxShadow: "0 0 24px rgba(94,255,158,0.4)",
           }}>

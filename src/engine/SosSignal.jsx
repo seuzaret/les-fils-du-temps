@@ -127,7 +127,7 @@ export function SosOverlay({ muted, onDone, gain = 1 }) {
       color: '#fff', fontFamily: '"Segoe UI", system-ui, sans-serif',
       animation: 'sosFadeIn 0.35s ease-out',
     }}>
-      <div style={{ fontSize: 12, letterSpacing: 4, color: '#ffd166', textTransform: 'uppercase', marginBottom: 10 }}>
+      <div style={{ fontSize: 13.5, letterSpacing: 4, color: '#ffd166', textTransform: 'uppercase', marginBottom: 10 }}>
         Le SOS se cache dans le message…
       </div>
       <div style={{ fontSize: 30, fontWeight: 700, letterSpacing: 3, color: '#f8efdd', marginBottom: 32 }}>
@@ -157,7 +157,7 @@ export function SosOverlay({ muted, onDone, gain = 1 }) {
           boxShadow: '0 0 24px rgba(255,209,102,0.25)',
         }}>
           <div style={{
-            fontFamily: 'ui-monospace,monospace', fontSize: 9, letterSpacing: 1.5,
+            fontFamily: 'ui-monospace,monospace', fontSize: 11, letterSpacing: 1.5,
             color: '#ffd166', textAlign: 'center', lineHeight: 1.35,
           }}>⚡ FLUX<br />TEMPOREL</div>
           <div style={{
@@ -182,7 +182,7 @@ export function SosOverlay({ muted, onDone, gain = 1 }) {
             ))}
           </div>
           <div style={{
-            fontFamily: 'ui-monospace,monospace', fontSize: 12, fontWeight: 700,
+            fontFamily: 'ui-monospace,monospace', fontSize: 13.5, fontWeight: 700,
             color: flux >= 100 ? '#ffd166' : '#8fa3bd',
             textShadow: flux >= 100 ? '0 0 8px rgba(255,209,102,0.7)' : 'none',
           }}>{flux}%</div>
@@ -211,7 +211,7 @@ export function SosOverlay({ muted, onDone, gain = 1 }) {
           <div style={{ fontSize: 22, color: '#7fe0a8', fontWeight: 700, marginBottom: 8 }}>
             ✓ SOS caché. Rendez-vous en 2045.
           </div>
-          <div style={{ fontSize: 13, color: '#c8b090' }}>
+          <div style={{ fontSize: 14.5, color: '#c8b090' }}>
             +{gain} flux temporel · un bond de plus vers les chronautes
           </div>
         </div>

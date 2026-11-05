@@ -110,12 +110,12 @@ export function TailleSilexGame({ onClose, onWin, onFail }) {
       style={{ position: 'fixed', inset: 0, background: 'rgba(4,8,4,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, zIndex: 70, backdropFilter: 'blur(3px)' }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: '#1a140a', border: '2px solid #8a5828', borderRadius: 16, padding: 20, maxWidth: 520, width: '100%', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 12px 48px rgba(0,0,0,0.7)', color: '#efe6d2', fontFamily: 'Palatino, Georgia, serif' }}>
-        <div style={{ textAlign: 'center', fontFamily: 'ui-monospace,monospace', fontSize: 11, letterSpacing: 2, color: '#e0a848' }}>🪨 ATELIER DE SILEX · −18 000</div>
+        <div style={{ textAlign: 'center', fontFamily: 'ui-monospace,monospace', fontSize: 12, letterSpacing: 2, color: '#e0a848' }}>🪨 ATELIER DE SILEX · −18 000</div>
         <h2 style={{ textAlign: 'center', margin: '6px 0 4px', color: '#ffd166', fontSize: 21 }}>Tailler un silex</h2>
 
         {phase === 'play' && (
           <>
-            <p style={{ textAlign: 'center', fontSize: 13, color: '#d8c9a8', margin: '0 0 12px' }}>
+            <p style={{ textAlign: 'center', fontSize: 14.5, color: '#d8c9a8', margin: '0 0 12px' }}>
               Frappe le silex QUAND le percuteur est PILE au-dessus (le repère devient vert). {GOAL} bonnes frappes en {MAX_TRIES} essais.
             </p>
 
@@ -152,7 +152,7 @@ export function TailleSilexGame({ onClose, onWin, onFail }) {
             </svg>
 
             {/* score + tries */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'ui-monospace,monospace', fontSize: 12, marginBottom: 10 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'ui-monospace,monospace', fontSize: 13.5, marginBottom: 10 }}>
               <span style={{ color: '#7fe0a8' }}>✓ {good} / {GOAL}</span>
               <span style={{ color: tries >= MAX_TRIES - 2 ? '#ff5030' : '#c8b090' }}>essais : {tries} / {MAX_TRIES}</span>
             </div>
@@ -163,7 +163,7 @@ export function TailleSilexGame({ onClose, onWin, onFail }) {
             </button>
 
             {failed && (
-              <div style={{ marginTop: 10, textAlign: 'center', background: '#2a0e10', border: '1px solid #ff5030', borderRadius: 8, padding: '10px 14px', color: '#ffb0a0', fontSize: 13.5, lineHeight: 1.5 }}>
+              <div style={{ marginTop: 10, textAlign: 'center', background: '#2a0e10', border: '1px solid #ff5030', borderRadius: 8, padding: '10px 14px', color: '#ffb0a0', fontSize: 15, lineHeight: 1.5 }}>
                 <b>Craac !</b> Le silex a cassé en miettes. Ce sont des choses qui arrivent — les tailleurs préhistoriques ratent aussi (les archéologues retrouvent bien plus d'éclats ratés que d'outils réussis !).
                 <div style={{ marginTop: 6, opacity: 0.85 }}>Va ramasser un autre silex brut et réessaie.</div>
                 <button onClick={onClose}
@@ -179,15 +179,15 @@ export function TailleSilexGame({ onClose, onWin, onFail }) {
           <div style={{ marginTop: 4 }}>
             <div style={{ background: '#0e2010', border: '2px solid #7fe0a8', borderRadius: 12, padding: '16px 18px', textAlign: 'center' }}>
               <div style={{ fontSize: 34 }}>🔪</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#7fe0a8', margin: '6px 0' }}>Silex taillé net !</div>
+              <div style={{ fontSize: 15.5, fontWeight: 800, color: '#7fe0a8', margin: '6px 0' }}>Silex taillé net !</div>
             </div>
             <div style={{ background: '#0e1420', border: '1px solid #2a3648', borderRadius: 12, padding: '14px 16px', marginTop: 10 }}>
-              <p style={{ fontSize: 14.5, lineHeight: 1.65, color: '#e8eef5', margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: '#e8eef5', margin: 0 }}>
                 « Bien vu ! Ough vient de te transmettre un savoir-faire vieux de plus de 2 millions d'années — la TAILLE DE PIERRE. Chaque coup de percuteur détache un éclat au bord tranchant comme un rasoir. Sans écriture, cette technique se transmet DE LA MAIN À LA MAIN, du maître à l'élève, par observation et répétition. C'est déjà une forme de communication : un message que le geste imprime dans les doigts. » — MARTINE
               </p>
             </div>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: '100%', background: '#e0a848', color: '#1a1206', border: 'none', borderRadius: 10, padding: '12px', fontWeight: 800, cursor: 'pointer', fontSize: 15, fontFamily: 'ui-monospace,monospace', letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: '100%', background: '#e0a848', color: '#1a1206', border: 'none', borderRadius: 10, padding: '12px', fontWeight: 800, cursor: 'pointer', fontSize: 16, fontFamily: 'ui-monospace,monospace', letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

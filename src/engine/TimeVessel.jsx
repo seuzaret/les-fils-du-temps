@@ -87,7 +87,7 @@ function MaterializePhase({ onEnter }) {
       {ready && (
         <div style={{
           position: "absolute", left: "50%", top: "12%", transform: "translateX(-50%)",
-          fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2,
+          fontFamily: "ui-monospace,monospace", fontSize: 14.5, letterSpacing: 2,
           color: "#5eff9e", background: "rgba(4,8,14,0.7)",
           padding: "8px 16px", borderRadius: 8,
           border: "1px solid rgba(94,255,158,0.4)",
@@ -352,7 +352,7 @@ function CockpitPhase({ onGo, onCancel, backdropScene }) {
           pointerEvents: "none",
         }}>
           <div style={{
-            fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4,
+            fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4,
             color: "#ffd166", textShadow: "0 0 10px rgba(255,209,102,0.7)",
             background: "rgba(4,8,14,0.55)", padding: "5px 14px", borderRadius: 4,
             border: "1px solid rgba(255,209,102,0.4)",
@@ -361,7 +361,7 @@ function CockpitPhase({ onGo, onCancel, backdropScene }) {
           </div>
           <p style={{
             margin: "6px 20px 0", maxWidth: 640, textAlign: "center",
-            color: "#e8eef5", fontSize: 14, lineHeight: 1.45,
+            color: "#e8eef5", fontSize: 15.5, lineHeight: 1.45,
             fontFamily: "Palatino, Georgia, serif",
             background: "rgba(4,8,14,0.55)", padding: "8px 14px", borderRadius: 8,
           }}>
@@ -388,7 +388,7 @@ function CockpitPhase({ onGo, onCancel, backdropScene }) {
             position: "absolute", right: 14, bottom: 8,
             background: "rgba(0,0,0,0.45)", color: "#8fa3bd",
             border: "1px solid #2a3542",
-            borderRadius: 6, padding: "5px 10px", fontSize: 11,
+            borderRadius: 6, padding: "5px 10px", fontSize: 12,
             cursor: "pointer", fontFamily: "ui-monospace,monospace",
           }}>← retour</button>
 
@@ -461,7 +461,7 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
           temporel et déclenche onDone (arrivée au chapitre suivant). */}
       <button onClick={() => onDone?.()}
         title="Sauter le jeu temporel"
-        style={{ position: "absolute", top: 12, right: 16, zIndex: 20, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+        style={{ position: "absolute", top: 12, right: 16, zIndex: 20, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
         passer ›
       </button>
 
@@ -494,7 +494,7 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
               boxShadow: "0 0 30px rgba(94,255,158,0.35)",
               textAlign: "center",
             }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e", marginBottom: 8 }}>▶ MARTINE</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 3, color: "#5eff9e", marginBottom: 8 }}>▶ MARTINE</div>
               <p style={{ margin: 0, fontSize: 18, lineHeight: 1.55 }}>
                 « Ce message va traverser le temps, et son courant m'a rechargée.
                 {" "}On peut faire le <strong style={{ color: "#5eff9e" }}>bond suivant</strong>. »
@@ -503,7 +503,7 @@ export function TimeVessel({ nextLabel, nextSub, onDone, onCancel, backdrop: bac
                 autoFocus
                 style={{
                   marginTop: 14, background: "#5eff9e", color: "#06110b", border: "none",
-                  borderRadius: 12, padding: "12px 34px", fontSize: 15, fontWeight: 800,
+                  borderRadius: 12, padding: "12px 34px", fontSize: 16, fontWeight: 800,
                   cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 3,
                   boxShadow: "0 0 18px rgba(94,255,158,0.45)",
                 }}>▶ CONTINUER</button>

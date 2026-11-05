@@ -42,10 +42,10 @@ export default function EndScreen({
           <div style={{ background: "#0e1420", border: `2px solid ${badge.color}`, borderRadius: 16, padding: "16px 20px", marginTop: 16, boxShadow: `0 0 24px ${badge.color}55` }}>
             <div style={{ fontSize: 42, lineHeight: 1 }}>{badge.emoji}</div>
             <div style={{ fontFamily: "ui-monospace,monospace", color: badge.color, fontSize: 20, fontWeight: 800, letterSpacing: 1.5, marginTop: 6 }}>{badge.name.toUpperCase()}</div>
-            <div style={{ fontFamily: "ui-monospace,monospace", color: badge.color, fontSize: 13, opacity: 0.85, marginTop: 2 }}>⚡ {fluxTotal} flux · {scorePct}% du voyage</div>
-            <p style={{ fontSize: 13.5, color: "#c8d4e2", lineHeight: 1.6, margin: "8px 0 0", fontStyle: "italic" }}>{badge.desc}</p>
+            <div style={{ fontFamily: "ui-monospace,monospace", color: badge.color, fontSize: 14.5, opacity: 0.85, marginTop: 2 }}>⚡ {fluxTotal} flux · {scorePct}% du voyage</div>
+            <p style={{ fontSize: 15, color: "#c8d4e2", lineHeight: 1.6, margin: "8px 0 0", fontStyle: "italic" }}>{badge.desc}</p>
             {bonusChapters.length > 0 && (
-              <p style={{ fontSize: 12, color: "#ffd166", marginTop: 8, fontFamily: "ui-monospace,monospace" }}>
+              <p style={{ fontSize: 13.5, color: "#ffd166", marginTop: 8, fontFamily: "ui-monospace,monospace" }}>
                 ✨ Cartes bonus débloquées ({bonusChapters.length}) : {bonusChapters.map((i) => chapters[i]?.epoque).join(" · ")}
               </p>
             )}
@@ -56,7 +56,7 @@ export default function EndScreen({
         <div style={{ textAlign: "left", background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "10px 14px" }}>
           <Frise collection={collection} />
           {trendSentence(collection) && (
-            <p style={{ fontSize: 13.5, fontStyle: "italic", color: "#ffd166", lineHeight: 1.6, margin: "4px 0 2px" }}>
+            <p style={{ fontSize: 15, fontStyle: "italic", color: "#ffd166", lineHeight: 1.6, margin: "4px 0 2px" }}>
               📈 « {trendSentence(collection)} » — MARTINE
             </p>
           )}
@@ -66,18 +66,18 @@ export default function EndScreen({
         {isLastChapter && (
           <div style={{ border: "2px dashed #7fd8ff", borderRadius: 12, padding: "18px 20px", marginTop: 16, background: "radial-gradient(ellipse at 50% 50%, rgba(127,216,255,0.08), transparent)", textAlign: "center" }}>
             <div style={{ fontSize: 38, marginBottom: 8 }}>🌀</div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", marginBottom: 6 }}>MISSION EN ATTENTE</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#7fd8ff", marginBottom: 6 }}>MISSION EN ATTENTE</div>
             <div style={{ fontFamily: TITRE_FONT, fontSize: 26, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.09em", background: "linear-gradient(100deg, #7fd8ff 0%, #ffd166 60%)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", lineHeight: 1.15 }}>
               Retrouver Al3x1a
             </div>
-            <p style={{ fontSize: 13.5, lineHeight: 1.6, color: "#c8d4e2", margin: "10px auto 14px", maxWidth: 460, fontStyle: "italic" }}>
+            <p style={{ fontSize: 15, lineHeight: 1.6, color: "#c8d4e2", margin: "10px auto 14px", maxWidth: 460, fontStyle: "italic" }}>
               La pionnière est bloquée quelque part dans les époques que tu viens de traverser. Grâce au TEMPOSCOPE que MARTINE t'a remis, tu peux voyager librement et recouper les indices pour la retrouver.
             </p>
             <button onClick={onStartJeu2}
-              style={{ background: "#7fd8ff", color: "#06110b", border: "none", borderRadius: 12, padding: "12px 26px", fontSize: 15, fontWeight: 900, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 22px rgba(127,216,255,0.55)" }}>
+              style={{ background: "#7fd8ff", color: "#06110b", border: "none", borderRadius: 12, padding: "12px 26px", fontSize: 16, fontWeight: 900, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2, boxShadow: "0 0 22px rgba(127,216,255,0.55)" }}>
               ▶ PARTIR MAINTENANT
             </button>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#7a879e", marginTop: 8 }}>ou reviens plus tard depuis le menu titre</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#7a879e", marginTop: 8 }}>ou reviens plus tard depuis le menu titre</div>
           </div>
         )}
 
@@ -88,7 +88,7 @@ export default function EndScreen({
               msgs.includes(id) ? (
                 <div key={id} style={{ background: "#101827", border: "1px solid #2a3648", borderRadius: 12, padding: "10px 14px", marginBottom: 8 }}>
                   <strong>{chapter.messages[id].emoji} {chapter.messages[id].title}</strong>
-                  <p style={{ fontSize: 13, color: "#b8c4d4", margin: "4px 0 0", lineHeight: 1.5 }}>{chapter.messages[id].fact}</p>
+                  <p style={{ fontSize: 14.5, color: "#b8c4d4", margin: "4px 0 0", lineHeight: 1.5 }}>{chapter.messages[id].fact}</p>
                 </div>
               ) : (
                 <div key={id} style={{ background: "#0d1320", border: "1px dashed #2a3648", borderRadius: 12, padding: "10px 14px", marginBottom: 8, color: "#7a879e" }}>
@@ -100,7 +100,7 @@ export default function EndScreen({
         )}
 
         <button onClick={onRestart}
-          style={{ margin: "18px 0 40px", background: "transparent", color: "#5eff9e", border: "2px solid #5eff9e", borderRadius: 12, padding: "12px 26px", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "ui-monospace,monospace" }}>
+          style={{ margin: "18px 0 40px", background: "transparent", color: "#5eff9e", border: "2px solid #5eff9e", borderRadius: 12, padding: "12px 26px", fontSize: 15.5, fontWeight: 700, cursor: "pointer", fontFamily: "ui-monospace,monospace" }}>
           ↺ REJOUER LE CHAPITRE
         </button>
       </div>

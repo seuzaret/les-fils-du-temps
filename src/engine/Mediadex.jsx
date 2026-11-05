@@ -53,7 +53,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
           <h1 style={{ margin: 0, fontSize: 22, color: '#ffd166', letterSpacing: 2 }}>
             🃏 MEDIADEX
           </h1>
-          <div style={{ fontSize: 12, color: '#c8963e', marginTop: 2 }}>
+          <div style={{ fontSize: 13.5, color: '#c8963e', marginTop: 2 }}>
             {totalUnlocked} / {cards.length} médias trouvés
           </div>
         </div>
@@ -61,14 +61,14 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
           style={{
             background: '#3a2010', color: '#ffd166', border: '1px solid #c8963e',
             padding: '8px 20px', borderRadius: 8, cursor: 'pointer',
-            fontSize: 14, fontFamily: 'inherit',
+            fontSize: 15.5, fontFamily: 'inherit',
           }}>
           Fermer ✕
         </button>
       </div>
 
       <div style={{ padding: '20px 24px 60px' }}>
-        <p style={{ maxWidth: 720, fontSize: 13, lineHeight: 1.6, color: '#c8b090' }}>
+        <p style={{ maxWidth: 720, fontSize: 14.5, lineHeight: 1.6, color: '#c8b090' }}>
           Chaque invention de communication transmise à MARTINE t'a offert une carte.
           Trouve-les toutes pour compléter ton Mediadex. Clique une carte connue pour la revoir.
         </p>
@@ -77,7 +77,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
             joué. Évolue avec le score cumulé du voyage (fluxTotal). */}
         <section style={{ margin: '28px 0 0' }}>
           <h2 style={{
-            color: '#ffd166', fontSize: 15, letterSpacing: 2, fontFamily: 'ui-monospace, monospace',
+            color: '#ffd166', fontSize: 16, letterSpacing: 2, fontFamily: 'ui-monospace, monospace',
             borderBottom: '1px solid #5a4028', paddingBottom: 4,
           }}>
             TROPHÉE
@@ -94,7 +94,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
         {Object.keys(byChapter).sort((a, b) => a - b).map((chap) => (
           <section key={chap} style={{ margin: '28px 0 0' }}>
             <h2 style={{
-              color: '#e0a848', fontSize: 15, letterSpacing: 2, fontFamily: 'ui-monospace, monospace',
+              color: '#e0a848', fontSize: 16, letterSpacing: 2, fontFamily: 'ui-monospace, monospace',
               borderBottom: '1px solid #5a4028', paddingBottom: 4,
             }}>
               CHAPITRE {chap}
@@ -146,7 +146,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
                           position: 'absolute', right: 4, bottom: 4,
                           background: 'rgba(10,6,4,0.85)', border: '1px solid #c8963e',
                           borderRadius: 4, padding: '2px 6px',
-                          fontFamily: 'ui-monospace, monospace', fontSize: 10, fontWeight: 700,
+                          fontFamily: 'ui-monospace, monospace', fontSize: 11.5, fontWeight: 700,
                           color: '#ffd166', letterSpacing: 0.5,
                         }}>
                           {dateLabel}
@@ -154,7 +154,7 @@ export default function Mediadex({ unlocked = [], onClose, fluxTotal = 0, bonusC
                       )}
                     </div>
                     <div style={{
-                      marginTop: 6, fontSize: 12, fontWeight: 700,
+                      marginTop: 6, fontSize: 13.5, fontWeight: 700,
                       color: found ? '#ffd166' : '#5a4028',
                       lineHeight: 1.25,
                     }}>

@@ -43,7 +43,7 @@ function OutilCard({ o, onClick, disabled, verdict }) {
         opacity: isWrong ? 0.55 : 1,
       }}>
       <svg viewBox="-32 -32 64 64" style={{ width: 46, height: 46 }}>{o.svg}</svg>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: isRight ? "#5eff9e" : isWrong ? "#e8934a" : "#e8eef5" }}>{o.nom}</div>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: isRight ? "#5eff9e" : isWrong ? "#e8934a" : "#e8eef5" }}>{o.nom}</div>
     </button>
   );
 }
@@ -68,9 +68,9 @@ export function TsfGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.85)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", border: "2px solid #7fb0e066", borderRadius: 18, padding: 20, maxWidth: 640, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#e8eef5", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fb0e0" }}>🌊 NUIT DU 15 AVRIL 1912 · L'ETABLI DE MARCONI</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fb0e0" }}>🌊 NUIT DU 15 AVRIL 1912 · L'ETABLI DE MARCONI</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>Un paquebot coule dans l'Atlantique !</h2>
-        <p style={{ textAlign: "center", fontSize: 13.5, color: "#c8d4e2", margin: "0 0 14px", lineHeight: 1.55 }}>
+        <p style={{ textAlign: "center", fontSize: 15, color: "#c8d4e2", margin: "0 0 14px", lineHeight: 1.55 }}>
           On entend ses bips de detresse. Parmi ces outils, lequel peut envoyer un message <strong>dans l'air, sans fil</strong>, jusqu'aux navires les plus proches ?
         </p>
 
@@ -85,7 +85,7 @@ export function TsfGame({ onClose, onWin }) {
             </div>
             <div style={{ minHeight: 60, background: outilVerdict ? "#101827" : "transparent", border: outilVerdict ? "1px solid #2a3648" : "none", borderRadius: 10, padding: outilVerdict ? "10px 14px" : 0 }}>
               {outilVerdict && (
-                <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: verdict.endsWith(":no") ? "#e8934a" : "#c8e0b8", fontStyle: "italic" }}>
+                <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: verdict.endsWith(":no") ? "#e8934a" : "#c8e0b8", fontStyle: "italic" }}>
                   <strong>{verdict.endsWith(":no") ? "Bzzt, non : " : "OUI ! "}</strong>{outilVerdict.raison}
                 </p>
               )}
@@ -94,15 +94,15 @@ export function TsfGame({ onClose, onWin }) {
         ) : (
           <div>
             <div style={{ background: "#0e1a24", border: "1px solid #2a4648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 Tu attrapes l'antenne. Il reste a la brancher sur la cabine de Marconi pour que les ondes puissent partir dans la nuit.
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Antenne recuperee
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#7fb0e0", color: "#06121e", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#7fb0e0", color: "#06121e", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

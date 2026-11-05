@@ -85,12 +85,12 @@ export function VraiFauxIAGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.86)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", color: "#e8eef5", border: "2px solid #2a3a58", borderRadius: 16, padding: 20, maxWidth: 780, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.7)", fontFamily: "system-ui, sans-serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff" }}>🔎 ATELIER — VÉRIFIER LES IMAGES</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>🔎 ATELIER — VÉRIFIER LES IMAGES</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#fff", fontSize: 22 }}>Vrai, faux ou IA ?</h2>
 
         {step === 0 && (
           <>
-            <p style={{ textAlign: "center", fontSize: 13, lineHeight: 1.5, color: "#c8d4e2", margin: "6px 0 14px" }}>
+            <p style={{ textAlign: "center", fontSize: 14.5, lineHeight: 1.5, color: "#c8d4e2", margin: "6px 0 14px" }}>
               Regarde bien chaque image. Pour chacune, choisis sa nature.
             </p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 12 }}>
@@ -99,13 +99,13 @@ export function VraiFauxIAGame({ onClose, onWin }) {
                   <div style={{ borderRadius: 8, overflow: "hidden", border: "1px solid #26324a", aspectRatio: "4/3", background: "#0a1220", display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <Vignette src={im.src} alt={im.legende} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                   </div>
-                  <div style={{ fontSize: 12, color: "#c8d4e2", margin: "8px 0 8px", fontStyle: "italic" }}>{im.legende}</div>
+                  <div style={{ fontSize: 13.5, color: "#c8d4e2", margin: "8px 0 8px", fontStyle: "italic" }}>{im.legende}</div>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
                     {Object.entries(NATURES).map(([k, N]) => {
                       const sel = reponses[im.id] === k;
                       return (
                         <button key={k} onClick={() => setReponses(r => ({ ...r, [im.id]: k }))}
-                          style={{ background: sel ? N.couleur : "#26324a", color: sel ? "#0a1220" : "#c8d4e2", border: `1px solid ${sel ? N.couleur : "#3a4a68"}`, borderRadius: 8, padding: "6px 8px", fontSize: 11.5, fontWeight: 700, cursor: "pointer" }}>
+                          style={{ background: sel ? N.couleur : "#26324a", color: sel ? "#0a1220" : "#c8d4e2", border: `1px solid ${sel ? N.couleur : "#3a4a68"}`, borderRadius: 8, padding: "6px 8px", fontSize: 12.5, fontWeight: 700, cursor: "pointer" }}>
                           {N.label}
                         </button>
                       );
@@ -115,7 +115,7 @@ export function VraiFauxIAGame({ onClose, onWin }) {
               ))}
             </div>
             <button onClick={valider} disabled={!tousRepondus}
-              style={{ marginTop: 14, width: "100%", background: tousRepondus ? "#5eff9e" : "#26324a", color: tousRepondus ? "#0a1220" : "#5a7a90", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: tousRepondus ? "pointer" : "not-allowed", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 14, width: "100%", background: tousRepondus ? "#5eff9e" : "#26324a", color: tousRepondus ? "#0a1220" : "#5a7a90", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: tousRepondus ? "pointer" : "not-allowed", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               {tousRepondus ? "✓ Voir les réponses" : `Classe les 4 images (${Object.keys(reponses).length}/4)`}
             </button>
           </>
@@ -124,9 +124,9 @@ export function VraiFauxIAGame({ onClose, onWin }) {
         {step === 1 && (
           <>
             <div style={{ textAlign: "center", background: "#101a2a", border: "1px solid #2a3a58", borderRadius: 12, padding: 12, margin: "10px 0 14px" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff" }}>SCORE</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>SCORE</div>
               <div style={{ fontSize: 26, fontWeight: 900, color: score >= 3 ? "#5eff9e" : score >= 2 ? "#ffd166" : "#ff8a6a" }}>{score} / 4</div>
-              <div style={{ fontSize: 12, color: "#c8d4e2", marginTop: 4 }}>
+              <div style={{ fontSize: 13.5, color: "#c8d4e2", marginTop: 4 }}>
                 {score === 4 && "Œil d'aigle. Tu ne te fais pas avoir facilement."}
                 {score === 3 && "Bien joué. Il ne reste qu'un piège."}
                 {score === 2 && "Moitié-moitié. Regarde les indices ci-dessous."}
@@ -145,13 +145,13 @@ export function VraiFauxIAGame({ onClose, onWin }) {
                         <Vignette src={im.src} alt={im.legende} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                       <div style={{ flex: 1 }}>
-                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: N.couleur, fontWeight: 800 }}>
+                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 1.5, color: N.couleur, fontWeight: 800 }}>
                           {bon ? "✓ " : "✗ "}{N.label.toUpperCase()}
                         </div>
-                        <div style={{ fontSize: 11.5, color: "#c8d4e2", lineHeight: 1.45, marginTop: 4 }}>{im.indice}</div>
+                        <div style={{ fontSize: 12.5, color: "#c8d4e2", lineHeight: 1.45, marginTop: 4 }}>{im.indice}</div>
                         {/* la source, après la réponse seulement (elle donnerait des indices avant) ;
                             obligatoire pour les deux photos sous licence CC BY */}
-                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#7a879e", marginTop: 5 }}>Source : {im.credit}</div>
+                        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#7a879e", marginTop: 5 }}>Source : {im.credit}</div>
                       </div>
                     </div>
                   </div>
@@ -160,13 +160,13 @@ export function VraiFauxIAGame({ onClose, onWin }) {
             </div>
 
             <div style={{ marginTop: 14, background: "#101827", border: "1px solid #5eff9e44", borderRadius: 10, padding: "12px 14px" }}>
-              <p style={{ fontSize: 13, lineHeight: 1.55, margin: 0, color: "#c8d4e2", fontStyle: "italic" }}>
+              <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: 0, color: "#c8d4e2", fontStyle: "italic" }}>
                 « Une image ne prouve plus rien à elle seule. On vérifie : d'où elle vient, qui l'a prise, si on la retrouve ailleurs. Sinon, on ne partage pas. » — MARTINE
               </p>
             </div>
 
             <button onClick={onClose}
-              style={{ marginTop: 12, width: "100%", background: "#5eff9e", color: "#0a1220", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 12, width: "100%", background: "#5eff9e", color: "#0a1220", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </>

@@ -259,14 +259,14 @@ export default function BunkerPrison({ onGo, j3 }) {
 
       <div style={{ maxWidth: 1200, width: "100%" }}>
         <div style={{ background: "#0a0e14", border: "1px dashed #5a6270", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-          <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.55, fontStyle: "italic" }}>
+          <p style={{ margin: 0, fontSize: 14.5, color: "#c8d4e2", lineHeight: 1.55, fontStyle: "italic" }}>
             Trois cellules. Celle du milieu est occupée par Jorge, les deux autres vides. L'air sent la poussière et le métal froid.
             {doneCount < 3 && " Approche-toi des barreaux pour lui parler."}
             {doneCount >= 3 && !flags.phase5_done && " Jorge te regarde comme on regarde quelqu'un qui a fini son travail. Il a encore quelque chose à te dire."}
             {flags.phase5_done && " Jorge t'a tout dit. La trappe rouge, au fond du couloir de l'Habitat, mène au niveau −3. Et tu as la clé de la réserve de la bibliothèque."}
           </p>
           {doneCount > 0 && doneCount < 3 && (
-            <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8aff9e", letterSpacing: 2 }}>
+            <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8aff9e", letterSpacing: 2 }}>
               voyages confirmés · {doneCount} / 3
             </div>
           )}
@@ -274,7 +274,7 @@ export default function BunkerPrison({ onGo, j3 }) {
       </div>
 
       <button onClick={() => onGo(j3.hubRoom || "hubBas")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Retour au couloir
       </button>
 

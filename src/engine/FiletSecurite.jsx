@@ -21,13 +21,13 @@ function Carte({ titre, texte, detail, bouton, onClick, plein }) {
       background: plein ? "#050810" : "transparent", color: "#e8eef5", fontFamily: "Palatino, Georgia, serif" }}>
       <div style={{ maxWidth: 460, textAlign: "center", padding: "20px 22px", background: "#0e1420", border: "1px solid #5a3020", borderRadius: 14 }}>
         <div style={{ fontSize: 34 }}>⚠️</div>
-        <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: 1.5, color: "#e0a848", margin: "6px 0 8px" }}>{titre}</div>
-        <p style={{ fontSize: 14, lineHeight: 1.55, color: "#c8b8a0", margin: 0 }}>{texte}</p>
+        <div style={{ fontFamily: MONO, fontSize: 13.5, letterSpacing: 1.5, color: "#e0a848", margin: "6px 0 8px" }}>{titre}</div>
+        <p style={{ fontSize: 15.5, lineHeight: 1.55, color: "#c8b8a0", margin: 0 }}>{texte}</p>
         <button onClick={onClick} autoFocus
-          style={{ marginTop: 14, background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "9px 20px", fontSize: 13, fontFamily: MONO, fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>
+          style={{ marginTop: 14, background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "9px 20px", fontSize: 14.5, fontFamily: MONO, fontWeight: 700, letterSpacing: 1, cursor: "pointer" }}>
           {bouton}
         </button>
-        {detail && <div style={{ marginTop: 14, fontFamily: MONO, fontSize: 10, color: "#6a7488", wordBreak: "break-word" }}>{detail}</div>}
+        {detail && <div style={{ marginTop: 14, fontFamily: MONO, fontSize: 11.5, color: "#6a7488", wordBreak: "break-word" }}>{detail}</div>}
       </div>
     </div>
   );

@@ -28,7 +28,7 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, width: "100%", maxWidth: 1600, height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto" }}>
       {titre && (
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#8fa3bd" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#8fa3bd" }}>
           {titre}
         </div>
       )}
@@ -87,19 +87,19 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
         {current ? (
           <div onClick={(e) => e.stopPropagation()}
             style={{ background: "#141020", border: "1px solid #3a80c8", borderRadius: 10, padding: "12px 16px", cursor: "default" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: "#7fd8ff" }}>
               {current.nom.toUpperCase()} · {current.role}
             </div>
             <p style={{ margin: "4px 0 0", fontSize: 17, lineHeight: 1.55, color: "#e8eef5" }}>
               {current.replique}
             </p>
-            <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
+            <div style={{ marginTop: 6, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#5a7a90", fontStyle: "italic", textAlign: "right" }}>
               Clique ailleurs pour fermer ▸
             </div>
           </div>
         ) : (
           <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 14px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 13, color: "#7a879e", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 14.5, color: "#7a879e", fontStyle: "italic" }}>
               Clique un PNJ pour écouter ce qu'il ou elle a à dire.
             </p>
           </div>
@@ -156,7 +156,7 @@ function SmalltalkModal({ pnj, temoin, kovaDone, billet = true, idx = 0, onInter
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1218", border: "2px solid #7fd8ff", borderRadius: 12, padding: 18, maxWidth: 620, width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: "#7fd8ff" }}>
             🔍 {pnj.nom.toUpperCase()} · {pnj.role}
           </div>
           <button onClick={onClose}
@@ -165,17 +165,17 @@ function SmalltalkModal({ pnj, temoin, kovaDone, billet = true, idx = 0, onInter
 
         {teaserMode ? (
           <div style={{ marginTop: 12 }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#e0a848", letterSpacing: 1, marginBottom: 6 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#e0a848", letterSpacing: 1, marginBottom: 6 }}>
               « Un indice avant qu'on commence ? »
             </div>
             <div style={{ padding: "10px 14px", background: "#141b26", borderLeft: "2px solid #e0a848", borderRadius: 6 }}>
-              <p style={{ margin: 0, fontSize: 14, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
+              <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
                 « {teaser || "— Pas grand-chose à ajouter avant l'interrogatoire. —"} »
               </p>
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 12 }}>
               <button onClick={() => onInterview(temoin.id)}
-                style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 12, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+                style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "9px 16px", fontSize: 13.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
                 Interroger officiellement ▸
               </button>
             </div>
@@ -196,14 +196,14 @@ function SmalltalkModal({ pnj, temoin, kovaDone, billet = true, idx = 0, onInter
                         color: hasAnswer ? (isPicked ? "#7fd8ff" : "#e8eef5") : "#5a6678",
                         border: `1px solid ${isPicked ? "#7fd8ff" : "#3a4048"}`,
                         borderRadius: 8, padding: "8px 12px",
-                        fontFamily: "ui-monospace,monospace", fontSize: 12.5,
+                        fontFamily: "ui-monospace,monospace", fontSize: 14,
                         cursor: hasAnswer ? "pointer" : "default",
                       }}>
                       {isPicked ? "▾" : "▸"} {row.q}
                     </button>
                     {isPicked && hasAnswer && (
                       <div style={{ margin: "6px 4px 0 20px", padding: "8px 12px", background: "#0a0e14", borderLeft: "2px solid #7fd8ff", borderRadius: 4 }}>
-                        <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
+                        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
                           « {answerFor(row.id)} »
                         </p>
                       </div>
@@ -212,7 +212,7 @@ function SmalltalkModal({ pnj, temoin, kovaDone, billet = true, idx = 0, onInter
                 );
               })}
             </div>
-            <div style={{ marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#5a7a90", textAlign: "right", fontStyle: "italic" }}>
+            <div style={{ marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#5a7a90", textAlign: "right", fontStyle: "italic" }}>
               Clique une question pour entendre la réponse.
             </div>
           </>

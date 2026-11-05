@@ -56,19 +56,19 @@ export default function EpilogueJeu3({ onDone, prenom = "Chronaute", fin = "etei
   return (
     <div style={{ position: "fixed", inset: 0, background: "#050810", zIndex: 60, overflowY: "auto", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
       <div style={{ minHeight: "100%", boxSizing: "border-box", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "16px 12px" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4, color: "#c8a848", marginBottom: 10, textAlign: "center" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#c8a848", marginBottom: 10, textAlign: "center" }}>
           🌑 LE PUITS · ÉPILOGUE · {A.title}
         </div>
         <div style={{ width: "100%", maxWidth: 1000 }}>
           <Comp key={acte} prenom={prenom} fin={fin} onFini={() => setPret(true)} />
         </div>
         <div style={{ marginTop: 14, display: "flex", gap: 10, alignItems: "center", minHeight: 40 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8a7050" }}>
             {acte + 1} / {actes.length}
           </div>
           {(!A.dialogue || pret) && (
             <button onClick={suivant} autoFocus={!!A.dialogue} data-acte-suivant="1"
-              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 24px", fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
+              style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "10px 24px", fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, cursor: "pointer", letterSpacing: 2 }}>
               {A.cta}
             </button>
           )}
@@ -110,24 +110,24 @@ function Dialogue({ lignes, prenom, onLigne, onFini }) {
   return (
     <div style={{ marginTop: 10, background: "#0e0c08", border: `1px solid ${v ? v.couleur + "88" : "#5a4a30"}`, borderRadius: 10, padding: "12px 16px", minHeight: 96, boxSizing: "border-box" }}>
       {l.choix ? (<>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: VOIX.toi.couleur, marginBottom: 8 }}>TOI</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: VOIX.toi.couleur, marginBottom: 8 }}>TOI</div>
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           {l.choix.map((c, k) => (
             <button key={c.texte} onClick={() => choisir(c)} autoFocus={k === 0} data-choix="1"
-              style={{ background: "rgba(255,226,160,0.1)", color: "#ffe2a0", border: "1px solid rgba(255,226,160,0.45)", borderRadius: 10, padding: "9px 14px", cursor: "pointer", fontFamily: "Palatino, Georgia, serif", fontSize: 15 }}>
+              style={{ background: "rgba(255,226,160,0.1)", color: "#ffe2a0", border: "1px solid rgba(255,226,160,0.45)", borderRadius: 10, padding: "9px 14px", cursor: "pointer", fontFamily: "Palatino, Georgia, serif", fontSize: 16 }}>
               {fill(c.texte)}
             </button>
           ))}
         </div>
       </>) : (<>
-        {v && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: v.couleur }}>{v.nom}</div>}
-        <p key={`${i}-${l.texte}`} style={{ margin: "6px 0 10px", fontSize: 15.5, lineHeight: 1.55, color: l.qui === "recit" ? "#d8ccb0" : "#f0ece4", fontStyle: l.qui === "recit" ? "italic" : "normal", animation: "epFondu .7s ease-out both" }}>
+        {v && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: v.couleur }}>{v.nom}</div>}
+        <p key={`${i}-${l.texte}`} style={{ margin: "6px 0 10px", fontSize: 16.5, lineHeight: 1.55, color: l.qui === "recit" ? "#d8ccb0" : "#f0ece4", fontStyle: l.qui === "recit" ? "italic" : "normal", animation: "epFondu .7s ease-out both" }}>
           {l.dida && <span style={{ fontStyle: "italic", color: "#a89878" }}>({l.dida}) </span>}
           {fill(l.texte)}
         </p>
         {!fini && (
           <button onClick={suite} autoFocus data-suite="1"
-            style={{ background: "transparent", color: "#c8a848", border: "1px solid #c8a848", borderRadius: 8, padding: "6px 16px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, letterSpacing: 1 }}>
+            style={{ background: "transparent", color: "#c8a848", border: "1px solid #c8a848", borderRadius: 8, padding: "6px 16px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, letterSpacing: 1 }}>
             Suite ▸
           </button>
         )}

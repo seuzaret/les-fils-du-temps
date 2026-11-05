@@ -293,25 +293,25 @@ export default function BunkerArchives({ onGo, j3 }) {
       <div style={{ maxWidth: 1200, width: "100%" }}>
         {done ? (
           <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#5eff9e" }}>
               ✓ TOUS LES DOSSIERS RESTAURÉS
             </div>
-            <p style={{ margin: "8px 0 0", fontSize: 13, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
+            <p style={{ margin: "8px 0 0", fontSize: 14.5, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
               {mission.succes}
             </p>
           </div>
         ) : unlocked ? (
           <div style={{ background: "#0a0e14", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.55 }}>
+            <p style={{ margin: 0, fontSize: 14.5, color: "#c8d4e2", lineHeight: 1.55 }}>
               Le terminal des Archives affiche <strong style={{ color: "#5a6678" }}>VERROUILLÉ · MARTINE</strong>. Impossible de consulter les dossiers d'ici.
             </p>
-            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8a848", fontStyle: "italic" }}>
+            <p style={{ margin: "6px 0 0", fontSize: 14, color: "#c8a848", fontStyle: "italic" }}>
               L'archiviste Jorge, assis au bureau, lève à peine la tête quand tu entres.
             </p>
           </div>
         ) : (
           <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#7a879e", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 14, color: "#7a879e", fontStyle: "italic" }}>
               L'archiviste Jorge est là, bougon, le nez dans ses dossiers. Il ne semble pas avoir de travail à te confier pour l'instant.
             </p>
           </div>
@@ -319,7 +319,7 @@ export default function BunkerArchives({ onGo, j3 }) {
       </div>
 
       <button onClick={() => onGo(j3.hubRoom || "hub")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Retour au couloir
       </button>
 
@@ -360,11 +360,11 @@ function ArrestOverlay({ onDone }) {
     <div onClick={() => (isLast ? onDone() : setI(i + 1))}
       style={{ position: "fixed", inset: 0, background: "rgba(2,4,8,0.96)", zIndex: 320, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
       <div style={{ maxWidth: 640, color: "#e8dfc8", textAlign: "center" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4, color: "#e83820", marginBottom: 18 }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#e83820", marginBottom: 18 }}>
           ⚠ ARRESTATION
         </div>
         <p style={{ fontSize: 20, lineHeight: 1.6, margin: 0 }}>{lignes[i]}</p>
-        <div style={{ marginTop: 24, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050", fontStyle: "italic" }}>
+        <div style={{ marginTop: 24, fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8a7050", fontStyle: "italic" }}>
           {isLast ? "Clique pour continuer ▸" : `${i + 1} / ${lignes.length} · clique pour continuer ▸`}
         </div>
       </div>

@@ -71,7 +71,7 @@ export default function BunkerMinimap({ room, flags, onGo, cheat = false }) {
       fontFamily: "ui-monospace,monospace",
       overflowY: "auto",
     }}>
-      <div style={{ fontSize: 9, letterSpacing: 2, color: "#5a6678", textAlign: "center", marginBottom: 4 }}>
+      <div style={{ fontSize: 11, letterSpacing: 2, color: "#5a6678", textAlign: "center", marginBottom: 4 }}>
         BUNKER · COUPE
       </div>
       <svg viewBox={`0 0 130 ${SVG_H}`} style={{ width: "100%", height: "auto", display: "block" }}>

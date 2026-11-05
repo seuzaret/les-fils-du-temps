@@ -322,25 +322,25 @@ export default function BunkerDormants({ onGo, j3 }) {
 
       {reveil >= 0 ? (
         <div style={{ maxWidth: 820, width: "100%", background: "#0a1a10", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e" }}>
             {REVEIL[reveil].qui === "petite" ? "◈ LA PETITE MARTINE" : "◈ SALLE DE REPOS"}
           </div>
-          <p style={{ margin: "6px 0 10px", fontSize: 14.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: REVEIL[reveil].qui === "recit" ? "italic" : "normal" }}>
+          <p style={{ margin: "6px 0 10px", fontSize: 16, lineHeight: 1.55, color: "#e8eef5", fontStyle: REVEIL[reveil].qui === "recit" ? "italic" : "normal" }}>
             {REVEIL[reveil].texte}
           </p>
           <button onClick={suiteReveil} autoFocus
-            style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "8px 20px", fontSize: 12.5, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
+            style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "8px 20px", fontSize: 14, fontWeight: 800, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
             Suite ▸
           </button>
         </div>
       ) : (
       <div style={{ maxWidth: 820, width: "100%", background: "#081216", border: "1px dashed #4a8a90", borderRadius: 10, padding: "12px 16px" }}>
-        <p style={{ margin: 0, fontSize: 13.5, color: "#d8eeee", lineHeight: 1.6, fontStyle: "italic" }}>
+        <p style={{ margin: 0, fontSize: 15, color: "#d8eeee", lineHeight: 1.6, fontStyle: "italic" }}>
           {NOTES[note]}
           {note === "compteur" && seen("martine") && " MARTINE a dit le contraire."}
         </p>
         {note === "martine" && !seen("compteur") && (
-          <p style={{ margin: "6px 0 0", fontSize: 12, color: "#7fe8e0" }}>
+          <p style={{ margin: "6px 0 0", fontSize: 13.5, color: "#7fe8e0" }}>
             C'est ce que dit MARTINE. Y a-t-il ici de quoi le vérifier ?
           </p>
         )}
@@ -349,11 +349,11 @@ export default function BunkerDormants({ onGo, j3 }) {
 
       {reveil < 0 && <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
         <button onClick={() => onGo("hub")}
-          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           ← Remonter l'escalier
         </button>
         <button onClick={() => onGo("serveurs")}
-          style={{ background: "#0e2818", color: "#5eff9e", border: "1px solid #5eff9e", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ background: "#0e2818", color: "#5eff9e", border: "1px solid #5eff9e", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           Pousser la porte du fond ▸
         </button>
       </div>}

@@ -206,15 +206,15 @@ export default function PacManEgg({ onClose }) {
         style={{ maxWidth: 520, width: "100%", background: "#000", border: "6px solid #c8a848", borderRadius: 14, padding: "18px 18px 14px", boxShadow: "0 0 60px rgba(255,209,102,0.25)" }}>
         {/* En-tête */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 8 }}>
-          <div style={{ fontSize: 10, letterSpacing: 3, color: "#c8a848" }}>ARCADE · PAC·80</div>
+          <div style={{ fontSize: 11.5, letterSpacing: 3, color: "#c8a848" }}>ARCADE · PAC·80</div>
           <button onClick={onClose}
-            style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 4, padding: "4px 10px", fontFamily: "ui-monospace,monospace", fontSize: 10, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+            style={{ background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 4, padding: "4px 10px", fontFamily: "ui-monospace,monospace", fontSize: 11.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
             REFERMER ✕
           </button>
         </div>
 
         {/* Score */}
-        <div style={{ display: "flex", justifyContent: "space-between", color: "#ffd700", fontSize: 12, fontWeight: 800, marginBottom: 6, letterSpacing: 2 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", color: "#ffd700", fontSize: 13.5, fontWeight: 800, marginBottom: 6, letterSpacing: 2 }}>
           <span>1UP · {String(score).padStart(4, "0")}</span>
           <span style={{ color: "#e83820" }}>HIGH · 7650</span>
         </div>
@@ -287,18 +287,18 @@ export default function PacManEgg({ onClose }) {
             <button onClick={() => tap(0, 1)} style={padBtn}>▼</button>
             <div />
           </div>
-          <div style={{ textAlign: "right", fontSize: 10, color: "#8a7a4a", letterSpacing: 1 }}>
+          <div style={{ textAlign: "right", fontSize: 11.5, color: "#8a7a4a", letterSpacing: 1 }}>
             <div>FLÈCHES = BOUGER</div>
             <div>ÉCHAP = QUITTER</div>
             {status !== "playing" && (
-              <button onClick={restart} style={{ marginTop: 6, background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 4, padding: "4px 10px", fontFamily: "ui-monospace,monospace", fontSize: 10, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+              <button onClick={restart} style={{ marginTop: 6, background: "#c8a848", color: "#1a0e08", border: "none", borderRadius: 4, padding: "4px 10px", fontFamily: "ui-monospace,monospace", fontSize: 11.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
                 REJOUER
               </button>
             )}
           </div>
         </div>
 
-        <div style={{ marginTop: 8, textAlign: "center", fontSize: 10, color: "#8a7a4a", fontStyle: "italic", letterSpacing: 1 }}>
+        <div style={{ marginTop: 8, textAlign: "center", fontSize: 11.5, color: "#8a7a4a", fontStyle: "italic", letterSpacing: 1 }}>
           « Trois pièces de 1 franc dans la fente — et voilà. »
         </div>
       </div>
@@ -312,7 +312,7 @@ const padBtn = {
   border: "1px solid #c8a848",
   borderRadius: 4,
   fontFamily: "ui-monospace,monospace",
-  fontSize: 16,
+  fontSize: 17,
   fontWeight: 800,
   cursor: "pointer",
 };

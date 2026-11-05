@@ -688,7 +688,7 @@ function SlideOutside({ onNext }) {
           autoFocus
           style={{ position: 'absolute', left: '50%', bottom: 8, transform: 'translateX(-50%)',
             background: '#5eff9e', color: '#06110b', border: 'none',
-            borderRadius: 12, padding: '14px 32px', fontSize: 16, fontWeight: 800,
+            borderRadius: 12, padding: '14px 32px', fontSize: 17, fontWeight: 800,
             cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 3,
             boxShadow: '0 0 22px rgba(94,255,158,0.5)',
             animation: 'fadeIn 0.4s ease-out' }}>
@@ -857,7 +857,7 @@ function SlideCockpit({ onNext }) {
         background: '#0e1a30', border: '2px solid #5eff9e', borderRadius: 14,
         padding: '14px 20px', color: '#e8eef5',
         boxShadow: '0 0 30px rgba(94,255,158,0.35)', textAlign: 'center' }}>
-        <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55 }}>
+        <p style={{ margin: 0, fontSize: 16, lineHeight: 1.55 }}>
           « Bienvenue à bord. Je suis <strong style={{ color: '#5eff9e' }}>MARTINE</strong> —
           Machine À Remonter le Temps Intelligente Néanmoins Excellente.
           Al3x1a m'envoie te chercher : je t'emmène chez les chronautes, en 2035. Avant de partir, écoute bien : je vais te dire les <strong style={{ color: '#5eff9e' }}>4 règles</strong> que doit connaître un chronaute. »
@@ -947,7 +947,7 @@ function SlideRules({ onNext }) {
               {Object.entries(REPONSES).map(([key, r]) => (
                 <button key={key} onClick={() => setMood(key)}
                   style={{ background: '#141b26', color: '#e8eef5', border: '2px solid #3a4048',
-                    borderRadius: 12, padding: '12px 18px', fontSize: 13, fontWeight: 700,
+                    borderRadius: 12, padding: '12px 18px', fontSize: 14.5, fontWeight: 700,
                     cursor: 'pointer', fontFamily: 'ui-monospace,monospace',
                     display: 'flex', alignItems: 'center', gap: 8, minWidth: 200,
                     transition: 'all 0.2s' }}
@@ -963,7 +963,7 @@ function SlideRules({ onNext }) {
               <div><Avatar mood={REPONSES[mood].martineMood} size={64} talking /></div>
               <button onClick={() => setN(0)} autoFocus
                 style={{ background: '#5eff9e', color: '#06110b', border: 'none', borderRadius: 10,
-                  padding: '12px 26px', fontSize: 14, fontWeight: 800, cursor: 'pointer',
+                  padding: '12px 26px', fontSize: 15.5, fontWeight: 800, cursor: 'pointer',
                   fontFamily: 'ui-monospace,monospace', letterSpacing: 2,
                   boxShadow: '0 0 22px rgba(94,255,158,0.55)' }}>
                 LES 4 RÈGLES →
@@ -1026,7 +1026,7 @@ function SlideRules({ onNext }) {
               style={{ flexShrink: 0, background: isLast ? '#5eff9e' : '#141b26',
                 color: isLast ? '#06110b' : '#5eff9e',
                 border: '2px solid #5eff9e',
-                borderRadius: 10, padding: '10px 20px', fontSize: 13, fontWeight: 800,
+                borderRadius: 10, padding: '10px 20px', fontSize: 14.5, fontWeight: 800,
                 cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 2,
                 boxShadow: isLast ? '0 0 22px rgba(94,255,158,0.55)' : 'none' }}>
               {isLast ? "Suite →" : `Suite (${n + 2}/${REGLES.length})`}
@@ -1087,7 +1087,7 @@ function SlideMartineReparee({ onNext }) {
           style={{ background: isLast ? '#5eff9e' : '#141b26',
             color: isLast ? '#06110b' : '#5eff9e',
             border: '2px solid #5eff9e',
-            borderRadius: 10, padding: '12px 26px', fontSize: 14, fontWeight: 800,
+            borderRadius: 10, padding: '12px 26px', fontSize: 15.5, fontWeight: 800,
             cursor: 'pointer', fontFamily: 'ui-monospace,monospace', letterSpacing: 2,
             boxShadow: isLast ? '0 0 22px rgba(94,255,158,0.55)' : 'none' }}>
           {isLast ? "ON PART →" : `Suite (${n + 2}/${LINES.length})`}
@@ -1375,14 +1375,14 @@ function SlideChat({ onNext, onCadran }) {
         </div>
         {aChasser ? (
           <button key={rappel} onClick={chasser} autoFocus
-            style={{ flex: '0 0 auto', background: '#ffd166', color: '#1a1206', border: '2px solid #ffd166', borderRadius: 10, padding: '10px 18px', fontSize: 13, fontWeight: 800, cursor: 'pointer',
+            style={{ flex: '0 0 auto', background: '#ffd166', color: '#1a1206', border: '2px solid #ffd166', borderRadius: 10, padding: '10px 18px', fontSize: 14.5, fontWeight: 800, cursor: 'pointer',
               fontFamily: 'ui-monospace,monospace', letterSpacing: 2, animation: rappel ? 'chatRappel 0.3s ease-in-out 2' : 'none' }}>
             👆 CHASSE-LE !
           </button>
         ) : (
           <button onClick={(e) => { e.stopPropagation(); advance(); }} autoFocus disabled={!pret || (n === 3)}
             style={{ flex: '0 0 auto', background: isLast ? '#5eff9e' : '#141b26', color: isLast ? '#06110b' : '#5eff9e', border: '2px solid #5eff9e', opacity: pret && n !== 3 ? 1 : 0.45,
-              borderRadius: 10, padding: '10px 18px', fontSize: 13, fontWeight: 800, cursor: pret ? 'pointer' : 'default', fontFamily: 'ui-monospace,monospace', letterSpacing: 2 }}>
+              borderRadius: 10, padding: '10px 18px', fontSize: 14.5, fontWeight: 800, cursor: pret ? 'pointer' : 'default', fontFamily: 'ui-monospace,monospace', letterSpacing: 2 }}>
             {isLast ? "ACCROCHE-TOI →" : `Suite (${n + 1}/${CHAT_TEMPS.length})`}
           </button>
         )}
@@ -1514,7 +1514,7 @@ function SlideFlash({ onNext, start = 2026 }) {
       </svg>
       {/* Décompte des années, superposé au flash */}
       <div style={{ position: 'absolute', top: '38%', left: 0, right: 0, textAlign: 'center', pointerEvents: 'none' }}>
-        <div style={{ fontFamily: 'ui-monospace,monospace', fontSize: 14, letterSpacing: 6, color: '#ffd166',
+        <div style={{ fontFamily: 'ui-monospace,monospace', fontSize: 15.5, letterSpacing: 6, color: '#ffd166',
           textShadow: '0 0 14px rgba(0,0,0,0.9)' }}>
           ⏳ SAUT TEMPOREL
         </div>

@@ -142,10 +142,10 @@ export default function BunkerSurface({ onGo, j3 }) {
       </svg>
 
       <div style={{ maxWidth: 800, width: "100%", background: "#2a1408", border: "1px solid #8a1010", borderRadius: 10, padding: "10px 14px", textAlign: "center" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ff5030" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#ff5030" }}>
           ⚠ SORTIE C-3 · NIVEAU +2 · SCELLÉE DEPUIS 40 ANS
         </div>
-        <p style={{ margin: "5px 0 0", fontSize: 13, color: "#c8b090", lineHeight: 1.5 }}>
+        <p style={{ margin: "5px 0 0", fontSize: 14.5, color: "#c8b090", lineHeight: 1.5 }}>
           {done
             ? "Le volant tourne à vide. Quelque chose a changé au niveau -3 — la porte pourrait bientôt s'ouvrir."
             : "Chaînes soudées, cadenas indéchiffrable. Selon MARTINE, l'air dehors serait inhabitable. Mais qui a soudé la porte, et pourquoi ?"}
@@ -153,7 +153,7 @@ export default function BunkerSurface({ onGo, j3 }) {
       </div>
 
       <button onClick={() => onGo("elevator")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ↕ Reprendre l'ascenseur
       </button>
     </div>

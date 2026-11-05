@@ -280,10 +280,10 @@ export function FaireLaUneGame({ onClose, onWin }) {
         }}>
         {/* Bandeau style "ÉDITION SPÉCIALE" */}
         <div style={{ display: "flex", justifyContent: "center", gap: 10, alignItems: "center", marginBottom: 10 }}>
-          <span style={{ background: "#8a5a2a", color: "#fff", padding: "4px 14px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(138,90,42,0.4)" }}>
+          <span style={{ background: "#8a5a2a", color: "#fff", padding: "4px 14px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(138,90,42,0.4)" }}>
             🗞️ KIOSQUE DE ROBERT
           </span>
-          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8a5a2a" }}>MATIN · 1980</span>
+          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: "#8a5a2a" }}>MATIN · 1980</span>
         </div>
         <h2 style={{ textAlign: "center", margin: "0 0 16px", color: "#3a2214", fontSize: 32, fontWeight: 900, letterSpacing: 1 }}>Fais la Une</h2>
 
@@ -293,7 +293,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
             <div style={{ display: "flex", gap: 18, alignItems: "flex-start", background: "linear-gradient(135deg,#fff 0%,#f8e8c8 100%)", border: "3px solid #8a5a2a", borderRadius: 14, padding: 18, boxShadow: "0 4px 16px rgba(138,90,42,0.25)" }}>
               <PortraitRobert />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800, marginBottom: 8 }}>▸ ROBERT · LE KIOSQUIER</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, letterSpacing: 2, color: "#8a5a2a", fontWeight: 800, marginBottom: 8 }}>▸ ROBERT · LE KIOSQUIER</div>
                 <p style={{ fontSize: 17.5, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
                   « Ouf, tu tombes bien ! Ma fille Julie débute comme stagiaire dans un journal. Elle m'appelle en panique : elle doit boucler sa toute première Une avant midi. Tu veux bien lui donner un coup de main ? »
                 </p>
@@ -324,7 +324,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
             }}>
               <PortraitJulie couleur={journal.couleur} />
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 4 }}>▸ JULIE · STAGIAIRE À</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 4 }}>▸ JULIE · STAGIAIRE À</div>
                 <div style={{ fontSize: 22, fontWeight: 900, color: journal.couleur, marginBottom: 10, letterSpacing: 1 }}>{journal.nom.toUpperCase()}</div>
                 <p style={{ fontSize: 17, lineHeight: 1.55, color: "#1c1a10", margin: 0, fontStyle: "italic" }}>
                   « Merci ! Bon, on écrit pour <strong>{journal.cible}</strong>. {journal.juliePhrase} Je te lis la dépêche AFP, tu me choisis un titre et un ton, OK ? »
@@ -341,16 +341,16 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 2 : dépêche AFP ═════ */}
         {step === 2 && (
           <>
-            <div style={{ background: "#fffbe8", border: "1px dashed #a08040", borderRadius: 8, padding: "12px 14px", marginBottom: 12, fontSize: 15, lineHeight: 1.5, color: "#3a2e1e" }}>
+            <div style={{ background: "#fffbe8", border: "1px dashed #a08040", borderRadius: 8, padding: "12px 14px", marginBottom: 12, fontSize: 16, lineHeight: 1.5, color: "#3a2e1e" }}>
               <strong style={{ color: "#8a5a2a" }}>Une dépêche AFP, c'est quoi ?</strong><br />
               L'<strong>Agence France-Presse</strong> envoie la même info, courte et neutre, à tous les journaux. Ensuite, chaque journal en fait ce qu'il veut : titre, ton, place dans le journal.
             </div>
             <div style={{ background: "#fff", border: "1px dashed #8a6a3a", borderRadius: 8, padding: "14px 16px", fontFamily: "ui-monospace, monospace" }}>
-              <div style={{ fontSize: 12, letterSpacing: 2, color: "#8a5a2a", marginBottom: 8, borderBottom: "1px solid #c9b48c", paddingBottom: 6 }}>DÉPÊCHE AFP · {dep.date}</div>
-              <p style={{ fontSize: 16, lineHeight: 1.5, margin: 0, color: "#1c1a10" }}>{dep.fait}</p>
+              <div style={{ fontSize: 13.5, letterSpacing: 2, color: "#8a5a2a", marginBottom: 8, borderBottom: "1px solid #c9b48c", paddingBottom: 6 }}>DÉPÊCHE AFP · {dep.date}</div>
+              <p style={{ fontSize: 17, lineHeight: 1.5, margin: 0, color: "#1c1a10" }}>{dep.fait}</p>
             </div>
             <button onClick={() => setStep(3)}
-              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 14, width: "100%", background: "#8a5a2a", color: "#fff", border: "none", borderRadius: 10, padding: "14px", fontWeight: 800, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               2/3 · Choisir un titre →
             </button>
           </>
@@ -360,9 +360,9 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {step === 3 && (
           <>
             <div style={{ background: `${journal.couleur}11`, border: `2px solid ${journal.couleur}44`, borderRadius: 10, padding: "10px 14px", marginBottom: 12, textAlign: "center" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 2 }}>▸ POUR</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: journal.couleur, fontWeight: 800, marginBottom: 2 }}>▸ POUR</div>
               <div style={{ fontSize: 17, fontWeight: 900, color: journal.couleur, letterSpacing: 1 }}>{journal.nom.toUpperCase()}</div>
-              <div style={{ fontSize: 14, color: "#3a2e1e", fontStyle: "italic", marginTop: 2 }}>{journal.cible}</div>
+              <div style={{ fontSize: 15.5, color: "#3a2e1e", fontStyle: "italic", marginTop: 2 }}>{journal.cible}</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {dep.titres.map((t) => {
@@ -378,7 +378,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
                       boxShadow: sel ? `0 4px 14px ${ANGLE_COLOR[t.angle]}33` : "0 1px 4px rgba(0,0,0,0.06)",
                       transition: "all .2s",
                     }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: ANGLE_COLOR[t.angle], fontWeight: 800, marginBottom: 6 }}>TITRE {ANGLE_LABEL[t.angle].toUpperCase()}</div>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: ANGLE_COLOR[t.angle], fontWeight: 800, marginBottom: 6 }}>TITRE {ANGLE_LABEL[t.angle].toUpperCase()}</div>
                     <div style={{ fontSize: 19, fontWeight: 800, color: "#1c1a10", lineHeight: 1.3, fontFamily: "Georgia, serif" }}>{t.t}</div>
                   </button>
                 );
@@ -394,7 +394,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
         {/* ═════ 4 : choix du ton ═════ */}
         {step === 4 && (
           <>
-            <p style={{ fontSize: 16, lineHeight: 1.5, textAlign: "center", margin: "0 0 14px", color: "#3a2e1e" }}>
+            <p style={{ fontSize: 17, lineHeight: 1.5, textAlign: "center", margin: "0 0 14px", color: "#3a2e1e" }}>
               Le texte sous le titre, tu l'écris <strong>comment</strong> ?
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -411,7 +411,7 @@ export function FaireLaUneGame({ onClose, onWin }) {
                       boxShadow: sel ? "0 4px 14px rgba(138,90,42,0.25)" : "0 1px 4px rgba(0,0,0,0.06)",
                       transition: "all .2s",
                     }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, letterSpacing: 1, color: "#8a5a2a", fontWeight: 800 }}>{T.label}</div>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 17, letterSpacing: 1, color: "#8a5a2a", fontWeight: 800 }}>{T.label}</div>
                   </button>
                 );
               })}
@@ -436,11 +436,11 @@ export function FaireLaUneGame({ onClose, onWin }) {
                 <div style={{ opacity: pressStep >= 2 ? 1 : 0, transform: pressStep >= 2 ? "translateY(0)" : "translateY(6px)", transition: "opacity .4s, transform .4s", fontSize: 24, fontWeight: 900, lineHeight: 1.2, color: "#1c1a10", marginBottom: 10 }}>
                   {titre.t}
                 </div>
-                <div style={{ opacity: pressStep >= 3 ? 1 : 0, transition: "opacity .5s", fontSize: 16, lineHeight: 1.55, color: "#2a2418" }}>
+                <div style={{ opacity: pressStep >= 3 ? 1 : 0, transition: "opacity .5s", fontSize: 17, lineHeight: 1.55, color: "#2a2418" }}>
                   {dep.chapo[ton.angle]}
                 </div>
                 {pressStep >= 3 && (
-                  <div style={{ marginTop: 14, borderTop: "1px solid #c9b48c", paddingTop: 10, fontSize: 12.5, color: "#7a6248", fontStyle: "italic" }}>
+                  <div style={{ marginTop: 14, borderTop: "1px solid #c9b48c", paddingTop: 10, fontSize: 14, color: "#7a6248", fontStyle: "italic" }}>
                     Suite en pages intérieures — voir aussi : brèves, sports, télé.
                   </div>
                 )}
@@ -449,14 +449,14 @@ export function FaireLaUneGame({ onClose, onWin }) {
               {pressStep >= 4 && (
                 <div style={{ marginTop: 14, background: "#101827", border: `1px solid ${V.color}44`, borderRadius: 10, padding: "14px 16px", color: "#e8eef5", animation: "fadein .4s" }}>
                   <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 6 }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 1.5, color: V.color, fontWeight: 800 }}>{V.note}</div>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, letterSpacing: 1.5, color: V.color, fontWeight: 800 }}>{V.note}</div>
                     {isWin && (
-                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 900, color: "#ffd166", letterSpacing: 1 }}>+5 ⚡</div>
+                      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 15.5, fontWeight: 900, color: "#ffd166", letterSpacing: 1 }}>+5 ⚡</div>
                     )}
                   </div>
-                  <p style={{ fontSize: 15.5, lineHeight: 1.6, margin: 0 }}>{V.text}</p>
+                  <p style={{ fontSize: 16.5, lineHeight: 1.6, margin: 0 }}>{V.text}</p>
                   {isWin && (
-                    <p style={{ fontSize: 14, lineHeight: 1.55, margin: "10px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
+                    <p style={{ fontSize: 15.5, lineHeight: 1.55, margin: "10px 0 0", color: "#c8d4e2", fontStyle: "italic" }}>
                       « Même dépêche, mais chaque journal fabrique SA Une pour SON public. Ça, c'est une ligne éditoriale. » — MARTINE
                     </p>
                   )}

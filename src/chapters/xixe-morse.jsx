@@ -98,9 +98,9 @@ export function MorseGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 24, maxWidth: 860, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 13, letterSpacing: 2, color: "#e0a848" }}>📟 TELEGRAPHE DU FAR WEST · POUR NEW YORK</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 14.5, letterSpacing: 2, color: "#e0a848" }}>📟 TELEGRAPHE DU FAR WEST · POUR NEW YORK</div>
         <h2 style={{ textAlign: "center", margin: "8px 0 6px", color: "#ffd166", fontSize: 26 }}>Prévenir la famille — vite !</h2>
-        <p style={{ textAlign: "center", fontSize: 16, color: "#d8c9a8", margin: "0 0 16px", lineHeight: 1.5 }}>
+        <p style={{ textAlign: "center", fontSize: 17, color: "#d8c9a8", margin: "0 0 16px", lineHeight: 1.5 }}>
           Chaque bip coûte cher au télégraphe. <strong>Trouve le mot LE PLUS COURT</strong> pour dire à ta famille que tu as trouvé de l'or. Tape-le en Morse (appui bref = point ·, appui long = trait —), valide chaque lettre, puis envoie.
         </p>
 
@@ -108,8 +108,8 @@ export function MorseGame({ onClose, onWin }) {
           <div style={{ display: "grid", gridTemplateColumns: "240px 1fr", gap: 20 }}>
             {/* ALPHABET MORSE affiche a gauche */}
             <div style={{ background: "#0e0a06", border: "1px solid #4a3a1e", borderRadius: 10, padding: "14px 12px", maxHeight: 460, overflowY: "auto" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: "#c8963e", textAlign: "center", marginBottom: 10 }}>ALPHABET MORSE</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 10px", fontFamily: "ui-monospace,monospace", fontSize: 15 }}>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 1, color: "#c8963e", textAlign: "center", marginBottom: 10 }}>ALPHABET MORSE</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "6px 10px", fontFamily: "ui-monospace,monospace", fontSize: 16 }}>
                 {Object.entries(ALPHABET).map(([L, code]) => (
                   <div key={L} style={{ display: "flex", justifyContent: "space-between", padding: "2px 6px", color: "#e8d8a8" }}>
                     <span style={{ fontWeight: 700, color: "#ffd166" }}>{L}</span>
@@ -123,17 +123,17 @@ export function MorseGame({ onClose, onWin }) {
             <div>
               {/* le message compose */}
               <div style={{ background: "#241a10", border: "1px solid #6a4a20", borderRadius: 10, padding: "14px 18px", marginBottom: 10, minHeight: 80 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, color: "#8a7c60", marginBottom: 6 }}>message :</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, color: "#8a7c60", marginBottom: 6 }}>message :</div>
                 <div style={{ fontFamily: "'Cinzel',Georgia,serif", fontSize: 34, fontWeight: 800, color: "#ffd166", minHeight: 42, letterSpacing: 6 }}>
                   {composed || <span style={{ color: "#5a4a2a", fontSize: 17, fontWeight: 400, letterSpacing: 0 }}>(rien encore)</span>}
                 </div>
                 <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 18, color: "#c8963e", minHeight: 22, marginTop: 4 }}>
                   {current || <span style={{ color: "#5a4a2a" }}>—</span>}
-                  {current && <span style={{ color: "#8a7c60", fontSize: 14, marginLeft: 10 }}>{decode(current) ? `(${decode(current)})` : "(?)"}</span>}
+                  {current && <span style={{ color: "#8a7c60", fontSize: 15.5, marginLeft: 10 }}>{decode(current) ? `(${decode(current)})` : "(?)"}</span>}
                 </div>
               </div>
 
-              <p style={{ minHeight: 40, textAlign: "center", color: "#e0a848", fontSize: 14.5, fontStyle: "italic", margin: "0 0 10px", lineHeight: 1.4 }}>{flash}</p>
+              <p style={{ minHeight: 40, textAlign: "center", color: "#e0a848", fontSize: 16, fontStyle: "italic", margin: "0 0 10px", lineHeight: 1.4 }}>{flash}</p>
 
               {/* manipulateur */}
               <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
@@ -151,8 +151,8 @@ export function MorseGame({ onClose, onWin }) {
               </div>
 
               <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap", marginBottom: 12 }}>
-                <button onClick={() => addSym(".")} style={btn("#ffd166")}>·<span style={{ fontSize: 12, marginLeft: 6, fontFamily: "ui-monospace,monospace" }}>point</span></button>
-                <button onClick={() => addSym("-")} style={btn("#ffd166")}>—<span style={{ fontSize: 12, marginLeft: 6, fontFamily: "ui-monospace,monospace" }}>trait</span></button>
+                <button onClick={() => addSym(".")} style={btn("#ffd166")}>·<span style={{ fontSize: 13.5, marginLeft: 6, fontFamily: "ui-monospace,monospace" }}>point</span></button>
+                <button onClick={() => addSym("-")} style={btn("#ffd166")}>—<span style={{ fontSize: 13.5, marginLeft: 6, fontFamily: "ui-monospace,monospace" }}>trait</span></button>
                 <button onClick={backspace} style={btn("#c8963e")}>⌫</button>
                 <button onClick={validateLetter} disabled={!current} style={{ ...btn("#7fe0a8"), opacity: current ? 1 : 0.4 }}>lettre suivante</button>
               </div>
@@ -166,15 +166,15 @@ export function MorseGame({ onClose, onWin }) {
         ) : (
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « — — — · — · — bip ! bip ! — À New York, l'aiguille du récepteur a tremblé exactement dans le même ordre : O… R… <strong>OR</strong>. Deux lettres seulement, et pourtant sa famille comprendra tout : James a trouvé le filon. Le message a traversé le pays en une SECONDE — là où une diligence mettait des semaines. Voilà la magie de l'électricité et d'un CODE partagé. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Message « OR » transmis a New York !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

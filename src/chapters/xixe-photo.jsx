@@ -137,14 +137,14 @@ export function PhotoGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ position: "relative", background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 20, maxWidth: 620, width: "100%", maxHeight: "92vh", overflow: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>📷 STUDIO DAGUERRÉOTYPE · CALIFORNIE 1855</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>📷 STUDIO DAGUERRÉOTYPE · CALIFORNIE 1855</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>Le portrait de James pour sa mère</h2>
         {/* halo lumineux qui envahit le modal quand on retire le cache */}
         <div style={{ position: "absolute", inset: 0, borderRadius: 18, background: "radial-gradient(circle at 50% 50%, #fff2c8 0%, #ffe8a0 40%, transparent 75%)", pointerEvents: "none", opacity: opening ? 1 : 0, transition: "opacity 0.55s ease-out", zIndex: 5 }} />
 
         {!won ? (
           <>
-            <p style={{ textAlign: "center", fontSize: 13, color: "#d8c9a8", margin: "0 0 12px" }}>
+            <p style={{ textAlign: "center", fontSize: 14.5, color: "#d8c9a8", margin: "0 0 12px" }}>
               James n'arrive pas à rester immobile ! Appuie sur <strong>DÉCLENCHER</strong> pour armer le magnésium — attention, le flash part avec un COURT DÉLAI. Il faut le viser bien dans le cadre. Trois bonnes photos suffiront.
             </p>
 
@@ -239,23 +239,23 @@ export function PhotoGame({ onClose, onWin }) {
             {/* la RANGÉE DES PHOTOS PRISES (visibles côte à côte) */}
             <div style={{ display: "flex", gap: 6, justifyContent: "center", margin: "12px 0 8px", minHeight: 40 }}>
               {taken.map((sh, i) => (
-                <div key={i} style={{ width: 44, height: 40, background: sh.ok ? "#3a2410" : "#0a0604", border: `2px solid ${sh.ok ? "#7fe0a8" : "#a83828"}`, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "ui-monospace,monospace", fontSize: 10, color: sh.ok ? "#7fe0a8" : "#a83828" }}>
+                <div key={i} style={{ width: 44, height: 40, background: sh.ok ? "#3a2410" : "#0a0604", border: `2px solid ${sh.ok ? "#7fe0a8" : "#a83828"}`, borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: sh.ok ? "#7fe0a8" : "#a83828" }}>
                   {sh.ok ? "✓" : "✗"}<br />
                 </div>
               ))}
-              {taken.length === 0 && <span style={{ fontSize: 11, color: "#a89878", fontStyle: "italic", alignSelf: "center" }}>aucune photo prise</span>}
+              {taken.length === 0 && <span style={{ fontSize: 12, color: "#a89878", fontStyle: "italic", alignSelf: "center" }}>aucune photo prise</span>}
             </div>
-            <p style={{ textAlign: "center", fontSize: 12, color: "#c8963e", margin: "0 0 8px" }}>
+            <p style={{ textAlign: "center", fontSize: 13.5, color: "#c8963e", margin: "0 0 8px" }}>
               {okCount} / {NEED} bonnes photos · plaques utilisées : {taken.length} / {MAX_TRIES}
             </p>
 
             {outOfTries ? (
               <>
-                <p style={{ textAlign: "center", fontSize: 13, color: "#e0685a", fontStyle: "italic", margin: "6px 0 10px" }}>
+                <p style={{ textAlign: "center", fontSize: 14.5, color: "#e0685a", fontStyle: "italic", margin: "6px 0 10px" }}>
                   Toutes les plaques du photographe sont utilisées ! Il faut tout recommencer.
                 </p>
                 <button onClick={recommencer}
-                  style={{ width: "100%", background: "#c8382e", color: "#efe6d2", border: "none", borderRadius: 10, padding: "16px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
+                  style={{ width: "100%", background: "#c8382e", color: "#efe6d2", border: "none", borderRadius: 10, padding: "16px", fontWeight: 800, cursor: "pointer", fontSize: 17, fontFamily: "ui-monospace,monospace", letterSpacing: 2 }}>
                   ↺ RECOMMENCER
                 </button>
               </>
@@ -269,15 +269,15 @@ export function PhotoGame({ onClose, onWin }) {
         ) : (
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Trois plaques réussies ! James pourra choisir la moins pire pour sa mère. Le daguerréotype (Daguerre, 1839) fixe la lumière sur une plaque de cuivre argentée en 15 à 30 secondes ; en 1855, avec le magnésium, on descend à 1 seconde… mais l'éclair est si violent qu'il ÉBLOUIT le sujet. Les portraits d'époque font tous la tête : essaie de sourire quand tu prends la foudre en pleine figure. Retiens ça : la photo est un DÉCALAGE — le photographe ne capture jamais tout à fait l'instant qu'il croit voir. Dès 1850 on RETOUCHE les daguerréotypes ; en 2026 c'est pareil, en pire. Bonne habitude : se demander toujours qui a fait cette image, ET ce qu'elle NE montre pas. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Daguerréotype de James : pour l'Irlande !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

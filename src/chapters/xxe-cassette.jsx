@@ -261,14 +261,14 @@ export function CassetteGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.85)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 20, maxWidth: 560, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>📼 CHAMBRE DE JULIEN · 17H · 1985</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>📼 CHAMBRE DE JULIEN · 17H · 1985</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>
           {recording ? "Enregistrement en cours…" : "Enregistrer le tube sans le DJ !"}
         </h2>
 
         {!won ? (
           <>
-            <p style={{ textAlign: "center", fontSize: 13, color: "#d8c9a8", margin: "0 0 12px" }}>
+            <p style={{ textAlign: "center", fontSize: 14.5, color: "#d8c9a8", margin: "0 0 12px" }}>
               {recording
                 ? "Ne touche plus à rien. La face A se remplit tout seul — on écoute jusqu'à ce que ce soit bon."
                 : <>Écoute la radio. Presse <strong>PLAY+REC</strong> PILE au moment où le tube commence — pas pendant que le DJ parle.</>}
@@ -335,10 +335,10 @@ export function CassetteGame({ onClose, onWin }) {
 
             {/* ce qu'on ENTEND (ou ce qui S'ENREGISTRE) */}
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 8, padding: "10px 14px", minHeight: 46, marginBottom: 10 }}>
-              <div style={{ fontSize: 11, fontFamily: "ui-monospace,monospace", color: "#7a6a4a", letterSpacing: 1 }}>
+              <div style={{ fontSize: 12, fontFamily: "ui-monospace,monospace", color: "#7a6a4a", letterSpacing: 1 }}>
                 {recording ? "SUR LA CASSETTE :" : "ON ENTEND :"}
               </div>
-              <div style={{ fontSize: 13.5, color: recording ? "#7fe0a8" : seg.type === "tube" ? "#7fe0a8" : seg.type === "pub" ? "#c8a8e0" : "#c8b090", fontStyle: "italic", fontFamily: "Georgia,serif" }}>
+              <div style={{ fontSize: 15, color: recording ? "#7fe0a8" : seg.type === "tube" ? "#7fe0a8" : seg.type === "pub" ? "#c8a8e0" : "#c8b090", fontStyle: "italic", fontFamily: "Georgia,serif" }}>
                 {recording ? "🎸 ♪♪ LE TUBE ! ♪♪ (le morceau tourne, tu tiens ton enregistrement)" : seg.label}
               </div>
             </div>
@@ -352,13 +352,13 @@ export function CassetteGame({ onClose, onWin }) {
               </div>
             ) : (
               <div style={{ marginBottom: 8 }}>
-                <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#a89878", marginBottom: 4 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#a89878", marginBottom: 4 }}>
                   <span>Face A · piste 1</span>
                   <span>{recElapsed.toFixed(1)} / {REC_DURATION.toFixed(1)} s</span>
                 </div>
                 <div style={{ position: "relative", height: 18, background: "#1a140a", border: "1px solid #5a4028", borderRadius: 4, overflow: "hidden" }}>
                   <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: `${recPct}%`, background: "linear-gradient(90deg,#c02010,#e83820)", transition: "width 60ms linear" }} />
-                  <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#fff", letterSpacing: 2, textShadow: "0 1px 2px rgba(0,0,0,0.6)" }}>
+                  <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#fff", letterSpacing: 2, textShadow: "0 1px 2px rgba(0,0,0,0.6)" }}>
                     ● REC · GRAVURE EN COURS
                   </div>
                 </div>
@@ -366,7 +366,7 @@ export function CassetteGame({ onClose, onWin }) {
             )}
 
             {!recording && (
-              <div style={{ minHeight: 22, marginBottom: 8, textAlign: "center", fontSize: 12.5, fontStyle: "italic",
+              <div style={{ minHeight: 22, marginBottom: 8, textAlign: "center", fontSize: 14, fontStyle: "italic",
                 color: verdict === "top" ? "#7fe0a8" : verdict ? "#e0a848" : "transparent" }}>
                 {verdict === "top" && "✓ Pile au bon moment ! On enregistre…"}
                 {verdict === "trop_tot" && "Trop tôt — tu enregistrerais le DJ par-dessus le tube !"}
@@ -382,12 +382,12 @@ export function CassetteGame({ onClose, onWin }) {
                 ⏵ PLAY + ⏺ REC
               </button>
             ) : (
-              <div style={{ background: "#2a1a10", border: "1px solid #5a2a10", borderRadius: 10, padding: "12px", fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#f8c088", textAlign: "center", letterSpacing: 1 }}>
+              <div style={{ background: "#2a1a10", border: "1px solid #5a2a10", borderRadius: 10, padding: "12px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, color: "#f8c088", textAlign: "center", letterSpacing: 1 }}>
                 🔴 REC · ne touche plus à la platine, la bande défile
               </div>
             )}
             {!recording && (
-              <div style={{ fontSize: 10.5, textAlign: "center", color: "#a89878", marginTop: 6 }}>
+              <div style={{ fontSize: 12, textAlign: "center", color: "#a89878", marginTop: 6 }}>
                 tentatives : {attempts} — reste calme, écoute bien
               </div>
             )}
@@ -395,15 +395,15 @@ export function CassetteGame({ onClose, onWin }) {
         ) : (
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Tu as attrapé le tube dès la première note, et la face A est pleine — dix secondes du morceau, gravées sur ta bande. Cassette Philips en 1963, magnétoscope VHS en 1976 : pour la PREMIÈRE FOIS de l'Histoire, chaque foyer peut enregistrer chez soi ce qui passe à la radio ou à la télé — puis copier, prêter, échanger. L'industrie du disque crie déjà au « piratage ». Attention : la bande se démagnétise, se casse, s'aimante. Des archives entières de radio et de télé ont été perdues. Un support qui EXISTE ne garantit pas la SURVIE du message. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Tube enregistré — Julien te fait un high-five !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

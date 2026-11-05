@@ -16,7 +16,7 @@ export default function Jeu2Placeholder({ onRetourMenu }) {
     }}>
       <div style={{ maxWidth: 540, textAlign: "center" }}>
         <div style={{ fontSize: 58 }}>🌀</div>
-        <div style={{ fontFamily: "ui-monospace,monospace", color: "#7fd8ff", letterSpacing: 3, fontSize: 12, marginTop: 6 }}>JEU 2 · AL3X1A</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", color: "#7fd8ff", letterSpacing: 3, fontSize: 13.5, marginTop: 6 }}>JEU 2 · AL3X1A</div>
         <h1 style={{
           fontFamily: TITRE_FONT, fontSize: 38, textTransform: "uppercase", letterSpacing: "0.09em",
           background: "linear-gradient(100deg, #7fd8ff 0%, #ffd166 60%)",
@@ -25,13 +25,13 @@ export default function Jeu2Placeholder({ onRetourMenu }) {
         }}>
           En construction
         </h1>
-        <p style={{ fontSize: 15, lineHeight: 1.65, color: "#c8d4e2", marginTop: 14 }}>
+        <p style={{ fontSize: 16, lineHeight: 1.65, color: "#c8d4e2", marginTop: 14 }}>
           L'enquête pour retrouver Al3x1a n'est pas encore prête à jouer.
           Ta partie de jeu 2 est déjà réservée dans un slot séparé — dès
           que les notes, les époques et le remède seront branchés, tu
           reprendras ici même sans rien perdre.
         </p>
-        <p style={{ fontSize: 13, lineHeight: 1.6, color: "#8fa3bd", marginTop: 12, fontStyle: "italic" }}>
+        <p style={{ fontSize: 14.5, lineHeight: 1.6, color: "#8fa3bd", marginTop: 12, fontStyle: "italic" }}>
           En attendant, tu peux rejouer le voyage principal pour explorer
           les époques que tu n'as pas encore visitées.
         </p>

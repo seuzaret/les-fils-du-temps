@@ -288,11 +288,11 @@ export default function BunkerSalleK({ onGo, j3 }) {
       <div onClick={() => (last ? (j3.setFlag("salle_k_vue"), setIntro(false)) : setIntroIdx((i) => i + 1))}
         style={{ position: "fixed", inset: 0, background: "rgba(2,4,8,0.96)", zIndex: 320, display: "flex", alignItems: "center", justifyContent: "center", padding: 24, cursor: "pointer", fontFamily: "Palatino, Georgia, serif" }}>
         <div style={{ maxWidth: 680, color: "#e8dfc8", textAlign: "center" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 4, color: "#c8a848", marginBottom: 18 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#c8a848", marginBottom: 18 }}>
             ⟡ ÉTAGE K — SALLE OUBLIÉE
           </div>
           <p style={{ fontSize: 20, lineHeight: 1.6, margin: 0 }}>{lignes[introIdx]}</p>
-          <div style={{ marginTop: 24, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8a7050", fontStyle: "italic" }}>
+          <div style={{ marginTop: 24, fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8a7050", fontStyle: "italic" }}>
             {last ? "Clique pour entrer ▸" : `${introIdx + 1} / ${lignes.length} · clique ▸`}
           </div>
         </div>
@@ -324,38 +324,38 @@ export default function BunkerSalleK({ onGo, j3 }) {
       <div style={{ maxWidth: 1200, width: "100%" }}>
         {!lit ? (
           <div style={{ background: "#0a0806", border: "1px dashed #5a4028", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 12.5, color: "#8a7050", fontStyle: "italic", lineHeight: 1.55 }}>
+            <p style={{ margin: 0, fontSize: 14, color: "#8a7050", fontStyle: "italic", lineHeight: 1.55 }}>
               Il fait nuit noire. Tu devines à peine les contours de la pièce. Quelque chose luit faiblement, près de la porte sur la droite.
             </p>
           </div>
         ) : !tableauOuvert ? (
           <div style={{ background: "#2a1808", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#c8a848", fontWeight: 800 }}>
               ⟡ SALLE K — HORS SERVICE
             </div>
-            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8b090", lineHeight: 1.55, fontStyle: "italic" }}>
+            <p style={{ margin: "6px 0 0", fontSize: 14, color: "#c8b090", lineHeight: 1.55, fontStyle: "italic" }}>
               Quatre leviers à chiffres sont dissimulés dans la pièce. Chaque clic sur un levier fait avancer son chiffre. Ensemble, ils forment une année — celle d'une invention notée sur le tableau blanc. Fouille, cherche, essaie.
             </p>
           </div>
         ) : !portalOnline ? (
           <div style={{ background: "#141c26", border: "1px dashed #7fd8ff", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
               ⚙ PUPITRE DÉVOILÉ — CHARGER LES CADRANS
             </div>
-            <p style={{ margin: "6px 0 0", fontSize: 12.5, color: "#c8e4ff", lineHeight: 1.55, fontStyle: "italic" }}>
+            <p style={{ margin: "6px 0 0", fontSize: 14, color: "#c8e4ff", lineHeight: 1.55, fontStyle: "italic" }}>
               Le tableau blanc a glissé et dévoilé un pupitre à quatre cadrans. Clique chaque cadran pour l'amorcer. Les quatre chargés, le portail prendra vie.
             </p>
-            <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#7fd8ff", letterSpacing: 2 }}>
+            <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#7fd8ff", letterSpacing: 2 }}>
               cadrans · {cadrans.filter(Boolean).length} / {cadrans.length} chargés
             </div>
           </div>
         ) : (
           <div style={{ background: "#0e2818", border: "1px solid #7fd8ff", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#7fd8ff", fontWeight: 800 }}>
               {voyagesDone} / 3 VOYAGES
             </div>
             {voyagesDone === 3 && (
-              <p style={{ margin: "8px 0 0", fontSize: 13, color: "#c8e4ff", fontStyle: "italic", lineHeight: 1.5 }}>
+              <p style={{ margin: "8px 0 0", fontSize: 14.5, color: "#c8e4ff", fontStyle: "italic", lineHeight: 1.5 }}>
                 Les trois voyages sont faits. Remonte voir Jorge, aux cellules du niveau −1 : il a encore quelque chose à te dire.
               </p>
             )}
@@ -364,7 +364,7 @@ export default function BunkerSalleK({ onGo, j3 }) {
       </div>
 
       <button onClick={() => onGo("elevator")}
-        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 12.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+        style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "9px 20px", fontWeight: 700, cursor: "pointer", fontSize: 14, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
         ← Reprendre l'ascenseur
       </button>
 
@@ -1074,18 +1074,18 @@ function CockpitVoyage({ j3, onGo, onClose }) {
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0a1428", border: "2px solid #7fd8ff", borderRadius: 14, padding: 24, maxWidth: 540, width: "100%", boxShadow: "0 0 60px rgba(127,216,255,0.3)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 16 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 4, color: "#7fd8ff", fontWeight: 800 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 4, color: "#7fd8ff", fontWeight: 800 }}>
             ⟡ CABINE K-01 · CLAVIER TEMPOREL
           </div>
           <button onClick={onClose}
-            style={{ background: "transparent", color: "#5a6678", border: "1px solid #28303a", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontSize: 11, fontFamily: "ui-monospace,monospace" }}>
+            style={{ background: "transparent", color: "#5a6678", border: "1px solid #28303a", borderRadius: 6, padding: "4px 10px", cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
             ✕ Sortir
           </button>
         </div>
 
         {/* Afficheur année */}
         <div style={{ background: "#050810", border: "1px solid #3a4858", borderRadius: 8, padding: "20px 24px", textAlign: "center", marginBottom: 16 }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#5a6678", marginBottom: 8 }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 3, color: "#5a6678", marginBottom: 8 }}>
             ANNÉE DE DESTINATION
           </div>
           <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 56, fontWeight: 900, letterSpacing: 10, color: "#7fd8ff",
@@ -1099,26 +1099,26 @@ function CockpitVoyage({ j3, onGo, onClose }) {
         {/* Erreur ou confirmation */}
         {err && !confirming && (
           <div style={{ background: "#2a0808", border: "1px solid #e83820", borderRadius: 6, padding: "8px 12px", marginBottom: 12 }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#e83820", fontWeight: 700 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#e83820", fontWeight: 700 }}>
               ⚠ {err}
             </div>
           </div>
         )}
         {confirming && (
           <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 8, padding: "12px 14px", marginBottom: 12 }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e", fontWeight: 700 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#5eff9e", fontWeight: 700 }}>
               ✓ DESTINATION TROUVÉE
             </div>
-            <p style={{ margin: "6px 0 10px", fontSize: 13, color: "#c8ffdd", lineHeight: 1.5 }}>
+            <p style={{ margin: "6px 0 10px", fontSize: 14.5, color: "#c8ffdd", lineHeight: 1.5 }}>
               <strong>{confirming.dest.titre}</strong>, {confirming.dest.lieu} ({confirming.year}).
             </p>
             <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
               <button onClick={() => setConfirming(null)}
-                style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 6, padding: "6px 12px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 11 }}>
+                style={{ background: "transparent", color: "#8a7050", border: "1px solid #3a2818", borderRadius: 6, padding: "6px 12px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 12 }}>
                 Annuler
               </button>
               <button onClick={lancer}
-                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 6, padding: "8px 18px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, letterSpacing: 1 }}>
+                style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 6, padding: "8px 18px", cursor: "pointer", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, letterSpacing: 1 }}>
                 ⟡ Voyager ▸
               </button>
             </div>
@@ -1146,7 +1146,7 @@ function CockpitVoyage({ j3, onGo, onClose }) {
               style={{ width: "100%", background: year.length === 4 ? "#7fd8ff" : "#28303a",
                 color: year.length === 4 ? "#06110b" : "#5a6678",
                 border: "none", borderRadius: 8, padding: "14px 0",
-                fontSize: 15, fontWeight: 800, letterSpacing: 3,
+                fontSize: 16, fontWeight: 800, letterSpacing: 3,
                 fontFamily: "ui-monospace,monospace",
                 cursor: year.length === 4 ? "pointer" : "not-allowed" }}>
               ⟡ VALIDER L'ANNÉE
@@ -1154,7 +1154,7 @@ function CockpitVoyage({ j3, onGo, onClose }) {
           </>
         )}
 
-        <p style={{ margin: "12px 0 0", fontSize: 11, color: "#5a6678", fontStyle: "italic", textAlign: "center", lineHeight: 1.4 }}>
+        <p style={{ margin: "12px 0 0", fontSize: 12, color: "#5a6678", fontStyle: "italic", textAlign: "center", lineHeight: 1.4 }}>
           Trois dossiers de Jorge mènent à des témoins précis. Ouvre le médiadex 📘 pour retrouver les dates.<br />
           Toute autre année t'y conduit aussi — mais le témoin que tu cherches n'y sera pas forcément.
         </p>

@@ -71,9 +71,9 @@ export function ChappeGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", border: "2px solid #7fb0e066", borderRadius: 18, padding: 20, maxWidth: 620, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#e8eef5", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fb0e0" }}>🚦 LE TÉLÉGRAPHE DE CHAPPE</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fb0e0" }}>🚦 LE TÉLÉGRAPHE DE CHAPPE</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 20 }}>Compose le signal de la victoire de Condé</h2>
-        <p style={{ textAlign: "center", fontSize: 13, color: "#c8d4e2", margin: "0 0 12px" }}>
+        <p style={{ textAlign: "center", fontSize: 14.5, color: "#c8d4e2", margin: "0 0 12px" }}>
           Place les trois bras <strong>exactement</strong> comme le cahier de codes l'indique. Clique un bras pour le faire tourner.
         </p>
 
@@ -81,14 +81,14 @@ export function ChappeGame({ onClose, onWin }) {
           <div style={{ display: "flex", flexWrap: "wrap", gap: 14, justifyContent: "center", alignItems: "flex-start" }}>
             {/* LE MODÈLE (cahier de codes) */}
             <div style={{ flex: "1 1 180px", maxWidth: 230, textAlign: "center" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#8fa3bd", marginBottom: 4 }}>📓 LE CAHIER DE CODES</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#8fa3bd", marginBottom: 4 }}>📓 LE CAHIER DE CODES</div>
               <div style={{ background: "#efe6ce", borderRadius: 10, padding: 8, border: "2px solid #b09a6e" }}>
                 <Telegraphe reg={TARGET.reg} left={TARGET.left} right={TARGET.right} />
               </div>
             </div>
             {/* LE TÉLÉGRAPHE À MANŒUVRER */}
             <div style={{ flex: "1 1 180px", maxWidth: 230, textAlign: "center" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: ok ? "#5eff9e" : "#ffd166", marginBottom: 4 }}>🗼 TA TOUR {ok ? "· BON SIGNAL !" : "· clique les bras"}</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: ok ? "#5eff9e" : "#ffd166", marginBottom: 4 }}>🗼 TA TOUR {ok ? "· BON SIGNAL !" : "· clique les bras"}</div>
               <div style={{ background: "#101827", borderRadius: 10, padding: 8, border: `2px solid ${ok ? "#5eff9e" : "#2a3648"}` }}>
                 <Telegraphe reg={reg} left={left} right={right} ok={ok} interactif
                   onReg={cyc(setReg)} onLeft={cyc(setLeft)} onRight={cyc(setRight)} />
@@ -98,15 +98,15 @@ export function ChappeGame({ onClose, onWin }) {
         ) : (
           <div style={{ marginTop: 8 }}>
             <div style={{ background: "#101827", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Bras en place, signal formé ! De colline en colline, la nouvelle de Condé file vers Paris — en moins d'une heure au lieu de plusieurs jours. Mais regarde bien : ces trois bras ne veulent RIEN dire pour qui n'a pas le cahier de codes. Coder, ce n'est pas cacher le message : c'est se mettre d'accord, à l'avance, sur ce que chaque geste signifie. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Signal codé formé — la tour suivante peut le lire !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#7fb0e0", color: "#06121e", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#7fb0e0", color: "#06121e", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

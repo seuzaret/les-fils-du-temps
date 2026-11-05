@@ -164,12 +164,12 @@ export function TsfReglageGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.85)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#17110a", border: "2px solid #c8963e66", borderRadius: 18, padding: 20, maxWidth: 560, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", color: "#efe6d2", fontFamily: "Palatino, Georgia, serif" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>📻 SALON DUPONT · PARIS · 21H15, 5 JUIN 1944</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>📻 SALON DUPONT · PARIS · 21H15, 5 JUIN 1944</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>Chercher Londres dans le brouillage</h2>
 
         {!won ? (
           <>
-            <p style={{ textAlign: "center", fontSize: 13, color: "#d8c9a8", margin: "0 0 12px" }}>
+            <p style={{ textAlign: "center", fontSize: 14.5, color: "#d8c9a8", margin: "0 0 12px" }}>
               Tourne le bouton de fréquence avec les flèches. Reste dans la zone BBC (verte) pendant 3 secondes pour capter le message.
             </p>
 
@@ -204,8 +204,8 @@ export function TsfReglageGame({ onClose, onWin }) {
 
             {/* Ce qu'on entend actuellement */}
             <div style={{ background: "#0e1420", border: `1px solid ${currentColor}44`, borderRadius: 8, padding: "10px 14px", minHeight: 44, marginBottom: 10 }}>
-              <div style={{ fontSize: 11, fontFamily: "ui-monospace,monospace", color: "#7a6a4a", letterSpacing: 1 }}>ON ENTEND :</div>
-              <div style={{ fontSize: 14, color: currentColor, fontStyle: "italic", fontFamily: "Georgia,serif" }}>{currentLabel}</div>
+              <div style={{ fontSize: 12, fontFamily: "ui-monospace,monospace", color: "#7a6a4a", letterSpacing: 1 }}>ON ENTEND :</div>
+              <div style={{ fontSize: 15.5, color: currentColor, fontStyle: "italic", fontFamily: "Georgia,serif" }}>{currentLabel}</div>
             </div>
 
             {/* Boutons ◀ / ▶ pour tourner le bouton */}
@@ -220,25 +220,25 @@ export function TsfReglageGame({ onClose, onWin }) {
             <div style={{ background: "#1a140a", border: "1px solid #5a4028", borderRadius: 6, height: 14, overflow: "hidden" }}>
               <div style={{ width: `${(inZone / HOLD_MS) * 100}%`, height: "100%", background: "#7fe0a8", transition: "width 0.08s linear" }} />
             </div>
-            <div style={{ fontSize: 11, textAlign: "center", color: "#a89878", marginTop: 4 }}>
+            <div style={{ fontSize: 12, textAlign: "center", color: "#a89878", marginTop: 4 }}>
               maintien dans BBC : {Math.max(0, Math.ceil((HOLD_MS - inZone) / 1000))} s
             </div>
           </>
         ) : (
           <div style={{ marginTop: 4 }}>
             <div style={{ background: "#0e1420", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.7, color: "#e8eef5", margin: "0 0 8px", fontStyle: "italic", textAlign: "center" }}>
+              <p style={{ fontSize: 16, lineHeight: 1.7, color: "#e8eef5", margin: "0 0 8px", fontStyle: "italic", textAlign: "center" }}>
                 « … Les sanglots longs des violons de l'automne bercent mon cœur d'une langueur monotone. »
               </p>
-              <p style={{ fontSize: 14, lineHeight: 1.6, color: "#c8d4e2", margin: 0 }}>
+              <p style={{ fontSize: 15.5, lineHeight: 1.6, color: "#c8d4e2", margin: 0 }}>
                 Marthe blêmit — puis sourit. Ce vers de Verlaine, c'est le SIGNAL. Le Débarquement aura lieu dans les 48 heures. Cette nuit, partout en France, les réseaux de résistance sabotent voies ferrées, ponts et lignes téléphoniques. Le 6 juin à l'aube, 156 000 soldats alliés touchent la Normandie. Une phrase de poésie, glissée dans la radio ennemie, vient de lancer la libération de l'Europe.
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✓ Signal reçu — la libération commence !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e0a848", color: "#1a1206", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

@@ -33,7 +33,7 @@ const calme = () => {
 
 /* ─── la mise en page des crédits ─── */
 const Rubrique = ({ children }) => (
-  <div style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: 4, color: OR, opacity: 0.85, textTransform: "uppercase", margin: "0 0 10px" }}>{children}</div>
+  <div style={{ fontFamily: MONO, fontSize: 12.5, letterSpacing: 4, color: OR, opacity: 0.85, textTransform: "uppercase", margin: "0 0 10px" }}>{children}</div>
 );
 const Nom = ({ children, petit }) => (
   <div style={{ fontFamily: CORMORANT, fontWeight: 500, fontSize: petit ? 19 : 25, lineHeight: 1.3, color: "#f4ead6" }}>{children}</div>
@@ -64,11 +64,11 @@ function sections(prenom) {
     { k: "chronaute", el: (<><Rubrique>Chronaute</Rubrique><Nom>{prenom || "toi"}</Nom></>) },
     { k: "equipe", el: (<>
       <Rubrique>Conception</Rubrique>
-      <Pseudo /><Nom>Claude</Nom><Nom>MARTINE <span style={{ fontSize: 16, fontStyle: "italic", color: "#a89c88" }}>(elle a insisté)</span></Nom>
+      <Pseudo /><Nom>Claude</Nom><Nom>MARTINE <span style={{ fontSize: 17, fontStyle: "italic", color: "#a89c88" }}>(elle a insisté)</span></Nom>
       <div style={{ height: 22 }} />
       <Rubrique>Histoire et tests</Rubrique><Pseudo />
       <div style={{ height: 22 }} />
-      <Rubrique>Programmation, dessins et musique</Rubrique><Nom>Claude</Nom><Note>Claude Code, d'Anthropic, avec <span style={{ fontFamily: MONO, fontStyle: "normal", fontSize: 15, fontVariantNumeric: "slashed-zero" }}>pr0fd0c65</span></Note>
+      <Rubrique>Programmation, dessins et musique</Rubrique><Nom>Claude</Nom><Note>Claude Code, d'Anthropic, avec <span style={{ fontFamily: MONO, fontStyle: "normal", fontSize: 16, fontVariantNumeric: "slashed-zero" }}>pr0fd0c65</span></Note>
     </>) },
     { k: "avec", el: (<>
       <Rubrique>Avec</Rubrique>
@@ -159,7 +159,7 @@ export default function Generique({ prenom = "", onDone }) {
 
   const w = portrait ? 150 : paysageBas ? 130 : 220;
   const largeur = portrait ? "calc(100% - 32px)" : "min(620px, calc(100% - 48px))";
-  const bouton = (fond, texte) => ({ background: fond, color: texte, border: `1px solid ${OR}`, borderRadius: 999, padding: "8px 16px", fontFamily: MONO, fontSize: 12.5, fontWeight: 700, letterSpacing: 1, cursor: "pointer" });
+  const bouton = (fond, texte) => ({ background: fond, color: texte, border: `1px solid ${OR}`, borderRadius: 999, padding: "8px 16px", fontFamily: MONO, fontSize: 14, fontWeight: 700, letterSpacing: 1, cursor: "pointer" });
   const basculerSon = () => setMuted(!isMuted());
 
   return createPortal(

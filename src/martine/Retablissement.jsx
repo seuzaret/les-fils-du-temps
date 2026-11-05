@@ -271,7 +271,7 @@ export default function Retablissement({ onFin }) {
                   <div key={ep.id} style={{ position: "absolute", left: x, transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap",
                     animation: `rtApparait .5s ease-out ${FINALE.dureeRecul * 0.6 + e * 0.06}s both` }}>
                     <div style={{ fontSize: Math.max(14, 20 * g.u) }}>{ep.chapitre.emoji}</div>
-                    {g.vw > 640 && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: OR, letterSpacing: 0.5 }}>{ep.chapitre.date}</div>}
+                    {g.vw > 640 && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: OR, letterSpacing: 0.5 }}>{ep.chapitre.date}</div>}
                   </div>
                 );
               })}
@@ -301,7 +301,7 @@ export default function Retablissement({ onFin }) {
       {flash > 0 && <div key={flash} aria-hidden style={{ position: "absolute", inset: 0, background: "#fffaf0", pointerEvents: "none", animation: `rtFlash ${flash === 1 ? 0.6 : 1.1}s ease-out both` }} />}
 
       <button onClick={passer} style={{ position: "absolute", right: 14, bottom: 12, background: "transparent", color: "#8a7a64", border: "1px solid #3a3020", borderRadius: 8,
-        padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer", animation: "rtApparait .6s ease-out 1.5s both" }}>Passer ▸</button>
+        padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, cursor: "pointer", animation: "rtApparait .6s ease-out 1.5s both" }}>Passer ▸</button>
     </div>
   );
 }

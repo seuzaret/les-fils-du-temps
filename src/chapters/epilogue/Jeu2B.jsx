@@ -217,12 +217,12 @@ function Comparaison({ onDone }) {
   };
 
   const paper = { background: "#f1ead8", color: "#2a2418", borderRadius: 6, boxShadow: "0 10px 34px rgba(0,0,0,0.55)", fontFamily: "Georgia, serif", overflow: "hidden", flex: "1 1 320px", minWidth: 0 };
-  const head = (t, c) => ({ background: c, color: "#fff", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, fontWeight: 800, padding: "7px 12px" });
+  const head = (t, c) => ({ background: c, color: "#fff", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, fontWeight: 800, padding: "7px 12px" });
 
   return (
     <div style={{ position: "absolute", inset: 0, zIndex: 5, overflowY: "auto", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "58px 14px 16px", background: "rgba(4,8,14,0.55)" }}>
       <div style={{ width: "100%", maxWidth: 1020 }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", color: "#ffd166", fontSize: 12, letterSpacing: 2, marginBottom: 10 }}>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", color: "#ffd166", fontSize: 13.5, letterSpacing: 2, marginBottom: 10 }}>
           ◆ COMPARE LES DEUX VERSIONS · CLIQUE SUR LES 3 PASSAGES DU BULLETIN QUI ONT CHANGÉ
         </div>
         <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "stretch" }}>
@@ -263,7 +263,7 @@ function Comparaison({ onDone }) {
                       border: `2px ${on || mk ? "solid" : "dashed"} ${bord}`, position: "relative",
                     }}>
                     {s.R}
-                    {on && <span style={{ position: "absolute", top: -9, right: 8, background: bord === "transparent" ? "#e8742a" : bord, color: "#fff", fontFamily: "ui-monospace,monospace", fontSize: 10, fontWeight: 800, letterSpacing: 1, padding: "1px 7px", borderRadius: 8 }}>
+                    {on && <span style={{ position: "absolute", top: -9, right: 8, background: bord === "transparent" ? "#e8742a" : bord, color: "#fff", fontFamily: "ui-monospace,monospace", fontSize: 11.5, fontWeight: 800, letterSpacing: 1, padding: "1px 7px", borderRadius: 8 }}>
                       {mk === "ko" ? "✗ identique" : mk === "ok" ? "✓ modifié" : "⚑ modifié ?"}
                     </span>}
                   </button>
@@ -274,7 +274,7 @@ function Comparaison({ onDone }) {
         </div>
 
         {/* retour + boutons */}
-        <div style={{ marginTop: 12, background: "#101827ee", border: "1px solid #2a3648", borderRadius: 10, padding: "10px 14px", color: "#e8eef5", fontSize: 14, lineHeight: 1.55 }}>
+        <div style={{ marginTop: 12, background: "#101827ee", border: "1px solid #2a3648", borderRadius: 10, padding: "10px 14px", color: "#e8eef5", fontSize: 15.5, lineHeight: 1.55 }}>
           {phase === "play" && <span style={{ color: "#a8b6c8" }}>Lis ligne à ligne, y compris l'en-tête : <b>qui</b> parle, et <b>d'où</b> vient l'information ? Sélectionné : <b>{sel.size}</b> / 3</span>}
           {phase === "marked" && (
             <span>
@@ -297,12 +297,12 @@ function Comparaison({ onDone }) {
         <div style={{ marginTop: 10, textAlign: "center" }}>
           {phase !== "done" ? (
             <button onClick={valider} disabled={sel.size === 0}
-              style={{ background: sel.size ? "#ffd166" : "#3a3320", color: sel.size ? "#1a1408" : "#7a6a40", border: "none", borderRadius: 10, padding: "11px 26px", fontWeight: 800, fontSize: 14, letterSpacing: 2, fontFamily: "ui-monospace,monospace", cursor: sel.size ? "pointer" : "default", boxShadow: sel.size ? "0 0 18px rgba(255,209,102,0.4)" : "none" }}>
+              style={{ background: sel.size ? "#ffd166" : "#3a3320", color: sel.size ? "#1a1408" : "#7a6a40", border: "none", borderRadius: 10, padding: "11px 26px", fontWeight: 800, fontSize: 15.5, letterSpacing: 2, fontFamily: "ui-monospace,monospace", cursor: sel.size ? "pointer" : "default", boxShadow: sel.size ? "0 0 18px rgba(255,209,102,0.4)" : "none" }}>
               VALIDER
             </button>
           ) : (
             <button onClick={() => onDone({ ok: !revealed, tries })} autoFocus
-              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "11px 26px", fontWeight: 800, fontSize: 14, letterSpacing: 2, fontFamily: "ui-monospace,monospace", cursor: "pointer", boxShadow: "0 0 18px rgba(94,255,158,0.45)" }}>
+              style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 10, padding: "11px 26px", fontWeight: 800, fontSize: 15.5, letterSpacing: 2, fontFamily: "ui-monospace,monospace", cursor: "pointer", boxShadow: "0 0 18px rgba(94,255,158,0.45)" }}>
               CONTINUER ▸
             </button>
           )}
@@ -395,14 +395,14 @@ export default function Jeu2B({ prenom, onDone }) {
 
       {/* passer */}
       <button onClick={(e) => { e.stopPropagation(); skipScene(); }} title="Sauter cette scène"
-        style={{ position: "absolute", top: 10, right: 14, zIndex: 10, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
+        style={{ position: "absolute", top: 10, right: 14, zIndex: 10, background: "rgba(20,27,38,0.6)", border: "1px solid rgba(200,212,226,0.25)", color: "#8fa3bd", padding: "5px 12px", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "ui-monospace,monospace", letterSpacing: 1, backdropFilter: "blur(4px)" }}>
         passer ›
       </button>
 
       {/* bandeau titre */}
       <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#ffd166" }}>{head.titre}</div>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>{STAGE_LABEL[stage]}</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#ffd166" }}>{head.titre}</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>{STAGE_LABEL[stage]}</div>
       </div>
 
       <div style={{ flex: 1 }} />
@@ -427,11 +427,11 @@ export default function Jeu2B({ prenom, onDone }) {
           {step.type === "choice" ? (
             <div onClick={(e) => e.stopPropagation()}
               style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#ffd166" }}>◆ {step.prompt.toUpperCase()}</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#ffd166" }}>◆ {step.prompt.toUpperCase()}</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                 {step.options.map((o, k) => (
                   <button key={k} onClick={() => choose(o)} autoFocus={k === 0}
-                    style={{ textAlign: "left", background: "#141b26", color: "#e8eef5", border: "1px solid #3a4a64", borderRadius: 10, padding: "11px 16px", fontSize: 15, cursor: "pointer", fontFamily: "Georgia, serif" }}>
+                    style={{ textAlign: "left", background: "#141b26", color: "#e8eef5", border: "1px solid #3a4a64", borderRadius: 10, padding: "11px 16px", fontSize: 16, cursor: "pointer", fontFamily: "Georgia, serif" }}>
                     {o.label}
                   </button>
                 ))}
@@ -441,13 +441,13 @@ export default function Jeu2B({ prenom, onDone }) {
             <div title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}
               style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 130, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
-                {who.nom && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: who.couleur, marginBottom: 6 }}>{who.nom}</div>}
-                <p style={{ fontSize: 15, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
+                {who.nom && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: who.couleur, marginBottom: 6 }}>{who.nom}</div>}
+                <p style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
                   {step.who === "narr" ? shown : <>« {shown}{!done && <span style={{ opacity: 0.7 }}>▮</span>} »</>}
                   {step.who === "narr" && !done && <span style={{ opacity: 0.7 }}>▮</span>}
                 </p>
               </div>
-              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 1, color: done ? who.couleur : "#3a4658" }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 1, color: done ? who.couleur : "#3a4658" }}>
                 {done ? (step.fx === "sleep" ? "clique pour fermer les yeux ▸" : "clique pour continuer ▸") : "…"}
               </div>
             </div>

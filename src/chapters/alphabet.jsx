@@ -170,7 +170,7 @@ function Tuile({ L, used, wrong, onPick }) {
           {L.l}
         </div>
       </div>
-      <div style={{ fontSize: 10, fontFamily: "ui-monospace,monospace",
+      <div style={{ fontSize: 11.5, fontFamily: "ui-monospace,monospace",
         color: used ? "#8fb8a0" : "#c9a877", textAlign: "center", lineHeight: 1.2 }}>
         {L.nom}<br /><span style={{ color: "#8a97ad" }}>{L.sens}</span>
       </div>
@@ -216,9 +216,9 @@ export function AlphabetGame({ onClose, onWin }) {
       style={{ position: "fixed", inset: 0, background: "rgba(4,8,14,0.82)", display: "flex", alignItems: "center", justifyContent: "center", padding: 16, zIndex: 70, backdropFilter: "blur(3px)" }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1420", border: "2px solid #e8934a66", borderRadius: 18, padding: 20, maxWidth: 720, width: "100%", maxHeight: "92vh", overflowY: "auto", boxShadow: "0 12px 48px rgba(0,0,0,0.6)", fontFamily: "Palatino, Georgia, serif", color: "#e8eef5" }}>
-        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e8934a" }}>✍ L'INVENTION DE L'ALPHABET</div>
+        <div style={{ textAlign: "center", fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e8934a" }}>✍ L'INVENTION DE L'ALPHABET</div>
         <h2 style={{ textAlign: "center", margin: "6px 0 4px", color: "#ffd166", fontSize: 21 }}>Écris MARTINE dans le premier alphabet</h2>
-        <p style={{ fontSize: 13.5, lineHeight: 1.55, color: "#c8d4e2", textAlign: "center", margin: "0 0 14px" }}>
+        <p style={{ fontSize: 15, lineHeight: 1.55, color: "#c8d4e2", textAlign: "center", margin: "0 0 14px" }}>
           Il y a 3 500 ans, chaque lettre était le DESSIN d'une chose. Voici 15 signes phéniciens (mélangés).
           Clique-les <strong style={{ color: "#ffd166" }}>dans le bon ordre</strong> pour épeler M · A · R · T · I · N · E.
         </p>
@@ -261,12 +261,12 @@ export function AlphabetGame({ onClose, onWin }) {
 
         {!done ? (
           <div style={{ marginTop: 12, display: "flex", alignItems: "center", gap: 12 }}>
-            <p style={{ flex: 1, minHeight: 18, color: flash ? "#e8934a" : "#8fa3bd", fontSize: 12.5, fontStyle: "italic", margin: 0 }}>
+            <p style={{ flex: 1, minHeight: 18, color: flash ? "#e8934a" : "#8fa3bd", fontSize: 14, fontStyle: "italic", margin: 0 }}>
               {flash || `Prochaine lettre à écrire : « ${TARGET[used.length]} »`}
             </p>
             {used.length > 0 && (
               <button onClick={effacer}
-                style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "8px 14px", fontWeight: 700, cursor: "pointer", fontSize: 12, fontFamily: "ui-monospace,monospace" }}>
+                style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 10, padding: "8px 14px", fontWeight: 700, cursor: "pointer", fontSize: 13.5, fontFamily: "ui-monospace,monospace" }}>
                 ✕ Recommencer
               </button>
             )}
@@ -274,15 +274,15 @@ export function AlphabetGame({ onClose, onWin }) {
         ) : (
           <div style={{ marginTop: 16 }}>
             <div style={{ background: "#101827", border: "1px solid #2a3648", borderRadius: 12, padding: "14px 16px" }}>
-              <p style={{ fontSize: 15, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: "#e8eef5", margin: 0 }}>
                 « Tu viens d'écrire mon nom dans l'alphabet des Phéniciens ! Regarde : chacune de nos lettres n'est, au départ, que le dessin d'une chose. Un bœuf, l'eau, une main… Ce code est si SIMPLE qu'on l'apprend en quelques jours. Maintenant que tu le TIENS, confie-le aux navires marchands : c'est le commerce qui le portera de port en port, tout autour de la mer. » — MARTINE
               </p>
             </div>
-            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+            <p style={{ textAlign: "center", margin: "12px 0 0", color: "#7fe0a8", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               ✨ Tu as appris l'ALPHABET — mets-le sur les navires pour le diffuser !
             </p>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: "100%", background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 15, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: "100%", background: "#e8934a", color: "#1a0e02", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer", fontSize: 16, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

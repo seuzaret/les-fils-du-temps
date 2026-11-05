@@ -467,9 +467,9 @@ function Sac({ sac, choisi, onChoisir, onPoubelle, secoue, vertical = false }) {
         <span style={{ fontSize: 24, lineHeight: 1 }}>🗑️</span>
         <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 8.5, letterSpacing: 0.5, fontWeight: 800, whiteSpace: "nowrap" }}>POUBELLE TEMPORELLE</span>
       </button>
-      <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 13, fontWeight: 800, letterSpacing: 1, color: "#ffb8be", whiteSpace: "nowrap", textAlign: vertical ? "center" : undefined }}>🎒 SAC</span>
+      <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 14.5, fontWeight: 800, letterSpacing: 1, color: "#ffb8be", whiteSpace: "nowrap", textAlign: vertical ? "center" : undefined }}>🎒 SAC</span>
       <div style={{ flex: 1, minWidth: 0, minHeight: 0, display: "flex", flexDirection: vertical ? "column" : "row", flexWrap: vertical ? "nowrap" : "wrap", alignItems: vertical ? "stretch" : "center", gap: 6, maxHeight: vertical ? "none" : 96, overflowY: "auto", padding: "3px 0" }}>
-      {sac.length === 0 && <span style={{ fontSize: 13, color: "#7a5a64", fontStyle: "italic" }}>vide</span>}
+      {sac.length === 0 && <span style={{ fontSize: 14.5, color: "#7a5a64", fontStyle: "italic" }}>vide</span>}
       {sac.map((id) => {
         const on = choisi === id;
         const o = objetDuSac(id);
@@ -482,7 +482,7 @@ function Sac({ sac, choisi, onChoisir, onPoubelle, secoue, vertical = false }) {
             {o.image
               ? <img src={assetUrl(`assets/inventions/${o.image}`)} alt="" style={{ width: 42, height: 32, objectFit: "cover", borderRadius: 4 }} />
               : <span style={{ width: 42, height: 32, display: "grid", placeItems: "center", fontSize: 22, background: "#0a0408", borderRadius: 4 }}>{o.emoji}</span>}
-            <span style={{ fontFamily: "Georgia, serif", fontSize: 13, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{o.nom}</span>
+            <span style={{ fontFamily: "Georgia, serif", fontSize: 14.5, fontWeight: 700, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{o.nom}</span>
           </button>
         );
       })}
@@ -767,7 +767,7 @@ function Monde({ page, phase, setPhase }) {
 
   const monde = { etat, sortant, onCarte, onPerso, onFutur, bulle };
   const paysageBas = ecran.bas && !ecran.portrait;
-  const compteur = { fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 800, color: "#ffe8a0", whiteSpace: "nowrap" };
+  const compteur = { fontFamily: "ui-monospace,monospace", fontSize: 15.5, fontWeight: 800, color: "#ffe8a0", whiteSpace: "nowrap" };
   const tableaux = TABLEAUX[ep.id];
   return (
     <div style={{ ...page, height: "100dvh", display: "flex", flexDirection: "column" }}>
@@ -784,8 +784,8 @@ function Monde({ page, phase, setPhase }) {
           <span data-compteur="persos" title="Personnages de cette époque qui ont retrouvé leur support" style={compteur}>🧑 {nbServis}/{persosIci.length}</span>
           <span data-compteur="futurs" title="Objets du futur de cette époque jetés" style={compteur}>🗑️ {nbJetes}/{futursIci.length}</span>
           <span title="Époques remises en ordre" style={{ ...compteur, color: GOLD }}>✦ {finies.length}/{EPOQUES.length}</span>
-          <button onClick={basculerSon} title={son ? "Couper le son" : "Remettre le son"} style={{ background: "#12060a", color: son ? "#ffb8be" : "#7a5a64", border: `2px solid ${son ? "#5a2a34" : "#3a1a24"}`, borderRadius: 10, padding: "5px 9px", fontSize: 16, cursor: "pointer" }}>{son ? "🔊" : "🔇"}</button>
-          <button onClick={() => setMediadex(true)} title="Médiadex" style={{ background: "#2a1808", color: GOLD, border: "2px solid #c8a848", borderRadius: 10, padding: "5px 9px", fontSize: 16, cursor: "pointer" }}>🃏</button>
+          <button onClick={basculerSon} title={son ? "Couper le son" : "Remettre le son"} style={{ background: "#12060a", color: son ? "#ffb8be" : "#7a5a64", border: `2px solid ${son ? "#5a2a34" : "#3a1a24"}`, borderRadius: 10, padding: "5px 9px", fontSize: 17, cursor: "pointer" }}>{son ? "🔊" : "🔇"}</button>
+          <button onClick={() => setMediadex(true)} title="Médiadex" style={{ background: "#2a1808", color: GOLD, border: "2px solid #c8a848", borderRadius: 10, padding: "5px 9px", fontSize: 17, cursor: "pointer" }}>🃏</button>
         </div>
       </div>
       <div style={{ position: "relative", zIndex: 4, padding: "0 12px" }}>
@@ -816,7 +816,7 @@ function Monde({ page, phase, setPhase }) {
         {toast && (
           <div key={toast.texte} style={{ position: "absolute", left: "50%", bottom: "100%", transform: "translateX(-50%)", marginBottom: 2, maxWidth: "92%", width: "max-content", zIndex: 5 }}>
             <div style={{ background: toast.ok ? "#0e1a12" : "#1a0408", color: toast.ok ? "#c8ffd8" : "#ffd8dc", border: `1px solid ${toast.ok ? "#5eff9e" : RED}`,
-              borderRadius: 10, padding: "6px 14px", fontFamily: "Georgia, serif", fontSize: 14.5, textAlign: "center", animation: "m2Pop .25s ease-out both" }}>
+              borderRadius: 10, padding: "6px 14px", fontFamily: "Georgia, serif", fontSize: 16, textAlign: "center", animation: "m2Pop .25s ease-out both" }}>
               {toast.texte}
             </div>
           </div>
@@ -830,8 +830,8 @@ function Monde({ page, phase, setPhase }) {
           background: "rgba(18,8,28,0.97)", border: "1px solid #a04ce8", borderRadius: 10, padding: 10, boxShadow: "0 6px 24px rgba(0,0,0,0.6)",
           display: "flex", flexDirection: "column", gap: 5, fontFamily: "ui-monospace,monospace" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 3 }}>
-            <span style={{ fontSize: 11, letterSpacing: 1, color: "#c88aff", fontWeight: 700 }}>🎛️ TRICHE · MONDE 2</span>
-            <button onClick={() => setTriche(false)} style={{ background: "none", border: "none", color: "#8a7a9a", cursor: "pointer", fontSize: 14 }}>✕</button>
+            <span style={{ fontSize: 12, letterSpacing: 1, color: "#c88aff", fontWeight: 700 }}>🎛️ TRICHE · MONDE 2</span>
+            <button onClick={() => setTriche(false)} style={{ background: "none", border: "none", color: "#8a7a9a", cursor: "pointer", fontSize: 15.5 }}>✕</button>
           </div>
           {[
             [`✅ Ranger cette époque (${ep.chapitre.epoque})`, () => { ranger([ep.id]); }],
@@ -841,9 +841,9 @@ function Monde({ page, phase, setPhase }) {
             ["← Rentrer au jeu", () => { window.location.href = RACINE(); }],
           ].map(([t, f]) => (
             <button key={t} onClick={f} style={{ background: "#2a1638", border: "1px solid #7a3ca8", color: "#e8d4ff", borderRadius: 7, padding: "6px 8px",
-              cursor: "pointer", fontSize: 11, textAlign: "left", fontFamily: "inherit" }}>{t}</button>
+              cursor: "pointer", fontSize: 12, textAlign: "left", fontFamily: "inherit" }}>{t}</button>
           ))}
-          <div style={{ fontSize: 9.5, color: "#6a5a7a", marginTop: 3 }}>tape « triche » (ou 🐛) pour fermer</div>
+          <div style={{ fontSize: 11, color: "#6a5a7a", marginTop: 3 }}>tape « triche » (ou 🐛) pour fermer</div>
         </div>
       )}
     </div>
@@ -851,5 +851,5 @@ function Monde({ page, phase, setPhase }) {
 }
 
 function btn(bg, color, border) {
-  return { background: bg, color, border: border ? `1px solid ${border}` : "none", borderRadius: 10, padding: "11px 22px", fontFamily: "ui-monospace,monospace", fontSize: 14, fontWeight: 800, letterSpacing: 1, cursor: "pointer", display: "inline-block" };
+  return { background: bg, color, border: border ? `1px solid ${border}` : "none", borderRadius: 10, padding: "11px 22px", fontFamily: "ui-monospace,monospace", fontSize: 15.5, fontWeight: 800, letterSpacing: 1, cursor: "pointer", display: "inline-block" };
 }

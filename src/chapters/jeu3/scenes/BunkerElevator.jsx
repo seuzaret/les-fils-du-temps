@@ -524,17 +524,17 @@ export default function BunkerElevator({ onGo, j3 }) {
       </svg>
 
       {phase === "arrived" && (
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 3, color: "#5eff9e" }}>
           ✓ ARRIVÉE À L'ÉTAGE {target.id} — {target.name.toUpperCase()}
         </div>
       )}
       {phase === "idle" && lastNew && (
-        <p style={{ margin: 0, maxWidth: 760, fontSize: 13, color: "#e8dfc8", textAlign: "center", fontStyle: "italic", fontFamily: "Palatino, Georgia, serif" }}>
+        <p style={{ margin: 0, maxWidth: 760, fontSize: 14.5, color: "#e8dfc8", textAlign: "center", fontStyle: "italic", fontFamily: "Palatino, Georgia, serif" }}>
           {lastNew.caption}
         </p>
       )}
       {phase === "idle" && (
-        <p style={{ margin: 0, fontSize: 11, color: "#7a879e", textAlign: "center", fontStyle: "italic" }}>
+        <p style={{ margin: 0, fontSize: 12, color: "#7a879e", textAlign: "center", fontStyle: "italic" }}>
           Clique un étage sur le tableau, ou utilise la mini-carte à gauche.
         </p>
       )}

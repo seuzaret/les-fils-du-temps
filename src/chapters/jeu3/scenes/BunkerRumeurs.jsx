@@ -85,20 +85,20 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   if (!billetRecu) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#8a5030", textAlign: "center" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#8a5030", textAlign: "center" }}>
           BUREAU DES RUMEURS · R-01
         </div>
         <div style={{ maxWidth: 480, textAlign: "center", background: "#141008", border: "1px solid #3a2010", borderRadius: 12, padding: "22px 24px", color: "#c8b090" }}>
           <div style={{ fontSize: 48, marginBottom: 10 }}>🔒</div>
-          <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic" }}>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, fontStyle: "italic" }}>
             La porte est fermée. Un petit mot y est punaisé :
           </p>
-          <p style={{ margin: "10px 0 0", fontSize: 14, lineHeight: 1.5, fontFamily: "Georgia, serif", color: "#e8dfc8" }}>
+          <p style={{ margin: "10px 0 0", fontSize: 15.5, lineHeight: 1.5, fontFamily: "Georgia, serif", color: "#e8dfc8" }}>
             « Je reçois les habitants qui savent déjà pourquoi ils viennent. Prends le temps d'écouter les autres. — V. »
           </p>
         </div>
         <button onClick={() => onGo(j3.hubRoom || "hubBas")}
-          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           ← Retour au couloir
         </button>
       </div>
@@ -112,16 +112,16 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     const hint = "Je n'ai rien de neuf pour toi. L'archiviste du niveau -1, Jorge, cherchait quelqu'un pour l'aider à classer ses fiches, j'ai entendu. Va voir, tu lui es sûrement plus utile qu'à traîner ici.";
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#e0a848", textAlign: "center" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#e0a848", textAlign: "center" }}>
           BUREAU DES RUMEURS · JUGE VEZ
         </div>
         <div style={{ maxWidth: 540, textAlign: "center", background: "#141008", border: "1px solid #e0a848", borderRadius: 12, padding: "22px 24px", color: "#e8dfc8" }}>
-          <p style={{ margin: 0, fontSize: 14.5, lineHeight: 1.6, fontStyle: "italic" }}>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6, fontStyle: "italic" }}>
             « {hint} »
           </p>
         </div>
         <button onClick={() => onGo(j3.hubRoom || "hubBas")}
-          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           ← Retour au couloir
         </button>
       </div>
@@ -132,16 +132,16 @@ export default function BunkerRumeurs({ onGo, j3 }) {
   if (allDone) {
     return (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16, width: "100%", height: "100%", padding: 20, boxSizing: "border-box", justifyContent: "center", background: "#0a0806" }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 3, color: "#5eff9e", textAlign: "center" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#5eff9e", textAlign: "center" }}>
           ✓ TOUTES LES ENQUÊTES RENDUES
         </div>
         <div style={{ maxWidth: 520, textAlign: "center", background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 12, padding: "22px 24px", color: "#c8ffdd" }}>
-          <p style={{ margin: 0, fontSize: 15, lineHeight: 1.6 }}>
+          <p style={{ margin: 0, fontSize: 16, lineHeight: 1.6 }}>
             Vez note dans son registre, pose son stylo. « Pas mal, pour un assistant. Reviens me voir plus tard — il y aura d'autres affaires. »
           </p>
         </div>
         <button onClick={() => onGo(j3.hubRoom || "hubBas")}
-          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 13, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
+          style={{ background: "#141b26", color: "#7fd8ff", border: "1px solid #3a80c8", borderRadius: 10, padding: "10px 22px", fontWeight: 700, cursor: "pointer", fontSize: 14.5, fontFamily: "ui-monospace,monospace", letterSpacing: 1 }}>
           ← Retour au couloir
         </button>
       </div>
@@ -202,7 +202,7 @@ export default function BunkerRumeurs({ onGo, j3 }) {
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 6, width: "100%", height: "100%", padding: 4, boxSizing: "border-box", overflowY: "auto", scrollbarGutter: "stable" }}>
       {/* Bandeau titre + bouton carnet */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", maxWidth: 1200, padding: "0 4px", flexShrink: 0 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>
           🎯 ENQUÊTE {missionNum} · {mission.titre.toUpperCase()}
         </div>
       </div>
@@ -352,8 +352,8 @@ export default function BunkerRumeurs({ onGo, j3 }) {
       <div style={{ maxWidth: 900, width: "100%", minHeight: 140 }}>
         {phase === "done" && (
           <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#5eff9e" }}>✓ MISSION ACCOMPLIE</div>
-            <p style={{ margin: "4px 0 0", fontSize: 13.5, lineHeight: 1.5, color: "#e8eef5" }}>{mission.succes}</p>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#5eff9e" }}>✓ MISSION ACCOMPLIE</div>
+            <p style={{ margin: "4px 0 0", fontSize: 15, lineHeight: 1.5, color: "#e8eef5" }}>{mission.succes}</p>
           </div>
         )}
 
@@ -453,15 +453,15 @@ export default function BunkerRumeurs({ onGo, j3 }) {
 function IntroPanel({ affirmation, onGoVez }) {
   return (
     <div style={{ background: "#0a0e14", border: "1px dashed #e0a848", borderRadius: 10, padding: "12px 16px" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848", marginBottom: 6 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848", marginBottom: 6 }}>
         AFFIRMATION À VÉRIFIER
       </div>
-      <p style={{ margin: 0, fontSize: 14, lineHeight: 1.6, color: "#e8eef5", fontStyle: "italic" }}>
+      <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.6, color: "#e8eef5", fontStyle: "italic" }}>
         « {affirmation} »
       </p>
       <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
         <button onClick={onGoVez}
-          style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+          style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
           Voir le Juge Vez ▸
         </button>
       </div>
@@ -472,18 +472,18 @@ function IntroPanel({ affirmation, onGoVez }) {
 function VezPanel({ titre, lignes, action }) {
   return (
     <div style={{ background: "#141020", border: "1px solid #e0a848", borderRadius: 10, padding: "12px 16px" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848", marginBottom: 6 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848", marginBottom: 6 }}>
         JUGE VEZ · {titre.toUpperCase()}
       </div>
       {lignes.map((l, i) => (
-        <p key={i} style={{ margin: i === 0 ? 0 : "6px 0 0", fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5" }}>
+        <p key={i} style={{ margin: i === 0 ? 0 : "6px 0 0", fontSize: 15, lineHeight: 1.55, color: "#e8eef5" }}>
           {l}
         </p>
       ))}
       {action && (
         <div style={{ marginTop: 10, display: "flex", justifyContent: "flex-end" }}>
           <button onClick={action.on}
-            style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+            style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
             {action.label}
           </button>
         </div>
@@ -496,21 +496,21 @@ function EnquetePanel({ mission, nbInterroges, allAsked, temoinsAChercher = [] }
   const nbExterieurs = temoinsAChercher.length;
   return (
     <div style={{ background: "#0a0e14", border: "1px dashed #3a80c8", borderRadius: 10, padding: "12px 16px" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#7fd8ff", marginBottom: 6 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff", marginBottom: 6 }}>
         ENQUÊTE EN COURS · {nbInterroges}/{mission.temoins.length} interrogé{nbInterroges > 1 ? "s" : ""}
       </div>
-      <p style={{ margin: 0, fontSize: 13, color: "#c8d4e2", lineHeight: 1.5 }}>
+      <p style={{ margin: 0, fontSize: 14.5, color: "#c8d4e2", lineHeight: 1.5 }}>
         Clique sur chaque témoin ici au Bureau. Pour les autres, va les voir dans leur pièce. Le carnet 📓 note où les trouver.
       </p>
       {nbExterieurs > 0 && (
-        <ul style={{ margin: "8px 0 0", paddingLeft: 20, fontSize: 12.5, color: "#8fa3bd", lineHeight: 1.5 }}>
+        <ul style={{ margin: "8px 0 0", paddingLeft: 20, fontSize: 14, color: "#8fa3bd", lineHeight: 1.5 }}>
           {temoinsAChercher.map((t) => (
             <li key={t.id}>☐ Voir <strong>{t.nom}</strong> · {t.lieu}</li>
           ))}
         </ul>
       )}
       {allAsked && (
-        <p style={{ margin: "8px 0 0", fontSize: 13, color: "#e0a848", fontWeight: 700 }}>
+        <p style={{ margin: "8px 0 0", fontSize: 14.5, color: "#e0a848", fontWeight: 700 }}>
           ▸ Tu as interrogé tout le monde. Retourne voir le Juge Vez pour rendre ton verdict.
         </p>
       )}
@@ -524,13 +524,13 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
   return (
     <div style={{ background: "#1a1408", border: "2px solid #e0a848", borderRadius: 10, padding: "10px 14px" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4, gap: 8 }}>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#e0a848" }}>🎯 RENDS TON VERDICT</div>
-        <div style={{ fontSize: 11, color: "#c8d4e2", fontStyle: "italic", flex: 1, textAlign: "right" }}>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#e0a848" }}>🎯 RENDS TON VERDICT</div>
+        <div style={{ fontSize: 12, color: "#c8d4e2", fontStyle: "italic", flex: 1, textAlign: "right" }}>
           « {mission.affirmation} »
         </div>
       </div>
 
-      <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
+      <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
         1. QUEL VERDICT ?
       </div>
       <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
@@ -542,17 +542,17 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
               color: verdictChoice === v.id ? "#1a0e08" : "#e8eef5",
               border: `1px solid ${verdictChoice === v.id ? "#e0a848" : "#3a4048"}`,
               borderRadius: 8, padding: "6px 12px",
-              fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800,
+              fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800,
               cursor: "pointer", letterSpacing: 1, flex: "1 1 150px",
               textAlign: "left",
             }}>
             {v.label}
-            <div style={{ fontSize: 10, fontWeight: 500, marginTop: 2, opacity: 0.85, lineHeight: 1.3 }}>{v.desc}</div>
+            <div style={{ fontSize: 11.5, fontWeight: 500, marginTop: 2, opacity: 0.85, lineHeight: 1.3 }}>{v.desc}</div>
           </button>
         ))}
       </div>
 
-      <div style={{ marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
+      <div style={{ marginTop: 10, fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 1.5, color: "#c8a848", fontWeight: 700 }}>
         2. TÉMOIN·S FIABLE·S ?
       </div>
       <div style={{ display: "flex", gap: 6, marginTop: 4, flexWrap: "wrap" }}>
@@ -565,7 +565,7 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
                 color: picked ? "#5eff9e" : "#c8d4e2",
                 border: `1px solid ${picked ? "#5eff9e" : "#3a4048"}`,
                 borderRadius: 8, padding: "5px 10px",
-                fontFamily: "ui-monospace,monospace", fontSize: 11.5, cursor: "pointer", letterSpacing: 1,
+                fontFamily: "ui-monospace,monospace", fontSize: 12.5, cursor: "pointer", letterSpacing: 1,
               }}>
               {picked ? "☑ " : "☐ "}{t.nom}
             </button>
@@ -575,7 +575,7 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
 
       <div style={{ display: "flex", justifyContent: "space-between", marginTop: 10, gap: 8 }}>
         <button onClick={onCancel}
-          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 11, cursor: "pointer" }}>
+          style={{ background: "transparent", color: "#8fa3bd", border: "1px solid #2a3648", borderRadius: 8, padding: "6px 12px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer" }}>
           ← Continuer d'enquêter
         </button>
         <button onClick={onSubmit} disabled={!canSubmit}
@@ -583,7 +583,7 @@ function VerdictPanel({ mission, verdictChoice, setVerdictChoice, reliablePicks,
             background: canSubmit ? "#5eff9e" : "#2a3648",
             color: canSubmit ? "#06110b" : "#5a6678",
             border: "none", borderRadius: 8, padding: "7px 18px",
-            fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800,
+            fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800,
             cursor: canSubmit ? "pointer" : "default", letterSpacing: 1,
           }}>
           ▶ Rendre le verdict
@@ -597,24 +597,24 @@ function FeedbackPanel({ feedback, onRetry, onNext }) {
   const ok = feedback.verdict.ok;
   return (
     <div style={{ background: ok ? "#0e2818" : "#2a1408", border: `1px solid ${ok ? "#5eff9e" : "#e0a848"}`, borderRadius: 10, padding: "12px 16px" }}>
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: ok ? "#5eff9e" : "#e0a848", marginBottom: 6 }}>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: ok ? "#5eff9e" : "#e0a848", marginBottom: 6 }}>
         {ok ? "✓ VERDICT CORRECT" : "✗ RECOMMENCE"}
       </div>
-      <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5" }}>{feedback.verdict.retour}</p>
+      <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: "#e8eef5" }}>{feedback.verdict.retour}</p>
       {feedback.fbFiables && (
-        <p style={{ margin: "8px 0 0", fontSize: 12.5, lineHeight: 1.5, color: "#c8d4e2", fontStyle: "italic" }}>
+        <p style={{ margin: "8px 0 0", fontSize: 14, lineHeight: 1.5, color: "#c8d4e2", fontStyle: "italic" }}>
           {feedback.fbFiables}
         </p>
       )}
       <div style={{ marginTop: 12, display: "flex", justifyContent: "flex-end" }}>
         {ok ? (
           <button onClick={onNext}
-            style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+            style={{ background: "#5eff9e", color: "#06110b", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
             Continuer ▸
           </button>
         ) : (
           <button onClick={onRetry}
-            style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
+            style={{ background: "#e0a848", color: "#1a0e08", border: "none", borderRadius: 8, padding: "8px 18px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, fontWeight: 800, cursor: "pointer", letterSpacing: 1 }}>
             ↺ Retour à l'enquête
           </button>
         )}

@@ -115,17 +115,17 @@ export function EniacDebugGame({ onClose, onWin }) {
       style={{ position: 'fixed', inset: 0, background: 'rgba(4,8,14,0.85)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, zIndex: 70, backdropFilter: 'blur(3px)' }}>
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: '#17110a', border: '2px solid #c8963e66', borderRadius: 18, padding: 20, maxWidth: 640, width: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 12px 48px rgba(0,0,0,0.6)', color: '#efe6d2', fontFamily: 'Palatino, Georgia, serif' }}>
-        <div style={{ textAlign: 'center', fontFamily: 'ui-monospace,monospace', fontSize: 11, letterSpacing: 2, color: '#e0a848' }}>🐛 ENIAC · PHILADELPHIE · 1946</div>
+        <div style={{ textAlign: 'center', fontFamily: 'ui-monospace,monospace', fontSize: 12, letterSpacing: 2, color: '#e0a848' }}>🐛 ENIAC · PHILADELPHIE · 1946</div>
         <h2 style={{ textAlign: 'center', margin: '6px 0 4px', color: '#ffd166', fontSize: 21 }}>Débugue la machine !</h2>
 
         {phase === 'play' && (
           <>
-            <p style={{ textAlign: 'center', fontSize: 13, color: '#d8c9a8', margin: '0 0 12px' }}>
+            <p style={{ textAlign: 'center', fontSize: 14.5, color: '#d8c9a8', margin: '0 0 12px' }}>
               Clique vite sur les <strong>🐛 insectes</strong> et les <strong>tubes grillés</strong> ! Objectif : <b>{GOAL} réparations</b> avant la fin du chrono.
             </p>
 
             {/* barre chrono + score */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, fontFamily: 'ui-monospace,monospace', fontSize: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8, fontFamily: 'ui-monospace,monospace', fontSize: 13.5 }}>
               <span style={{ color: '#7fe0a8' }}>✓ {score} / {GOAL}</span>
               <span style={{ color: timeLeft < 10 ? '#ff5030' : '#c8b090' }}>⏱ {timeLeft}s</span>
             </div>
@@ -147,7 +147,7 @@ export function EniacDebugGame({ onClose, onWin }) {
                       {/* tube grillé (noir) */}
                       {issue?.type === 'tube' && (
                         <button onClick={(e) => { e.stopPropagation(); clickIssue(issue.id, 'tube'); }}
-                          style={{ position: 'absolute', inset: 2, background: '#1a0a06', border: '2px solid #ff5030', borderRadius: 3, cursor: 'pointer', animation: 'pulse 0.6s ease-in-out infinite', color: '#ff5030', fontSize: 10, fontWeight: 800 }}>
+                          style={{ position: 'absolute', inset: 2, background: '#1a0a06', border: '2px solid #ff5030', borderRadius: 3, cursor: 'pointer', animation: 'pulse 0.6s ease-in-out infinite', color: '#ff5030', fontSize: 11.5, fontWeight: 800 }}>
                           ✗
                         </button>
                       )}
@@ -163,7 +163,7 @@ export function EniacDebugGame({ onClose, onWin }) {
                 })}
               </div>
             </div>
-            <div style={{ textAlign: 'center', fontSize: 10.5, color: '#7a6a4a', marginTop: 6, fontStyle: 'italic' }}>
+            <div style={{ textAlign: 'center', fontSize: 12, color: '#7a6a4a', marginTop: 6, fontStyle: 'italic' }}>
               ({issues.length} incident{issues.length > 1 ? 's' : ''} en cours sur l'ENIAC)
             </div>
 
@@ -182,17 +182,17 @@ export function EniacDebugGame({ onClose, onWin }) {
           <div style={{ marginTop: 4 }}>
             <div style={{ background: '#0e2010', border: '2px solid #7fe0a8', borderRadius: 12, padding: '16px 18px', textAlign: 'center' }}>
               <div style={{ fontSize: 34, marginBottom: 8 }}>🎉</div>
-              <div style={{ fontSize: 14, fontWeight: 800, color: '#7fe0a8', marginBottom: 6 }}>
+              <div style={{ fontSize: 15.5, fontWeight: 800, color: '#7fe0a8', marginBottom: 6 }}>
                 ENIAC RÉPARÉ · {score} incidents corrigés
               </div>
             </div>
             <div style={{ background: '#0e1420', border: '1px solid #2a3648', borderRadius: 12, padding: '14px 16px', marginTop: 10 }}>
-              <p style={{ fontSize: 14.5, lineHeight: 1.65, color: '#e8eef5', margin: 0 }}>
+              <p style={{ fontSize: 16, lineHeight: 1.65, color: '#e8eef5', margin: 0 }}>
                 « Bien vu ! L'ENIAC casse un tube à vide toutes les 2 minutes en moyenne, sur 18 000 — c'est plein temps. Et savais-tu que le mot <b>« bug »</b> (insecte en anglais) désigne les pannes informatiques… parce que c'était LITTÉRALEMENT un insecte à l'origine ? Le 9 septembre 1947, Grace Hopper trouve une VRAIE mite coincée dans un relais du Harvard Mark II. Elle la scotche dans le carnet de bord avec la mention « First actual case of bug being found ». Depuis, tout plantage informatique s'appelle un bug. » — MARTINE
               </p>
             </div>
             <button onClick={onClose}
-              style={{ marginTop: 10, width: '100%', background: '#e0a848', color: '#1a1206', border: 'none', borderRadius: 10, padding: '12px', fontWeight: 800, cursor: 'pointer', fontSize: 15, fontFamily: 'ui-monospace,monospace', letterSpacing: 1 }}>
+              style={{ marginTop: 10, width: '100%', background: '#e0a848', color: '#1a1206', border: 'none', borderRadius: 10, padding: '12px', fontWeight: 800, cursor: 'pointer', fontSize: 16, fontFamily: 'ui-monospace,monospace', letterSpacing: 1 }}>
               Continuer
             </button>
           </div>

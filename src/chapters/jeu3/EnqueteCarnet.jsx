@@ -25,11 +25,11 @@ export default function EnqueteCarnet({ mission, temoins, answered, onClose }) {
         {/* En-tête du carnet */}
         <div style={{ padding: "14px 22px", borderBottom: "2px dashed #8a5030", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 3, color: "#8a5030" }}>ASSISTANT DU JUGE · CARNET</div>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 3, color: "#8a5030" }}>ASSISTANT DU JUGE · CARNET</div>
             <div style={{ fontFamily: "Georgia, serif", fontSize: 18, fontWeight: 800, color: "#3a2010", marginTop: 2 }}>Fiches des personnes interrogées</div>
           </div>
           <button onClick={onClose}
-            style={{ background: "#5a3818", color: "#f2e6cc", border: "none", borderRadius: 6, padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 12, cursor: "pointer", letterSpacing: 1 }}>
+            style={{ background: "#5a3818", color: "#f2e6cc", border: "none", borderRadius: 6, padding: "6px 14px", fontFamily: "ui-monospace,monospace", fontSize: 13.5, cursor: "pointer", letterSpacing: 1 }}>
             Refermer ✕
           </button>
         </div>
@@ -37,10 +37,10 @@ export default function EnqueteCarnet({ mission, temoins, answered, onClose }) {
         {/* Rappel coloré de l'enquête courante */}
         {mission && (
           <div style={{ padding: "12px 22px", background: "#faf0d8", borderBottom: "1px solid #c8a848" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#8a1010", fontWeight: 800, marginBottom: 4 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#8a1010", fontWeight: 800, marginBottom: 4 }}>
               ENQUÊTE EN COURS
             </div>
-            <p style={{ margin: 0, fontSize: 14, lineHeight: 1.5, color: "#3a2010", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 15.5, lineHeight: 1.5, color: "#3a2010", fontStyle: "italic" }}>
               « {mission.affirmation} »
             </p>
           </div>
@@ -64,14 +64,14 @@ export default function EnqueteCarnet({ mission, temoins, answered, onClose }) {
                   style={{ background: "#f8f0d8", border: "1px solid #8a5030", borderRadius: 4, padding: "12px 16px", marginBottom: 12 }}>
                   {/* Bandeau identité */}
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-                    <div style={{ fontFamily: "Georgia, serif", fontSize: 16, fontWeight: 800, color: "#3a2010" }}>
+                    <div style={{ fontFamily: "Georgia, serif", fontSize: 17, fontWeight: 800, color: "#3a2010" }}>
                       👤 {t.nom}
                     </div>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, color: "#8a5030" }}>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, color: "#8a5030" }}>
                       {asked.length} / {t.questions.length} question{asked.length > 1 ? "s" : ""}
                     </div>
                   </div>
-                  <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, color: "#5a3818", marginBottom: 10, letterSpacing: 0.5 }}>
+                  <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, color: "#5a3818", marginBottom: 10, letterSpacing: 0.5 }}>
                     {t.role} · Au Puits depuis {t.ancienneteAns} ans · {t.lieu}
                   </div>
                   {/* Colonnes brutes */}
@@ -86,10 +86,10 @@ export default function EnqueteCarnet({ mission, temoins, answered, onClose }) {
 
         {notVisited.length > 0 && (
           <div style={{ padding: "0 22px 14px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: "#8a5030", marginBottom: 6 }}>
+            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#8a5030", marginBottom: 6 }}>
               ENCORE À VOIR
             </div>
-            <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13, lineHeight: 1.6, color: "#5a3818" }}>
+            <ul style={{ margin: 0, paddingLeft: 20, fontSize: 14.5, lineHeight: 1.6, color: "#5a3818" }}>
               {notVisited.map((t) => (
                 <li key={t.id}>
                   ☐ <strong>{t.nom}</strong>
@@ -100,7 +100,7 @@ export default function EnqueteCarnet({ mission, temoins, answered, onClose }) {
           </div>
         )}
 
-        <div style={{ padding: "10px 22px 14px", borderTop: "1px dashed #8a5030", fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 12, color: "#5a3818", textAlign: "center" }}>
+        <div style={{ padding: "10px 22px 14px", borderTop: "1px dashed #8a5030", fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 13.5, color: "#5a3818", textAlign: "center" }}>
           Un témoin qui A VU pèse davantage qu'un témoin qui RAPPORTE. À toi d'en juger.
         </div>
       </div>

@@ -85,10 +85,10 @@ export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }
 
         {/* En-tête : titre + rareté */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 6px 8px' }}>
-          <div style={{ fontWeight: 800, fontSize: 15, lineHeight: 1.1, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
+          <div style={{ fontWeight: 800, fontSize: 16, lineHeight: 1.1, textShadow: '0 1px 2px rgba(0,0,0,0.6)' }}>
             <span style={{ fontSize: 18, marginRight: 4 }}>{message.emoji}</span> {message.title}
           </div>
-          <div style={{ display: 'flex', gap: 1, fontSize: 12, color: '#ffd700', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+          <div style={{ display: 'flex', gap: 1, fontSize: 13.5, color: '#ffd700', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
             {'★'.repeat(stars)}{'☆'.repeat(5 - stars)}
           </div>
         </div>
@@ -104,7 +104,7 @@ export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }
           {/* étiquette type en bas de l'image */}
           <div style={{
             position: 'absolute', bottom: 6, right: 6,
-            background: t.accent, color: '#1a0e04', fontSize: 10, fontWeight: 800,
+            background: t.accent, color: '#1a0e04', fontSize: 11.5, fontWeight: 800,
             padding: '2px 8px', borderRadius: 10, letterSpacing: 1,
             fontFamily: 'ui-monospace, monospace',
           }}>
@@ -117,12 +117,12 @@ export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }
           {GAUGE_ROWS.map((row) => {
             const v = message.jauges?.[row.key] ?? 0;
             return (
-              <div key={row.key} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 24px', alignItems: 'center', gap: 6, fontSize: 11.5 }}>
+              <div key={row.key} style={{ display: 'grid', gridTemplateColumns: '80px 1fr 24px', alignItems: 'center', gap: 6, fontSize: 12.5 }}>
                 <span>{row.emoji} {row.label}</span>
                 <div style={{ height: 10, background: 'rgba(0,0,0,0.4)', border: `1px solid ${t.accent}66`, borderRadius: 3, overflow: 'hidden' }}>
                   <div style={{ width: `${(v / 5) * 100}%`, height: '100%', background: t.accent }} />
                 </div>
-                <span style={{ textAlign: 'right', fontFamily: 'ui-monospace, monospace', fontSize: 10 }}>{v}/5</span>
+                <span style={{ textAlign: 'right', fontFamily: 'ui-monospace, monospace', fontSize: 11.5 }}>{v}/5</span>
               </div>
             );
           })}
@@ -133,7 +133,7 @@ export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }
           <div style={{
             margin: '8px 6px 4px', padding: '8px 10px',
             background: 'rgba(0,0,0,0.35)', borderRadius: 6,
-            fontSize: 11.5, fontStyle: 'italic', lineHeight: 1.45, color: '#e8dfc8',
+            fontSize: 12.5, fontStyle: 'italic', lineHeight: 1.45, color: '#e8dfc8',
           }}>
             « {flavor.trim()}. »
           </div>
@@ -143,7 +143,7 @@ export default function MediaCard({ card, message, onClose, autoCloseMs = 7000 }
         <div style={{
           marginTop: 8, padding: '6px 6px 2px',
           borderTop: `1px solid ${t.accent}44`,
-          fontSize: 10, color: '#c8c0a8', display: 'flex', justifyContent: 'space-between', gap: 8,
+          fontSize: 11.5, color: '#c8c0a8', display: 'flex', justifyContent: 'space-between', gap: 8,
         }}>
           <span>Chapitre {card.chapter}</span>
           <span style={{ textAlign: 'right', flex: 1 }}>

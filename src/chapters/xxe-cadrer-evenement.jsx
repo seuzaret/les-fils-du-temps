@@ -287,16 +287,16 @@ export function CadrerEvenementGame({ onClose, onWin }) {
         style={{ background: "linear-gradient(180deg,#101c30 0%,#0a1324 100%)", color: "#e8eef5", border: "2px solid #a02020", borderRadius: 16, padding: "16px 20px", maxWidth: 920, width: "100%", maxHeight: "94vh", overflowY: "auto", boxShadow: "0 16px 60px rgba(0,0,0,0.75)", fontFamily: "Georgia, serif" }}>
         {/* Bandeau "EN DIRECT" rouge style JT */}
         <div style={{ display: "flex", justifyContent: "center", gap: 10, alignItems: "center", marginBottom: 6 }}>
-          <span style={{ background: "#a02020", color: "#fff", padding: "3px 10px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 11, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(160,32,32,0.5)" }}>
+          <span style={{ background: "#a02020", color: "#fff", padding: "3px 10px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 12, fontWeight: 900, letterSpacing: 2, boxShadow: "0 0 12px rgba(160,32,32,0.5)" }}>
             ◉ EN DIRECT
           </span>
-          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: "#8fa3bd" }}>BERLIN · 9 NOV. 1989</span>
+          <span style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#8fa3bd" }}>BERLIN · 9 NOV. 1989</span>
         </div>
         <h2 style={{ textAlign: "center", margin: "0 0 10px", color: "#ffd166", fontSize: 26, fontWeight: 900, letterSpacing: 1 }}>Cadre l'événement</h2>
 
         {step === 0 && (
           <>
-            <p style={{ fontSize: 15, lineHeight: 1.45, textAlign: "center", margin: "0 0 12px", color: "#c8d4e2" }}>
+            <p style={{ fontSize: 16, lineHeight: 1.45, textAlign: "center", margin: "0 0 12px", color: "#c8d4e2" }}>
               <strong style={{ color: "#ffd166" }}>Imagine que tu travailles pour le JT.</strong> Le mur de Berlin tombe en direct — mais chaque rédaction va choisir une image différente.
             </p>
             {/* Carte "ta rédaction" avec dégradé coloré — compacte pour tenir sans scroll */}
@@ -308,20 +308,20 @@ export function CadrerEvenementGame({ onClose, onWin }) {
               marginBottom: 12,
               boxShadow: `0 0 20px ${chaine.couleur}33, inset 0 1px 0 ${chaine.couleur}66`,
             }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: chaine.couleur, fontWeight: 800, marginBottom: 4 }}>▸ TU TRAVAILLES POUR</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: chaine.couleur, fontWeight: 800, marginBottom: 4 }}>▸ TU TRAVAILLES POUR</div>
               <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 10 }}>
                 <div style={{ fontSize: 44, lineHeight: 1 }}>{chaine.emoji}</div>
                 <div style={{ fontSize: 24, fontWeight: 900, color: "#fff", letterSpacing: 1, textShadow: `0 0 12px ${chaine.couleur}66` }}>
                   {chaine.nom}
                 </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: 14, lineHeight: 1.45, color: "#d8e2ee" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, fontSize: 15.5, lineHeight: 1.45, color: "#d8e2ee" }}>
                 <div>
-                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, display: "block", marginBottom: 2 }}>PUBLIC</strong>
+                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, display: "block", marginBottom: 2 }}>PUBLIC</strong>
                   <span>{chaine.public}</span>
                 </div>
                 <div style={{ paddingLeft: 12, borderLeft: `1px dashed ${chaine.couleur}66` }}>
-                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, display: "block", marginBottom: 2 }}>LIGNE ÉDITORIALE</strong>
+                  <strong style={{ color: chaine.couleur, fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, display: "block", marginBottom: 2 }}>LIGNE ÉDITORIALE</strong>
                   <em style={{ color: "#ffd166" }}>« {chaine.ligne} »</em>
                 </div>
               </div>
@@ -349,11 +349,11 @@ export function CadrerEvenementGame({ onClose, onWin }) {
             }}>
               <div style={{ fontSize: 32, lineHeight: 1 }}>{chaine.emoji}</div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 10, letterSpacing: 2, color: chaine.couleur, fontWeight: 800 }}>▸ POUR {chaine.nom.toUpperCase()}</div>
-                <div style={{ fontSize: 15.5, color: "#e8eef5", lineHeight: 1.4, fontStyle: "italic" }}>« {chaine.ligne} »</div>
+                <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: chaine.couleur, fontWeight: 800 }}>▸ POUR {chaine.nom.toUpperCase()}</div>
+                <div style={{ fontSize: 16.5, color: "#e8eef5", lineHeight: 1.4, fontStyle: "italic" }}>« {chaine.ligne} »</div>
               </div>
             </div>
-            <p style={{ fontSize: 14.5, color: "#8fa3bd", textAlign: "center", margin: "0 0 12px", fontStyle: "italic" }}>
+            <p style={{ fontSize: 16, color: "#8fa3bd", textAlign: "center", margin: "0 0 12px", fontStyle: "italic" }}>
               Clique sur une zone de l'image pour prévisualiser le cadrage.
             </p>
             {/* GRANDE image avec cadre TV survolable */}
@@ -406,8 +406,8 @@ export function CadrerEvenementGame({ onClose, onWin }) {
                       boxShadow: sel ? `0 0 14px ${z.color}66` : "none",
                       transition: "all .2s",
                     }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: z.color, fontWeight: 800, marginBottom: 4 }}>▸ {z.tag}</div>
-                    <div style={{ fontSize: 15, fontWeight: 700, lineHeight: 1.3 }}>{z.label}</div>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: z.color, fontWeight: 800, marginBottom: 4 }}>▸ {z.tag}</div>
+                    <div style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.3 }}>{z.label}</div>
                   </button>
                 );
               })}
@@ -477,7 +477,7 @@ export function CadrerEvenementGame({ onClose, onWin }) {
                   boxShadow: `0 0 20px ${col}33`,
                 }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10, gap: 10 }}>
-                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 16, letterSpacing: 2, color: col, fontWeight: 900 }}>{titre}</div>
+                    <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 17, letterSpacing: 2, color: col, fontWeight: 900 }}>{titre}</div>
                     {points > 0 && (
                       <div style={{ background: "#ffd166", color: "#1a0e08", padding: "6px 14px", borderRadius: 20, fontFamily: "ui-monospace,monospace", fontSize: 17, fontWeight: 900, letterSpacing: 1, boxShadow: "0 0 14px rgba(255,209,102,0.5)" }}>+{points} ⚡</div>
                     )}
@@ -485,11 +485,11 @@ export function CadrerEvenementGame({ onClose, onWin }) {
                   <p style={{ fontSize: 17, lineHeight: 1.6, margin: 0 }}>
                     « {chaine.verdict[resultKey]} »
                   </p>
-                  <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 11, letterSpacing: 2, color: chaine.couleur, textAlign: "right" }}>
+                  <div style={{ marginTop: 8, fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: chaine.couleur, textAlign: "right" }}>
                     — RÉDACTION {chaine.nom.toUpperCase()}
                   </div>
                   {canWin && (
-                    <p style={{ fontSize: 14.5, lineHeight: 1.55, margin: "14px 0 0", padding: "12px 14px", background: "rgba(94,255,158,0.08)", borderLeft: "3px solid #5eff9e", color: "#c8d4e2", fontStyle: "italic", borderRadius: "4px 8px 8px 4px" }}>
+                    <p style={{ fontSize: 16, lineHeight: 1.55, margin: "14px 0 0", padding: "12px 14px", background: "rgba(94,255,158,0.08)", borderLeft: "3px solid #5eff9e", color: "#c8d4e2", fontStyle: "italic", borderRadius: "4px 8px 8px 4px" }}>
                       Cadrer, c'est déjà interpréter. Deux rédactions regardent la même scène et racontent deux histoires différentes. <strong style={{ color: "#5eff9e" }}>— MARTINE</strong>
                     </p>
                   )}

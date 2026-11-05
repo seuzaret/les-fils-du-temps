@@ -26,7 +26,7 @@ export default function JorgeSmalltalk({ onClose }) {
       <div onClick={(e) => e.stopPropagation()}
         style={{ background: "#0e1218", border: "2px solid #7fd8ff", borderRadius: 12, padding: 18, maxWidth: 620, width: "100%" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
-          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#7fd8ff" }}>
+          <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 13.5, letterSpacing: 2, color: "#7fd8ff" }}>
             🔍 JORGE · ARCHIVISTE
           </div>
           <button onClick={onClose}
@@ -44,13 +44,13 @@ export default function JorgeSmalltalk({ onClose }) {
                     color: isPicked ? "#7fd8ff" : "#e8eef5",
                     border: `1px solid ${isPicked ? "#7fd8ff" : "#3a4048"}`,
                     borderRadius: 8, padding: "8px 12px",
-                    fontFamily: "ui-monospace,monospace", fontSize: 12.5, cursor: "pointer",
+                    fontFamily: "ui-monospace,monospace", fontSize: 14, cursor: "pointer",
                   }}>
                   {isPicked ? "▾" : "▸"} {row.q}
                 </button>
                 {isPicked && (
                   <div style={{ margin: "6px 4px 0 20px", padding: "8px 12px", background: "#0a0e14", borderLeft: "2px solid #7fd8ff", borderRadius: 4 }}>
-                    <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
+                    <p style={{ margin: 0, fontSize: 15, lineHeight: 1.55, color: "#e8eef5", fontStyle: "italic" }}>
                       « {answerFor(row.id)} »
                     </p>
                   </div>
