@@ -1,3 +1,4 @@
+import { createContext, useContext } from "react";
 import { Bust, Figure } from "./cineChars.jsx";
 import { rng, Speckle } from "../../engine/scenery.jsx";
 import { DomeHall } from "./FinJeu2Scenes.jsx";
@@ -23,7 +24,14 @@ import { Avatar } from "../../engine/Martine.jsx";
    ============================================================ */
 
 /* Paysage : le décor remplit l'écran (rogné). Portrait (téléphone) : décor entier, centré. */
-const PAR = () => (typeof window !== "undefined" && window.innerHeight > window.innerWidth * 1.1 ? "xMidYMid meet" : "xMidYMid slice");
+/* Cadrage : le décor remplit l'écran (slice), sauf en portrait, ou quand
+   Jeu2B le pose ENTRE le titre et la boîte de dialogue (écran bas, téléphone
+   en paysage) : alors on le montre en entier (meet), rien n'est recouvert. */
+export const CadreEntier = createContext(false);
+const usePar = () => {
+  const entier = useContext(CadreEntier);
+  return entier || (typeof window !== "undefined" && window.innerHeight > window.innerWidth * 1.1) ? "xMidYMid meet" : "xMidYMid slice";
+};
 const FILL = { position: "absolute", inset: 0, width: "100%", height: "100%", display: "block" };
 
 const polar = (r, deg) => {
@@ -387,10 +395,11 @@ const MIRA_MOOD = { reseaux: "vexe", memoire: "vexe", capteurs: "content", accor
 const ELIAS_MOOD = { gel: "vexe", decider: "vexe", machine: "vexe", reseaux: "vexe", panne: "surpris" };
 
 export function StageStation({ viz = "panne", who = null, prenom = "chronaute" }) {
+  const par = usePar();
   const dark = viz === "panne";
   const lit = (w) => who === w;
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={par} style={FILL}>
       <style>{`@keyframes j2sFlick { 0%, 100% { opacity: 0; } 46% { opacity: 0; } 48% { opacity: 0.55; } 50% { opacity: 0.1; } 53% { opacity: 0.7; } 56% { opacity: 0; } }
 @keyframes j2sIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
       <DomeHall id="j2s" dim={dark ? 0.6 : 0.2} />
@@ -494,8 +503,9 @@ export function PortraitLea({ mood = "neutre" }) {
 
 /* ───────────────────────── 1 · le Puits ───────────────────────── */
 export function StageChantier() {
+  const par = usePar();
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={par} style={FILL}>
       <defs>
         <linearGradient id="j2c-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#080d18" /><stop offset="55%" stopColor="#152036" /><stop offset="100%" stopColor="#262130" />
@@ -677,8 +687,9 @@ export function StageChantier() {
 
 /* ───────────────────────── 2 · l'atelier de Léa ───────────────────────── */
 export function StageAtelier() {
+  const par = usePar();
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={par} style={FILL}>
       <defs>
         <linearGradient id="j2a-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#0c1820" /><stop offset="100%" stopColor="#14242c" />
@@ -806,6 +817,7 @@ export function StageAtelier() {
 
 /* ───────────────────────── 3 · la salle commune ───────────────────────── */
 export function StageToast({ raised = false }) {
+  const par = usePar();
   /* verres au repos (x, y) → point de tintement (tx, ty), à droite de Léa et
      à gauche d'Elias pour ne pas masquer les visages. Le dernier verre est celui du joueur. */
   const cups = [
@@ -815,7 +827,7 @@ export function StageToast({ raised = false }) {
     { x: 580, y: 360, tx: 570, ty: 280, c: "#ffe2a8" },
   ];
   return (
-    <svg viewBox="0 0 1000 560" preserveAspectRatio={PAR()} style={FILL}>
+    <svg viewBox="0 0 1000 560" preserveAspectRatio={par} style={FILL}>
       <defs>
         <linearGradient id="j2t-wall" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#0b1018" /><stop offset="100%" stopColor="#2a2028" />

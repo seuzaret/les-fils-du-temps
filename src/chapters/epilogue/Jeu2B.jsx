@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { Avatar } from "../../engine/Martine.jsx";
 import { PortraitElias, PortraitMira } from "./StationChronautes.jsx";
-import { PortraitLea, StageStation, StageChantier, StageAtelier, StageToast } from "./Jeu2BDecors.jsx";
+import { PortraitLea, StageStation, StageChantier, StageAtelier, StageToast, CadreEntier } from "./Jeu2BDecors.jsx";
 import { playClink, playSleepHum } from "../../engine/sfx.js";
 import { useTypewriter } from "./cineKit.jsx";
 
@@ -380,17 +380,43 @@ export default function Jeu2B({ prenom, onDone }) {
   const Portrait = step.who === "lea" ? PortraitLea : step.who === "mira" ? PortraitMira : step.who === "elias" ? PortraitElias : null;
   const mood = step.mood || "neutre";
 
+  /* Écran bas (téléphone en paysage) : le titre et la boîte de dialogue
+     recouvraient le haut et le bas de l'écran de la station. On pose alors
+     le décor dans la place qui reste entre les deux, en entier, et on
+     masque le portrait (le nom de celui qui parle reste affiché). */
+  const estCourt = () => typeof window !== "undefined" && window.innerHeight < 520 && window.innerWidth > window.innerHeight;
+  const [court, setCourt] = useState(estCourt);
+  useEffect(() => {
+    const f = () => setCourt(estCourt());
+    window.addEventListener("resize", f);
+    return () => window.removeEventListener("resize", f);
+  }, []);
+  const hautRef = useRef(null);
+  const basRef = useRef(null);
+  const [cadre, setCadre] = useState({ haut: 0, bas: 0 });
+  useLayoutEffect(() => {
+    if (!court) return undefined;
+    const mesure = () => setCadre({ haut: hautRef.current?.offsetHeight || 0, bas: basRef.current?.offsetHeight || 0 });
+    mesure();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(mesure) : null;
+    [hautRef.current, basRef.current].forEach((n) => n && ro?.observe(n));
+    return () => ro?.disconnect();
+  }, [court, idx, step.type]);
+  const placeDecor = court ? { left: 0, right: 0, top: cadre.haut, bottom: step.type === "emi" ? 0 : cadre.bas } : { inset: 0 };
+
   return (
     <div onClick={advance}
       style={{ height: "100dvh", overflow: "hidden", background: "#080d16", display: "flex", flexDirection: "column", position: "relative", fontFamily: "Georgia, serif", cursor: isLine && !fading ? "pointer" : "default", userSelect: "none" }}>
       <style>{`@keyframes j2bIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
 
       {/* décor — remonté (fondu) à chaque changement de scène */}
-      <div key={stage} style={{ position: "absolute", inset: 0, animation: "j2bIn 900ms ease-out", filter: fading ? "blur(7px) brightness(0.55)" : "none", transition: "filter 3200ms ease-in" }}>
-        {stage === "station" && <StageStation viz={vizOf(script, idx) || "panne"} who={isLine ? step.who : null} prenom={nom} />}
-        {stage === "chantier" && <StageChantier />}
-        {stage === "atelier" && <StageAtelier />}
-        {stage === "toast" && <StageToast raised={raised} />}
+      <div key={stage} style={{ position: "absolute", ...placeDecor, animation: "j2bIn 900ms ease-out", filter: fading ? "blur(7px) brightness(0.55)" : "none", transition: "filter 3200ms ease-in" }}>
+        <CadreEntier.Provider value={court}>
+          {stage === "station" && <StageStation viz={vizOf(script, idx) || "panne"} who={isLine ? step.who : null} prenom={nom} />}
+          {stage === "chantier" && <StageChantier />}
+          {stage === "atelier" && <StageAtelier />}
+          {stage === "toast" && <StageToast raised={raised} />}
+        </CadreEntier.Provider>
       </div>
 
       {/* passer */}
@@ -400,7 +426,7 @@ export default function Jeu2B({ prenom, onDone }) {
       </button>
 
       {/* bandeau titre */}
-      <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "12px 12px 0", pointerEvents: "none" }}>
+      <div ref={hautRef} style={{ position: "relative", zIndex: 2, textAlign: "center", padding: court ? "8px 96px 6px" : "12px 12px 0", pointerEvents: "none" }}>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 3, color: "#ffd166" }}>{head.titre}</div>
         <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 11.5, letterSpacing: 2, color: "#7fd8ff", marginTop: 4, opacity: 0.75 }}>{STAGE_LABEL[stage]}</div>
       </div>
@@ -412,13 +438,13 @@ export default function Jeu2B({ prenom, onDone }) {
 
       {/* boîte de dialogue / choix */}
       {step.type !== "emi" && (
-        <div style={{ position: "relative", zIndex: 2, padding: "12px 20px 24px", background: "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end", opacity: fading ? 0.0 : 1, transition: "opacity 1200ms" }}>
-          {isLine && Portrait && (
+        <div ref={basRef} style={{ position: "relative", zIndex: 2, padding: court ? "6px 12px 10px" : "12px 20px 24px", background: court ? "#080d16" : "linear-gradient(180deg,#0c122000 0%,#0c1220ee 40%,#080d16 100%)", display: "flex", gap: 16, alignItems: "flex-end", opacity: fading ? 0.0 : 1, transition: "opacity 1200ms" }}>
+          {isLine && Portrait && !court && (
             <div style={{ width: "min(140px, 26vw)", aspectRatio: "140 / 170", flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: `2px solid ${who.couleur}`, boxShadow: "0 8px 32px rgba(0,0,0,0.65)" }}>
               <Portrait mood={mood} />
             </div>
           )}
-          {isLine && step.who === "martine" && (
+          {isLine && step.who === "martine" && !court && (
             <div style={{ width: "min(140px, 26vw)", aspectRatio: "140 / 170", flex: "0 0 auto", borderRadius: 12, overflow: "hidden", border: `2px solid ${who.couleur}`, boxShadow: "0 8px 32px rgba(0,0,0,0.65)", background: "radial-gradient(circle at 50% 45%,#12302a,#08121a)", display: "grid", placeItems: "center" }}>
               <Avatar mood={mood} talking={!done} size={104} date={head.date} />
             </div>
@@ -439,7 +465,7 @@ export default function Jeu2B({ prenom, onDone }) {
             </div>
           ) : (
             <div title={done ? "Cliquer n'importe où pour continuer" : "Cliquer pour tout afficher"}
-              style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: "12px 16px", minHeight: 130, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+              style={{ flex: 1, background: "#0e1420ee", border: "1px solid #2a3648", borderRadius: 12, padding: court ? "8px 14px" : "12px 16px", minHeight: court ? 0 : 130, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
                 {who.nom && <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: who.couleur, marginBottom: 6 }}>{who.nom}</div>}
                 <p style={{ fontSize: 16, lineHeight: 1.6, color: "#e8eef5", margin: 0, fontStyle: "italic" }}>
