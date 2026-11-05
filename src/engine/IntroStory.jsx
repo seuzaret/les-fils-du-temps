@@ -111,6 +111,8 @@ function Blackout({ text, big = false, onNext }) {
 export default function IntroStory({ onDone }) {
   const [i, setI] = useState(0);
   const next = () => setI((v) => v + 1);
+  /* l'année où le chat a laissé le cadran : le saut temporel repart de là */
+  const [anneeCadran, setAnneeCadran] = useState(2026);
   const SLIDES = [
     <Blackout         key="b0" text="Une nuit paisible de ta vie." onNext={next} />,
     <SlideNight       key="s1a" silent onNext={next} />,
@@ -123,8 +125,8 @@ export default function IntroStory({ onDone }) {
     <SlideCockpit     key="s4" onNext={next} />,
     <SlideRules       key="s4b" onNext={next} />,
     <SlideMartineReparee key="s4c" onNext={next} />,
-    <SlideChat        key="s4d" onNext={next} />,
-    <SlideFlash       key="s5" onNext={next} />,
+    <SlideChat        key="s4d" onNext={next} onCadran={setAnneeCadran} />,
+    <SlideFlash       key="s5" onNext={next} start={anneeCadran} />,
     <SlideArrival     key="s6" onDone={onDone} />,
   ];
   return (
@@ -1197,7 +1199,7 @@ function etatChat(phase, s) {
   return { x, y, k, alpha, sx, sy, rot, pose, miroir };
 }
 
-function SlideChat({ onNext }) {
+function SlideChat({ onNext, onCadran }) {
   const [n, setN] = useState(0);
   const [annee, setAnnee] = useState(2035);
   const [debut, setDebut] = useState(true);      // le sas est encore grand ouvert
@@ -1268,10 +1270,17 @@ function SlideChat({ onNext }) {
     const id = setTimeout(() => setEmballe(true), n === 2 ? 1150 : 0);
     return () => clearTimeout(id);
   }, [n >= 2]); // eslint-disable-line react-hooks/exhaustive-deps
+  /* le cadran s'emballe (lent, puis de plus en plus vite) et file vers
+     −14 000 sans jamais y arriver : c'est le saut temporel (SlideFlash) qui
+     reprend à cette valeur et finit le trajet jusqu'à la butée, −18 000 */
   useEffect(() => {
     if (!emballe) return;
-    let v = 2035, pas = 9;
-    const id = setInterval(() => { pas = Math.min(pas * 1.12, 700); v = Math.max(-18000, Math.round(v - pas)); setAnnee(v); }, 70);
+    const t0 = performance.now();
+    const id = setInterval(() => {
+      const t = (performance.now() - t0) / 1000;
+      const u = 1 - Math.exp(-((t / 6) ** 2));
+      setAnnee(Math.round(2035 + (-14000 - 2035) * u));
+    }, 70);
     return () => clearInterval(id);
   }, [emballe]);
   /* chassé : il file par le sas, qui claque derrière lui */
@@ -1286,7 +1295,7 @@ function SlideChat({ onNext }) {
   const advance = () => {
     if (!pret) return;
     if (n === 3) { if (!chasse) setRappel((r) => r + 1); return; }
-    if (isLast) onNext(); else setN(n + 1);
+    if (isLast) { onCadran?.(annee); onNext(); } else setN(n + 1);
   };
   const fmt = (y) => (y < 0 ? `−${Math.abs(y).toLocaleString('fr-FR')}` : String(y));
 
@@ -1383,10 +1392,12 @@ function SlideChat({ onNext }) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   S5 — FLASH + décompte des années (2026 → −18 000), après l'accident du chat
+   S5 — FLASH + décompte des années, après l'accident du chat : le
+   compteur repart de l'année où le chat a laissé le cadran (`start`,
+   transmis par SlideChat) et file jusqu'à la butée, −18 000.
    ═══════════════════════════════════════════════════════════════ */
-function SlideFlash({ onNext }) {
-  const START = 2026;
+function SlideFlash({ onNext, start = 2026 }) {
+  const START = start;
   const END = -18000;
   const DUR = 3800; // ms
   const [year, setYear] = useState(START);
