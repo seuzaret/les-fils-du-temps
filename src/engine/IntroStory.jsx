@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { playMaterialize } from './sfx.js';
 import { demarrerVibreur, isMuted, playSfx } from './audio.js';
 import TimeMachine from './TimeMachine.jsx';
@@ -1118,79 +1118,84 @@ const CHAT_TEMPS = [
 const CHAT_DUREES = { 1: 1800, 2: 1250 };
 
 /* le chat noir aux yeux verts (comme sur la clôture de la rue).
-   `cligne` : les yeux se ferment de temps en temps. */
-function ChatNoir({ assis = true, cligne = false }) {
+   `cligne` : les yeux se ferment de temps en temps (SMIL, sûr partout).
+   `halo` : la même silhouette en couleur et un peu plus épaisse ; dessinée
+   juste dessous, elle fait un liseré de lumière (pas de filtre SVG). */
+function ChatNoir({ assis = true, cligne = false, halo = null }) {
+  const c = halo || "#06070e";
+  const st = halo ? { stroke: halo, strokeWidth: 3, strokeLinejoin: "round" } : {};
   const anim = cligne ? <animate attributeName="ry" values="2.2;2.2;0.2;2.2" keyTimes="0;0.92;0.96;1" dur="4.5s" repeatCount="indefinite" /> : null;
   return (
     <g>
-      <path d={assis ? "M-14 0 Q-16 -22 -6 -30 L6 -30 Q16 -22 14 0 Z" : "M-22 -6 Q-18 -20 0 -22 Q18 -22 22 -8 Q20 2 0 2 Q-20 2 -22 -6 Z"} fill="#06070e" />
+      <path d={assis ? "M-14 0 Q-16 -22 -6 -30 L6 -30 Q16 -22 14 0 Z" : "M-22 -6 Q-18 -20 0 -22 Q18 -22 22 -8 Q20 2 0 2 Q-20 2 -22 -6 Z"} fill={c} {...st} />
       <g transform={assis ? "translate(0,-36)" : "translate(-20,-20)"}>
-        <circle cx="0" cy="0" r="9" fill="#06070e" />
-        <path d="M-8 -4 L-7 -14 L-2 -7 Z M8 -4 L7 -14 L2 -7 Z" fill="#06070e" />
-        <ellipse cx="-3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a">{anim}</ellipse>
-        <ellipse cx="3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a">{anim}</ellipse>
+        <circle cx="0" cy="0" r="9" fill={c} {...st} />
+        <path d="M-8 -4 L-7 -14 L-2 -7 Z M8 -4 L7 -14 L2 -7 Z" fill={c} {...st} />
+        {!halo && <ellipse cx="-3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a">{anim}</ellipse>}
+        {!halo && <ellipse cx="3.4" cy="-1" rx="1.8" ry="2.2" fill="#c8ff6a">{anim}</ellipse>}
       </g>
-      <path d={assis ? "M12 -4 Q26 -6 24 -22" : "M22 -8 Q36 -14 34 -28"} stroke="#06070e" strokeWidth="4" fill="none" strokeLinecap="round" />
+      <path d={assis ? "M12 -4 Q26 -6 24 -22" : "M22 -8 Q36 -14 34 -28"} stroke={c} strokeWidth={halo ? 7 : 4} fill="none" strokeLinecap="round" />
     </g>
   );
 }
 
 /* le même chat, de profil (tourné vers la droite), qui court ou saute.
-   `saut` : pattes tendues (avant devant, arrière derrière), sinon trot. */
-function ChatCourt({ saut = false }) {
-  const pattes = (cls, ox, rot) => ({
-    transformOrigin: `${ox}px -11px`,
-    ...(saut ? { transform: `rotate(${rot}deg)` } : { animation: `${cls} 0.22s ease-in-out infinite alternate` }),
-  });
+   Les pattes sont tournées par la boucle d'animation (refs `patteAr…`). */
+function ChatCourt({ halo = null, reg, id }) {
+  const c = halo || "#06070e";
+  const w = halo ? 3 : 0;
+  const st = halo ? { stroke: halo, strokeWidth: 3, strokeLinejoin: "round" } : {};
   return (
     <g>
-      <path d="M-20 -19 Q-36 -20 -36 -40" stroke="#06070e" strokeWidth="4.5" fill="none" strokeLinecap="round" />
-      <path d="M-15 -12 L-17 0 M-9 -12 L-8 0" stroke="#06070e" strokeWidth="5" strokeLinecap="round" style={pattes("chatPatteAr", -12, 55)} />
-      <path d="M12 -12 L13 0 M17 -12 L19 0" stroke="#06070e" strokeWidth="5" strokeLinecap="round" style={pattes("chatPatteAv", 14, -55)} />
-      <path d="M-22 -18 Q-20 -30 0 -29 Q18 -30 23 -21 Q23 -10 10 -10 L-14 -10 Q-22 -10 -22 -18 Z" fill="#06070e" />
+      <path d="M-20 -19 Q-36 -20 -36 -40" stroke={c} strokeWidth={4.5 + w} fill="none" strokeLinecap="round" />
+      <g ref={reg(`patteAr${id}`)}><path d="M-15 -12 L-17 0 M-9 -12 L-8 0" stroke={c} strokeWidth={5 + w} strokeLinecap="round" /></g>
+      <g ref={reg(`patteAv${id}`)}><path d="M12 -12 L13 0 M17 -12 L19 0" stroke={c} strokeWidth={5 + w} strokeLinecap="round" /></g>
+      <path d="M-22 -18 Q-20 -30 0 -29 Q18 -30 23 -21 Q23 -10 10 -10 L-14 -10 Q-22 -10 -22 -18 Z" fill={c} {...st} />
       <g transform="translate(26,-30)">
-        <circle r="9.5" fill="#06070e" />
-        <path d="M-6 -5 L-5 -16 L1 -8 Z M3 -8 L8 -17 L9 -4 Z" fill="#06070e" />
-        <ellipse cx="2.6" cy="-1" rx="1.7" ry="2.3" fill="#c8ff6a" />
-        <ellipse cx="7.4" cy="-1" rx="1.3" ry="2.1" fill="#c8ff6a" />
+        <circle r="9.5" fill={c} {...st} />
+        <path d="M-6 -5 L-5 -16 L1 -8 Z M3 -8 L8 -17 L9 -4 Z" fill={c} {...st} />
+        {!halo && <ellipse cx="2.6" cy="-1" rx="1.7" ry="2.3" fill="#c8ff6a" />}
+        {!halo && <ellipse cx="7.4" cy="-1" rx="1.3" ry="2.1" fill="#c8ff6a" />}
       </g>
     </g>
   );
 }
 
-/* trajets du chat (viewBox 800 × 320), échelle 1,5 : sur la clôture du sas,
-   au sol du cockpit, puis assis sur le cadran (le bouton rond de la console) */
-const CHAT_POS = { cloture: [120, 246], sol: [244, 312], cadran: [650, 160] };
-const tr = ([x, y], k = 1.5) => `transform: translate(${x}px, ${y}px) scale(${k});`;
-/* deux poses superposées : l'une se montre pendant que l'autre se cache */
-const poses = (nom, a, b) =>
-  `@keyframes ${nom}Mvt { 0%, ${a}% { opacity: 0; } ${a + 0.5}%, ${b}% { opacity: 1; } ${b + 0.5}%, 100% { opacity: 0; } }
-   @keyframes ${nom}Pose { 0%, ${a}% { opacity: 1; } ${a + 0.5}%, ${b}% { opacity: 0; } ${b + 0.5}%, 100% { opacity: 1; } }`;
-const CHAT_CSS = `
-  @keyframes chatEntre {
-    0% { ${tr(CHAT_POS.cloture)} } 18% { ${tr([152, 194])} } 38% { ${tr([212, 214])} }
-    56% { ${tr([232, 312])} } 100% { ${tr(CHAT_POS.sol)} } }
-  @keyframes chatSaute {
-    0%, 14% { ${tr(CHAT_POS.sol)} } 40% { ${tr([380, 120])} } 62% { ${tr([520, 92])} }
-    82% { ${tr([620, 118])} } 100% { ${tr(CHAT_POS.cadran)} } }
-  @keyframes chatRamasse {
-    0% { transform: scale(1, 1); } 10% { transform: scale(1.12, 0.78); } 16% { transform: scale(0.94, 1.12); }
-    86% { transform: scale(1, 1); } 92% { transform: scale(1.14, 0.84); } 100% { transform: scale(1, 1); } }
-  @keyframes chatFuit {
-    0% { ${tr(CHAT_POS.cadran)} opacity: 1; } 35% { ${tr([470, 64])} opacity: 1; }
-    70% { ${tr([230, 150], 1.25)} opacity: 1; } 88% { ${tr([150, 214], 0.9)} opacity: 1; }
-    100% { ${tr([110, 236], 0.5)} opacity: 0; } }
-  ${poses("chatE", 8, 90)}
-  ${poses("chatS", 14, 90)}
-  @keyframes chatFMvt { 0%, 6% { opacity: 0; } 6.5%, 100% { opacity: 1; } }
-  @keyframes chatFPose { 0%, 6% { opacity: 1; } 6.5%, 100% { opacity: 0; } }
-  @keyframes chatPatteAr { from { transform: rotate(-32deg); } to { transform: rotate(32deg); } }
-  @keyframes chatPatteAv { from { transform: rotate(32deg); } to { transform: rotate(-32deg); } }
-  @keyframes chatTangue { 0%, 100% { transform: rotate(-9deg); } 50% { transform: rotate(9deg); } }
-  @keyframes chatCadran { to { transform: rotate(-360deg); } }
-  @keyframes chatCible { 0%, 100% { opacity: 0.25; } 50% { opacity: 1; } }
-  @keyframes chatRappel { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
-`;
+/* ── Le mouvement du chat, calculé en JavaScript ──────────────────
+   Les animations CSS de `transform` sur des éléments SVG ne s'affichaient
+   pas sur Firefox (retour du créateur, 2026-11-05). Ici, une boucle
+   requestAnimationFrame écrit directement l'attribut `transform` : ça
+   marche dans tous les navigateurs. Repères du viewBox 800 × 320. */
+const CHAT_POS = { cloture: [120, 246], sol: [252, 312], cadran: [650, 160] };
+const bez = (a, c, b, u) => [(1 - u) * (1 - u) * a[0] + 2 * (1 - u) * u * c[0] + u * u * b[0], (1 - u) * (1 - u) * a[1] + 2 * (1 - u) * u * c[1] + u * u * b[1]];
+const lerp = (a, b, u) => a + (b - a) * u;
+const seg = (t, a, b) => Math.max(0, Math.min(1, (t - a) / (b - a)));   // progression dans [a, b]
+const doux = (u) => u * u * (3 - 2 * u);                                 // départ et arrivée en douceur
+
+/* position, échelle, écrasement, roulis et pose du chat, `s` secondes après
+   le début de la phase */
+function etatChat(phase, s) {
+  const P = CHAT_POS;
+  let [x, y] = P.cloture, k = 1.5, alpha = 1, sx = 1, sy = 1, rot = 0, pose = 'assis', miroir = false;
+  if (phase === 'entre') {            // de la clôture au sol du cockpit
+    const t = s / 1.8;
+    if (t >= 0.08 && t < 0.56) { [x, y] = bez(P.cloture, [175, 140], [215, 312], doux(seg(t, 0.08, 0.56))); pose = 'saut'; }
+    else if (t >= 0.56 && t < 0.9) { x = lerp(215, P.sol[0], seg(t, 0.56, 0.9)); y = P.sol[1]; pose = 'court'; }
+    else if (t >= 0.9) [x, y] = P.sol;
+  } else if (phase === 'saute') {     // il se ramasse, bondit, atterrit sur le cadran et tangue
+    const t = s / 1.2;
+    if (t < 0.15) { [x, y] = P.sol; const u = Math.sin(Math.PI * seg(t, 0, 0.15)); sx = 1 + 0.12 * u; sy = 1 - 0.22 * u; }
+    else if (t < 0.85) { [x, y] = bez(P.sol, [450, -10], P.cadran, doux(seg(t, 0.15, 0.85))); pose = 'saut'; }
+    else { [x, y] = P.cadran; const u = Math.sin(Math.PI * seg(t, 0.85, 1)); sx = 1 + 0.14 * u; sy = 1 - 0.16 * u; }
+    if (s > 1.2) rot = 9 * Math.sin(2 * Math.PI * (s - 1.2) / 0.35);
+  } else if (phase === 'fuit') {      // chassé : il file par le sas, de plus en plus loin
+    const t = s / 1.1;
+    if (t < 0.06) [x, y] = P.cadran;
+    else if (t < 0.85) { const u = doux(seg(t, 0.06, 0.85)); [x, y] = bez(P.cadran, [420, -20], [150, 214], u); k = lerp(1.5, 1, u); pose = 'saut'; miroir = true; }
+    else { const u = seg(t, 0.85, 1); x = lerp(150, 110, u); y = lerp(214, 236, u); k = lerp(1, 0.5, u); alpha = 1 - u; pose = 'saut'; miroir = true; }
+  }
+  return { x, y, k, alpha, sx, sy, rot, pose, miroir };
+}
 
 function SlideChat({ onNext }) {
   const [n, setN] = useState(0);
@@ -1204,6 +1209,50 @@ function SlideChat({ onNext }) {
   const isLast = n === CHAT_TEMPS.length - 1;
   const t = CHAT_TEMPS[n];
   const aChasser = n === 3 && !chasse;
+  const phase = n === 0 ? 'cloture' : n === 1 ? 'entre' : n >= 4 ? 'parti' : chasse ? 'fuit' : 'saute';
+  const fermeture = debut ? 0 : (ferme || n >= 4) ? 1 : 0.35;
+
+  /* éléments SVG pilotés par la boucle d'animation (refs stables) */
+  const el = useRef({});
+  const regs = useRef({});
+  const reg = (k) => regs.current[k] || (regs.current[k] = (node) => { el.current[k] = node; });
+  const anim = useRef({ phase: 'cloture', t0: 0, emballe: false, fermeture: 0 });
+  useLayoutEffect(() => { anim.current.phase = phase; anim.current.t0 = performance.now(); }, [phase]);
+  useLayoutEffect(() => { anim.current.emballe = emballe; anim.current.fermeture = fermeture; }, [emballe, fermeture]);
+
+  useEffect(() => {
+    let id, prev = performance.now(), porte = 0, aiguille = 0;
+    const att = (node, nom, v) => { if (node) node.setAttribute(nom, v); };
+    const boucle = (now) => {
+      const dt = Math.min(0.05, Math.max(0, (now - prev) / 1000)); prev = now;
+      const a = anim.current, e = el.current;
+      const s = Math.max(0, (now - a.t0) / 1000);
+      const c = etatChat(a.phase, s);
+      att(e.chat, 'transform', `translate(${c.x.toFixed(1)} ${c.y.toFixed(1)}) scale(${c.k.toFixed(3)})`);
+      att(e.chat, 'opacity', c.alpha.toFixed(3));
+      att(e.ecrase, 'transform', `scale(${c.sx.toFixed(3)} ${c.sy.toFixed(3)})`);
+      att(e.tangue, 'transform', `rotate(${c.rot.toFixed(2)})`);
+      att(e.assis, 'display', c.pose === 'assis' ? 'inline' : 'none');
+      att(e.court, 'display', c.pose === 'assis' ? 'none' : 'inline');
+      att(e.miroir, 'transform', c.miroir ? 'scale(-1 1)' : 'scale(1 1)');
+      const trot = c.pose === 'court' ? 32 * Math.sin(2 * Math.PI * s / 0.44) : 0;
+      for (const v of ['h', 'n']) {
+        att(e[`patteAr${v}`], 'transform', `rotate(${(c.pose === 'saut' ? 55 : trot).toFixed(1)} -12 -11)`);
+        att(e[`patteAv${v}`], 'transform', `rotate(${(c.pose === 'saut' ? -55 : -trot).toFixed(1)} 14 -11)`);
+      }
+      if (a.emballe) aiguille -= dt * 720;
+      att(e.aiguille, 'transform', `rotate(${aiguille.toFixed(1)})`);
+      /* les battants du sas glissent vers leur position ; ils claquent vite */
+      porte += (a.fermeture - porte) * Math.min(1, dt * (a.fermeture >= 1 ? 16 : 5));
+      const hh = (236 * porte / 2).toFixed(1);
+      att(e.porteH, 'height', hh);
+      att(e.porteB, 'height', hh);
+      att(e.porteB, 'y', (288 - 236 * porte / 2).toFixed(1));
+      id = requestAnimationFrame(boucle);
+    };
+    id = requestAnimationFrame(boucle);
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   useEffect(() => { const id = setTimeout(() => setDebut(false), 350); return () => clearTimeout(id); }, []);
   useEffect(() => {
@@ -1240,21 +1289,6 @@ function SlideChat({ onNext }) {
     if (isLast) onNext(); else setN(n + 1);
   };
   const fmt = (y) => (y < 0 ? `−${Math.abs(y).toLocaleString('fr-FR')}` : String(y));
-  const fermeture = debut ? 0 : (ferme || n >= 4) ? 1 : 0.35;
-  const ouvert = 236 * (1 - fermeture);
-
-  /* le chat : une animation par moment (même chaîne de style entre les
-     répliques 3 et 4, pour que l'animation ne reparte pas de zéro) */
-  const phase = n === 0 ? 'cloture' : n === 1 ? 'entre' : n >= 4 ? 'parti' : chasse ? 'fuit' : 'saute';
-  const mvt = {
-    cloture: { transform: `translate(${CHAT_POS.cloture[0]}px, ${CHAT_POS.cloture[1]}px) scale(1.5)` },
-    entre: { animation: 'chatEntre 1.8s ease-in-out forwards' },
-    saute: { animation: 'chatSaute 1.2s ease-in-out forwards' },
-    fuit: { animation: 'chatFuit 1.1s ease-in forwards' },
-  }[phase];
-  const vis = { entre: 'chatE', saute: 'chatS', fuit: 'chatF' }[phase];
-  const dur = { entre: '1.8s', saute: '1.2s', fuit: '1.1s' }[phase];
-  const montre = (suffixe) => (vis ? { animation: `${vis}${suffixe} ${dur} linear forwards` } : { opacity: suffixe === 'Pose' ? 1 : 0 });
 
   return (
     <div onClick={advance} title={aChasser ? "Clique sur le chat !" : "Cliquer n'importe où pour continuer"}
@@ -1264,14 +1298,6 @@ function SlideChat({ onNext }) {
           <linearGradient id="s4d-nuit" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#0a1430" /><stop offset="100%" stopColor="#1a2440" />
           </linearGradient>
-          {/* liseré de lumière autour du chat : un chat noir sur fond sombre */}
-          <filter id="s4d-rim" x="-40%" y="-40%" width="180%" height="180%">
-            <feMorphology in="SourceAlpha" operator="dilate" radius="1.3" result="d" />
-            <feFlood floodColor="#9fc4ff" floodOpacity="0.85" />
-            <feComposite in2="d" operator="in" result="o" />
-            <feGaussianBlur in="o" stdDeviation="0.9" result="ob" />
-            <feMerge><feMergeNode in="ob" /><feMergeNode in="SourceGraphic" /></feMerge>
-          </filter>
         </defs>
         <CabinBackdrop w={800} h={320} uid="s4d" glowY={210} />
         {/* le SAS, à gauche : la rue de nuit, la clôture */}
@@ -1280,9 +1306,9 @@ function SlideChat({ onNext }) {
           <rect x="52" y="52" width="136" height="236" rx="8" fill="url(#s4d-nuit)" />
           {[[78, 80], [150, 66], [120, 110], [170, 130]].map(([x, y], i) => <circle key={i} cx={x} cy={y} r="1.3" fill="#e8eef5" opacity="0.8" />)}
           <path d="M52 250 H188 M60 230 V288 M90 230 V288 M120 230 V288 M150 230 V288 M180 230 V288" stroke="#3a4458" strokeWidth="4" />
-          {/* les deux battants du sas qui se referment (haut et bas) */}
-          <rect x="52" y="52" width="136" height={(236 - ouvert) / 2} fill="#2a3444" stroke="#7fd8ff" strokeWidth="1" style={{ transition: `height ${ferme ? '.25s' : '.6s'} ease-in` }} />
-          <rect x="52" y={288 - (236 - ouvert) / 2} width="136" height={(236 - ouvert) / 2} fill="#2a3444" stroke="#7fd8ff" strokeWidth="1" style={{ transition: `all ${ferme ? '.25s' : '.6s'} ease-in` }} />
+          {/* les deux battants du sas (hauteur pilotée par la boucle) */}
+          <rect ref={reg('porteH')} x="52" y="52" width="136" height="0" fill="#2a3444" stroke="#7fd8ff" strokeWidth="1" />
+          <rect ref={reg('porteB')} x="52" y="288" width="136" height="0" fill="#2a3444" stroke="#7fd8ff" strokeWidth="1" />
         </g>
         {/* la CONSOLE et le cadran des années */}
         <g>
@@ -1293,34 +1319,41 @@ function SlideChat({ onNext }) {
           <g transform="translate(650,178)">
             <circle r="20" fill="#28303a" stroke={emballe ? "#ff8a6a" : "#7fd8ff"} strokeWidth="2" />
             {[0, 45, 90, 135, 180, 225, 270, 315].map((a) => <line key={a} x1="0" y1="-17" x2="0" y2="-20" stroke="#7fd8ff" strokeWidth="1.5" transform={`rotate(${a})`} />)}
-            <line x1="0" y1="0" x2="0" y2="-16" stroke="#ffd166" strokeWidth="3" strokeLinecap="round"
-              style={{ transformOrigin: '0 0', animation: emballe ? 'chatCadran 0.5s linear infinite' : 'none' }} />
+            <g ref={reg('aiguille')}><line x1="0" y1="0" x2="0" y2="-16" stroke="#ffd166" strokeWidth="3" strokeLinecap="round" /></g>
           </g>
           {[330, 360, 390, 690, 720].map((x, i) => <circle key={x} cx={x} cy="240" r="6" fill={["#ff6a5a", "#5eff9e", "#ffd166", "#7fd8ff", "#ff6a5a"][i]} opacity="0.8" />)}
         </g>
-        {/* la cible : c'est sur lui qu'il faut cliquer */}
+        {/* la cible : c'est sur lui qu'il faut cliquer (clignote en SMIL) */}
         {aChasser && pret && (
           <g style={{ pointerEvents: 'none' }}>
-            <circle cx="650" cy="118" r="50" fill="none" stroke="#ffd166" strokeWidth="3" strokeDasharray="10 7" style={{ animation: 'chatCible 0.9s ease-in-out infinite' }} />
-            <text x="712" y="86" fontSize="26" style={{ animation: 'chatCible 0.9s ease-in-out infinite' }}>👆</text>
+            <circle cx="650" cy="118" r="50" fill="none" stroke="#ffd166" strokeWidth="3" strokeDasharray="10 7">
+              <animate attributeName="opacity" values="0.25;1;0.25" dur="0.9s" repeatCount="indefinite" />
+            </circle>
+            <text x="712" y="86" fontSize="26">👆<animate attributeName="opacity" values="0.25;1;0.25" dur="0.9s" repeatCount="indefinite" /></text>
           </g>
         )}
-        {/* LE CHAT */}
+        {/* LE CHAT (position, pose et pattes écrites par la boucle) */}
         {phase !== 'parti' && (
-          <g key={phase} style={{ ...mvt, cursor: aChasser ? 'pointer' : 'inherit' }} onClick={aChasser ? chasser : undefined} filter="url(#s4d-rim)">
+          <g ref={reg('chat')} transform="translate(120 246) scale(1.5)" onClick={aChasser ? chasser : undefined} style={{ cursor: aChasser ? 'pointer' : 'inherit' }}>
             {/* zone de clic généreuse (doigts sur téléphone) */}
             {aChasser && <rect x="-38" y="-62" width="76" height="70" fill="transparent" />}
-            <g style={phase === 'saute' ? { animation: 'chatRamasse 1.2s ease-in-out forwards' } : undefined}>
-              <g style={phase === 'saute' ? { transformOrigin: '0 0', animation: 'chatTangue 0.35s ease-in-out 1.2s infinite' } : undefined}>
-                <g style={montre('Pose')}><ChatNoir cligne={phase === 'cloture'} /></g>
-                <g style={montre('Mvt')}>
-                  <g transform={phase === 'fuit' ? 'scale(-1,1)' : undefined}><ChatCourt saut={phase !== 'entre'} /></g>
+            <g ref={reg('ecrase')}>
+              <g ref={reg('tangue')}>
+                <g ref={reg('assis')}>
+                  <g opacity="0.8"><ChatNoir halo="#9fc4ff" /></g>
+                  <ChatNoir cligne={phase === 'cloture'} />
+                </g>
+                <g ref={reg('court')} display="none">
+                  <g ref={reg('miroir')}>
+                    <g opacity="0.8"><ChatCourt halo="#9fc4ff" reg={reg} id="h" /></g>
+                    <ChatCourt reg={reg} id="n" />
+                  </g>
                 </g>
               </g>
             </g>
           </g>
         )}
-        <style>{CHAT_CSS}</style>
+        <style>{"@keyframes chatRappel { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }"}</style>
       </svg>
 
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', width: '100%', maxWidth: 720, padding: '0 10px', boxSizing: 'border-box' }}>
