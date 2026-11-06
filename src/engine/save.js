@@ -120,6 +120,12 @@ export function retourMonde2Pris() {
 const SLOTS = ["jeu1", "jeu2", "jeu3", "monde2"];
 const FORMAT = "martine-parties";
 
+/** « Nouvelle aventure » (écran titre) : efface les trois jeux et le monde 2,
+    pour que tout reparte du début (et que le Jeu 3 se reverrouille). */
+export function effacerToutesLesParties() {
+  SLOTS.forEach((slot) => clearSave(slot));
+}
+
 /** Exporte toutes les parties en cours dans un seul texte JSON, ou null
     s'il n'y en a aucune. */
 export function exportAllString() {

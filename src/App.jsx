@@ -7,7 +7,7 @@ import Particles from "./engine/Particles.jsx";
 import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
 import { playSfx, isMuted, setMuted, startAmbience, stopAmbience, surChangementSon } from "./engine/audio.js";
-import { loadSave, saveDate, writeSave, clearSave, hasSave, exportAllString, importAllString, retourMonde2, retourMonde2Pris } from "./engine/save.js";
+import { loadSave, saveDate, writeSave, clearSave, hasSave, exportAllString, importAllString, retourMonde2, retourMonde2Pris, effacerToutesLesParties } from "./engine/save.js";
 import { trichePermise, BoutonTriche } from "./engine/triche.jsx";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
@@ -1741,9 +1741,6 @@ export default function App() {
     const jeu1Fini = !!(saved && saved.screen === "end");
     const savedJeu2 = loadSave("jeu2");
     const savedJeu3 = loadSave("jeu3");
-    /* Le Jeu 3 s'ouvre quand Al3x1a est retrouvée (choix de départ fait),
-       ou s'il y a déjà une partie du Puits. Le mode triche y mène toujours. */
-    const jeu3Ouvert = !!savedJeu3 || !!savedJeu2?.jeu2EndChoice;
     /* « Reprendre ton aventure » : la partie jouée le plus récemment */
     const dates = { jeu1: saveDate("jeu1"), jeu2: saveDate("jeu2"), jeu3: saveDate("jeu3") };
     const derniere = Object.keys(dates).filter((k) => dates[k]).sort((a, b) => dates[b] - dates[a])[0] || null;
@@ -1762,7 +1759,7 @@ export default function App() {
         {cheatPanel}
         {(() => {
           const Variante = VARIANTES_TITRE[VARIANTE_TITRE];
-          const m = { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, jeu3Ouvert, reprise, prenom: prenomTitre, son: !muted,
+          const m = { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, reprise, prenom: prenomTitre, son: !muted,
             onReprendre: () => resume("jeu1"),
             onNouvelle: () => setModal({ type: "confirmNew" }),
             onDemarrer: () => setModal({ type: "askPrenom", after: newGame }),
@@ -1790,15 +1787,14 @@ export default function App() {
         {modal?.type === "confirmNew" && (
           <div style={overlay} onClick={() => setModal(null)}>
             <div style={card} onClick={(e) => e.stopPropagation()}>
-              <h2 style={{ marginTop: 0, color: "#e8934a", fontSize: 20, textAlign: "center" }}>Recommencer le voyage ?</h2>
+              <h2 style={{ marginTop: 0, color: "#e8934a", fontSize: 20, textAlign: "center" }}>Recommencer l'aventure ?</h2>
               <p style={{ fontSize: 15.5, color: "#c8d4e2", lineHeight: 1.6 }}>
-                Le voyage (Jeu 1) repart du début : sa progression sauvegardée sera effacée définitivement.
-                Tes parties du Jeu 2 et du Jeu 3 sont gardées (« Choisir une partie »).
+                Toute ton aventure (Jeux 1, 2 et 3) repart du début : ta progression sera effacée définitivement.
                 Pense à l'<strong>exporter</strong> d'abord si tu veux la garder.
               </p>
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                 <button onClick={() => setModal(null)} style={{ flex: 1, background: "#1a2536", color: "#e8eef5", border: "1px solid #2a3648", borderRadius: 10, padding: "12px", fontWeight: 700, cursor: "pointer" }}>Annuler</button>
-                <button onClick={() => { clearSave("jeu1"); setModal({ type: "askPrenom", after: newGame }); }} style={{ flex: 1, background: "#e8934a", color: "#111", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer" }}>Nouvelle partie</button>
+                <button onClick={() => { effacerToutesLesParties(); setModal({ type: "askPrenom", after: newGame }); }} style={{ flex: 1, background: "#e8934a", color: "#111", border: "none", borderRadius: 10, padding: "12px", fontWeight: 800, cursor: "pointer" }}>Tout recommencer</button>
               </div>
             </div>
           </div>

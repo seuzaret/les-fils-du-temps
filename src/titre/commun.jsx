@@ -11,8 +11,6 @@
                   fin du Jeu 1, Jeu 3 en bêta, réglages, médiadex,
                   son), hiérarchisé et lisible sur n'importe quel fond.
    ============================================================ */
-import { useState } from "react";
-
 export const CINZEL = "'Cinzel', 'Trajan Pro', Georgia, serif";
 export const CORMORANT = "'Cormorant Garamond', Georgia, serif";
 const MONO = "ui-monospace, monospace";
@@ -58,25 +56,17 @@ export function Accroche({ align = "center", clair = false, petit = false }) {
 
 const pill = (fond, texte, bord) => ({ background: fond, color: texte, border: `1px solid ${bord}`, borderRadius: 999, padding: "9px 16px", fontFamily: MONO, fontSize: 14, fontWeight: 700, letterSpacing: 1, cursor: "pointer", whiteSpace: "nowrap" });
 
-/* m : { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, jeu3Ouvert, reprise, prenom, son, onReprendre, onNouvelle,
-         onDemarrer, onReprendreJeu2, onNouvelleJeu2, onJeu2, onJeu3, onReprendreJeu3, onNouvelleJeu3, onReglages, onMediadex, onSon }
+/* m : { reprise, prenom, son, onDemarrer, onNouvelle, onReglages, onMediadex, onSon, … }
    reprise : { label, onClick } de la partie jouée le plus récemment, ou null.
-   Une partie existe → un seul grand bouton « Reprendre ton aventure » ; la
-   liste des trois jeux se déplie avec « Choisir une partie » (rejouer, ou
-   pour l'enseignant). Aucune partie → « Commencer le voyage » et la suite
-   verrouillée. Le Jeu 3 s'ouvre quand Al3x1a est retrouvée (2026-11-06).
+   Une partie existe → un seul grand bouton « Reprendre ton aventure » (avec
+   où l'on reprend) et « Nouvelle aventure » (tout recommencer). Aucune
+   partie → « Commencer le voyage ». Les Jeux 2 et 3 s'enchaînent depuis
+   l'histoire elle-même ; la liste des trois jeux a été retirée le
+   2026-11-06 (le mode triche permet toujours d'y sauter).
    compact : téléphone (portrait ou paysage) — marges et textes resserrés */
 export function MenuTitre({ m, largeur = 440, compact = false }) {
-  const [choisir, setChoisir] = useState(false);
   const pied = { ...pill("transparent", "#b8c4d6", "transparent"), padding: compact ? "5px 9px" : "7px 12px", fontSize: compact ? 12 : 12.5 };
-  const petit = { ...pill("transparent", "#a8b4c8", "transparent"), padding: "2px 10px", fontWeight: 600, fontSize: 13 };
-  const verrou = (texte, titre) => (
-    <span title={titre} style={{ ...(compact ? { ...pill("rgba(255,255,255,0.03)", "#8a96aa", "rgba(143,163,189,0.25)"), padding: "6px 11px", fontSize: 13 } : pill("rgba(255,255,255,0.03)", "#8a96aa", "rgba(143,163,189,0.25)")), cursor: "default" }}>{texte}</span>
-  );
   const reprise = m.reprise;
-  const liste = !reprise || choisir;
-  /* sur téléphone, pastilles resserrées : I et II tiennent sur une ligne */
-  const pastille = (...a) => (compact ? { ...pill(...a), padding: "6px 11px", fontSize: 13 } : pill(...a));
   return (
     <nav aria-label="Menu" style={{ width: "100%", maxWidth: largeur, boxSizing: "border-box", padding: compact ? "12px 12px 8px" : "16px 18px 10px", borderRadius: 18,
       background: "linear-gradient(180deg, rgba(10,14,24,0.78), rgba(6,9,16,0.88))", border: "1px solid rgba(255,209,102,0.22)",
@@ -91,52 +81,17 @@ export function MenuTitre({ m, largeur = 440, compact = false }) {
           boxShadow: "0 6px 22px rgba(240,168,72,0.35), inset 0 -2px 0 rgba(120,60,10,0.35), inset 0 1px 0 rgba(255,255,255,0.6)" }}>
         ▶&nbsp; {reprise ? "Reprendre ton aventure" : "Commencer le voyage"}
       </button>
-      {reprise && (
-        <div style={{ textAlign: "center", fontFamily: MONO, fontSize: 13, color: "#d8c48a", letterSpacing: 0.5, marginTop: compact ? -3 : -5 }}>{reprise.label}</div>
-      )}
-      {reprise && (
-        <div style={{ display: "flex", justifyContent: "center", gap: 4, flexWrap: "wrap" }}>
-          <button className="tt-btn" onClick={m.onNouvelle} style={petit}>↺ Nouvelle aventure</button>
-          <button className="tt-btn" onClick={() => setChoisir((v) => !v)} aria-expanded={choisir} style={petit}>
-            {choisir ? "▴" : "▾"} Choisir une partie
-          </button>
-        </div>
-      )}
-
-      {liste && (
+      {reprise ? (
         <>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "2px 0 0" }}>
-            <span style={{ flex: 1, height: 1, background: "rgba(255,209,102,0.18)" }} />
-            <span style={{ fontFamily: MONO, fontSize: 11.5, letterSpacing: 3, color: "#c8a868" }}>{reprise ? "LES PARTIES" : "LA SUITE"}</span>
-            <span style={{ flex: 1, height: 1, background: "rgba(255,209,102,0.18)" }} />
-          </div>
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
-            {reprise && m.saveExists && (
-              <button className="tt-btn" onClick={m.onReprendre} style={pastille("rgba(255,209,102,0.12)", "#ffe1a0", "rgba(255,209,102,0.5)")}>▶ I · Le voyage</button>
-            )}
-            {m.savedJeu2 ? (
-              <span style={{ display: "inline-flex", gap: 4 }}>
-                <button className="tt-btn" onClick={m.onReprendreJeu2} style={pastille("rgba(127,216,255,0.14)", "#bfeaff", "rgba(127,216,255,0.55)")}>▶ II · Reprendre Al3x1a</button>
-                <button className="tt-btn" onClick={m.onNouvelleJeu2} title="Nouvelle enquête" style={pastille("transparent", "#8fa3bd", "rgba(143,163,189,0.35)")}>↺</button>
-              </span>
-            ) : m.jeu1Fini ? (
-              <button className="tt-btn" onClick={m.onJeu2} style={pastille("rgba(127,216,255,0.14)", "#bfeaff", "rgba(127,216,255,0.55)")}>▶ II · Al3x1a</button>
-            ) : verrou("🔒 II · Al3x1a", "À débloquer en terminant le voyage")}
-            {m.savedJeu3 ? (
-              <span style={{ display: "inline-flex", gap: 4 }}>
-                <button className="tt-btn" onClick={m.onReprendreJeu3} title="Jeu 3 · Le Puits, 2087 (bêta)" style={pastille("rgba(200,168,240,0.12)", "#e0ccff", "rgba(200,168,240,0.5)")}>▶ III · Reprendre Le Puits <small style={{ opacity: 0.7 }}>β</small></button>
-                <button className="tt-btn" onClick={m.onNouvelleJeu3} title="Nouvelle partie du Puits" style={pastille("transparent", "#8fa3bd", "rgba(143,163,189,0.35)")}>↺</button>
-              </span>
-            ) : m.jeu3Ouvert ? (
-              <button className="tt-btn" onClick={m.onJeu3} title="Jeu 3 · Le Puits, 2087 (bêta)" style={pastille("rgba(200,168,240,0.12)", "#e0ccff", "rgba(200,168,240,0.5)")}>▶ III · Le Puits <small style={{ opacity: 0.7 }}>β</small></button>
-            ) : verrou("🔒 III · Le Puits", "À débloquer en retrouvant Al3x1a")}
-          </div>
-          {!m.jeu1Fini && !m.savedJeu2 && !(compact && reprise) && (
-            <div style={{ textAlign: "center", fontSize: 14, color: "#a8b4c8", fontFamily: CORMORANT, fontStyle: "italic", marginTop: -2 }}>
-              Al3x1a t'attend à la fin du voyage.
-            </div>
-          )}
+          <div style={{ textAlign: "center", fontFamily: MONO, fontSize: 13, color: "#d8c48a", letterSpacing: 0.5, marginTop: compact ? -3 : -5 }}>{reprise.label}</div>
+          <button className="tt-btn" onClick={m.onNouvelle} style={{ ...pill("transparent", "#a8b4c8", "transparent"), alignSelf: "center", padding: "2px 10px", fontWeight: 600, fontSize: 13 }}>
+            ↺ Nouvelle aventure
+          </button>
         </>
+      ) : (
+        <div style={{ textAlign: "center", fontSize: 15, color: "#a8b4c8", fontFamily: CORMORANT, fontStyle: "italic" }}>
+          Al3x1a t'attend à la fin du voyage.
+        </div>
       )}
 
       <div style={{ display: "flex", justifyContent: "center", gap: compact ? 2 : 6, flexWrap: "wrap", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: compact ? 4 : 6 }}>
