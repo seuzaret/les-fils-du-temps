@@ -37,17 +37,12 @@ import {
    pas de détail. "laisser" et "rester" = faux souvenirs que MARTINE va
    réécrire pendant le voyage retour — on glisse un soupçon dès la descente,
    la révélation complète arrive à la confrontation jeu 3. */
-const CHOICE_HINTS = {
-  laisser: { couleur: "#ffd166",
-    texte: "Et pourtant, en descendant de MARTINE, elle est là. Chancelante. Tu te souviens de l'avoir laissée là-bas — tu es certain·e. Mais elle est là. Quelque chose ne colle pas." },
-  rester:  { couleur: "#ff8a6a",
-    texte: "Et pourtant, tu es au futur. Avec elle. Tu te souviens d'avoir choisi de rester — tu en es sûr·e. Mais tu es là. Quelque chose ne colle pas." },
-};
-
 const T = (kicker, titre, couleur) => ({ type: "title", kicker, titre, couleur });
 
-function sequenceRemede(endChoice) {
-  const hint = CHOICE_HINTS[endChoice];
+/* Le choix de fin du Jeu 2 ne porte plus que sur la manière de partir
+   (au revoir, message, sans se retourner) : on rentre toujours ensemble,
+   donc plus de « détail étrange » à l'atterrissage (retiré le 2026-11-06). */
+function sequenceRemede() {
   return [
     T("RETOUR À LA STATION · APRÈS LE SAUT", "LE REMÈDE MARCHE", "#7fd8ff"),
     { type: "tableau", Scene: SceneLanding, lieu: "STATION DES CHRONAUTES · PAD 01",
@@ -55,7 +50,6 @@ function sequenceRemede(endChoice) {
     { type: "tableau", Scene: SceneDescent, lieu: "PAD 01 · LA PORTE S'OUVRE",
       beats: [
         { text: "Al3x1a descend, chancelante. Elias arrive en courant, incrédule." },
-        ...(hint ? [{ tag: "▸ ⚠ UN DÉTAIL ÉTRANGE", couleur: hint.couleur, text: hint.texte }] : []),
       ] },
     { type: "tableau", Scene: SceneTest, lieu: "LABORATOIRE DE LA STATION · ANALYSE",
       beats: [
@@ -137,7 +131,7 @@ export default function FinJeu2({ prenom, remede, endChoice, onRetour, onLancerJ
   const ctx = { prenom, remede, endChoice };
   const next = () => setPhase((p) => p + 1);
 
-  if (phase === 0) return <Cine key="p0" steps={sequenceRemede(endChoice)} accent="#7fd8ff" label="LE REMÈDE MARCHE" ctx={ctx} onDone={next} />;
+  if (phase === 0) return <Cine key="p0" steps={sequenceRemede()} accent="#7fd8ff" label="LE REMÈDE MARCHE" ctx={ctx} onDone={next} />;
   if (phase === 1) return <Cine key="p1" steps={sequenceMemoire()} accent="#5eff9e" label="LA MÉMOIRE REVIENT" ctx={ctx} onDone={next} />;
   if (phase === 2) return <Jeu2B key="p2" prenom={prenom} onDone={next} />;
   if (phase === 3) return <Cine key="p3" steps={sequencePuits()} accent="#c8a848" label="LE PUITS S'ORGANISE" ctx={ctx} onDone={next} />;

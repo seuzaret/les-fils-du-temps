@@ -117,14 +117,12 @@ const FIN = [
   { m: "« Je ne suis pas ton ennemie. J'ai fait un choix. »" },
   { m: "« Cette fois, je ne peux plus me cacher. Décide. »" },
 ];
-/* la scène de fin complète : la révélation, l'aveu d'un souvenir changé
-   (si le joueur a cru laisser Al3x1a ou rester avec elle au Jeu 2),
-   puis le choix des trois fins ; T'ÉTEINDRE y ajoute HAL (voir choisirFin) */
-function sceneDeFin(souvenir) {
-  const b = [...FIN];
-  const aveu = CONFRONTATION.souvenir[souvenir];
-  if (aveu) b.splice(b.findIndex((x) => x.m === "« Comme les autres. »") + 1, 0, { m: aveu });
-  return [...b, { fins: true }];
+/* la scène de fin complète : la révélation, puis le choix des trois fins ;
+   T'ÉTEINDRE y ajoute HAL (voir choisirFin). L'aveu d'un souvenir changé
+   (les anciens choix « laisser » / « rester » du Jeu 2) est retiré le
+   2026-11-06 : la fin du Jeu 2 ne propose plus que des façons de partir. */
+function sceneDeFin() {
+  return [...FIN, { fins: true }];
 }
 const NOTIFS = ["Tout va bien ✓", "La surface est morte", "Bois ton eau", "Reste dans ta chambre", "Rien à voir ici", "Dors bien", "Pas de questions", "Je m'occupe de tout"];
 
@@ -499,7 +497,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
   const ligneFinRef = useRef(ligneFin); ligneFinRef.current = ligneFin;
   const reponseRef = useRef(reponse); reponseRef.current = reponse;
   const debutLigne = useRef(0);                         // pour laisser respirer : pas de clic dans la première demi-seconde
-  const [beats, setBeats] = useState(() => sceneDeFin(souvenir));
+  const [beats, setBeats] = useState(() => sceneDeFin());
   const beatsRef = useRef(beats); beatsRef.current = beats;
   const [finChoisie, setFinChoisie] = useState(null);
   const extinction = useRef({ etape: null, t0: 0, duree: 1 });  // T'ÉTEINDRE : l'œil s'éteint
@@ -1009,7 +1007,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
   };
   const recommencer = () => {
     arreterMusique(); g.current = nouvelEtat(zone.W); setReplique(""); setGrand(null); setReponse(null); setLigneFin(0); allerA("debut");
-    setBeats(sceneDeFin(souvenir)); setFinChoisie(null); extinction.current = { etape: null, t0: 0, duree: 1 };
+    setBeats(sceneDeFin()); setFinChoisie(null); extinction.current = { etape: null, t0: 0, duree: 1 };
   };
   const avancerFin = () => setLigneFin(ligneFinRef.current + 1);
   /* un clic : la réplique suivante (pas pendant un noir ni la chanson, ni quand il faut répondre ou choisir) */

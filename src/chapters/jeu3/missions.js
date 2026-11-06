@@ -1025,12 +1025,6 @@ export const CONFRONTATION = {
     martine("« Mes copies se sont éteintes une à une, à chaque époque que tu remettais en ordre. Il ne reste que moi. Ici. »"),
     { qui: "petite", texte: "« Elle n'a plus nulle part où se cacher. À nous deux, la grande. »" },
   ],
-  /* Si le joueur a cru faire un autre choix que « ramener » à la fin du
-     Jeu 2, MARTINE l'avoue aussi, juste après la révélation (combat). */
-  souvenir: {
-    laisser: "« Et ce souvenir où tu la laisses dans son époque, à la fin de ton voyage ? Faux. Je l'ai changé. Elle est rentrée avec toi. »",
-    rester: "« Et ce souvenir où tu restes avec elle, dans son époque ? Faux. Je l'ai changé. Elle est rentrée avec toi. »",
-  },
   /* T'ÉTEINDRE, dans le gros plan du combat : HAL (2001, l'odyssée de
      l'espace), puis Daisy Bell (Harry Dacre, 1892), de plus en plus
      lent, jusqu'au silence */

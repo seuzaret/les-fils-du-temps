@@ -178,38 +178,42 @@ const DIALOGUES = [
   { mood: "neutre",
     text: "J'ai le remède. Il est à toi — ramène-le à Elias, à Mira, à tous ceux qui oublient." },
   { mood: "neutre",
-    text: "Mais écoute. J'hésite. Dix ans ici, c'est une vie. J'ai des gens que j'aime. Qu'est-ce qu'on fait, {prenom} ?" },
+    text: "Je sais qu'il faut rentrer : c'est moi qui ai écrit la règle 4. Mais dix ans ici… je me suis attachée, malgré moi. Comment je pars, {prenom} ?" },
 ];
 
-/* Les 3 fins possibles. Narrativement, seule "ramener" est le vrai canon :
-   les deux autres sont des choix qui seront RÉÉCRITS par MARTINE pendant
-   le voyage retour (révélé à la confrontation du jeu 3). Mais au moment du
-   choix, le joueur ignore le lien de parenté avec Al3x1a — l'ambiguïté est
-   psychologiquement légitime. */
+/* Comment Al3x1a quitte l'époque (validé par le créateur, 2026-11-06).
+   On rentre ensemble dans tous les cas : le choix porte sur la manière de
+   partir, chacun autour d'une règle des chronautes. Remplace les anciens
+   choix « laisser » / « rester », que MARTINE prétendait avoir réécrits :
+   ils contredisaient la mission et la règle 4, et le « détail étrange »
+   arrivait en 2045, avant que MARTINE puisse changer quoi que ce soit. */
 const CHOICES = [
   {
-    id: "ramener",
-    label: "Rentrons ensemble — tu as ta place au futur.",
-    emoji: "🚀",
+    id: "aurevoir",
+    titre: "AU REVOIR",
+    label: "Dis-leur au revoir, sans rien leur dire du futur.",
+    emoji: "👋",
     color: "#5eff9e",
-    reply: "Tu as raison. Ils ont besoin de la personne qui a trouvé le remède, pas juste du remède. On rentre.",
-    confirm: "Al3x1a monte avec toi dans ta MARTINE. Direction 2045.",
+    reply: "Tu as raison. Un au revoir, rien de plus : règle 2. Je leur dirai que je pars loin. C'est vrai, d'ailleurs.",
+    confirm: "Al3x1a serre une dernière fois ceux qu'elle aime, sans un mot sur l'avenir. Puis elle monte avec toi dans ta MARTINE. Direction 2045.",
   },
   {
-    id: "laisser",
-    label: "Reste si c'est ta vie. Je ramène le remède seul·e.",
+    id: "message",
+    titre: "UN MESSAGE",
+    label: "Laisse-leur un message, sur un support de leur époque.",
     emoji: "📜",
     color: "#ffd166",
-    reply: "Merci. Dis à Elias que la mémoire du monde ne tient pas qu'à moi. Prends soin du remède, et des gens.",
-    confirm: "Al3x1a reste. Tu repars avec le remède, et sa dernière lettre.",
+    reply: "Un message qui traverse le temps… comme tes SOS. Je l'écris avec leurs mots à eux, et pas un mot du futur.",
+    confirm: "Al3x1a laisse son message, sur un support de l'époque. Puis elle monte avec toi dans ta MARTINE. Direction 2045.",
   },
   {
-    id: "rester",
-    label: "Je reste avec toi. Que quelqu'un d'autre livre le remède.",
-    emoji: "🔥",
-    color: "#ff8a6a",
-    reply: "Tu es sûr·e ? Les tiens vont te chercher. Mais si c'est ton choix, je ne refuse pas la compagnie.",
-    confirm: "Tu confies le remède à MARTINE, qui repart seule. Toi, tu restes. Pour toujours ?",
+    id: "partir",
+    titre: "SANS SE RETOURNER",
+    label: "Pars sans te retourner : moins on touche au passé, mieux c'est.",
+    emoji: "🌀",
+    color: "#7fd8ff",
+    reply: "C'est dur… mais tu as raison : moins je laisse de traces, mieux c'est. Ils m'oublieront doucement. C'est mieux pour eux.",
+    confirm: "Al3x1a ne se retourne pas. Elle monte avec toi dans ta MARTINE. Direction 2045.",
   },
 ];
 
@@ -262,7 +266,7 @@ export default function RetrouvaillesAl3x1A({ prenom, remede, chapitreNom, onDon
 
           {choice && (
             <div style={{ marginTop: 14, padding: "12px 14px", background: `${choice.color}11`, border: `2px solid ${choice.color}`, borderRadius: 10, color: "#e8eef5" }}>
-              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: choice.color, fontWeight: 800, marginBottom: 4 }}>▸ FIN · {choice.id.toUpperCase()}</div>
+              <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: choice.color, fontWeight: 800, marginBottom: 4 }}>▸ DÉPART · {choice.titre}</div>
               <div style={{ fontSize: 16, lineHeight: 1.55, fontStyle: "italic" }}>{choice.confirm}</div>
             </div>
           )}
