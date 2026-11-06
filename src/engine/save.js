@@ -44,6 +44,22 @@ export function loadSave(slot = DEFAULT_SLOT) {
   }
 }
 
+/** Date (ms) de la dernière écriture d'un slot, 0 s'il n'y a pas de partie
+    valide. Sert au bouton « Reprendre ton aventure » de l'écran titre, qui
+    reprend la partie jouée le plus récemment. Une sauvegarde ancienne sans
+    date compte quand même (1 : la plus ancienne). */
+export function saveDate(slot = DEFAULT_SLOT) {
+  try {
+    const raw = localStorage.getItem(keyFor(slot));
+    if (!raw) return 0;
+    const data = JSON.parse(raw);
+    if (!data || data.version !== VERSION || !data.state) return 0;
+    return data.savedAt || 1;
+  } catch {
+    return 0;
+  }
+}
+
 /** Écrit la sauvegarde (appelée automatiquement par App.jsx). */
 export function writeSave(state, slot = DEFAULT_SLOT) {
   try {

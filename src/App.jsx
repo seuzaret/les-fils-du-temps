@@ -7,7 +7,7 @@ import Particles from "./engine/Particles.jsx";
 import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
 import { playSfx, isMuted, setMuted, startAmbience, stopAmbience, surChangementSon } from "./engine/audio.js";
-import { loadSave, writeSave, clearSave, hasSave, exportAllString, importAllString, retourMonde2, retourMonde2Pris } from "./engine/save.js";
+import { loadSave, saveDate, writeSave, clearSave, hasSave, exportAllString, importAllString, retourMonde2, retourMonde2Pris } from "./engine/save.js";
 import { trichePermise, BoutonTriche } from "./engine/triche.jsx";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
@@ -931,6 +931,14 @@ export default function App() {
     const nom = s.prenom ? `, ${s.prenom}` : "";
     setDialog({ lines: [`Reprise du voyage${nom}. Je remets les circuits en route là où on s'était arrêtés.`], idx: 0, mood: "neutre" });
     setScreen(s.screen === "end" ? "end" : "play");
+    /* Jeu 2 : Al3x1a retrouvée mais la fenêtre des retrouvailles fermée en
+       cours de route (onglet fermé) → on la rouvre, sinon elle n'est plus
+       dans le décor ; choix de départ déjà fait → on reprend la fin du Jeu 2
+       (cinématiques, Jeu 2B, puis le Jeu 3) au lieu d'un décor sans but. */
+    if (slot === "jeu2" && s.jeu2Found && (s.jeu2Target ?? -1) >= 0) {
+      if (s.jeu2EndChoice) { setFinJeu2Start(0); setScreen("finJeu2"); }
+      else setOpenRetrouvailles(true);
+    }
   };
 
   /* Ramasser un élément dans le décor.
@@ -1733,6 +1741,19 @@ export default function App() {
     const jeu1Fini = !!(saved && saved.screen === "end");
     const savedJeu2 = loadSave("jeu2");
     const savedJeu3 = loadSave("jeu3");
+    /* Le Jeu 3 s'ouvre quand Al3x1a est retrouvée (choix de départ fait),
+       ou s'il y a déjà une partie du Puits. Le mode triche y mène toujours. */
+    const jeu3Ouvert = !!savedJeu3 || !!savedJeu2?.jeu2EndChoice;
+    /* « Reprendre ton aventure » : la partie jouée le plus récemment */
+    const dates = { jeu1: saveDate("jeu1"), jeu2: saveDate("jeu2"), jeu3: saveDate("jeu3") };
+    const derniere = Object.keys(dates).filter((k) => dates[k]).sort((a, b) => dates[b] - dates[a])[0] || null;
+    const ch = (s) => CHAPTERS[s?.chapterIndex ?? 0];
+    const reprise = !derniere ? null : {
+      jeu1: { label: saved?.screen === "end" ? "Jeu 1 · le voyage est terminé" : `Jeu 1 · chapitre ${(saved?.chapterIndex ?? 0) + 1} · ${ch(saved)?.epoque || ""}`, onClick: () => resume("jeu1") },
+      jeu2: { label: savedJeu2?.jeu2EndChoice ? "Jeu 2 · le retour avec Al3x1a" : `Jeu 2 · à la recherche d'Al3x1a · ${(savedJeu2?.jeu2Notes || []).length}/10 notes`, onClick: () => resume("jeu2") },
+      jeu3: { label: "Jeu 3 · Le Puits, 2087", onClick: resumeJeu3 },
+    }[derniere];
+    const prenomTitre = saved?.prenom || savedJeu2?.prenom || savedJeu3?.prenom || "";
     const basculerSonTitre = () => { const coupe = !muted; toggleMute(); if (!coupe) setTimeout(demarrerTheme, 60); };
     return (
       /* le thème démarre au premier geste sur l'écran (règle des navigateurs) */
@@ -1741,7 +1762,7 @@ export default function App() {
         {cheatPanel}
         {(() => {
           const Variante = VARIANTES_TITRE[VARIANTE_TITRE];
-          const m = { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, son: !muted,
+          const m = { saved, saveExists, jeu1Fini, savedJeu2, savedJeu3, jeu3Ouvert, reprise, prenom: prenomTitre, son: !muted,
             onReprendre: () => resume("jeu1"),
             onNouvelle: () => setModal({ type: "confirmNew" }),
             onDemarrer: () => setModal({ type: "askPrenom", after: newGame }),
@@ -1769,9 +1790,10 @@ export default function App() {
         {modal?.type === "confirmNew" && (
           <div style={overlay} onClick={() => setModal(null)}>
             <div style={card} onClick={(e) => e.stopPropagation()}>
-              <h2 style={{ marginTop: 0, color: "#e8934a", fontSize: 20, textAlign: "center" }}>Effacer la partie en cours ?</h2>
+              <h2 style={{ marginTop: 0, color: "#e8934a", fontSize: 20, textAlign: "center" }}>Recommencer le voyage ?</h2>
               <p style={{ fontSize: 15.5, color: "#c8d4e2", lineHeight: 1.6 }}>
-                Une nouvelle partie remplacera définitivement ta progression sauvegardée.
+                Le voyage (Jeu 1) repart du début : sa progression sauvegardée sera effacée définitivement.
+                Tes parties du Jeu 2 et du Jeu 3 sont gardées (« Choisir une partie »).
                 Pense à l'<strong>exporter</strong> d'abord si tu veux la garder.
               </p>
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
