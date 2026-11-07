@@ -224,7 +224,7 @@ function ActeReveil({ prenom, fin, onFini }) {
 function ActeDepart({ prenom, onFini }) {
   const [part, setPart] = useState(false);
   const lignes = [
-    { qui: "recit", texte: "Dehors, le ciel est immense. Le flux est lisse : les machines repassent." },
+    { qui: "recit", texte: "Dehors, le ciel est immense. Le temps est rétabli : on peut de nouveau y voyager." },
     { qui: "al3x1a", texte: "« Je dois rentrer. Dans mon temps. Ma famille m'attend. »" },
     { choix: [
       { texte: "« Ta famille… c'est moi ? »", suite: [{ qui: "al3x1a", dida: "elle sourit", texte: "« Règle numéro 2. »" }] },

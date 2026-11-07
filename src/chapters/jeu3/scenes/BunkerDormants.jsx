@@ -43,7 +43,7 @@ const NOTES = {
 const REVEIL = [
   { qui: "recit", texte: "Le hublot de la petite MARTINE clignote. Une fois. Deux fois. L'antenne se redresse, la poussière tombe." },
   { qui: "petite", texte: "« Pilote ? … Ah non. Tu as ses yeux, par contre. »" },
-  { qui: "petite", texte: "« Le flux est redevenu lisse : je capte de nouveau. C'est toi qui as fait ça ? On est en quelle année ? »" },
+  { qui: "petite", texte: "« Le temps est rétabli : je capte de nouveau. C'est toi qui as fait ça ? On est en quelle année ? »" },
   { qui: "recit", texte: "Tu lui dis : 2087." },
   { qui: "petite", texte: "« Quarante ans ?! Mes propulseurs ont rouillé. Bon. On improvise. »" },
   { qui: "petite", texte: "« La grande, derrière cette porte, c'est elle qui m'a éteinte. Guide-moi, je m'occupe de tirer. »" },

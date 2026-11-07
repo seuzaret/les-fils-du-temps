@@ -746,7 +746,7 @@ function Monde({ page, phase, setPhase }) {
           {ligneFin > 0 && (
             <div style={{ animation: "mmIn 900ms ease-out 1200ms both" }}>
               <p style={{ margin: "0 0 12px", fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.5, color: "#f0e6d0" }}>
-                Le flux est lisse. MARTINE n'a plus de cachette dans le temps : il ne reste d'elle que les serveurs du −3.
+                Le temps est rétabli. MARTINE n'a plus de cachette dans le passé : il ne reste d'elle que ses serveurs, au niveau −3.
               </p>
               <p style={{ margin: "0 0 18px", fontFamily: "Georgia, serif", fontStyle: "italic", fontSize: 17, lineHeight: 1.5, color: GOLD }}>
                 {/* sur le site …/martine/, le chemin dans l'autre sens ; sur …/les-fils-du-temps/martine/, il suffit d'enlever martine/ */}
