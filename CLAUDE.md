@@ -1,9 +1,49 @@
 # MARTINE — Brief de conception & instructions de développement
 
-> **Ce document sert de référence au projet.** Il peut être renommé `CLAUDE.md` à la racine
-> du projet pour que Claude Code le lise automatiquement à chaque session.
+> **Ce document sert de référence au projet.** Nommé `CLAUDE.md` à la racine du dépôt :
+> Claude Code le lit automatiquement au début de chaque session (renommé le 2026-11-16 ;
+> avant, `Claude.md`, que Claude Code ne lisait pas tout seul).
 > Jeu sérieux EMI (Éducation aux Médias et à l'Information) — collège, cycles 3 & 4.
 > Auteur : professeur documentaliste. Public : élèves de 6e à 3e, usage en classe (vidéoprojecteur ou postes individuels) et en autonomie au CDI.
+
+---
+
+## 0. Reprendre le projet (à lire en premier)
+
+*Écrit le 2026-11-16, avant une pause possible de l'abonnement. Une nouvelle session repart d'ici, sans rien redemander au créateur.*
+
+**Où est quoi**
+- Ce dépôt, `seuzaret/les-fils-du-temps` : le jeu (React + Vite). `main` est la version en ligne (GitHub Pages, dossier `docs/`).
+- `LORE.md` : toute l'histoire et les décisions, avec leur statut ([ACQUIS] validé, [PROPOSÉ], [À TRANCHER], [CODE]). À lire avant de toucher à un texte.
+- `CLAUDE_JEU2.md`, `CLAUDE_JEU3.md` : notes de conception des volets 2 et 3. `JALON-M*.md` : historique des étapes.
+- Le dépôt séparé `seuzaret/martine` : la « porte » du monde 2 (`index.html` seul). Ne pas changer son adresse d'origine.
+
+**Publier**
+- Tout ce qui arrive sur `main` est construit et mis en ligne automatiquement par `.github/workflows/build-and-deploy.yml` : `npm ci`, `npm run build`, copie de `dist/` dans `docs/`, commit « Build auto de docs/ [skip ci] ». Compter une minute environ. Si la construction échoue, le site garde la version précédente.
+- Habitude des sessions Claude : travailler sur une branche `claude/…`, construire soi-même (`npx vite build`, vider `docs/` sauf `.nojekyll`, puis `cp -r dist/. docs/`), pousser la branche, puis avancer `main` en avance rapide (`git merge --ff-only`). Ne jamais réécrire l'historique de `main`.
+- Les petites corrections de texte peuvent se faire directement sur github.com (crayon ✏️, commit sur `main`) : la construction automatique fait le reste.
+
+**Tester**
+- `npm install`, puis `npm run dev`, ou `npx vite build` et servir `dist/` (par exemple `python3 -m http.server --directory dist`).
+- Mode triche : `?triche` dans l'adresse (bouton 🐛), ou taper « triche » au clavier. Il mène aux chapitres, à la station, au Jeu 2, à la fin du Jeu 2 (dont le Jeu 2B), au Jeu 3 étape par étape (combat et épilogue compris), au générique, au monde 2 et à sa finale.
+- Sauvegardes (`localStorage`) : `martine.save` (Jeu 1), `martine.save.jeu2`, `martine.save.jeu3`, `martine.save.monde2`, au format `{ version: 1, savedAt, state }`. Réglages : `martine.a11y`, `martine.muted`. Un monde 2 fini depuis moins de 6 h relance le Jeu 3 tout seul à l'ouverture (voulu).
+- Autres adresses : `?titre=c` (variante « pellicule » de l'écran titre), `?generique`, `martine/?fin=1` (finale du monde 2).
+- Vérifier sur 1366 × 768, sur téléphone en paysage (844 × 390) et en portrait (390 × 844), et avec « réduire les animations » : le jeu coupe alors toutes les animations CSS (voir plus bas « Animations et réduire les animations »).
+
+**Travailler avec le créateur** (professeur documentaliste)
+- En français. Réponses claires et sourcées, sans flatterie.
+- **Tout texte du jeu est validé par le créateur avant d'être codé.** Proposer les textes numérotés (avant / proposé), attendre « ok » ou « ok sauf… ». Signaler clairement tout texte écrit sans validation (réponse d'un personnage, bouton, fenêtre).
+- Pour un gros changement, montrer des captures avant de publier.
+- Commits en français, sans identifiant de modèle ni dans le code ni dans les messages.
+- Il teste sur ordinateur et sur téléphone, parfois sous Firefox. Son système a peut-être « réduire les animations » activé : une animation CSS invisible chez lui en vient souvent.
+- Règles déjà fixées, plus bas : « Écran titre », « Taille des textes », « Animations et réduire les animations », « Pourquoi le flux », « Flux et erreurs ».
+
+**Points ouverts** (au 2026-11-16)
+- Questions de lore : `LORE.md` §9 et les mentions [À TRANCHER].
+- Le choix de départ à la fin du Jeu 2 (au revoir, message, sans se retourner) est enregistré (`jeu2EndChoice`) mais n'a plus d'écho ensuite : une idée possible.
+- La « version sombre » des SOS est gardée en réserve (`LORE.md` §5, « Le Jeu 1 »).
+- Intro sur téléphone en portrait : la scène reste petite et le texte serré (défaut ancien, non traité).
+- Le créateur testait le Jeu 3 au moment de cette note : ses retours éventuels sont à reprendre en premier.
 
 ---
 

@@ -1,6 +1,6 @@
 # MARTINE — Jeu 3 : « ALEATOIRE » (titre de travail)
 
-> Notes de conception du troisième volet. Fait suite à `Claude.md`
+> Notes de conception du troisième volet. Fait suite à `CLAUDE.md`
 > (jeu 1) et `CLAUDE_JEU2.md` (jeu 2, enquête Al3x1A).
 > État : brainstorm, rien n'est arrêté. Ce document est une décharge
 > d'idées à trier — pas un cahier des charges.
