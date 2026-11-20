@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { SMALLTALK_QUESTIONS } from "../pnj.js";
 
 /* ============================================================
    JEU 3 — Modale smalltalk pour Jorge (archives)
    ------------------------------------------------------------
-   Mêmes 3 questions que les autres PNJ, mais Jorge n'est pas
-   dans PnjRoom (les Archives sont une scène custom). On duplique
-   donc la modale ici, avec ses propres réponses.
+   Jorge n'est pas dans PnjRoom (les Archives sont une scène
+   custom) : il garde sa propre modale à trois questions.
    ============================================================ */
+const SMALLTALK_QUESTIONS = [
+  { id: "ou",          q: "Où sommes-nous exactement ?" },
+  { id: "pourquoiMoi", q: "Qu'est-ce que je fais ici, moi ?" },
+  { id: "toi",         q: "Et toi, qu'est-ce que tu fais ?" },
+];
 const JORGE_REPLIES = {
   ou:          "Salle des Archives, niveau -1. Secteur mémoire. Je range des fiches ici depuis trente ans. On me laisse tranquille, c'est bien.",
   pourquoiMoi: "Toi ? Si Vez t'a convoqué·e, c'est que tu auras à vérifier des choses. Évite de me déranger sans raison, j'ai du travail.",
