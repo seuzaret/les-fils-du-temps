@@ -10,14 +10,14 @@
 
 ## 0. Reprendre le projet (à lire en premier)
 
-*Écrit le 2026-11-16, avant une pause possible de l'abonnement. Une nouvelle session repart d'ici, sans rien redemander au créateur.*
+*Écrit le 2026-11-16, avant une pause possible de l'abonnement, mis à jour le 2026-11-20. Une nouvelle session repart d'ici, sans rien redemander au créateur.*
 
 **Où est quoi**
 - Ce dépôt, `seuzaret/les-fils-du-temps` : le jeu (React + Vite). `main` est la version en ligne (GitHub Pages, dossier `docs/`).
 - `LORE.md` : toute l'histoire et les décisions, avec leur statut ([ACQUIS] validé, [PROPOSÉ], [À TRANCHER], [CODE]). À lire avant de toucher à un texte.
 - `CLAUDE_JEU2.md`, `CLAUDE_JEU3.md` : notes de conception des volets 2 et 3. `JALON-M*.md` : historique des étapes.
 - Le dépôt séparé `seuzaret/martine` : la « porte » du monde 2 (`index.html` seul). Ne pas changer son adresse d'origine.
-- La conversation de travail du 29 octobre au 19 novembre 2026 a été exportée (`conversation-claude-2026-10-29_2026-11-19.md`). Le créateur la garde chez lui, hors du dépôt, qui est public. S'il la dépose dans le dépôt ou la fournit, la lire avant de reprendre.
+- La conversation de travail du 29 octobre au 20 novembre 2026 a été exportée (`conversation-claude-2026-10-29_2026-11-20.md`, qui remplace l'export précédent, arrêté au 19 novembre). Le créateur la garde chez lui, hors du dépôt, qui est public. S'il la dépose dans le dépôt ou la fournit, la lire avant de reprendre.
 
 **Publier**
 - Tout ce qui arrive sur `main` est construit et mis en ligne automatiquement par `.github/workflows/build-and-deploy.yml` : `npm ci`, `npm run build`, copie de `dist/` dans `docs/`, commit « Build auto de docs/ [skip ci] ». Compter une minute environ. Si la construction échoue, le site garde la version précédente.
@@ -39,12 +39,12 @@
 - Il teste sur ordinateur et sur téléphone, parfois sous Firefox. Son système a peut-être « réduire les animations » activé : une animation CSS invisible chez lui en vient souvent.
 - Règles déjà fixées, plus bas : « Écran titre », « Taille des textes », « Animations et réduire les animations », « Pourquoi le flux », « Flux et erreurs », « Les habitants du Puits ».
 
-**Points ouverts** (au 2026-11-16)
+**Points ouverts** (au 2026-11-20)
 - Questions de lore : `LORE.md` §9 et les mentions [À TRANCHER].
 - Le choix de départ à la fin du Jeu 2 (au revoir, message, sans se retourner) est enregistré (`jeu2EndChoice`) mais n'a plus d'écho ensuite : une idée possible.
 - La « version sombre » des SOS est gardée en réserve (`LORE.md` §5, « Le Jeu 1 »).
 - Intro sur téléphone en portrait : la scène reste petite et le texte serré (défaut ancien, non traité).
-- Le créateur testait le Jeu 3 au moment de cette note : ses retours éventuels sont à reprendre en premier.
+- Le créateur teste le Jeu 3. Premier retour traité et publié le 2026-11-20 : au réveil, les habitants du Puits font confiance à MARTINE et répondent à « On est où, ici ? » (règle « Les habitants du Puits », plus bas, et `LORE.md` §3). Ses autres retours sur le Jeu 3 sont à reprendre en premier.
 
 ---
 
