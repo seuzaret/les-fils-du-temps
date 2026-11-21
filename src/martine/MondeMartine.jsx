@@ -8,7 +8,7 @@ import { preparerVignettes } from "./vignettes.js";
 import { assetUrl } from "../engine/assetUrl.js";
 import useEcran from "../engine/useEcran.js";
 import { loadSave, marquerMonde2Fini } from "../engine/save.js";
-import { trichePermise, BoutonTriche } from "../engine/triche.jsx";
+import { trichePermise, BoutonTriche, CODE_TRICHE } from "../engine/triche.jsx";
 import { playClink, playMaterialize } from "../engine/sfx.js";
 import { isMuted, setMuted } from "../engine/audio.js";
 import { rng } from "../engine/scenery.jsx";
@@ -693,15 +693,15 @@ function Monde({ page, phase, setPhase }) {
     setToast({ texte: `${SUPPORTS[choisi].nom} : ce n'est pas un objet du futur ! Rends-le à son propriétaire.`, ok: false });
   };
   const changerEpoque = (id) => { if (id !== epoqueId) { setEpoqueId(id); setTab(0); } };
-  /* TRICHE (pour l'enseignant) : taper « triche » ouvre un petit panneau */
+  /* TRICHE (pour l'enseignant) : taper « triche! » ouvre un petit panneau */
   const [triche, setTriche] = useState(false);
-  const [tricheTel] = useState(trichePermise);   // ?triche (téléphone) : un bouton 🐛
+  const [tricheTel] = useState(trichePermise);   // ?triche! (téléphone) : un bouton 🐛
   useEffect(() => {
     let buf = "";
     const onKey = (e) => {
       if (!e.key || e.key.length !== 1) return;
-      buf = (buf + e.key.toLowerCase()).slice(-6);
-      if (buf === "triche") setTriche((t) => !t);
+      buf = (buf + e.key.toLowerCase()).slice(-CODE_TRICHE.length);
+      if (buf === CODE_TRICHE) setTriche((t) => !t);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -843,7 +843,7 @@ function Monde({ page, phase, setPhase }) {
             <button key={t} onClick={f} style={{ background: "#2a1638", border: "1px solid #7a3ca8", color: "#e8d4ff", borderRadius: 7, padding: "6px 8px",
               cursor: "pointer", fontSize: 12, textAlign: "left", fontFamily: "inherit" }}>{t}</button>
           ))}
-          <div style={{ fontSize: 11, color: "#6a5a7a", marginTop: 3 }}>tape « triche » (ou 🐛) pour fermer</div>
+          <div style={{ fontSize: 11, color: "#6a5a7a", marginTop: 3 }}>tape « triche! » (ou 🐛) pour fermer</div>
         </div>
       )}
     </div>

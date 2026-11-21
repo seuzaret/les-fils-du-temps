@@ -107,10 +107,10 @@ export default function CheatPanel({
       <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
         <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/"; }}>🙃 Entrer dans le monde 2</button>
         <button style={CHEAT_BTN} onClick={() => { window.location.href = "martine/?fin=1"; }}>✨ La finale (« Le temps est rétabli »)</button>
-        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a" }}>dans le monde 2, tape « triche » (ou 🐛) : ranger une époque, tout ranger…</div>
+        <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a" }}>dans le monde 2, tape « triche! » (ou 🐛) : ranger une époque, tout ranger…</div>
       </div>
 
-      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche » (ou 🐛) pour fermer · sur téléphone : ?triche dans l'adresse</div>
+      <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 9.5, color: "#6a5a7a", marginTop: 8 }}>tape « triche! » (ou 🐛) pour fermer · sur téléphone : ?triche! dans l'adresse</div>
     </div>
   );
 }

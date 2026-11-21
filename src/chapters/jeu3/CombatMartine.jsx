@@ -490,7 +490,7 @@ export default function CombatMartine({ onQuitter, integre = false, prenom = "",
   const [tourner, setTourner] = useState(false);       // téléphone tenu en largeur : on demande de le tourner
   const [pleinEcran, setPleinEcran] = useState(false);
   const [muet, setMuet] = useState(isMuted);
-  const [triche] = useState(trichePermise);   // ?triche : en pause, « niveau suivant »
+  const [triche] = useState(trichePermise);   // ?triche! : en pause, « niveau suivant »
   useEffect(() => surChangementSon(setMuet), []);
   const cadre = useRef(null), toile = useRef(null), g = useRef(nouvelEtat());
   const ecranRef = useRef(ecran); ecranRef.current = ecran;

@@ -1,18 +1,23 @@
 /* ============================================================
    MOTEUR — Le mode triche sur téléphone
    ------------------------------------------------------------
-   Au clavier, on tape « triche » (App.jsx, monde 2). Sur un
-   téléphone, pas de clavier : on ajoute ?triche à l'adresse. Un
-   petit bouton 🐛 apparaît alors dans un coin et ouvre le même
-   panneau. Il reste actif tout l'onglet (sessionStorage), même
-   après un changement d'adresse (monde 2, « Rentrer au Puits ») ;
-   ?triche=0 l'enlève. Pour l'enseignant, pas pour les élèves.
+   Le code est « triche! », avec le point d'exclamation (demande du
+   créateur, 2026-11-21 : que les élèves ne le devinent pas ; le
+   simple « triche » ne marche plus). Au clavier, on tape triche!
+   (App.jsx, monde 2). Sur un téléphone, pas de clavier : on ajoute
+   ?triche! à l'adresse. Un petit bouton 🐛 apparaît alors dans un
+   coin et ouvre le même panneau. Il reste actif tout l'onglet
+   (sessionStorage), même après un changement d'adresse (monde 2,
+   « Rentrer au Puits ») ; ?triche!=0 l'enlève. Pour l'enseignant,
+   pas pour les élèves.
    ============================================================ */
 const CLE = "martine.triche";
+/* le mot à taper au clavier, et le paramètre de l'adresse (?triche!) */
+export const CODE_TRICHE = "triche!";
 
 export function trichePermise() {
   try {
-    const v = new URLSearchParams(window.location.search).get("triche");
+    const v = new URLSearchParams(window.location.search).get(CODE_TRICHE);
     if (v !== null) { if (v === "0") sessionStorage.removeItem(CLE); else sessionStorage.setItem(CLE, "1"); }
     return sessionStorage.getItem(CLE) === "1";
   } catch {

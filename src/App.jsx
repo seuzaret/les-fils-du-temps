@@ -8,7 +8,7 @@ import Gauges from "./engine/Gauges.jsx";
 import Frise, { trendSentence } from "./engine/Frise.jsx";
 import { playSfx, isMuted, setMuted, startAmbience, stopAmbience, surChangementSon } from "./engine/audio.js";
 import { loadSave, saveDate, writeSave, clearSave, hasSave, exportAllString, importAllString, retourMonde2, retourMonde2Pris, effacerToutesLesParties } from "./engine/save.js";
-import { trichePermise, BoutonTriche } from "./engine/triche.jsx";
+import { trichePermise, BoutonTriche, CODE_TRICHE } from "./engine/triche.jsx";
 import { computeBadge } from "./engine/badge.js";
 import JaugeTemporelle from "./engine/JaugeTemporelle.jsx";
 import useEcran from "./engine/useEcran.js";
@@ -204,8 +204,8 @@ export default function App() {
   const [dust, setDust] = useState(null);        // effet poussière d'un message perdu {x, y, emoji, key}
   const [muted, setMutedState] = useState(isMuted()); // bouton 🔇 (mémorisé)
   useEffect(() => surChangementSon(setMutedState), []);   // coupé ou remis depuis le Jeu 3 ou le combat
-  const [cheat, setCheat] = useState(false);     // mode triche (dev) — tape « triche » pour l'ouvrir
-  const [tricheTel] = useState(trichePermise);   // …ou ?triche dans l'adresse (téléphone) : un bouton 🐛
+  const [cheat, setCheat] = useState(false);     // mode triche (dev) — tape « triche! » pour l'ouvrir
+  const [tricheTel] = useState(trichePermise);   // …ou ?triche! dans l'adresse (téléphone) : un bouton 🐛
   const [debugNotes, setDebugNotes] = useState(false); // mode calage : voir les 3 emplacements de note du chapitre — tape « notes »
   const [epiChoice, setEpiChoice] = useState(null); // épilogue : le support choisi par le joueur
   const [prenom, setPrenom] = useState("");      // carnet imprimable : le prénom de l'élève
@@ -396,17 +396,21 @@ export default function App() {
     else document.documentElement.requestFullscreen?.();
   };
 
-  /* MODE TRICHE (pour l'enseignant, pas les élèves) : tape le mot
-     « triche » au clavier n'importe où pour afficher/masquer le
-     petit panneau de test. Aucun conflit avec les raccourcis du
-     navigateur. Tout est dans App.jsx (le moteur n'est pas touché). */
+  /* MODE TRICHE (pour l'enseignant, pas les élèves) : tape
+     « triche! » (avec le point d'exclamation, CODE_TRICHE) au clavier
+     n'importe où pour afficher/masquer le petit panneau de test.
+     « notes » (calage des emplacements de notes du Jeu 1, qui montre
+     où elles sont cachées) ne marche qu'en mode triche : panneau
+     ouvert, ou ?triche! dans l'adresse. */
+  const cheatRef = useRef(false);
+  cheatRef.current = cheat;
   useEffect(() => {
     let buf = "";
     const onKey = (e) => {
       if (e.key && e.key.length === 1) {
-        buf = (buf + e.key.toLowerCase()).slice(-6);
-        if (buf === "triche") setCheat((c) => !c);
-        if (buf.endsWith("notes")) setDebugNotes((c) => !c);
+        buf = (buf + e.key.toLowerCase()).slice(-CODE_TRICHE.length);
+        if (buf === CODE_TRICHE) setCheat((c) => !c);
+        if (buf.endsWith("notes") && (cheatRef.current || tricheTel)) setDebugNotes((c) => !c);
       }
     };
     window.addEventListener("keydown", onKey);
@@ -1567,7 +1571,7 @@ export default function App() {
   const headBtn = { background: "#141b26", border: "1px solid #2a3648", color: "#c8d4e2", borderRadius: 10, padding: "7px 11px", cursor: "pointer", fontSize: 14.5 };
 
   /* Panneau du MODE TRICHE — visible seulement après avoir tapé
-     « triche ». Réutilisé dans tous les écrans via <CheatPanel />. */
+     « triche! ». Réutilisé dans tous les écrans via <CheatPanel />. */
   const cheatPanel = (<>
     {generiqueSeul && <Generique prenom={prenom} onDone={fermerGenerique} />}
     {tricheTel && <BoutonTriche actif={cheat} onClick={() => setCheat((c) => !c)} />}

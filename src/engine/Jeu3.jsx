@@ -154,14 +154,16 @@ export default function Jeu3({ prenom, onExit, startAt, endChoice }) {
      l'ascenseur. Sinon, la mini-carte est purement informative — il faut
      utiliser l'ascenseur pour changer d'étage (immersion). */
   const [cheat, setCheat] = useState(false);
-  const [tricheTel] = useState(trichePermise);   // ?triche (téléphone) : le bouton 🐛 remplace Ctrl+Maj+C
+  const [tricheTel] = useState(trichePermise);   // ?triche! (téléphone) : le bouton 🐛 remplace Ctrl+Maj+C
   /* le son : le même réglage que l'écran titre et le combat (martine.muted) */
   const [muet, setMuet] = useState(isMuted);
   useEffect(() => surChangementSon(setMuet), []);
   const basculerSon = () => { const m = !isMuted(); setMuted(m); setMuet(m); if (!m) setTimeout(() => playSfx("test"), 40); };
   useEffect(() => {
     const onKey = (e) => {
-      if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
+      /* seulement en mode triche (?triche! dans l'adresse) : un élève
+         ne doit pas tomber dessus par hasard */
+      if (tricheTel && e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
         setCheat((c) => !c);
       }
     };
