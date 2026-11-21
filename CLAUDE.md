@@ -41,10 +41,12 @@
 
 **Points ouverts** (au 2026-11-21)
 - Questions de lore : `LORE.md` §9 et les mentions [À TRANCHER].
-- **Relecture finale du 2026-11-21** (chaque entrée du panneau de triche testée sur 1366 × 768, 844 × 390 et 390 × 844 : aucune erreur, aucun plantage ; corrigé et publié : frise du Jeu 2 en portrait, bulles du Jeu 1 en paysage, code « triche! »). Restent, proposés au créateur et **en attente de sa validation** :
-  - Bug des Archives (`BunkerArchives.jsx`) : le texte sous la scène dit toujours « Il ne semble pas avoir de travail à te confier », même quand Jorge a un tri à donner et même après son arrestation, parce qu'il dépend d'une mission `appel` qui n'existe plus (`j3.missions.appel` est indéfini). Textes proposés : tri prêt, « Jorge lève la tête : il a une pile de fiches pour toi. Clique sur lui. » ; après l'arrestation, « Le bureau de Jorge est vide. Ses fiches attendent, bien rangées. » ; entre deux, le texte actuel.
-  - Réplique d'Ela (validée le 2026-11-20) : « Je l'ai copié dans un livre » lui donne une copie du dessin, que l'enquête du champ de blé ignore (le livre a disparu). Proposé : « Tu sais ce que c'est, un champ de blé ? J'en ai vu un, dessiné dans un livre des Archives. Maman dit que ça n'existe plus. »
-  - « Clique un PNJ pour écouter ce qu'il ou elle a à dire. » : « PNJ » est un mot de joueur, pas d'élève de 6e. Proposé : « Clique sur un habitant pour l'écouter. » ; et « Clique ailleurs pour fermer la bulle. » (non validé) à faire valider.
+- **Relecture finale du 2026-11-21** : chaque entrée du panneau de triche testée sur 1366 × 768, 844 × 390 et 390 × 844, sans erreur ni plantage. Corrigé et publié le même jour :
+  - code « triche! » ; « notes » et Ctrl+Maj+C seulement en mode triche ;
+  - frise du Jeu 2 en portrait (défile, carnet à la ligne) ; bulles du Jeu 1 du côté où il y a de la place ;
+  - bug des Archives (`BunkerArchives.jsx`) : le texte sous la scène dépendait d'une mission `appel` qui n'existe plus et disait toujours que Jorge n'avait pas de travail ; il suit maintenant les tris (textes validés : « Jorge lève la tête : il a une pile de fiches pour toi. Clique sur lui. », « Le bureau de Jorge est vide. Ses fiches attendent, bien rangées. ») ;
+  - réplique d'Ela (« Tu sais ce que c'est, un champ de blé ? J'en ai vu un, dessiné dans un livre des Archives… » : plus de copie du dessin, que l'enquête ignorait) ;
+  - « Clique sur un habitant pour l'écouter. » au lieu de « Clique un PNJ… », et « Clique ailleurs pour fermer la bulle. » validé.
 - Le choix de départ à la fin du Jeu 2 (au revoir, message, sans se retourner) est enregistré (`jeu2EndChoice`) mais n'a plus d'écho ensuite : une idée possible.
 - La « version sombre » des SOS est gardée en réserve (`LORE.md` §5, « Le Jeu 1 »).
 - Intro sur téléphone en portrait : la scène reste petite et le texte serré (défaut ancien, non traité).

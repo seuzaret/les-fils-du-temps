@@ -289,29 +289,26 @@ export default function BunkerArchives({ onGo, j3 }) {
         )}
       </svg>
 
-      {/* Panneau bas : indicateur contextuel */}
+      {/* Panneau bas : ce que fait Jorge (textes validés le 2026-11-21).
+          Avant, ce panneau dépendait d'une mission « appel » qui n'existe
+          plus : il disait toujours que Jorge n'avait pas de travail, même
+          quand un tri l'attendait, et même après son arrestation. */}
       <div style={{ maxWidth: 1200, width: "100%" }}>
-        {done ? (
-          <div style={{ background: "#0e2818", border: "1px solid #5eff9e", borderRadius: 10, padding: "12px 16px" }}>
-            <div style={{ fontFamily: "ui-monospace,monospace", fontSize: 12, letterSpacing: 2, color: "#5eff9e" }}>
-              ✓ TOUS LES DOSSIERS RESTAURÉS
-            </div>
-            <p style={{ margin: "8px 0 0", fontSize: 14.5, color: "#c8ffdd", lineHeight: 1.55, fontStyle: "italic" }}>
-              {mission.succes}
+        {jorgeArrete ? (
+          <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
+            <p style={{ margin: 0, fontSize: 15, color: "#7a879e", fontStyle: "italic" }}>
+              Le bureau de Jorge est vide. Ses fiches attendent, bien rangées.
             </p>
           </div>
-        ) : unlocked ? (
+        ) : triReady ? (
           <div style={{ background: "#0a0e14", border: "1px dashed #c8a848", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 14.5, color: "#c8d4e2", lineHeight: 1.55 }}>
-              Le terminal des Archives affiche <strong style={{ color: "#5a6678" }}>VERROUILLÉ · MARTINE</strong>. Impossible de consulter les dossiers d'ici.
-            </p>
-            <p style={{ margin: "6px 0 0", fontSize: 14, color: "#c8a848", fontStyle: "italic" }}>
-              L'archiviste Jorge, assis au bureau, lève à peine la tête quand tu entres.
+            <p style={{ margin: 0, fontSize: 15, color: "#e8d8a8", fontStyle: "italic" }}>
+              Jorge lève la tête : il a une pile de fiches pour toi. Clique sur lui.
             </p>
           </div>
         ) : (
           <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 16px", textAlign: "center" }}>
-            <p style={{ margin: 0, fontSize: 14, color: "#7a879e", fontStyle: "italic" }}>
+            <p style={{ margin: 0, fontSize: 15, color: "#7a879e", fontStyle: "italic" }}>
               L'archiviste Jorge est là, bougon, le nez dans ses dossiers. Il ne semble pas avoir de travail à te confier pour l'instant.
             </p>
           </div>

@@ -54,7 +54,7 @@ export const PNJ_ROOMS = {
       pose: { x: 620, y: 400 }, color: "#c88060", pants: "#3a4048", hair: "#e8dfc8",
       look: "ponytail", mood: "content",
       facing: "left", activity: "cup",
-      replique: "Tu veux voir mon dessin ? C'est un champ de blé. Je l'ai copié dans un livre. Maman dit que ça n'existe plus.",
+      replique: "Tu sais ce que c'est, un champ de blé ? J'en ai vu un, dessiné dans un livre des Archives. Maman dit que ça n'existe plus.",
       repliqueApres: "Ma mère dit que dehors c'est mort. Mais dans un livre de la salle des Archives, il y avait un dessin de champ de blé, page 42. Je l'ai regardé trois fois. Ensuite le livre a disparu.",
       ou: "Dans le Puits ! Je suis née ici. Je n'ai jamais vu le ciel. Toi non plus, hein ?" },
     { id: "cantine_bri",  nom: "Bri",  role: "Cuisinière en chef",

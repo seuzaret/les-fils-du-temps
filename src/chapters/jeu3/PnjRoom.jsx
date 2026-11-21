@@ -239,7 +239,7 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
       {enBulle ? (
         /* Une seule ligne, de hauteur fixe : la scène ne bouge pas. */
         <div style={{ maxWidth: 820, width: "100%", textAlign: "center", fontSize: 14.5, color: "#7a879e", fontStyle: "italic", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", flexShrink: 0 }}>
-          {current ? "Clique ailleurs pour fermer la bulle." : "Clique un PNJ pour écouter ce qu'il ou elle a à dire."}
+          {current ? "Clique ailleurs pour fermer la bulle." : "Clique sur un habitant pour l'écouter."}
         </div>
       ) : (
         <div style={{ maxWidth: 820, width: "100%", minHeight: 90 }}>
@@ -254,7 +254,7 @@ export default function PnjRoom({ titre, bg, pnjList, j3, onGo }) {
           ) : (
             <div style={{ background: "#0a0e14", border: "1px dashed #3a4048", borderRadius: 10, padding: "12px 14px", textAlign: "center" }}>
               <p style={{ margin: 0, fontSize: 14.5, color: "#7a879e", fontStyle: "italic" }}>
-                Clique un PNJ pour écouter ce qu'il ou elle a à dire.
+                Clique sur un habitant pour l'écouter.
               </p>
             </div>
           )}
