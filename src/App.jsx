@@ -367,6 +367,15 @@ export default function App() {
      décor n'est jamais « trop zoomé » (pas de rognage au-delà de la légère
      sur-échelle de la parallaxe), quelle que soit la taille d'écran. */
   const decorCellRef = useRef(null);
+  /* frise du Jeu 2 : centrer l'époque courante quand la frise défile */
+  const friseJeu2Ref = useRef(null);
+  useEffect(() => {
+    const f = friseJeu2Ref.current;
+    const ici = f?.querySelector('[data-ici="1"]');
+    if (!f || !ici || f.scrollWidth <= f.clientWidth) return;
+    const a = ici.getBoundingClientRect(), b = f.getBoundingClientRect();
+    f.scrollLeft += a.left + a.width / 2 - (b.left + b.width / 2);
+  }, [mode, chapterIndex]);
   const [decorBox, setDecorBox] = useState(null);
   useEffect(() => {
     const el = decorCellRef.current;
@@ -2157,19 +2166,23 @@ export default function App() {
           chacune cliquable pour voyager. La courante est mise en avant,
           les notes trouvées ont un ✓. Compact (~66 px de hauteur). */}
       {mode === "jeu2" && (
-        <div style={{ position: "relative", padding: "4px 10px 8px 12px", background: "linear-gradient(180deg, rgba(14,28,42,0.55), transparent)", flex: "0 0 auto", display: "flex", alignItems: "center", gap: 8 }}>
+        <div style={{ position: "relative", padding: "4px 10px 8px 12px", background: "linear-gradient(180deg, rgba(14,28,42,0.55), transparent)", flex: "0 0 auto", display: "flex", flexWrap: "wrap", justifyContent: "flex-end", alignItems: "center", gap: 8 }}>
           {/* la frise prend la place qui reste ; le carnet est rangé à sa
              droite (avant, posé par-dessus, il cachait les deux dernières
              époques sur un écran étroit) */}
-          <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
-            {/* Le "fil du temps" : dégradé horizontal derrière les pastilles */}
-            <div style={{ position: "absolute", left: 18, right: 18, top: "50%", height: 2, marginTop: -1, background: "linear-gradient(90deg, #26324a 0%, #7fd8ff 50%, #26324a 100%)", opacity: 0.55, borderRadius: 2 }} />
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 4, position: "relative", maxWidth: 1080, margin: "0 auto" }}>
+          {/* Sur un écran étroit (téléphone en portrait), les 10 époques ne
+             tiennent pas : la frise défile au doigt, l'époque courante est
+             centrée (avant, les trois dernières sortaient de l'écran, hors
+             d'atteinte, et passaient sous le carnet). */}
+          <div ref={friseJeu2Ref} style={{ position: "relative", flex: "1 1 300px", minWidth: 0, overflowX: "auto", overflowY: "hidden", scrollbarWidth: "thin" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: 2, position: "relative", maxWidth: 1080, margin: "0 auto", minWidth: "max-content" }}>
+              {/* Le "fil du temps" : dégradé horizontal derrière les pastilles */}
+              <div style={{ position: "absolute", left: 18, right: 18, top: "50%", height: 2, marginTop: -1, background: "linear-gradient(90deg, #26324a 0%, #7fd8ff 50%, #26324a 100%)", opacity: 0.55, borderRadius: 2 }} />
               {CHAPTERS.map((c, i) => {
                 const has = jeu2Notes.includes(i);
                 const isHere = i === chapterIndex;
                 return (
-                  <button key={c.id} onClick={() => travelJeu2(i)}
+                  <button key={c.id} onClick={() => travelJeu2(i)} data-ici={isHere ? "1" : undefined}
                     title={`${c.epoque || 'Chapitre ' + (i + 1)} · ${c.date || ''} — ${has ? 'note trouvée ✓' : 'à explorer'}`}
                     style={{
                       position: "relative",
@@ -2556,8 +2569,16 @@ export default function App() {
            simples (défaut ou banalité aléatoire). Reprend le look phylactère
            d'origine, qui reste plus vivant que le bandeau sur ces échanges
            courts. */
-        const W = Math.min(300, window.innerWidth - 24);
-        const dessous = bubble.y < 240;
+        /* Du côté où il y a le plus de place (au-dessus ou au-dessous du
+           personnage) ; plus large sur un écran bas ; et si elle ne tient
+           toujours pas, elle défile. Avant : toujours dessous quand on
+           cliquait dans le haut de l'écran, et coupée en bas sur un
+           téléphone en paysage (chapitre 9, Nathalie). */
+        const bas = window.innerHeight < 520;
+        const W = Math.min(bas ? 460 : 300, window.innerWidth - 24);
+        const placeDessous = window.innerHeight - bubble.y - 18 - 8;
+        const placeDessus = bubble.y - 16 - 8;
+        const dessous = placeDessous >= placeDessus;
         const cx = Math.min(Math.max(bubble.x, 12 + W / 2), window.innerWidth - 12 - W / 2);
         return (
           <div onClick={() => setBubble(null)}
@@ -2568,8 +2589,10 @@ export default function App() {
               padding: "11px 14px", fontFamily: "Palatino, Georgia, serif", fontSize: 16, lineHeight: 1.5,
               boxShadow: "0 8px 26px rgba(0,0,0,0.5)", cursor: "pointer", animation: "fadein .18s ease-out",
             }}>
-            {bubble.text}
-            <div style={{ fontSize: 11.5, color: "#8a7250", fontStyle: "italic", marginTop: 5, textAlign: "right" }}>clique n'importe où pour fermer</div>
+            <div style={{ maxHeight: Math.max(96, (dessous ? placeDessous : placeDessus) - 24), overflowY: "auto" }}>
+              {bubble.text}
+              <div style={{ fontSize: 11.5, color: "#8a7250", fontStyle: "italic", marginTop: 5, textAlign: "right" }}>clique n'importe où pour fermer</div>
+            </div>
             <div style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", width: 0, height: 0,
               borderLeft: "10px solid transparent", borderRight: "10px solid transparent",
               ...(dessous ? { top: -11, borderBottom: "12px solid #f4e8cc" } : { bottom: -11, borderTop: "12px solid #f4e8cc" }) }} />
