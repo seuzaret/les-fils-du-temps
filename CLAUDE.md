@@ -17,7 +17,7 @@
 - `LORE.md` : toute l'histoire et les décisions, avec leur statut ([ACQUIS] validé, [PROPOSÉ], [À TRANCHER], [CODE]). À lire avant de toucher à un texte.
 - `CLAUDE_JEU2.md`, `CLAUDE_JEU3.md` : notes de conception des volets 2 et 3. `JALON-M*.md` : historique des étapes.
 - Le dépôt séparé `seuzaret/martine` : la « porte » du monde 2 (`index.html` seul). Ne pas changer son adresse d'origine.
-- La conversation de travail du 29 octobre au 20 novembre 2026 a été exportée (`conversation-claude-2026-10-29_2026-11-20.md`, qui remplace l'export précédent, arrêté au 19 novembre). Le créateur la garde chez lui, hors du dépôt, qui est public. S'il la dépose dans le dépôt ou la fournit, la lire avant de reprendre.
+- La conversation de travail du 29 octobre au 21 novembre 2026 a été exportée (`conversation-claude-2026-10-29_2026-11-21.md`, qui remplace les exports précédents, arrêtés au 19 puis au 20 novembre). Le créateur la garde chez lui, hors du dépôt, qui est public. S'il la dépose dans le dépôt ou la fournit, la lire avant de reprendre.
 
 **Publier**
 - Tout ce qui arrive sur `main` est construit et mis en ligne automatiquement par `.github/workflows/build-and-deploy.yml` : `npm ci`, `npm run build`, copie de `dist/` dans `docs/`, commit « Build auto de docs/ [skip ci] ». Compter une minute environ. Si la construction échoue, le site garde la version précédente.
